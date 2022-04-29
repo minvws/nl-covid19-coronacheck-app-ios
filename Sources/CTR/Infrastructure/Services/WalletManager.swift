@@ -433,10 +433,9 @@ class WalletManager: WalletManaging, Logging {
 
 					let data = Data(remoteEuGreenCard.credential.utf8)
 					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
-						logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 						result = result && CredentialModel.create(
 							data: data,
-							validFrom: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt),
+							validFrom: Date(timeIntervalSince1970: 0), // DCC are always immediately valid
 							expirationTime: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime),
 							version: Int32(euCredentialAttributes.credentialVersion),
 							greenCard: greenCard,

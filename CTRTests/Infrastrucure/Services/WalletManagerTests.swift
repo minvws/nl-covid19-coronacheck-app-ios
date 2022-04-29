@@ -589,6 +589,8 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		// Credential Valid From should be now for a CTB
+		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) != Date(timeIntervalSince1970: 0)
 	}
 	
 	func test_storeDomesticGreenCard_recovery() throws {
@@ -673,6 +675,8 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		// Credential Valid From should be epoch for a DCC (immediately valid)
+		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) == Date(timeIntervalSince1970: 0)
 	}
 
 	func test_storeInternationalGreenCard_recovery() throws {
