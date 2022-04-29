@@ -622,10 +622,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func displayError(content: Content, backAction: (() -> Void)?) {
 		
-		let viewController = ErrorStateViewController(
-			viewModel: ErrorStateViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				content: content,
-				backAction: backAction
+				backAction: backAction,
+				allowsSwipeBack: false
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
