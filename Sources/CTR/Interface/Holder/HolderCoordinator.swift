@@ -532,7 +532,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		let destination = VisitorPassCompleteCertificateViewController(viewModel: VisitorPassCompleteCertificateViewModel(coordinatorDelegate: self))
+		let viewModel = ContentViewModel(
+			content: Content(
+				title: L.holder_completecertificate_title(),
+				body: L.holder_completecertificate_body(),
+				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
+				primaryAction: { [weak self] in
+					self?.userWishesToCreateANegativeTestQR()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			),
+			backAction: { [weak navigationController] in
+				navigationController?.popViewController(animated: true, completion: {})
+			},
+			allowsSwipeBack: true,
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			}
+		)
+
+		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
@@ -562,7 +582,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
 		
-		let viewModel = ContentViewModel(
+		let viewModel = BottomSheetContentViewModel(
 			coordinator: self,
 			content: Content(
 				title: L.holder_expiredDomesticVaccinationModal_title(),
@@ -584,7 +604,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			hideBodyForScreenCapture: false
 		)
 		
-		let viewController = ContentViewController(viewModel: viewModel)
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
 		presentAsBottomSheet(viewController)
 	}
 	
@@ -622,10 +642,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func displayError(content: Content, backAction: (() -> Void)?) {
 		
-		let viewController = ErrorStateViewController(
-			viewModel: ErrorStateViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				content: content,
-				backAction: backAction
+				backAction: backAction,
+				allowsSwipeBack: false
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)

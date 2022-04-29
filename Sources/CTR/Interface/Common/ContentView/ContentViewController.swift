@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -7,15 +7,14 @@
 
 import UIKit
 
-// swiftlint:disable:next type_name
-class VisitorPassCompleteCertificateViewController: BaseViewController {
+class ContentViewController: BaseViewController {
 
-	private let viewModel: VisitorPassCompleteCertificateViewModel
-	let sceneView = VisitorPassCompleteCertificateView()
+	internal let viewModel: ContentViewModel
+	private let sceneView = ContentView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: VisitorPassCompleteCertificateViewModel) {
+	init(viewModel: ContentViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -37,7 +36,9 @@ class VisitorPassCompleteCertificateViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		addBackButton()
+		if viewModel.showBackButton {
+			addBackButton(customAction: #selector(self.backButtonTapped))
+		}
 		
 		viewModel.$content.binding = { [weak self] in
 			self?.displayContent($0)
@@ -49,7 +50,15 @@ class VisitorPassCompleteCertificateViewController: BaseViewController {
 		}
 	}
 	
-	override var enableSwipeBack: Bool { true }
+	override var enableSwipeBack: Bool {
+
+		viewModel.allowsSwipeBack
+	}
+
+	@objc func backButtonTapped() {
+
+		viewModel.backButtonTapped()
+	}
 
 	private func displayContent(_ content: Content) {
 

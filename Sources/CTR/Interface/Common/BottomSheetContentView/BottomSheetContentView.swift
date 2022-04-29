@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class ContentView: BaseView {
+class BottomSheetContentView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {

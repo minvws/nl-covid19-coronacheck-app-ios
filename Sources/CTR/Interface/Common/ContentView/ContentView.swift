@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ErrorStateView: ScrolledStackWithButtonView {
+class ContentView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {

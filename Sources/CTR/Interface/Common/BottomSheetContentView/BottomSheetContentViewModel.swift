@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ContentViewModel {
+class BottomSheetContentViewModel {
 
 	/// Dismissable Delegate
 	weak var coordinator: Dismissable?

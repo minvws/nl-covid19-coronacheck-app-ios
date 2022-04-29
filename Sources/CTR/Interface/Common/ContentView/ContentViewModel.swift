@@ -7,23 +7,36 @@
 
 import Foundation
 
-final class ErrorStateViewModel: Logging {
+final class ContentViewModel: Logging {
 
 	@Bindable private(set) var content: Content
 	
-	@Bindable private(set) var showBackButton: Bool
-
+	let showBackButton: Bool
+	let allowsSwipeBack: Bool
 	private var backbuttonAction: (() -> Void)?
-
-	init(content: Content, backAction: (() -> Void)?) {
+	private let linkTapHander: ((URL) -> Void)?
+	
+	init(
+		content: Content,
+		backAction: (() -> Void)?,
+		allowsSwipeBack: Bool,
+		linkTapHander: ((URL) -> Void)? = nil
+	) {
 
 		self.content = content
 		self.backbuttonAction = backAction
 		self.showBackButton = backbuttonAction != nil
+		self.allowsSwipeBack = allowsSwipeBack
+		self.linkTapHander = linkTapHander
 	}
 
 	func backButtonTapped() {
 
 		backbuttonAction?()
+	}
+	
+	func openUrl(_ url: URL) {
+		
+		linkTapHander?(url)
 	}
 }

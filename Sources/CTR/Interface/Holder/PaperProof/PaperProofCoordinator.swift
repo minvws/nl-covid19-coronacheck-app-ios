@@ -91,7 +91,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnNoInputToken() {
 
-		let viewModel = PaperProofContentViewModel(
+		let viewModel = ContentViewModel(
 			content: Content(
 				title: L.holderPaperproofNotokenTitle(),
 				body: L.holderPaperproofNotokenMessage(),
@@ -102,16 +102,20 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 					self?.navigationController.popToRootViewController(animated: false)
 					self?.delegate?.switchToAddRegularProof()
 				}
-			)
+			),
+			backAction: { [weak navigationController] in
+				navigationController?.popViewController(animated: true, completion: {})
+			},
+			allowsSwipeBack: true
 		)
-		let destination = PaperProofContentViewController(viewModel: viewModel)
+		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
+		let viewController = BottomSheetContentViewController(
+			viewModel: BottomSheetContentViewModel(
 				coordinator: self,
 				content: Content(
 					title: L.holder_paperproof_whichProofsCanBeUsed_title(),
@@ -199,10 +203,11 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func displayError(content: Content, backAction: @escaping () -> Void) {
 
-		let viewController = ErrorStateViewController(
-			viewModel: ErrorStateViewModel(
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				content: content,
-				backAction: backAction
+				backAction: backAction,
+				allowsSwipeBack: false
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
