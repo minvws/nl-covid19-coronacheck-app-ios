@@ -232,8 +232,8 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	private func navigateToMoreInformation(_ title: String, body: String, hideBodyForScreenCapture: Bool) {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
+		let viewController = BottomSheetContentViewController(
+			viewModel: BottomSheetContentViewModel(
 				coordinator: self,
 				content: Content(
 					title: title,

@@ -110,8 +110,8 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
+		let viewController = BottomSheetContentViewController(
+			viewModel: BottomSheetContentViewModel(
 				coordinator: self,
 				content: Content(
 					title: L.holder_paperproof_whichProofsCanBeUsed_title(),

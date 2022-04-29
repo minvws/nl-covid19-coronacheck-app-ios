@@ -66,8 +66,8 @@ class SharedCoordinator: Coordinator, Logging {
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
+		let viewController = BottomSheetContentViewController(
+			viewModel: BottomSheetContentViewModel(
 				coordinator: self,
 				content: Content(
 					title: title,

@@ -265,7 +265,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
+		let viewModel: BottomSheetContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel
 		
 		expect(viewModel?.content.title) == L.holder_paperproof_whichProofsCanBeUsed_title()
 		expect(viewModel?.content.body) == L.holder_paperproof_whichProofsCanBeUsed_body()

@@ -562,7 +562,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
 		
-		let viewModel = ContentViewModel(
+		let viewModel = BottomSheetContentViewModel(
 			coordinator: self,
 			content: Content(
 				title: L.holder_expiredDomesticVaccinationModal_title(),
@@ -584,7 +584,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			hideBodyForScreenCapture: false
 		)
 		
-		let viewController = ContentViewController(viewModel: viewModel)
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
 		presentAsBottomSheet(viewController)
 	}
 	
