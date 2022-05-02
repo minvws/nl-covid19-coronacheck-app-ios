@@ -194,7 +194,12 @@ class RemoteEventItemView: BaseView {
 				kerning: ViewTraits.Link.kerning,
 				textColor: C.primaryBlue()!
 			)
-			backgroundButton.accessibilityLabel = link
+		}
+	}
+	
+	var accessibilityTitle: String? {
+		didSet {
+			backgroundButton.accessibilityLabel = accessibilityTitle
 		}
 	}
 	
