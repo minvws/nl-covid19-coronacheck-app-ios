@@ -1202,11 +1202,14 @@ extension EventFlow.AccessToken {
 }
 
 extension EuCredentialAttributes {
-	static func fake(dcc: EuCredentialAttributes.DigitalCovidCertificate, issuer: String = "NL") -> EuCredentialAttributes {
+	static func fake(
+		dcc: EuCredentialAttributes.DigitalCovidCertificate,
+		issuer: String = "NL",
+		expirationTime: TimeInterval = now.timeIntervalSince1970 + 3600) -> EuCredentialAttributes {
 		EuCredentialAttributes(
 			credentialVersion: 1,
 			digitalCovidCertificate: dcc,
-			expirationTime: now.timeIntervalSince1970 + 3600,
+			expirationTime: expirationTime,
 			issuedAt: now.timeIntervalSince1970,
 			issuer: issuer
 		)
@@ -1218,6 +1221,10 @@ extension EuCredentialAttributes {
 
 	static func foreignFakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
 		fake(dcc: dcc, issuer: "BE")
+	}
+	
+	static func foreignExpiredFakeVaccination(dcc: EuCredentialAttributes.DigitalCovidCertificate = .sampleWithVaccine(doseNumber: 1, totalDose: 2)) -> EuCredentialAttributes {
+		fake(dcc: dcc, issuer: "BE", expirationTime: now.timeIntervalSince1970 - 3600)
 	}
 	
 	static var fakeTest: EuCredentialAttributes {
