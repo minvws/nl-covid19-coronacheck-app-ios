@@ -36,6 +36,8 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	
 	func userWantsToGoBackToDashboard()
 
+	func userWantsToGoBackToEnterToken()
+	
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
@@ -169,7 +171,19 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		token = nil
 		delegate?.addPaperProofFlowDidFinish()
 	}
-
+	
+	func userWantsToGoBackToEnterToken() {
+		
+		if let viewController = navigationController.viewControllers
+			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
+			
+			navigationController.popToViewController(
+				viewController,
+				animated: true
+			)
+		}
+	}
+	
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
 
 		let eventCoordinator = EventCoordinator(
