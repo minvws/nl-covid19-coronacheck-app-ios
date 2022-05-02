@@ -18,6 +18,8 @@ protocol ShowQRDatasourceProtocol {
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool
 	
+	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
+	
 	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool
 	
 	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool
@@ -109,9 +111,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 		guard self.items.count > 1,
 			greenCard.type == GreenCardType.eu.rawValue,
 			let highestFullyVaccinatedGreenCard = fullyVaccinatedGreenCards.first,
-			let credential = greenCard.getActiveCredential(),
-			let data = credential.data,
-			let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+			let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
 			let doseNumber = euVaccination.doseNumber,
 			let totalDose = euVaccination.totalDose,
@@ -127,15 +127,22 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool {
 		
 		guard greenCard.type == GreenCardType.eu.rawValue,
-			  let credential = greenCard.getActiveCredential(),
-			  let data = credential.data,
-			  let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+			  let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			  euCredentialAttributes.digitalCovidCertificate.vaccinations != nil else {
 			// Not a vaccination
 			return false
 		}
 		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
 		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
+	}
+	
+	 func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
+		 
+		 if let credentialData = greenCard.getLatestCredential()?.data,
+			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
+			 return euCredentialAttributes
+		 }
+		return nil
 	}
 	
 	func getIndexForMostRelevantGreenCard() -> Int {
