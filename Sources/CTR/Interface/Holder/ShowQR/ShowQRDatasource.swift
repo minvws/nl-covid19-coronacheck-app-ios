@@ -74,9 +74,8 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			.filter { $0.greenCard.type == GreenCardType.eu.rawValue }
 		// only with attributes
 			.compactMap { cardsWithSortedOrigin in
-				if let credential = cardsWithSortedOrigin.greenCard.getActiveCredential(),
-				   let data = credential.data,
-				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data) {
+				if let credentialData = cardsWithSortedOrigin.greenCard.getLatestCredential()?.data,
+				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(credentialData) {
 
 					return (cardsWithSortedOrigin.greenCard, attributes: euCredentialAttributes)
 				}
