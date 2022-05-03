@@ -172,4 +172,8 @@ struct EuCredentialAttributes: Codable {
 		}
 		return nil
 	}
+	
+	var isForeignDCC: Bool {
+		issuer.lowercased() != "nl"
+	}
 }

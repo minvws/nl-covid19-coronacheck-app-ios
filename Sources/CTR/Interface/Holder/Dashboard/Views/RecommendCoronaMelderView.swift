@@ -25,7 +25,7 @@ final class RecommendCoronaMelderCardView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = .white
+		backgroundColor = C.white()
 	}
 	
 	/// Setup the hierarchy

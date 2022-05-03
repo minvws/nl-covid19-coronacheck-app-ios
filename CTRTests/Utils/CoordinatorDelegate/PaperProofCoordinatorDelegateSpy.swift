@@ -8,14 +8,14 @@
 import Foundation
 @testable import CTR
 
-class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol {
+class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 
-	var invokedUserWishesMoreInformationOnSelfPrintedProof = false
-	var invokedUserWishesMoreInformationOnSelfPrintedProofCount = 0
+	var invokedUserWishesToCancelPaperProofFlow = false
+	var invokedUserWishesToCancelPaperProofFlowCount = 0
 
-	func userWishesMoreInformationOnSelfPrintedProof() {
-		invokedUserWishesMoreInformationOnSelfPrintedProof = true
-		invokedUserWishesMoreInformationOnSelfPrintedProofCount += 1
+	func userWishesToCancelPaperProofFlow() {
+		invokedUserWishesToCancelPaperProofFlow = true
+		invokedUserWishesToCancelPaperProofFlowCount += 1
 	}
 
 	var invokedUserWishesMoreInformationOnNoInputToken = false
@@ -26,12 +26,40 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWishesMoreInformationOnNoInputTokenCount += 1
 	}
 
-	var invokedUserWishesMoreInformationOnInternationalQROnly = false
-	var invokedUserWishesMoreInformationOnInternationalQROnlyCount = 0
+	var invokedUserWishesMoreInformationOnWhichProofsCanBeUsed = false
+	var invokedUserWishesMoreInformationOnWhichProofsCanBeUsedCount = 0
 
-	func userWishesMoreInformationOnInternationalQROnly() {
-		invokedUserWishesMoreInformationOnInternationalQROnly = true
-		invokedUserWishesMoreInformationOnInternationalQROnlyCount += 1
+	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
+		invokedUserWishesMoreInformationOnWhichProofsCanBeUsed = true
+		invokedUserWishesMoreInformationOnWhichProofsCanBeUsedCount += 1
+	}
+
+	var invokedUserWishesToScanCertificate = false
+	var invokedUserWishesToScanCertificateCount = 0
+
+	func userWishesToScanCertificate() {
+		invokedUserWishesToScanCertificate = true
+		invokedUserWishesToScanCertificateCount += 1
+	}
+
+	var invokedUserDidScanDCC = false
+	var invokedUserDidScanDCCCount = 0
+	var invokedUserDidScanDCCParameters: (message: String, Void)?
+	var invokedUserDidScanDCCParametersList = [(message: String, Void)]()
+
+	func userDidScanDCC(_ message: String) {
+		invokedUserDidScanDCC = true
+		invokedUserDidScanDCCCount += 1
+		invokedUserDidScanDCCParameters = (message, ())
+		invokedUserDidScanDCCParametersList.append((message, ()))
+	}
+
+	var invokedUserWishesToEnterToken = false
+	var invokedUserWishesToEnterTokenCount = 0
+
+	func userWishesToEnterToken() {
+		invokedUserWishesToEnterToken = true
+		invokedUserWishesToEnterTokenCount += 1
 	}
 
 	var invokedUserDidSubmitPaperProofToken = false
@@ -46,20 +74,20 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserDidSubmitPaperProofTokenParametersList.append((token, ()))
 	}
 
+	var invokedUserWishesToCreateACertificate = false
+	var invokedUserWishesToCreateACertificateCount = 0
+
+	func userWishesToCreateACertificate() {
+		invokedUserWishesToCreateACertificate = true
+		invokedUserWishesToCreateACertificateCount += 1
+	}
+
 	var invokedUserWantsToGoBackToDashboard = false
 	var invokedUserWantsToGoBackToDashboardCount = 0
 
 	func userWantsToGoBackToDashboard() {
 		invokedUserWantsToGoBackToDashboard = true
 		invokedUserWantsToGoBackToDashboardCount += 1
-	}
-
-	var invokedUserWantsToGoBackToTokenEntry = false
-	var invokedUserWantsToGoBackToTokenEntryCount = 0
-
-	func userWantsToGoBackToTokenEntry() {
-		invokedUserWantsToGoBackToTokenEntry = true
-		invokedUserWantsToGoBackToTokenEntryCount += 1
 	}
 
 	var invokedUserWishesToSeeScannedEvent = false
@@ -72,34 +100,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWishesToSeeScannedEventCount += 1
 		invokedUserWishesToSeeScannedEventParameters = (event, ())
 		invokedUserWishesToSeeScannedEventParametersList.append((event, ()))
-	}
-
-	var invokedUserWishesToEnterToken = false
-	var invokedUserWishesToEnterTokenCount = 0
-
-	func userWishesToEnterToken() {
-		invokedUserWishesToEnterToken = true
-		invokedUserWishesToEnterTokenCount += 1
-	}
-
-	var invokedUserWishesToScanCertificate = false
-	var invokedUserWishesToScanCertificateCount = 0
-
-	func userWishesToScanCertificate() {
-		invokedUserWishesToScanCertificate = true
-		invokedUserWishesToScanCertificateCount += 1
-	}
-
-	var invokedUserWishesToCreateACertificate = false
-	var invokedUserWishesToCreateACertificateCount = 0
-	var invokedUserWishesToCreateACertificateParameters: (message: String, Void)?
-	var invokedUserWishesToCreateACertificateParametersList = [(message: String, Void)]()
-
-	func userWishesToCreateACertificate(message: String) {
-		invokedUserWishesToCreateACertificate = true
-		invokedUserWishesToCreateACertificateCount += 1
-		invokedUserWishesToCreateACertificateParameters = (message, ())
-		invokedUserWishesToCreateACertificateParametersList.append((message, ()))
 	}
 
 	var invokedDisplayError = false
@@ -118,14 +118,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		}
 	}
 
-	var invokedUserWishesToGoBackToScanCertificate = false
-	var invokedUserWishesToGoBackToScanCertificateCount = 0
-
-	func userWishesToGoBackToScanCertificate() {
-		invokedUserWishesToGoBackToScanCertificate = true
-		invokedUserWishesToGoBackToScanCertificateCount += 1
-	}
-
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
@@ -136,5 +128,13 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, inApp)
 		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedDismiss = false
+	var invokedDismissCount = 0
+
+	func dismiss() {
+		invokedDismiss = true
+		invokedDismissCount += 1
 	}
 }

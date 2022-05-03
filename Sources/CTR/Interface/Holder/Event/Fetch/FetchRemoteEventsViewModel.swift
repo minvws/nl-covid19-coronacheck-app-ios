@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -56,8 +55,6 @@ final class FetchRemoteEventsViewModel: Logging {
 			handleErrorCodesForAccesTokenAndProviders(errorCodes, serverErrors: serverErrors)
 			return
 		}
-
-		self.mappingManager.setEventProviders(eventProviders)
 
 		// Do the Unomi call
 		self.fetchHasEventInformation(

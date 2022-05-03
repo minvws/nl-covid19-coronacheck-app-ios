@@ -113,15 +113,22 @@ class WalletManager: WalletManaging, Logging {
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				EventGroupModel.create(
-					type: type,
-					providerIdentifier: providerIdentifier,
-					maxIssuedAt: issuedAt,
-					jsonData: jsonData,
-					wallet: wallet,
-					managedContext: context
-				)
-				dataStoreManager.save(context)
+				
+				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, maxIssuedAt: issuedAt, jsonData: jsonData) != nil {
+					logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
+					success = true
+				} else {
+					
+					EventGroupModel.create(
+						type: type,
+						providerIdentifier: providerIdentifier,
+						maxIssuedAt: issuedAt,
+						jsonData: jsonData,
+						wallet: wallet,
+						managedContext: context
+					)
+					dataStoreManager.save(context)
+				}
 			} else {
 				success = false
 			}

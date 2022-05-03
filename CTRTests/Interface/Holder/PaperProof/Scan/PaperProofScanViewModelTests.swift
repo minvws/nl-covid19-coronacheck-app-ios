@@ -12,74 +12,129 @@ import SnapshotTesting
 
 final class PaperProofScanViewModelTests: XCTestCase {
 	
-	var sut: PaperProofScanViewModel!
+	private var sut: PaperProofScanViewModel!
 	private var environmentSpies: EnvironmentSpies!
-	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
+	private var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
+	private var paperProofIdentifierSpy: PaperProofIdentifierSpy!
 	
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy)
+		paperProofIdentifierSpy = PaperProofIdentifierSpy()
+		sut = PaperProofScanViewModel(coordinator: coordinatorDelegateSpy, scanner: paperProofIdentifierSpy)
 	}
 	
 	func test_initialState() {
-		expect(self.sut.title) == L.holderScannerTitle()
-		expect(self.sut.message) == L.holderScannerMessage()
+
+		// Given
+		
+		// When
+		
+		// Then
+		expect(self.sut.title) == L.holder_scanner_title()
+		expect(self.sut.message) == L.holder_scanner_message()
 		expect(self.sut.torchLabels) == [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
 		PaperProofScanViewController(viewModel: sut).assertImage(containedInNavigationController: true)
 	}
-	
-	func test_parseQRMessage_whenDomesticQRIsUppercased_shouldInvokeAlert() {
+
+	func test_parseQRMessage_whenQRisCTB_shouldShowErrorState() {
+
 		// Given
-		let message = "NL:MOCK:MESSAGE"
+		paperProofIdentifierSpy.stubbedIdentifyResult = .ctb
 		
 		// When
-		sut.parseQRMessage(message)
+		sut.parseQRMessage("test")
 		
 		// Then
-		expect(self.sut.alert?.title) == L.holderScannerAlertDccTitle()
-		expect(self.sut.alert?.subTitle) == L.holderScannerAlertDccMessage()
-		expect(self.sut.alert?.okTitle) == L.generalOk()
+		expect(self.coordinatorDelegateSpy.invokedDisplayError) == true
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorParameters?.content.title) == L.holder_scanner_error_title_ctb()
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorParameters?.content.body) == L.holder_scanner_error_message_ctb()
+	}
+
+	func test_parseQRMessage_whenQRIsUnknown_shouldShowErrorState() {
+
+		// Given
+		paperProofIdentifierSpy.stubbedIdentifyResult = .unknown
+		
+		// When
+		sut.parseQRMessage("test")
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedDisplayError) == true
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorParameters?.content.title) == L.holder_scanner_error_title_unknown()
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorParameters?.content.body) == L.holder_scanner_error_message_unknown()
+	}
+
+	func test_parseQRMessage_whenQRIsDutchDCC_shouldInvokeCoordinator() {
+		
+		// Given
+		let code = "test"
+		paperProofIdentifierSpy.stubbedIdentifyResult = .dutchDCC(dcc: code )
+		
+		// When
+		sut.parseQRMessage(code)
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCC) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCCParameters?.message) == code
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToEnterToken) == true
 	}
 	
-	func test_parseQRMessage_whenDomesticQRIsLowercased_shouldInvokeAlert() {
+	func test_parseQRMessage_whenQRIsForeignDCC_shouldInvokeCoordinator() {
+		
 		// Given
-		let message = "nl:mock:message"
+		let code = "test"
+		paperProofIdentifierSpy.stubbedIdentifyResult = .foreignDCC(dcc: code )
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			identity: nil,
+			status: .complete,
+			result: nil
+		)
 		
 		// When
-		sut.parseQRMessage(message)
+		sut.parseQRMessage(code)
 		
 		// Then
-		expect(self.sut.alert?.title) == L.holderScannerAlertDccTitle()
-		expect(self.sut.alert?.subTitle) == L.holderScannerAlertDccMessage()
-		expect(self.sut.alert?.okTitle) == L.generalOk()
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCC) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCCParameters?.message) == code
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == true
 	}
 	
-	func test_parseQRMessage_whenQRIsUnknown_shouldInvokeAlert() {
+	func test_parseQRMessage_whenQRIsForeignDCC_conversionFailed_shouldShowError() {
+		
 		// Given
-		let message = "ml:!@#$%"
+		let code = "test"
+		paperProofIdentifierSpy.stubbedIdentifyResult = .foreignDCC(dcc: code )
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
 		
 		// When
-		sut.parseQRMessage(message)
+		sut.parseQRMessage(code)
 		
 		// Then
-		expect(self.sut.alert?.title) == L.holderScannerAlertUnknownTitle()
-		expect(self.sut.alert?.subTitle) == L.holderScannerAlertUnknownMessage()
-		expect(self.sut.alert?.okTitle) == L.generalOk()
+		expect(self.coordinatorDelegateSpy.invokedUserDidScanDCC) == true
+		expect(self.coordinatorDelegateSpy.invokedDisplayError) == true
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorParameters?.content.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorParameters?.content.body) == L.holderErrorstateClientMessage("i 520 000 052")
 	}
-	
-	func test_parseQRMessage_whenQRIsDCC_shouldInvokeCoordinator() {
-		// Given
-		let message = "HC1:MOCK:MESSAGE"
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
-		
-		// When
-		sut.parseQRMessage(message)
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateACertificate) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateACertificateParameters?.message) == message
+}
+
+class PaperProofIdentifierSpy: PaperProofIdentifierProtocol {
+
+	var invokedIdentify = false
+	var invokedIdentifyCount = 0
+	var invokedIdentifyParameters: (code: String, Void)?
+	var invokedIdentifyParametersList = [(code: String, Void)]()
+	var stubbedIdentifyResult: PaperProofType!
+
+	func identify(_ code: String) -> PaperProofType {
+		invokedIdentify = true
+		invokedIdentifyCount += 1
+		invokedIdentifyParameters = (code, ())
+		invokedIdentifyParametersList.append((code, ()))
+		return stubbedIdentifyResult
 	}
 }

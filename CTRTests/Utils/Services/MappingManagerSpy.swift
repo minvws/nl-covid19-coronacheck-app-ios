@@ -9,18 +9,6 @@
 
 class MappingManagerSpy: MappingManaging {
 
-	var invokedSetEventProviders = false
-	var invokedSetEventProvidersCount = 0
-	var invokedSetEventProvidersParameters: (providers: [EventFlow.EventProvider], Void)?
-	var invokedSetEventProvidersParametersList = [(providers: [EventFlow.EventProvider], Void)]()
-
-	func setEventProviders(_ providers: [EventFlow.EventProvider]) {
-		invokedSetEventProviders = true
-		invokedSetEventProvidersCount += 1
-		invokedSetEventProvidersParameters = (providers, ())
-		invokedSetEventProvidersParametersList.append((providers, ()))
-	}
-
 	var invokedGetProviderIdentifierMapping = false
 	var invokedGetProviderIdentifierMappingCount = 0
 	var invokedGetProviderIdentifierMappingParameters: (code: String?, Void)?
@@ -37,15 +25,15 @@ class MappingManagerSpy: MappingManaging {
 
 	var invokedGetDisplayIssuer = false
 	var invokedGetDisplayIssuerCount = 0
-	var invokedGetDisplayIssuerParameters: (issuer: String, Void)?
-	var invokedGetDisplayIssuerParametersList = [(issuer: String, Void)]()
+	var invokedGetDisplayIssuerParameters: (issuer: String, country: String)?
+	var invokedGetDisplayIssuerParametersList = [(issuer: String, country: String)]()
 	var stubbedGetDisplayIssuerResult: String! = ""
 
-	func getDisplayIssuer(_ issuer: String) -> String {
+	func getDisplayIssuer(_ issuer: String, country: String) -> String {
 		invokedGetDisplayIssuer = true
 		invokedGetDisplayIssuerCount += 1
-		invokedGetDisplayIssuerParameters = (issuer, ())
-		invokedGetDisplayIssuerParametersList.append((issuer, ()))
+		invokedGetDisplayIssuerParameters = (issuer, country)
+		invokedGetDisplayIssuerParametersList.append((issuer, country))
 		return stubbedGetDisplayIssuerResult
 	}
 

@@ -14,6 +14,7 @@ class NavigationControllerSpy: UINavigationController {
 	var invokedPopViewController = false
 	var invokedPopToViewController = false
 	var invokedPresent = false
+	var invokedSetViewController = false
 	
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 		
@@ -41,5 +42,11 @@ class NavigationControllerSpy: UINavigationController {
 
 		invokedPresent = true
 		super.present(viewControllerToPresent, animated: flag, completion: completion)
+	}
+	
+	override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+		
+		invokedSetViewController = true
+		super.setViewControllers(viewControllers, animated: animated)
 	}
 }

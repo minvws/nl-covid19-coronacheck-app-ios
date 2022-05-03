@@ -13,7 +13,9 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 
 	/// Coordination Delegate
-	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)?
+	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
+	
+	var paperProofIdentifier: PaperProofIdentifierProtocol
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -33,12 +35,15 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol)) {
+		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
+		scanner: PaperProofIdentifierProtocol = PaperProofIdentifier()
+	) {
 		
 		self.theCoordinator = coordinator
+		self.paperProofIdentifier = scanner
 		
-		self.title = L.holderScannerTitle()
-		self.message = L.holderScannerMessage()
+		self.title = L.holder_scanner_title()
+		self.message = L.holder_scanner_message()
 		self.torchLabels = [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
 		super.init(coordinator: coordinator)
@@ -48,33 +53,76 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 		
-		if message.lowercased().hasPrefix("nl") {
-
-			logWarning("Invalid: Domestic QR-code")
-			displayAlert(title: L.holderScannerAlertDccTitle(), message: L.holderScannerAlertDccMessage())
-
-		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
-
-			theCoordinator?.userWishesToCreateACertificate(message: message)
-
-		} else {
-
-			logWarning("Invalid: Unknown QR-code")
-			displayAlert(title: L.holderScannerAlertUnknownTitle(), message: L.holderScannerAlertUnknownMessage())
+		switch paperProofIdentifier.identify(message) {
+			case .ctb:
+				displayContent(
+					L.holder_scanner_error_title_ctb(),
+					body: L.holder_scanner_error_message_ctb()
+				)
+				
+			case let .dutchDCC(dcc: dcc):
+				theCoordinator?.userDidScanDCC(dcc)
+				theCoordinator?.userWishesToEnterToken()
+				
+			case let .foreignDCC(dcc: dcc):
+				theCoordinator?.userDidScanDCC(dcc)
+				if let wrapper = Current.couplingManager.convert(dcc, couplingCode: nil) {
+					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
+					theCoordinator?.userWishesToSeeScannedEvent(remoteEvent)
+				} else {
+					displayConvertError()
+				}
+				
+			case .unknown:
+				displayContent(
+					L.holder_scanner_error_title_unknown(),
+					body: L.holder_scanner_error_message_unknown()
+				)
 		}
 	}
-
-	private func displayAlert(title: String, message: String) {
-
-		alert = AlertContent(
-			title: title,
-			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.shouldResumeScanning = true
-			},
-			okTitle: L.generalOk()
+	
+	private func displayConvertError() {
+		
+		let errorCode = ErrorCode(flow: .paperproof, step: .scan, clientCode: .failedToConvertDCCToV3Event)
+		logError("errorCode")
+		
+		theCoordinator?.displayError(
+			content: Content(
+				title: L.holderErrorstateTitle(),
+				body: L.holderErrorstateClientMessage("\(errorCode)"),
+				primaryActionTitle: L.general_toMyOverview(),
+				primaryAction: {[weak self] in
+					self?.theCoordinator?.userWantsToGoBackToDashboard()
+				},
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
+					self?.theCoordinator?.openUrl(url, inApp: true)
+				}
+			),
+			backAction: { [weak self] in
+				self?.theCoordinator?.dismiss()
+			}
+		)
+		
+	}
+	
+	private func displayContent(_ title: String, body: String) {
+		
+		theCoordinator?.displayError(
+			content: Content(
+				title: title,
+				body: body,
+				primaryActionTitle: L.holder_scanner_error_action(),
+				primaryAction: {[weak self] in
+					self?.theCoordinator?.dismiss()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			),
+			backAction: { [weak self] in
+				self?.theCoordinator?.dismiss()
+			}
 		)
 	}
 }

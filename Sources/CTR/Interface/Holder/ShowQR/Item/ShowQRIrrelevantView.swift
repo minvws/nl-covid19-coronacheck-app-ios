@@ -12,7 +12,7 @@ class ShowQRIrrelevantView: BaseView {
 	private var overlay: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .white.withAlphaComponent(0.8)
+		view.backgroundColor = C.white()!.withAlphaComponent(0.8)
 		return view
 	}()
 

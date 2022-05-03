@@ -48,4 +48,24 @@ class EventGroupModel {
 			return .failure(error)
 		}
 	}
+	
+	@discardableResult class func findBy(
+		wallet: Wallet,
+		type: EventMode,
+		providerIdentifier: String,
+		maxIssuedAt: Date,
+		jsonData: Data) -> EventGroup? {
+			
+		if let list = wallet.eventGroups?.allObjects as? [EventGroup] {
+			
+			return list
+				.filter { $0.type == type.rawValue }
+				.filter { $0.providerIdentifier == providerIdentifier }
+				.filter { $0.maxIssuedAt == maxIssuedAt }
+				.filter { $0.jsonData == jsonData }
+				.last
+		}
+		
+		return nil
+	}
 }

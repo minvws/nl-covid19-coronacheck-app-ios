@@ -24,14 +24,6 @@ class SecurityFeaturesView: BaseView {
 		return view
 	}()
 
-	/// the button
-	internal let primaryButton: UIButton = {
-
-		let button = UIButton()
-		button.translatesAutoresizingMaskIntoConstraints = false
-		return button
-	}()
-
 	/// The current animation
 	var currentAnimation: SecurityAnimation = .domesticAnimation
 
@@ -41,7 +33,8 @@ class SecurityFeaturesView: BaseView {
 		super.setupViews()
 
 		backgroundColor = C.white()
-		primaryButton.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapFlipAnimation))
+		addGestureRecognizer(tapGesture)
 	}
 
 	/// Setup the hierarchy
@@ -49,7 +42,6 @@ class SecurityFeaturesView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(animationView)
-		addSubview(primaryButton)
 	}
 
 	/// Setup the constraints
@@ -58,11 +50,10 @@ class SecurityFeaturesView: BaseView {
 		super.setupViewConstraints()
 
 		animationView.embed(in: self)
-		primaryButton.embed(in: self)
 	}
 
-	/// User tapped on the primary button
-	@objc func primaryButtonTapped() {
+	/// User tapped to flip security view animation
+	@objc func tapFlipAnimation() {
 
 		animatingLeftToRight.toggle()
 

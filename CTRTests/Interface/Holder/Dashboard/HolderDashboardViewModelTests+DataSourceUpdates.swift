@@ -138,7 +138,6 @@ extension HolderDashboardViewModelTests {
 			didTapAdd()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == true
 		})
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
@@ -185,7 +184,6 @@ extension HolderDashboardViewModelTests {
 		}))
 		
 		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
@@ -227,7 +225,6 @@ extension HolderDashboardViewModelTests {
 		}))
 		
 		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
@@ -282,8 +279,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
-		
 		expect(self.sut.internationalCards).toEventually(haveCount(3))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard())
@@ -334,7 +329,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_expiringSoon() {
@@ -385,7 +379,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22 * hours * ago))) == "Verloopt over 22 uur en 1 minuut"
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut en 1 seconde"
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Single TEST, Currently Valid, Domestic
@@ -446,7 +439,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticTest_1G() {
@@ -499,7 +491,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticTest_1G3G() {
@@ -582,7 +573,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
 		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Single RECOVERY, Currently Valid, Domestic
@@ -638,7 +628,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery_1g() {
@@ -687,7 +676,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery_1G3G() {
@@ -734,7 +722,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Single, Currently Valid, International
@@ -791,7 +778,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		expect(self.sut.internationalCards[2]).toEventually(beAddCertificateCard())
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_ExpiringSoon() {
@@ -844,7 +830,89 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
+	}
+	
+	func test_datasourceupdate_multipleCurrentlyValidDCCs_IssuedAbroad() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
+					EuCredentialAttributes.fake(dcc: .sampleWithVaccine(doseNumber: 1, totalDose: 2, country: "DE"), issuer: "NL")
+				}),
+				greencards: [
+					.init(id: NSManagedObjectID(), origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()])
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
+					EuCredentialAttributes.fake(dcc: .sampleWithTest(country: "BE"), issuer: "NL")
+				}),
+				greencards: [
+					.init(id: NSManagedObjectID(), origins: [.validOneHourAgo_test_expires23HoursFromNow()])
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { (greencard: QRCard.GreenCard, date: Date) in
+					EuCredentialAttributes.fake(dcc: .sampleWithRecovery(country: "IT"), issuer: "NL")
+				}),
+				greencards: [
+					.init(id: NSManagedObjectID(), origins: [.validOneHourAgo_recovery_expires300DaysFromNow()])
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(6))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holderDashboardIntroInternational()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
+		}))
+		
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == "Dosis 1/2 (Duitsland)" // only vaccine has country in UI
+			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 15 juni 2021"
+		}))
+		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == "Type test: LP6464-4"
+			expect(nowValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
+		}))
+		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(1))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
+		}))
+		expect(self.sut.internationalCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_0_of_2() {
@@ -892,7 +960,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_nil_of_2() {
@@ -943,7 +1010,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
@@ -999,7 +1065,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalRecovery() {
@@ -1045,7 +1110,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Multiple, One Valid, One not yet Valid, Domestic
@@ -1108,7 +1172,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_validVaccine_prematureRecovery_domestic_1G() {
@@ -1163,7 +1226,6 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Triple, Currently Valid, Domestic
@@ -1211,7 +1273,6 @@ extension HolderDashboardViewModelTests {
 			}
 		))
 		
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_1G() {
@@ -1282,7 +1343,6 @@ extension HolderDashboardViewModelTests {
 		))
 		
 		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_1G3G() {
@@ -1353,7 +1413,6 @@ extension HolderDashboardViewModelTests {
 		))
 		
 		expect(self.sut.domesticCards[4]).toEventually(beAddCertificateCard())
-		expect(self.sut.domesticCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_oneExpiringSoon() {
@@ -1394,7 +1453,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomestic_allExpiringSoon() {
@@ -1435,7 +1493,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 2 uur"
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Triple, Currently Valid, International
@@ -1520,7 +1577,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Triple, Currently Valid, Domestic but viewing International Tab
@@ -1714,7 +1770,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(5))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
@@ -1806,7 +1861,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(5))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
@@ -1898,7 +1952,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 		
 		expect(self.sut.internationalCards).toEventually(haveCount(5))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard())
@@ -1971,7 +2024,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_lessThan3Years() {
@@ -2021,7 +2073,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination_dose2() {
@@ -2071,7 +2122,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticRecovery() {
@@ -2119,7 +2169,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidDomesticTest_3G() {
@@ -2165,7 +2214,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.domesticCards[4]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	// MARK: - Single, Not Yet Valid, International
@@ -2214,7 +2262,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleNotYetValidInternationalRecovery() {
@@ -2260,7 +2307,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	 
 	// MARK: - Expired cards
@@ -2459,7 +2505,6 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_multipleDCC_1of2_2of2_3of2_3of3() {
@@ -2546,6 +2591,5 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beRecommendCoronaMelderCard())
 	}
 }

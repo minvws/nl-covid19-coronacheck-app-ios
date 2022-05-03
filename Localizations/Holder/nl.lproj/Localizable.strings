@@ -188,8 +188,6 @@
 "holder.dcc.recovery.name" = "Naam:";
 "holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
-/* MARK: - Paper Certificate Recovery Event */
-"holder.dcc.recovery.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.recovery.validfrom" = "Geldig vanaf:";
 "holder.dcc.recovery.validuntil" = "Geldig tot:";
 "holder.dcc.test.country" = "Getest in:";
@@ -205,8 +203,6 @@
 "holder.dcc.test.pathogen" = "Ziekteverwekker:";
 "holder.dcc.test.pathogenvalue" = "COVID-19";
 "holder.dcc.test.result" = "Testuitslag:";
-/* MARK: - Paper Certificate Test Event */
-"holder.dcc.test.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.test.testname" = "Testnaam:";
 "holder.dcc.test.type" = "Type test:";
 "holder.dcc.vaccination.brand" = "Vaccin:";
@@ -223,8 +219,6 @@
 "holder.dcc.vaccination.name" = "Naam:";
 "holder.dcc.vaccination.pathogen" = "Ziekteverwekker:";
 "holder.dcc.vaccination.pathogenvalue" = "COVID-19";
-/* MARK: - Paper Certificate Vaccination Event */
-"holder.dcc.vaccination.subtitle" = "Deze gegevens staan in je papieren bewijs:";
 "holder.dcc.vaccination.type" = "Type vaccin:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
@@ -335,7 +329,6 @@
 "holder.menu.dashboard" = "Mijn bewijzen";
 "holder.menu.faq" = "Meestgestelde vragen";
 "holder.menu.feedback" = "Geef ons feedback";
-"holder.menu.papercertificate" = "Papieren bewijs toevoegen";
 "holder.menu.privacy" = "Privacyverklaring";
 "holder.menu.proof" = "Bewijs toevoegen";
 "holder.menu.settings" = "Instellingen";
@@ -353,25 +346,9 @@
 "holder.onboarding.title.safely" = "Krijg toegang met je bewijs";
 "holder.onboarding.title.validity" = "Je bewijs heeft een QR-code";
 "holder.onboarding.title.yourqr" = "Bewijs van vaccinatie, herstel of test";
-"holder.paperproof.internationalQROnly.message" = "In je internationale QR-code staan de gegevens die nodig zijn om jouw bewijs in de app te zetten. Heb je ook een papieren bewijs met een Nederlandse QR-code? Dan hoef je deze niet te scannen.";
-"holder.paperproof.internationalQROnly.title" = "Waarom de internationale QR-code?";
 "holder.paperproof.notoken.action" = "Voeg bewijs toe via DigiD";
 "holder.paperproof.notoken.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie als je jouw papieren bewijzen hebt aangevraagd bij je zorgverlener, of opgestuurd hebt gekregen per post.</p><p><b>Heb je zelf je bewijs geprint?</b><br />Je kunt dan je bewijzen toevoegen aan de app met behulp van DigiD.</p>";
 "holder.paperproof.notoken.title" = "Geen lettercombinatie?";
-"holder.paperproof.selfprinted.action" = "Voeg bewijs toe via DigiD";
-"holder.paperproof.selfprinted.message" = "<p>Het is dan niet mogelijk om je bewijzen op deze manier aan de app toe te voegen.</p><p>Je kunt wel bewijzen toevoegen aan de app met behulp van DigiD.</p>";
-"holder.paperproof.selfprinted.title" = "Zelf je bewijs uitgeprint?";
-"holder.paperproof.start.mail.message" = "De overheid heeft je bewijzen voor je geprint en opgestuurd per post";
-"holder.paperproof.start.mail.title" = "Opgestuurd per post";
-"holder.paperproof.start.message" = "Je kunt papieren bewijzen toevoegen aan de app als je die op de volgende manier hebt gekregen:";
-"holder.paperproof.start.provider.message" = "Je huisarts of andere zorgverlener heeft je bewijzen voor je geprint";
-"holder.paperproof.start.provider.title" = "Van je zorgverlener";
-"holder.paperproof.start.selfprinted" = "Zelf je bewijs uitgeprint?";
-"holder.paperproof.start.title" = "Papieren bewijzen toevoegen";
-"holder.paperproof.startscanning.action" = "Start scannen";
-"holder.paperproof.startscanning.international" = "Waarom de internationale QR-code?";
-"holder.paperproof.startscanning.message" = "<p>Scan met de camera van je telefoon de <b>internationale QR-code</b> op je papieren bewijs.</p><p>Heb je meerdere internationale QR-codes? Doorloop deze stappen straks opnieuw voor elke QR-code die je in de app wilt hebben.</p>";
-"holder.paperproof.startscanning.title" = "Scan je internationale QR-code";
 "holder.provider.commercial.title" = "Andere testlocatie";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.ggd.title" = "GGD";
@@ -387,17 +364,6 @@
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.vaccinationOnly.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste vaccinatie kon je test wel meegeteld worden in je vaccinatiebewijs.</p>";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
-"holder.scanner.alert.dcc.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
-"holder.scanner.alert.dcc.title" = "Scan je internationale QR-code";
-"holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
-/* MARK: - Holder Scanner Alert */
-"holder.scanner.alert.unknown.title" = "Ongeldige QR-code";
-"holder.scanner.message" = "Richt je telefoon op de QR-code op je internationale bewijs";
-"holder.scanner.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
-"holder.scanner.permission.settings" = "Naar instellingen";
-"holder.scanner.permission.title" = "Geen toegang tot camera";
-/* MARK: - Holder Scanner */
-"holder.scanner.title" = "Scan QR-code";
 "holder.showqr.details" = "Details";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan, hersteld of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
@@ -613,6 +579,7 @@
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
+"holder_dccDetails_subtitle" = "Deze gegevens staan in je bewijs:";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
 "holder_endOfLife_button" = "Naar CoronaCheck.nl";
@@ -670,6 +637,7 @@
 "holder_listRemoteEvents_paperflow_message" = "Met deze gegevens kun je een bewijs maken.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
 "holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent getest of gevaccineerd. Vraag of zij je kunnen helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Klopt er iets niet?";
@@ -680,6 +648,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
+"holder_menu_paperproof_subTitle" = "Inscannen met je camera";
+"holder_menu_paperproof_title" = "Papieren bewijs toevoegen";
 "holder_menu_resetApp" = "App resetten";
 "holder_menu_storedEvents" = "Opgeslagen gegevens";
 /* Menu item for short stay route */
@@ -700,6 +670,8 @@
 "holder_newintheapp_content_only3G_title" = "3G-toegang in Nederland";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "In Nederland wordt het coronatoegangsbewijs niet meer gebruikt. Nederlandse bewijzen zijn daarom uit de app gehaald. Voor reizen in het buitenland zijn gewoon nog internationale bewijzen te maken en te gebruiken.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Alleen internationale bewijzen";
+"holder_newintheapp_foreignproofs_body" = "Heb je een coronabewijs met QR-code van een test of vaccinatie uit het buitenland? Dan kun je jouw bewijs nu toevoegen aan CoronaCheck. Kies in het menu voor “coronabewijs inscannen”.";
+"holder_newintheapp_foreignproofs_title" = "Buitenlandse bewijzen toevoegen";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Je bezoekersbewijs is alleen in Nederland geldig. Wil je naar een ander land? Check de regels van het land dat je wilt bezoeken.</p>\n<p><b>Meer weten?</b><br />Lees meer op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "Over je bezoekersbewijs";
 "holder_onboarding_content_TravelSafe_0G_message" = "Reis je naar een land waar om een coronabewijs wordt gevraagd? Dan kun je met deze app je bewijs maken.";
@@ -712,8 +684,24 @@
 "holder_onboarding_disclosurePolicyChanged_only1GAccess_title" = "Alleen 1G-toegang in Nederland";
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_message" = "Bezoek je een plek in Nederland waar een coronabewijs nodig is? Op dit moment wordt overal 3G-toegang gegeven. Je kunt dan naar binnen met een bewijs van vaccinatie, herstel, of een negatieve test.";
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_title" = "3G-toegang in Nederland";
+"holder_paperproof_startscanning_body" = "<p>Je kunt een bestaand bewijs toevoegen aan de CoronaCheck app door ze in te scannen. Bijvoorbeeld bewijzen die je van je zorgverlener hebt gekregen. Of bewijzen die zijn uitgegeven buiten Nederland.</p><p>Scan de <b>internationale QR-code</b> van jouw bewijs. Deze herken je aan een Europese vlag op het bewijs. </p>";
+"holder_paperproof_startscanning_button_startScanning" = "Start scannen";
+"holder_paperproof_startscanning_button_whichProofs" = "Welke bewijzen kan ik inscannen?";
+"holder_paperproof_startscanning_title" = "Een bewijs inscannen met je camera";
+"holder_paperproof_whichProofsCanBeUsed_body" = "<p>Ben je getest of gevaccineerd in Nederland? Dan kan jouw zorgverlener  een bewijs voor je uit te printen. Dit bewijs kun je op zichzelf gebruiken of inscannen in de CoronaCheck app.</p><p>Ben je in het buitenland getest of gevaccineerd? Dan heb je in het buitenland een Europees digitaal coronacertificaat(Foreign DCC) gekregen. Of je maakt gebruik van een andere Europese Corona App.<br />De QR-code op dat bewijs kun je inscannen in de CoronaCheck app.</p>";
+"holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
+"holder_scanner_error_action" = "Opnieuw scannen";
+"holder_scanner_error_message_ctb" = "Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
+"holder_scanner_error_message_unknown" = "De QR-code die je probeert te scannen wordt niet herkend als die van een coronabewijs. Controleer of je de goede QR-code voor de camera houdt.";
+"holder_scanner_error_title_ctb" = "Scan je internationale QR-code";
+"holder_scanner_error_title_unknown" = "QR-code wordt niet herkend";
+"holder_scanner_message" = "Richt je telefoon op de QR-code";
+"holder_scanner_permission_message" = "De app wil toegang tot de camera om de QR-code te scannen.";
+"holder_scanner_permission_settings" = "Naar instellingen";
+"holder_scanner_permission_title" = "Geen toegang tot camera";
+"holder_scanner_title" = "Scan QR-code";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Nederlandse QR-code";
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis\">Lees meer over de dosis</a>";

@@ -10,7 +10,7 @@ import UIKit
 class MenuViewController: BaseViewController {
 	
 	enum Item {
-		case row(title: String, icon: UIImage, action: () -> Void )
+		case row(title: String, subTitle: String?, icon: UIImage, action: () -> Void )
 		case sectionBreak
 	}
 	
@@ -54,7 +54,7 @@ class MenuViewController: BaseViewController {
 			
 			items.enumerated().forEach { index, item in
 				switch item {
-					case let .row(title, icon, action):
+					case let .row(title, subTitle, icon, action):
 					
 						let row = MenuRowView()
 						row.title = title
@@ -67,6 +67,12 @@ class MenuViewController: BaseViewController {
 							guard case .row = items[nextIndex] else { return false }
 							return true
 						}()
+						if let subTitle = subTitle {
+							row.showSubTitle(subTitle)
+							row.accessibilityLabel = title + ", " + subTitle
+						} else {
+							row.accessibilityLabel = title
+						}
 						self.sceneView.stackView.addArrangedSubview(row)
 						
 					case .sectionBreak:

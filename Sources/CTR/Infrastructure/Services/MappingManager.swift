@@ -9,11 +9,9 @@ import Foundation
 
 protocol MappingManaging {
 
-	func setEventProviders(_ providers: [EventFlow.EventProvider])
-
 	func getProviderIdentifierMapping(_ code: String? ) -> String?
 
-	func getDisplayIssuer(_ issuer: String) -> String
+	func getDisplayIssuer(_ issuer: String, country: String) -> String
 
 	func getBiLingualDisplayCountry(_ country: String) -> String
 	
@@ -54,20 +52,13 @@ class MappingManager: MappingManaging, Logging {
 		self.providerIdentifiers = remoteConfigManager.storedConfiguration.providerIdentifiers ?? []
 	}
 
-	func setEventProviders(_ providers: [EventFlow.EventProvider]) {
-
-		providerIdentifiers.removeAll()
-
-		providers.forEach { providerIdentifiers.append(Mapping(code: $0.identifier, name: $0.name)) }
-	}
-
 	func getProviderIdentifierMapping(_ code: String? ) -> String? {
 
 		return providerIdentifiers.first(where: { $0.code == code })?.name
 	}
 
-	func getDisplayIssuer(_ issuer: String) -> String {
-		guard issuer == "Ministry of Health Welfare and Sport" else {
+	func getDisplayIssuer(_ issuer: String, country: String) -> String {
+		guard issuer == "Ministry of Health Welfare and Sport", ["NL", "NLD"].contains(country) else {
 			return issuer
 		}
 		return L.holderVaccinationAboutIssuer()
@@ -83,7 +74,7 @@ class MappingManager: MappingManaging, Logging {
 	func getDisplayCountry(_ country: String) -> String {
 		
 		guard ["NL", "NLD"].contains(country) else {
-			return country
+			return Locale.current.localizedString(forRegionCode: country) ?? country
 		}
 		return L.generalNetherlands()
 	}

@@ -32,7 +32,7 @@ class AddCertificateCardView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = .white
+		view?.backgroundColor = C.white()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
 

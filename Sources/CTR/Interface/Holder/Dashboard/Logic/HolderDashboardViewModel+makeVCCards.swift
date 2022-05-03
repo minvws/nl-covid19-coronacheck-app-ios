@@ -191,6 +191,8 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
+		guard state.shouldShowRecommendCoronaMelderCard else { return [] }
+		
 		let regionFilteredQRCards = state.regionFilteredQRCards(validityRegion: validityRegion)
 		
 		guard !regionFilteredQRCards.isEmpty,

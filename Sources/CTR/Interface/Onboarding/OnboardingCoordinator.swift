@@ -16,7 +16,7 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	func dismiss()
 
 	/// Navigate to the consent page
-	func navigateToConsent(shouldHideBackButton: Bool)
+	func navigateToConsent()
 
 	/// Consent was given
 	func consentGiven()
@@ -84,7 +84,8 @@ class OnboardingCoordinator: Coordinator, Logging {
 			allowsCloseButton: false,
 			allowsNextButton: true
 		)
-		navigationController.pushViewController(viewController, animated: true)
+		navigationController.viewControllers = [viewController]
+		navigationController.view.window?.replaceRootViewController(with: navigationController)
 	}
 
     // MARK: - Universal Link handling
@@ -125,7 +126,14 @@ extension OnboardingCoordinator: PagedAnnouncementDelegate {
 		onboardingDelegate?.finishOnboarding()
 
 		// Go to consent
-		navigateToConsent(shouldHideBackButton: false)
+		let viewController = PrivacyConsentViewController(
+			viewModel: PrivacyConsentViewModel(
+				coordinator: self,
+				factory: onboardingFactory,
+				shouldHideBackButton: false
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 
@@ -158,16 +166,17 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	}
 
 	/// Navigate to the consent page
-	func navigateToConsent(shouldHideBackButton: Bool) {
+	func navigateToConsent() {
 
 		let viewController = PrivacyConsentViewController(
 			viewModel: PrivacyConsentViewModel(
 				coordinator: self,
 				factory: onboardingFactory,
-				shouldHideBackButton: shouldHideBackButton
+				shouldHideBackButton: true
 			)
 		)
-		navigationController.pushViewController(viewController, animated: true)
+		navigationController.viewControllers = [viewController]
+		navigationController.view.window?.replaceRootViewController(with: navigationController)
 	}
 
 	/// Consent was given
