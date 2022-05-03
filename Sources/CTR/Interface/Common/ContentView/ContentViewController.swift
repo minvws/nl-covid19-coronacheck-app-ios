@@ -67,13 +67,7 @@ class ContentViewController: BaseViewController {
 		sceneView.message = content.body
 
 		// Button
-		if let actionTitle = content.primaryActionTitle {
-			sceneView.primaryTitle = actionTitle
-			sceneView.footerButtonView.isHidden = false
-		} else {
-			sceneView.primaryTitle = nil
-			sceneView.footerButtonView.isHidden = true
-		}
+		sceneView.primaryTitle = content.primaryActionTitle
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.secondaryButtonTappedCommand = content.secondaryAction
 		sceneView.secondaryButtonTitle = content.secondaryActionTitle

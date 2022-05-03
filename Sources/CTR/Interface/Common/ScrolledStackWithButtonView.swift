@@ -30,7 +30,8 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}()
 	
 	private var scrollViewContentOffsetObserver: NSKeyValueObservation?
-
+	private var scrollViewToFooterConstraint: NSLayoutConstraint?
+	
 	/// Setup all the views
 	override func setupViews() {
 
@@ -52,16 +53,18 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		addSubview(footerButtonView)
 	}
-
+ 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
 		
-		bottomScrollViewConstraint?.isActive = false
+		bottomScrollViewConstraint?.isActive = true
 
+		scrollViewToFooterConstraint = footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor)
+		scrollViewToFooterConstraint?.isActive = false
+				
 		NSLayoutConstraint.activate([
-			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
@@ -73,6 +76,16 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		primaryButtonTappedCommand?()
 	}
+	
+	private var shouldShowFooter: Bool = false {
+		didSet {
+			footerButtonView.isHidden = !shouldShowFooter
+			
+			bottomScrollViewConstraint?.isActive = !shouldShowFooter
+			scrollViewToFooterConstraint?.isActive = shouldShowFooter
+			setNeedsLayout()
+		}
+	}
 
 	// MARK: Public Access
 
@@ -80,6 +93,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	var primaryTitle: String? {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
+			shouldShowFooter = primaryTitle != nil
 		}
 	}
 
