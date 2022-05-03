@@ -15,8 +15,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	private var captureSession: AVCaptureSession!
 	private var previewLayer: AVCaptureVideoPreviewLayer!
 
-	private var previousOrientation: UIInterfaceOrientation?
-    
     private var torchButton: UIBarButtonItem?
     private var torchEnableLabel: String?
     private var torchDisableLabel: String?
@@ -112,7 +110,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		// Force navigation title color to white
 		overrideNavigationBarTitleColor(with: .white)
 
-		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
 
@@ -124,8 +121,12 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 
 		navigationControllerTeardown?()
-
-		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		
+		super.viewDidDisappear(animated)
+		OrientationUtility.unlockOrientation()
 	}
 
 	func failed() {
