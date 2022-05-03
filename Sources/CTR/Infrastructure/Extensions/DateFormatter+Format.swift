@@ -135,7 +135,7 @@ extension DateFormatter.Print {
 	}()
 	
 	/// e.g. `May`
-	static let MonthFormatter: DateFormatter = {
+	static let monthFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "MMMM"
@@ -144,7 +144,6 @@ extension DateFormatter.Print {
 	
 	/// e.g. `03-05-2022`
 	static let numericDateFormatter: DateFormatter = {
-		
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd-MM-yyyy"

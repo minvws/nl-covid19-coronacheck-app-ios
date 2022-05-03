@@ -106,15 +106,15 @@ class ListStoredEventsViewModel: Logging {
 		   let identity = wrapper.identity {
 			
 			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
-				lhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture > rhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture
+				lhs.getSortDate(with: DateFormatter.Format.iso8601DateFormatter) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Format.iso8601DateFormatter) ?? .distantFuture
 			})
 			
 			guard let sortedEvents = sortedEvents else { return result }
 			result.append(contentsOf: sortedEvents.compactMap { event in
-				guard let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) else {
+				guard let date = event.getSortDate(with: DateFormatter.Format.iso8601DateFormatter) else {
 					return nil
 				}
-				let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
+				let dateString = DateFormatter.Print.dayMonthYearFormatter.string(from: date)
 				
 				if event.hasNegativeTest {
 					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
@@ -228,7 +228,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? vaccination.dateOfVaccination
+			.map(DateFormatter.Print.dayMonthYearFormatter.string) ?? vaccination.dateOfVaccination
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_vaccination().capitalizingFirstLetter(),
@@ -245,7 +245,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(DateFormatter.Print.dayMonthYearFormatter.string) ?? recovery.firstPositiveTestDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -262,7 +262,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? test.sampleDate
+			.map(DateFormatter.Print.dayMonthYearFormatter.string) ?? test.sampleDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_negativeTest().capitalizingFirstLetter(),
