@@ -90,6 +90,14 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWantsToGoBackToDashboardCount += 1
 	}
 
+	var invokedUserWantsToGoBackToEnterToken = false
+	var invokedUserWantsToGoBackToEnterTokenCount = 0
+
+	func userWantsToGoBackToEnterToken() {
+		invokedUserWantsToGoBackToEnterToken = true
+		invokedUserWantsToGoBackToEnterTokenCount += 1
+	}
+
 	var invokedUserWishesToSeeScannedEvent = false
 	var invokedUserWishesToSeeScannedEventCount = 0
 	var invokedUserWishesToSeeScannedEventParameters: (event: RemoteEvent, Void)?
@@ -116,6 +124,18 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		if shouldInvokeDisplayErrorBackAction {
 			backAction()
 		}
+	}
+
+	var invokedDisplayErrorForPaperProofCheck = false
+	var invokedDisplayErrorForPaperProofCheckCount = 0
+	var invokedDisplayErrorForPaperProofCheckParameters: (content: Content, Void)?
+	var invokedDisplayErrorForPaperProofCheckParametersList = [(content: Content, Void)]()
+
+	func displayErrorForPaperProofCheck(content: Content) {
+		invokedDisplayErrorForPaperProofCheck = true
+		invokedDisplayErrorForPaperProofCheckCount += 1
+		invokedDisplayErrorForPaperProofCheckParameters = (content, ())
+		invokedDisplayErrorForPaperProofCheckParametersList.append((content, ()))
 	}
 
 	var invokedOpenUrl = false

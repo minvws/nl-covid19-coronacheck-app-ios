@@ -169,9 +169,7 @@ class PaperProofCheckViewModel: Logging {
 			secondaryAction: nil
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.dismiss()
-			}
+			self.coordinator?.displayErrorForPaperProofCheck(content: content)
 		}
 	}
 
@@ -204,9 +202,7 @@ class PaperProofCheckViewModel: Logging {
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.dismiss()
-			}
+			self.coordinator?.displayErrorForPaperProofCheck(content: content)
 		}
 	}
 }
