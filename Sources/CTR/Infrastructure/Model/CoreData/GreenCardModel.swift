@@ -54,6 +54,7 @@ extension GreenCard {
 	/// Get the type of a greenCard as a GreenCardType
 	/// - Returns: greenCard type
 	func getType() -> GreenCardType? {
+		
 		if let type = type {
 			return GreenCardType(rawValue: type)
 		}
@@ -78,6 +79,7 @@ extension GreenCard {
 	}
 
 	func originsActiveNowOrBeforeThresholdFromNow(now: Date, thresholdDays: Int) -> [Origin]? {
+		
 		let thresholdEndDate = now.addingTimeInterval(TimeInterval(60 * 60 * 24 * thresholdDays))
 
 		return castOrigins()?
@@ -95,6 +97,7 @@ extension GreenCard {
 	}
 
 	func activeCredentialsNowOrInFuture(forDate now: Date = Date()) -> [Credential] {
+		
 		guard let list = credentials?.allObjects as? [Credential] else { return [] }
 
 		let activeCredentialsNowOrInFuture = list
@@ -105,6 +108,7 @@ extension GreenCard {
 	}
 
 	func currentOrNextActiveCredential(forDate now: Date = Date()) -> Credential? {
+		
 		let activeCrendentials = activeCredentialsNowOrInFuture(forDate: now)
 		return activeCrendentials.sorted(by: {
 			($0.validFrom ?? .distantFuture) < ($1.validFrom ?? .distantFuture)
@@ -113,11 +117,25 @@ extension GreenCard {
 
 	/// Get the credentials, strongly typed.
 	func castCredentials() -> [Credential]? {
+		
 		return credentials?.compactMap({ $0 as? Credential })
 	}
 
 	/// Get the origins, strongly typed.
 	func castOrigins() -> [Origin]? {
+		
 		return origins?.compactMap({ $0 as? Origin })
+	}
+	
+	func getLatestCredential() -> Credential? {
+		
+		switch getType() {
+			case .none:
+				return nil
+			case .domestic:
+				return getActiveCredential()
+			case .eu:
+				return castCredentials()?.last
+		}
 	}
 }
