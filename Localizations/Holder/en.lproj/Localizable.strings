@@ -221,10 +221,10 @@
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
 "holder.dcctokenentry.error.emptycode" = "Please enter a letter combination first";
 "holder.dcctokenentry.error.invalidcode" = "This letter combination is invalid. A valid combination looks like this: FLBRXQ.";
-"holder.dcctokenentry.header" = "Please enter the letter combination. You’ve received this together with the paper certificate.";
+"holder.dcctokenentry.header" = "Please enter the letter combination you’ve received together with the paper certificate.";
 "holder.dcctokenentry.next" = "Next";
 "holder.dcctokenentry.retry.title" = "I haven't received a code";
-"holder.dcctokenentry.title" = "Your letter combination";
+"holder.dcctokenentry.title" = "Enter your letter combination";
 "holder.dcctokenentry.tokenField.placeholder" = "E.g. FLBRXQ";
 "holder.dcctokenentry.tokenField.placeholder.screenreader" = "Enter your letter combination here";
 "holder.dcctokenentry.tokenField.title" = "Letter combination";
@@ -344,8 +344,8 @@
 "holder.onboarding.title.validity" = "Your certificate contains a QR code";
 "holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery or test";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
-"holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
-"holder.paperproof.notoken.title" = "No letter combination?";
+"holder.paperproof.notoken.message" = "<p>You only have a letter combination if your healthcare provider or the Dutch government has sent your certificate to you.</p><p>Don’t have a letter combination or lost it? Then it’s not possible to add your certificate right now. First, request a new certificate with corresponding letter combination.</p><p><b>Did you print your certificate yourself?</b><br />Then you can only add your certificates to the app via DigiD.</p>";
+"holder.paperproof.notoken.title" = "Don’t have a letter combination?";
 "holder.provider.commercial.title" = "Other test location";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
 "holder.provider.ggd.title" = "GGD";
@@ -631,9 +631,10 @@
 "holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body" = "<p>At this moment, we can't create a certificate from your retrieved details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>At this moment, we can't create a certificate from your vaccination approval. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>At this moment, we can't create a certificate from your vaccination. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
-"holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
+"holder_listRemoteEvents_paperflow_message" = "If the details below are correct, you can add your certificate to the app.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. Ask if they can help you correct your data.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Please contact your test location. They can help you change these details.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Please contact the test location. They can help you change your details.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Is something wrong?";
@@ -645,7 +646,7 @@
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 "holder_menu_paperproof_subTitle" = "Add (paper) certificate";
-"holder_menu_paperproof_title" = "Scan coronavirus pass";
+"holder_menu_paperproof_title" = "Scan to add certificate";
 "holder_menu_resetApp" = "Reset the app";
 "holder_menu_storedEvents" = "Stored data";
 /* Menu item for short stay route */
@@ -666,6 +667,8 @@
 "holder_newintheapp_content_only3G_title" = "3G access in the Netherlands";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "The coronavirus entry pass is no longer used in the Netherlands. Dutch certificates are therefore removed from the app. International certificates can still be made and used for travelling abroad.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Only international certificates";
+"holder_newintheapp_foreignproofs_body" = "Do you have a coronavirus certificate with QR code of a test or vaccination from abroad? Now you can add your certificate to CoronaCheck. Choose “Scan to add certificate” in the menu.";
+"holder_newintheapp_foreignproofs_title" = "Adding foreign certificates";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
 "holder_onboarding_content_TravelSafe_0G_message" = "Are you travelling to a country where a coronavirus pass is required? Then you can create your certificate with this app.";
@@ -678,9 +681,19 @@
 "holder_onboarding_disclosurePolicyChanged_only1GAccess_title" = "Only 1G access in the Netherlands";
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? 3G access currently applies everywhere. This means you can enter with a vaccination or recovery certificate, or a negative test.";
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_title" = "3G access in the Netherlands";
+"holder_paperproof_startscanning_body" = "<p>Have you already received a coronavirus certificate and do you want to add it to the app? You can do this by scanning the QR code with your phone’s camera.</p><p>You can add a certificate of your vaccination or test from abroad. Or a certificate that you received from your health care provider or the Dutch government.</p>";
+"holder_paperproof_startscanning_button_startScanning" = "Start scanning";
+"holder_paperproof_startscanning_button_whichProofs" = "Which certificates can I scan?";
+"holder_paperproof_startscanning_title" = "Scan to add a certificate";
+"holder_paperproof_whichProofsCanBeUsed_body" = "<p>You can scan and add the following certificates to the app:</p><ul><li>A paper certificate you got from your health care provider or the government. Did you receive a certificate for in the Netherlands and for international use? Scan the <b>international QR code</b>.</li><li>A coronavirus certificate with QR code of your test or vaccination from abroad. You have the QR code on paper or in a foreign coronavirus app.</li></ul>";
+"holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_scanner_error_action" = "Scan again";
+"holder_scanner_error_message_ctb" = "Scan the QR code on the international certificate you received from your health care provider or the government. It contains the information needed to add your certificate to the app. You can recognise this certificate by the European flag.";
+"holder_scanner_error_message_unknown" = "The QR code you are trying to scan is not recognised as a coronavirus pass. Make sure you are holding the correct QR code in front of the camera.";
 "holder_scanner_error_title_ctb" = "Scan your international QR code";
+"holder_scanner_error_title_unknown" = "QR code not recognised";
 "holder_scanner_message" = "Point your phone at the QR code";
 "holder_scanner_permission_message" = "The app wants to access your camera to scan the QR code.";
 "holder_scanner_permission_settings" = "To Settings";

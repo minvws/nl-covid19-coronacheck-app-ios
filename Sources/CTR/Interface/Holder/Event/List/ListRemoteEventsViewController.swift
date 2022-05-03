@@ -182,7 +182,8 @@ extension RemoteEventItemView {
 		view.title = title
 		view.details = details
 		view.link = L.holderEventDetails()
-		view.disclaimerButtonTappedCommand = command
+		view.accessibilityTitle = "\(L.holderEventDetails()) \(title)"
+		view.backgroundButtonTappedCommand = command
 		return view
 	}
 }
