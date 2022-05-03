@@ -41,6 +41,8 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
+	
+	func displayErrorForPaperProofCheck(content: Content)
 }
 
 final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
@@ -216,15 +218,26 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	}
 
 	func displayError(content: Content, backAction: @escaping () -> Void) {
-
+		
 		let viewController = ContentViewController(
 			viewModel: ContentViewModel(
 				content: content,
 				backAction: backAction,
-				allowsSwipeBack: false
+				allowsSwipeBack: true
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
+	}
+	
+	func displayErrorForPaperProofCheck(content: Content) {
+
+		// Remove the check view controller. Fixes backswipe issue.
+		navigationController.popViewController(animated: false)
+		
+		// Present the error
+		displayError(content: content) { [weak self] in
+			self?.userWantsToGoBackToEnterToken()
+		}
 	}
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {

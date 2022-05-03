@@ -126,6 +126,18 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		}
 	}
 
+	var invokedDisplayErrorForPaperProofCheck = false
+	var invokedDisplayErrorForPaperProofCheckCount = 0
+	var invokedDisplayErrorForPaperProofCheckParameters: (content: Content, Void)?
+	var invokedDisplayErrorForPaperProofCheckParametersList = [(content: Content, Void)]()
+
+	func displayErrorForPaperProofCheck(content: Content) {
+		invokedDisplayErrorForPaperProofCheck = true
+		invokedDisplayErrorForPaperProofCheckCount += 1
+		invokedDisplayErrorForPaperProofCheckParameters = (content, ())
+		invokedDisplayErrorForPaperProofCheckParametersList.append((content, ()))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
