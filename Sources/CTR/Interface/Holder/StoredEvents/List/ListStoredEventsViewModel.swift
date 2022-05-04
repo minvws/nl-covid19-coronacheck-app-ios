@@ -106,12 +106,12 @@ class ListStoredEventsViewModel: Logging {
 		   let identity = wrapper.identity {
 			
 			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
-				lhs.getSortDate(with: DateFormatter.Format.iso8601) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Format.iso8601) ?? .distantFuture
+				lhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture
 			})
 			
 			guard let sortedEvents = sortedEvents else { return result }
 			result.append(contentsOf: sortedEvents.compactMap { event in
-				guard let date = event.getSortDate(with: DateFormatter.Format.iso8601) else {
+				guard let date = event.getSortDate(with: DateFormatter.Event.iso8601) else {
 					return nil
 				}
 				let dateString = DateFormatter.Format.dayMonthYear.string(from: date)

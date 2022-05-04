@@ -186,8 +186,8 @@ extension ListRemoteEventsViewModel {
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.getSortDate(with: DateFormatter.Format.iso8601),
-			   let rhsDate = rhs.event.getSortDate(with: DateFormatter.Format.iso8601) {
+			if let lhsDate = lhs.event.getSortDate(with: DateFormatter.Event.iso8601),
+			   let rhsDate = rhs.event.getSortDate(with: DateFormatter.Event.iso8601) {
 
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
