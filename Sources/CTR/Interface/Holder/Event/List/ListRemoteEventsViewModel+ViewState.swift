@@ -238,13 +238,14 @@ extension ListRemoteEventsViewModel {
 				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
 			} else if currentRow.event.hasPaperCertificate {
 				if let credentialData = currentRow.event.dccEvent?.credential.data(using: .utf8),
+				   let isForeignDcc = cryptoManager?.isForeignDCC(credentialData),
 				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination, isForeign: euCredentialAttributes.isForeignDCC))
+						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination, isForeign: isForeignDcc))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery, isForeign: euCredentialAttributes.isForeignDCC))
+						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery, isForeign: isForeignDcc))
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: euCredentialAttributes.isForeignDCC))
+						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: isForeignDcc))
 					}
 				}
 			}

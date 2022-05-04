@@ -54,7 +54,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	func parseQRMessage(_ message: String) {
 		
 		switch paperProofIdentifier.identify(message) {
-			case .ctb:
+			case .hasDomesticPrefix:
 				displayContent(
 					L.holder_scanner_error_title_ctb(),
 					body: L.holder_scanner_error_message_ctb()

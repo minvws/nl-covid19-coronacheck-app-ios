@@ -58,6 +58,16 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: True if the DCC is foreign
 	func isForeignDCC(_ data: Data) -> Bool
 	
+	/// Is this data a DCC
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a DCC
+	func isDCC(_ data: Data) -> Bool
+	
+	/// Does this look like a domestic credential
+	/// - Parameter data: the data
+	/// - Returns: True if the data looks like a domestic credential
+	func hasDomesticPrefix(_ data: Data) -> Bool
+
 	// MARK: QR
 
 	///  Disclose the credential

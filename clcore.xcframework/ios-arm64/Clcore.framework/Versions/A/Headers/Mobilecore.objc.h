@@ -107,6 +107,7 @@
 
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreCATEGORY_ATTRIBUTE_1G;
 FOUNDATION_EXPORT const int64_t MobilecoreCREATE_CREDENTIAL_VERSION;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDCC_DOMESTIC_ISSUER_COUNTRY_CODE;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_1G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_3G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
@@ -152,9 +153,15 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 // skipped function GetVerifiersForCLI with unsupported parameter or return types
 
 
+FOUNDATION_EXPORT BOOL MobilecoreHasDomesticPrefix(NSData* _Nullable proofQREncoded);
+
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeHolder(NSString* _Nullable configDirectoryPath);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeVerifier(NSString* _Nullable configDirectoryPath);
+
+FOUNDATION_EXPORT BOOL MobilecoreIsDCC(NSData* _Nullable proofQREncoded);
+
+FOUNDATION_EXPORT BOOL MobilecoreIsForeignDCC(NSData* _Nullable proofQREncoded);
 
 /**
  * DEPRECATED: Remove this method when the mobile apps have migrated to using
@@ -166,7 +173,7 @@ FOUNDATION_EXPORT MobilecorePublicKeysConfig* _Nullable MobilecoreNewPublicKeysC
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofQREncoded);
 
 FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy);
 
