@@ -235,10 +235,23 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Parameter data: the data of the DCC
 	/// - Returns: True if the DCC is foreign
 	func isForeignDCC(_ data: Data) -> Bool {
+				
+		return MobilecoreIsForeignDCC(data)
+	}
+	
+	/// Is this data a DCC
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a DCC
+	func isDCC(_ data: Data) -> Bool {
+				
+		return MobilecoreIsDCC(data)
+	}
+	
+	/// Is this data a CTB
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a CTB
+	func hasDomesticPrefix(_ data: Data) -> Bool {
 		
-		guard let euCredentialAttributes = readEuCredentials(data) else {
-			return false
-		}
-		return euCredentialAttributes.isForeignDCC
+		return MobilecoreHasDomesticPrefix(data)
 	}
 }

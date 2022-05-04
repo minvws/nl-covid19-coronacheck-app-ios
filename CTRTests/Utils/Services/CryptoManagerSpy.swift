@@ -93,6 +93,34 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedIsForeignDCCResult
 	}
 
+	var invokedIsDCC = false
+	var invokedIsDCCCount = 0
+	var invokedIsDCCParameters: (data: Data, Void)?
+	var invokedIsDCCParametersList = [(data: Data, Void)]()
+	var stubbedIsDCCResult: Bool! = false
+
+	func isDCC(_ data: Data) -> Bool {
+		invokedIsDCC = true
+		invokedIsDCCCount += 1
+		invokedIsDCCParameters = (data, ())
+		invokedIsDCCParametersList.append((data, ()))
+		return stubbedIsDCCResult
+	}
+
+	var invokedHasDomesticPrefix = false
+	var invokedHasDomesticPrefixCount = 0
+	var invokedHasDomesticPrefixParameters: (data: Data, Void)?
+	var invokedHasDomesticPrefixParametersList = [(data: Data, Void)]()
+	var stubbedHasDomesticPrefixResult: Bool! = false
+
+	func hasDomesticPrefix(_ data: Data) -> Bool {
+		invokedHasDomesticPrefix = true
+		invokedHasDomesticPrefixCount += 1
+		invokedHasDomesticPrefixParameters = (data, ())
+		invokedHasDomesticPrefixParametersList.append((data, ()))
+		return stubbedHasDomesticPrefixResult
+	}
+
 	var invokedDiscloseCredential = false
 	var invokedDiscloseCredentialCount = 0
 	var invokedDiscloseCredentialParameters: (credential: Data, disclosurePolicy: DisclosurePolicy)?
