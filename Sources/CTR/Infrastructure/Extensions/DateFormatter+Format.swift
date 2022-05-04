@@ -18,10 +18,6 @@ extension DateFormatter {
 	/// Display relative date formatter
 	enum Relative { }
 	
-	static let format = Format.self
-	static let header = Header.self
-	static let event = Event.self
-	
 	/// Initializes a date formatter with `Europe/Amsterdam` identifier with a custom `format` string parameter.
 	/// - Parameter format: The date format as string
 	convenience init(format: String) {
@@ -125,6 +121,16 @@ extension DateFormatter.Relative {
 		formatter.unitsStyle = .full
 		formatter.maximumUnitCount = 2
 		formatter.allowedUnits = [.hour, .minute]
+		return formatter
+	}()
+	
+	/// e.g. `"55 minutes, 20 seconds"`
+	/// 	 `"20 seconds"`
+	static let minutesSeconds: DateComponentsFormatter = {
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = . full
+		formatter.maximumUnitCount = 2
+		formatter.allowedUnits = [.minute, .second]
 		return formatter
 	}()
 
