@@ -581,7 +581,7 @@ class WalletManager: WalletManaging, Logging {
 	func hasDomesticGreenCard(originType: String) -> Bool {
 
 		let allDomesticGreencards = listGreenCards()
-			.filter { $0.getType() == .domestic }
+			.filter { $0.getType() == GreenCardType.domestic }
 			.filter { greencard in
 				guard let origins = greencard.castOrigins() else { return false }
 				return !origins.filter({ $0.type == originType }).isEmpty

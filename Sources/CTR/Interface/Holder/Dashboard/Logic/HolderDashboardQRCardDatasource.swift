@@ -107,7 +107,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 				// If this iteration has a `.domestic`, then it goes to its own QRCard function:
 				if let firstPair = greencardsGroup.first,
 				   let firstType = firstPair.0.getType(),
-				   firstType == .domestic {
+				   firstType == GreenCardType.domestic {
 
 					// For each domestic greencard (Note: there should only be one), convert it to a domestic QRCard:
 					return greencardsGroup.flatMap { greencard, origins in
@@ -205,7 +205,7 @@ extension QRCard {
 		withOrigins dbOrigins: [DBOrigin],
 		now: () -> Date
 	) -> [QRCard] {
-		guard dbGreencard.getType() == .domestic else { return [] }
+		guard dbGreencard.getType() == GreenCardType.domestic else { return [] }
 
 		// Entries on the Card that represent an Origin.
 		let origins = QRCard.GreenCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
@@ -229,7 +229,7 @@ extension QRCard {
 	) -> [QRCard] {
 
 		// Check that no domestic cards slipped through (logical error if so)
-		guard !dbGreencardGroup.contains(where: { $0.0.getType() == .domestic }) else { return [] }
+		guard !dbGreencardGroup.contains(where: { $0.0.getType() == GreenCardType.domestic }) else { return [] }
 
 		// Create "UI Greencards" from the DBGreenCard+DBOrigin pairs
 		let uiGreencards = dbGreencardGroup.map { pair -> GreenCard in

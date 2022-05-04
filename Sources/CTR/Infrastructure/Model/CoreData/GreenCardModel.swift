@@ -66,7 +66,7 @@ extension GreenCard {
 	/// - Returns: the active credential
 	func getActiveDomesticCredential(forDate now: Date = Date()) -> Credential? {
 		
-		guard getType() == .domestic else {
+		guard getType() == GreenCardType.domestic else {
 			return nil
 		}
 
