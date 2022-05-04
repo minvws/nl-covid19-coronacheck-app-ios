@@ -108,7 +108,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
 
 		guard self.items.count > 1,
-			  greenCard.getType() == .eu,
+			  greenCard.getType() == GreenCardType.eu,
 			let highestFullyVaccinatedGreenCard = fullyVaccinatedGreenCards.first,
 			let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
@@ -125,7 +125,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	
 	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool {
 		
-		guard greenCard.getType() == .eu,
+		guard greenCard.getType() == GreenCardType.eu,
 			  let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			  euCredentialAttributes.digitalCovidCertificate.vaccinations != nil else {
 			// Not a vaccination

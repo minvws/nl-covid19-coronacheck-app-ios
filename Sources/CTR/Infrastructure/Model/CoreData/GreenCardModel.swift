@@ -133,7 +133,7 @@ extension GreenCard {
 	
 	func getLatestInternationalCredential() -> Credential? {
 		
-		guard getType() == .eu else {
+		guard getType() == GreenCardType.eu else {
 			return nil
 		}
 		// An international greencard has 1 credential, that may be expired.
