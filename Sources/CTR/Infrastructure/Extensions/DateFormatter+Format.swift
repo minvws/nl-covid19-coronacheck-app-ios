@@ -19,77 +19,13 @@ extension DateFormatter {
 }
 
 extension DateFormatter.Format {
-	
-	/// e.g. `2022-05-02`
-	static let iso8601DateFormatter: ISO8601DateFormatter = {
-		let dateFormatter = ISO8601DateFormatter()
-		dateFormatter.formatOptions = [.withFullDate]
-		return dateFormatter
-	}()
-	
-	/// e.g. `10 August 2021`
-	static let dateWithoutTimeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMMM yyyy"
-		return formatter
-	}()
-
-	/// e.g. `10 August 15:17`
-	static let dateWithTimeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMMM HH:mm"
-		return formatter
-	}()
-
-	/// e.g. `Tuesday 10 August 15:18`
-	static let dateWithDayAndTimeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "EEEE d MMMM HH:mm"
-		return formatter
-	}()
-
-	/// e.g. `10 August`
-	static let dayAndMonthFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMMM"
-		return formatter
-	}()
 
 	/// e.g. `10 August 15:18`
 	static let dayAndMonthWithTimeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMMM HH:mm"
-		return formatter
-	}()
-
-	/// e.g. `"4 hours, 55 minutes"`
-	/// 	 `"59 minutes"`
-	/// 	 `"20 seconds"`
-	static let hmsRelativeFormatter: DateComponentsFormatter = {
-		let formatter = DateComponentsFormatter()
-		formatter.unitsStyle = .full
-		formatter.maximumUnitCount = 2
-		formatter.allowedUnits = [.hour, .minute, .second]
-		return formatter
-	}()
-
-	/// e.g. `"4 hours, 55 minutes"`
-	/// 	 `"59 minutes"`
-	static let hmRelativeFormatter: DateComponentsFormatter = {
-		let formatter = DateComponentsFormatter()
-		formatter.unitsStyle = .full
-		formatter.maximumUnitCount = 2
-		formatter.allowedUnits = [.hour, .minute]
-		return formatter
-	}()
-
-	/// e.g. `"3 days"`
-	/// 	 `"0 days"`
-	static let daysRelativeFormatter: DateComponentsFormatter = {
-		let formatter = DateComponentsFormatter()
-		formatter.unitsStyle = .full
-		formatter.allowedUnits = [.day]
-		return formatter
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "d MMMM HH:mm"
+		return dateFormatter
 	}()
 	
 	/// e.g. `3 May 2022`
@@ -138,6 +74,47 @@ extension DateFormatter.Format {
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
+	}()
+	
+	// MARK: - Event
+	
+	/// e.g. `2022-05-02`
+	static let iso8601DateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
+		dateFormatter.formatOptions = [.withFullDate]
+		return dateFormatter
+	}()
+	
+	// MARK: - Time
+	
+	/// e.g. `"4 hours, 55 minutes"`
+	/// 	 `"59 minutes"`
+	/// 	 `"20 seconds"`
+	static let hoursMinutesSecondsRelativeFormatter: DateComponentsFormatter = {
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.maximumUnitCount = 2
+		formatter.allowedUnits = [.hour, .minute, .second]
+		return formatter
+	}()
+
+	/// e.g. `"4 hours, 55 minutes"`
+	/// 	 `"59 minutes"`
+	static let hoursMinutesFormatter: DateComponentsFormatter = {
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.maximumUnitCount = 2
+		formatter.allowedUnits = [.hour, .minute]
+		return formatter
+	}()
+
+	/// e.g. `"3 days"`
+	/// 	 `"0 days"`
+	static let daysRelativeFormatter: DateComponentsFormatter = {
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.allowedUnits = [.day]
+		return formatter
 	}()
 }
 

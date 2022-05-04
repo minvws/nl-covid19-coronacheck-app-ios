@@ -28,9 +28,9 @@ extension AlertContent {
 
 		let localizedTimeRemainingUntilExpiry: String = {
 			if expiryDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day in future
-				return HolderDashboardViewModel.daysRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
+				return DateFormatter.Format.daysRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
 			} else {
-				return HolderDashboardViewModel.hmRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
+				return DateFormatter.Format.hoursMinutesFormatter.string(from: now, to: expiryDate) ?? "-"
 			}
 		}()
 
