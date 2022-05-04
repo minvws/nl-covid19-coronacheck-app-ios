@@ -145,12 +145,12 @@ class ShowQRViewModel: Logging {
 	private func setupContent(greenCards: [GreenCard], thirdPartyTicketAppName: String?) {
 
 		if let greenCard = greenCards.first {
-			if greenCard.type == GreenCardType.domestic.rawValue {
+			if greenCard.getType() == GreenCardType.domestic {
 				title = L.holderShowqrDomesticTitle()
 				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
 				showInternationalAnimation = false
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
-			} else if greenCard.type == GreenCardType.eu.rawValue {
+			} else if greenCard.getType() == GreenCardType.eu {
 				title = L.holderShowqrEuTitle()
 				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
 				showInternationalAnimation = true
@@ -188,14 +188,17 @@ class ShowQRViewModel: Logging {
 
 	func showMoreInformation() {
 		
-		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
-			  let credentialData = greenCard.getLatestCredential()?.data else {
+		guard let greenCard = dataSource.getGreenCardForIndex(currentPage) else {
 			return
 		}
 		
-		if greenCard.type == GreenCardType.domestic.rawValue {
+		if greenCard.getType() == GreenCardType.domestic {
+			guard let credentialData = greenCard.getActiveDomesticCredential()?.data else { return }
+			
 			showDomesticDetails(credentialData)
-		} else if greenCard.type == GreenCardType.eu.rawValue {
+		} else if greenCard.getType() == GreenCardType.eu {
+			guard let credentialData = greenCard.getLatestInternationalCredential()?.data else { return }
+			
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 				showInternationalDetails(euCredentialAttributes)
 			}
@@ -224,7 +227,7 @@ class ShowQRViewModel: Logging {
 	private func displayQRInformation() {
 		
 		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
-			  greenCard.type == GreenCardType.eu.rawValue,
+			  greenCard.getType() == GreenCardType.eu,
 			  let euCredentialAttributes = dataSource.getEuCredentialAttributes(greenCard),
 			  let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first else {
 			return

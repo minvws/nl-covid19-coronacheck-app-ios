@@ -161,22 +161,22 @@ extension QRCard {
 		/// For a given date and greencard, return whether the UI can show that as "enabled" (i.e. it has an active credential):
 		static func evaluateButtonEnabledState(date: Date, dbGreencard: DBGreenCard, origins: [GreenCard.Origin]) -> Bool {
 			guard !dbGreencard.isDeleted else { return false }
-			guard dbGreencard.type != GreenCardType.eu.rawValue else {
+			guard dbGreencard.getType() != GreenCardType.eu else {
 				// international cards should always have an active button.
 				return true
 			}
 
-			let activeCredential: Credential? = dbGreencard.getActiveCredential(forDate: date)
+			let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
 			let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
 			return enabled
 		}
 
-		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI):
+		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI): (might be expired)
 		static func evaluateEUCredentialAttributes(date: Date, dbGreencard: DBGreenCard) -> EuCredentialAttributes? {
 			guard !dbGreencard.isDeleted else { return nil }
 
-			guard dbGreencard.type == GreenCardType.eu.rawValue,
-				  let credentialData = dbGreencard.getLatestCredential()?.data,
+			guard dbGreencard.getType() == .eu,
+				  let credentialData = dbGreencard.getLatestInternationalCredential()?.data,
 				  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData)
 			else {
 				return nil
@@ -188,7 +188,7 @@ extension QRCard {
 		static func evaluateDomesticCredentialAttributes(date: Date, dbGreencard: DBGreenCard) -> DomesticCredentialAttributes? {
 			guard !dbGreencard.isDeleted else { return nil }
 
-			guard dbGreencard.type == GreenCardType.domestic.rawValue,
+			guard dbGreencard.getType() == GreenCardType.domestic,
 				  let credentialData = dbGreencard.currentOrNextActiveCredential(forDate: date)?.data,
 				  let domesticCredentialAttributes = Current.cryptoManager.readDomesticCredentials(credentialData)
 			else {

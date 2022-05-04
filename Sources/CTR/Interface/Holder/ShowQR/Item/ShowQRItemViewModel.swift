@@ -80,9 +80,9 @@ class ShowQRItemViewModel: Logging {
 		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
 		self.qrShouldInitiallyBeHidden = qrShouldInitiallyBeHidden
 		
-		if greenCard.type == GreenCardType.domestic.rawValue {
+		if greenCard.getType() == GreenCardType.domestic {
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
-		} else if greenCard.type == GreenCardType.eu.rawValue {
+		} else if greenCard.getType() == GreenCardType.eu {
 			qrAccessibility = L.holderShowqrEuQrTitle()
 		}
 		
@@ -178,16 +178,15 @@ class ShowQRItemViewModel: Logging {
 	
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
-		
-		guard let data = greenCard.getLatestCredential()?.data else {
-			setQRNotValid()
-			return
-		}
-		
+				
 		switch greenCard.getType() {
 			case .none:
 				setQRNotValid()
 			case .domestic:
+				guard let data = greenCard.getActiveDomesticCredential()?.data else {
+					setQRNotValid()
+					return
+				}
 				DispatchQueue.global(qos: .userInitiated).async {
 					
 					if let policy = self.disclosusePolicy,
@@ -203,6 +202,10 @@ class ShowQRItemViewModel: Logging {
 					}
 				}
 			case .eu:
+				guard let data = greenCard.getLatestInternationalCredential()?.data else {
+					setQRNotValid()
+					return
+				}
 				DispatchQueue.global(qos: .userInitiated).async {
 					if let image = data.generateQRCode(correctionLevel: ShowQRItemViewModel.internationalCorrectionLevel) {
 						DispatchQueue.main.async {
