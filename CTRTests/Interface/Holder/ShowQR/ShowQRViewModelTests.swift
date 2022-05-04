@@ -319,7 +319,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 	func test_moreInformation_euGreenCard_validCredential() throws {
 		// Given
-		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
