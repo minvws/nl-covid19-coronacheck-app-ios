@@ -67,7 +67,7 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter data: the data
 	/// - Returns: True if the data looks like a domestic credential
 	func hasDomesticPrefix(_ data: Data) -> Bool
-	
+
 	// MARK: QR
 
 	///  Disclose the credential
