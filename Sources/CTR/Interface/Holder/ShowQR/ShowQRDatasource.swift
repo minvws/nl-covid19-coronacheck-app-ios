@@ -17,6 +17,12 @@ protocol ShowQRDatasourceProtocol {
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool
+	
+	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
+	
+	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool
+	
+	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool
 
 	func getIndexForMostRelevantGreenCard() -> Int
 }
@@ -68,9 +74,8 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			.filter { $0.greenCard.type == GreenCardType.eu.rawValue }
 		// only with attributes
 			.compactMap { cardsWithSortedOrigin in
-				if let credential = cardsWithSortedOrigin.greenCard.getActiveCredential(),
-				   let data = credential.data,
-				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data) {
+				if let credentialData = cardsWithSortedOrigin.greenCard.getLatestCredential()?.data,
+				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(credentialData) {
 
 					return (cardsWithSortedOrigin.greenCard, attributes: euCredentialAttributes)
 				}
@@ -97,23 +102,48 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool {
 
+		return isDosenumberSmallerThanTotalDose(greenCard) || isVaccinationExpired(greenCard)
+	}
+
+	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
+
 		guard self.items.count > 1,
 			greenCard.type == GreenCardType.eu.rawValue,
 			let highestFullyVaccinatedGreenCard = fullyVaccinatedGreenCards.first,
-			let credential = greenCard.getActiveCredential(),
-			let data = credential.data,
-			let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+			let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
 			let doseNumber = euVaccination.doseNumber,
 			let totalDose = euVaccination.totalDose,
 			totalDose != doseNumber else {
+			// Total Dose equals doseNumber
 			return false
 		}
-
+		
 		logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
-
+	
+	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool {
+		
+		guard greenCard.type == GreenCardType.eu.rawValue,
+			  let euCredentialAttributes = getEuCredentialAttributes(greenCard),
+			  euCredentialAttributes.digitalCovidCertificate.vaccinations != nil else {
+			// Not a vaccination
+			return false
+		}
+		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
+		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
+	}
+	
+	 func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
+		 
+		 if let credentialData = greenCard.getLatestCredential()?.data,
+			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
+			 return euCredentialAttributes
+		 }
+		return nil
+	}
+	
 	func getIndexForMostRelevantGreenCard() -> Int {
 		
 		// Sort by doseNumber, totalDose

@@ -161,6 +161,10 @@ extension QRCard {
 		/// For a given date and greencard, return whether the UI can show that as "enabled" (i.e. it has an active credential):
 		static func evaluateButtonEnabledState(date: Date, dbGreencard: DBGreenCard, origins: [GreenCard.Origin]) -> Bool {
 			guard !dbGreencard.isDeleted else { return false }
+			guard dbGreencard.type != GreenCardType.eu.rawValue else {
+				// international cards should always have an active button.
+				return true
+			}
 
 			let activeCredential: Credential? = dbGreencard.getActiveCredential(forDate: date)
 			let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
@@ -172,13 +176,11 @@ extension QRCard {
 			guard !dbGreencard.isDeleted else { return nil }
 
 			guard dbGreencard.type == GreenCardType.eu.rawValue,
-				  let credential = dbGreencard.currentOrNextActiveCredential(forDate: date),
-				  let data = credential.data,
-				  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(data)
+				  let credentialData = dbGreencard.getLatestCredential()?.data,
+				  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData)
 			else {
 				return nil
 			}
-
 			return euCredentialAttributes
 		}
 
@@ -187,13 +189,11 @@ extension QRCard {
 			guard !dbGreencard.isDeleted else { return nil }
 
 			guard dbGreencard.type == GreenCardType.domestic.rawValue,
-				  let credential = dbGreencard.currentOrNextActiveCredential(forDate: date),
-				  let data = credential.data,
-				  let domesticCredentialAttributes = Current.cryptoManager.readDomesticCredentials(data)
+				  let credentialData = dbGreencard.currentOrNextActiveCredential(forDate: date)?.data,
+				  let domesticCredentialAttributes = Current.cryptoManager.readDomesticCredentials(credentialData)
 			else {
 				return nil
 			}
-
 			return domesticCredentialAttributes
 		}
 	}
