@@ -9,12 +9,12 @@ import Foundation
 
 extension DateFormatter {
 	
+	/// Display date formatter
 	enum Format { }
-	enum Print { }
+	/// Server date formatter
 	enum Header { }
 	
 	static let format = Format.self
-	static let print = Print.self
 	static let header = Header.self
 }
 
@@ -91,9 +91,6 @@ extension DateFormatter.Format {
 		formatter.allowedUnits = [.day]
 		return formatter
 	}()
-}
-
-extension DateFormatter.Print {
 	
 	/// e.g. `3 May 2022`
 	static let dayMonthYearFormatter: DateFormatter = {
@@ -113,7 +110,6 @@ extension DateFormatter.Print {
 	
 	/// e.g. `Tuesday 3 May`
 	static let dayNameDayNumericMonthFormatter: DateFormatter = {
-		
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM"

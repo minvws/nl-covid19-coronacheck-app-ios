@@ -114,7 +114,7 @@ class ListStoredEventsViewModel: Logging {
 				guard let date = event.getSortDate(with: DateFormatter.Format.iso8601DateFormatter) else {
 					return nil
 				}
-				let dateString = DateFormatter.Print.dayMonthYearFormatter.string(from: date)
+				let dateString = DateFormatter.Format.dayMonthYearFormatter.string(from: date)
 				
 				if event.hasNegativeTest {
 					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
@@ -228,7 +228,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(DateFormatter.Print.dayMonthYearFormatter.string) ?? vaccination.dateOfVaccination
+			.map(DateFormatter.Format.dayMonthYearFormatter.string) ?? vaccination.dateOfVaccination
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_vaccination().capitalizingFirstLetter(),
@@ -245,7 +245,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(DateFormatter.Print.dayMonthYearFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(DateFormatter.Format.dayMonthYearFormatter.string) ?? recovery.firstPositiveTestDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -262,7 +262,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Print.dayMonthYearFormatter.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayMonthYearFormatter.string) ?? test.sampleDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_negativeTest().capitalizingFirstLetter(),
