@@ -109,7 +109,7 @@ class CryptoManager: CryptoManaging, Logging {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
 			} else {
-				self.logDebug("ICM: \(result.error)")
+				self.logError("ICM: \(result.error)")
 			}
 		}
 		return nil
@@ -129,7 +129,7 @@ class CryptoManager: CryptoManaging, Logging {
 			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
-				logDebug("QR message: \(message)")
+				logVerbose("QR message: \(message)")
 				return payload
 			} else if let error = disclosed?.error {
 				logError("generateQRmessage: \(error)")
