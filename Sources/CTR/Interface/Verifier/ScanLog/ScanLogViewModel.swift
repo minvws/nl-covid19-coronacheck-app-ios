@@ -66,9 +66,7 @@ class ScanLogViewModel {
 		if firstUseDate < now().addingTimeInterval(-30 * 24 * 60 * 60) { // Cut off 30 days
 			appInUseSince = L.scan_log_footer_long_time()
 		} else {
-			let dateFormatter = DateFormatter()
-			dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-			dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+			let dateFormatter = DateFormatter.Format.dayMonthYearWithTime
 			appInUseSince = L.scan_log_footer_in_use(dateFormatter.string(from: firstUseDate))
 		}
 	}
@@ -105,13 +103,6 @@ private struct ScanLogDataSource: Logging {
 			}
 		}
 	}
-
-	let timeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "HH:mm"
-		formatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		return formatter
-	}()
 
 	let entries: [ScanLogEntry]
 
@@ -198,14 +189,14 @@ private struct ScanLogDataSource: Logging {
 		guard let itemFrom = item.from, let itemTo = item.to else {
 			return nil
 		}
-		var timeTo = timeFormatter.string(from: itemTo)
+		var timeTo = DateFormatter.Format.time.string(from: itemTo)
 		if replaceToDate {
 			timeTo = L.scan_log_list_now() // first entry in the stack should have `HH:mm - now`
 		}
 		// Convert to a ScanLogDisplayEntry
 		return ScanLogDisplayEntry.entry(
 			type: item.mode,
-			timeInterval: timeFormatter.string(from: itemFrom) + " - " + timeTo,
+			timeInterval: DateFormatter.Format.time.string(from: itemFrom) + " - " + timeTo,
 			message: L.scan_log_list_entry(roundedToTens.lowerBound, roundedToTens.higherBound),
 			warning: item.skew ? L.scan_log_list_clock_skew_detected() : nil
 		)

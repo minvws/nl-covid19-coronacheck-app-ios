@@ -51,12 +51,6 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	private let remoteConfigManager: RemoteConfigManaging
 	private let currentSystemUptime: () -> __darwin_time_t?
 	private let now: () -> Date
-	private lazy var serverHeaderDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
-		dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
-		return dateFormatter
-	}()
 
 	required init(
 		remoteConfigManager: RemoteConfigManaging,
@@ -85,7 +79,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	/// Update using the Server Response Header string
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
 	func update(serverHeaderDate: String, ageHeader: String?) {
-		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate),
+		guard var serverDate = DateFormatter.Header.serverDate.date(from: serverHeaderDate),
 			  let systemUptime = currentSystemUptime()
 		else { return }
 

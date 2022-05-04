@@ -186,8 +186,8 @@ extension ListRemoteEventsViewModel {
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
-			   let rhsDate = rhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) {
+			if let lhsDate = lhs.event.getSortDate(with: DateFormatter.Event.iso8601),
+			   let rhsDate = rhs.event.getSortDate(with: DateFormatter.Event.iso8601) {
 
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
@@ -258,10 +258,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
@@ -286,10 +286,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printMonthFormatter.string) ?? ""
+			.map(DateFormatter.Format.month.string) ?? ""
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var details = VaccinationDetailsGenerator.getDetails(
@@ -336,10 +336,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonth.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),
@@ -364,10 +364,10 @@ extension ListRemoteEventsViewModel {
 		
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
 		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -392,10 +392,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -423,7 +423,7 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		var title: String = L.general_vaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -455,7 +455,7 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -482,7 +482,7 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
@@ -728,7 +728,7 @@ private extension ListRemoteEventsViewModel {
 			return nil
 		}
 
-		let printSampleDate: String = ListRemoteEventsViewModel.printTestDateFormatter.string(from: sampleDate)
+		let printSampleDate: String = DateFormatter.Format.dayNameDayNumericMonthWithTime.string(from: sampleDate)
 		let holderID = NegativeTestV2DetailsGenerator.getDisplayIdentity(result.holder)
 		
 		return ListRemoteEventsViewController.Row(

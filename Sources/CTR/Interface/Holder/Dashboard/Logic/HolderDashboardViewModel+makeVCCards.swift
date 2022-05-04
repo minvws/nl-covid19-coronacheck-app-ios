@@ -679,10 +679,10 @@ private func countdownText(now: Date, to futureExpiryDate: Date) -> String? {
 		let fiveMinutes: TimeInterval = 5 * 60
 		if futureExpiryDate < now.addingTimeInterval(fiveMinutes) {
 			// e.g. "4 minuten en 15 seconden"
-			return HolderDashboardViewModel.hmsRelativeFormatter
+			return DateFormatter.Relative.hoursMinutesSeconds
 		} else {
 			// e.g. "23 uur en 59 minuten"
-			return HolderDashboardViewModel.hmRelativeFormatter
+			return DateFormatter.Relative.hoursMinutes
 		}
 	}()
 
