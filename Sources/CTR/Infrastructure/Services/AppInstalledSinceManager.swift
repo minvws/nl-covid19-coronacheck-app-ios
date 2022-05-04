@@ -25,13 +25,6 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		set { secureUserSettings.appInstalledDate = newValue }
 	}
 	
-	private lazy var serverHeaderDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
-		dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
-		return dateFormatter
-	}()
-	
 	var firstUseDate: Date? {
 		return appInstalledDate
 	}
@@ -51,7 +44,7 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		// it can only be set once
 		guard appInstalledDate == nil else { return }
 
-		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate) else { return }
+		guard var serverDate = DateFormatter.Header.dateFormatter.date(from: serverHeaderDate) else { return }
 
 		if let ageHeader = ageHeader {
 			

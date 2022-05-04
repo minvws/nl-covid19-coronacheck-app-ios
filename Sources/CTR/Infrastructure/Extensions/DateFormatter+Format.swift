@@ -11,9 +11,11 @@ extension DateFormatter {
 	
 	enum Format { }
 	enum Print { }
+	enum Header { }
 	
 	static let format = Format.self
 	static let print = Print.self
+	static let header = Header.self
 }
 
 extension DateFormatter.Format {
@@ -22,14 +24,6 @@ extension DateFormatter.Format {
 	static let iso8601DateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
-		return dateFormatter
-	}()
-	
-	/// e.g. `Tue, 3 May 2022 09:58:24 CEST`
-	static let serverHeaderDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
-		dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
 		return dateFormatter
 	}()
 	
@@ -147,6 +141,17 @@ extension DateFormatter.Print {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd-MM-yyyy"
+		return dateFormatter
+	}()
+}
+
+extension DateFormatter.Header {
+	
+	/// e.g. `Tue, 3 May 2022 09:58:24 CEST`
+	static let dateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
+		dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
 		return dateFormatter
 	}()
 }
