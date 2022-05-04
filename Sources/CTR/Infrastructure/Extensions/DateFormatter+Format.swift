@@ -36,6 +36,14 @@ extension DateFormatter.Format {
 		return dateFormatter
 	}()
 	
+	/// e.g. `3 May 2022 09:53`
+	static let dayMonthYearWithTimeFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+		return dateFormatter
+	}()
+	
 	/// e.g. `Tuesday 3 May 09:53`
 	static let dayNameDayNumericMonthWithTimeFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
@@ -73,6 +81,14 @@ extension DateFormatter.Format {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd-MM-yyyy"
+		return dateFormatter
+	}()
+	
+	/// e.g. `13-10-2021 09:54`
+	static let numericDateWithTimeFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
 		return dateFormatter
 	}()
 	

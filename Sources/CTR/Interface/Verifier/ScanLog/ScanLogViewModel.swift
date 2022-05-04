@@ -66,9 +66,7 @@ class ScanLogViewModel {
 		if firstUseDate < now().addingTimeInterval(-30 * 24 * 60 * 60) { // Cut off 30 days
 			appInUseSince = L.scan_log_footer_long_time()
 		} else {
-			let dateFormatter = DateFormatter()
-			dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-			dateFormatter.dateFormat = "d MMMM yyyy HH:mm"
+			let dateFormatter = DateFormatter.Format.dayMonthYearWithTimeFormatter
 			appInUseSince = L.scan_log_footer_in_use(dateFormatter.string(from: firstUseDate))
 		}
 	}

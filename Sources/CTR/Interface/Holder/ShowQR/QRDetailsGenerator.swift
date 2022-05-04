@@ -7,25 +7,6 @@
 
 import Foundation
 
-struct QRDetailsGenerator {
-
-	static let printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
-		return dateFormatter
-	}()
-
-	static let printDateTimeFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		return dateFormatter
-	}()
-}
-
 class NegativeTestQRDetailsGenerator {
 
 	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) -> [DCCQRDetails] {
@@ -33,10 +14,10 @@ class NegativeTestQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDateFormatter)
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(QRDetailsGenerator.printDateTimeFormatter.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthWithTimeFormatter.string) ?? test.sampleDate
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
 
@@ -94,10 +75,10 @@ class VaccinationQRDetailsGenerator {
 		let vaccineManufacturer = mappingManager.getVaccinationManufacturer(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDateFormatter)
 
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
+			.map(DateFormatter.Format.numericDateFormatter.string) ?? vaccination.dateOfVaccination
 
 		return [
 			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
@@ -122,14 +103,14 @@ class RecoveryQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDateFormatter)
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(DateFormatter.Format.numericDateFormatter.string) ?? recovery.firstPositiveTestDate
 		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? recovery.validFrom
+			.map(DateFormatter.Format.numericDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? recovery.expiresAt
+			.map(DateFormatter.Format.numericDateFormatter.string) ?? recovery.expiresAt
 
 		return [
 			DCCQRDetails(field: DCCQRDetailsRecovery.name, value: name),

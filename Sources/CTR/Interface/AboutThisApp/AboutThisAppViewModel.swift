@@ -84,10 +84,7 @@ class AboutThisAppViewModel: Logging {
 				  let hash = Current.userSettings.configFetchedHash
 			else { return nil }
 
-			// 13-10-2021 00:00
-			let dateformatter = DateFormatter()
-			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
-			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
+			let dateString = DateFormatter.Format.numericDateWithTimeFormatter.string(from: Date(timeIntervalSince1970: timestamp))
 
 			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
 		}()
