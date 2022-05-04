@@ -230,4 +230,15 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return .failure(CryptoError.unknown)
 	}
+	
+	/// Is this data a foreign DCC
+	/// - Parameter data: the data of the DCC
+	/// - Returns: True if the DCC is foreign
+	func isForeignDCC(_ data: Data) -> Bool {
+		
+		guard let euCredentialAttributes = readEuCredentials(data) else {
+			return false
+		}
+		return euCredentialAttributes.isForeignDCC
+	}
 }

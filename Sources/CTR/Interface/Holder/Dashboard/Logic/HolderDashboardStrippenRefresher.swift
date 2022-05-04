@@ -303,7 +303,14 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					}
 					return
 				}
-
+				
+				// Filter expired foreign DCCs, those should not lead to a refresh
+				if greencard.type == GreenCardType.eu.rawValue,
+				   let lastCredentialData = allCredentialsForGreencard.last?.data,
+				   Current.cryptoManager.isForeignDCC(lastCredentialData) {
+					return
+				}
+				
 				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
 				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
 
@@ -323,14 +330,6 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 				guard greencardIsWithinThresholdForRefresh
 				else { return } // There are still plenty of credentials remaining, no need to refresh.
-
-				// Filter expired foreign DCCs, those should not lead to a refresh
-				if greencard.type == GreenCardType.eu.rawValue,
-				   let lastCredentialData = allCredentialsForGreencard.last?.data,
-					let euCredentialAttributes = Current.cryptoManager.readEuCredentials(lastCredentialData),
-					euCredentialAttributes.isForeignDCC {
-						return
-				}
 				
 				if daysUntilLastCredentialExpiry <= 0 {
 					expiredGreencards += [greencard]

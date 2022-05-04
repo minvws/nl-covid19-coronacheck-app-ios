@@ -53,6 +53,11 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError>
 	
+	/// Is this data a foreign DCC
+	/// - Parameter data: the data of the DCC
+	/// - Returns: True if the DCC is foreign
+	func isForeignDCC(_ data: Data) -> Bool
+	
 	// MARK: QR
 
 	///  Disclose the credential
