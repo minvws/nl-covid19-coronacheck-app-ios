@@ -14,10 +14,10 @@ class NegativeTestQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTimeFormatter.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? test.sampleDate
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
 
@@ -75,10 +75,10 @@ class VaccinationQRDetailsGenerator {
 		let vaccineManufacturer = mappingManager.getVaccinationManufacturer(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(DateFormatter.Format.numericDateFormatter.string) ?? vaccination.dateOfVaccination
+			.map(DateFormatter.Format.numericDate.string) ?? vaccination.dateOfVaccination
 
 		return [
 			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
@@ -103,14 +103,14 @@ class RecoveryQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(DateFormatter.Format.numericDateFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(DateFormatter.Format.numericDate.string) ?? recovery.firstPositiveTestDate
 		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-			.map(DateFormatter.Format.numericDateFormatter.string) ?? recovery.validFrom
+			.map(DateFormatter.Format.numericDate.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-			.map(DateFormatter.Format.numericDateFormatter.string) ?? recovery.expiresAt
+			.map(DateFormatter.Format.numericDate.string) ?? recovery.expiresAt
 
 		return [
 			DCCQRDetails(field: DCCQRDetailsRecovery.name, value: name),

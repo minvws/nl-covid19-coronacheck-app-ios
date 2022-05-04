@@ -44,7 +44,7 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		// it can only be set once
 		guard appInstalledDate == nil else { return }
 
-		guard var serverDate = DateFormatter.Header.dateFormatter.date(from: serverHeaderDate) else { return }
+		guard var serverDate = DateFormatter.Header.serverDate.date(from: serverHeaderDate) else { return }
 
 		if let ageHeader = ageHeader {
 			

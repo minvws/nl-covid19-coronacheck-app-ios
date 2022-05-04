@@ -79,7 +79,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	/// Update using the Server Response Header string
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
 	func update(serverHeaderDate: String, ageHeader: String?) {
-		guard var serverDate = DateFormatter.Header.dateFormatter.date(from: serverHeaderDate),
+		guard var serverDate = DateFormatter.Header.serverDate.date(from: serverHeaderDate),
 			  let systemUptime = currentSystemUptime()
 		else { return }
 

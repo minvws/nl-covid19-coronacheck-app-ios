@@ -682,7 +682,7 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 			  let timeToLive = Current.remoteConfigManager.storedConfiguration.configTTL else { return }
 		
 		let configValidUntilDate = Date(timeIntervalSince1970: configFetchedTimestamp + TimeInterval(timeToLive))
-		let configValidUntilDateString = DateFormatter.Format.dayAndMonthWithTimeFormatter.string(from: configValidUntilDate)
+		let configValidUntilDateString = DateFormatter.Format.dayMonthWithTime.string(from: configValidUntilDate)
 		coordinator?.userWishesMoreInfoAboutOutdatedConfig(validUntil: configValidUntilDateString)
 	}
 	
