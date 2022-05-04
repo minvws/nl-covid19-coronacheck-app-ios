@@ -132,10 +132,7 @@ class ShowQRItemViewModel: Logging {
 			// Attempt to make a nicer voiceover string:
 			let voiceoverTimeRemaining: String
 			
-			let durationFormatter = DateComponentsFormatter()
-			durationFormatter.unitsStyle = . full
-			durationFormatter.maximumUnitCount = 2
-			durationFormatter.allowedUnits = [.minute, .second]
+			let durationFormatter = DateFormatter.Relative.minutesSeconds
 			
 			// e.g. "in ten seconds"
 			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))
