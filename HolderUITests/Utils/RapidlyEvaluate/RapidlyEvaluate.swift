@@ -10,7 +10,7 @@ import CoreFoundation
 /// Adds an observer to the RunLoop with a callback to match a condition before each loop.
 /// This allows for very rapid evaluation of a test condition without excessive waiting.
 /// Downside: high CPU usage.
-func rapidlyEvaluate(_ evaluateCondition: @escaping () -> Bool, timeout: CFTimeInterval = 5) -> Bool {
+func rapidlyEvaluate(timeout: CFTimeInterval = 5, _ evaluateCondition: @escaping () -> Bool) -> Bool {
 	
 	var fulfilled = false
 	

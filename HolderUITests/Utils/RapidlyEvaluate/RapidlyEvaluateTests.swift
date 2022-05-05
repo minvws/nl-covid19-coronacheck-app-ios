@@ -34,9 +34,9 @@ class RapidlyEvaluateTests: XCTestCase {
 		
 		let until = Date(timeIntervalSinceNow: 2)
 		
-		let result = rapidlyEvaluate({
+		let result = rapidlyEvaluate(timeout: 1) {
 			until < Date()
-		}, timeout: 1)
+		}
 		
 		XCTAssertFalse(result)
     }

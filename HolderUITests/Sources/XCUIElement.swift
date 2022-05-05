@@ -25,7 +25,7 @@ extension XCUIElement {
 	}
 	
 	func assertExistence() -> XCUIElement {
-		let elementPresent = rapidlyEvaluate {
+		let elementPresent = rapidlyEvaluate(timeout: XCUIElement.timeout) {
 			self.exists
 		}
 		XCTAssertTrue(elementPresent, self.description + " could not be found")
