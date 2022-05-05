@@ -399,6 +399,7 @@ targets:
       - Standard_UITesting
     sources:
       - path: HolderUITests
+      - path: CTRTests/Utils/RapidlyEvaluate/RapidlyEvaluate.swift
 
   HolderUISmoketests:
     templates:
