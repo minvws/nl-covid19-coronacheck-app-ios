@@ -50,7 +50,7 @@ final class PaperProofStartScanningViewController: BaseViewController {
 
 	private func setupButtons() {
 
-		viewModel.$nextButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
+		viewModel.$nextButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.userTappedNextButton() }
 
 		viewModel.$secondaryButtonTitle.binding = { [weak self] in self?.sceneView.secondaryButton.title = $0 }
