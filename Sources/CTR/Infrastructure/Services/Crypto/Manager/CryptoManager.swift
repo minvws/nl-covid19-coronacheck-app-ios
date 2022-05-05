@@ -109,7 +109,7 @@ class CryptoManager: CryptoManaging, Logging {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
 			} else {
-				self.logDebug("ICM: \(result.error)")
+				self.logError("ICM: \(result.error)")
 			}
 		}
 		return nil
@@ -129,7 +129,7 @@ class CryptoManager: CryptoManaging, Logging {
 			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
-				logDebug("QR message: \(message)")
+				logVerbose("QR message: \(message)")
 				return payload
 			} else if let error = disclosed?.error {
 				logError("generateQRmessage: \(error)")
@@ -229,5 +229,29 @@ class CryptoManager: CryptoManaging, Logging {
 			return .failure(CryptoError.credentialCreateFail(reason: reason))
 		}
 		return .failure(CryptoError.unknown)
+	}
+	
+	/// Is this data a foreign DCC
+	/// - Parameter data: the data of the DCC
+	/// - Returns: True if the DCC is foreign
+	func isForeignDCC(_ data: Data) -> Bool {
+				
+		return MobilecoreIsForeignDCC(data)
+	}
+	
+	/// Is this data a DCC
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a DCC
+	func isDCC(_ data: Data) -> Bool {
+				
+		return MobilecoreIsDCC(data)
+	}
+	
+	/// Is this data a CTB
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a CTB
+	func hasDomesticPrefix(_ data: Data) -> Bool {
+		
+		return MobilecoreHasDomesticPrefix(data)
 	}
 }

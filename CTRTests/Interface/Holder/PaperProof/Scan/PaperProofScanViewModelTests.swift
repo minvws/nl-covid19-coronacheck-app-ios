@@ -42,7 +42,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRisCTB_shouldShowErrorState() {
 
 		// Given
-		paperProofIdentifierSpy.stubbedIdentifyResult = .ctb
+		paperProofIdentifierSpy.stubbedIdentifyResult = .hasDomesticPrefix
 		
 		// When
 		sut.parseQRMessage("test")

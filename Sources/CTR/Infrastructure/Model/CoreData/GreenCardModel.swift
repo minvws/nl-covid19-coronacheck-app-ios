@@ -64,7 +64,11 @@ extension GreenCard {
 	/// Get the active credential with the longest lifetime for a date
 	/// - Parameter now: the date for the credential (defaults to now)
 	/// - Returns: the active credential
-	func getActiveCredential(forDate now: Date = Date()) -> Credential? {
+	func getActiveDomesticCredential(forDate now: Date = Date()) -> Credential? {
+		
+		guard getType() == GreenCardType.domestic else {
+			return nil
+		}
 
 		if let list = credentials?.allObjects as? [Credential] {
 			return list
@@ -127,15 +131,12 @@ extension GreenCard {
 		return origins?.compactMap({ $0 as? Origin })
 	}
 	
-	func getLatestCredential() -> Credential? {
+	func getLatestInternationalCredential() -> Credential? {
 		
-		switch getType() {
-			case .none:
-				return nil
-			case .domestic:
-				return getActiveCredential()
-			case .eu:
-				return castCredentials()?.last
+		guard getType() == GreenCardType.eu else {
+			return nil
 		}
+		// An international greencard has 1 credential, that may be expired.
+		return castCredentials()?.last
 	}
 }

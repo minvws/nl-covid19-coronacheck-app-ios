@@ -37,18 +37,18 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetDisplayIssuerResult
 	}
 
-	var invokedGetBiLingualDisplayCountry = false
-	var invokedGetBiLingualDisplayCountryCount = 0
-	var invokedGetBiLingualDisplayCountryParameters: (country: String, Void)?
-	var invokedGetBiLingualDisplayCountryParametersList = [(country: String, Void)]()
-	var stubbedGetBiLingualDisplayCountryResult: String! = ""
+	var invokedGetBilingualDisplayCountry = false
+	var invokedGetBilingualDisplayCountryCount = 0
+	var invokedGetBilingualDisplayCountryParameters: (country: String, Void)?
+	var invokedGetBilingualDisplayCountryParametersList = [(country: String, Void)]()
+	var stubbedGetBilingualDisplayCountryResult: String! = ""
 
-	func getBiLingualDisplayCountry(_ country: String) -> String {
-		invokedGetBiLingualDisplayCountry = true
-		invokedGetBiLingualDisplayCountryCount += 1
-		invokedGetBiLingualDisplayCountryParameters = (country, ())
-		invokedGetBiLingualDisplayCountryParametersList.append((country, ()))
-		return stubbedGetBiLingualDisplayCountryResult
+	func getBilingualDisplayCountry(_ country: String) -> String {
+		invokedGetBilingualDisplayCountry = true
+		invokedGetBilingualDisplayCountryCount += 1
+		invokedGetBilingualDisplayCountryParameters = (country, ())
+		invokedGetBilingualDisplayCountryParametersList.append((country, ()))
+		return stubbedGetBilingualDisplayCountryResult
 	}
 
 	var invokedGetDisplayCountry = false

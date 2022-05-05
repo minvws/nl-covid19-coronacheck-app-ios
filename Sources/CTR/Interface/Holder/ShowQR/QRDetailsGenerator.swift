@@ -47,7 +47,7 @@ class NegativeTestQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsTest.result, value: testResult),
 			DCCQRDetails(field: DCCQRDetailsTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			DCCQRDetails(field: DCCQRDetailsTest.manufacturer, value: manufacturer),
-			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager.getBiLingualDisplayCountry(test.country)),
+			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager.getBilingualDisplayCountry(test.country)),
 			DCCQRDetails(field: DCCQRDetailsTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer, country: test.country)),
 			DCCQRDetails(field: DCCQRDetailsTest.uniqueIdentifer, value: test.certificateIdentifier)
 		]
@@ -89,7 +89,7 @@ class VaccinationQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage, dosageMessage: dosageMessage),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
-			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBiLingualDisplayCountry(vaccination.country)),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBilingualDisplayCountry(vaccination.country)),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer, country: vaccination.country)),
 			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
 		]
@@ -117,7 +117,7 @@ class RecoveryQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsRecovery.dateOfBirth, value: formattedBirthDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.pathogen, value: L.holderShowqrEuAboutRecoveryPathogenvalue()),
 			DCCQRDetails(field: DCCQRDetailsRecovery.date, value: formattedFirstPostiveDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager.getBiLingualDisplayCountry(recovery.country)),
+			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager.getBilingualDisplayCountry(recovery.country)),
 			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer, country: recovery.country)),
 			DCCQRDetails(field: DCCQRDetailsRecovery.validFrom, value: formattedValidFromDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.validUntil, value: formattedValidUntilDate),

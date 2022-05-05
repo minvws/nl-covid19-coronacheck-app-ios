@@ -71,10 +71,10 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 		let vaccinationGreenCardsWithAttributes: [(greenCard: GreenCard, attributes: EuCredentialAttributes)] = items
 		// only international
-			.filter { $0.greenCard.type == GreenCardType.eu.rawValue }
+			.filter { $0.greenCard.getType() == GreenCardType.eu }
 		// only with attributes
 			.compactMap { cardsWithSortedOrigin in
-				if let credentialData = cardsWithSortedOrigin.greenCard.getLatestCredential()?.data,
+				if let credentialData = cardsWithSortedOrigin.greenCard.getLatestInternationalCredential()?.data,
 				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(credentialData) {
 
 					return (cardsWithSortedOrigin.greenCard, attributes: euCredentialAttributes)
@@ -108,7 +108,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
 
 		guard self.items.count > 1,
-			greenCard.type == GreenCardType.eu.rawValue,
+			  greenCard.getType() == GreenCardType.eu,
 			let highestFullyVaccinatedGreenCard = fullyVaccinatedGreenCards.first,
 			let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
@@ -125,7 +125,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	
 	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool {
 		
-		guard greenCard.type == GreenCardType.eu.rawValue,
+		guard greenCard.getType() == GreenCardType.eu,
 			  let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			  euCredentialAttributes.digitalCovidCertificate.vaccinations != nil else {
 			// Not a vaccination
@@ -137,7 +137,9 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	
 	 func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
 		 
-		 if let credentialData = greenCard.getLatestCredential()?.data,
+		 guard greenCard.getType() == .eu else { return nil }
+		 
+		 if let credentialData = greenCard.getLatestInternationalCredential()?.data,
 			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 			 return euCredentialAttributes
 		 }
