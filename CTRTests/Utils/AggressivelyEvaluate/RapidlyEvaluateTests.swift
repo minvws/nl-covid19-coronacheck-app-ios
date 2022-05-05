@@ -41,4 +41,3 @@ class RapidlyEvaluateTests: XCTestCase {
 		XCTAssertFalse(result)
     }
 }
-
