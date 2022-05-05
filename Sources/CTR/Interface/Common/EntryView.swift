@@ -25,7 +25,7 @@ class EntryView: BaseView {
 	/// The header label
 	private let headerLabel: Label = {
 		
-		return Label(caption1SemiBold: nil)
+		return Label(caption1SemiBold: nil).multiline()
 	}()
 	
 	let inputField: UITextField = {
@@ -91,7 +91,7 @@ class EntryView: BaseView {
 			
 			// Header
 			headerLabel.topAnchor.constraint(equalTo: topAnchor),
-			headerLabel.heightAnchor.constraint(equalToConstant: ViewTraits.headerHeight),
+			headerLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.headerHeight),
 			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
 			headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			headerLabel.bottomAnchor.constraint(equalTo: inputField.topAnchor),
