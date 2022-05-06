@@ -97,7 +97,6 @@ extension DisclosureSubtitleButton {
 		button.isUserInteractionEnabled = true
 		button.title = title
 		button.subtitle = subtitle
-		button.subtitleIcon = subtitleIcon
 		button.primaryButtonTappedCommand = command
 		return button
 	}

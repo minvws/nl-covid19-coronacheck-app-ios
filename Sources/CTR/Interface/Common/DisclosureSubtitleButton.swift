@@ -25,7 +25,6 @@ class DisclosureSubtitleButton: BaseView {
 		static let topMargin: CGFloat = 13.0
 		static let bottomMargin: CGFloat = 16.0
 		static let leadingMargin: CGFloat = 16.0
-		static let iconSpacing: CGFloat = 12.0
 		
 		enum Title {
 			static let lineHeight: CGFloat = 22
@@ -56,16 +55,6 @@ class DisclosureSubtitleButton: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-	
-	/// The subtitle icon image view
-	private let iconImageView: UIImageView = {
-		
-		let view = UIImageView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.adjustsImageSizeForAccessibilityContentSizeCategory = true
-		view.contentMode = .scaleAspectFit
-		return view
-	}()
 
 	let button: UIButton = {
 
@@ -89,7 +78,6 @@ class DisclosureSubtitleButton: BaseView {
 		addSubview(disclosureView)
 		addSubview(titleLabel)
 		addSubview(subtitleLabel)
-		addSubview(iconImageView)
 		button.embed(in: self)
 		bringSubviewToFront(button)
 	}
@@ -110,7 +98,10 @@ class DisclosureSubtitleButton: BaseView {
 				equalTo: leadingAnchor,
 				constant: ViewTraits.leadingMargin
 			),
-			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
+			titleLabel.trailingAnchor.constraint(
+				lessThanOrEqualTo: disclosureView.leadingAnchor,
+				constant: -ViewTraits.textMargin
+			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: subtitleLabel.topAnchor,
 				constant: -ViewTraits.textMargin
@@ -125,16 +116,10 @@ class DisclosureSubtitleButton: BaseView {
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.bottomMargin
 			),
-			
-			iconImageView.leadingAnchor.constraint(
-				equalTo: subtitleLabel.trailingAnchor,
-				constant: ViewTraits.iconSpacing
-			),
-			iconImageView.trailingAnchor.constraint(
+			subtitleLabel.trailingAnchor.constraint(
 				lessThanOrEqualTo: disclosureView.leadingAnchor,
-				constant: -ViewTraits.iconSpacing
-			),
-			iconImageView.bottomAnchor.constraint(equalTo: subtitleLabel.bottomAnchor)
+				constant: -ViewTraits.textMargin
+			)
 		])
 
 		setupDisclosureViewConstraints()
@@ -192,13 +177,6 @@ class DisclosureSubtitleButton: BaseView {
 			subtitleLabel.attributedText = subtitle?.setLineHeight(ViewTraits.Message.lineHeight,
 																   kerning: ViewTraits.Message.kerning)
 			setAccessibilityLabel()
-		}
-	}
-	
-	/// The icon next to subtitle
-	var subtitleIcon: UIImage? {
-		didSet {
-			iconImageView.image = subtitleIcon
 		}
 	}
 }
