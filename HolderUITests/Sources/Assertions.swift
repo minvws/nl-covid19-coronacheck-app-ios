@@ -80,7 +80,7 @@ extension BaseTest {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
-		app.tapButton("CloseButton")
+		app.tapButton("Sluiten")
 	}
 	
 	func assertDisclosureMessages() {
@@ -241,7 +241,7 @@ extension BaseTest {
 				app.tapButton("Vorige QR-code")
 			}
 		}
-		app.tapButton("BackButton")
+		app.tapButton("Terug")
 	}
 	
 	func assertInternationalRecoveryQRDetails(for person: TestPerson) {
@@ -254,7 +254,7 @@ extension BaseTest {
 		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: formattedOffsetDate(with: person.recFrom, short: true))
 		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value: formattedOffsetDate(with: person.recUntil, short: true))
 		closeQRDetails()
-		app.tapButton("BackButton")
+		app.tapButton("Terug")
 	}
 	
 	func assertInternationalTestQRDetails(for person: TestPerson, testType: TestCertificateType) {
@@ -266,11 +266,11 @@ extension BaseTest {
 		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona)")
 		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
 		closeQRDetails()
-		app.tapButton("BackButton")
+		app.tapButton("Terug")
 	}
 	
 	private func openQRDetails(for person: TestPerson) {
-		app.tapButton("InformationButton")
+		app.tapButton("Details")
 		app.labelValuePairExist(label: "Naam / Name:", value: person.name)
 		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
 	}
@@ -290,11 +290,12 @@ extension BaseTest {
 		let dataShown = app.otherElements["StoredEventDetailsView"].descendants(matching: .other).mapLabelsToSet()
 		makeScreenShot(name: "Wallet item \(eventType.rawValue)@\(atIndex)")
 		XCTAssertTrue(dataToCheck.isSubset(of: dataShown))
-		app.tapButton("BackButton")
+		app.tapButton("Terug")
 	}
 	
 	func assertAmountOfWalletItems(ofType eventType: EventType, is expectedAmount: Int) {
-		let items = app.descendants(matching: .any).matching(identifier: eventType.rawValue)
+		let predicate = NSPredicate(format: "label contains[c] %@", eventType.rawValue)
+		let items = app.descendants(matching: .button).matching(predicate)
 		XCTAssertEqual(items.count, expectedAmount)
 	}
 }
