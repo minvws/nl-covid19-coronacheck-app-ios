@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import AppAuthEnterpriseUserAgent
+import AppAuth
 
 extension OIDExternalUserAgentIOSCustomBrowser {
 
