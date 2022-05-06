@@ -11,7 +11,7 @@ packages:
     ## and fix Xcode compile warnings.
     ## Forked from: https://github.com/openid/AppAuth-iOS
     github: GlennChiu/AppAuth-iOS
-    revision: 1818e38a9171eb9a883fc4d4a2a6b2fc14fdee0d
+    revision: c0507aaff96d95a3c39bd3ca868106185674436f
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.4
@@ -41,7 +41,7 @@ packages:
     majorVersion: 9.1.0
 
 
-# - Attributes: 
+# - Attributes:
 
 attributes:
   LastUpgradeCheck: "1250"
@@ -87,10 +87,6 @@ targetTemplates:
       # SPM:
       - package: AppAuth
         product: AppAuth
-      - package: AppAuth
-        product: AppAuthCore
-      - package: AppAuth
-        product: AppAuthEnterpriseUserAgent
       - package: CocoaLumberjack
         product: CocoaLumberjack
       - package: CocoaLumberjack
@@ -219,7 +215,7 @@ targetTemplates:
             echo "error: Testflight deploys cannot contain missing translations:"
             echo $OUTPUT
             exit 1
-          else 
+          else
             echo $OUTPUT
           fi
         inputFiles:
@@ -238,9 +234,9 @@ targetTemplates:
           fi
 
           # Call Swiftlint:
-          if [ -z ${SWIFTLINT_PATH+x} ]; then 
+          if [ -z ${SWIFTLINT_PATH+x} ]; then
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
-          else 
+          else
             $SWIFTLINT_PATH --quiet --config=./.swiftlint.yml
           fi
 
