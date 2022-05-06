@@ -48,7 +48,6 @@ extension BaseTest {
 		if !loggedIn { loginToServer() }
 		
 		let textField = safari.webViews.textFields.firstMatch.assertExistence()
-		textField.tap()
 		textField.clearText()
 		textField.typeText(person.bsn)
 		makeScreenShot(name: "BSN typed")
@@ -74,7 +73,7 @@ extension BaseTest {
 		makeScreenShot(name: "Username typed")
 		
 		let continueButton = safari.buttons["Continue"]
-		if continueButton.waitForExistence(timeout: self.loginTimeout) {
+		if rapidlyEvaluate(timeout: self.loginTimeout, { continueButton.exists }) {
 			continueButton.tap()
 			makeScreenShot(name: "Hide continue button")
 		}
