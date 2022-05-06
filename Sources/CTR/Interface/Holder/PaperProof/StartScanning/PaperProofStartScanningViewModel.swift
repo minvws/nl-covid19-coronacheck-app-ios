@@ -13,7 +13,7 @@ final class PaperProofStartScanningViewModel: Logging {
 	@Bindable private(set) var message: String = L.holder_paperproof_startscanning_body()
 	@Bindable private(set) var nextButtonTitle = L.holder_paperproof_startscanning_button_startScanning()
 	@Bindable private(set) var secondaryButtonTitle = L.holder_paperproof_startscanning_button_whichProofs()
-	@Bindable private(set) var internationalQROnly = I.internationalQROnly()
+	@Bindable private(set) var internationalQROnly = I.scannableQRs()
 
 	private weak var coordinator: PaperProofCoordinatorDelegate?
 	

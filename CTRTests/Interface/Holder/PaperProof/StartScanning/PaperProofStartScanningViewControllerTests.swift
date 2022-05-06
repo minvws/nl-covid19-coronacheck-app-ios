@@ -44,7 +44,7 @@ class PaperProofStartScanningViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holder_paperproof_startscanning_body()
 		expect(self.sut.sceneView.primaryTitle) == L.holder_paperproof_startscanning_button_startScanning()
 		expect(self.sut.sceneView.secondaryButton.title) == L.holder_paperproof_startscanning_button_whichProofs()
-		expect(self.sut.sceneView.icon) == I.internationalQROnly()
+		expect(self.sut.sceneView.icon) == I.scannableQRs()
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
