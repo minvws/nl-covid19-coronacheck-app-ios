@@ -67,10 +67,6 @@ class AppCoordinator: Coordinator, Logging {
 	/// Designated starter method
 	func start() {
 		
-		guard !ProcessInfo.processInfo.isTesting else {
-			return
-		}
-		
 		if CommandLine.arguments.contains("-resetOnStart") {
 			Current.wipePersistedData(flavor: AppFlavor.holder)
 		}

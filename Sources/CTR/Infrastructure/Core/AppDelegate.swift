@@ -24,6 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 			
+			if CommandLine.arguments.contains("-disableTransitions") {
+				// Disable UIView animations for UI testing
+				UIView.setAnimationsEnabled(false)
+			}
+			
 			if !ProcessInfo.processInfo.isTesting {
 				// Setup Logging
 				LogHandler.setup()

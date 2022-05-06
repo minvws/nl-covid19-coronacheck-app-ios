@@ -32,6 +32,18 @@ class AppCoordinatorTests: XCTestCase {
 	}
 
 	// MARK: - Tests
+	
+	func test_start() {
+		
+		// Given
+		sut.flavor = .holder
+		
+		// When
+		sut.start()
+		
+		// Then
+		expect(self.navigationSpy.invokedSetViewController) == true
+	}
 
 	func test_holder_handleLaunchState_finished() {
 

@@ -182,7 +182,7 @@
 "holder.dcc.recovery.date" = "Test date:";
 "holder.dcc.recovery.dateofbirth" = "Date of birth:";
 "holder.dcc.recovery.details.title" = "Details";
-"holder.dcc.recovery.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.recovery.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.recovery.identifier" = "Unique certificate identifier:";
 "holder.dcc.recovery.name" = "Name:";
 "holder.dcc.recovery.pathogen" = "Disease recovered from:";
@@ -194,7 +194,7 @@
 "holder.dcc.test.dateofbirth" = "Date of birth:";
 "holder.dcc.test.details.title" = "Details";
 "holder.dcc.test.facility" = "Testing centre:";
-"holder.dcc.test.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 "holder.dcc.test.manufacturer" = "Test manufacturer:";
 "holder.dcc.test.name" = "Name:";
@@ -209,7 +209,7 @@
 "holder.dcc.vaccination.dateofbirth" = "Date of birth:";
 "holder.dcc.vaccination.details.title" = "Details";
 "holder.dcc.vaccination.dosage" = "Number in series of doses:";
-"holder.dcc.vaccination.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.vaccination.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.vaccination.identifier" = "Unique vaccination identifier:";
 "holder.dcc.vaccination.list.title" = "Vaccination certificate dose %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Vaccine manufacturer:";
@@ -634,7 +634,7 @@
 "holder_listRemoteEvents_paperflow_message" = "If the details below are correct, you can add your certificate to the app.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
-"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. Ask if they can help you correct your data.</p>";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. Ask if they can help you correct your data.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Please contact your test location. They can help you change these details.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Please contact the test location. They can help you change your details.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Is something wrong?";
@@ -690,7 +690,7 @@
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_scanner_error_action" = "Scan again";
-"holder_scanner_error_message_ctb" = "Scan the QR code on the international certificate you received from your health care provider or the government. It contains the information needed to add your certificate to the app. You can recognise this certificate by the European flag.";
+"holder_scanner_error_message_ctb" = "You don’t need to scan your Dutch QR code. Scan the QR code on the international certificate you received from your health care provider or the government. It contains the information needed to add your certificate to the app. You can recognise this certificate by the European flag.";
 "holder_scanner_error_message_unknown" = "The QR code you are trying to scan is not recognised as a coronavirus pass. Make sure you are holding the correct QR code in front of the camera.";
 "holder_scanner_error_title_ctb" = "Scan your international QR code";
 "holder_scanner_error_title_unknown" = "QR code not recognised";
