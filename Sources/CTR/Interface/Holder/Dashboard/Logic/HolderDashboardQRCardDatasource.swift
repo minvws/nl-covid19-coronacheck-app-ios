@@ -161,14 +161,17 @@ extension QRCard {
 		/// For a given date and greencard, return whether the UI can show that as "enabled" (i.e. it has an active credential):
 		static func evaluateButtonEnabledState(date: Date, dbGreencard: DBGreenCard, origins: [GreenCard.Origin]) -> Bool {
 			guard !dbGreencard.isDeleted else { return false }
-			guard dbGreencard.getType() != GreenCardType.eu else {
-				// international cards should always have an active button.
-				return true
+			
+			if dbGreencard.getType() == GreenCardType.eu {
+				
+				// The button is enabled for expired dccs, not for future dccs.
+				return origins.contains(where: { $0.validFromDate <= date }) && dbGreencard.getLatestInternationalCredential() != nil
+			} else {
+				
+				let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
+				let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
+				return enabled
 			}
-
-			let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
-			let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
-			return enabled
 		}
 
 		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI): (might be expired)
