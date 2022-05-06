@@ -182,7 +182,7 @@
 "holder.dcc.recovery.date" = "Testdatum:";
 "holder.dcc.recovery.dateofbirth" = "Geboortedatum:";
 "holder.dcc.recovery.details.title" = "Details";
-"holder.dcc.recovery.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
+"holder.dcc.recovery.footer" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.recovery.identifier" = "Uniek testnummer:";
 "holder.dcc.recovery.name" = "Naam:";
 "holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
@@ -194,7 +194,7 @@
 "holder.dcc.test.dateofbirth" = "Geboortedatum:";
 "holder.dcc.test.details.title" = "Details";
 "holder.dcc.test.facility" = "Testlocatie:";
-"holder.dcc.test.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
+"holder.dcc.test.footer" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.test.identifier" = "Uniek testnummer:";
 "holder.dcc.test.manufacturer" = "Testproducent:";
 "holder.dcc.test.name" = "Naam:";
@@ -209,7 +209,7 @@
 "holder.dcc.vaccination.dateofbirth" = "Geboortedatum:";
 "holder.dcc.vaccination.details.title" = "Details";
 "holder.dcc.vaccination.dosage" = "Dosis:";
-"holder.dcc.vaccination.footer" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
+"holder.dcc.vaccination.footer" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
 "holder.dcc.vaccination.list.title" = "Vaccinatiebewijs dosis %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Producent:";
@@ -634,7 +634,7 @@
 "holder_listRemoteEvents_paperflow_message" = "Als onderstaande gegevens kloppen kun je jouw bewijs toevoegen aan de app.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
 "holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
-"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p></p><p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent getest of gevaccineerd. Vraag of zij je kunnen helpen je gegevens aan te passen.</p>";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent getest of gevaccineerd. Vraag of zij je kunnen helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Klopt er iets niet?";
@@ -690,7 +690,7 @@
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_scanner_error_action" = "Opnieuw scannen";
-"holder_scanner_error_message_ctb" = "Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
+"holder_scanner_error_message_ctb" = "Je hoeft je Nederlandse QR-code niet te scannen. Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
 "holder_scanner_error_message_unknown" = "De QR-code die je probeert te scannen wordt niet herkend als die van een coronabewijs. Controleer of je de goede QR-code voor de camera houdt.";
 "holder_scanner_error_title_ctb" = "Scan je internationale QR-code";
 "holder_scanner_error_title_unknown" = "QR-code wordt niet herkend";
