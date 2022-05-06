@@ -22,7 +22,6 @@ jobs:
         # 🧐 when changing below, don't forget to also change the device name in the Fastfile too:
         run: | 
           xcrun simctl boot "iPhone 13" || true
-          xcrun simctl list devices 14.4
       
       - name: Checkout
         uses: actions/checkout@v3
