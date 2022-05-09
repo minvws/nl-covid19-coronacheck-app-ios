@@ -56,38 +56,22 @@ class InputRetrievalCodeViewController: BaseViewController {
 	
 	func setupBinding() {
 		
+		setupContent()
+		setupEntry()
+		setupVerification()
+		setupPrimaryButton()
+		setupResendButton()
+		setupUserNeedsTokenButtons()
+	}
+	
+	func setupContent() {
+		
 		viewModel.$title.binding = { [weak self] title in
 			self?.sceneView.title = title
 		}
-		
 		viewModel.$message.binding = { [weak self] message in
 			self?.sceneView.message = message
 		}
-		
-		viewModel.$tokenEntryHeaderTitle.binding = { [weak self] in
-			self?.sceneView.tokenEntryView.header = $0
-		}
-		
-		viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
-			self?.sceneView.tokenEntryFieldPlaceholder = $0
-		}
-		
-		viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
-			self?.sceneView.verificationEntryView.header = $0
-		}
-		
-		viewModel.$verificationInfo.binding = { [weak self] in
-			self?.sceneView.text = $0
-		}
-		
-		viewModel.$primaryTitle.binding = { [weak self] in
-			self?.sceneView.primaryTitle = $0
-		}
-		
-		viewModel.$verificationPlaceholder.binding = { [weak self] in
-			self?.sceneView.verificationEntryFieldPlaceholder = $0
-		}
-		
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 			if $0 {
 				self?.sceneView.spinner.isHidden = false
@@ -98,7 +82,22 @@ class InputRetrievalCodeViewController: BaseViewController {
 				self?.sceneView.spinner.isHidden = true
 			}
 		}
+		viewModel.$networkErrorAlert.binding = { [weak self] in
+			self?.showAlert($0)
+		}
+	}
+	
+	func setupEntry() {
 		
+		viewModel.$tokenEntryHeaderTitle.binding = { [weak self] in
+			self?.sceneView.tokenEntryView.header = $0
+		}
+		viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
+			self?.sceneView.tokenEntryFieldPlaceholder = $0
+		}
+		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
+			self?.sceneView.tokenEntryView.isHidden = !$0
+		}
 		viewModel.$fieldErrorMessage.binding = { [weak self] message in
 			self?.sceneView.fieldErrorMessage = message
 			if message != nil {
@@ -110,19 +109,19 @@ class InputRetrievalCodeViewController: BaseViewController {
 				}
 			}
 		}
+	}
+	
+	func setupVerification() {
 		
-		viewModel.$networkErrorAlert.binding = { [weak self] in
-			self?.showAlert($0)
+		viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
+			self?.sceneView.verificationEntryView.header = $0
 		}
-
-		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
-			self?.sceneView.tokenEntryView.isHidden = !$0
+		viewModel.$verificationInfo.binding = { [weak self] in
+			self?.sceneView.text = $0
 		}
-
-		viewModel.$shouldShowNextButton.binding = { [weak self] in
-			self?.sceneView.primaryButton.isHidden = !$0
+		viewModel.$verificationPlaceholder.binding = { [weak self] in
+			self?.sceneView.verificationEntryFieldPlaceholder = $0
 		}
-
 		viewModel.$shouldShowVerificationEntryField.binding = { [weak self] shouldShowVerificationEntryField in
 			guard let strongSelf = self else { return }
 			
@@ -133,7 +132,6 @@ class InputRetrievalCodeViewController: BaseViewController {
 			if strongSelf.sceneView.errorView.isHidden {
 				strongSelf.sceneView.textLabel.isHidden = !shouldShowVerificationEntryField
 			}
-			
 			if shouldShowVerificationEntryField {
 				// Don't want the following code executing during viewDidLoad because it causes
 				// a glitch, so let's do it with a slight delay:
@@ -143,15 +141,24 @@ class InputRetrievalCodeViewController: BaseViewController {
 					}
 				}
 			}
-			
 			if wasHidden && shouldShowVerificationEntryField {
 				// Only post once
 				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
 			}
 		}
+	}
+	
+	func setupPrimaryButton() {
 		
-		viewModel.$shouldEnableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
-		
+		viewModel.$primaryTitle.binding = { [weak self] in
+			self?.sceneView.primaryTitle = $0
+		}
+		viewModel.$shouldShowNextButton.binding = { [weak self] in
+			self?.sceneView.primaryButton.isHidden = !$0
+		}
+		viewModel.$shouldEnableNextButton.binding = { [weak self] in
+			self?.sceneView.primaryButton.isEnabled = $0
+		}
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			
@@ -160,27 +167,29 @@ class InputRetrievalCodeViewController: BaseViewController {
 				verificationInput: strongSelf.sceneView.verificationEntryView.inputField.text
 			)
 		}
-		
+	}
+	
+	func setupResendButton() {
+				
 		viewModel.$resendVerificationButtonTitle.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButtonTitle = $0
 		}
-
-		viewModel.$userNeedsATokenButtonTitle.binding = { [weak self] in
-			self?.sceneView.userNeedsATokenButtonTitle = $0
-		}
-
-		viewModel.$shouldShowUserNeedsATokenButton.binding = { [weak self] in
-			self?.sceneView.userNeedsATokenButton.isHidden = !$0
-		}
-		
 		viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButton.isHidden = !$0
 		}
-		
 		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in
 			self?.displayResendVerificationConfirmationAlert()
 		}
-
+	}
+	
+	func setupUserNeedsTokenButtons() {
+		
+		viewModel.$userNeedsATokenButtonTitle.binding = { [weak self] in
+			self?.sceneView.userNeedsATokenButtonTitle = $0
+		}
+		viewModel.$shouldShowUserNeedsATokenButton.binding = { [weak self] in
+			self?.sceneView.userNeedsATokenButton.isHidden = !$0
+		}
 		sceneView.userNeedsATokenButtonTappedCommand = { [weak self] in
 			self?.viewModel.userHasNoTokenButtonTapped()
 		}
