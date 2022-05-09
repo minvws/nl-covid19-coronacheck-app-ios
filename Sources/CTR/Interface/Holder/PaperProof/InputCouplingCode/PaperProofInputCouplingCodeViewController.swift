@@ -15,8 +15,6 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 	
 	let sceneView = PaperProofInputCouplingCodeView()
 	
-	let keyboardAnimator = KeyboardAnimator()
-	
 	init(viewModel: PaperProofInputCouplingCodeViewModel) {
 		
 		self.viewModel = viewModel
@@ -135,7 +133,7 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 	
 	@objc func keyBoardWillShow(notification: Notification) {
 		
-		keyboardAnimator.keyBoardWillShow(notification: notification) { [weak self] bottomOffset in
+		KeyboardAnimator.keyBoardWillShow(notification: notification) { [weak self] bottomOffset in
 			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
 			self?.view?.layoutIfNeeded()
 			self?.tapGestureRecognizer?.isEnabled = true
@@ -145,7 +143,7 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 	@objc func keyBoardWillHide(notification: Notification) {
 		
 		tapGestureRecognizer?.isEnabled = false
-		keyboardAnimator.keyBoardWillHide(notification: notification) { [weak self] bottomOffset in
+		KeyboardAnimator.keyBoardWillHide(notification: notification) { [weak self] bottomOffset in
 			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
 			self?.view?.layoutIfNeeded()
 		}

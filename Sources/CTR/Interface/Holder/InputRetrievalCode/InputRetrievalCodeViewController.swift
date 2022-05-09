@@ -20,8 +20,6 @@ class InputRetrievalCodeViewController: BaseViewController {
 	
 	let sceneView = InputRetrievalCodeView()
 	
-	let keyboardAnimator = KeyboardAnimator()
-	
 	init(viewModel: InputRetrievalCodeViewModel) {
 		
 		self.viewModel = viewModel
@@ -229,7 +227,7 @@ class InputRetrievalCodeViewController: BaseViewController {
 
 	@objc func keyBoardWillShow(notification: Notification) {
 		
-		keyboardAnimator.keyBoardWillShow(notification: notification) { [weak self] bottomOffset in
+		KeyboardAnimator.keyBoardWillShow(notification: notification) { [weak self] bottomOffset in
 			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
 			self?.view?.layoutIfNeeded()
 			self?.tapGestureRecognizer?.isEnabled = true
@@ -239,7 +237,7 @@ class InputRetrievalCodeViewController: BaseViewController {
 	@objc func keyBoardWillHide(notification: Notification) {
 		
 		tapGestureRecognizer?.isEnabled = false
-		keyboardAnimator.keyBoardWillHide(notification: notification) { [weak self] bottomOffset in
+		KeyboardAnimator.keyBoardWillHide(notification: notification) { [weak self] bottomOffset in
 			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
 			self?.view?.layoutIfNeeded()
 		}
