@@ -13,7 +13,7 @@ extension ListRemoteEventsViewModel {
 
 	func getViewState(from remoteEvents: [RemoteEvent]) -> ListRemoteEventsViewController.State {
 
-		var event30DataSource = [EventDataTuple]()
+		var eventDataSource = [EventDataTuple]()
 
 		// If there is just one pending negative/positive test: Pending State.
 		if remoteEvents.count == 1 &&
@@ -24,9 +24,9 @@ extension ListRemoteEventsViewModel {
 
 		for eventResponse in remoteEvents {
 			if let identity = eventResponse.wrapper.identity,
-			   let events30 = eventResponse.wrapper.events {
-				for event in events30 where isEventAllowed(event) {
-					event30DataSource.append(
+			   let events = eventResponse.wrapper.events {
+				for event in events where isEventAllowed(event) {
+					eventDataSource.append(
 						(
 							identity: identity,
 							event: event,
@@ -37,23 +37,8 @@ extension ListRemoteEventsViewModel {
 			}
 		}
 
-		if event30DataSource.isEmpty {
-
-			if let event = remoteEvents.first, event.wrapper.protocolVersion == "2.0" {
-				// A test 2.0
-				switch event.wrapper.status {
-					case .complete:
-						if let result = event.wrapper.result, result.negativeResult {
-							return listTest20EventsState(event)
-						}
-					case .pending:
-						return pendingEventsState()
-					default:
-						break
-				}
-			}
-		} else {
-			return listEventsState(event30DataSource)
+		if eventDataSource.isNotEmpty {
+			return listEventsState(eventDataSource)
 		}
 
 		return emptyEventsState()
@@ -688,65 +673,6 @@ private extension ListRemoteEventsViewModel {
 			title: L.holderTestresultsPendingTitle(),
 			subTitle: L.holderTestresultsPendingText(),
 			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListRemoteEventsViewController.State {
-
-		var rows = [ListRemoteEventsViewController.Row]()
-		if let row = getTest20Row(remoteEvent) {
-			rows.append(row)
-		}
-
-		return .listEvents(
-			content: Content(
-				title: L.holder_listRemoteEvents_title(),
-				body: L.holderTestresultsResultsText(),
-				primaryActionTitle: L.holderTestresultsResultsButton(),
-				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR()
-				},
-				secondaryActionTitle: L.holderVaccinationListWrong(),
-				secondaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(
-						.moreInformation(
-							title: L.holder_listRemoteEvents_somethingWrong_title(),
-							body: L.holder_listRemoteEvents_somethingWrong_test_body(),
-							hideBodyForScreenCapture: false
-						)
-					)
-				}
-			),
-			rows: rows
-		)
-	}
-
-	func getTest20Row(_ remoteEvent: RemoteEvent) -> ListRemoteEventsViewController.Row? {
-
-		guard let result = remoteEvent.wrapper.result,
-			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
-			return nil
-		}
-
-		let printSampleDate: String = DateFormatter.Format.dayNameDayNumericMonthWithTime.string(from: sampleDate)
-		let holderID = NegativeTestV2DetailsGenerator.getDisplayIdentity(result.holder)
-		
-		return ListRemoteEventsViewController.Row(
-			title: L.holderTestresultsNegative(),
-			details: [
-				L.holder_listRemoteEvents_listElement_testDate(printSampleDate),
-				L.holder_listRemoteEvents_listElement_yourDetails(holderID)
-			],
-			action: { [weak self] in
-				
-				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(
-						title: L.holderEventAboutTitle(),
-						details: NegativeTestV2DetailsGenerator.getDetails(testResult: result),
-						footer: nil
-					)
-				)
-			}
 		)
 	}
 }

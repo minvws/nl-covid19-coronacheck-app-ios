@@ -58,8 +58,7 @@ class PaperProofCheckModelTests: XCTestCase {
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: nil,
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 
 		// When

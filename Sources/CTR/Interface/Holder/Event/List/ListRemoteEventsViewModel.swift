@@ -229,10 +229,7 @@ class ListRemoteEventsViewModel: Logging {
 	private func getStorageMode(remoteEvent: RemoteEvent) -> EventMode? {
 		
 		var storageEventMode: EventMode?
-		if remoteEvent.wrapper.result != nil {
-			// V2
-			storageEventMode = .test
-		} else if let storageMode = remoteEvent.wrapper.events?.first?.storageMode {
+		if let storageMode = remoteEvent.wrapper.events?.first?.storageMode {
 			// V3
 			storageEventMode = storageMode
 			if storageEventMode == .paperflow {
@@ -583,7 +580,7 @@ class ListRemoteEventsViewModel: Logging {
 		let storableEvents = remoteEvents.filter { (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) in
 			// We can not store empty remoteEvents without an v2 result or a v3 event.
 			// ZZZ sometimes returns an empty array of events in the combined flow.
-			(wrapper.events ?? []).isNotEmpty || wrapper.result != nil
+			(wrapper.events ?? []).isNotEmpty
 		}
 
 		for response in storableEvents where response.wrapper.status == .complete {
@@ -633,12 +630,6 @@ class ListRemoteEventsViewModel: Logging {
 	}
 
 	private func getMaxIssuedAt(wrapper: EventFlow.EventResultWrapper) -> Date? {
-
-		// 2.0
-		if let result = wrapper.result,
-		   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
-			return sampleDate
-		}
 
 		// 3.0
 		let maxIssuedAt: Date? = wrapper.events?

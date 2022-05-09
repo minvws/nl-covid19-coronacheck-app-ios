@@ -166,8 +166,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 				providerIdentifier: "CC",
 				protocolVersion: "3.0",
 				identity: nil,
-				status: .complete,
-				result: nil
+				status: .complete
 			),
 			signedResponse: nil
 		)

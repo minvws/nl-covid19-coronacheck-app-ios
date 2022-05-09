@@ -122,7 +122,6 @@ struct EventFlow {
 		let protocolVersion: String
 		let identity: Identity? // 3.0
 		let status: EventState
-		let result: TestResult? // 2.0
 		var events: [Event]? = [] // 3.0
 
 		// Key mapping
@@ -133,7 +132,6 @@ struct EventFlow {
 			case providerIdentifier
 			case status
 			case events
-			case result
 		}
 	}
 

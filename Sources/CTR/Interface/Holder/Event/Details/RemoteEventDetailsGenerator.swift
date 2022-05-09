@@ -47,47 +47,6 @@ class NegativeTestDetailsGenerator {
 	}
 }
 
-class NegativeTestV2DetailsGenerator {
-
-	static func getDetails(testResult: TestResult) -> [EventDetails] {
-
-		let mappingManager: MappingManaging = Current.mappingManager
-
-		guard let sampleDate = Formatter.getDateFrom(dateString8601: testResult.sampleDate) else {
-			return []
-		}
-
-		let printSampleLongDate: String = DateFormatter.Format.dayNameDayNumericMonthWithTime.string(from: sampleDate)
-		let holderID = getDisplayIdentity(testResult.holder)
-
-		return [
-			EventDetails(field: EventDetailsTest.name, value: holderID),
-			EventDetails(field: EventDetailsTest.testType, value: mappingManager.getNlTestType(testResult.testType) ?? testResult.testType),
-			EventDetails(field: EventDetailsTest.date, value: printSampleLongDate),
-			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: testResult.unique)
-		]
-	}
-
-	/// Get a display version of the holder identity
-	/// - Parameter holder: the holder identity
-	/// - Returns: the display version
-	static func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
-
-		guard let holder = holder else {
-			return ""
-		}
-
-		let parts = holder.mapIdentity(months: String.shortMonths)
-		var output = ""
-		for part in parts {
-			output.append(part)
-			output.append(" ")
-		}
-		return output.trimmingCharacters(in: .whitespaces)
-	}
-}
-
 class PositiveTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {

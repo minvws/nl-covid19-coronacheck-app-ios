@@ -36,8 +36,6 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 
 			if let existing = existingIdentity as? EventFlow.Identity {
 				existingTuple = existing.asIdentityTuple()
-			} else if let existing = existingIdentity as? TestHolderIdentity {
-				existingTuple = existing.asIdentityTuple()
 			}
 			logVerbose("existingIdentity: \(String(describing: existingTuple))")
 
@@ -46,8 +44,6 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				var remoteTuple: IdentityTuple?
 
 				if let remote = remoteIdentity as? EventFlow.Identity {
-					remoteTuple = remote.asIdentityTuple()
-				} else if let remote = remoteIdentity as? TestHolderIdentity {
 					remoteTuple = remote.asIdentityTuple()
 				}
 				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
@@ -87,8 +83,6 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 
 					if let identity = wrapper.identity {
 						identities.append(identity)
-					} else if let holder = wrapper.result?.holder {
-						identities.append(holder)
 					}
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 					if let credentialData = object.credential.data(using: .utf8),
@@ -106,8 +100,6 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 		return remoteEvents.compactMap {
 			if let identity = $0.wrapper.identity {
 				return identity
-			} else if let holder = $0.wrapper.result?.holder {
-				return holder
 			}
 			return nil
 		}
@@ -198,13 +190,5 @@ class Normalizer {
 			return nil
 		}
 		return capitalizedInitial
-	}
-}
-
-extension TestHolderIdentity {
-
-	func asIdentityTuple() -> IdentityTuple {
-
-		return (firstNameInitial: firstNameInitial.uppercased(), lastNameInitial: lastNameInitial.uppercased(), day: birthDay, month: birthMonth)
 	}
 }
