@@ -15,6 +15,8 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 	
 	let sceneView = PaperProofInputCouplingCodeView()
 	
+	let keyboardAnimator = KeyboardAnimator()
+	
 	init(viewModel: PaperProofInputCouplingCodeViewModel) {
 		
 		self.viewModel = viewModel
@@ -133,50 +135,20 @@ class PaperProofInputCouplingCodeViewController: BaseViewController {
 	
 	@objc func keyBoardWillShow(notification: Notification) {
 		
-		let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
-		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
-		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
-
-		// Create a property animator to manage the animation
-		let animator = UIViewPropertyAnimator(
-			duration: animationDuration,
-			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
-		) {
-			let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
-			self.sceneView.footerButtonView.bottomButtonConstraint?.constant = -keyboardHeight + buttonOffset
-
-			// Required to trigger NSLayoutConstraint changes
-			// to animate
-			self.view?.layoutIfNeeded()
+		keyboardAnimator.keyBoardWillShow(notification: notification) { [weak self] bottomOffset in
+			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
+			self?.view?.layoutIfNeeded()
+			self?.tapGestureRecognizer?.isEnabled = true
 		}
-
-		animator.addCompletion { _ in
-			self.tapGestureRecognizer?.isEnabled = true
-		}
-
-		// Start the animation
-		animator.startAnimation()
 	}
 	
 	@objc func keyBoardWillHide(notification: Notification) {
 		
 		tapGestureRecognizer?.isEnabled = false
-
-		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
-		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
-
-		// Create a property animator to manage the animation
-		let animator = UIViewPropertyAnimator(
-			duration: animationDuration,
-			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
-		) {
-			self.sceneView.footerButtonView.bottomButtonConstraint?.constant = -20
-
-			self.view?.layoutIfNeeded()
+		keyboardAnimator.keyBoardWillHide(notification: notification) { [weak self] bottomOffset in
+			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
+			self?.view?.layoutIfNeeded()
 		}
-
-		// Start the animation
-		animator.startAnimation()
 	}
 }
 
