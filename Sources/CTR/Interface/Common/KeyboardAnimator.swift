@@ -9,12 +9,12 @@ import UIKit
 
 class KeyboardAnimator {
 	
-	@objc func keyBoardWillShow(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
-
+	func keyBoardWillShow(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
+		
 		let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
 		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
 		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
-
+		
 		// Create a property animator to manage the animation
 		let animator = UIViewPropertyAnimator(
 			duration: animationDuration,
@@ -23,11 +23,11 @@ class KeyboardAnimator {
 			let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
 			onCompletion?(-keyboardHeight + buttonOffset)
 		}
-
+		
 		// Start the animation
 		animator.startAnimation()
 	}
-
+	
 	func keyBoardWillHide(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
 		
 		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
