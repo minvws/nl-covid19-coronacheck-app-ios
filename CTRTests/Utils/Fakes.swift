@@ -704,18 +704,6 @@ extension RemoteGreenCards.Response {
 			]
 		)
 	}
-	
-	static var domesticlTestV2: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: []
-		)
-	}
 
 	static var domesticAndInternationalExpiredRecoveryValidVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
