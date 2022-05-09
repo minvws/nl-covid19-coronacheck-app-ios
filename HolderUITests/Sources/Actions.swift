@@ -73,7 +73,7 @@ extension BaseTest {
 		makeScreenShot(name: "Username typed")
 		
 		let continueButton = safari.buttons["Continue"]
-		if continueButton.waitForExistence(timeout: self.loginTimeout) {
+		if rapidlyEvaluate(timeout: self.loginTimeout, { continueButton.exists }) {
 			continueButton.tap()
 			makeScreenShot(name: "Hide continue button")
 		}
@@ -94,6 +94,7 @@ extension BaseTest {
 		waitUntilSpinnerIsGone()
 		makeScreenShot(name: "Data retrieval screen")
 		app.tapButton("Maak bewijs")
+		waitUntilSpinnerIsGone()
 	}
 	
 	private func waitUntilSpinnerIsGone() {
@@ -111,16 +112,16 @@ extension BaseTest {
 	}
 	
 	func returnFromWalletToOverview() {
-		app.tapButton("BackButton")
-		app.tapButton("BackButton")
-		app.tapButton("BackButton")
+		app.tapButton("Terug")
+		app.tapButton("Terug")
+		app.tapButton("Terug")
 	}
 	
 	func storeRetrievedCertificateDetails(atIndex: Int = 0) -> Set<String> {
 		app.tapButton("Details", index: atIndex)
 		makeScreenShot(name: "Details \(atIndex)")
 		let result = app.otherElements["RemoteEventDetailsView"].descendants(matching: .other).mapLabelsToSet()
-		app.tapButton("CloseButton")
+		app.tapButton("Sluiten")
 		return result
 	}
 	
@@ -137,8 +138,8 @@ extension BaseTest {
 		app.tapButton("App resetten")
 		app.tapButton(confirm ? "Reset app" : "Annuleer")
 		if !confirm {
-			app.tapButton("BackButton")
-			app.tapButton("BackButton")
+			app.tapButton("Terug")
+			app.tapButton("Terug")
 		}
 	}
 }
