@@ -58,7 +58,7 @@ class HolderDashboardViewController: BaseViewController {
 		let kind: Kind
 	}
 
-	let viewModel: HolderDashboardViewModel
+	let viewModel: HolderDashboardViewModelType
 
 	let sceneView = HolderDashboardView()
 
@@ -68,7 +68,7 @@ class HolderDashboardViewController: BaseViewController {
 
 	// MARK: Initializers
 
-	init(viewModel: HolderDashboardViewModel) {
+	init(viewModel: HolderDashboardViewModelType) {
 
 		self.viewModel = viewModel
 
@@ -161,39 +161,39 @@ class HolderDashboardViewController: BaseViewController {
 	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
+		viewModel.title.observe { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
-		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
+		viewModel.domesticCards.observe { [sceneView, weak self] cards in
 			DispatchQueue.main.async {
 				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
 			}
 		}
 		
-		viewModel.$internationalCards.binding = { [sceneView, weak self] cards in
+		viewModel.internationalCards.observe { [sceneView, weak self] cards in
 			DispatchQueue.main.async {
 				self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
 			}
 		}
 		
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$shouldShowAddCertificateFooter.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
+		viewModel.primaryButtonTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
+		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
-		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
+		viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
 			DispatchQueue.main.async {
 				self?.showAlert(alertContent)
 			}
 		}
 
-		viewModel.$selectedTab.binding = { [weak self, sceneView] region in
+		viewModel.selectedTab.observe { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
 			sceneView.selectTab(tab: region)
 		}
 		
-		viewModel.$shouldShowTabBar.binding = { [sceneView] in
+		viewModel.shouldShowTabBar.observe { [sceneView] in
 			sceneView.shouldShowTabBar = $0
 		}
 		
-		viewModel.$shouldShowOnlyInternationalPane.binding = { [sceneView] in
+		viewModel.shouldShowOnlyInternationalPane.observe { [sceneView] in
 			sceneView.shouldShowOnlyInternationalPane = $0
 		}
 	}
