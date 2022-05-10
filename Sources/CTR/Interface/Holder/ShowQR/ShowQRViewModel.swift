@@ -212,17 +212,16 @@ class ShowQRViewModel: Logging {
 			return
 		}
 		// Dosage
-		if let euCredentialAttributes = dataSource.getEuCredentialAttributes(greenCard),
-		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-			displayDosageInformation(euVaccination)
-		}
+		displayDosageInformation(greenCard)
 		// Relevancy
 		displayRelevancyInformation(greenCard)
 	}
 	
-	private func displayDosageInformation(_ euVaccination: EuCredentialAttributes.Vaccination) {
+	private func displayDosageInformation(_ greenCard: GreenCard) {
 		
-		if let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
+		if let euCredentialAttributes = dataSource.getEuCredentialAttributes(greenCard),
+		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
+		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
 			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
 	}
