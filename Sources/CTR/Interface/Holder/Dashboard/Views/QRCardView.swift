@@ -128,8 +128,8 @@ class QRCardView: BaseView {
 	// MARK: - init
 
 	init(stackSize: Int) {
-		self.stackSize = stackSize
-		squashedCards = (0 ..< stackSize - 1).map { _ in UIView() }
+		self.stackSize = min(stackSize, 3)
+		squashedCards = (0 ..< self.stackSize - 1).map { _ in UIView() }
 
 		super.init(frame: .zero)
 
