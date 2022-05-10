@@ -62,8 +62,6 @@ class HolderDashboardViewController: BaseViewController {
 
 	let sceneView = HolderDashboardView()
 
-	var screenCaptureInProgress = false
-	
 	private var didSetInitialStartingTabOnSceneView = false
 
 	// MARK: Initializers
