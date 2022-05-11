@@ -747,11 +747,10 @@ extension ErrorCode.ClientCode {
 	static let noVaccinationProviderAvailable = ErrorCode.ClientCode(value: "082")
 }
 
-
 extension ServerError {
 	
 	// Transform regular .error to .provider to display the provider identifier
-	func toProviderError(provider: EventFlow.EventProvider) -> ServerError {
+	fileprivate func toProviderError(provider: EventFlow.EventProvider) -> ServerError {
 		
 		switch self {
 			case let ServerError.error(statusCode, serverResponse, networkError):
