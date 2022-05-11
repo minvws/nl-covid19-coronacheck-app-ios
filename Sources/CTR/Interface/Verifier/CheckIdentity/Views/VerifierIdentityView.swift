@@ -86,14 +86,12 @@ class VerifierIdentityView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		stackView.embed(in: self)
 		NSLayoutConstraint.activate([
 
-			stackView.topAnchor.constraint(equalTo: topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			stackView.widthAnchor.constraint(equalTo: widthAnchor),
-			stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
+			stackView.widthAnchor.constraint(equalTo: widthAnchor)
 		])
 	}
 

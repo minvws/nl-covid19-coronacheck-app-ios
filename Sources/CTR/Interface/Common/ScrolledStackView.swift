@@ -71,6 +71,7 @@ class ScrolledStackView: BaseView {
 		super.setupViewConstraints()
 
 		stackView.preservesSuperviewLayoutMargins = true
+		stackView.embed(in: contentScrollView)
 
 		NSLayoutConstraint.activate([
 			
@@ -92,10 +93,6 @@ class ScrolledStackView: BaseView {
 			contentScrollView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
 			
 			// StackView
-			stackView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor),
-			stackView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor),
-			stackView.topAnchor.constraint(equalTo: contentScrollView.topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor),
 			stackView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
 			stackView.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor)
 		])

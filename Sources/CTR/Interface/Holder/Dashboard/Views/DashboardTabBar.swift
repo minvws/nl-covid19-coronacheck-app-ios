@@ -102,11 +102,12 @@ final class DashboardTabBar: BaseView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
+		stackView.embed(
+			in: self,
+			insets: UIEdgeInsets(top: 0, left: ViewTraits.Margin.horizontal, bottom: 0, right: ViewTraits.Margin.horizontal)
+		)
+		
 		NSLayoutConstraint.activate([
-			stackView.topAnchor.constraint(equalTo: topAnchor),
-			stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: ViewTraits.Margin.horizontal),
-			stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -ViewTraits.Margin.horizontal),
-			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			separatorView.leftAnchor.constraint(equalTo: stackView.leftAnchor),
 			separatorView.rightAnchor.constraint(equalTo: stackView.rightAnchor),
