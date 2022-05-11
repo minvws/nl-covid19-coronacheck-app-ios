@@ -246,7 +246,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	// MARK: - Navigate to..
 	
-	private func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
+	func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
 		
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
@@ -270,7 +270,7 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to the token entry scene
-	private func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
 		
 		let destination = InputRetrievalCodeViewController(
 			viewModel: InputRetrievalCodeViewModel(
@@ -285,7 +285,7 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	// "Waar wil je een QR-code van maken?"
-	private func navigateToChooseQRCodeType() {
+	func navigateToChooseQRCodeType() {
 		
 		let destination = ChooseProofTypeViewController(
 			viewModel: ChooseProofTypeViewModel(
@@ -295,18 +295,18 @@ class HolderCoordinator: SharedCoordinator {
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
-	private func navigateToAddPaperProof() {
+	func navigateToAddPaperProof() {
 		
 		let paperProofCoordinator = PaperProofCoordinator(navigationController: navigationController, delegate: self)
 		startChildCoordinator(paperProofCoordinator)
 	}
 	
-	private func navigateToAddVisitorPass() {
+	func navigateToAddVisitorPass() {
 		let viewController = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	private func navigateToAboutThisApp() {
+	func navigateToAboutThisApp() {
 		let viewController = AboutThisAppViewController(
 			viewModel: AboutThisAppViewModel(
 				coordinator: self,
@@ -318,7 +318,7 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to enlarged QR
-	private func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 		
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
@@ -333,7 +333,7 @@ class HolderCoordinator: SharedCoordinator {
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
-	private func navigateToChooseTestLocation() {
+	func navigateToChooseTestLocation() {
 		
 		let destination = ChooseTestLocationViewController(
 			viewModel: ChooseTestLocationViewModel(
