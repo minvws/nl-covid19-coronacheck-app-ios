@@ -133,7 +133,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image(precision: 0.95))
 	}
 	
 	func test_expiredQR() {
