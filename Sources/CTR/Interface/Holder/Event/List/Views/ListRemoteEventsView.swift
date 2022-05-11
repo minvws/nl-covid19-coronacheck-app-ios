@@ -51,35 +51,13 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 		view.spacing = 0
 		return view
 	}()
-
-	/// The spinner
-	private let spinner: UIActivityIndicatorView = {
-
-		let view = UIActivityIndicatorView()
-		view.hidesWhenStopped = true
+	
+	private let activityIndicatorView: ActivityIndicatorView = {
+		
+		let view = ActivityIndicatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 13.0, *) {
-			view.style = .large
-		} else {
-			view.style = .whiteLarge
-		}
-		view.color = C.primaryBlue()
 		return view
 	}()
-	
-	var shouldShowLoadingSpinner: Bool = false {
-		didSet {
-			if shouldShowLoadingSpinner {
-				spinner.startAnimating()
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-					// After a short delay (otherwise it's never announced)
-					UIAccessibility.post(notification: .layoutChanged, argument: self.spinner)
-				}
-			} else {
-				spinner.stopAnimating()
-			}
-		}
-	}
 
 	let somethingIsWrongButton: Button = {
 
@@ -102,7 +80,7 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 
 		super.setupViewHierarchy()
 
-		addSubview(spinner)
+		addSubview(activityIndicatorView)
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.setCustomSpacing(ViewTraits.Title.spacing, after: titleLabel)
@@ -118,8 +96,8 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+			activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
+			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
 
@@ -196,6 +174,12 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 		eventStackView.isHidden = ishidden
 		if ishidden {
 			stackView.setCustomSpacing(ViewTraits.Button.spacing, after: contentTextView)
+		}
+	}
+	
+	var shouldShowLoadingSpinner: Bool = false {
+		didSet {
+			activityIndicatorView.shouldShowLoadingSpinner = shouldShowLoadingSpinner
 		}
 	}
 }

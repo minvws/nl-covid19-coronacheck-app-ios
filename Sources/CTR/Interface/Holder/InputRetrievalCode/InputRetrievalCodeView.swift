@@ -100,20 +100,13 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 		return button
 	}()
 	
-	/// The spinner
-	let spinner: UIActivityIndicatorView = {
-
-		let view = UIActivityIndicatorView()
+	private let activityIndicatorView: ActivityIndicatorView = {
+		
+		let view = ActivityIndicatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 13.0, *) {
-			view.style = .large
-		} else {
-			view.style = .whiteLarge
-		}
-		view.color = C.primaryBlue()
 		return view
 	}()
-	
+
 	/// Setup all the views
 	override func setupViews() {
 		
@@ -148,7 +141,7 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.setCustomSpacing(ViewTraits.margin, after: resendVerificationCodeButton)
 		
-		addSubview(spinner)
+		addSubview(activityIndicatorView)
 	}
 	
 	override func setupViewConstraints() {
@@ -156,8 +149,8 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+			activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
+			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
 
@@ -248,6 +241,12 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 			} else {
 				errorView.isHidden = true
 			}
+		}
+	}
+	
+	var shouldShowLoadingSpinner: Bool = false {
+		didSet {
+			activityIndicatorView.shouldShowLoadingSpinner = shouldShowLoadingSpinner
 		}
 	}
 }
