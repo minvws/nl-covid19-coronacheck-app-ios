@@ -23,12 +23,11 @@ extension ListRemoteEventsViewModel {
 		}
 
 		for eventResponse in remoteEvents {
-			if let identity = eventResponse.wrapper.identity,
-			   let events = eventResponse.wrapper.events {
+			if let events = eventResponse.wrapper.events {
 				for event in events where isEventAllowed(event) {
 					eventDataSource.append(
 						(
-							identity: identity,
+							identity: eventResponse.wrapper.identity,
 							event: event,
 							providerIdentifier: eventResponse.wrapper.providerIdentifier
 						)

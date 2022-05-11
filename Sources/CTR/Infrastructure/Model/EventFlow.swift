@@ -120,7 +120,7 @@ struct EventFlow {
 
 		var providerIdentifier: String
 		let protocolVersion: String
-		let identity: Identity? // 3.0
+		let identity: Identity
 		let status: EventState
 		var events: [Event]? = [] // 3.0
 

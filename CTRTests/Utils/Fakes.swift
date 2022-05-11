@@ -89,7 +89,7 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .complete
 		)
 	}
@@ -98,7 +98,7 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .pending
 		)
 	}
@@ -107,7 +107,7 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .blocked
 		)
 	}
@@ -116,7 +116,7 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .verificationRequired
 		)
 	}
@@ -125,7 +125,7 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .invalid
 		)
 	}
@@ -134,7 +134,7 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
+			identity: EventFlow.Identity.fakeIdentity,
 			status: .unknown
 		)
 	}

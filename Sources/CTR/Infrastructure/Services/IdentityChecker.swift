@@ -80,10 +80,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
 				   let decodedPayloadData = Data(base64Encoded: object.payload),
 				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
-
-					if let identity = wrapper.identity {
-						identities.append(identity)
-					}
+						identities.append(wrapper.identity)
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 					if let credentialData = object.credential.data(using: .utf8),
 					   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
@@ -98,10 +95,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 	private func convertRemoteEventsToIdentities(_ remoteEvents: [RemoteEvent]) -> [Any] {
 
 		return remoteEvents.compactMap {
-			if let identity = $0.wrapper.identity {
-				return identity
-			}
-			return nil
+			return $0.wrapper.identity
 		}
 	}
 }

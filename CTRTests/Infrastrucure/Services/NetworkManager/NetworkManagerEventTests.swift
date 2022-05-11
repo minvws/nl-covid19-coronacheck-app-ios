@@ -445,7 +445,7 @@ class NetworkManagerEventTests: XCTestCase {
 				expect(result.isSuccess) == true
 				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
 				expect(result.successValue?.0.protocolVersion) == "3.0"
-				expect(result.successValue?.0.identity?.firstName) == "Corrie"
+				expect(result.successValue?.0.identity.firstName) == "Corrie"
 				expect(result.successValue?.0.events?.first?.vaccination?.hpkCode) == "2924528"
 				expect(result.successValue?.0.events?.first?.unique) == "092841f0-eded-4336-923f-6f2df27bbb55"
 				done()
