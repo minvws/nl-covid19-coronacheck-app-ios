@@ -32,8 +32,10 @@ class HolderDashboardViewControllerTests: XCTestCase {
 	}
 	
 	func test_footerButtonPrimaryButtonTap() {
+		
 		// Arrange
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
+		sut.viewDidLoad()
 		
 		// Act
 		sut.sceneView.footerButtonView.primaryButtonTappedCommand?()
@@ -43,8 +45,10 @@ class HolderDashboardViewControllerTests: XCTestCase {
 	}
 	
 	func test_menuButtonTap() {
+		
 		// Arrange
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
+		sut.viewDidLoad()
 		
 		// Act
 		sut.sceneView.tapMenuButtonHandler?()
@@ -54,8 +58,10 @@ class HolderDashboardViewControllerTests: XCTestCase {
 	}
 	
 	func test_viewWillAppear() {
+		
 		// Arrange
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
+		sut.viewDidLoad()
 		
 		// Act
 		sut.viewWillAppear(false)
