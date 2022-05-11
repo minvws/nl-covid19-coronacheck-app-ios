@@ -128,8 +128,8 @@ class QRCardView: BaseView {
 	// MARK: - init
 
 	init(stackSize: Int) {
-		self.stackSize = stackSize
-		squashedCards = (0 ..< stackSize - 1).map { _ in UIView() }
+		self.stackSize = min(stackSize, 3)
+		squashedCards = (0 ..< self.stackSize - 1).map { _ in UIView() }
 
 		super.init(frame: .zero)
 
@@ -414,6 +414,7 @@ class QRCardView: BaseView {
 
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 
@@ -428,6 +429,8 @@ class QRCardView: BaseView {
 	}
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 
