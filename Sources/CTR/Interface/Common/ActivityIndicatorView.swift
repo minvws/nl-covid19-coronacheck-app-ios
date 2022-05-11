@@ -54,12 +54,4 @@ class ActivityIndicatorView: BaseView {
 			}
 		}
 	}
-	
-//	func startAnimating() {
-//		spinner.startAnimating()
-//	}
-	
-//	func stopAnimating() {
-//		spinner.stopAnimating()
-//	}
 }
