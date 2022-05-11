@@ -74,9 +74,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1110 000 062")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1110 000 062")
 	}
 	
 	// MARK: - prepare issue
@@ -100,9 +100,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 053")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 053")
 	}
 	
 	func test_removalVaccination_prepareIssue_invalidSignature() throws {
@@ -124,9 +124,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 020")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 020")
 	}
 	
 	func test_removalVaccination_prepareIssue_serverError() throws {
@@ -148,9 +148,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1170 000 500 99702")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1170 000 500 99702")
 	}
 	
 	func test_removalVaccination_prepareIssue_serverBusy() throws {
@@ -172,9 +172,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1170 000 429")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1170 000 429")
 	}
 	
 	func test_removalVaccination_prepareIssue_serverUnreachable() throws {
@@ -196,9 +196,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1170 000 004")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1170 000 004")
 	}
 	
 	// MARK: - Commit Message
@@ -222,9 +222,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 054")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 054")
 	}
 	
 	// MARK: - Signer
@@ -248,9 +248,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1180 000 020")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1180 000 020")
 	}
 	
 	func test_removalVaccination_signer_serverError() throws {
@@ -272,9 +272,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1180 000 500 99702")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1180 000 500 99702")
 	}
 	
 	func test_removalVaccination_signer_serverBusy() throws {
@@ -296,9 +296,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1180 000 429")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1180 000 429")
 	}
 	
 	func test_removalVaccination_signer_serverUnreachable() throws {
@@ -320,9 +320,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1180 000 004")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1180 000 004")
 	}
 	
 	// MARK: - Save GreenCards
@@ -346,9 +346,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1190 000 055")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1190 000 055")
 	}
 	
 	// MARK: - No internet
@@ -372,7 +372,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
 	}
@@ -398,7 +398,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 	}
 	
 	func test_removalVaccination_didNotEvaluate() throws {
@@ -420,7 +420,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 	}
 	
 	func test_removalVaccination_noEvents() throws {
@@ -442,7 +442,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 	}
 	

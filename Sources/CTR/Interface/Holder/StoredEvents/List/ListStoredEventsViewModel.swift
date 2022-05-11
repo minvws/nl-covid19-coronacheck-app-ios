@@ -384,7 +384,7 @@ class ListStoredEventsViewModel: Logging {
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content, backAction: nil)
+			self.coordinator?.presentError(content: content, backAction: nil)
 		}
 	}
 }

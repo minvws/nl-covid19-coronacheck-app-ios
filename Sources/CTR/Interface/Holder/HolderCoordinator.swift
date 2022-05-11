@@ -11,10 +11,12 @@ import Reachability
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
-	// MARK: Navigation
-	
-	/// Navigate to the start fo the holder flow
+	/// Navigate to the start of the holder flow
 	func navigateBackToStart()
+	
+	func openUrl(_ url: URL, inApp: Bool)
+	
+	func presentError(content: Content, backAction: (() -> Void)?)
 	
 	/// Show an information page
 	/// - Parameters:
@@ -22,67 +24,45 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
-	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
-	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
-	
-	func userWishesToOpenTheMenu()
-	
-	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
-	
-	func userWishesToCreateAQR()
-	
-	func userWishesToCreateANegativeTestQR()
-	
-	func userWishesToCreateAVisitorPass()
-	
-	func userWishesToChooseTestLocation()
-	
-	func userHasNotBeenTested()
-	
-	func userWishesToCreateANegativeTestQRFromGGD()
-	
-	func userWishesToCreateAVaccinationQR()
-	
-	func userWishesToCreateARecoveryQR()
-	
 	func userDidScanRequestToken(requestToken: RequestToken)
-	
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
-	
 	func userWishesMoreInfoAboutClockDeviation()
-	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
-	
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
-	
-	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	
-	func userWishesMoreInfoAboutIncompleteDutchVaccination()
-	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
-	
-	func openUrl(_ url: URL, inApp: Bool)
-	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
-	
-	func userWishesToLaunchThirdPartyTicketApp()
-	
-	func displayError(content: Content, backAction: (() -> Void)?)
-	
+	func userWishesMoreInfoAboutGettingTested()
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 	func userWishesMoreInfoAboutNoTestToken()
-	
 	func userWishesMoreInfoAboutNoVisitorPassToken()
-	
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
+	func userWishesToChooseTestLocation()
+	func userWishesToCreateANegativeTestQR()
+	func userWishesToCreateANegativeTestQRFromGGD()
+	func userWishesToCreateAQR()
+	func userWishesToCreateARecoveryQR()
+	func userWishesToCreateAVaccinationQR()
+	func userWishesToCreateAVisitorPass()
+	func userWishesToLaunchThirdPartyTicketApp()
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
+	func userWishesToOpenTheMenu()
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
 	func userWishesToSeeStoredEvents()
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 }
-
-// swiftlint:enable class_delegate_protocol
 
 class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+	
+	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
+	///	display a "return to Ticket App" button on the ShowQR screen
+	/// Docs: https://shrtm.nu/oc45
+	var thirdpartyTicketApp: (name: String, returnURL: URL)?
+	
+	/// If set, this should be handled at the first opportunity:
+	var unhandledUniversalLink: UniversalLink?
 	
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
 		willSet {
@@ -91,20 +71,27 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 	
-	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
-	///	display a "return to Ticket App" button on the ShowQR screen
-	/// Docs: https://shrtm.nu/oc45
-	internal var thirdpartyTicketApp: (name: String, returnURL: URL)?
-	
-	/// If set, this should be handled at the first opportunity:
-	internal var unhandledUniversalLink: UniversalLink?
-	
 	// MARK: - Setup
 	
 	override init(navigationController: UINavigationController, window: UIWindow) {
 		super.init(navigationController: navigationController, window: window)
 		setupNotificationListeners()
 	}
+	
+	// MARK: - Teardown
+	
+	private func removeChildCoordinator() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+	}
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
+	}
+	
+	// MARK: - Starting Coordinator
 	
 	// Designated starter method
 	override func start() {
@@ -140,14 +127,40 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 	
-	// MARK: - Teardown
-	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
+	private func startEventFlowForVaccination() {
+		
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		eventCoordinator.startWithVaccination()
+		
 	}
 	
-	// MARK: - Listeners
+	private func startEventFlowForRecovery() {
+		
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		eventCoordinator.startWithRecovery()
+		
+	}
+	
+	private func startEventFlowForNegativeTest() {
+		
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		eventCoordinator.startWithNegativeTest()
+		
+	}
+	
+	// MARK: - Setup Listeners
 	
 	private func setupNotificationListeners() {
 		
@@ -231,37 +244,29 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 	
-	private func startEventFlowForVaccination() {
-		
-		let eventCoordinator = EventCoordinator(
-			navigationController: navigationController,
-			delegate: self
-		)
-		addChildCoordinator(eventCoordinator)
-		eventCoordinator.startWithVaccination()
-		
-	}
+	// MARK: - Navigate to..
 	
-	private func startEventFlowForRecovery() {
+	func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
 		
-		let eventCoordinator = EventCoordinator(
-			navigationController: navigationController,
-			delegate: self
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self,
+				datasource: HolderDashboardQRCardDatasource(),
+				strippenRefresher: DashboardStrippenRefresher(
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
+					reachability: try? Reachability()
+				),
+				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
+				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
+				versionSupplier: versionSupplier
+			)
 		)
-		addChildCoordinator(eventCoordinator)
-		eventCoordinator.startWithRecovery()
 		
-	}
-	
-	private func startEventFlowForNegativeTest() {
+		navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
 		
-		let eventCoordinator = EventCoordinator(
-			navigationController: navigationController,
-			delegate: self
-		)
-		addChildCoordinator(eventCoordinator)
-		eventCoordinator.startWithNegativeTest()
-		
+		if replacingWindowRootViewController {
+			window.replaceRootViewController(with: navigationController)
+		}
 	}
 	
 	/// Navigate to the token entry scene
@@ -312,44 +317,8 @@ class HolderCoordinator: SharedCoordinator {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	private func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
-		
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(),
-				strippenRefresher: DashboardStrippenRefresher(
-					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability()
-				),
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
-				versionSupplier: versionSupplier
-			)
-		)
-		
-		navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
-		
-		if replacingWindowRootViewController {
-			window.replaceRootViewController(with: navigationController)
-		}
-	}
-	
-	private func removeChildCoordinator() {
-		
-		guard let coordinator = childCoordinators.last else { return }
-		removeChildCoordinator(coordinator)
-	}
-}
-
-// MARK: - HolderCoordinatorDelegate
-
-extension HolderCoordinator: HolderCoordinatorDelegate {
-	
-	// MARK: Navigation
-	
 	/// Navigate to enlarged QR
-	private func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 		
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
@@ -364,7 +333,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
-	private func navigateToChooseTestLocation() {
+	func navigateToChooseTestLocation() {
 		
 		let destination = ChooseTestLocationViewController(
 			viewModel: ChooseTestLocationViewModel(
@@ -373,12 +342,29 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		navigationController.pushViewController(destination, animated: true)
 	}
+}
+
+// MARK: - HolderCoordinatorDelegate
+
+extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart() {
 		
 		//		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 		navigationController.popToRootViewController(animated: true)
+	}
+	
+	func presentError(content: Content, backAction: (() -> Void)?) {
+		
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
+				content: content,
+				backAction: backAction,
+				allowsSwipeBack: false
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
 	}
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
@@ -393,6 +379,179 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		presentAsBottomSheet(viewController)
+	}
+	
+	// MARK: - User Wishes To ... -
+	
+	func userDidScanRequestToken(requestToken: RequestToken) {
+		navigateToTokenEntry(requestToken)
+	}
+	
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.holderClockDeviationDetectedTitle()
+		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+	}
+	
+	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
+		
+		let viewModel = ContentViewModel(
+			content: Content(
+				title: L.holder_completecertificate_title(),
+				body: L.holder_completecertificate_body(),
+				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
+				primaryAction: { [weak self] in
+					self?.userWishesToCreateANegativeTestQR()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			),
+			backAction: { [weak navigationController] in
+				navigationController?.popViewController(animated: true, completion: {})
+			},
+			allowsSwipeBack: true,
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			}
+		)
+		
+		let destination = ContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
+		
+		let viewModel = BottomSheetContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: L.holder_expiredDomesticVaccinationModal_title(),
+				body: L.holder_expiredDomesticVaccinationModal_body(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
+				secondaryAction: { [weak self] in
+					guard let self = self else { return }
+					self.navigationController.dismiss(
+						animated: true,
+						completion: self.userWishesToCreateAVaccinationQR
+					)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func userWishesMoreInfoAboutGettingTested() {
+		
+		let viewController = MakeTestAppointmentViewController(
+			viewModel: MakeTestAppointmentViewModel(
+				coordinator: self,
+				title: L.holderNotestTitle(),
+				message: String(format: L.holderNotestBody()),
+				buttonTitle: L.holderNotestButtonTitle()
+			)
+		)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
+		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
+		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesMoreInfoAboutNoTestToken() {
+		
+		presentInformationPage(
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutNoVisitorPassToken() {
+		
+		presentInformationPage(
+			title: L.visitorpass_token_modal_notoken_title(),
+			body: L.visitorpass_token_modal_notoken_details(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
+	}
+	
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
+		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
+		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+	}
+	
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+		
+		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
+	}
+	
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
+		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
+		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+	}
+	
+	func userWishesToChooseTestLocation() {
+		if Current.featureFlagManager.isGGDEnabled() {
+			navigateToChooseTestLocation()
+		} else {
+			// Fallback when GGD is not available
+			navigateToTokenEntry()
+		}
+	}
+	
+	func userWishesToCreateANegativeTestQR() {
+		navigateToTokenEntry()
+	}
+	
+	func userWishesToCreateANegativeTestQRFromGGD() {
+		startEventFlowForNegativeTest()
+	}
+	
+	func userWishesToCreateAQR() {
+		navigateToChooseQRCodeType()
+	}
+	
+	func userWishesToCreateARecoveryQR() {
+		startEventFlowForRecovery()
+	}
+	
+	func userWishesToCreateAVaccinationQR() {
+		startEventFlowForVaccination()
+	}
+	
+	func userWishesToCreateAVisitorPass() {
+		
+		navigateToTokenEntry(retrievalMode: .visitorPass)
+	}
+	
+	func userWishesToLaunchThirdPartyTicketApp() {
+		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
+		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
+	}
+	
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
+		
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
 	}
 	
 	func userWishesToOpenTheMenu() {
@@ -445,224 +604,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
-		
-		let eventCoordinator = EventCoordinator(
-			navigationController: navigationController,
-			delegate: self
-		)
-		addChildCoordinator(eventCoordinator)
-		eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
-	}
-	
-	func userWishesToCreateANegativeTestQR() {
-		navigateToTokenEntry()
-	}
-	
-	func userWishesToCreateAVisitorPass() {
-		
-		navigateToTokenEntry(retrievalMode: .visitorPass)
-	}
-	
-	func userWishesToChooseTestLocation() {
-		if Current.featureFlagManager.isGGDEnabled() {
-			navigateToChooseTestLocation()
-		} else {
-			// Fallback when GGD is not available
-			navigateToTokenEntry()
-		}
-	}
-	
-	func userHasNotBeenTested() {
-		
-		let viewController = MakeTestAppointmentViewController(
-			viewModel: MakeTestAppointmentViewModel(
-				coordinator: self,
-				title: L.holderNotestTitle(),
-				message: String(format: L.holderNotestBody()),
-				buttonTitle: L.holderNotestButtonTitle()
-			)
-		)
-		presentAsBottomSheet(viewController)
-	}
-	
-	func userWishesToCreateANegativeTestQRFromGGD() {
-		startEventFlowForNegativeTest()
-	}
-	
-	func userWishesToCreateAVaccinationQR() {
-		startEventFlowForVaccination()
-	}
-	
-	func userWishesToCreateARecoveryQR() {
-		startEventFlowForRecovery()
-	}
-	
-	func userWishesToCreateAQR() {
-		navigateToChooseQRCodeType()
-	}
-	
-	func userDidScanRequestToken(requestToken: RequestToken) {
-		navigateToTokenEntry(requestToken)
-	}
-	
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
-		
-		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
-		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
-	}
-	
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
-		
-		let viewModel = ContentViewModel(
-			content: Content(
-				title: L.holder_completecertificate_title(),
-				body: L.holder_completecertificate_body(),
-				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
-				primaryAction: { [weak self] in
-					self?.userWishesToCreateANegativeTestQR()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			),
-			backAction: { [weak navigationController] in
-				navigationController?.popViewController(animated: true, completion: {})
-			},
-			allowsSwipeBack: true,
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			}
-		)
-
-		let destination = ContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
-	}
-	
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
-		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
-		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
-	}
-	
-	func userWishesMoreInfoAboutClockDeviation() {
-		let title: String = L.holderClockDeviationDetectedTitle()
-		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
-	}
-	
-	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
-		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
-		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
-	}
-	
-	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
-		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
-		navigationController.pushViewController(viewController, animated: true)
-	}
-	
-	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
-		
-		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
-			content: Content(
-				title: L.holder_expiredDomesticVaccinationModal_title(),
-				body: L.holder_expiredDomesticVaccinationModal_body(),
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
-				secondaryAction: { [weak self] in
-					guard let self = self else { return }
-					self.navigationController.dismiss(
-						animated: true,
-						completion: self.userWishesToCreateAVaccinationQR
-					)
-				}
-			),
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			},
-			hideBodyForScreenCapture: false
-		)
-		
-		let viewController = BottomSheetContentViewController(viewModel: viewModel)
-		presentAsBottomSheet(viewController)
-	}
-	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
-		
-		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
-		switch result {
-			case let .success(greenCards):
-				if greenCards.isEmpty {
-					showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
-				} else {
-					navigateToShowQRs(greenCards, disclosurePolicy: disclosurePolicy)
-				}
-			case .failure:
-				showAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
-		}
-	}
-	
-	private func showAlertWithErrorCode(_ code: ErrorCode) {
-		
-		let alertController = UIAlertController(
-			title: L.generalErrorTitle(),
-			message: L.generalErrorTechnicalCustom("\(code)"),
-			preferredStyle: .alert
-		)
-		
-		alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
-		navigationController.present(alertController, animated: true, completion: nil)
-	}
-	
-	func userWishesToLaunchThirdPartyTicketApp() {
-		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
-		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
-	}
-	
-	func displayError(content: Content, backAction: (() -> Void)?) {
-		
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: backAction,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
-	}
-	
-	func userWishesMoreInfoAboutNoTestToken() {
-		
-		presentInformationPage(
-			title: L.holderTokenentryModalNotokenTitle(),
-			body: L.holderTokenentryModalNotokenDetails(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func userWishesMoreInfoAboutNoVisitorPassToken() {
-		
-		presentInformationPage(
-			title: L.visitorpass_token_modal_notoken_title(),
-			body: L.visitorpass_token_modal_notoken_details(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func userWishesToSeeStoredEvents() {
-		
-		let viewController = ListStoredEventsViewController(
-			viewModel: ListStoredEventsViewModel(coordinator: self)
-		)
-		navigationController.pushViewController(viewController, animated: true)
-	}
-	
 	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails]) {
 		
 		let viewController = StoredEventDetailsViewController(
@@ -675,6 +616,41 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeStoredEvents() {
+		
+		let viewController = ListStoredEventsViewController(
+			viewModel: ListStoredEventsViewModel(coordinator: self)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
+		
+		func presentAlertWithErrorCode(_ code: ErrorCode) {
+			
+			let alertController = UIAlertController(
+				title: L.generalErrorTitle(),
+				message: L.generalErrorTechnicalCustom("\(code)"),
+				preferredStyle: .alert
+			)
+			
+			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+			navigationController.present(alertController, animated: true, completion: nil)
+		}
+		
+		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
+		switch result {
+			case let .success(greenCards):
+				if greenCards.isEmpty {
+					presentAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
+				} else {
+					navigateToShowQRs(greenCards, disclosurePolicy: disclosurePolicy)
+				}
+			case .failure:
+				presentAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
+		}
 	}
 }
 
@@ -745,7 +721,7 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	}
 	
 	func handleDisclosurePolicyUpdates() {
- 
+		
 		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
 			// No Disclosure Policy modal if we still need to finish onboarding
 			return
@@ -754,7 +730,7 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
 			return
 		}
-
+		
 		guard Current.disclosurePolicyManager.hasChanges else {
 			return
 		}
