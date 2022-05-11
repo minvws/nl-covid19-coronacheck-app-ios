@@ -114,4 +114,23 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 			activityIndicatorView.shouldShowLoadingSpinner = shouldShowLoadingSpinner
 		}
 	}
+	
+	func applyContent(_ content: Content) {
+
+		// Texts
+		title = content.title
+		message = content.body
+
+		// Button
+		if let actionTitle = content.primaryActionTitle {
+			primaryTitle = actionTitle
+			footerButtonView.isHidden = false
+		} else {
+			primaryTitle = nil
+			footerButtonView.isHidden = true
+		}
+		primaryButtonTappedCommand = content.primaryAction
+		secondaryButtonTappedCommand = content.secondaryAction
+		secondaryButtonTitle = content.secondaryActionTitle
+	}
 }
