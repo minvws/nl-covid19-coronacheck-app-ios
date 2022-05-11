@@ -204,38 +204,39 @@ class ShowQRViewModel: Logging {
 			}
 		}
 	}
-
-	private func handleVaccinationDosageInformation(_ euVaccination: EuCredentialAttributes.Vaccination) {
+	
+	private func displayQRInformation() {
 		
-		if let doseNumber = euVaccination.doseNumber,
-		   let totalDose = euVaccination.totalDose {
+		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
+			  greenCard.getType() == GreenCardType.eu else {
+			return
+		}
+		// Dosage
+		displayDosageInformation(greenCard)
+		// Relevancy
+		displayRelevancyInformation(greenCard)
+	}
+	
+	private func displayDosageInformation(_ greenCard: GreenCard) {
+		
+		if let euCredentialAttributes = dataSource.getEuCredentialAttributes(greenCard),
+		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
+		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
 			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
 	}
 	
-	private func displayRelevancy(_ greenCard: GreenCard) {
+	private func displayRelevancyInformation(_ greenCard: GreenCard) {
 		
-		if dataSource.isVaccinationExpired(greenCard) {
-			relevancyInformation = L.holder_showQR_label_expiredVaccination()
-		} else  if dataSource.isDosenumberSmallerThanTotalDose(greenCard) {
+		if dataSource.isCredentialExpired(greenCard) {
+			relevancyInformation = L.holder_showQR_label_expiredQR()
+		} else if dataSource.isDosenumberSmallerThanTotalDose(greenCard) {
 			relevancyInformation = L.holder_showQR_label_newerQRAvailable()
 		} else {
 			relevancyInformation = nil
 		}
 	}
 	
-	private func displayQRInformation() {
-		
-		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
-			  greenCard.getType() == GreenCardType.eu,
-			  let euCredentialAttributes = dataSource.getEuCredentialAttributes(greenCard),
-			  let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first else {
-			return
-		}
-		handleVaccinationDosageInformation(euVaccination)
-		displayRelevancy(greenCard)
-	}
-
 	private func showDomesticDetails(_ data: Data) {
 		
 		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {

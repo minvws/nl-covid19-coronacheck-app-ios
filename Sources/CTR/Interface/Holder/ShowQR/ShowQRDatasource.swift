@@ -20,7 +20,7 @@ protocol ShowQRDatasourceProtocol {
 	
 	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
 	
-	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool
+	func isCredentialExpired(_ greenCard: GreenCard) -> Bool
 	
 	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool
 
@@ -102,7 +102,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool {
 
-		return isDosenumberSmallerThanTotalDose(greenCard) || isVaccinationExpired(greenCard)
+		return isDosenumberSmallerThanTotalDose(greenCard) || isCredentialExpired(greenCard)
 	}
 
 	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
@@ -123,12 +123,11 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
 	
-	func isVaccinationExpired(_ greenCard: GreenCard) -> Bool {
+	func isCredentialExpired(_ greenCard: GreenCard) -> Bool {
 		
 		guard greenCard.getType() == GreenCardType.eu,
-			  let euCredentialAttributes = getEuCredentialAttributes(greenCard),
-			  euCredentialAttributes.digitalCovidCertificate.vaccinations != nil else {
-			// Not a vaccination
+			  let euCredentialAttributes = getEuCredentialAttributes(greenCard) else {
+			// No attributes
 			return false
 		}
 		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
@@ -137,7 +136,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 	
 	 func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
 		 
-		 guard greenCard.getType() == .eu else { return nil }
+		 guard greenCard.getType() == GreenCardType.eu else { return nil }
 		 
 		 if let credentialData = greenCard.getLatestInternationalCredential()?.data,
 			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {

@@ -699,7 +699,7 @@
 "holder_scanner_permission_settings" = "To Settings";
 "holder_scanner_permission_title" = "No access to camera";
 "holder_scanner_title" = "Scan QR code";
-"holder_showQR_label_expiredVaccination" = "This QR code is no longer valid";
+"holder_showQR_label_expiredQR" = "This QR code is no longer valid";
 "holder_showQR_label_newerQRAvailable" = "You probably won't need this QR code because you have a more recent dose.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
