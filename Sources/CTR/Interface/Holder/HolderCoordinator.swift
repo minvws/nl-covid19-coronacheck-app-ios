@@ -110,7 +110,7 @@ class HolderCoordinator: SharedCoordinator {
 	override func start() {
 		
 		if CommandLine.arguments.contains("-skipOnboarding") {
-			navigateToHolderStart()
+			navigateToDashboard(replacingWindowRootViewController: true)
 			return
 		}
 		
@@ -123,15 +123,14 @@ class HolderCoordinator: SharedCoordinator {
 				
 				// Attempt to consume the universal link again:
 				self.unhandledUniversalLink = nil // prevent potential infinite loops
-				navigateToHolderStart {
+				navigateToDashboard(replacingWindowRootViewController: true) {
 					self.consume(universalLink: unhandledUniversalLink)
 				}
 				
 			} else {
 				
 				// Start with the holder app
-				navigateToHolderStart {
-					
+				navigateToDashboard(replacingWindowRootViewController: true) {
 					self.handleDisclosurePolicyUpdates()
 					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
 						self?.handleDisclosurePolicyUpdates()
@@ -313,7 +312,7 @@ class HolderCoordinator: SharedCoordinator {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	private func navigateToDashboard(completion: @escaping () -> Void = {}) {
+	private func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
 		
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
@@ -329,7 +328,11 @@ class HolderCoordinator: SharedCoordinator {
 			)
 		)
 		
-		navigationController.setViewControllers([dashboardViewController], animated: true, completion: completion)
+		navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
+		
+		if replacingWindowRootViewController {
+			window.replaceRootViewController(with: navigationController)
+		}
 	}
 	
 	private func removeChildCoordinator() {
@@ -344,26 +347,6 @@ class HolderCoordinator: SharedCoordinator {
 extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: Navigation
-	
-	func navigateToHolderStart(completion: @escaping () -> Void = {}) {
-		
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(),
-				strippenRefresher: DashboardStrippenRefresher(
-					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability()
-				),
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
-				versionSupplier: versionSupplier
-			)
-		)
-		
-		navigationController.setViewControllers([dashboardViewController], animated: false, completion: completion)
-		window.replaceRootViewController(with: navigationController)
-	}
 	
 	/// Navigate to enlarged QR
 	private func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
