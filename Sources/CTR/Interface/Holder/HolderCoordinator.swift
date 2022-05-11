@@ -11,71 +11,45 @@ import Reachability
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
-	// MARK: Navigation
-	
-	/// Navigate to the start fo the holder flow
+	/// Navigate to the start of the holder flow
 	func navigateBackToStart()
 	
+	func openUrl(_ url: URL, inApp: Bool)
+	
+	func presentError(content: Content, backAction: (() -> Void)?)
+
 	/// Show an information page
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
-	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
-	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
-	
-	func userWishesToOpenTheMenu()
-	
-	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
-	
-	func userWishesToCreateAQR()
-	
-	func userWishesToCreateANegativeTestQR()
-	
-	func userWishesToCreateAVisitorPass()
-	
-	func userWishesToChooseTestLocation()
-	
-	func userHasNotBeenTested()
-	
-	func userWishesToCreateANegativeTestQRFromGGD()
-	
-	func userWishesToCreateAVaccinationQR()
-	
-	func userWishesToCreateARecoveryQR()
-	
 	func userDidScanRequestToken(requestToken: RequestToken)
-	
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
-	
 	func userWishesMoreInfoAboutClockDeviation()
-	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
-	
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
-	
-	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	
-	func userWishesMoreInfoAboutIncompleteDutchVaccination()
-	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
-	
-	func openUrl(_ url: URL, inApp: Bool)
-	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
-	
-	func userWishesToLaunchThirdPartyTicketApp()
-	
-	func displayError(content: Content, backAction: (() -> Void)?)
-	
+	func userWishesMoreInfoAboutGettingTested()
+	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 	func userWishesMoreInfoAboutNoTestToken()
-	
 	func userWishesMoreInfoAboutNoVisitorPassToken()
-	
+	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
+	func userWishesToChooseTestLocation()
+	func userWishesToCreateANegativeTestQR()
+	func userWishesToCreateANegativeTestQRFromGGD()
+	func userWishesToCreateAQR()
+	func userWishesToCreateARecoveryQR()
+	func userWishesToCreateAVaccinationQR()
+	func userWishesToCreateAVisitorPass()
+	func userWishesToLaunchThirdPartyTicketApp()
+	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
+	func userWishesToOpenTheMenu()
+	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
 	func userWishesToSeeStoredEvents()
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -473,7 +447,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		}
 	}
 	
-	func userHasNotBeenTested() {
+	func userWishesMoreInfoAboutGettingTested() {
 		
 		let viewController = MakeTestAppointmentViewController(
 			viewModel: MakeTestAppointmentViewModel(
@@ -623,7 +597,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
 	}
 	
-	func displayError(content: Content, backAction: (() -> Void)?) {
+	func presentError(content: Content, backAction: (() -> Void)?) {
 		
 		let viewController = ContentViewController(
 			viewModel: ContentViewModel(
