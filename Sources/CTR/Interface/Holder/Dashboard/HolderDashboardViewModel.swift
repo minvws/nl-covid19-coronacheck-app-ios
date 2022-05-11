@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -32,8 +33,28 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapDisclosurePolicyInformation0GBannerClose()
 }
 
+protocol HolderDashboardViewModelType: AnyObject {
+
+	var title: Observable<String> { get }
+	var domesticCards: Observable<[HolderDashboardViewController.Card]> { get }
+	var internationalCards: Observable<[HolderDashboardViewController.Card]> { get }
+	var primaryButtonTitle: Observable<String> { get }
+	var shouldShowAddCertificateFooter: Observable<Bool> { get }
+	var currentlyPresentedAlert: Observable<AlertContent?> { get }
+	var selectedTab: Observable<DashboardTab> { get }
+	var shouldShowTabBar: Observable<Bool> { get }
+	var shouldShowOnlyInternationalPane: Observable<Bool> { get }
+	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
+	
+	func selectTab(newTab: DashboardTab)
+	func viewWillAppear()
+	func addCertificateFooterTapped()
+	func userTappedMenuButton()
+	func openUrl(_ url: URL)
+}
+
 // swiftlint:disable:next type_body_length
-final class HolderDashboardViewModel: Logging {
+final class HolderDashboardViewModel: HolderDashboardViewModelType, Logging {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
@@ -42,22 +63,22 @@ final class HolderDashboardViewModel: Logging {
 	var loggingCategory: String = "HolderDashboardViewModel"
 
 	/// The title of the scene
-	@Bindable private(set) var title: String = L.holderDashboardTitle()
+	let title = Observable<String>(value: L.holderDashboardTitle())
 
-	@Bindable private(set) var domesticCards = [HolderDashboardViewController.Card]()
-	@Bindable private(set) var internationalCards = [HolderDashboardViewController.Card]()
+	let domesticCards = Observable<[HolderDashboardViewController.Card]>(value: [])
+	let internationalCards = Observable<[HolderDashboardViewController.Card]>(value: [])
 	
-	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
+	let primaryButtonTitle = Observable<String>(value: L.holderMenuProof())
 	
-	@Bindable private(set) var shouldShowAddCertificateFooter: Bool = false
+	let shouldShowAddCertificateFooter = Observable<Bool>(value: false)
 
-	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
+	let currentlyPresentedAlert = Observable<AlertContent?>(value: nil)
 	
-	@Bindable private(set) var selectedTab: DashboardTab = .domestic
+	let selectedTab = Observable<DashboardTab>(value: .domestic)
 
-	@Bindable private(set) var shouldShowTabBar: Bool = false
+	let shouldShowTabBar = Observable<Bool>(value: false)
 	
-	@Bindable private(set) var shouldShowOnlyInternationalPane: Bool = false
+	let shouldShowOnlyInternationalPane = Observable<Bool>(value: false)
 
 	// MARK: - Private types
 
@@ -173,7 +194,7 @@ final class HolderDashboardViewModel: Logging {
 		
 		// Handle new value:
 		dashboardRegionToggleValue = newTab.isDomestic ? .domestic : .europeanUnion
-		selectedTab = newTab
+		selectedTab.value = newTab
 	}
 
 	private let datasource: HolderDashboardQRCardDatasourceProtocol
@@ -329,7 +350,7 @@ final class HolderDashboardViewModel: Logging {
 		
 		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
 			// 1G-only
-			domesticCards = HolderDashboardViewModel.assemble1gOnlyCards(
+			domesticCards.value = HolderDashboardViewModel.assemble1gOnlyCards(
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
@@ -338,7 +359,7 @@ final class HolderDashboardViewModel: Logging {
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			// 3G + 1G
-			domesticCards = HolderDashboardViewModel.assemble3gWith1GCards(
+			domesticCards.value = HolderDashboardViewModel.assemble3gWith1GCards(
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
@@ -347,10 +368,10 @@ final class HolderDashboardViewModel: Logging {
 			)
 		} else if state.shouldShowOnlyInternationalPane {
 			// 0G
-			domesticCards = []
+			domesticCards.value = []
 		} else {
 			// 3G-only fallback
-			domesticCards = HolderDashboardViewModel.assemble3gOnlyCards(
+			domesticCards.value = HolderDashboardViewModel.assemble3gOnlyCards(
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
@@ -359,7 +380,7 @@ final class HolderDashboardViewModel: Logging {
 			)
 		}
 
-		internationalCards = HolderDashboardViewModel.assembleInternationalCards(
+		internationalCards.value = HolderDashboardViewModel.assembleInternationalCards(
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
@@ -367,9 +388,9 @@ final class HolderDashboardViewModel: Logging {
 			now: Current.now()
 		)
 
-		shouldShowAddCertificateFooter = state.shouldShowAddCertificateFooter
-		shouldShowTabBar = state.shouldShowTabBar
-		shouldShowOnlyInternationalPane = state.shouldShowOnlyInternationalPane
+		shouldShowAddCertificateFooter.value = state.shouldShowAddCertificateFooter
+		shouldShowTabBar.value = state.shouldShowTabBar
+		shouldShowOnlyInternationalPane.value = state.shouldShowOnlyInternationalPane
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {
@@ -396,7 +417,7 @@ final class HolderDashboardViewModel: Logging {
 
 			case (.noInternet, .expired, false):
 				logDebug("StrippenRefresh: Need refreshing now, but no internet. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiredWithNoInternet(strippenRefresher: strippenRefresher)
+				currentlyPresentedAlert.value = AlertContent.strippenExpiredWithNoInternet(strippenRefresher: strippenRefresher)
 
 			case (.noInternet, .expired, true):
 				logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
@@ -408,7 +429,7 @@ final class HolderDashboardViewModel: Logging {
 
 			case (.noInternet, .expiring(let expiryDate), false):
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: Current.now())
+				currentlyPresentedAlert.value = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: Current.now())
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 

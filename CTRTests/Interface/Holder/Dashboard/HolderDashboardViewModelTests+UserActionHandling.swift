@@ -64,26 +64,26 @@ extension HolderDashboardViewModelTests {
 		// Act & Assert
 		datasourceSpy.invokedDidUpdate?([], [expiredRecovery, expiredTest])
 		
-		expect(self.sut.domesticCards).toEventually(haveCount(4))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard())
-		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard())
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
+		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards.value[1]).toEventually(beExpiredQRCard())
+		expect(self.sut.domesticCards.value[2]).toEventually(beExpiredQRCard())
 		
 		// Close first expired QR:
 		sut.didTapCloseExpiredQR(expiredQR: expiredRecovery)
 		
-		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { title, _ in
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards.value[1]).toEventually(beExpiredQRCard(test: { title, _ in
 			// The expired test card should remain:
 			expect(title) == L.holder_dashboard_originExpiredBanner_domesticTest_title()
 		}))
 		
 		// Close second expired QR:
 		sut.didTapCloseExpiredQR(expiredQR: expiredTest)
-		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.domesticCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo_vaccination_domestic() {
@@ -210,7 +210,7 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
-		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
 			
 			// Test `didTapCallToAction`
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
@@ -223,10 +223,10 @@ extension HolderDashboardViewModelTests {
 			didTapClose()
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == [.policy3G]
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
 		
-		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).to(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_actionhandling_disclosurePolicyInformationCard_1g() {
@@ -238,7 +238,7 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
-		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
 			
 			// Test `didTapCallToAction`
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
@@ -251,10 +251,10 @@ extension HolderDashboardViewModelTests {
 			didTapClose()
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == [.policy1G]
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
 		
-		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).to(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_actionhandling_disclosurePolicyInformationCard_1g3g() {
@@ -266,7 +266,7 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
-		expect(self.sut.domesticCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
 			
 			// Test `didTapCallToAction`
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
@@ -279,10 +279,10 @@ extension HolderDashboardViewModelTests {
 			didTapClose()
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == [.policy1G, .policy3G]
 		}))
-		expect(self.sut.domesticCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
 		
-		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).to(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).to(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_actionhandling_disclosurePolicyInformationCard_0g() {
@@ -294,8 +294,8 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
-		expect(self.sut.internationalCards[0]).to(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
+		expect(self.sut.internationalCards.value[0]).to(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
 			
 			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
 			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
@@ -313,6 +313,6 @@ extension HolderDashboardViewModelTests {
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == []
 			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy) == true
 		}))
-		expect(self.sut.internationalCards[2]).to(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[2]).to(beEmptyStatePlaceholderImage())
 	}
 }
