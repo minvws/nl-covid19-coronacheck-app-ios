@@ -358,20 +358,10 @@ final class FetchRemoteEventsViewModel: Logging {
 				from: provider,
 				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
 
-					let mappedToProvider = result.mapError { serverError -> ServerError in
+					let mappedToProvider = result
 						// Transform regular .error to .provider to display the provider identifier
-						switch serverError {
-							case let ServerError.error(statusCode, serverResponse, networkError):
-								return ServerError.provider(
-									provider: provider.identifier,
-									statusCode: statusCode,
-									response: serverResponse,
-									error: networkError
-								)
-							default:
-								return serverError
-						}
-					}.map { info in
+						.mapError { $0.toProviderError(provider: provider) }
+						.map { info in
 						// Map the right provider identifier (fixes duplication on ACC for ZZZ and GGD)
 						return EventFlow.EventInformationAvailable(
 							providerIdentifier: provider.identifier,
@@ -441,19 +431,10 @@ final class FetchRemoteEventsViewModel: Logging {
 				eventFetchingGroup.enter()
 				fetchRemoteEvent(from: provider) { result in
 
-					let mapped = result.mapError { serverError -> ServerError in
-						switch serverError {
-							case let ServerError.error(statusCode, serverResponse, networkError):
-								return ServerError.provider(
-									provider: provider.identifier,
-									statusCode: statusCode,
-									response: serverResponse,
-									error: networkError
-								)
-							default:
-								return serverError
-						}
-					}
+					let mapped = result
+						// Transform regular .error to .provider to display the provider identifier
+						.mapError { $0.toProviderError(provider: provider) }
+					
 					if Configuration().getEnvironment() == "production" {
 						eventResponseResults += [mapped.map({ ($0, $1) })]
 					} else {
@@ -764,4 +745,24 @@ extension ErrorCode.ClientCode {
 	static let noTestProviderAvailable = ErrorCode.ClientCode(value: "080")
 	static let noRecoveryProviderAvailable = ErrorCode.ClientCode(value: "081")
 	static let noVaccinationProviderAvailable = ErrorCode.ClientCode(value: "082")
+}
+
+
+extension ServerError {
+	
+	// Transform regular .error to .provider to display the provider identifier
+	func toProviderError(provider: EventFlow.EventProvider) -> ServerError {
+		
+		switch self {
+			case let ServerError.error(statusCode, serverResponse, networkError):
+				return ServerError.provider(
+					provider: provider.identifier,
+					statusCode: statusCode,
+					response: serverResponse,
+					error: networkError
+				)
+			default:
+				return self
+		}
+	}
 }
