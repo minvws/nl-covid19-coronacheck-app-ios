@@ -16,40 +16,6 @@ protocol Embeddable {
 	var bottomAnchor: NSLayoutYAxisAnchor { get }
 }
 
-struct CustomEmbeddable: Embeddable {
-	let view: UIView?
-	let leadingAnchor: NSLayoutXAxisAnchor
-	let trailingAnchor: NSLayoutXAxisAnchor
-	let topAnchor: NSLayoutYAxisAnchor
-	let bottomAnchor: NSLayoutYAxisAnchor
-}
-
-extension UIView {
-
-	/// Returns a container with horizontal constraints to the readableContentGuide and vertical constraints to the normal top and bottom anchors.
-	var readableWidth: Embeddable {
-		return CustomEmbeddable(
-			view: self,
-			leadingAnchor: readableContentGuide.leadingAnchor,
-			trailingAnchor: readableContentGuide.trailingAnchor,
-			topAnchor: topAnchor,
-			bottomAnchor: bottomAnchor)
-	}
-
-	/// Returns a container with horizontal constraints to the leading readableContentGuide
-	/// and the trailing anchor and vertical constraints to the normal top and bottom anchors.
-	/// An example use is a separator within a `UITableViewCell` that has a left margin, but extends to the right off the screen.
-	var readableIdentation: Embeddable {
-		return CustomEmbeddable(
-			view: self,
-			leadingAnchor: readableContentGuide.leadingAnchor,
-			trailingAnchor: trailingAnchor,
-			topAnchor: topAnchor,
-			bottomAnchor: bottomAnchor)
-	}
-
-}
-
 extension UIView: Embeddable {
 	var view: UIView? {
 		return self
@@ -60,7 +26,6 @@ extension UILayoutGuide: Embeddable {
 	var view: UIView? {
 		return owningView
 	}
-
 }
 
 extension UIView: Logging {
@@ -102,5 +67,4 @@ extension UIView: Logging {
 
 		return self
 	}
-
 }
