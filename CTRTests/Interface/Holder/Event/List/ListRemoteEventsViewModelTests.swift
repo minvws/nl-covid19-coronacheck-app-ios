@@ -3521,7 +3521,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				protocolVersion: "3.0",
 				identity: EventFlow.Identity.fakeIdentity,
 				status: .complete,
-				result: nil,
 				events: [
 					EventFlow.Event(
 						type: "vaccination",
@@ -3547,7 +3546,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				protocolVersion: "3.0",
 				identity: EventFlow.Identity.fakeIdentity,
 				status: .complete,
-				result: nil,
 				events: [
 					EventFlow.Event(
 						type: "paperFlow",

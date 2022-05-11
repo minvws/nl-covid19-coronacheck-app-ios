@@ -61,28 +61,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 
 		sut.assertImage(containedInNavigationController: true)
 	}
-	
-	func test_content_negativeTest_v2() {
-		
-		// Given
-		let details = NegativeTestV2DetailsGenerator.getDetails(testResult: TestResult.negativeResult)
-		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
-			title: L.holderEventAboutTitle(),
-			details: details,
-			footer: nil
-		)
-		sut = RemoteEventDetailsViewController(viewModel: viewModel)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
-		
-		sut.assertImage(containedInNavigationController: true)
-	}
 
 	func test_content_negativeTest_dcc() {
 		

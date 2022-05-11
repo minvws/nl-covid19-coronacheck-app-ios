@@ -55,7 +55,6 @@ class CouplingManager: CouplingManaging, Logging {
 					protocolVersion: "3.0",
 					identity: euCredentialAttributes.identity,
 					status: .complete,
-					result: nil,
 					events: [
 						EventFlow.Event(
 							type: "paperFlow",

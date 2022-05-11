@@ -410,9 +410,9 @@ class NetworkManagerTestResultsTests: XCTestCase {
 				expect(result.isSuccess) == true
 				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
 				expect(result.successValue?.0.protocolVersion) == "3.0"
-				expect(result.successValue?.0.identity?.firstName) == "Bob"
-				expect(result.successValue?.0.events?.first?.negativeTest?.sampleDateString) == "2022-04-13T04:19:00Z"
-				expect(result.successValue?.0.events?.first?.unique) == "e5147b810046cd24fde6d5183cb27a31ff05b423"
+				expect(result.successValue?.0.identity.firstName) == "Bob"
+				expect(result.successValue?.0.events.first?.negativeTest?.sampleDateString) == "2022-04-13T04:19:00Z"
+				expect(result.successValue?.0.events.first?.unique) == "e5147b810046cd24fde6d5183cb27a31ff05b423"
 				done()
 			}
 		}

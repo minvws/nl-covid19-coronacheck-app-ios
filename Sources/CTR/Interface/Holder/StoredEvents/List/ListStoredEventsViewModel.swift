@@ -102,14 +102,13 @@ class ListStoredEventsViewModel: Logging {
 		
 		if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
 		   let decodedPayloadData = Data(base64Encoded: object.payload),
-		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
-		   let identity = wrapper.identity {
+		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
 			
-			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
+			let sortedEvents = wrapper.events.sorted(by: { lhs, rhs in
 				lhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture
 			})
 			
-			guard let sortedEvents = sortedEvents else { return result }
+//			guard let sortedEvents = sortedEvents else { return result }
 			result.append(contentsOf: sortedEvents.compactMap { event in
 				guard let date = event.getSortDate(with: DateFormatter.Event.iso8601) else {
 					return nil
@@ -117,15 +116,15 @@ class ListStoredEventsViewModel: Logging {
 				let dateString = DateFormatter.Format.dayMonthYear.string(from: date)
 				
 				if event.hasNegativeTest {
-					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
+					return getRowFromNegativeTestEvent(event, date: dateString, identity: wrapper.identity)
 				} else if event.hasPositiveTest {
-					return getRowFromPositiveTestEvent(event, date: dateString, identity: identity)
+					return getRowFromPositiveTestEvent(event, date: dateString, identity: wrapper.identity)
 				} else if event.hasRecovery {
-					return getRowFromRecoveryEvent(event, date: dateString, identity: identity)
+					return getRowFromRecoveryEvent(event, date: dateString, identity: wrapper.identity)
 				} else if event.hasVaccination {
-					return getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier)
+					return getRowFromVaccinationEvent(event, date: dateString, identity: wrapper.identity, providerName: wrapper.providerIdentifier)
 				} else if event.hasVaccinationAssessment {
-					return getRowFromAssessementEvent(event, date: dateString, identity: identity)
+					return getRowFromAssessementEvent(event, date: dateString, identity: wrapper.identity)
 				}
 				return nil
 			})
