@@ -17,7 +17,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func openUrl(_ url: URL, inApp: Bool)
 	
 	func presentError(content: Content, backAction: (() -> Void)?)
-
+	
 	/// Show an information page
 	/// - Parameters:
 	///   - title: the title of the page
@@ -63,7 +63,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	/// If set, this should be handled at the first opportunity:
 	var unhandledUniversalLink: UniversalLink?
-
+	
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
 		willSet {
 			// Remove any existing observation:
@@ -159,7 +159,7 @@ class HolderCoordinator: SharedCoordinator {
 		eventCoordinator.startWithNegativeTest()
 		
 	}
-
+	
 	// MARK: - Setup Listeners
 	
 	private func setupNotificationListeners() {
@@ -414,7 +414,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				self?.openUrl(url, inApp: true)
 			}
 		)
-
+		
 		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
 	}
@@ -538,7 +538,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		
 		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
-
+	
 	func userWishesToLaunchThirdPartyTicketApp() {
 		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
@@ -721,7 +721,7 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	}
 	
 	func handleDisclosurePolicyUpdates() {
- 
+		
 		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
 			// No Disclosure Policy modal if we still need to finish onboarding
 			return
@@ -730,7 +730,7 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
 			return
 		}
-
+		
 		guard Current.disclosurePolicyManager.hasChanges else {
 			return
 		}
