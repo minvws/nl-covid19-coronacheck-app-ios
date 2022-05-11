@@ -66,10 +66,10 @@ class CouplingManagerTests: XCTestCase {
 		expect(wrapper?.protocolVersion) == "3.0"
 		expect(wrapper?.identity.firstName) == "Check"
 		expect(wrapper?.identity.lastName) == "Corona"
-		expect(wrapper?.events?.first?.type) == "paperFlow"
-		expect(wrapper?.events?.first?.unique) == "test_convert"
-		expect(wrapper?.events?.first?.vaccination).to(beNil())
-		expect(wrapper?.events?.first?.dccEvent?.credential) == "test_convert"
-		expect(wrapper?.events?.first?.dccEvent?.couplingCode) == "test_couplingCode"
+		expect(wrapper?.events.first?.type) == "paperFlow"
+		expect(wrapper?.events.first?.unique) == "test_convert"
+		expect(wrapper?.events.first?.vaccination).to(beNil())
+		expect(wrapper?.events.first?.dccEvent?.credential) == "test_convert"
+		expect(wrapper?.events.first?.dccEvent?.couplingCode) == "test_couplingCode"
 	}
 }

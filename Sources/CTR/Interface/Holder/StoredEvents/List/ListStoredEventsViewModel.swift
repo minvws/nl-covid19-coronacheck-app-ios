@@ -104,11 +104,11 @@ class ListStoredEventsViewModel: Logging {
 		   let decodedPayloadData = Data(base64Encoded: object.payload),
 		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
 			
-			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
+			let sortedEvents = wrapper.events.sorted(by: { lhs, rhs in
 				lhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture
 			})
 			
-			guard let sortedEvents = sortedEvents else { return result }
+//			guard let sortedEvents = sortedEvents else { return result }
 			result.append(contentsOf: sortedEvents.compactMap { event in
 				guard let date = event.getSortDate(with: DateFormatter.Event.iso8601) else {
 					return nil
