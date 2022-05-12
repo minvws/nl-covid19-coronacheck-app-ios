@@ -69,6 +69,7 @@ class VerifierIdentityView: BaseView {
 
 		super.setupViewHierarchy()
 
+		stackView.embed(in: self)
 		stackView.addArrangedSubview(lastNameView)
 		stackView.addArrangedSubview(firstNameView)
 		if traitCollection.preferredContentSizeCategory >= .extraLarge {
@@ -79,7 +80,6 @@ class VerifierIdentityView: BaseView {
 			horizontalStackView.addArrangedSubview(monthOfBirthView)
 			stackView.addArrangedSubview(horizontalStackView)
 		}
-		addSubview(stackView)
 	}
 
 	/// Setup the constraints
@@ -87,7 +87,6 @@ class VerifierIdentityView: BaseView {
 
 		super.setupViewConstraints()
 		
-		stackView.embed(in: self)
 		NSLayoutConstraint.activate([
 
 			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),

@@ -51,12 +51,6 @@ final class DeniedQRScanMoreInfoView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(stackView)
-	}
-
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-		
 		stackView.embed(
 			in: layoutMarginsGuide,
 			insets: UIEdgeInsets(top: 0, left: ViewTraits.horizontalMargin, bottom: ViewTraits.bottomMargin, right: ViewTraits.horizontalMargin)

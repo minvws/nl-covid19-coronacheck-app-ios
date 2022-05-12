@@ -61,21 +61,13 @@ class BottomSheetContentView: BaseView {
 
 		super.setupViewHierarchy()
 
-		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
-		stackView.addArrangedSubview(secondaryButton)
-		
-		addSubview(stackView)
-	}
-
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
 		stackView.embed(
 			in: safeAreaLayoutGuide,
 			insets: UIEdgeInsets(top: 0, left: ViewTraits.margin, bottom: ViewTraits.margin, right: ViewTraits.margin)
 		)
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(secondaryButton)
 	}
 	
 	@objc func secondaryButtonTapped() {

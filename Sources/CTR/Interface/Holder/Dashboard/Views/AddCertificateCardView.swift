@@ -38,24 +38,15 @@ class AddCertificateCardView: BaseView {
 
 		addCertificateButton.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
-
+	
 	override func setupViewHierarchy() {
-
+		
 		super.setupViewHierarchy()
 		
-		addSubview(addCertificateButton)
-	}
-
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		var constraints = [NSLayoutConstraint]()
-		constraints += [addCertificateButton.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
-		constraints += [addCertificateButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
-		constraints += [addCertificateButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
-		constraints += [addCertificateButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
-		NSLayoutConstraint.activate(constraints)
+		addCertificateButton.embed(
+			in: self,
+			insets: UIEdgeInsets(top: ViewTraits.margin, left: ViewTraits.margin, bottom: ViewTraits.margin, right: ViewTraits.margin)
+		)
 	}
 
 	private func createShadow() {

@@ -34,21 +34,17 @@ extension UIView: Logging {
 	///
 	/// - parameter embeddable: The container conforming to Embeddable to which the receiver will be added
 	/// - parameter insets: The insets that will be applied to the constraints
-	/// - parameter preservesSuperviewLayoutMargins: A Boolean value indicating whether the receiver also respects the margins of its container. Defaults to true
 	/// # Example uses:
 	/// ````
 	/// someView.embed(in: otherView)
 	/// someView.embed(in: otherView.safeAreaLayoutGuide)
 	/// someView.embed(in: otherView.safeAreaLayoutGuide, insets: .top(50) + .left(10))
-	/// someView.embed(in: otherView.readableWidth)
-	/// someView.embed(in: otherView.readableContentGuide)
 	/// ````
 	/// - Tag: Embed
 	@discardableResult
 	func embed(
 		in embeddable: Embeddable,
-		insets: UIEdgeInsets = .zero,
-		preservesSuperviewLayoutMargins: Bool = true) -> Self {
+		insets: UIEdgeInsets = .zero) -> Self {
 
 		guard let view = embeddable.view else {
 			logError("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
@@ -56,8 +52,6 @@ extension UIView: Logging {
 		}
 
 		view.addSubview(self)
-		view.preservesSuperviewLayoutMargins = preservesSuperviewLayoutMargins
-		self.preservesSuperviewLayoutMargins = preservesSuperviewLayoutMargins
 
 		translatesAutoresizingMaskIntoConstraints = false
 		leadingAnchor.constraint(equalTo: embeddable.leadingAnchor, constant: insets.left).isActive = true

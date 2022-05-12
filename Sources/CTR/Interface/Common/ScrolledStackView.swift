@@ -60,8 +60,8 @@ class ScrolledStackView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		stackView.embed(in: contentScrollView)
 		scrollView.addSubview(contentScrollView)
-		contentScrollView.addSubview(stackView)
 		addSubview(scrollView)
 	}
 
@@ -71,7 +71,6 @@ class ScrolledStackView: BaseView {
 		super.setupViewConstraints()
 
 		stackView.preservesSuperviewLayoutMargins = true
-		stackView.embed(in: contentScrollView)
 
 		NSLayoutConstraint.activate([
 			

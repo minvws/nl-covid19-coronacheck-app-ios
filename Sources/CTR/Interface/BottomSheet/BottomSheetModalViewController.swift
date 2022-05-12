@@ -113,18 +113,15 @@ private extension BottomSheetModalViewController {
 		addChild(childViewController)
 		childViewController.didMove(toParent: self)
 		view.addSubview(scrollView)
-		scrollView.addSubview(childViewController.view)
 		view.addSubview(closeButton)
 	}
 	
 	func setupViewConstraints() {
 		childViewController.view.translatesAutoresizingMaskIntoConstraints = false
+		childViewController.view.embed(in: scrollView)
+		
 		
 		NSLayoutConstraint.activate([
-			childViewController.view.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			childViewController.view.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			childViewController.view.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
-			childViewController.view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			childViewController.view.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 			
 			closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: ViewTraits.Margin.closeButton),
