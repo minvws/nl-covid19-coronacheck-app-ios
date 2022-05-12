@@ -30,7 +30,7 @@ class ChooseTestLocationViewModel: Logging {
 		
 		bottomButton = ChooseTestLocationViewController.ButtonModel(
 			title: L.holderLocationNotest()) { [weak self] in
-				self?.coordinator?.userHasNotBeenTested()
+				self?.coordinator?.userWishesMoreInfoAboutGettingTested()
 			}
 		
 		buttonModels = [

@@ -90,9 +90,8 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
-			identity: nil,
-			status: .complete,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .complete
 		)
 		
 		// When

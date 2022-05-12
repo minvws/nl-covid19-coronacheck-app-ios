@@ -74,12 +74,10 @@ class InputRetrievalCodeViewController: BaseViewController {
 		}
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 			if $0 {
-				self?.sceneView.spinner.isHidden = false
-				self?.sceneView.spinner.startAnimating()
+				self?.sceneView.shouldShowLoadingSpinner = true
 				UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
 			} else {
-				self?.sceneView.spinner.stopAnimating()
-				self?.sceneView.spinner.isHidden = true
+				self?.sceneView.shouldShowLoadingSpinner = false
 			}
 		}
 		viewModel.$networkErrorAlert.binding = { [weak self] in

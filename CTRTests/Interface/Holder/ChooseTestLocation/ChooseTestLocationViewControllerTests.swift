@@ -47,7 +47,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 		self.sut.sceneView.noTestButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserHasNotBeenTested) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInfoAboutGettingTested) == true
 	}
 
 	func test_ggdbutton_tapped() {

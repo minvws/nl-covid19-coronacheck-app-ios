@@ -31,35 +31,12 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 		return view
 	}()
 
-	/// The spinner
-	private let spinner: UIActivityIndicatorView = {
-
-		let view = UIActivityIndicatorView()
-		view.hidesWhenStopped = true
+	private let activityIndicatorView: ActivityIndicatorView = {
+		
+		let view = ActivityIndicatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 13.0, *) {
-			view.style = .large
-		} else {
-			view.style = .whiteLarge
-		}
-		view.color = C.primaryBlue()
 		return view
 	}()
-	
-	var shouldShowLoadingSpinner: Bool = false {
-		didSet {
-			if shouldShowLoadingSpinner {
-				
-				spinner.startAnimating()
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-					// After a short delay (otherwise it's never announced)
-					UIAccessibility.post(notification: .layoutChanged, argument: self.spinner)
-				}
-			} else {
-				spinner.stopAnimating()
-			}
-		}
-	}
 
 	let secondaryButton: Button = {
 
@@ -81,7 +58,7 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 
 		super.setupViewHierarchy()
 
-		addSubview(spinner)
+		addSubview(activityIndicatorView)
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
 		stackView.addArrangedSubview(secondaryButton)
@@ -93,8 +70,8 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+			activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
+			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
 
@@ -130,5 +107,30 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
 			secondaryButton.isHidden = secondaryButtonTitle?.isEmpty ?? true
 		}
+	}
+	
+	var shouldShowLoadingSpinner: Bool = false {
+		didSet {
+			activityIndicatorView.shouldShowLoadingSpinner = shouldShowLoadingSpinner
+		}
+	}
+	
+	func applyContent(_ content: Content) {
+
+		// Texts
+		title = content.title
+		message = content.body
+
+		// Button
+		if let actionTitle = content.primaryActionTitle {
+			primaryTitle = actionTitle
+			footerButtonView.isHidden = false
+		} else {
+			primaryTitle = nil
+			footerButtonView.isHidden = true
+		}
+		primaryButtonTappedCommand = content.primaryAction
+		secondaryButtonTappedCommand = content.secondaryAction
+		secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

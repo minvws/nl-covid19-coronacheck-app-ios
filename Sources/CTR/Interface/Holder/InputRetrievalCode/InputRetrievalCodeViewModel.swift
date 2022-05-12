@@ -642,7 +642,7 @@ extension InputRetrievalCodeViewModel {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		coordinator?.displayError(content: content) { [weak self] in
+		coordinator?.presentError(content: content) { [weak self] in
 			self?.coordinator?.navigateBackToStart()
 		}
 	}
@@ -729,7 +729,7 @@ extension InputRetrievalCodeViewModel {
 			secondaryAction: nil
 		)
 
-		coordinator?.displayError(content: content) { [weak self] in
+		coordinator?.presentError(content: content) { [weak self] in
 			self?.coordinator?.navigateBackToStart()
 		}
 	}

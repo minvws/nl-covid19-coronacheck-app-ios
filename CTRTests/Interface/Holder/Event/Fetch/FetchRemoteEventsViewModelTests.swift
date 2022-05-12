@@ -653,7 +653,6 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			protocolVersion: "3.0",
 			identity: EventFlow.Identity.fakeIdentity,
 			status: .complete,
-			result: nil,
 			events: []
 		)
 
