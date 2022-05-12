@@ -147,7 +147,7 @@
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "'s morgens";
 "holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
-"holder.dashboard.qr.button.viewQR" = "Bekijk QR";
+"holder.dashboard.qr.button.viewQR" = "Bekijk QR-code";
 "holder.dashboard.qr.button.viewQRs" = "Bekijk QR-codes";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
