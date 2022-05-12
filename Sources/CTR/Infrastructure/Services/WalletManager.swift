@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -203,7 +203,7 @@ class WalletManager: WalletManaging, Logging {
 	
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
 		
-		return EventGroupModel.delete(objectID)
+		return EventGroupModel.delete(objectID, managedObjectContext: dataStoreManager.managedObjectContext())
 	}
 
 	func fetchSignedEvents() -> [String] {

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -642,7 +642,7 @@ extension InputRetrievalCodeViewModel {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		coordinator?.displayError(content: content) { [weak self] in
+		coordinator?.presentError(content: content) { [weak self] in
 			self?.coordinator?.navigateBackToStart()
 		}
 	}
@@ -729,7 +729,7 @@ extension InputRetrievalCodeViewModel {
 			secondaryAction: nil
 		)
 
-		coordinator?.displayError(content: content) { [weak self] in
+		coordinator?.presentError(content: content) { [weak self] in
 			self?.coordinator?.navigateBackToStart()
 		}
 	}

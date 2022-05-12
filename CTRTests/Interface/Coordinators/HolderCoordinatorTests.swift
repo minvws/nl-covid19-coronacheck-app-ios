@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -526,7 +526,7 @@ class HolderCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.userHasNotBeenTested()
+		sut.userWishesMoreInfoAboutGettingTested()
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
@@ -787,7 +787,7 @@ class HolderCoordinatorTests: XCTestCase {
 		)
 		
 		// When
-		sut.displayError(content: content, backAction: {})
+		sut.presentError(content: content, backAction: {})
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1

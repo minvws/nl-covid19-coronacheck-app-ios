@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -41,7 +41,7 @@ class LoginTVSViewController: BaseViewController {
 			self?.sceneView.shouldShowLoadingSpinner = $0
 		}
 
-		viewModel.$content.binding = { [weak self] in self?.displayContent($0) }
+		viewModel.$content.binding = { [weak self] in self?.sceneView.applyContent($0) }
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 		viewModel.login()
 		
@@ -53,24 +53,5 @@ class LoginTVSViewController: BaseViewController {
 	@objc func displayCancelAuthorization() {
 		
 		viewModel.cancelAuthorization()
-	}
-
-	private func displayContent(_ content: Content) {
-
-		// Texts
-		sceneView.title = content.title
-		sceneView.message = content.body
-
-		// Button
-		if let actionTitle = content.primaryActionTitle {
-			sceneView.primaryTitle = actionTitle
-			sceneView.footerButtonView.isHidden = false
-		} else {
-			sceneView.primaryTitle = nil
-			sceneView.footerButtonView.isHidden = true
-		}
-		sceneView.primaryButtonTappedCommand = content.primaryAction
-		sceneView.secondaryButtonTappedCommand = content.secondaryAction
-		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

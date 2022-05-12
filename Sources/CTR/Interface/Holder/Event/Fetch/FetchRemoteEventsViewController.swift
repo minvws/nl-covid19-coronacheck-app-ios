@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -77,31 +77,12 @@ class FetchRemoteEventsViewController: BaseViewController {
 	private func setForLoadingState(_ content: Content) {
 
 		sceneView.shouldShowLoadingSpinner = true
-		displayContent(content)
+		sceneView.applyContent(content)
 	}
 
 	private func setForFeedback(_ content: Content) {
 
 		sceneView.shouldShowLoadingSpinner = false
-		displayContent(content)
-	}
-
-	private func displayContent(_ content: Content) {
-
-		// Texts
-		sceneView.title = content.title
-		sceneView.message = content.body
-
-		// Button
-		if let actionTitle = content.primaryActionTitle {
-			sceneView.primaryTitle = actionTitle
-			sceneView.footerButtonView.isHidden = false
-		} else {
-			sceneView.primaryTitle = nil
-			sceneView.footerButtonView.isHidden = true
-		}
-		sceneView.primaryButtonTappedCommand = content.primaryAction
-		sceneView.secondaryButtonTappedCommand = content.secondaryAction
-		sceneView.secondaryButtonTitle = content.secondaryActionTitle
+		sceneView.applyContent(content)
 	}
 }
