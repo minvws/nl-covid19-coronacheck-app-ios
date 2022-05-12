@@ -132,7 +132,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType, Logging {
 		}
 		
 		func dashboardHasInternationalQRCards() -> Bool {
-			!qrCards.filter({ $0.isOfRegion(region: .europeanUnion) }).isEmpty || !regionFilteredExpiredCards(validityRegion: .europeanUnion).isEmpty
+			qrCards.filter({ $0.isOfRegion(region: .europeanUnion) }).isNotEmpty || regionFilteredExpiredCards(validityRegion: .europeanUnion).isNotEmpty
 		}
 		
 		func dashboardHasEmptyState(for validityRegion: QRCodeValidityRegion) -> Bool {
