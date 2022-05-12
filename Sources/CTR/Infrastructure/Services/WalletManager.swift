@@ -203,7 +203,7 @@ class WalletManager: WalletManaging, Logging {
 	
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
 		
-		return EventGroupModel.delete(objectID)
+		return EventGroupModel.delete(objectID, managedObjectContext: dataStoreManager.managedObjectContext())
 	}
 
 	func fetchSignedEvents() -> [String] {
