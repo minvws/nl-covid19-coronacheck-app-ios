@@ -25,6 +25,7 @@ class DisclosureSubtitleButton: BaseView {
 		static let topMargin: CGFloat = 13.0
 		static let bottomMargin: CGFloat = 16.0
 		static let leadingMargin: CGFloat = 16.0
+		static let trailingMargin: CGFloat = 12.0
 		
 		enum Title {
 			static let lineHeight: CGFloat = 22
@@ -100,7 +101,7 @@ class DisclosureSubtitleButton: BaseView {
 			),
 			titleLabel.trailingAnchor.constraint(
 				lessThanOrEqualTo: disclosureView.leadingAnchor,
-				constant: -ViewTraits.textMargin
+				constant: -ViewTraits.trailingMargin
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: subtitleLabel.topAnchor,
@@ -117,8 +118,8 @@ class DisclosureSubtitleButton: BaseView {
 				constant: -ViewTraits.bottomMargin
 			),
 			subtitleLabel.trailingAnchor.constraint(
-				lessThanOrEqualTo: disclosureView.leadingAnchor,
-				constant: -ViewTraits.textMargin
+				equalTo: disclosureView.leadingAnchor,
+				constant: -ViewTraits.trailingMargin
 			)
 		])
 
