@@ -120,7 +120,6 @@ private extension BottomSheetModalViewController {
 		childViewController.view.translatesAutoresizingMaskIntoConstraints = false
 		childViewController.view.embed(in: scrollView)
 		
-		
 		NSLayoutConstraint.activate([
 			childViewController.view.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 			

@@ -135,7 +135,7 @@ class MessageCardView: BaseView {
 		
 		super.setupViewHierarchy()
 		
-		addSubview(accessibilityRoleView)
+		accessibilityRoleView.embed(in: self)
 		addSubview(messageLabel)
 		
 		if nil != config.closeButtonCommand {
@@ -153,10 +153,6 @@ class MessageCardView: BaseView {
 		
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += [accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor)]
-		constraints += [accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor)]
-		constraints += [accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor)]
-		constraints += [accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor)]
 		constraints += [messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
 		constraints += [messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
 		
