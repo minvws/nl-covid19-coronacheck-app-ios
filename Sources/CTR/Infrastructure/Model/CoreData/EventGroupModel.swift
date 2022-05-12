@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -33,13 +33,12 @@ class EventGroupModel {
 		return object
 	}
 	
-	class func delete(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+	class func delete(_ objectID: NSManagedObjectID, managedObjectContext: NSManagedObjectContext) -> Result<Bool, Error> {
 
-		let managedContext = Current.dataStoreManager.managedObjectContext()
 		do {
-			if let eventGroup = try managedContext.existingObject(with: objectID) as? EventGroup {
-				managedContext.delete(eventGroup)
-				Current.dataStoreManager.save(managedContext)
+			if let eventGroup = try managedObjectContext.existingObject(with: objectID) as? EventGroup {
+				managedObjectContext.delete(eventGroup)
+				Current.dataStoreManager.save(managedObjectContext)
 				return .success(true)
 			} else {
 				return .success(false)
