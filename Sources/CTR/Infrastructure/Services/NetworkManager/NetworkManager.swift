@@ -51,31 +51,15 @@ class NetworkManager: Logging {
 					let signedResult: Result<SignedResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
 					switch signedResult {
 						case let .success(signedResponse):
+							
+							self.validateSignedResponse(
+								signatureValidator: signatureValidator,
+								urlResponse: networkResponse.urlResponse,
+								signedResponse: signedResponse,
+								proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
+								completion: completion
+							)
 
-							// Make sure we have an actual payload and signature
-							guard let decodedPayloadData = signedResponse.decodedPayload,
-								  let signatureData = signedResponse.decodedSignature else {
-								self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-								completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
-								return
-							}
-
-							// Validate signature (on the base64 payload)
-							signatureValidator.validate(data: decodedPayloadData, signature: signatureData) { valid in
-								if valid {
-									
-									self.decodeToObject(
-										decodedPayloadData,
-										proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
-										signedResponse: signedResponse,
-										urlResponse: networkResponse.urlResponse,
-										completion: completion
-									)
-								} else {
-									self.logError("We got an invalid signature!")
-									completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
-								}
-							}
 						case let .failure(decodeError):
 							if let networkError = NetworkError.inspect(response: networkResponse.urlResponse) {
 								// Is there a actual network error? Report that rather than the signed response decode fail.
@@ -88,6 +72,39 @@ class NetworkManager: Logging {
 			}
 			
 			self.cleanupSession(session)
+		}
+	}
+	
+	private func validateSignedResponse<Object: Decodable>(
+		signatureValidator: SignatureValidation,
+		urlResponse: URLResponse,
+		signedResponse: SignedResponse,
+		proceedToSuccessIfResponseIs400: Bool = false,
+		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
+		
+		// Make sure we have an actual payload and signature
+		guard let decodedPayloadData = signedResponse.decodedPayload,
+			  let signatureData = signedResponse.decodedSignature else {
+			self.logError("we cannot decode the payload or signature (base64 decoding failed)")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
+			return
+		}
+
+		// Validate signature (on the base64 payload)
+		signatureValidator.validate(data: decodedPayloadData, signature: signatureData) { valid in
+			if valid {
+				
+				self.decodeToObject(
+					decodedPayloadData,
+					proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
+					signedResponse: signedResponse,
+					urlResponse: urlResponse,
+					completion: completion
+				)
+			} else {
+				self.logError("We got an invalid signature!")
+				completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
+			}
 		}
 	}
 
@@ -361,7 +378,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 
-		guard let urlRequest =URLRequest.construct(url: networkConfiguration.remoteConfigurationUrl, timeOutInterval: 10.0) else {
+		guard let urlRequest = URLRequest.construct(url: networkConfiguration.remoteConfigurationUrl, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getRemoteConfiguration: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
