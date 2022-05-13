@@ -39,10 +39,7 @@ class NetworkManager: Logging {
 		let session = createSession(strategy: strategy)
 		data(request: request, session: session) { data, response, error in
 
-			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
-			// Result<(URLResponse, Data), ServerError>
-
-			switch networkResult {
+			switch self.handleNetworkResponse(response: response, data: data, error: error) {
 				case let .failure(serverError):
 					completion(.failure(serverError))
 				case let .success(networkResponse):
@@ -94,12 +91,13 @@ class NetworkManager: Logging {
 		signatureValidator.validate(data: decodedPayloadData, signature: signatureData) { valid in
 			if valid {
 				
-				self.decodeToObject(
-					decodedPayloadData,
-					proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
-					signedResponse: signedResponse,
-					urlResponse: urlResponse,
-					completion: completion
+				completion(
+					self.decodeToObject(
+						decodedPayloadData,
+						proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
+						signedResponse: signedResponse,
+						urlResponse: urlResponse
+					)
 				)
 			} else {
 				self.logError("We got an invalid signature!")
@@ -159,8 +157,7 @@ class NetworkManager: Logging {
 		_ decodedPayloadData: Data,
 		proceedToSuccessIfResponseIs400: Bool = false,
 		signedResponse: SignedResponse,
-		urlResponse: URLResponse,
-		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
+		urlResponse: URLResponse) -> Result<(Object, SignedResponse, Data, URLResponse), ServerError> {
 
 		// Did we experience a network error?
 		let networkError = NetworkError.inspect(response: urlResponse)
@@ -171,16 +168,16 @@ class NetworkManager: Logging {
 		switch (decodedResult, proceedToSuccessIfResponseIs400, networkError) {
 			case (let .success(object), _, nil), (let .success(object), true, .resourceNotFound):
 				// Success and no network error, or success and ignore 400
-				completion(.success((object, signedResponse, decodedPayloadData, urlResponse)))
+				return .success((object, signedResponse, decodedPayloadData, urlResponse))
 
 			case (.success, _, _):
 				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
-				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? .invalidResponse)))
+				return .failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? .invalidResponse))
 
 			case (let .failure(responseError), _, _):
 				// Decode to a server response
 				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
-				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
+				return .failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError))
 		}
 	}
 
