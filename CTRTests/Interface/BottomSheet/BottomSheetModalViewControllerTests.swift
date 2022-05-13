@@ -22,7 +22,6 @@ final class BottomSheetModalViewControllerTests: XCTestCase {
 		super.setUp()
 
 		window = UIWindow()
-		isRecording = false
 	}
 	
 	func loadView() {
@@ -46,7 +45,7 @@ final class BottomSheetModalViewControllerTests: XCTestCase {
 private extension BottomSheetModalViewControllerTests {
 	
 	func createSut() {
-		let viewControllerToPresent = SnapshotViewController(viewModel: .init(flavor: .holder))
+		let viewControllerToPresent = TestModalViewController(viewModel: .init())
 		let topMargin: CGFloat = 62
 		viewControllerToPresent.view.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
