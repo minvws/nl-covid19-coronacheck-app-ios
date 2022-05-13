@@ -91,7 +91,10 @@ final class DashboardTabBar: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(stackView)
+		stackView.embed(
+			in: self,
+			insets: UIEdgeInsets(top: 0, left: ViewTraits.Margin.horizontal, bottom: 0, right: ViewTraits.Margin.horizontal)
+		)
 		stackView.addArrangedSubview(domesticButton)
 		stackView.addArrangedSubview(internationalButton)
 		stackView.addSubview(separatorView)
@@ -103,10 +106,6 @@ final class DashboardTabBar: BaseView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			stackView.topAnchor.constraint(equalTo: topAnchor),
-			stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: ViewTraits.Margin.horizontal),
-			stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -ViewTraits.Margin.horizontal),
-			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			separatorView.leftAnchor.constraint(equalTo: stackView.leftAnchor),
 			separatorView.rightAnchor.constraint(equalTo: stackView.rightAnchor),

@@ -47,20 +47,8 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(stackView)
+		stackView.embed(in: self)
 		stackView.addArrangedSubview(contentTextView)
-	}
-	
-	/// Setup the constraints
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-		
-		NSLayoutConstraint.activate([
-			stackView.leftAnchor.constraint(equalTo: leftAnchor),
-			stackView.rightAnchor.constraint(equalTo: rightAnchor),
-			stackView.topAnchor.constraint(equalTo: topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-		])
 	}
 	
 	/// The message

@@ -78,7 +78,6 @@ class FakeNavigationBarView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(stackView)
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(menuButton)
 	}
@@ -94,12 +93,10 @@ class FakeNavigationBarView: BaseView {
 			bottomMargin = ViewTraits.margin / 2
 		}
 		
-		var constraints = [NSLayoutConstraint]()
-		constraints += [stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
-		constraints += [stackView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin)]
-		constraints += [stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomMargin)]
-		constraints += [stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
-		NSLayoutConstraint.activate(constraints)
+		stackView.embed(
+			in: self,
+			insets: UIEdgeInsets(top: ViewTraits.margin, left: ViewTraits.margin, bottom: bottomMargin, right: ViewTraits.margin)
+		)
 	}
 	
 	// MARK: - UITraitEnvironment

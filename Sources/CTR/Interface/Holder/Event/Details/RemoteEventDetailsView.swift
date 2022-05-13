@@ -47,31 +47,11 @@ final class RemoteEventDetailsView: BaseView, EventDetailsViewable {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(stackView)
+		stackView.embed(
+			in: safeAreaLayoutGuide,
+			insets: UIEdgeInsets(top: 0, left: ViewTraits.margin, bottom: ViewTraits.margin, right: ViewTraits.margin)
+		)
 		stackView.addArrangedSubview(titleLabel)
-	}
-	
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-		
-		NSLayoutConstraint.activate([
-
-			stackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
-			stackView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
-			)
-		])
 	}
 	
 	override func setupAccessibility() {

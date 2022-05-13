@@ -60,8 +60,8 @@ class ScrolledStackView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		stackView.embed(in: contentScrollView)
 		scrollView.addSubview(contentScrollView)
-		contentScrollView.addSubview(stackView)
 		addSubview(scrollView)
 	}
 
@@ -92,10 +92,6 @@ class ScrolledStackView: BaseView {
 			contentScrollView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
 			
 			// StackView
-			stackView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor),
-			stackView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor),
-			stackView.topAnchor.constraint(equalTo: contentScrollView.topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor),
 			stackView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
 			stackView.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor)
 		])

@@ -166,7 +166,7 @@ class QRCardView: BaseView {
 
 		super.setupViewHierarchy()
 		
-		addSubview(accessibilityRoleView)
+		accessibilityRoleView.embed(in: self)
 
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
@@ -212,10 +212,6 @@ class QRCardView: BaseView {
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 		
 		NSLayoutConstraint.activate([
-			accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor),
-			accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			
 			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),
