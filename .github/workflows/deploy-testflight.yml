@@ -31,7 +31,7 @@ jobs:
           ./Scripts/log-build-number.sh
                     
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1.106.0
         with:
           bundler-cache: true
 
