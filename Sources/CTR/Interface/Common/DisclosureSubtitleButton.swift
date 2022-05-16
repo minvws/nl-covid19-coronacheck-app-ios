@@ -13,15 +13,10 @@ class DisclosureSubtitleButton: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 		
-		// Dimensions
-		static let cornerRadius: CGFloat = 9
-		
-		// Margins
-		static let textMargin: CGFloat = 4.0
-		static let topMargin: CGFloat = 13.0
-		static let bottomMargin: CGFloat = 16.0
-		static let leadingMargin: CGFloat = 16.0
-		
+		enum View {
+			static let cornerRadius: CGFloat = 9
+			static let leadingMargin: CGFloat = 16.0
+		}
 		enum Disclosure {
 			static let height: CGFloat = 12
 			static let width: CGFloat = 12
@@ -32,10 +27,13 @@ class DisclosureSubtitleButton: BaseView {
 		enum Title {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
+			static let topMargin: CGFloat = 13.0
+			static let bottomMargin: CGFloat = 4.0
 		}
 		enum Message {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
+			static let bottomMargin: CGFloat = 16.0
 		}
 	}
 	
@@ -95,11 +93,11 @@ class DisclosureSubtitleButton: BaseView {
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topAnchor,
-				constant: ViewTraits.topMargin
+				constant: ViewTraits.Title.topMargin
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
-				constant: ViewTraits.leadingMargin
+				constant: ViewTraits.View.leadingMargin
 			),
 			titleLabel.trailingAnchor.constraint(
 				lessThanOrEqualTo: disclosureView.leadingAnchor,
@@ -107,17 +105,17 @@ class DisclosureSubtitleButton: BaseView {
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: subtitleLabel.topAnchor,
-				constant: -ViewTraits.textMargin
+				constant: -ViewTraits.Title.bottomMargin
 			),
 			
 			// Message
 			subtitleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
-				constant: ViewTraits.leadingMargin
+				constant: ViewTraits.View.leadingMargin
 			),
 			subtitleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
-				constant: -ViewTraits.bottomMargin
+				constant: -ViewTraits.Message.bottomMargin
 			),
 			subtitleLabel.trailingAnchor.constraint(
 				lessThanOrEqualTo: disclosureView.leadingAnchor,
