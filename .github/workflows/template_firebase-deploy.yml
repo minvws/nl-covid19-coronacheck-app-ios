@@ -49,7 +49,7 @@ jobs:
         echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
 
     - name: Setup Ruby
-      uses: ruby/setup-ruby@v1.106.0
+      uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
 
