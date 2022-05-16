@@ -175,7 +175,8 @@ class RemoteEventItemView: BaseView {
 			detailsStackView.removeArrangedSubviews()
 			details.forEach { detail in
 				let label = Label(subhead: nil).multiline()
-				label.attributedText = .makeFromHtml(
+				
+				NSAttributedString.makeFromHtml(
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
 						font: Fonts.subhead,
@@ -183,8 +184,10 @@ class RemoteEventItemView: BaseView {
 						lineHeight: ViewTraits.Message.lineHeight,
 						kern: ViewTraits.Message.kerning
 					)
-				)
-				detailsStackView.addArrangedSubview(label)
+				) { attributedString in
+					label.attributedText = attributedString
+					self.detailsStackView.addArrangedSubview(label)
+				}
 			}
 		}
 	}

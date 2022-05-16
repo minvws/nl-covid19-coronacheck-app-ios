@@ -193,7 +193,8 @@ class StoredEventItemView: BaseView {
 			details.forEach { detail in
 				let label = Label(body: nil).multiline()
 				label.isAccessibilityElement = false
-				label.attributedText = .makeFromHtml(
+				
+				NSAttributedString.makeFromHtml(
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
 						font: Fonts.body,
@@ -201,8 +202,10 @@ class StoredEventItemView: BaseView {
 						lineHeight: ViewTraits.Message.lineHeight,
 						kern: ViewTraits.Message.kerning
 					)
-				)
-				detailsStackView.addArrangedSubview(label)
+				) {
+					label.attributedText = $0
+					self.detailsStackView.addArrangedSubview(label)
+				}
 			}
 			updateAccessbilityLabel()
 		}

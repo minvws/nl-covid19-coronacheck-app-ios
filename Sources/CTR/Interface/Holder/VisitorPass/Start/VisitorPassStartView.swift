@@ -64,7 +64,7 @@ final class VisitorPassStartView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			contentTextView.html(message)
+			contentTextView.applyHTML(message)
 		}
 	}
 }

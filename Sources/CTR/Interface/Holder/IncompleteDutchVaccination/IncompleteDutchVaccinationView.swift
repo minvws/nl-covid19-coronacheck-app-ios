@@ -67,7 +67,7 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	
 	var secondVaccineText: String? {
 		didSet {
-			secondVaccineTextView.html(secondVaccineText)
+			secondVaccineTextView.applyHTML(secondVaccineText)
 		}
 	}
 	

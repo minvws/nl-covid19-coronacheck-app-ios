@@ -93,6 +93,19 @@ public extension NSAttributedString {
 
 public extension NSAttributedString {
 
+	static func makeFromHtml(text: String?, style: HTMLStyle, completion: @escaping (NSAttributedString) -> Void) {
+
+		guard !ProcessInfo.processInfo.isTesting else {
+			completion(NSAttributedString(string: text ?? ""))
+			return
+		}
+
+		DispatchQueue.main.async {
+			let result = makeFromHtml(text: text, style: style)
+			completion(result)
+		}
+	}
+	
 	static func makeFromHtml(text: String?, style: HTMLStyle) -> NSAttributedString {
 
 		guard !ProcessInfo.processInfo.isTesting else {
