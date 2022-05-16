@@ -68,7 +68,7 @@ class DisclosureSubtitleButton: BaseView {
 		
 		super.setupViews()
 		backgroundColor = C.primaryBlue5()
-		layer.cornerRadius = ViewTraits.cornerRadius
+		layer.cornerRadius = ViewTraits.View.cornerRadius
 		button.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
 	}
 	
