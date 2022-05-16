@@ -92,7 +92,9 @@ final class RemoteEventDetailsView: BaseView, EventDetailsViewable {
 	/// The message
 	var footer: String? {
 		didSet {
-			footerTextView.attributedText = .makeFromHtml(text: footer, style: .bodyDark)
+			NSAttributedString.makeFromHtml(text: footer, style: .bodyDark) {
+				self.footerTextView.attributedText = $0
+			}
 		}
 	}
 }

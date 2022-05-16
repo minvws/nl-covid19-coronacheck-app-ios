@@ -180,7 +180,7 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 	var message: String? {
 		didSet {
 			if let message = message {
-				contentTextView.html(message)
+				contentTextView.applyHTML(message)
 				contentTextView.isHidden = false
 			} else {
 				contentTextView.isHidden = true

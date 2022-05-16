@@ -95,14 +95,16 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(
+			NSAttributedString.makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
 					font: Fonts.body,
 					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
-			)
+			) {
+				self.messageTextView.attributedText = $0
+			}
 		}
 	}
 

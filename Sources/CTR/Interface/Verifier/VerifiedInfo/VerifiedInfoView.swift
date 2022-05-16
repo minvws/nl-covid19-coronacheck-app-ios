@@ -143,7 +143,9 @@ final class VerifiedInfoView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message, style: .bodyDark)
+			NSAttributedString.makeFromHtml(text: message, style: .bodyDark) {
+				self.messageTextView.attributedText = $0
+			}
 		}
 	}
 	

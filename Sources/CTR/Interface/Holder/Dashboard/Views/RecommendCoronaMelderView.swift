@@ -47,7 +47,8 @@ final class RecommendCoronaMelderCardView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			contentTextView.attributedText = .makeFromHtml(
+			
+			NSAttributedString.makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
 					font: Fonts.subhead,
@@ -55,7 +56,9 @@ final class RecommendCoronaMelderCardView: BaseView {
 					kern: ViewTraits.Message.kerning,
 					paragraphSpacing: 0
 				)
-			)
+			) {
+				self.contentTextView.attributedText = $0
+			}
 		}
 	}
 
