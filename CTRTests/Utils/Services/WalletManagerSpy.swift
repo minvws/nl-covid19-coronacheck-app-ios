@@ -163,9 +163,9 @@ class WalletManagerSpy: WalletManaging {
 	var invokedRemoveEventGroupCount = 0
 	var invokedRemoveEventGroupParameters: (objectID: NSManagedObjectID, Void)?
 	var invokedRemoveEventGroupParametersList = [(objectID: NSManagedObjectID, Void)]()
-	var stubbedRemoveEventGroupResult: Result<Bool, Error>!
+	var stubbedRemoveEventGroupResult: Result<Void, Error>!
 
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		invokedRemoveEventGroup = true
 		invokedRemoveEventGroupCount += 1
 		invokedRemoveEventGroupParameters = (objectID, ())
