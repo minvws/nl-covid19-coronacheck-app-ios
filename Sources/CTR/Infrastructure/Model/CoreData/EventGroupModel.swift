@@ -33,21 +33,6 @@ class EventGroupModel {
 		return object
 	}
 	
-	class func delete(_ objectID: NSManagedObjectID, managedObjectContext: NSManagedObjectContext, save: () -> Void) -> Result<Bool, Error> {
-
-		do {
-			if let eventGroup = try managedObjectContext.existingObject(with: objectID) as? EventGroup {
-				managedObjectContext.delete(eventGroup)
-				save()
-				return .success(true)
-			} else {
-				return .success(false)
-			}
-		} catch let error {
-			return .failure(error)
-		}
-	}
-	
 	@discardableResult class func findBy(
 		wallet: Wallet,
 		type: EventMode,

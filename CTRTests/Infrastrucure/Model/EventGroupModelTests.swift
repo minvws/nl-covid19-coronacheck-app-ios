@@ -120,7 +120,7 @@ class EventGroupModelTests: XCTestCase {
 		
 		// When
 		let objectId = try XCTUnwrap(event1?.objectID)
-		let result = EventGroupModel.delete(objectId, managedObjectContext: context, save: { Current.dataStoreManager.save(Current.dataStoreManager.managedObjectContext()) })
+		let result = Current.dataStoreManager.delete(objectId)
 		
 		// Then
 		expect(result.isSuccess) == true
@@ -160,8 +160,8 @@ class EventGroupModelTests: XCTestCase {
 		
 		// When
 		let objectId = try XCTUnwrap(event1?.objectID)
-		_ = EventGroupModel.delete(objectId, managedObjectContext: context, save: { Current.dataStoreManager.save(Current.dataStoreManager.managedObjectContext()) })
-		let result = EventGroupModel.delete(objectId, managedObjectContext: context, save: { Current.dataStoreManager.save(Current.dataStoreManager.managedObjectContext()) })
+		_ = Current.dataStoreManager.delete(objectId)
+		let result = Current.dataStoreManager.delete(objectId)
 
 		// Then
 		expect(result.isFailure) == true
