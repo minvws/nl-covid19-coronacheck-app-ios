@@ -116,7 +116,19 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 
 				// Otherwise, (for international greencards) the group gets wrangled into a set of europeanUnion QR Cards:
 				} else {
-					return QRCard.euQRCards(forGreencardGroup: greencardsGroup, now: now)
+					var cards = [QRCard]()
+					greencardsGroup.forEach { greenCard, origins in
+						if origins.contains(where: { $0.type == OriginType.recovery.rawValue }) {
+							// Make individual cards for the recovery cards
+							origins.forEach { origin in
+								cards += QRCard.euQRCards(forGreencardGroup: [(greenCard, [origin])], now: now)
+							}
+						} else {
+							// Combine the vaccination and test cards
+							cards = QRCard.euQRCards(forGreencardGroup: greencardsGroup, now: now)
+						}
+					}
+					return cards
 				}
 			}
 
