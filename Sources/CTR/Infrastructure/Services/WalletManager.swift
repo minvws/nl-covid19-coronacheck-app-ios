@@ -205,7 +205,7 @@ class WalletManager: WalletManaging, Logging {
 		
 		return EventGroupModel.delete(objectID,
 			managedObjectContext: dataStoreManager.managedObjectContext(),
-			save: { Current.dataStoreManager.save(dataStoreManager.managedObjectContext()) }
+			save: { dataStoreManager.save(dataStoreManager.managedObjectContext()) }
 		)
 	}
 
