@@ -307,13 +307,21 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	func navigateToAboutThisApp() {
-		let viewController = AboutThisAppViewController(
-			viewModel: AboutThisAppViewModel(
-				coordinator: self,
-				versionSupplier: versionSupplier,
-				flavor: AppFlavor.flavor
-			)
-		)
+		
+		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
+			guard let self = self else { return }
+			switch outcome {
+				case let .openURL(url, inApp):
+					self.openUrl(url, inApp: inApp)
+				case .coordinatorShouldRestart:
+					self.restart()
+				case .userWishesToSeeStoredEvents:
+					self.userWishesToSeeStoredEvents()
+				case .userWishesToOpenScanLog:
+					break // - for VerifierCoordinator
+			}
+		}
+		let viewController = AboutThisAppViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

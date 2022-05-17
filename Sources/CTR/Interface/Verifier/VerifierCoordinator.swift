@@ -263,13 +263,20 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 	
 	func navigateToAboutThisApp() {
-		let viewController = AboutThisAppViewController(
-			viewModel: AboutThisAppViewModel(
-				coordinator: self,
-				versionSupplier: versionSupplier,
-				flavor: AppFlavor.flavor
-			)
-		)
+		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
+			guard let self = self else { return }
+			switch outcome {
+				case let .openURL(url, inApp):
+					self.openUrl(url, inApp: inApp)
+				case .userWishesToOpenScanLog:
+					self.userWishesToOpenScanLog()
+				case .coordinatorShouldRestart:
+					self.restart()
+				case .userWishesToSeeStoredEvents:
+					break // - for holdercoordinator
+			}
+		}
+		let viewController = AboutThisAppViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
