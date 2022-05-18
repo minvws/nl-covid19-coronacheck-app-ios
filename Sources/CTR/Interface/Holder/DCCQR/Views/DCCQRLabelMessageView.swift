@@ -83,8 +83,9 @@ final class DCCQRLabelMessageView: BaseView, DCCQRLabelViewable {
 	
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message,
-														   style: .init(font: Fonts.subhead, textColor: C.black()!))
+			NSAttributedString.makeFromHtml(text: message, style: .init(font: Fonts.subhead, textColor: C.black()!)) { attributedString in
+				self.messageTextView.attributedText = attributedString
+			}
 		}
 	}
 }

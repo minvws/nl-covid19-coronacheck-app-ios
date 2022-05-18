@@ -132,7 +132,7 @@ class ListRemoteEventsView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		set {
-			contentTextView.html(newValue)
+			contentTextView.applyHTML(newValue)
 		}
 		get {
 			contentTextView.attributedText?.string

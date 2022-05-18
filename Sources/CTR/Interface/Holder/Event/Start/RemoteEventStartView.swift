@@ -107,7 +107,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 
 	var message: String? {
 		didSet {
-			contentTextView.html(message)
+			contentTextView.applyHTML(message)
 		}
 	}
 	

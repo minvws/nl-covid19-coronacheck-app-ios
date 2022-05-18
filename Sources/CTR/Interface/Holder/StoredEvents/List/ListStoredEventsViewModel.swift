@@ -299,12 +299,8 @@ class ListStoredEventsViewModel: Logging {
 		
 		let removalResult = Current.walletManager.removeEventGroup(objectID)
 		switch removalResult {
-			case .success(let success):
-				if success {
-					sendEventsToTheSigner()
-				} else {
-					handleCoreDataError()
-				}
+			case .success:
+				sendEventsToTheSigner()
 			case .failure(let error):
 				logError("Failed to remove event groups: \(error)")
 				handleCoreDataError()

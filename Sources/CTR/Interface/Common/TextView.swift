@@ -91,7 +91,7 @@ class TextView: UIStackView {
 		
         super.init(frame: .zero)
         setup()
-        html(htmlText)
+		applyHTML(htmlText)
     }
     
     //// Initializes the TextView with a string
@@ -120,11 +120,13 @@ class TextView: UIStackView {
     }
         
     /// Sets the content to the supplied html string.
-    @discardableResult
-	func html(_ htmlText: String?) -> Self {
-		attributedText = .makeFromHtml(text: htmlText, style: .bodyDark)
-        return self
-    }
+	///
+	func applyHTML(_ htmlText: String?, completion: (() -> Void)? = nil) {
+		NSAttributedString.makeFromHtml(text: htmlText, style: .bodyDark) { attributedString in
+			self.attributedText = attributedString
+			completion?()
+		}
+	}
     
     /// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
     ///

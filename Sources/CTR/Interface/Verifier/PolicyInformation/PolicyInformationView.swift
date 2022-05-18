@@ -149,7 +149,10 @@ final class PolicyInformationView: ScrolledStackView {
 	
 	var content: String? {
 		didSet {
-			contentTextView.attributedText = .makeFromHtml(text: content, style: .bodyDark)
+			
+			NSAttributedString.makeFromHtml(text: content, style: .bodyDark) {
+				self.contentTextView.attributedText = $0
+			}
 		}
 	}
 	

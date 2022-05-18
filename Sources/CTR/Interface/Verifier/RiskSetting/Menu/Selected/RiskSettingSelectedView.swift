@@ -137,7 +137,9 @@ final class RiskSettingSelectedView: BaseView {
 				labelStackView.setCustomSpacing(ViewTraits.Spacing.titleToHeader, after: titleLabel)
 			}
 			
-			headerLabel.attributedText = .makeFromHtml(text: header, style: .bodyDark)
+			NSAttributedString.makeFromHtml(text: header, style: .bodyDark) {
+				self.headerLabel.attributedText = $0
+			}
 		}
 	}
 }
