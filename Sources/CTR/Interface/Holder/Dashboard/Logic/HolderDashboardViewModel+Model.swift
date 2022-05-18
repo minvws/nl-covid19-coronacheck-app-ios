@@ -52,6 +52,9 @@ extension HolderDashboardViewModel {
 					let index = type.customSortIndex
 					if validFromDate < Current.now() {
 						// Valid, sort based on expirationtime. latest one first.
+						/// now is 2021-07-15 15:02:39
+						/// epoch = 1626361359
+						/// index = type.customSortIndex +1 - 0.1626361359
 						return index + 1 - expirationTime.timeIntervalSince1970 / 10000000000
 					} else {
 						// Future valid, highest sort index (displayed last)
