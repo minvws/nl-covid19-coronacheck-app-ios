@@ -43,8 +43,20 @@ extension HolderDashboardViewModel {
 				let doseNumber: Int?
 
 				/// There is a particular order to sort these onscreen
-				var customSortIndex: Int {
-					type.customSortIndex
+				var customSortIndex: Double {
+				
+					guard type == .recovery || type == .test else {
+						return type.customSortIndex
+					}
+					
+					let index = type.customSortIndex
+					if validFromDate < Current.now() {
+						// Valid, sort based on expirationtime. latest one first.
+						return index + 1 - expirationTime.timeIntervalSince1970 / 10000000000
+					} else {
+						// Future valid, highest sort index (displayed last)
+						return index + 0.99
+					}
 				}
 
 				func isNotYetExpired(now: Date) -> Bool {
@@ -100,10 +112,10 @@ extension HolderDashboardViewModel {
 		}
 
 		/// There is a particular order to sort these onscreen
-		var customSortIndex: Int {
+		var customSortIndex: Double {
 			guard let firstGreenCard = greencards.first, // assumption: when multiple greencards, should all have same origin type.
 				  let firstOrigin = firstGreenCard.origins.first
-			else { return .max }
+			else { return .greatestFiniteMagnitude }
 
 			return firstOrigin.customSortIndex
 		}

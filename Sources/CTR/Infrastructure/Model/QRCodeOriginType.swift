@@ -34,7 +34,7 @@ enum QRCodeOriginType: String, Codable, Equatable {
 	}
 
 	/// There is a particular order to sort these onscreen
-	var customSortIndex: Int {
+	var customSortIndex: Double {
 		switch self {
 			case .vaccination: return 0
 			case .recovery: return 1
