@@ -315,7 +315,7 @@ extension NetworkManager: NetworkManaging {
 		tvsToken: String,
 		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
-			guard let urlRequest = URLRequest.construct(
+			guard let urlRequest = URLRequest(
 			url: networkConfiguration.eventAccessTokensUrl,
 			method: .POST,
 			headers: [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
@@ -335,7 +335,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest.construct(url: networkConfiguration.prepareIssueUrl) else {
+		guard let urlRequest = URLRequest(url: networkConfiguration.prepareIssueUrl) else {
 			logError("NetworkManager - prepareIssue: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -352,7 +352,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest.construct(url: networkConfiguration.publicKeysUrl, timeOutInterval: 10.0) else {
+		guard let urlRequest = URLRequest(url: networkConfiguration.publicKeysUrl, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getPublicKeys: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -375,7 +375,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest.construct(url: networkConfiguration.remoteConfigurationUrl, timeOutInterval: 10.0) else {
+		guard let urlRequest = URLRequest(url: networkConfiguration.remoteConfigurationUrl, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getRemoteConfiguration: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -404,7 +404,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = URLRequest.construct(
+		guard let urlRequest = URLRequest(
 			url: networkConfiguration.credentialUrl,
 			method: .POST,
 			body: body
@@ -437,7 +437,7 @@ extension NetworkManager: NetworkManaging {
 
 	private func fetchProviders<T: Envelopable & Codable>(completion: @escaping (Result<[T], ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest.construct(url: networkConfiguration.providersUrl) else {
+		guard let urlRequest = URLRequest(url: networkConfiguration.providersUrl) else {
 			logError("NetworkManager - fetchProviders: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -478,7 +478,7 @@ extension NetworkManager: NetworkManaging {
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
 
-		guard let urlRequest = URLRequest.construct(url: providerUrl, method: .POST, body: httpBodyFromDictionary([HTTPBodyKeys.verificationCode.rawValue: code]), headers: headers) else {
+		guard let urlRequest = URLRequest(url: providerUrl, method: .POST, body: httpBodyFromDictionary([HTTPBodyKeys.verificationCode.rawValue: code]), headers: headers) else {
 			logError("NetworkManager - fetchTestResult: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -518,7 +518,7 @@ extension NetworkManager: NetworkManaging {
 		}
 
 		let body = httpBodyFromDictionary(provider.queryFilter)
-		guard let urlRequest = URLRequest.construct(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
+		guard let urlRequest = URLRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEventInformation: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -557,7 +557,7 @@ extension NetworkManager: NetworkManaging {
 		}
 		
 		let body = httpBodyFromDictionary(provider.queryFilter)
-		guard let urlRequest = URLRequest.construct(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
+		guard let urlRequest = URLRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
 			logError("NetworkManager - fetchEvents: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -590,7 +590,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = URLRequest.construct(
+		guard let urlRequest = URLRequest(
 			url: networkConfiguration.couplingUrl,
 			method: .POST,
 			body: body
@@ -620,40 +620,35 @@ extension URLResponse {
 
 fileprivate extension URLRequest {
 	
-	static func construct(
+	init?(
 		url: URL?,
 		method: HTTPMethod = .GET,
 		body: Encodable? = nil,
 		timeOutInterval: TimeInterval = 30,
-		headers: [HTTPHeaderKey: String] = [:]) -> URLRequest? {
-
+		headers: [HTTPHeaderKey: String] = [:]) {
+			
 		guard let url = url else {
 			return nil
 		}
+			
+		self.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: timeOutInterval)
 		
-		var request = URLRequest(
-			url: url,
-			cachePolicy: .useProtocolCachePolicy,
-			timeoutInterval: timeOutInterval
-		)
-		request.httpMethod = method.rawValue
+		httpMethod = method.rawValue
 		
 		let defaultHeaders = [
 			HTTPHeaderKey.contentType: HTTPContentType.json.rawValue
 		]
 		
 		defaultHeaders.forEach { header, value in
-			request.addValue(value, forHTTPHeaderField: header.rawValue)
+			addValue(value, forHTTPHeaderField: header.rawValue)
 		}
 		
 		headers.forEach { header, value in
-			request.addValue(value, forHTTPHeaderField: header.rawValue)
-		}
-
-		if body is Data {
-			request.httpBody = body as? Data
+			addValue(value, forHTTPHeaderField: header.rawValue)
 		}
 		
-		return request
+		if body is Data {
+			httpBody = body as? Data
+		}
 	}
 }
