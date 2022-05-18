@@ -147,7 +147,7 @@
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "'s morgens";
 "holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
-"holder.dashboard.qr.button.viewQR" = "Bekijk QR";
+"holder.dashboard.qr.button.viewQR" = "Bekijk QR-code";
 "holder.dashboard.qr.button.viewQRs" = "Bekijk QR-codes";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
@@ -634,7 +634,7 @@
 "holder_listRemoteEvents_paperflow_message" = "Als onderstaande gegevens kloppen kun je jouw bewijs toevoegen aan de app.";
 "holder_listRemoteEvents_paperflow_title" = "Gescande gegevens";
 "holder_listRemoteEvents_recovery_message" = "Als de gegevens van je test kloppen kun je een herstelbewijs maken.";
-"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent getest of gevaccineerd. Vraag of zij je kunnen helpen je gegevens aan te passen.</p>";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Kloppen er gegevens niet?</b><br />Check in het land waar je getest of gevaccineerd bent hoe je jouw gegevens kunt aanpassen.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Neem contact op met je testlocatie. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Klopt er iets niet?";
@@ -692,7 +692,7 @@
 "holder_scanner_error_action" = "Opnieuw scannen";
 "holder_scanner_error_message_ctb" = "Je hoeft je Nederlandse QR-code niet te scannen. Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
 "holder_scanner_error_message_unknown" = "De QR-code die je probeert te scannen wordt niet herkend als die van een coronabewijs. Controleer of je de goede QR-code voor de camera houdt.";
-"holder_scanner_error_title_ctb" = "Scan je internationale QR-code";
+"holder_scanner_error_title_ctb" = "Scan de internationale QR-code";
 "holder_scanner_error_title_unknown" = "QR-code wordt niet herkend";
 "holder_scanner_message" = "Richt je telefoon op de QR-code";
 "holder_scanner_permission_message" = "De app wil toegang tot de camera om de QR-code te scannen.";
