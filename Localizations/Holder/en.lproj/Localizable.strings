@@ -147,7 +147,7 @@
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "am";
 "holder.dashboard.qr.backToThirdPartyApp" = "Back to the %@";
-"holder.dashboard.qr.button.viewQR" = "View QR";
+"holder.dashboard.qr.button.viewQR" = "View QR code";
 "holder.dashboard.qr.button.viewQRs" = "View QR codes";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
@@ -634,7 +634,7 @@
 "holder_listRemoteEvents_paperflow_message" = "If the details below are correct, you can add your certificate to the app.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
-"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. Ask if they can help you correct your data.</p>";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Are your details incorrect?</b><br />Please check in the country where you were tested or vaccinated how you can adjust your details.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Please contact your test location. They can help you change these details.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Please contact the test location. They can help you change your details.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Is something wrong?";
@@ -692,7 +692,7 @@
 "holder_scanner_error_action" = "Scan again";
 "holder_scanner_error_message_ctb" = "You don’t need to scan your Dutch QR code. Scan the QR code on the international certificate you received from your health care provider or the government. It contains the information needed to add your certificate to the app. You can recognise this certificate by the European flag.";
 "holder_scanner_error_message_unknown" = "The QR code you are trying to scan is not recognised as a coronavirus pass. Make sure you are holding the correct QR code in front of the camera.";
-"holder_scanner_error_title_ctb" = "Scan your international QR code";
+"holder_scanner_error_title_ctb" = "Scan the international QR code";
 "holder_scanner_error_title_unknown" = "QR code not recognised";
 "holder_scanner_message" = "Point your phone at the QR code";
 "holder_scanner_permission_message" = "The app wants to access your camera to scan the QR code.";
