@@ -248,7 +248,51 @@ extension GreenCard {
 
 		return [vaccineGreencard1, vaccineGreencard2]
 	}
+	
+	static func sampleInternationalMultiplRecoveryDCC(dataStoreManager: DataStoreManager) -> [GreenCard] {
+		let recoveryGreencard1 = GreenCard(context: dataStoreManager.managedObjectContext())
+		recoveryGreencard1.type = GreenCardType.eu.rawValue
+		recoveryGreencard1.origins = [
+			Origin.sampleRecovery(eventTime: 40 * days * ago, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+		recoveryGreencard1.credentials = [
+			Credential.sample(validFrom: 40 * days * ago, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
 
+		let recoveryGreencard2 = GreenCard(context: dataStoreManager.managedObjectContext())
+		recoveryGreencard2.type = GreenCardType.eu.rawValue
+		recoveryGreencard2.origins = [
+			Origin.sampleRecovery(eventTime: 20 * days * ago, expirationTime: 30 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+		recoveryGreencard2.credentials = [
+			Credential.sample(validFrom: 20 * days * ago, expirationTime: 30 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+
+		return [recoveryGreencard1, recoveryGreencard2]
+	}
+
+	static func sampleInternationalMultiplRecoveryDCCOneFutureValid(dataStoreManager: DataStoreManager) -> [GreenCard] {
+		let recoveryGreencard1 = GreenCard(context: dataStoreManager.managedObjectContext())
+		recoveryGreencard1.type = GreenCardType.eu.rawValue
+		recoveryGreencard1.origins = [
+			Origin.sampleRecovery(eventTime: 40 * days * ago, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+		recoveryGreencard1.credentials = [
+			Credential.sample(validFrom: 40 * days * ago, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+
+		let recoveryGreencard2 = GreenCard(context: dataStoreManager.managedObjectContext())
+		recoveryGreencard2.type = GreenCardType.eu.rawValue
+		recoveryGreencard2.origins = [
+			Origin.sampleRecovery(eventTime: 20 * days * fromNow, expirationTime: 30 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+		recoveryGreencard2.credentials = [
+			Credential.sample(validFrom: 20 * days * fromNow, expirationTime: 30 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+
+		return [recoveryGreencard1, recoveryGreencard2]
+	}
+	
 	static func sampleInternationalMultipleExpiredDCC(dataStoreManager: DataStoreManager) -> [GreenCard] {
 		let vaccineGreencard1 = GreenCard(context: dataStoreManager.managedObjectContext())
 		vaccineGreencard1.type = GreenCardType.eu.rawValue
@@ -269,6 +313,15 @@ extension Origin {
 	static func sampleVaccination(eventTime: TimeInterval, validFromDate: TimeInterval? = nil, expirationTime: TimeInterval, dataStoreManager: DataStoreManager) -> Origin {
 		let origin = Origin(context: dataStoreManager.managedObjectContext())
 		origin.type = OriginType.vaccination.rawValue
+		origin.eventDate = now.addingTimeInterval(eventTime)
+		origin.validFromDate = validFromDate.map { now.addingTimeInterval($0) } ?? origin.eventDate
+		origin.expirationTime = now.addingTimeInterval(expirationTime)
+		return origin
+	}
+	
+	static func sampleRecovery(eventTime: TimeInterval, validFromDate: TimeInterval? = nil, expirationTime: TimeInterval, dataStoreManager: DataStoreManager) -> Origin {
+		let origin = Origin(context: dataStoreManager.managedObjectContext())
+		origin.type = OriginType.recovery.rawValue
 		origin.eventDate = now.addingTimeInterval(eventTime)
 		origin.validFromDate = validFromDate.map { now.addingTimeInterval($0) } ?? origin.eventDate
 		origin.expirationTime = now.addingTimeInterval(expirationTime)
