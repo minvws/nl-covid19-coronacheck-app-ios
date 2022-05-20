@@ -49,11 +49,11 @@ class ShowQRItemViewController: BaseViewController, Logging {
 	}
 
 	private func setupBinding() {
-        
-        viewModel.$qrAccessibility.binding = { [weak self] in
-            
-            self?.sceneView.accessibilityDescription = $0
-        }
+		
+		viewModel.$qrAccessibility.binding = { [weak self] in
+			
+			self?.sceneView.accessibilityDescription = $0
+		}
 
 		viewModel.$visibilityState.binding = { [weak self] in
 			self?.sceneView.visibilityState = $0

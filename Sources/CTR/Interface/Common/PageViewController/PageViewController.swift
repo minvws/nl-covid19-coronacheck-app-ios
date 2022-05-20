@@ -28,11 +28,11 @@ final class PageViewController: UIPageViewController {
 	}
 	var isAccessibilityPageAnnouncementEnabled = true
 	
-    private(set) var currentIndex = 0 {
-        didSet {
-            pageViewControllerDelegate?.pageViewController(self, didSwipeToPendingViewControllerAt: currentIndex)
-        }
-    }
+	private(set) var currentIndex = 0 {
+		didSet {
+			pageViewControllerDelegate?.pageViewController(self, didSwipeToPendingViewControllerAt: currentIndex)
+		}
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
