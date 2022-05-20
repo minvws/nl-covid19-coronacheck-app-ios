@@ -118,7 +118,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 				} else {
 					var cards = [QRCard]()
 					greencardsGroup.forEach { greenCard, origins in
-						if origins.contains(where: { $0.type != OriginType.vaccination.rawValue }) {
+						if !origins.contains(where: { $0.type == OriginType.vaccination.rawValue }) {
 							// Make individual cards for the international recovery and test cards
 							origins.forEach { origin in
 								cards += QRCard.euQRCards(forGreencardGroup: [(greenCard, [origin])], now: now)
