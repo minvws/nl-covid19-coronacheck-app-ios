@@ -314,12 +314,10 @@ extension NetworkManager: NetworkManaging {
 	func fetchEventAccessTokens(
 		tvsToken: String,
 		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
-
-			guard let urlRequest = URLRequest(
-			url: networkConfiguration.eventAccessTokensUrl,
-			method: .POST,
-			headers: [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
-		) else {
+		
+		let tokenHeader = [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
+		guard let url = networkConfiguration.eventAccessTokensUrl,
+			  let urlRequest = URLRequest(url: url, method: .POST, headers: tokenHeader) else {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -335,7 +333,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest(url: networkConfiguration.prepareIssueUrl) else {
+		guard let url = networkConfiguration.prepareIssueUrl, let urlRequest = URLRequest(url: url) else {
 			logError("NetworkManager - prepareIssue: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -352,7 +350,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest(url: networkConfiguration.publicKeysUrl, timeOutInterval: 10.0) else {
+		guard let url = networkConfiguration.publicKeysUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getPublicKeys: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -375,7 +373,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest(url: networkConfiguration.remoteConfigurationUrl, timeOutInterval: 10.0) else {
+		guard let url = networkConfiguration.remoteConfigurationUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getRemoteConfiguration: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -404,11 +402,8 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = URLRequest(
-			url: networkConfiguration.credentialUrl,
-			method: .POST,
-			body: body
-		) else {
+		guard let url = networkConfiguration.credentialUrl,
+			  let urlRequest = URLRequest(url: url, method: .POST, body: body) else {
 			logError("NetworkManager - fetchGreencards: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -437,7 +432,7 @@ extension NetworkManager: NetworkManaging {
 
 	private func fetchProviders<T: Envelopable & Codable>(completion: @escaping (Result<[T], ServerError>) -> Void) {
 
-		guard let urlRequest = URLRequest(url: networkConfiguration.providersUrl) else {
+		guard let url = networkConfiguration.providersUrl, let urlRequest = URLRequest(url: url) else {
 			logError("NetworkManager - fetchProviders: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -590,11 +585,8 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		guard let urlRequest = URLRequest(
-			url: networkConfiguration.couplingUrl,
-			method: .POST,
-			body: body
-		) else {
+		guard let url = networkConfiguration.couplingUrl,
+			  let urlRequest = URLRequest(url: url, method: .POST, body: body) else {
 			logError("NetworkManager - checkCouplingStatus: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
@@ -621,16 +613,12 @@ extension URLResponse {
 fileprivate extension URLRequest {
 	
 	init?(
-		url: URL?,
+		url: URL,
 		method: HTTPMethod = .GET,
 		body: Encodable? = nil,
 		timeOutInterval: TimeInterval = 30,
 		headers: [HTTPHeaderKey: String] = [:]) {
-			
-		guard let url = url else {
-			return nil
-		}
-			
+		
 		self.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: timeOutInterval)
 		
 		httpMethod = method.rawValue
