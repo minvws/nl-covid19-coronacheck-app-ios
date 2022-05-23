@@ -10,6 +10,16 @@ import Foundation
 
 class FileStorageSpy: FileStorageProtocol {
 
+	var invokedDocumentsURLGetter = false
+	var invokedDocumentsURLGetterCount = 0
+	var stubbedDocumentsURL: URL!
+
+	var documentsURL: URL? {
+		invokedDocumentsURLGetter = true
+		invokedDocumentsURLGetterCount += 1
+		return stubbedDocumentsURL
+	}
+
 	var invokedStore = false
 	var invokedStoreCount = 0
 	var invokedStoreParameters: (data: Data, fileName: String)?

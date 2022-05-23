@@ -13,6 +13,8 @@ protocol FileStorageProtocol: AnyObject {
 	func debugLogItems()
 	func fileExists(_ fileName: String) -> Bool
 	func remove(_ fileName: String)
+
+	var documentsURL: URL? { get }
 }
 
 final class FileStorage: FileStorageProtocol, Logging {

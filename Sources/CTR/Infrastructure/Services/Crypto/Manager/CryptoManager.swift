@@ -202,6 +202,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
 		
 		if let entry = euCredentialAttributesCache[data.sha256] {
+			logVerbose("Using cache hit for \(String(decoding: data, as: UTF8.self))")
 			return entry
 		}
 		
