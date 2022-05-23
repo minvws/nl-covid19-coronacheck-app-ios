@@ -43,9 +43,14 @@ struct AboutThisAppMenuOption {
 
 class AboutThisAppViewModel: Logging {
 
-	/// Coordination Delegate
-	weak private var coordinator: (OpenUrlProtocol & Restartable)?
-
+	enum Outcome: Equatable {
+		case openURL(_: URL, inApp: Bool)
+		case userWishesToSeeStoredEvents
+		case userWishesToOpenScanLog
+		case coordinatorShouldRestart
+	}
+	
+	private let outcomeHandler: (Outcome) -> Void
 	private var flavor: AppFlavor
 
 	// MARK: - Bindable
@@ -65,13 +70,13 @@ class AboutThisAppViewModel: Logging {
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor
 	init(
-		coordinator: (OpenUrlProtocol & Restartable),
 		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor) {
+		flavor: AppFlavor,
+		outcomeHandler: @escaping (Outcome) -> Void
+	) {
 
-		self.coordinator = coordinator
+		self.outcomeHandler = outcomeHandler
 		self.flavor = flavor
-
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
 
@@ -159,7 +164,7 @@ class AboutThisAppViewModel: Logging {
 			case .reset:
 				showClearDataAlert()
 			case .storedEvents:
-				(coordinator as? HolderCoordinatorDelegate)?.userWishesToSeeStoredEvents()
+				outcomeHandler(.userWishesToSeeStoredEvents)
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:
@@ -200,7 +205,7 @@ class AboutThisAppViewModel: Logging {
 	private func openUrlString(_ urlString: String, inApp: Bool = true) {
 
 		if let url = URL(string: urlString) {
-			coordinator?.openUrl(url, inApp: inApp)
+			outcomeHandler(.openURL(url, inApp: inApp))
 		}
 	}
 
@@ -222,14 +227,12 @@ class AboutThisAppViewModel: Logging {
 	func wipePersistedData() {
 
 		Current.wipePersistedData(flavor: flavor)
-		self.coordinator?.restart()
+		outcomeHandler(.coordinatorShouldRestart)
 	}
 
 	func openScanLog() {
 
-		if let coordinator = coordinator as? VerifierCoordinatorDelegate {
-			coordinator.userWishesToOpenScanLog()
-		}
+		outcomeHandler(.userWishesToOpenScanLog)
 	}
 	
 	private func setDisclosurePolicy(_ newPolicy: [String], message: String) {
@@ -243,7 +246,7 @@ class AboutThisAppViewModel: Logging {
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { [weak self] _ in
-				self?.coordinator?.restart()
+				self?.outcomeHandler(.coordinatorShouldRestart)
 			},
 			okTitle: L.generalOk(),
 			okActionIsDestructive: false
