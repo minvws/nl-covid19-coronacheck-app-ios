@@ -138,7 +138,7 @@ extension ShowQRViewController {
 			guard let self = self else {
 				return
 			}
-
+				
 			self.pageViewController.startAtIndex($0)
 			self.updateControlVisibility()
 		}

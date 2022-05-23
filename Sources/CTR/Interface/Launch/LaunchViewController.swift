@@ -45,9 +45,9 @@ class LaunchViewController: BaseViewController {
 
 		// Bindings
 		viewModel.$message.binding = { [weak self] in
-            self?.sceneView.message = $0
-            UIAccessibility.post(notification: .announcement, argument: $0)
-        }
+			self?.sceneView.message = $0
+			UIAccessibility.post(notification: .announcement, argument: $0)
+		}
 		viewModel.$appIcon.binding = { [weak self] in self?.sceneView.appIcon = $0 }
 	}
 
