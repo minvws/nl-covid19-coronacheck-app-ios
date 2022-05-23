@@ -173,7 +173,7 @@ class MessageCardView: BaseView {
 		
 		if nil != config.ctaButton {
 			constraints += [callToActionButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin)]
-			constraints += [callToActionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.margin)]
+			constraints += [callToActionButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.margin)]
 			constraints += [callToActionButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: ViewTraits.verticalPadding)]
 			constraints += [callToActionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)]
 			
