@@ -43,7 +43,7 @@ struct AboutThisAppMenuOption {
 
 class AboutThisAppViewModel: Logging {
 
-	enum Outcome {
+	enum Outcome: Equatable {
 		case openURL(_: URL, inApp: Bool)
 		case userWishesToSeeStoredEvents
 		case userWishesToOpenScanLog
