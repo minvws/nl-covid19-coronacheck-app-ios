@@ -144,7 +144,7 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 		
 		var mode: EventMode = .test
 		
-		if let event = events.first?.wrapper.events.first {
+		if let event = events.first?.wrapper.events?.first {
 			
 			if event.hasVaccinationAssessment {
 				mode = .vaccinationassessment

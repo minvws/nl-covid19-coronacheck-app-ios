@@ -120,9 +120,9 @@ struct EventFlow {
 
 		var providerIdentifier: String
 		let protocolVersion: String
-		let identity: Identity
+		let identity: Identity?
 		let status: EventState
-		var events: [Event] = []
+		var events: [Event]? = []
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
