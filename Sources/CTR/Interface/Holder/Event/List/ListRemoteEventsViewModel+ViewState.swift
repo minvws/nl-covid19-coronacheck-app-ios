@@ -18,19 +18,23 @@ extension ListRemoteEventsViewModel {
 		// If there is just one pending negative/positive test: Pending State.
 		if remoteEvents.count == 1 &&
 			remoteEvents.first?.wrapper.status == .pending &&
-			(remoteEvents.first?.wrapper.events.first?.negativeTest != nil || remoteEvents.first?.wrapper.events.first?.positiveTest != nil) {
+			(remoteEvents.first?.wrapper.events?.first?.negativeTest != nil || remoteEvents.first?.wrapper.events?.first?.positiveTest != nil) {
 			return pendingEventsState()
 		}
 
 		for eventResponse in remoteEvents {
-			for event in eventResponse.wrapper.events where isEventAllowed(event) {
-				eventDataSource.append(
-					(
-						identity: eventResponse.wrapper.identity,
-						event: event,
-						providerIdentifier: eventResponse.wrapper.providerIdentifier
-					)
-				)
+			if let events = eventResponse.wrapper.events {
+				for event in events where isEventAllowed(event) {
+					if let identity = eventResponse.wrapper.identity {
+						eventDataSource.append(
+							(
+								identity: identity,
+								event: event,
+								providerIdentifier: eventResponse.wrapper.providerIdentifier
+							)
+						)
+					}
+				}
 			}
 		}
 

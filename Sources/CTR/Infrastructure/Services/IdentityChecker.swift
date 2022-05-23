@@ -79,8 +79,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 			if let jsonData = storedEvent.jsonData {
 				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
 				   let decodedPayloadData = Data(base64Encoded: object.payload),
-				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
-						identities.append(wrapper.identity)
+				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
+				   let identity = wrapper.identity {
+						identities.append(identity)
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 					if let credentialData = object.credential.data(using: .utf8),
 					   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {

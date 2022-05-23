@@ -445,9 +445,46 @@ class NetworkManagerEventTests: XCTestCase {
 				expect(result.isSuccess) == true
 				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
 				expect(result.successValue?.0.protocolVersion) == "3.0"
-				expect(result.successValue?.0.identity.firstName) == "Corrie"
-				expect(result.successValue?.0.events.first?.vaccination?.hpkCode) == "2924528"
-				expect(result.successValue?.0.events.first?.unique) == "092841f0-eded-4336-923f-6f2df27bbb55"
+				expect(result.successValue?.0.identity?.firstName) == "Corrie"
+				expect(result.successValue?.0.events?.first?.vaccination?.hpkCode) == "2924528"
+				expect(result.successValue?.0.events?.first?.unique) == "092841f0-eded-4336-923f-6f2df27bbb55"
+				done()
+			}
+		}
+	}
+	
+	func test_fetchEvents_validContent_verificationRequired() throws {
+
+		// Given
+		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
+		let signatureValidationSpy = SignatureValidationSpy()
+		signatureValidationSpy.stubbedValidateResult = true
+		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
+		sut = NetworkManager(configuration: NetworkConfiguration.development, signatureValidationFactory: signatureValidationFactorySpy)
+
+		stub(condition: isPath(path)) { _ in
+			// Return valid tokens
+			return HTTPStubsResponse(
+				jsonObject: [
+					"payload": "eyJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCJwcm92aWRlcklkZW50aWZpZXIiOiJaWloiLCJzdGF0dXMiOiJ2ZXJpZmljYXRpb25fcmVxdWlyZWQifQ==",
+					"signature": "test"
+				],
+				statusCode: 200,
+				headers: nil
+			)
+		}
+
+		// When
+		waitUntil { done in
+			self.sut.fetchEvents(provider: self.provider) { result in
+
+				// Then
+				expect(result.isSuccess) == true
+				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
+				expect(result.successValue?.0.protocolVersion) == "3.0"
+				expect(result.successValue?.0.status) == .verificationRequired
+				expect(result.successValue?.0.identity).to(beNil())
+				expect(result.successValue?.0.events).to(beNil())
 				done()
 			}
 		}
