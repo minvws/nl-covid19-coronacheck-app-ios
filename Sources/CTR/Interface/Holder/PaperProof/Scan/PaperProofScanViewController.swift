@@ -42,8 +42,6 @@ class PaperProofScanViewController: ScanViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-	
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
 		viewModel.$shouldResumeScanning.binding = { [weak self] in
 			if let value = $0, value {
