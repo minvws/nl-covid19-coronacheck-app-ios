@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -66,6 +66,11 @@ final class EnvironmentSpies {
 	var featureFlagManagerSpy: FeatureFlagManagerSpy = {
 		let spy = FeatureFlagManagerSpy()
 		spy.stubbedShouldShowCoronaMelderRecommendationResult = true
+		return spy
+	}()
+	
+	var fileStorageSpy: FileStorageSpy = {
+		let spy = FileStorageSpy()
 		return spy
 	}()
 	
@@ -187,6 +192,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
+		fileStorage: spies.fileStorageSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
 		identityChecker: spies.identityCheckerSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,

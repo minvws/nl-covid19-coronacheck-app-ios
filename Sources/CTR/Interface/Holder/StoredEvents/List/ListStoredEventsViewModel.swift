@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -102,8 +102,7 @@ class ListStoredEventsViewModel: Logging {
 		
 		if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
 		   let decodedPayloadData = Data(base64Encoded: object.payload),
-		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
-		   let identity = wrapper.identity {
+		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
 			
 			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
 				lhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture
@@ -111,7 +110,8 @@ class ListStoredEventsViewModel: Logging {
 			
 			guard let sortedEvents = sortedEvents else { return result }
 			result.append(contentsOf: sortedEvents.compactMap { event in
-				guard let date = event.getSortDate(with: DateFormatter.Event.iso8601) else {
+				guard let date = event.getSortDate(with: DateFormatter.Event.iso8601),
+						let identity = wrapper.identity else {
 					return nil
 				}
 				let dateString = DateFormatter.Format.dayMonthYear.string(from: date)
@@ -300,12 +300,8 @@ class ListStoredEventsViewModel: Logging {
 		
 		let removalResult = Current.walletManager.removeEventGroup(objectID)
 		switch removalResult {
-			case .success(let success):
-				if success {
-					sendEventsToTheSigner()
-				} else {
-					handleCoreDataError()
-				}
+			case .success:
+				sendEventsToTheSigner()
 			case .failure(let error):
 				logError("Failed to remove event groups: \(error)")
 				handleCoreDataError()
@@ -385,7 +381,7 @@ class ListStoredEventsViewModel: Logging {
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content, backAction: nil)
+			self.coordinator?.presentError(content: content, backAction: nil)
 		}
 	}
 }

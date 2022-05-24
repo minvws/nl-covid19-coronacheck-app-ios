@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -74,7 +74,7 @@ class ShowQRIrrelevantView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(overlay)
+		overlay.embed(in: self)
 		addSubview(innerView)
 		addSubview(iconView)
 		addSubview(titleLabel)
@@ -88,12 +88,6 @@ class ShowQRIrrelevantView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			// QR View
-			overlay.topAnchor.constraint(equalTo: topAnchor),
-			overlay.bottomAnchor.constraint(equalTo: bottomAnchor),
-			overlay.leadingAnchor.constraint(equalTo: leadingAnchor),
-			overlay.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			innerView.topAnchor.constraint(
 				equalTo: overlay.topAnchor,

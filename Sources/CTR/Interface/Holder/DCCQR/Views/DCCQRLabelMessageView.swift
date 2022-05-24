@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -83,8 +83,9 @@ final class DCCQRLabelMessageView: BaseView, DCCQRLabelViewable {
 	
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message,
-														   style: .init(font: Fonts.subhead, textColor: C.black()!))
+			NSAttributedString.makeFromHtml(text: message, style: .init(font: Fonts.subhead, textColor: C.black()!)) { attributedString in
+				self.messageTextView.attributedText = attributedString
+			}
 		}
 	}
 }

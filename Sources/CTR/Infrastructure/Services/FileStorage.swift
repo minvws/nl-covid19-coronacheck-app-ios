@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -13,6 +13,8 @@ protocol FileStorageProtocol: AnyObject {
 	func debugLogItems()
 	func fileExists(_ fileName: String) -> Bool
 	func remove(_ fileName: String)
+
+	var documentsURL: URL? { get }
 }
 
 final class FileStorage: FileStorageProtocol, Logging {

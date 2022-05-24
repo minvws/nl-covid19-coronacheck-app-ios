@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -47,33 +47,23 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(stackView)
+		stackView.embed(in: self)
 		stackView.addArrangedSubview(contentTextView)
-	}
-	
-	/// Setup the constraints
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-		
-		NSLayoutConstraint.activate([
-			stackView.leftAnchor.constraint(equalTo: leftAnchor),
-			stackView.rightAnchor.constraint(equalTo: rightAnchor),
-			stackView.topAnchor.constraint(equalTo: topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
-		])
 	}
 	
 	/// The message
 	var message: String? {
 		didSet {
-			contentTextView.attributedText = .makeFromHtml(
-				text: message,
+			NSAttributedString.makeFromHtml(
+				text: self.message,
 				style: NSAttributedString.HTMLStyle(
 					font: Fonts.body,
 					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
-			)
+			) {
+				self.contentTextView.attributedText = $0
+			}
 		}
 	}
 	

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -25,7 +25,7 @@ class ShowQRView: BaseView {
 			static var internationalSecurity: CGFloat {
 				SecurityAnimation.isWithinWinterPeriod ? 90 : 52
 			}
-            static var internationalSecurityExtraSafeAreaInset: CGFloat {
+			static var internationalSecurityExtraSafeAreaInset: CGFloat {
 				SecurityAnimation.isWithinWinterPeriod ? 60 : 20
 			}
 			static let returnToThirdPartyAppButton: CGFloat = 12
@@ -196,7 +196,7 @@ class ShowQRView: BaseView {
 		setupScrollViewConstraints()
 	}
 
-	func setupScrollViewConstraints() {
+	private func setupScrollViewConstraints() {
 
 		infoLabel.embed(
 			in: scrollContentView,
@@ -223,12 +223,12 @@ class ShowQRView: BaseView {
 		])
 		bringSubviewToFront(scrollView)
 	}
-    
-    override func safeAreaInsetsDidChange() {
-        super.safeAreaInsetsDidChange()
-        guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
-        securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
-    }
+	
+	override func safeAreaInsetsDidChange() {
+		super.safeAreaInsetsDidChange()
+		guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
+		securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+	}
 
 	@objc func didTapThirdPartyAppButton() {
 

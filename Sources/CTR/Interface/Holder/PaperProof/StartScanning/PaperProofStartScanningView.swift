@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -95,14 +95,16 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(
+			NSAttributedString.makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
 					font: Fonts.body,
 					textColor: C.black()!,
 					paragraphSpacing: 0
 				)
-			)
+			) {
+				self.messageTextView.attributedText = $0
+			}
 		}
 	}
 

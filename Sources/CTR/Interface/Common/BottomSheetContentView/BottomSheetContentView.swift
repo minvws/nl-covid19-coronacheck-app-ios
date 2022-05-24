@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -61,35 +61,13 @@ class BottomSheetContentView: BaseView {
 
 		super.setupViewHierarchy()
 
+		stackView.embed(
+			in: safeAreaLayoutGuide,
+			insets: UIEdgeInsets(top: 0, left: ViewTraits.margin, bottom: ViewTraits.margin, right: ViewTraits.margin)
+		)
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(secondaryButton)
-		
-		addSubview(stackView)
-	}
-
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-
-			stackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
-			stackView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
-			)
-		])
 	}
 	
 	@objc func secondaryButtonTapped() {

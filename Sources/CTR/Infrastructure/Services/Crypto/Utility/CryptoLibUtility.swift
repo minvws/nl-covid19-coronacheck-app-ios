@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -77,7 +77,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 
 	// MARK: - Dependencies
 
-	private let fileStorage: FileStorage
+	private let fileStorage: FileStorageProtocol
 	private let flavor: AppFlavor
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
@@ -93,7 +93,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		networkManager: NetworkManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
-		fileStorage: FileStorage = FileStorage(),
+		fileStorage: FileStorageProtocol,
 		flavor: AppFlavor = AppFlavor.flavor) {
 
 		self.now = now

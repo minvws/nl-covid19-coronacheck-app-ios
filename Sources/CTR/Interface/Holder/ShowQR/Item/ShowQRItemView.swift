@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -28,18 +28,10 @@ class ShowQRItemView: BaseView {
 		static let margin: CGFloat = 10.0
 	}
 
-	/// The spinner
-	private let spinner: UIActivityIndicatorView = {
-
-		let view = UIActivityIndicatorView()
+	private let activityIndicatorView: ActivityIndicatorView = {
+		
+		let view = ActivityIndicatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		if #available(iOS 13.0, *) {
-			view.style = .large
-		} else {
-			view.style = .whiteLarge
-		}
-		view.color = C.primaryBlue()
-		view.hidesWhenStopped = true
 		return view
 	}()
 
@@ -69,14 +61,14 @@ class ShowQRItemView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		spinner.startAnimating()
+		activityIndicatorView.shouldShowLoadingSpinner = true
 	}
 	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(spinner)
+		addSubview(activityIndicatorView)
 		addSubview(largeQRimageView)
 		addSubview(screenshotBlockingView)
 		addSubview(irrelevantView)
@@ -115,8 +107,8 @@ class ShowQRItemView: BaseView {
 			irrelevantView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
 			irrelevantView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 
-			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
-			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor)
+			activityIndicatorView.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
+			activityIndicatorView.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor)
 		])
 	}
 
@@ -141,42 +133,42 @@ class ShowQRItemView: BaseView {
 
 			switch visibilityState {
 				case .hiddenForScreenCapture:
-					spinner.stopAnimating()
+					activityIndicatorView.shouldShowLoadingSpinner = false
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = true
-					spinner.isHidden = true
+					activityIndicatorView.isHidden = true
 
 				case .loading:
-					spinner.startAnimating()
+					activityIndicatorView.shouldShowLoadingSpinner = true
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = true
-					spinner.isHidden = false
-                    
+					activityIndicatorView.isHidden = false
+
 				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
-					spinner.stopAnimating()
+					activityIndicatorView.shouldShowLoadingSpinner = false
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
 					irrelevantView.isHidden = true
-					spinner.isHidden = true
+					activityIndicatorView.isHidden = true
 
 				case .visible(let qrImage):
-					spinner.stopAnimating()
+					activityIndicatorView.shouldShowLoadingSpinner = false
 					largeQRimageView.isHidden = false
 					largeQRimageView.image = qrImage
 					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = true
-					spinner.isHidden = true
+					activityIndicatorView.isHidden = true
 
 				case .irrelevant(let qrImage):
-					spinner.stopAnimating()
+					activityIndicatorView.shouldShowLoadingSpinner = false
 					largeQRimageView.isHidden = false
 					largeQRimageView.image = qrImage
 					screenshotBlockingView.isHidden = true
 					irrelevantView.isHidden = false
-					spinner.isHidden = true
+					activityIndicatorView.isHidden = true
 			}
 
 			// Update accessibility at the moment that it becomes .screenshotBlocking from another state:

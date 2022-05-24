@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -194,16 +194,24 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
-
+	
+	var euCredentialAttributesCache: [Data: EuCredentialAttributes?] = [:]
+	
 	/// Read the crypto credential
 	/// - Returns: the crypto attributes
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
-
+		
+		if let entry = euCredentialAttributesCache[data.sha256] {
+			logVerbose("Using cache hit for \(String(decoding: data, as: UTF8.self))")
+			return entry
+		}
+		
 		if let response = MobilecoreReadEuropeanCredential(data) {
 			if let value = response.value {
 				do {
 					logVerbose("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
+					euCredentialAttributesCache[data.sha256] = object
 					return object
 				} catch {
 					self.logError("Error: \(String(decoding: value, as: UTF8.self))")
@@ -215,12 +223,12 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
-
+	
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-
+		
 		let result = MobilecoreCreateCredentials(ism)
 		if let credential = result?.value {
 			return .success(credential)
@@ -235,7 +243,7 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Parameter data: the data of the DCC
 	/// - Returns: True if the DCC is foreign
 	func isForeignDCC(_ data: Data) -> Bool {
-				
+		
 		return MobilecoreIsForeignDCC(data)
 	}
 	
@@ -243,7 +251,7 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Parameter data: the data
 	/// - Returns: True if the data is a DCC
 	func isDCC(_ data: Data) -> Bool {
-				
+		
 		return MobilecoreIsDCC(data)
 	}
 	

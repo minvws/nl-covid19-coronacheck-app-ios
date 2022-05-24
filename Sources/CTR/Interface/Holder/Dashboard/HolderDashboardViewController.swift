@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -62,8 +62,6 @@ class HolderDashboardViewController: BaseViewController {
 
 	let sceneView = HolderDashboardView()
 
-	var screenCaptureInProgress = false
-	
 	private var didSetInitialStartingTabOnSceneView = false
 
 	// MARK: Initializers
@@ -164,13 +162,13 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.title.observe { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
 		viewModel.domesticCards.observe { [sceneView, weak self] cards in
-			DispatchQueue.main.async {
+			performUIUpdate {
 				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
 			}
 		}
 		
 		viewModel.internationalCards.observe { [sceneView, weak self] cards in
-			DispatchQueue.main.async {
+			performUIUpdate {
 				self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
 			}
 		}
@@ -179,7 +177,7 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
-			DispatchQueue.main.async {
+			performUIUpdate {
 				self?.showAlert(alertContent)
 			}
 		}

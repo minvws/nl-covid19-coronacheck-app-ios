@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -34,18 +34,6 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_noEventGroup_remoteEventV2() {
-
-		// Given
-		let remoteEvent = RemoteEvent(wrapper: .fakeWithV2Identity, signedResponse: nil)
-
-		// When
-		let matched = sut.compare(eventGroups: [], with: [remoteEvent])
-
-		// Then
-		expect(matched) == true
-	}
-
 	func test_noEventGroup_remoteEventV3() {
 
 		// Given
@@ -53,19 +41,6 @@ class IdentityCheckerTests: XCTestCase {
 
 		// When
 		let matched = sut.compare(eventGroups: [], with: [remoteEvent])
-
-		// Then
-		expect(matched) == true
-	}
-
-	func test_noEventGroup_remoteEventV2_andV3() {
-
-		// Given
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
-		let remoteEventV2 = RemoteEvent(wrapper: .fakeWithV2Identity, signedResponse: nil)
-
-		// When
-		let matched = sut.compare(eventGroups: [], with: [remoteEventV2, remoteEventV3])
 
 		// Then
 		expect(matched) == true
@@ -91,32 +66,6 @@ class IdentityCheckerTests: XCTestCase {
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
-
-		// Then
-		expect(matched) == true
-	}
-
-	func test_eventGroupV2_remoteEventv3() throws {
-
-		// Given
-		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2Identity))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
-
-		// When
-		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
-
-		// Then
-		expect(matched) == true
-	}
-
-	func test_eventGroupV3_remoteEventv2() throws {
-
-		// Given
-		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
-		let remoteEventV2 = RemoteEvent(wrapper: .fakeWithV2Identity, signedResponse: nil)
-
-		// When
-		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV2])
 
 		// Then
 		expect(matched) == true
@@ -235,45 +184,6 @@ class IdentityCheckerTests: XCTestCase {
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
 
-		// Then
-		expect(matched) == true
-	}
-
-	func test_eventGroupV2IdentityAlternative_remoteEventV3IdentityAlternative2LowerCase() throws {
-		
-		// Given
-		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2IdentityAlternative))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2LowerCase, signedResponse: nil)
-		
-		// When
-		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
-		
-		// Then
-		expect(matched) == true
-	}
-
-	func test_eventGroupV2IdentityAlternative_remoteEventV3IdentityAlternative2() throws {
-
-		// Given
-		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2IdentityAlternative))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2, signedResponse: nil)
-
-		// When
-		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
-
-		// Then
-		expect(matched) == true
-	}
-	
-	func test_eventGroupV2IdentityAlternativeLowerCase_remoteEventV3IdentityAlternative2() throws {
-		
-		// Given
-		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2IdentityAlternativeLowerCase))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2, signedResponse: nil)
-		
-		// When
-		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
-		
 		// Then
 		expect(matched) == true
 	}
