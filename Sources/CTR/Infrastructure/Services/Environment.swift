@@ -22,6 +22,7 @@ struct Environment {
 	var deviceAuthenticationDetector: DeviceAuthenticationProtocol
 	var disclosurePolicyManager: DisclosurePolicyManaging
 	var featureFlagManager: FeatureFlagManaging
+	var fileStorage: FileStorageProtocol
 	var greenCardLoader: GreenCardLoading
 	var identityChecker: IdentityCheckerProtocol
 	var jailBreakDetector: JailBreakProtocol
@@ -50,6 +51,7 @@ struct Environment {
 		deviceAuthenticationDetector: DeviceAuthenticationProtocol,
 		disclosurePolicyManager: DisclosurePolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
+		fileStorage: FileStorageProtocol,
 		greenCardLoader: GreenCardLoading,
 		identityChecker: IdentityCheckerProtocol,
 		jailBreakDetector: JailBreakProtocol,
@@ -77,6 +79,7 @@ struct Environment {
 		self.deviceAuthenticationDetector = deviceAuthenticationDetector
 		self.disclosurePolicyManager = disclosurePolicyManager
 		self.featureFlagManager = featureFlagManager
+		self.fileStorage = fileStorage
 		self.greenCardLoader = greenCardLoader
 		self.identityChecker = identityChecker
 		self.jailBreakDetector = jailBreakDetector
@@ -105,7 +108,7 @@ private let cryptoLibUtility = CryptoLibUtility(
 	networkManager: networkManager,
 	remoteConfigManager: remoteConfigManager,
 	reachability: try? Reachability(),
-	fileStorage: FileStorage(),
+	fileStorage: fileStorage,
 	flavor: AppFlavor.flavor
 )
 private let clockDeviationManager = ClockDeviationManager(
@@ -135,6 +138,7 @@ private let featureFlagManager = FeatureFlagManager(
 	versionSupplier: AppVersionSupplier(),
 	remoteConfigManager: remoteConfigManager
 )
+private let fileStorage = FileStorage()
 private let greenCardLoader = GreenCardLoader(
 	now: now,
 	networkManager: networkManager,
@@ -176,7 +180,8 @@ private let remoteConfigManager = RemoteConfigManager(
 	userSettings: userSettings,
 	reachability: try? Reachability(),
 	networkManager: networkManager,
-	secureUserSettings: secureUserSettings
+	secureUserSettings: secureUserSettings,
+	fileStorage: fileStorage
 )
 private let verificationPolicyManager = VerificationPolicyManager(secureUserSettings: secureUserSettings)
 private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secureUserSettings)
@@ -211,6 +216,7 @@ private let environment: () -> Environment = {
 		deviceAuthenticationDetector: deviceAuthenticationDetector,
 		disclosurePolicyManager: disclosurePolicyManager,
 		featureFlagManager: featureFlagManager,
+		fileStorage: fileStorage,
 		greenCardLoader: greenCardLoader,
 		identityChecker: identityChecker,
 		jailBreakDetector: jailBreakDetector,

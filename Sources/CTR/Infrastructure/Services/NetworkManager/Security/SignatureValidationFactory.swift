@@ -95,7 +95,7 @@ class SignatureValidatorAlwaysAllow: SignatureValidator {
 class SignatureValidator: SignatureValidation, Logging {
 	
 	var trustedSigners: [SigningCertificate]
-	var openssl = OpenSSL()
+	let openssl = OpenSSL()
 	
 	init(trustedSigners: [SigningCertificate] = []) {
 		

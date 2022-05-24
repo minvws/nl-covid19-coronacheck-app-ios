@@ -112,9 +112,9 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 			}
 		}
 	}
-errit:
+
 	sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
-	X509_free(certificate);
+	X509_free(certificate); certificate = NULL;
 	return results;
 }
 
@@ -160,6 +160,7 @@ errit:
 	BOOL isMatch = ASN1_INTEGER_cmp(certificateSerial, expectedSerial) == 0;
 	
 	ASN1_INTEGER_free(expectedSerial); expectedSerial = NULL;
+	X509_free(certificate); certificate = NULL;
 	
 	return isMatch;
 }
@@ -186,8 +187,8 @@ errit:
 	isMatch = ASN1_OCTET_STRING_cmp(expectedSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
 	
 errit:
-	X509_free(certificate);
-	ASN1_OCTET_STRING_free(expectedSubjectKeyIdentifier);
+	X509_free(certificate); certificate = NULL;
+	ASN1_OCTET_STRING_free(expectedSubjectKeyIdentifier); expectedSubjectKeyIdentifier = NULL;
 	
 	return isMatch;
 }
@@ -260,76 +261,70 @@ errit:
 	bool result = NO;
 	BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL,*cmsBlob = NULL;
 	X509_VERIFY_PARAM *verifyParameters = NULL;
+	CMS_ContentInfo * cms = NULL;
 	STACK_OF(X509) *signers = NULL;
 	X509_STORE *store = NULL;
 	X509 *signingCert = NULL;
 	int cnt = 0;
-	
+
 	if (NULL == (signatureBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
-		EXITOUT("invalid  signatureBlob");
-	
+		EXITOUT("invalid signatureBlob");
+
 	if (NULL == (contentBlob = BIO_new_mem_buf(contentData.bytes, (int)contentData.length)))
-		EXITOUT("invalid  contentBlob");
-	
+		EXITOUT("invalid contentBlob");
+
 	if (NULL == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
 		EXITOUT("invalid certificateBlob");
-	
+
 	if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
 		EXITOUT("Could not create cms Blob");
-	
-	CMS_ContentInfo * cms = d2i_CMS_bio(cmsBlob, NULL);
+
+	cms = d2i_CMS_bio(cmsBlob, NULL);
 	if (NULL == cms)
 		EXITOUT("Could not create CMS structure from PKCS#7");
-	
+
 	if ((NULL == (store = X509_STORE_new())))
 		EXITOUT("store");
-	
+
 #ifdef __DEBUG
 	fprintf(stderr, "Chain:\n");
 #endif
 	for(X509 *cert = NULL;;cnt++) {
 		if (NULL == (cert = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
 			break;
-		
+
 		if (X509_STORE_add_cert(store, cert) != 1)
 			EXITOUT("Could not add cert %d to chain.",1+cnt);
-		
+
 #ifdef __DEBUG
 		fprintf(stderr,"#%d\t",cnt+1);
 		print_certificate(cert);
 #endif
-		X509_free(cert);
+		X509_free(cert); cert = NULL;
 	};
 	ERR_clear_error(); // as we have a feof() bio read error.
-	
+
 	if (cnt == 0)
 		EXITOUT("no trust chain of any length");
-	
+
 	if (NULL == (verifyParameters = X509_VERIFY_PARAM_new()))
 		EXITOUT("Could create verifyParameters");
-	
+
 	if (X509_VERIFY_PARAM_set_flags(verifyParameters, X509_V_FLAG_CRL_CHECK_ALL | X509_V_FLAG_POLICY_CHECK) != 1)
 		EXITOUT("Could not set CRL/Policy check on verifyParameters");
-	
+
 	if (X509_VERIFY_PARAM_set_purpose(verifyParameters, X509_PURPOSE_ANY) != 1)
 		EXITOUT("Could not set purpose on verifyParameters");
-	
+
 	if (X509_STORE_set1_param(store, verifyParameters) != 1)
 		EXITOUT("Could not set verifyParameters on the store");
-	
-	if (/* DISABLES CODE */ (0)) {
-		BUF_MEM *bptr;
-		BIO_get_mem_ptr(contentBlob, &bptr);
-		bptr->data[ bptr->length] = 0;
-		printf("Blob <%s>\n", bptr->data);
-	}
-	
+
 	// It appears that the PKCS7 family of OpenSSL does not support all the forms
 	// of paddings; including PSS padding (which is the SOGIS recommendation).
 	// So we use the more modern CMS family of functions.
 	//
 	// result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
-	
+
 	if ( 1 != CMS_verify(cms, NULL, store, contentBlob, NULL, CMS_BINARY) ) {
 #ifdef __DEBUG
 		char buff[1024];
@@ -337,58 +332,60 @@ errit:
 #endif
 		EXITOUT("CMS_verify fail");
 	}
-	
+
 #ifdef __DEBUG
 	fprintf(stderr,"=== signature is valid (but not yet validated) ===\n");
 #endif
-	
+
 	// Unlike its PKCS8_get0_signers#7 brethen - CMS_get0_signers needs to be called after
 	// a (successful) CMS_verify. So we only look at the actual signer after having
 	// verified the signature.
 	//
 	if (NULL == (signers = CMS_get0_signers(cms)))
 		EXITOUT("No signers in CMS signatureBlob");
-	
+
 	if (sk_X509_num(signers) != 1)
 		EXITOUT("Not exactly one signer in PCKS#7 signatureBlob");
-	
+
 	signingCert = sk_X509_value(signers, 0);
-	
+
 #ifdef __DEBUG
 	fprintf(stderr,"Signing certificate:\t");
 	print_certificate(signingCert);
 #endif
-	
+
 	if (expectedAuthorityKeyIdentifierDataOrNil.length)
-		if (![self validateAuthorityKeyIdentifierData:expectedAuthorityKeyIdentifierDataOrNil
-								   signingCertificate:signingCert])
+		if (![self validateAuthorityKeyIdentifierData: expectedAuthorityKeyIdentifierDataOrNil
+								   signingCertificate: signingCert])
 			EXITOUT("invalid isAuthorityKeyIdentifierValid");
-	
+
 	if (requiredCommonNameContentOrNil.length) {
-		if (![self validateCommonNameForCertificate:signingCert
-									requiredContent:requiredCommonNameContentOrNil])
+		if (![self validateCommonNameForCertificate: signingCert
+									requiredContent: requiredCommonNameContentOrNil])
 			EXITOUT("invalid isCommonNameValid");
 	}
-	
+
 #ifdef __DEBUG
 	fprintf(stderr,"=== signature is valid - and meets the rules ===\n");
 #endif
 	result = YES;
-	
+
 errit:
-	X509_VERIFY_PARAM_free(verifyParameters);
-	
-	X509_STORE_free(store);
-	
-	BIO_free(cmsBlob);
-	BIO_free(signatureBlob);
-	BIO_free(contentBlob);
-	BIO_free(certificateBlob);
-	
-	return result == YES;
+	X509_VERIFY_PARAM_free(verifyParameters); verifyParameters = NULL;
+	X509_STORE_free(store); store = NULL;
+	CMS_ContentInfo_free(cms); cms = NULL;
+	BIO_free(cmsBlob); cmsBlob = NULL;
+	BIO_free(signatureBlob); signatureBlob = NULL;
+	BIO_free(contentBlob); contentBlob = NULL;
+	BIO_free(certificateBlob); certificateBlob = NULL;
+	sk_X509_pop_free(signers, X509_free); signers = NULL;
+	X509_free(signingCert); signingCert = NULL;
+
+	return result;
 }
 
-- (BOOL)compareCerts:(NSData *)certificateData with:(NSData *)trustedCertificateData {
+- (BOOL)compareCerts:(NSData *)certificateData
+				with:(NSData *)trustedCertificateData {
 	
 	BOOL isMatch = NO;
 	
@@ -412,13 +409,14 @@ errit:
 	
 	isMatch = isMatch && ((1 == EVP_PKEY_cmp(ptc, tc)) ? YES : NO);
 	
-	X509_free(certificate);
-	X509_free(trustedCertificate);
+	X509_free(certificate); certificate = NULL;
+	X509_free(trustedCertificate); trustedCertificate = NULL;
 	
 	return isMatch;
 }
 
-- (BOOL)compareSubjectKeyIdentifier:(NSData *)certificateData with:(NSData *)trustedCertificateData {
+- (BOOL)compareSubjectKeyIdentifier:(NSData *)certificateData
+							   with:(NSData *)trustedCertificateData {
 	
 	// Certificate
 	X509 *certificate = [self getX509: certificateData];
@@ -453,7 +451,8 @@ errit:
 	return isMatch;
 }
 
-- (BOOL)compareSerialNumber:(NSData *)certificateData with:(NSData *)trustedCertificateData {
+- (BOOL)compareSerialNumber:(NSData *)certificateData
+					   with:(NSData *)trustedCertificateData {
 	
 	// Certificate
 	X509 *certificate = [self getX509: certificateData];
@@ -552,10 +551,12 @@ errit:
 	char certificateCommonName[256];
 	if (-1 == X509_NAME_get_text_by_NID(certificateSubjectName, NID_commonName, certificateCommonName, sizeof(certificateCommonName))) {
 		NSLog(@"X509_NAME_get_text_by_NID failed.");
+		X509_free(certificate); certificate = NULL;
 		return nil;
 	}
-	NSString *cnString = [NSString stringWithUTF8String:certificateCommonName];
-	return cnString;
+	NSString *commonNameString = [NSString stringWithUTF8String:certificateCommonName];
+	X509_free(certificate); certificate = NULL;
+	return commonNameString;
 }
 
 - (nullable NSData *) getAuthorityKeyIdentifierForCertificate: (NSData *) certificateData {
@@ -577,6 +578,7 @@ errit:
 	NSMutableData *result = [prefix mutableCopy];
 	[result appendData: authorityKey];
 
+	X509_free(certificate); certificate = NULL;
 	return result;
 }
 

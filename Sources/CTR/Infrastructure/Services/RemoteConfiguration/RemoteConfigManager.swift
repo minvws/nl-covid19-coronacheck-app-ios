@@ -62,7 +62,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		reachability: ReachabilityProtocol?,
 		networkManager: NetworkManaging,
 		secureUserSettings: SecureUserSettingsProtocol,
-		fileStorage: FileStorageProtocol = FileStorage(),
+		fileStorage: FileStorageProtocol,
 		appVersionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 	) {
 

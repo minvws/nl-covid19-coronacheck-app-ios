@@ -38,7 +38,6 @@ class SharedCoordinator: Coordinator, Logging {
 	var onboardingManager: OnboardingManaging = Current.onboardingManager
 	var newFeaturesManager: NewFeaturesManaging = Current.newFeaturesManager
 	var cryptoManager: CryptoManaging = Current.cryptoManager
-	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 	var remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	var versionSupplier = AppVersionSupplier()
 	var childCoordinators: [Coordinator] = []
