@@ -48,7 +48,7 @@
 "general.vaccinationdate" = "Vaccination date";
 /* MARK: - General */
 "general_cancel" = "Cancel";
-"general_delete" = "Clear data";
+"general_delete" = "Remove data";
 "general_menu" = "Menu";
 "general_negativeTest" = "Negative test result";
 "general_newintheapp" = "New in the app";
@@ -706,11 +706,11 @@
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/en/dose\">Read more about the dose</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details international QR code";
-"holder_storedEvent_alert_removeEvents_message" = "Clearing this data will possibly remove certificates with QR codes from the app.";
-"holder_storedEvent_alert_removeEvents_title" = "Clear this data?";
+"holder_storedEvent_alert_removeEvents_message" = "Removing this data will possibly also remove certificates with QR codes from the app.";
+"holder_storedEvent_alert_removeEvents_title" = "Remove this data?";
 "holder_storedEvents_button_handleData" = "How does Coronacheck handle my data?";
-"holder_storedEvents_button_removeEvents" = "Clear this data";
-"holder_storedEvents_eraseEvents_title" = "Clearing data";
+"holder_storedEvents_button_removeEvents" = "Remove from the app";
+"holder_storedEvents_eraseEvents_title" = "Removing data";
 "holder_storedEvents_listHeader_fetchedFromProvider" = "Retrieved at %@";
 "holder_storedEvents_listHeader_paperFlow" = "Scanned certificate";
 "holder_storedEvents_list_noEvents" = "No stored data";
