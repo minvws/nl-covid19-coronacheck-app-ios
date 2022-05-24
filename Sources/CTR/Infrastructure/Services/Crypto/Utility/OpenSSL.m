@@ -261,6 +261,7 @@ errit:
 	bool result = NO;
 	BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL,*cmsBlob = NULL;
 	X509_VERIFY_PARAM *verifyParameters = NULL;
+	CMS_ContentInfo * cms = NULL;
 	STACK_OF(X509) *signers = NULL;
 	X509_STORE *store = NULL;
 	X509 *signingCert = NULL;
@@ -278,7 +279,7 @@ errit:
 	if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
 		EXITOUT("Could not create cms Blob");
 
-	CMS_ContentInfo * cms = d2i_CMS_bio(cmsBlob, NULL);
+	cms = d2i_CMS_bio(cmsBlob, NULL);
 	if (NULL == cms)
 		EXITOUT("Could not create CMS structure from PKCS#7");
 
