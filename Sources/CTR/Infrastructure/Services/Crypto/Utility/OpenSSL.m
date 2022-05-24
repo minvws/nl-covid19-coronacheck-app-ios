@@ -318,13 +318,6 @@ errit:
 	if (X509_STORE_set1_param(store, verifyParameters) != 1)
 		EXITOUT("Could not set verifyParameters on the store");
 
-	if (/* DISABLES CODE */ (0)) {
-		BUF_MEM *bptr;
-		BIO_get_mem_ptr(contentBlob, &bptr);
-		bptr->data[ bptr->length] = 0;
-		printf("Blob <%s>\n", bptr->data);
-	}
-
 	// It appears that the PKCS7 family of OpenSSL does not support all the forms
 	// of paddings; including PSS padding (which is the SOGIS recommendation).
 	// So we use the more modern CMS family of functions.
@@ -379,14 +372,15 @@ errit:
 errit:
 	X509_VERIFY_PARAM_free(verifyParameters); verifyParameters = NULL;
 	X509_STORE_free(store); store = NULL;
+	CMS_ContentInfo_free(cms); cms = NULL;
 	BIO_free(cmsBlob); cmsBlob = NULL;
 	BIO_free(signatureBlob); signatureBlob = NULL;
 	BIO_free(contentBlob); contentBlob = NULL;
 	BIO_free(certificateBlob); certificateBlob = NULL;
+	sk_X509_pop_free(signers, X509_free); signers = NULL;
 	X509_free(signingCert); signingCert = NULL;
 
-
-	return result == YES;
+	return result;
 }
 
 - (BOOL)compareCerts:(NSData *)certificateData
