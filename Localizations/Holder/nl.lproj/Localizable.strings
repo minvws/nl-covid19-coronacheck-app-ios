@@ -48,7 +48,7 @@
 "general.vaccinationdate" = "Vaccinatiedatum";
 /* MARK: - General */
 "general_cancel" = "Annuleer";
-"general_delete" = "Wis gegevens";
+"general_delete" = "Verwijderen";
 "general_menu" = "Menu";
 "general_negativeTest" = "Negatieve testuitslag";
 "general_newintheapp" = "Nieuw in de app";
@@ -570,6 +570,7 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Je bezoekersbewijs is verlopen";
+"holder_dashboard_recoveryAlmostExpiredBanner_title" = "Je herstelbewijs verloopt bijna";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
@@ -688,6 +689,8 @@
 "holder_paperproof_whichProofsCanBeUsed_body" = "<p>Je kunt de volgende bewijzen inscannen en toevoegen aan de app:</p><ul><li>Een papieren bewijs gekregen van je zorgverlener of de overheid. Heb je een bewijs voor in Nederland en voor internationaal gebruik? Scan dan de <b>internationale QR-code</b>.</li><li>Een coronabewijs met QR-code van je test of vaccinatie uit het buitenland. Je hebt je QR-code op papier of in een buitenlandse corona-app staan.</li></ul>";
 "holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
+"holder_recoveryAlmostExpiredModal_message" = "Je herstelbewijs verloopt op %@. Daarna heb je geen coronabewijs meer. Heb je een nieuw coronabewijs nodig? Dan zijn er verschillende mogelijkheden. Lees meer op <a href=\"https://www.rijksoverheid.nl/onderwerpen/coronavirus-coronabewijs-en-coronatoegangsbewijs\">Rijksoverheid.nl</a>";
+"holder_recoveryAlmostExpiredModal_title" = "Herstelbewijs verloopt bijna";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_scanner_error_action" = "Opnieuw scannen";
 "holder_scanner_error_message_ctb" = "Je hoeft je Nederlandse QR-code niet te scannen. Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
@@ -706,11 +709,11 @@
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/nl/dosis\">Lees meer over de dosis</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details internationale QR-code";
-"holder_storedEvent_alert_removeEvents_message" = "Bij het wissen van deze gegevens worden er mogelijk bewijzen met QR-codes uit de app verwijderd.";
-"holder_storedEvent_alert_removeEvents_title" = "Deze gegevens wissen?";
+"holder_storedEvent_alert_removeEvents_message" = "Bij het verwijderen van deze gegevens worden er mogelijk ook bewijzen met QR-codes uit de app verwijderd.";
+"holder_storedEvent_alert_removeEvents_title" = "Deze gegevens verwijderen?";
 "holder_storedEvents_button_handleData" = "Hoe gaat CoronaCheck met gegevens om?";
-"holder_storedEvents_button_removeEvents" = "Deze gegevens wissen";
-"holder_storedEvents_eraseEvents_title" = "Gegevens wissen";
+"holder_storedEvents_button_removeEvents" = "Uit de app verwijderen";
+"holder_storedEvents_eraseEvents_title" = "Gegevens verwijderen";
 "holder_storedEvents_listHeader_fetchedFromProvider" = "Opgehaald bij %@";
 "holder_storedEvents_listHeader_paperFlow" = "Ingescand bewijs";
 "holder_storedEvents_list_noEvents" = "Geen gegevens opgeslagen";
