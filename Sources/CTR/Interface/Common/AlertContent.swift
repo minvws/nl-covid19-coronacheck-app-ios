@@ -41,11 +41,11 @@ extension UIViewController {
 	///   - alertContent: the content of the alert
 	func showAlert(_ alertContent: AlertContent?) {
 
-		func addAlertAction(action: AlertContent.Action?) {
+		func addAlertAction(action: AlertContent.Action?, style: UIAlertAction.Style) {
 			if let action = action {
 				let alertAction = UIAlertAction(
 					title: action.title,
-					style: action.actionIsDestructive ? .destructive : .cancel,
+					style: action.actionIsDestructive ? .destructive : style,
 					handler: action.action
 				)
 				alertController.addAction(alertAction)
@@ -64,8 +64,8 @@ extension UIViewController {
 			message: content.subTitle,
 			preferredStyle: .alert
 		)
-		addAlertAction(action: content.okAction)
-		addAlertAction(action: content.cancelAction)
+		addAlertAction(action: content.okAction, style: .default)
+		addAlertAction(action: content.cancelAction, style: .cancel)
 
 		present(alertController, animated: true, completion: nil)
 	}
