@@ -171,10 +171,12 @@ class LaunchViewModel: Logging {
 		alert = AlertContent(
 			title: L.jailbrokenTitle(),
 			subTitle: L.jailbrokenMessage(),
-			okTitle: L.generalOk(),
-			okAction: { [weak self] _ in
-				self?.userDismissedJailBreakWarning()
-			}
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.userDismissedJailBreakWarning()
+				}
+			)
 		)
 	}
 
@@ -206,10 +208,12 @@ class LaunchViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderDeviceAuthenticationWarningTitle(),
 			subTitle: L.holderDeviceAuthenticationWarningMessage(),
-			okTitle: L.generalOk(),
-			okAction: { [weak self] _ in
-				self?.userDismissedDeviceAuthenticationWarning()
-			}
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.userDismissedDeviceAuthenticationWarning()
+				}
+			)
 		)
 	}
 

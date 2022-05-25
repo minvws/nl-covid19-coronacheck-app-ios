@@ -243,10 +243,12 @@ class AboutThisAppViewModel: Logging {
 		alert = AlertContent(
 			title: "Disclosure policy updated",
 			subTitle: message,
-			okTitle: L.generalOk(),
-			okAction: { [weak self] _ in
-				self?.outcomeHandler(.coordinatorShouldRestart)
-			}
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.outcomeHandler(.coordinatorShouldRestart)
+				}
+			)
 		)
 	}
 }

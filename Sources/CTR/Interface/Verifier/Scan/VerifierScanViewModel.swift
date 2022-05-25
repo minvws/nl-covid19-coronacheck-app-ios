@@ -144,10 +144,12 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		alert = AlertContent(
 			title: title,
 			subTitle: message,
-			okTitle: L.generalOk(),
-			okAction: { [weak self] _ in
-				self?.shouldResumeScanning = true
-			}
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.shouldResumeScanning = true
+				}
+			)
 		)
 	}
 
