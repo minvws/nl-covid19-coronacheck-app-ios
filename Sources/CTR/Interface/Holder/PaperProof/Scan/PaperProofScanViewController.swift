@@ -91,9 +91,7 @@ class PaperProofScanViewController: ScanViewController {
 						self?.viewModel.gotoSettings()
 					}
 				),
-				cancelAction: AlertContent.Action(
-					title: L.general_cancel()
-				)
+				cancelAction: AlertContent.Action.cancel
 			)
 		)
 	}

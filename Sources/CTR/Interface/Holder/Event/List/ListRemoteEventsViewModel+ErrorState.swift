@@ -125,7 +125,7 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateSomeresultTitle(),
 			subTitle: L.holderErrorstateSomeresultMessage(),
-			okAction: AlertContent.Action(title: L.generalOk())
+			okAction: AlertContent.Action.okay
 		)
 	}
 }

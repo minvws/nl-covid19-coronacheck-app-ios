@@ -15,6 +15,9 @@ struct AlertContent {
 		var action: ((UIAlertAction) -> Void)?
 		var isDestructive: Bool = false
 		var isPreferred: Bool = false
+		
+		static let okay = AlertContent.Action(title: L.generalOk())
+		static let cancel = AlertContent.Action(title: L.general_cancel())
 	}
 	
 	private (set) var title: String

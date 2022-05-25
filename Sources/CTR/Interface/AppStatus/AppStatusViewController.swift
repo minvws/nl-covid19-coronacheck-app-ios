@@ -76,9 +76,9 @@ class AppStatusViewController: BaseViewController {
 		
 		showAlert(
 			AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: errorMessage ?? "",
-			okAction: AlertContent.Action(title: L.generalOk())
+				title: L.generalErrorTitle(),
+				subTitle: errorMessage ?? "",
+				okAction: AlertContent.Action.okay
 			)
 		)
 	}

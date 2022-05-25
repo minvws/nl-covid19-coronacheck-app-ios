@@ -107,7 +107,7 @@ class VerifierStartScanningViewController: BaseViewController {
 					AlertContent(
 						title: L.generalErrorTitle(),
 						subTitle: L.verifierStartOntimeinternet(),
-						okAction: AlertContent.Action(title: L.generalOk())
+						okAction: AlertContent.Action.okay
 					)
 				)
 			}

@@ -135,7 +135,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			AlertContent(
 				title: "Scanning not supported",
 				subTitle: "Your device does not support scanning a code from an item. Please use a device with a camera.",
-				okAction: AlertContent.Action(title: L.generalOk())
+				okAction: AlertContent.Action.okay
 			)
 		)
 		captureSession = nil
