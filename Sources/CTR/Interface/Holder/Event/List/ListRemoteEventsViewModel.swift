@@ -91,14 +91,14 @@ class ListRemoteEventsViewModel: Logging {
 			subTitle: eventMode.alertBody,
 			okAction: AlertContent.Action(
 				title: L.holderVaccinationAlertContinue(),
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.holderVaccinationAlertStop(),
 				action: { [weak self] _ in
 					self?.goBack()
 				},
-				actionIsDestructive: true
+				isDestructive: true
 			)
 		)
 	}

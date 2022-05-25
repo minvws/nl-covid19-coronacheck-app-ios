@@ -76,7 +76,7 @@ private extension RiskSettingSelectedViewModel {
 				action: { [weak self] _ in
 					self?.saveSettingAndGoBackToStart(enablingLock: true)
 				},
-				actionIsDestructive: true
+				isDestructive: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.verifier_risksetting_confirmation_dialog_negative_button()

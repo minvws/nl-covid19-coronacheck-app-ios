@@ -270,7 +270,7 @@ class InputRetrievalCodeViewController: BaseViewController {
 					self.sceneView.verificationEntryView.inputField.text = nil
 					self.viewModel.resendVerificationCodeButtonTapped()
 				},
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: viewModel.confirmResendVerificationAlertCancelButton ?? ""

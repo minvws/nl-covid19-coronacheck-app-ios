@@ -626,7 +626,7 @@ extension InputRetrievalCodeViewModel {
 				action: { [weak self] _ in
 					self?.fetchProviders(requestToken, verificationCode: verificationCode)
 				},
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.generalClose()

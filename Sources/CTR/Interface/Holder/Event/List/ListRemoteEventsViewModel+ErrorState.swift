@@ -21,8 +21,8 @@ extension ListRemoteEventsViewModel {
 				action: { _ in
 					onReplace()
 				},
-				actionIsDestructive: true,
-				actionIsPreferred: true
+				isDestructive: true,
+				isPreferred: true
 				
 			),
 			cancelAction: AlertContent.Action(
@@ -44,7 +44,7 @@ extension ListRemoteEventsViewModel {
 				action: { [weak self] _ in
 					self?.userWantsToMakeQR()
 				},
-				actionIsPreferred: true
+				isPreferred: true
 				
 			),
 			cancelAction: AlertContent.Action(
@@ -64,7 +64,7 @@ extension ListRemoteEventsViewModel {
 				action: { [weak self] _ in
 					self?.userWantsToMakeQR()
 				},
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.generalClose()

@@ -219,7 +219,7 @@ class AboutThisAppViewModel: Logging {
 				action: { [weak self] _ in
 					self?.wipePersistedData()
 				},
-				actionIsDestructive: true
+				isDestructive: true
 			),
 			cancelAction: AlertContent.Action(title: L.general_cancel())
 		)

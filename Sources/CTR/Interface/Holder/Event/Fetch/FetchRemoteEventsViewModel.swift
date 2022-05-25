@@ -180,7 +180,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			subTitle: eventMode.alertBody,
 			okAction: AlertContent.Action(
 				title: L.holderVaccinationAlertContinue(),
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.holderVaccinationAlertStop(),
@@ -620,7 +620,7 @@ private extension FetchRemoteEventsViewModel {
 				action: { [weak self] _ in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
-				actionIsPreferred: true
+				isPreferred: true
 			)
 		)
 	}
@@ -733,7 +733,7 @@ private extension FetchRemoteEventsViewModel {
 					guard let self = self else { return }
 					self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
 				},
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.generalClose(),

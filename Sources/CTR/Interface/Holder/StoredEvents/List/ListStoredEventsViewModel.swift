@@ -289,11 +289,11 @@ class ListStoredEventsViewModel: Logging {
 					self?.viewState = .loading(content: Content(title: L.holder_storedEvents_eraseEvents_title()))
 					self?.removeEventGroup(objectID: objectID)
 				},
-				actionIsDestructive: true
+				isDestructive: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.general_cancel(),
-				actionIsPreferred: true
+				isPreferred: true
 			)
 		)
 	}
@@ -359,7 +359,7 @@ class ListStoredEventsViewModel: Logging {
 				action: { [weak self] _ in
 					self?.sendEventsToTheSigner()
 				},
-				actionIsPreferred: true
+				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
 				title: L.generalClose(),
