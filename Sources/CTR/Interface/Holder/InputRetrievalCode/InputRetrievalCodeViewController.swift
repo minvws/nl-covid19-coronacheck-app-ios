@@ -264,7 +264,7 @@ class InputRetrievalCodeViewController: BaseViewController {
 			title: title,
 			subTitle: subTitle,
 			cancelAction: nil,
-			cancelTitle: viewModel.confirmResendVerificationAlertCancelButton,
+			cancelTitle: viewModel.confirmResendVerificationAlertCancelButton ?? "",
 			okAction: { [weak self] _ in
 				guard let self = self else { return }
 				self.sceneView.verificationEntryView.inputField.text = nil

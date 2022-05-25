@@ -243,13 +243,10 @@ class AboutThisAppViewModel: Logging {
 		alert = AlertContent(
 			title: "Disclosure policy updated",
 			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
+			okTitle: L.generalOk(),
 			okAction: { [weak self] _ in
 				self?.outcomeHandler(.coordinatorShouldRestart)
-			},
-			okTitle: L.generalOk(),
-			okActionIsDestructive: false
+			}
 		)
 	}
 }

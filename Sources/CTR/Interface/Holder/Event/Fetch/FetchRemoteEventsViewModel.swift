@@ -612,12 +612,10 @@ private extension FetchRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: nil,
+			okTitle: L.generalClose(),
 			okAction: { _ in
 				self.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
-			okTitle: L.generalClose(),
 			okActionIsPreferred: true
 		)
 	}
