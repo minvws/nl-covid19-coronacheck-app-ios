@@ -101,24 +101,6 @@ class BaseViewController: UIViewController {
 		)
 		navigationItem.leftBarButtonItem = .create(config)
 	}
-
-	/// Show alert
-	func showError(_ title: String = L.generalErrorTitle(), message: String) {
-
-		let alertController = UIAlertController(
-			title: title,
-			message: message,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.generalOk(),
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
-	}
 }
 
 private extension BaseViewController {
