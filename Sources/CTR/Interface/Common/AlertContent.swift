@@ -18,56 +18,45 @@ struct AlertContent {
 		var actionIsPreferred: Bool = false
 	}
 	
-	init(
-		title: String,
-		subTitle: String,
-		cancelAction: ((UIAlertAction) -> Void)? = nil,
-		cancelTitle: String, cancelActionIsDestructive: Bool = false,
-		cancelActionIsPreferred: Bool = false,
-		okAction: ((UIAlertAction) -> Void)? = nil,
-		okTitle: String,
-		okActionIsDestructive: Bool = false,
-		okActionIsPreferred: Bool = false
-	) {
-		self.title = title
-		self.subTitle = subTitle
-		self.okAction = Action(title: okTitle, action: okAction, actionIsDestructive: okActionIsDestructive, actionIsPreferred: okActionIsPreferred)
-		self.cancelAction = Action(title: cancelTitle, action: cancelAction, actionIsDestructive: cancelActionIsDestructive, actionIsPreferred: cancelActionIsPreferred)
-//		self.cancelAction = cancelAction
-//		self.cancelTitle = cancelTitle
-//		self.cancelActionIsDestructive = cancelActionIsDestructive
-//		self.cancelActionIsPreferred = cancelActionIsPreferred
-//		self.okAction = okAction
-//		self.okTitle = okTitle
-//		self.okActionIsDestructive = okActionIsDestructive
-//		self.okActionIsPreferred = okActionIsPreferred
-	}
-	
-	private (set) var title: String
-	private (set) var subTitle: String
-//	private (set) var cancelAction: ((UIAlertAction) -> Void)?
-//	private (set) var cancelTitle: String?
-//	private (set) var cancelActionIsDestructive: Bool = false
-//	private (set) var cancelActionIsPreferred: Bool = false
-//	private (set) var okAction: ((UIAlertAction) -> Void)?
-//	private (set) var okTitle: String
-//	private (set) var okActionIsDestructive: Bool = false
-//	private (set) var okActionIsPreferred: Bool = false
-	private (set) var okAction: AlertContent.Action
-	private (set) var cancelAction: AlertContent.Action?
-
-//	init(title: String, subTitle: String, okTitle: String, okAction: ((UIAlertAction) -> Void)? = nil, okActionIsPreferred: Bool = false) {
+//	init(
+//		title: String,
+//		subTitle: String,
+//		cancelAction: ((UIAlertAction) -> Void)? = nil,
+//		cancelTitle: String, cancelActionIsDestructive: Bool = false,
+//		cancelActionIsPreferred: Bool = false,
+//		okAction: ((UIAlertAction) -> Void)? = nil,
+//		okTitle: String,
+//		okActionIsDestructive: Bool = false,
+//		okActionIsPreferred: Bool = false
+//	) {
 //		self.title = title
 //		self.subTitle = subTitle
+//		self.okAction = Action(title: okTitle, action: okAction, actionIsDestructive: okActionIsDestructive, actionIsPreferred: okActionIsPreferred)
+//		self.cancelAction = Action(title: cancelTitle, action: cancelAction, actionIsDestructive: cancelActionIsDestructive, actionIsPreferred: cancelActionIsPreferred)
+////		self.cancelAction = cancelAction
+////		self.cancelTitle = cancelTitle
+////		self.cancelActionIsDestructive = cancelActionIsDestructive
+////		self.cancelActionIsPreferred = cancelActionIsPreferred
 ////		self.okAction = okAction
 ////		self.okTitle = okTitle
+////		self.okActionIsDestructive = okActionIsDestructive
 ////		self.okActionIsPreferred = okActionIsPreferred
 //	}
 	
-	init(title: String, subTitle: String, okAction: AlertContent.Action) {
+	private (set) var title: String
+	private (set) var subTitle: String
+	private (set) var okAction: AlertContent.Action
+	private (set) var cancelAction: AlertContent.Action?
+
+	init(
+		title: String,
+		subTitle: String,
+		okAction: AlertContent.Action,
+		cancelAction: AlertContent.Action? = nil) {
 		self.title = title
 		self.subTitle = subTitle
 		self.okAction = okAction
+		self.cancelAction = cancelAction
 	}
 }
 

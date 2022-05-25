@@ -85,19 +85,22 @@ class ListRemoteEventsViewModel: Logging {
 	}
 
 	func warnBeforeGoBack() {
-
+		
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode.alertBody,
-			cancelAction: { [weak self] _ in
-				self?.goBack()
-			},
-			cancelTitle: L.holderVaccinationAlertStop(),
-			cancelActionIsDestructive: true,
-			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue(),
-			okActionIsPreferred: true
- 		)
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationAlertContinue(),
+				actionIsPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationAlertStop(),
+				action: { [weak self] _ in
+					self?.goBack()
+				},
+				actionIsDestructive: true
+			)
+		)
 	}
 
 	func goBack() {

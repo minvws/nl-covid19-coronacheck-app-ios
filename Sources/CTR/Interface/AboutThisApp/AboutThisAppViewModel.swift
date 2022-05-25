@@ -214,13 +214,14 @@ class AboutThisAppViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderCleardataAlertTitle(),
 			subTitle: L.holderCleardataAlertSubtitle(),
-			cancelAction: nil,
-			cancelTitle: L.general_cancel(),
-			okAction: { [weak self] _ in
-				self?.wipePersistedData()
-			},
-			okTitle: L.holderCleardataAlertRemove(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.holderCleardataAlertRemove(),
+				action: { [weak self] _ in
+					self?.wipePersistedData()
+				},
+				actionIsDestructive: true
+			),
+			cancelAction: AlertContent.Action(title: L.general_cancel())
 		)
 	}
 

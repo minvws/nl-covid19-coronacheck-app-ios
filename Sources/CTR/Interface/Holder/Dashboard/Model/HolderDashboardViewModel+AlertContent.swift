@@ -13,14 +13,18 @@ extension AlertContent {
 		AlertContent(
 			title: L.holderDashboardStrippenExpiredNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiredNointernetAlertMessage(),
-			cancelAction: { _ in
-				strippenRefresher.userDismissedALoadingError()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { _ in
-				strippenRefresher.load()
-			},
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { _ in
+					strippenRefresher.load()
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { _ in
+					strippenRefresher.userDismissedALoadingError()
+				}
+			)
 		)
 	}
 
@@ -37,14 +41,18 @@ extension AlertContent {
 		return AlertContent(
 			title: L.holderDashboardStrippenExpiringNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(localizedTimeRemainingUntilExpiry),
-			cancelAction: { _ in
-				strippenRefresher.userDismissedALoadingError()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { _ in
-				strippenRefresher.load()
-			},
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { _ in
+					strippenRefresher.load()
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { _ in
+					strippenRefresher.userDismissedALoadingError()
+				}
+			)
 		)
 	}
 }

@@ -263,15 +263,18 @@ class InputRetrievalCodeViewController: BaseViewController {
 		let alert = AlertContent(
 			title: title,
 			subTitle: subTitle,
-			cancelAction: nil,
-			cancelTitle: viewModel.confirmResendVerificationAlertCancelButton ?? "",
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.sceneView.verificationEntryView.inputField.text = nil
-				self.viewModel.resendVerificationCodeButtonTapped()
-			},
-			okTitle: okTitle,
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: okTitle,
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.sceneView.verificationEntryView.inputField.text = nil
+					self.viewModel.resendVerificationCodeButtonTapped()
+				},
+				actionIsPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: viewModel.confirmResendVerificationAlertCancelButton ?? ""
+			)
 		)
 
 		showAlert(alert)

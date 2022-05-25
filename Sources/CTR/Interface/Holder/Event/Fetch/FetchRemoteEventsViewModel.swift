@@ -178,13 +178,16 @@ final class FetchRemoteEventsViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode.alertBody,
-			cancelAction: { _ in
-				self.goBack()
-			},
-			cancelTitle: L.holderVaccinationAlertStop(),
-			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationAlertContinue(),
+				actionIsPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationAlertStop(),
+				action: { _ in
+					self.goBack()
+				}
+			)
 		)
 	}
 
@@ -724,16 +727,20 @@ private extension FetchRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { _ in
-				self.coordinator?.fetchEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+				},
+				actionIsPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { _ in
+					self.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			)
 		)
 	}
 }
