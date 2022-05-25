@@ -71,7 +71,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -97,7 +97,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -121,7 +121,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -145,7 +145,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -169,7 +169,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -193,7 +193,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -219,7 +219,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -245,7 +245,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -269,7 +269,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -293,7 +293,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -317,7 +317,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -343,7 +343,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -369,7 +369,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
@@ -395,7 +395,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
@@ -417,7 +417,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
@@ -439,7 +439,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// When
 		let group = try XCTUnwrap(groups.first)
 		group.action?()
-		sut.alert?.okAction?(UIAlertAction())
+		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
