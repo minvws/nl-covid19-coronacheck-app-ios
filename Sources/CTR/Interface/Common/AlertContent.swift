@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import CloudKit
 
 struct AlertContent {
 	
@@ -18,36 +17,11 @@ struct AlertContent {
 		var actionIsPreferred: Bool = false
 	}
 	
-//	init(
-//		title: String,
-//		subTitle: String,
-//		cancelAction: ((UIAlertAction) -> Void)? = nil,
-//		cancelTitle: String, cancelActionIsDestructive: Bool = false,
-//		cancelActionIsPreferred: Bool = false,
-//		okAction: ((UIAlertAction) -> Void)? = nil,
-//		okTitle: String,
-//		okActionIsDestructive: Bool = false,
-//		okActionIsPreferred: Bool = false
-//	) {
-//		self.title = title
-//		self.subTitle = subTitle
-//		self.okAction = Action(title: okTitle, action: okAction, actionIsDestructive: okActionIsDestructive, actionIsPreferred: okActionIsPreferred)
-//		self.cancelAction = Action(title: cancelTitle, action: cancelAction, actionIsDestructive: cancelActionIsDestructive, actionIsPreferred: cancelActionIsPreferred)
-////		self.cancelAction = cancelAction
-////		self.cancelTitle = cancelTitle
-////		self.cancelActionIsDestructive = cancelActionIsDestructive
-////		self.cancelActionIsPreferred = cancelActionIsPreferred
-////		self.okAction = okAction
-////		self.okTitle = okTitle
-////		self.okActionIsDestructive = okActionIsDestructive
-////		self.okActionIsPreferred = okActionIsPreferred
-//	}
-	
 	private (set) var title: String
 	private (set) var subTitle: String
 	private (set) var okAction: AlertContent.Action
 	private (set) var cancelAction: AlertContent.Action?
-
+	
 	init(
 		title: String,
 		subTitle: String,
