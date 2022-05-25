@@ -50,8 +50,10 @@ extension UIViewController {
 			message: content.subTitle,
 			preferredStyle: .alert
 		)
-		alertController.addAlertAction(action: content.okAction, style: .default)
-		alertController.addAlertAction(action: content.cancelAction, style: .cancel)
+		alertController.addAlertAction(action: content.okAction)
+		if let cancelAction = content.cancelAction {
+			alertController.addAlertAction(action: cancelAction, style: .cancel)
+		}
 
 		present(alertController, animated: true, completion: nil)
 	}
@@ -59,17 +61,16 @@ extension UIViewController {
 
 extension UIAlertController {
 	
-	func addAlertAction(action: AlertContent.Action?, style: UIAlertAction.Style) {
-		if let action = action {
-			let alertAction = UIAlertAction(
-				title: action.title,
-				style: action.isDestructive ? .destructive : style,
-				handler: action.action
-			)
-			addAction(alertAction)
-			if action.isPreferred {
-				preferredAction = alertAction
-			}
+	func addAlertAction(action: AlertContent.Action, style: UIAlertAction.Style = .default) {
+		
+		let alertAction = UIAlertAction(
+			title: action.title,
+			style: action.isDestructive ? .destructive : style,
+			handler: action.action
+		)
+		addAction(alertAction)
+		if action.isPreferred {
+			preferredAction = alertAction
 		}
 	}
 }

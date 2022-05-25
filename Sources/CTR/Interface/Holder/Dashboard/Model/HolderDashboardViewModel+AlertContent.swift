@@ -10,21 +10,11 @@ import Foundation
 extension AlertContent {
 
 	static func strippenExpiredWithNoInternet(strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
-		AlertContent(
+		
+		return strippenExpiredWithNoInternet(
 			title: L.holderDashboardStrippenExpiredNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiredNointernetAlertMessage(),
-			okAction: AlertContent.Action(
-				title: L.generalRetry(),
-				action: { _ in
-					strippenRefresher.load()
-				}
-			),
-			cancelAction: AlertContent.Action(
-				title: L.generalClose(),
-				action: { _ in
-					strippenRefresher.userDismissedALoadingError()
-				}
-			)
+			strippenRefresher: strippenRefresher
 		)
 	}
 
@@ -37,10 +27,21 @@ extension AlertContent {
 				return DateFormatter.Relative.hoursMinutes.string(from: now, to: expiryDate) ?? "-"
 			}
 		}()
-
-		return AlertContent(
+		
+		return strippenExpiredWithNoInternet(
 			title: L.holderDashboardStrippenExpiringNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(localizedTimeRemainingUntilExpiry),
+			strippenRefresher: strippenRefresher
+		)
+	}
+	
+	static func strippenExpiredWithNoInternet(
+		title: String,
+		subTitle: String,
+		strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
+		AlertContent(
+			title: title,
+			subTitle: subTitle,
 			okAction: AlertContent.Action(
 				title: L.generalRetry(),
 				action: { _ in
