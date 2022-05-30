@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -89,9 +89,8 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
-			status: .complete,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .complete
 		)
 	}
 	
@@ -99,19 +98,8 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
-			status: .pending,
-			result: nil
-		)
-	}
-	
-	static var fakePendingV2: EventFlow.EventResultWrapper {
-		EventFlow.EventResultWrapper(
-			providerIdentifier: "",
-			protocolVersion: "2.0",
-			identity: nil,
-			status: .pending,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .pending
 		)
 	}
 
@@ -119,9 +107,8 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
-			status: .blocked,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .blocked
 		)
 	}
 	
@@ -129,9 +116,8 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
-			status: .verificationRequired,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .verificationRequired
 		)
 	}
 	
@@ -139,9 +125,8 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
-			status: .invalid,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .invalid
 		)
 	}
 	
@@ -149,9 +134,8 @@ extension EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
 			protocolVersion: "",
-			identity: nil,
-			status: .unknown,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .unknown
 		)
 	}
 
@@ -160,7 +144,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.vaccinationEvent]
 	)
 	
@@ -169,7 +152,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.boosterEvent]
 	)
 	
@@ -178,7 +160,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.vaccinationEvent, EventFlow.Event.boosterEvent]
 	)
 
@@ -187,7 +168,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.recoveryEvent]
 	)
 
@@ -196,7 +176,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.positiveTestEvent]
 	)
 	
@@ -205,7 +184,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.expiredPositiveTestEvent]
 	)
 
@@ -214,7 +192,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.negativeTestEvent]
 	)
 	
@@ -223,7 +200,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.paperProofEvent]
 	)
 	
@@ -232,7 +208,6 @@ extension EventFlow.EventResultWrapper {
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
-		result: nil,
 		events: [EventFlow.Event.vaccinationAssessmentEvent]
 	)
 	
@@ -241,8 +216,7 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Test", lastName: "de Tester", birthDateString: "1990-12-12"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
 	
@@ -251,8 +225,7 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Rool", lastName: "Paap", birthDateString: "1970-05-27"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
 	
@@ -261,8 +234,7 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "rool", lastName: "paap", birthDateString: "1970-05-27"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
 	
@@ -271,8 +243,7 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Henk", lastName: "Paap", birthDateString: "1970-05-27"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
 	
@@ -281,8 +252,7 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "henk", lastName: "paap", birthDateString: "1970-05-27"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
 	
@@ -291,8 +261,7 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Ådne", lastName: "Paap", birthDateString: "1970-05-27"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
 	
@@ -301,74 +270,9 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Ægir", lastName: "Paap", birthDateString: "1970-05-27"),
-			status: .complete,
-			result: nil
+			status: .complete
 		)
 	}
-	
-	static var fakeWithV2Identity: EventFlow.EventResultWrapper {
-		EventFlow.EventResultWrapper(
-			providerIdentifier: "CoronaCheck",
-			protocolVersion: "2.0",
-			identity: nil,
-			status: .complete,
-			result: TestResult(
-				unique: "test",
-				sampleDate: "2021-01-01T12:00:00",
-				testType: "PCR",
-				negativeResult: true,
-				holder: TestHolderIdentity(
-					firstNameInitial: "T",
-					lastNameInitial: "D",
-					birthDay: "12",
-					birthMonth: "12"
-				)
-			)
-		)
-	}
-	
-	static var fakeWithV2IdentityAlternative: EventFlow.EventResultWrapper {
-		EventFlow.EventResultWrapper(
-			providerIdentifier: "CoronaCheck",
-			protocolVersion: "2.0",
-			identity: nil,
-			status: .complete,
-			result: TestResult(
-				unique: "test",
-				sampleDate: "2021-01-01T12:00:00",
-				testType: "PCR",
-				negativeResult: true,
-				holder: TestHolderIdentity(
-					firstNameInitial: "H",
-					lastNameInitial: "P",
-					birthDay: "27",
-					birthMonth: "5"
-				)
-			)
-		)
-	}
-	
-	static var fakeWithV2IdentityAlternativeLowerCase: EventFlow.EventResultWrapper {
-		EventFlow.EventResultWrapper(
-			providerIdentifier: "CoronaCheck",
-			protocolVersion: "2.0",
-			identity: nil,
-			status: .complete,
-			result: TestResult(
-				unique: "test",
-				sampleDate: "2021-01-01T12:00:00",
-				testType: "PCR",
-				negativeResult: true,
-				holder: TestHolderIdentity(
-					firstNameInitial: "h",
-					lastNameInitial: "p",
-					birthDay: "27",
-					birthMonth: "5"
-				)
-			)
-		)
-	}
-	
 }
 
 extension RequestToken {
@@ -800,18 +704,6 @@ extension RemoteGreenCards.Response {
 			]
 		)
 	}
-	
-	static var domesticlTestV2: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: []
-		)
-	}
 
 	static var domesticAndInternationalExpiredRecoveryValidVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
@@ -1095,24 +987,6 @@ extension SignedResponse {
 	}
 }
 
-extension TestResult {
-
-	static var negativeResult: TestResult {
-		TestResult(
-			unique: "test",
-			sampleDate: "2021-01-01T12:00:00",
-			testType: "PCR",
-			negativeResult: true,
-			holder: TestHolderIdentity(
-				firstNameInitial: "T",
-				lastNameInitial: "D",
-				birthDay: "12",
-				birthMonth: "12"
-			)
-		)
-	}
-}
-
 extension EuCredentialAttributes.TestEntry {
 
 	static var negativeTest: EuCredentialAttributes.TestEntry {
@@ -1272,20 +1146,6 @@ extension EventGroup {
 
 // Can't extend RemoteEvent, so this struct will have to do.
 struct FakeRemoteEvent {
-	
-	static var fakeRemoteEventNegativeTestV2: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeWithV2Identity,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-	
-	static var fakeRemoteEventPendingV2: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakePendingV2,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
 	
 	static var fakeRemoteEventVaccination: RemoteEvent {
 		RemoteEvent(

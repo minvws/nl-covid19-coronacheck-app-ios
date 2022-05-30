@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -47,7 +47,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 		self.sut.sceneView.noTestButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserHasNotBeenTested) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInfoAboutGettingTested) == true
 	}
 
 	func test_ggdbutton_tapped() {

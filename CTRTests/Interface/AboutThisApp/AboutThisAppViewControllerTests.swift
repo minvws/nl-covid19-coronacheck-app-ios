@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -15,8 +15,8 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
 	private var sut: AboutThisAppViewController!
-	private var coordinatorSpy: AboutThisAppViewModelCoordinatorSpy!
 	private var environmentSpies: EnvironmentSpies!
+	private var outcomes: [AboutThisAppViewModel.Outcome]!
 	
 	var window: UIWindow!
 	
@@ -24,12 +24,14 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
-		coordinatorSpy = AboutThisAppViewModelCoordinatorSpy()
 
+		outcomes = [AboutThisAppViewModel.Outcome]()
 		let viewModel = AboutThisAppViewModel(
-			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.holder
+			flavor: AppFlavor.holder,
+			outcomeHandler: { [unowned self] outcome in
+				self.outcomes.append(outcome)
+			}
 		)
 		
 		sut = AboutThisAppViewController(viewModel: viewModel)
@@ -70,9 +72,11 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		let viewModel = AboutThisAppViewModel(
-			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			outcomeHandler: { outcome in
+				self.outcomes.append(outcome)
+			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		
@@ -97,9 +101,11 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
-			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			outcomeHandler: { [unowned self] outcome in
+				self.outcomes.append(outcome)
+			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		
@@ -122,9 +128,11 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
-			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			outcomeHandler: { [unowned self] outcome in
+				self.outcomes.append(outcome)
+			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
@@ -163,16 +171,19 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
-		expect(self.coordinatorSpy.invokedRestart) == true
+		expect(self.outcomes).to(haveCount(1))
+		expect(self.outcomes[0]) == .coordinatorShouldRestart
 	}
 	
 	func test_resetData_verifier() throws {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
-			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
-			flavor: AppFlavor.verifier
+			flavor: AppFlavor.verifier,
+			outcomeHandler: { [unowned self] outcome in
+				self.outcomes.append(outcome)
+			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
@@ -190,7 +201,8 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
-		expect(self.coordinatorSpy.invokedRestart) == true
+		expect(self.outcomes).to(haveCount(1))
+		expect(self.outcomes[0]) == .coordinatorShouldRestart
 	}
 	
 	func test_storedEventsOptionTapped_forHolder() {
@@ -202,6 +214,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedUserWishesToSeeStoredEvents) == true
+		expect(self.outcomes).to(haveCount(1))
+		expect(self.outcomes[0]) == .userWishesToSeeStoredEvents
 	}
 }

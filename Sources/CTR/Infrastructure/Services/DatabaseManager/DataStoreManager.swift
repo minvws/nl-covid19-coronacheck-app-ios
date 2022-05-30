@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -21,6 +21,8 @@ protocol DataStoreManaging {
 	/// Save the context, saves all pending changes.
 	/// - Parameter context: the context to be saved.
 	func save(_ context: NSManagedObjectContext)
+	
+	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 }
 
 class DataStoreManager: DataStoreManaging, Logging {
@@ -107,6 +109,19 @@ class DataStoreManager: DataStoreManaging, Logging {
 			if persistentContainer.viewContext != context {
 				persistentContainer.viewContext.refreshAllObjects()
 			}
+		}
+	}
+	
+	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
+
+		do {
+			let eventGroup = try managedObjectContext().existingObject(with: objectID)
+			managedObjectContext().delete(eventGroup)
+			save(managedObjectContext())
+			return .success(())
+			
+		} catch let error {
+			return .failure(error)
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -23,14 +23,14 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(4))
-		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.domesticCards[1]).toEventually(beCompleteYourVaccinationAssessmentCard(test: { message, buttonTitle, _ in
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[1]).toEventually(beCompleteYourVaccinationAssessmentCard(test: { message, buttonTitle, _ in
 			expect(message) == L.holder_dashboard_visitorpassincompletebanner_title()
 			expect(buttonTitle) == L.holder_dashboard_visitorpassincompletebanner_button_makecomplete()
 		}))
-		expect(self.sut.domesticCards[2]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards[3]).toEventually(beAddCertificateCard())
+		expect(self.sut.domesticCards.value[2]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
 	}
 	
 	func test_vaccinationassessment_domestic_shouldNotShow() {
@@ -42,9 +42,9 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
-		expect(self.sut.domesticCards).toEventually(haveCount(3))
-		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.domesticCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_vaccinationassessment_international_shouldShow() {
@@ -56,13 +56,13 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(3))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beVaccinationAssessmentInvalidOutsideNLCard(test: { message, buttonTitle, _ in
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beVaccinationAssessmentInvalidOutsideNLCard(test: { message, buttonTitle, _ in
 			expect(message) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
 			expect(buttonTitle) == L.general_readmore()
 		}))
-		expect(self.sut.internationalCards[2]).toEventually(beAddCertificateCard())
+		expect(self.sut.internationalCards.value[2]).toEventually(beAddCertificateCard())
 	}
 	
 	func test_vaccinationassessment_international_shouldNotShow() {
@@ -74,8 +74,8 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(2))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value).toEventually(haveCount(2))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
 	}
 }

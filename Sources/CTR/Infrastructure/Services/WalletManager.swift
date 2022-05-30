@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -58,7 +58,7 @@ protocol WalletManaging: AnyObject {
 	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
 	
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error>
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
@@ -201,9 +201,9 @@ class WalletManager: WalletManaging, Logging {
 		}
 	}
 	
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		
-		return EventGroupModel.delete(objectID)
+		dataStoreManager.delete(objectID)
 	}
 
 	func fetchSignedEvents() -> [String] {

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -258,8 +258,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
 			expect(content.body).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 920 000 429")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -282,7 +282,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
 			expect(content.body).toEventually(equal(L.generalErrorServerUnreachableErrorCode("i 920 000 005")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -336,8 +336,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
 			expect(content.body).toEventually(equal(L.holderErrorstateClientMessage("i 920 000 020")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -360,8 +360,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
 			expect(content.body).toEventually(equal(L.holderErrorstateServerMessage("i 920 000 500 99780")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -385,8 +385,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
 			expect(content.body).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 950 xxx 429")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -610,8 +610,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
 			expect(content.body).toEventually(equal(L.holderErrorstateTestMessage("i 950 xxx 403")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -658,8 +658,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
 			expect(content.body).toEventually(equal(L.holderErrorstateTestMessage("i 950 xxx 400")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -758,8 +758,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
 			expect(content.body).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 920 000 429")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))
@@ -1147,8 +1147,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
 			expect(content.body).toEventually(equal(L.holderErrorstateClientMessage("i 920 000 020")))
 			expect(content.primaryActionTitle).toEventually(equal(L.general_toMyOverview()))

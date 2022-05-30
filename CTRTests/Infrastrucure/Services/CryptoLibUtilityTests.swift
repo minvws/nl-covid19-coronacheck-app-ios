@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -17,6 +17,7 @@ class CryptoLibUtilityTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var reachabilitySpy: ReachabilitySpy!
 	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
+	private var fileStorageSpy: FileStorageSpy!
 
 	override func setUp() {
 
@@ -24,6 +25,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		networkSpy = NetworkSpy()
 		userSettingsSpy = UserSettingsSpy()
 		reachabilitySpy = ReachabilitySpy()
+		fileStorageSpy = FileStorageSpy()
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
@@ -34,7 +36,8 @@ class CryptoLibUtilityTests: XCTestCase {
 			userSettings: userSettingsSpy,
 			networkManager: networkSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			fileStorage: fileStorageSpy
 		)
 	}
 

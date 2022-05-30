@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -60,7 +60,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(false)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .failure(NSError(domain: "test error", code: 0))
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.preparingIssue(.error(statusCode: nil, response: nil, error: .invalidSignature))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -74,9 +74,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1110 000 062")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1110 000 062")
 	}
 	
 	// MARK: - prepare issue
@@ -86,7 +86,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.failedToParsePrepareIssue), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -100,9 +100,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 053")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 053")
 	}
 	
 	func test_removalVaccination_prepareIssue_invalidSignature() throws {
@@ -110,7 +110,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.preparingIssue(.error(statusCode: nil, response: nil, error: .invalidSignature))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -124,9 +124,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 020")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 020")
 	}
 	
 	func test_removalVaccination_prepareIssue_serverError() throws {
@@ -134,7 +134,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.preparingIssue(.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -148,9 +148,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1170 000 500 99702")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1170 000 500 99702")
 	}
 	
 	func test_removalVaccination_prepareIssue_serverBusy() throws {
@@ -158,7 +158,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.preparingIssue(.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -172,9 +172,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1170 000 429")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1170 000 429")
 	}
 	
 	func test_removalVaccination_prepareIssue_serverUnreachable() throws {
@@ -182,7 +182,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.preparingIssue(.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -196,9 +196,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1170 000 004")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1170 000 004")
 	}
 	
 	// MARK: - Commit Message
@@ -208,7 +208,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -222,9 +222,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 054")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 054")
 	}
 	
 	// MARK: - Signer
@@ -234,7 +234,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: nil, error: .invalidSignature))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -248,9 +248,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1180 000 020")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1180 000 020")
 	}
 	
 	func test_removalVaccination_signer_serverError() throws {
@@ -258,7 +258,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.credentials(.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -272,9 +272,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1180 000 500 99702")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateServerMessage("i 1180 000 500 99702")
 	}
 	
 	func test_removalVaccination_signer_serverBusy() throws {
@@ -282,7 +282,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.credentials(.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -296,9 +296,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1180 000 429")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.generalNetworkwasbusyTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalNetworkwasbusyErrorcode("i 1180 000 429")
 	}
 	
 	func test_removalVaccination_signer_serverUnreachable() throws {
@@ -306,7 +306,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -320,9 +320,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1180 000 004")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1180 000 004")
 	}
 	
 	// MARK: - Save GreenCards
@@ -332,7 +332,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.failedToSaveGreenCards), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -346,9 +346,9 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.title) == L.holderErrorstateTitle()
-		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1190 000 055")
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
+		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1190 000 055")
 	}
 	
 	// MARK: - No internet
@@ -358,7 +358,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: nil, error: .noInternetConnection))), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -372,7 +372,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
 	}
@@ -384,7 +384,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(RemoteGreenCards.Response.internationalVaccination), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -398,7 +398,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 	}
 	
 	func test_removalVaccination_didNotEvaluate() throws {
@@ -406,7 +406,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.didNotEvaluate), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -420,7 +420,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 	}
 	
 	func test_removalVaccination_noEvents() throws {
@@ -428,7 +428,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Given
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(true)
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.noSignedEvents), ())
 		setupSut()
 		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
@@ -442,7 +442,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		sut.alert?.okAction?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedDisplayError).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 	}
 	

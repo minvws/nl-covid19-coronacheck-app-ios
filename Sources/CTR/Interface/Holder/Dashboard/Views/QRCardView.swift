@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -128,8 +128,8 @@ class QRCardView: BaseView {
 	// MARK: - init
 
 	init(stackSize: Int) {
-		self.stackSize = stackSize
-		squashedCards = (0 ..< stackSize - 1).map { _ in UIView() }
+		self.stackSize = min(stackSize, 3)
+		squashedCards = (0 ..< self.stackSize - 1).map { _ in UIView() }
 
 		super.init(frame: .zero)
 
@@ -166,7 +166,7 @@ class QRCardView: BaseView {
 
 		super.setupViewHierarchy()
 		
-		addSubview(accessibilityRoleView)
+		accessibilityRoleView.embed(in: self)
 
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
@@ -212,10 +212,6 @@ class QRCardView: BaseView {
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 		
 		NSLayoutConstraint.activate([
-			accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor),
-			accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			
 			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),
@@ -414,6 +410,7 @@ class QRCardView: BaseView {
 
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 
@@ -428,6 +425,8 @@ class QRCardView: BaseView {
 	}
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 

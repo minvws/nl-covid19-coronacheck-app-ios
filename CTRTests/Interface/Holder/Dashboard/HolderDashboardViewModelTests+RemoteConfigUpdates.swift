@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -41,8 +41,8 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Assert
-		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
-		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.domesticCards.value[1]).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.internationalCards.value[1]).to(beConfigurationAlmostOutOfDateCard())
 
 		// only during .init
 		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerGetterCount) == 1
@@ -61,8 +61,8 @@ extension HolderDashboardViewModelTests {
 		almostOutOfDateObservatoryUpdates(true)
 		
 		// Assert
-		expect(self.sut.domesticCards[1]).to(beConfigurationAlmostOutOfDateCard())
-		expect(self.sut.internationalCards[1]).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.domesticCards.value[1]).to(beConfigurationAlmostOutOfDateCard())
+		expect(self.sut.internationalCards.value[1]).to(beConfigurationAlmostOutOfDateCard())
 
 		// only during .init
 		expect(self.configurationNotificationManagerSpy.invokedShouldShowAlmostOutOfDateBannerGetterCount) == 1
@@ -76,7 +76,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		// Act
-		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards[1] {
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.value[1] {
 			action()
 		}
 
@@ -92,7 +92,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		// Act
-		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards[1] {
+		if case let .configAlmostOutOfDate(_, _, action) = sut.domesticCards.value[1] {
 			action()
 		}
 
@@ -109,7 +109,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
 
 		// Assert
-		expect(self.sut.domesticCards[1]).toEventually(beRecommendedUpdateCard())
+		expect(self.sut.domesticCards.value[1]).toEventually(beRecommendedUpdateCard())
 	}
 	
 	func test_recommendUpdate_recommendedVersion_lowerActionVersion() {
@@ -121,7 +121,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
 		
 		// Assert
-		expect(self.sut.domesticCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_recommendUpdate_recommendedVersion_equalActionVersion() {
@@ -133,6 +133,6 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, appVersion: "1.1.0")
 		
 		// Assert
-		expect(self.sut.domesticCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 }

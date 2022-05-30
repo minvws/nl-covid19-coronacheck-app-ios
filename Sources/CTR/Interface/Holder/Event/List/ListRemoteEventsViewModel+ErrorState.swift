@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -98,11 +98,7 @@ extension ListRemoteEventsViewModel {
 			case .test:
 
 				if let identifier = remoteEvents.first?.wrapper.providerIdentifier {
-					if identifier.lowercased() == "ggd" {
-						return .ggdTest
-					} else {
-						return.commercialTest
-					}
+					return identifier.lowercased() == "ggd" ? .ggdTest : .commercialTest
 				}
 				return ErrorCode.Flow(value: "")
 		}

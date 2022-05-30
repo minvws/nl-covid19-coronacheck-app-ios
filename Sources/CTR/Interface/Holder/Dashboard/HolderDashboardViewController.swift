@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -58,17 +58,15 @@ class HolderDashboardViewController: BaseViewController {
 		let kind: Kind
 	}
 
-	let viewModel: HolderDashboardViewModel
+	let viewModel: HolderDashboardViewModelType
 
 	let sceneView = HolderDashboardView()
 
-	var screenCaptureInProgress = false
-	
 	private var didSetInitialStartingTabOnSceneView = false
 
 	// MARK: Initializers
 
-	init(viewModel: HolderDashboardViewModel) {
+	init(viewModel: HolderDashboardViewModelType) {
 
 		self.viewModel = viewModel
 
@@ -161,39 +159,39 @@ class HolderDashboardViewController: BaseViewController {
 	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
+		viewModel.title.observe { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
-		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
-			DispatchQueue.main.async {
+		viewModel.domesticCards.observe { [sceneView, weak self] cards in
+			performUIUpdate {
 				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
 			}
 		}
 		
-		viewModel.$internationalCards.binding = { [sceneView, weak self] cards in
-			DispatchQueue.main.async {
+		viewModel.internationalCards.observe { [sceneView, weak self] cards in
+			performUIUpdate {
 				self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
 			}
 		}
 		
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
-		viewModel.$shouldShowAddCertificateFooter.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
+		viewModel.primaryButtonTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
+		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
-		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
-			DispatchQueue.main.async {
+		viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
+			performUIUpdate {
 				self?.showAlert(alertContent)
 			}
 		}
 
-		viewModel.$selectedTab.binding = { [weak self, sceneView] region in
+		viewModel.selectedTab.observe { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
 			sceneView.selectTab(tab: region)
 		}
 		
-		viewModel.$shouldShowTabBar.binding = { [sceneView] in
+		viewModel.shouldShowTabBar.observe { [sceneView] in
 			sceneView.shouldShowTabBar = $0
 		}
 		
-		viewModel.$shouldShowOnlyInternationalPane.binding = { [sceneView] in
+		viewModel.shouldShowOnlyInternationalPane.observe { [sceneView] in
 			sceneView.shouldShowOnlyInternationalPane = $0
 		}
 	}

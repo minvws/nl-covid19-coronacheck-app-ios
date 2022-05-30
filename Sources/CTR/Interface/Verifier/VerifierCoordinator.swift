@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -263,13 +263,20 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 	
 	func navigateToAboutThisApp() {
-		let viewController = AboutThisAppViewController(
-			viewModel: AboutThisAppViewModel(
-				coordinator: self,
-				versionSupplier: versionSupplier,
-				flavor: AppFlavor.flavor
-			)
-		)
+		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
+			guard let self = self else { return }
+			switch outcome {
+				case let .openURL(url, inApp):
+					self.openUrl(url, inApp: inApp)
+				case .userWishesToOpenScanLog:
+					self.userWishesToOpenScanLog()
+				case .coordinatorShouldRestart:
+					self.restart()
+				case .userWishesToSeeStoredEvents:
+					break // - for holdercoordinator
+			}
+		}
+		let viewController = AboutThisAppViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

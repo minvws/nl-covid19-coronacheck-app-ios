@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -11,9 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OpenSSL : NSObject
 
-- (BOOL) validateSerialNumber: (uint64_t) serialNumber forCertificateData: (NSData *) certificatePemData;
-- (BOOL) validateSubjectKeyIdentifier: (NSData *) subjectKeyIdentifier forCertificateData: (NSData *) certificatePemData;
-- (BOOL) validateSubjectAlternativeDNSName: (NSString *) host forCertificateData: (NSData *) certificatePemData;
+- (BOOL) validateSerialNumber: (uint64_t) serialNumber
+		   forCertificateData: (NSData *) certificatePemData;
+
+- (BOOL) validateSubjectKeyIdentifier: (NSData *) subjectKeyIdentifier
+				   forCertificateData: (NSData *) certificatePemData;
+
+- (BOOL) validateSubjectAlternativeDNSName: (NSString *) host
+						forCertificateData: (NSData *) certificatePemData;
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
 				   contentData:(NSData *)contentData

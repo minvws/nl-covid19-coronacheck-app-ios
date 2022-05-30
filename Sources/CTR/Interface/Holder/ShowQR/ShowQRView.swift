@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -25,7 +25,7 @@ class ShowQRView: BaseView {
 			static var internationalSecurity: CGFloat {
 				SecurityAnimation.isWithinWinterPeriod ? 90 : 52
 			}
-            static var internationalSecurityExtraSafeAreaInset: CGFloat {
+			static var internationalSecurityExtraSafeAreaInset: CGFloat {
 				SecurityAnimation.isWithinWinterPeriod ? 60 : 20
 			}
 			static let returnToThirdPartyAppButton: CGFloat = 12
@@ -137,32 +137,17 @@ class ShowQRView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		setupContainerViewConstraints()
+		setupSecurityViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			// QR View
-			containerView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.Margin.edge
-			),
-			containerView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor
-			),
-			containerView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor
-			),
-			containerView.heightAnchor.constraint(equalTo: widthAnchor),
 
 			pageControl.topAnchor.constraint(
 				equalTo: navigationInfoView.bottomAnchor,
 				constant: ViewTraits.Spacing.buttonToPageControl
 			),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
-
-			// Security
-			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
-			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			returnToThirdPartyAppButton.topAnchor.constraint(
 				equalTo: containerView.bottomAnchor,
@@ -183,20 +168,50 @@ class ShowQRView: BaseView {
 				lessThanOrEqualTo: containerView.trailingAnchor
 			)
 		])
-
-		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
-			equalTo: bottomAnchor,
-			constant: ViewTraits.Margin.domesticSecurity
-		)
-		securityViewBottomConstraint?.isActive = true
-
 		bringSubviewToFront(containerView)
 		bringSubviewToFront(navigationInfoView)
 
 		setupScrollViewConstraints()
 	}
+	
+	private func setupContainerViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 
-	func setupScrollViewConstraints() {
+			// QR View
+			containerView.topAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.topAnchor,
+				constant: ViewTraits.Margin.edge
+			),
+			containerView.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor
+			),
+			containerView.trailingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.trailingAnchor
+			),
+			containerView.heightAnchor.constraint(equalTo: widthAnchor)
+		])
+	}
+
+	private func setupSecurityViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			// Security
+			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
+			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			{
+				let constraint = securityView.bottomAnchor.constraint(
+					equalTo: bottomAnchor,
+					constant: ViewTraits.Margin.domesticSecurity
+				)
+				securityViewBottomConstraint = constraint
+				return constraint
+			}()
+		])
+	}
+	
+	private func setupScrollViewConstraints() {
 
 		infoLabel.embed(
 			in: scrollContentView,
@@ -223,12 +238,12 @@ class ShowQRView: BaseView {
 		])
 		bringSubviewToFront(scrollView)
 	}
-    
-    override func safeAreaInsetsDidChange() {
-        super.safeAreaInsetsDidChange()
-        guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
-        securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
-    }
+	
+	override func safeAreaInsetsDidChange() {
+		super.safeAreaInsetsDidChange()
+		guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
+		securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+	}
 
 	@objc func didTapThirdPartyAppButton() {
 

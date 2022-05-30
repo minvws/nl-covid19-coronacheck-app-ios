@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -22,27 +22,27 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
 
 		// Assert
-		expect(self.sut.shouldShowTabBar) == false
-		expect(self.sut.shouldShowOnlyInternationalPane) == true
+		expect(self.sut.shouldShowTabBar.value) == false
+		expect(self.sut.shouldShowOnlyInternationalPane.value) == true
 		
-		expect(self.sut.internationalCards).toEventually(haveCount(3))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_emptyState_international_0G_message()
 			expect(buttonTitle) == L.holder_dashboard_international_0G_action_certificateNeeded()
 		}))
-		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
 			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
 			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
 		}))
-		expect(self.sut.internationalCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_zeroG_from1G_mutatesValuesCorrectly_viaViewWillAppear() {
 		
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G])
-		expect(self.sut.shouldShowTabBar) == true
-		expect(self.sut.shouldShowOnlyInternationalPane) == false
+		expect(self.sut.shouldShowTabBar.value) == true
+		expect(self.sut.shouldShowOnlyInternationalPane.value) == false
 
 		// Act
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = false
@@ -51,16 +51,16 @@ extension HolderDashboardViewModelTests {
 		sut.viewWillAppear()
 
 		// Assert
-		expect(self.sut.shouldShowTabBar).toEventually(beFalse())
-		expect(self.sut.shouldShowOnlyInternationalPane).toEventually(beTrue())
+		expect(self.sut.shouldShowTabBar.value).toEventually(beFalse())
+		expect(self.sut.shouldShowOnlyInternationalPane.value).toEventually(beTrue())
 	}
 	
 	func test_zeroG_from1G_mutatesValuesCorrectly_viaUserDefaults() {
 		
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G])
-		expect(self.sut.shouldShowTabBar) == true
-		expect(self.sut.shouldShowOnlyInternationalPane) == false
+		expect(self.sut.shouldShowTabBar.value) == true
+		expect(self.sut.shouldShowOnlyInternationalPane.value) == false
 		
 		// Act
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = false
@@ -69,8 +69,8 @@ extension HolderDashboardViewModelTests {
 		sut.userDefaultsDidChange()
 
 		// Assert
-		expect(self.sut.shouldShowTabBar).toEventually(beFalse())
-		expect(self.sut.shouldShowOnlyInternationalPane).toEventually(beTrue())
+		expect(self.sut.shouldShowTabBar.value).toEventually(beFalse())
+		expect(self.sut.shouldShowOnlyInternationalPane.value).toEventually(beTrue())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidDomesticButViewingInternationalTab_zeroG_shouldShowEmptyState() {
@@ -93,13 +93,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(3))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
 			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
 			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
 		}))
-		expect(self.sut.internationalCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_datasourceupdate_domesticExpiredButOnInternationalTab_zeroG_shouldShowEmptyState() {
@@ -117,13 +117,13 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(3))
-		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
 			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
 			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
 		}))
-		expect(self.sut.internationalCards[2]).toEventually(beEmptyStatePlaceholderImage())
+		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination_0G() {
@@ -160,14 +160,14 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards).toEventually(haveCount(7))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+		expect(self.sut.internationalCards.value).toEventually(haveCount(7))
+		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_filledState_international_0G_message()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards[1]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.general_vaccinationcertificate_0G()
@@ -181,7 +181,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.general_recoverycertificate_0G()
@@ -194,7 +194,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.internationalCards[4]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[4]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.general_testcertificate_0G()
@@ -207,7 +207,7 @@ extension HolderDashboardViewModelTests {
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-		expect(self.sut.internationalCards[5]).toEventually(beAddCertificateCard())
-		expect(self.sut.internationalCards[6]).toEventually(beRecommendCoronaMelderCard())
+		expect(self.sut.internationalCards.value[5]).toEventually(beAddCertificateCard())
+		expect(self.sut.internationalCards.value[6]).toEventually(beRecommendCoronaMelderCard())
 	}
 }
