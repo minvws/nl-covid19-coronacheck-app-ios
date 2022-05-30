@@ -13,7 +13,7 @@ protocol MappingManaging {
 
 	func getDisplayIssuer(_ issuer: String, country: String) -> String
 
-	func getBilingualDisplayCountry(_ country: String) -> String
+	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String
 	
 	func getDisplayCountry(_ country: String) -> String
 	
@@ -62,9 +62,9 @@ class MappingManager: MappingManaging, Logging {
 		return L.holderVaccinationAboutIssuer()
 	}
 
-	func getBilingualDisplayCountry(_ country: String) -> String {
+	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String {
 		guard ["NL", "NLD"].contains(country) else {
-			if "nl" == Locale.current.languageCode {
+			if "nl" == languageCode {
 				return (Locale.current.localizedString(forRegionCode: country) ?? country) + " / "
 				+ (Locale(identifier: "en_GB").localizedString(forRegionCode: country) ?? country)
 			} else {

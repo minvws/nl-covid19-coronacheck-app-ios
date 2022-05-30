@@ -53,6 +53,19 @@ class MappingManagerTests: XCTestCase {
 		expect(mapped).to(beNil())
 	}
 	
+	func test_providerIdentifierMapping_emptyMapping() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.providerIdentifiers = nil
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getProviderIdentifierMapping("Test")
+		
+		// Then
+		expect(mapped).to(beNil())
+	}
+	
 	// MARK: getDisplayIssuer
 	
 	func test_getDisplayIssuer() {
@@ -111,7 +124,7 @@ class MappingManagerTests: XCTestCase {
 		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
 		
 		// When
-		let mapped = sut.getBilingualDisplayCountry("NL")
+		let mapped = sut.getBilingualDisplayCountry("NL", languageCode: "nl")
 		
 		// Then
 		expect(mapped) == "Nederland / The Netherlands"
@@ -123,7 +136,7 @@ class MappingManagerTests: XCTestCase {
 		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
 		
 		// When
-		let mapped = sut.getBilingualDisplayCountry("NLD")
+		let mapped = sut.getBilingualDisplayCountry("NLD", languageCode: "nl")
 		
 		// Then
 		expect(mapped) == "Nederland / The Netherlands"
@@ -135,7 +148,7 @@ class MappingManagerTests: XCTestCase {
 		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
 		
 		// When
-		let mapped = sut.getBilingualDisplayCountry("DE")
+		let mapped = sut.getBilingualDisplayCountry("DE", languageCode: "nl")
 		
 		// Then
 		expect(mapped) == "Duitsland / Germany"
@@ -147,10 +160,82 @@ class MappingManagerTests: XCTestCase {
 		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
 		
 		// When
-		let mapped = sut.getBilingualDisplayCountry("BE")
+		let mapped = sut.getBilingualDisplayCountry("BE", languageCode: "nl")
 		
 		// Then
 		expect(mapped) == "België / Belgium"
+	}
+	
+	func test_getBilingualDisplayCountry_other() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getBilingualDisplayCountry("XX", languageCode: "nl")
+		
+		// Then
+		expect(mapped) == "XX / XX"
+	}
+	
+	func test_getBilingualDisplayCountry_nl_english() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getBilingualDisplayCountry("NL", languageCode: "en")
+		
+		// Then
+		expect(mapped) == "Nederland / The Netherlands"
+	}
+	
+	func test_getBilingualDisplayCountry_nld_english() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getBilingualDisplayCountry("NLD", languageCode: "en")
+		
+		// Then
+		expect(mapped) == "Nederland / The Netherlands"
+	}
+	
+	func test_getBilingualDisplayCountry_germany_english() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getBilingualDisplayCountry("DE", languageCode: "en")
+		
+		// Then
+		expect(mapped) == "Duitsland"
+	}
+	
+	func test_getBilingualDisplayCountry_belgium_english() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getBilingualDisplayCountry("BE", languageCode: "en")
+		
+		// Then
+		expect(mapped) == "België"
+	}
+	
+	func test_getBilingualDisplayCountry_other_english() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getBilingualDisplayCountry("XX", languageCode: "en")
+		
+		// Then
+		expect(mapped) == "XX"
 	}
 	
 	// MARK: - getDisplayCountry
@@ -201,6 +286,18 @@ class MappingManagerTests: XCTestCase {
 		
 		// Then
 		expect(mapped) == "België"
+	}
+	
+	func test_getDisplayCountry_other() {
+		
+		// Given
+		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		// When
+		let mapped = sut.getDisplayCountry("XX")
+		
+		// Then
+		expect(mapped) == "XX"
 	}
 	
 	// MARK: - getDisplayFacility
