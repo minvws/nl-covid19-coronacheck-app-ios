@@ -110,11 +110,7 @@ extension ListRemoteEventsViewModel {
 			case .test:
 
 				if let identifier = remoteEvents.first?.wrapper.providerIdentifier {
-					if identifier.lowercased() == "ggd" {
-						return .ggdTest
-					} else {
-						return.commercialTest
-					}
+					return identifier.lowercased() == "ggd" ? .ggdTest : .commercialTest
 				}
 				return ErrorCode.Flow(value: "")
 		}
