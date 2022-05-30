@@ -39,15 +39,15 @@ class MappingManagerSpy: MappingManaging {
 
 	var invokedGetBilingualDisplayCountry = false
 	var invokedGetBilingualDisplayCountryCount = 0
-	var invokedGetBilingualDisplayCountryParameters: (country: String, Void)?
-	var invokedGetBilingualDisplayCountryParametersList = [(country: String, Void)]()
+	var invokedGetBilingualDisplayCountryParameters: (country: String, languageCode: String?)?
+	var invokedGetBilingualDisplayCountryParametersList = [(country: String, languageCode: String?)]()
 	var stubbedGetBilingualDisplayCountryResult: String! = ""
 
-	func getBilingualDisplayCountry(_ country: String) -> String {
+	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String {
 		invokedGetBilingualDisplayCountry = true
 		invokedGetBilingualDisplayCountryCount += 1
-		invokedGetBilingualDisplayCountryParameters = (country, ())
-		invokedGetBilingualDisplayCountryParametersList.append((country, ()))
+		invokedGetBilingualDisplayCountryParameters = (country, languageCode)
+		invokedGetBilingualDisplayCountryParametersList.append((country, languageCode))
 		return stubbedGetBilingualDisplayCountryResult
 	}
 
@@ -189,19 +189,5 @@ class MappingManagerSpy: MappingManaging {
 		invokedGetVaccinationManufacturerParameters = (code, ())
 		invokedGetVaccinationManufacturerParametersList.append((code, ()))
 		return stubbedGetVaccinationManufacturerResult
-	}
-
-	var invokedGetNlTestType = false
-	var invokedGetNlTestTypeCount = 0
-	var invokedGetNlTestTypeParameters: (code: String?, Void)?
-	var invokedGetNlTestTypeParametersList = [(code: String?, Void)]()
-	var stubbedGetNlTestTypeResult: String!
-
-	func getNlTestType(_ code: String? ) -> String? {
-		invokedGetNlTestType = true
-		invokedGetNlTestTypeCount += 1
-		invokedGetNlTestTypeParameters = (code, ())
-		invokedGetNlTestTypeParametersList.append((code, ()))
-		return stubbedGetNlTestTypeResult
 	}
 }
