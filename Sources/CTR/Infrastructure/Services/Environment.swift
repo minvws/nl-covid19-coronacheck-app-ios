@@ -108,8 +108,7 @@ private let cryptoLibUtility = CryptoLibUtility(
 	networkManager: networkManager,
 	remoteConfigManager: remoteConfigManager,
 	reachability: try? Reachability(),
-	fileStorage: fileStorage,
-	flavor: AppFlavor.flavor
+	fileStorage: fileStorage
 )
 private let clockDeviationManager = ClockDeviationManager(
 	remoteConfigManager: remoteConfigManager,
