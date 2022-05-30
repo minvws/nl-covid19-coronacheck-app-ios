@@ -97,57 +97,115 @@ final class RiskSettingInstructionView: BaseView {
 	}
 	
 	override func setupViewConstraints() {
+
 		super.setupViewConstraints()
+
+		setupScrollViewConstraints()
+		setupFooterButtonViewConstraints()
+		setupTitleLabelViewConstraints()
+		setupHeaderLabelViewConstraints()
+		setupMoreButtonViewConstraints()
+		setupRiskSettingControlsViewConstraints()
+		setupErrorViewConstraints()
+	}
+	
+	func setupScrollViewConstraints() {
 		
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
-			
+			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
+		])
+	}
+	
+	func setupFooterButtonViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
-			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			
-			titleLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
-											constant: ViewTraits.Margin.top),
-			titleLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											 constant: ViewTraits.Margin.edge),
-			titleLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
-											  constant: -ViewTraits.Margin.edge),
-			titleLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-											  constant: -2 * ViewTraits.Margin.edge),
-			
-			headerLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-											 constant: ViewTraits.Spacing.titleToHeader),
-			headerLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											  constant: ViewTraits.Margin.edge),
-			headerLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
-											   constant: -ViewTraits.Margin.edge),
-			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
-											   constant: -2 * ViewTraits.Margin.edge),
-			
-			moreButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
-											constant: ViewTraits.Spacing.headerToMoreButton),
-			moreButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											 constant: ViewTraits.Margin.edge),
-			moreButton.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor,
-											  constant: -ViewTraits.Margin.edge),
-			
-			riskSettingControlsView.topAnchor.constraint(equalTo: moreButton.bottomAnchor,
-														 constant: ViewTraits.Spacing.moreButtonToControls),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
+	}
+	
+	func setupTitleLabelViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			titleLabel.topAnchor.constraint(
+				equalTo: scrollView.topAnchor,
+				constant: ViewTraits.Margin.top),
+			titleLabel.leftAnchor.constraint(
+				equalTo: scrollView.leftAnchor,
+				constant: ViewTraits.Margin.edge),
+			titleLabel.rightAnchor.constraint(
+				equalTo: scrollView.rightAnchor,
+				constant: -ViewTraits.Margin.edge),
+			titleLabel.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -2 * ViewTraits.Margin.edge)
+		])
+	}
+	
+	func setupHeaderLabelViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			headerLabel.topAnchor.constraint(
+				equalTo: titleLabel.bottomAnchor,
+				constant: ViewTraits.Spacing.titleToHeader),
+			headerLabel.leftAnchor.constraint(
+				equalTo: scrollView.leftAnchor,
+				constant: ViewTraits.Margin.edge),
+			headerLabel.rightAnchor.constraint(
+				equalTo: scrollView.rightAnchor,
+				constant: -ViewTraits.Margin.edge),
+			headerLabel.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -2 * ViewTraits.Margin.edge)
+		])
+	}
+	
+	func setupMoreButtonViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			moreButton.topAnchor.constraint(
+				equalTo: headerLabel.bottomAnchor,
+				constant: ViewTraits.Spacing.headerToMoreButton),
+			moreButton.leftAnchor.constraint(
+				equalTo: scrollView.leftAnchor,
+				constant: ViewTraits.Margin.edge),
+			moreButton.rightAnchor.constraint(
+				lessThanOrEqualTo: scrollView.rightAnchor,
+				constant: -ViewTraits.Margin.edge)
+		])
+	}
+	
+	func setupRiskSettingControlsViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			riskSettingControlsView.topAnchor.constraint(
+				equalTo: moreButton.bottomAnchor,
+				constant: ViewTraits.Spacing.moreButtonToControls),
 			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
 			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
-			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-			
-			errorView.topAnchor.constraint(equalTo: riskSettingControlsView.bottomAnchor,
-										   constant: ViewTraits.Spacing.controlsToErrorView),
-			errorView.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
-											constant: ViewTraits.Margin.edge),
-			errorView.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor,
-											 constant: -ViewTraits.Margin.edge),
-			errorView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
-											  constant: -ViewTraits.Margin.edge)
+			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+		])
+	}
+	
+	func setupErrorViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			errorView.topAnchor.constraint(
+				equalTo: riskSettingControlsView.bottomAnchor,
+				constant: ViewTraits.Spacing.controlsToErrorView),
+			errorView.leftAnchor.constraint(
+				equalTo: scrollView.leftAnchor,
+				constant: ViewTraits.Margin.edge),
+			errorView.rightAnchor.constraint(
+				lessThanOrEqualTo: scrollView.rightAnchor,
+				constant: -ViewTraits.Margin.edge),
+			errorView.bottomAnchor.constraint(
+				lessThanOrEqualTo: scrollView.bottomAnchor,
+				constant: -ViewTraits.Margin.edge)
 		])
 	}
 	
@@ -160,17 +218,19 @@ final class RiskSettingInstructionView: BaseView {
 	
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 kerning: ViewTraits.Title.kerning,
-															 textColor: C.black()!)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning,
+				textColor: C.black()!)
 		}
 	}
 	
 	var header: String? {
 		didSet {
-			headerLabel.attributedText = header?.setLineHeight(ViewTraits.Header.lineHeight,
-															   kerning: ViewTraits.Header.kerning,
-															   textColor: C.black()!)
+			headerLabel.attributedText = header?.setLineHeight(
+				ViewTraits.Header.lineHeight,
+				kerning: ViewTraits.Header.kerning,
+				textColor: C.black()!)
 		}
 	}
 	

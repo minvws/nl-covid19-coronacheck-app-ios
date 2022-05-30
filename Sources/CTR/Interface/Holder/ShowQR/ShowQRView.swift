@@ -137,32 +137,17 @@ class ShowQRView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		setupContainerViewConstraints()
+		setupSecurityViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			// QR View
-			containerView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.Margin.edge
-			),
-			containerView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor
-			),
-			containerView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor
-			),
-			containerView.heightAnchor.constraint(equalTo: widthAnchor),
 
 			pageControl.topAnchor.constraint(
 				equalTo: navigationInfoView.bottomAnchor,
 				constant: ViewTraits.Spacing.buttonToPageControl
 			),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
-
-			// Security
-			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
-			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			returnToThirdPartyAppButton.topAnchor.constraint(
 				equalTo: containerView.bottomAnchor,
@@ -183,19 +168,49 @@ class ShowQRView: BaseView {
 				lessThanOrEqualTo: containerView.trailingAnchor
 			)
 		])
-
-		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
-			equalTo: bottomAnchor,
-			constant: ViewTraits.Margin.domesticSecurity
-		)
-		securityViewBottomConstraint?.isActive = true
-
 		bringSubviewToFront(containerView)
 		bringSubviewToFront(navigationInfoView)
 
 		setupScrollViewConstraints()
 	}
+	
+	private func setupContainerViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 
+			// QR View
+			containerView.topAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.topAnchor,
+				constant: ViewTraits.Margin.edge
+			),
+			containerView.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor
+			),
+			containerView.trailingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.trailingAnchor
+			),
+			containerView.heightAnchor.constraint(equalTo: widthAnchor)
+		])
+	}
+
+	private func setupSecurityViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			// Security
+			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
+			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			{
+				let constraint = securityView.bottomAnchor.constraint(
+					equalTo: bottomAnchor,
+					constant: ViewTraits.Margin.domesticSecurity
+				)
+				securityViewBottomConstraint = constraint
+				return constraint
+			}()
+		])
+	}
+	
 	private func setupScrollViewConstraints() {
 
 		infoLabel.embed(
