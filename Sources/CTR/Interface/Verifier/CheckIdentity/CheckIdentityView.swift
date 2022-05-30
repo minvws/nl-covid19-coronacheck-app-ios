@@ -122,14 +122,13 @@ final class CheckIdentityView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		
-		setupLabelStackViewConstraints()
+		setupScrollViewConstraints()
 		setupIdentityViewConstraints()
 		setupLabelStackViewConstraints()
 		setupButtonViewConstraints()
 	}
 
-	private func setupViewScrollViewConstraints() {
+	private func setupScrollViewConstraints() {
 		
 		NSLayoutConstraint.activate([
 			// Scroll view
