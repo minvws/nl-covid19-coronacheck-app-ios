@@ -90,6 +90,7 @@ final class CheckIdentityView: BaseView {
 	
 	/// Setup the views
 	override func setupViews() {
+		
 		super.setupViews()
 		
 		backgroundColor = C.grey5()
@@ -104,6 +105,7 @@ final class CheckIdentityView: BaseView {
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
+		
 		super.setupViewHierarchy()
 
 		addSubview(scrollView)
@@ -121,8 +123,15 @@ final class CheckIdentityView: BaseView {
 
 		super.setupViewConstraints()
 		
+		setupLabelStackViewConstraints()
+		setupIdentityViewConstraints()
+		setupLabelStackViewConstraints()
+		setupButtonViewConstraints()
+	}
+
+	private func setupViewScrollViewConstraints() {
+		
 		NSLayoutConstraint.activate([
-			
 			// Scroll view
 			scrollView.topAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.topAnchor,
@@ -130,8 +139,13 @@ final class CheckIdentityView: BaseView {
 			),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
-
+			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor)
+		])
+	}
+	
+	private func setupIdentityViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			// Identity
 			identityView.topAnchor.constraint(
 				equalTo: scrollView.topAnchor,
@@ -148,8 +162,13 @@ final class CheckIdentityView: BaseView {
 			identityView.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
 				constant: -ViewTraits.Margin.identitySide * 2
-			),
-			
+			)
+		])
+	}
+
+	private func setupLabelStackViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			// Check identity label
 			labelStackView.topAnchor.constraint(
 				equalTo: identityView.bottomAnchor,
@@ -167,8 +186,13 @@ final class CheckIdentityView: BaseView {
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
-			labelStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			
+			labelStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+		])
+	}
+	
+	private func setupButtonViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			// Secondary button
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			
@@ -254,10 +278,11 @@ final class CheckIdentityView: BaseView {
 	
 	var checkIdentity: String? {
 		didSet {
-			checkIdentityLabel.attributedText = checkIdentity?.setLineHeight(ViewTraits.Label.lineHeight,
-																			 alignment: .center,
-																			 kerning: ViewTraits.Label.kerning,
-																			 textColor: C.secondaryText()!)
+			checkIdentityLabel.attributedText = checkIdentity?.setLineHeight(
+				ViewTraits.Label.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Label.kerning,
+				textColor: C.secondaryText()!)
 		}
 	}
 	
@@ -269,10 +294,11 @@ final class CheckIdentityView: BaseView {
 	
 	var dccScanned: String? {
 		didSet {
-			dccScannedLabel.attributedText = dccScanned?.setLineHeight(ViewTraits.Label.lineHeight,
-																	   alignment: .center,
-																	   kerning: ViewTraits.Label.kerning,
-																	   textColor: C.secondaryText()!)
+			dccScannedLabel.attributedText = dccScanned?.setLineHeight(
+				ViewTraits.Label.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Label.kerning,
+				textColor: C.secondaryText()!)
 		}
 	}
 	
