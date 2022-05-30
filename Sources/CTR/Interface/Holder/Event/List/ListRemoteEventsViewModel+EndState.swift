@@ -20,9 +20,7 @@ extension ListRemoteEventsViewModel {
 				primaryActionTitle: primaryActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
+				}
 			)
 		)
 	}
