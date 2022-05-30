@@ -14,6 +14,13 @@ extension BaseTest {
 		app.tapButton("Vaccinatie of test toevoegen")
 	}
 	
+	func addScannedQR() {
+		app.tapButton("Open menu")
+		app.tapButton("Coronabewijs inscannen")
+		app.tapButton("Start scannen")
+		app.tapButton("Bewijs toevoegen")
+	}
+	
 	func addVaccinationCertificate(for person: TestPerson, combinedWithPositiveTest: Bool = false) {
 		addEvent()
 		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
@@ -49,7 +56,7 @@ extension BaseTest {
 		
 		let textField = safari.webViews.textFields.firstMatch.assertExistence()
 		textField.clearText()
-		textField.typeText(person.bsn)
+		textField.typeText(person.bsn!)
 		makeScreenShot(name: "BSN typed")
 		
 		let submit = safari.webViews.staticTexts["Login / Submit"].assertExistence()

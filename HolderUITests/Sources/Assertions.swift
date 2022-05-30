@@ -189,7 +189,7 @@ extension BaseTest {
 		for (index, dose) in doses.reversed().enumerated() {
 			card(of: .vaccination).containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index)))
 		}
-		card(of: .vaccination).textExists(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
+		card(of: .vaccination).containsText("Bekijk QR")
 	}
 	
 	func assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: Int) {
@@ -234,7 +234,15 @@ extension BaseTest {
 			app.textExists("Over je dosis " + dose)
 			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
-			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true))
+			
+			var vacDate: String
+			if let personVacDate = person.vacDate {
+				vacDate = formattedDate(of: personVacDate, short: true)
+			} else {
+				vacDate = formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true)
+			}
+			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vacDate)
+			
 			closeQRDetails()
 			
 			if index != doses.indices.last {
@@ -270,9 +278,13 @@ extension BaseTest {
 	}
 	
 	private func openQRDetails(for person: TestPerson) {
-		app.tapButton("Details")
+		openQRDetails()
 		app.labelValuePairExist(label: "Naam / Name:", value: person.name)
 		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
+	}
+	
+	private func openQRDetails() {
+		app.tapButton("Details")
 	}
 	
 	private func closeQRDetails() {
