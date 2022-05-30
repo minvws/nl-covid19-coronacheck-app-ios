@@ -1014,9 +1014,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.euTestTypes = [
-			.init(code: "LP6464-4", name: "PCR (NAAT)")
-		]
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "PCR (NAAT)"
 		
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
