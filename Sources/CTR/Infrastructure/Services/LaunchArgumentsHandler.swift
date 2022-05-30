@@ -14,7 +14,7 @@ class LaunchArgumentsHandler {
 		if let commandlineArgument = CommandLine.arguments.first(where: { $0.lowercased().starts(with: "-scanneddcc:") }),
 		   let base64EncodedDCC = commandlineArgument.split(separator: ":").last,
 		   let base64DecodedDCC = String(base64EncodedDCC).base64Decoded() {
-			return base64DecodedDCC
+			return base64DecodedDCC.trimmingCharacters(in: .whitespacesAndNewlines)
 		}
 		return nil
 	}
