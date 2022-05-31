@@ -92,7 +92,6 @@ class InputRetrievalCodeViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging? = Current.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -314,7 +313,7 @@ class InputRetrievalCodeViewModel {
 
 		progressIndicationCounter.increment()
 
-		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
+		Current.networkManager.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
 			guard let self = self else { return }
 
@@ -360,7 +359,7 @@ class InputRetrievalCodeViewModel {
 
 		progressIndicationCounter.increment()
 
-		networkManager?.fetchTestResult(
+		Current.networkManager.fetchTestResult(
 			provider: provider,
 			token: requestToken,
 			code: verificationCode,

@@ -78,7 +78,6 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	// MARK: - Dependencies
 
 	private let fileStorage: FileStorageProtocol
-	private let flavor: AppFlavor
 	private let now: () -> Date
 	private let userSettings: UserSettingsProtocol
 	private let networkManager: NetworkManaging
@@ -93,13 +92,11 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		networkManager: NetworkManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
-		fileStorage: FileStorageProtocol,
-		flavor: AppFlavor = AppFlavor.flavor) {
+		fileStorage: FileStorageProtocol) {
 
 		self.now = now
 		self.networkManager = networkManager
 		self.fileStorage = fileStorage
-		self.flavor = flavor
 		self.userSettings = userSettings
 		self.remoteConfigManager = remoteConfigManager
 		self.shouldInitialize = .empty
@@ -140,7 +137,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		let path = fileStorage.documentsURL?.path
 		let result: MobilecoreResult?
 		
-		if flavor == .holder {
+		if AppFlavor.flavor == .holder {
 			// Initialize holder and have path to stored files as parameter
 			result = MobilecoreInitializeHolder(path)
 		} else {

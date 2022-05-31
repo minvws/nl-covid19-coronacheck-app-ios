@@ -167,31 +167,31 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	/// Toggle the torch
 	@objc func toggleTorch() {
-
+		
 		guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else {
 			// No camera or no torch
 			return
 		}
 		do {
 			try device.lockForConfiguration()
-            if device.torchMode == .on {
+			if device.torchMode == .on {
 				device.torchMode = .off
-                torchChanged(enabled: false)
+				torchChanged(enabled: false)
 			} else {
 				try device.setTorchModeOn(level: 1.0)
-                torchChanged(enabled: true)
+				torchChanged(enabled: true)
 			}
 			device.unlockForConfiguration()
 		} catch {
 			self.logError("toggleTorch: \(error)")
 		}
 	}
-    
-    func torchChanged(enabled: Bool) {
-        let label = enabled ? torchDisableLabel : torchEnableLabel
-        torchButton?.accessibilityLabel = label
-        torchButton?.title = label
-    }
+	
+	func torchChanged(enabled: Bool) {
+		let label = enabled ? torchDisableLabel : torchEnableLabel
+		torchButton?.accessibilityLabel = label
+		torchButton?.title = label
+	}
 
 	/// Add a torch button to the navigation bar.
 	/// - Parameters:
@@ -203,14 +203,16 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		enableLabel: String,
 		disableLabel: String) {
 		
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: action,
-												   content: .image(I.torch()),
-												   accessibilityIdentifier: "TorchButton",
-												   accessibilityLabel: enableLabel)
-		let button: UIBarButtonItem = .create(config)
-		navigationItem.rightBarButtonItem = button
-		
+			let config = UIBarButtonItem.Configuration(
+				target: self,
+				action: action,
+				content: .image(I.torch()),
+				accessibilityIdentifier: "TorchButton",
+				accessibilityLabel: enableLabel
+			)
+			let button: UIBarButtonItem = .create(config)
+			navigationItem.rightBarButtonItem = button
+			
 		self.torchButton = button
 		self.torchEnableLabel = enableLabel
 		self.torchDisableLabel = disableLabel

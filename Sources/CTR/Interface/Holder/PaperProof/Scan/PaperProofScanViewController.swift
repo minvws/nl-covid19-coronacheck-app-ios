@@ -52,10 +52,10 @@ class PaperProofScanViewController: ScanViewController {
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self, let enableLabel = $0.first, let disableLabel = $0.last else { return }
 			strongSelf.addTorchButton(
-                action: #selector(strongSelf.toggleTorch),
-                enableLabel: enableLabel,
-                disableLabel: disableLabel
-            )
+				action: #selector(strongSelf.toggleTorch),
+				enableLabel: enableLabel,
+				disableLabel: disableLabel
+			)
 		}
 		viewModel.$showPermissionWarning.binding = { [weak self] in
 			if $0 {
