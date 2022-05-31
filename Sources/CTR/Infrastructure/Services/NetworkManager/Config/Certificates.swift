@@ -11,11 +11,11 @@ import Security
 
 struct Certificate {
 
-    let secCertificate: SecCertificate
-
-    init(certificate: SecCertificate) {
-        self.secCertificate = certificate
-    }
+	let secCertificate: SecCertificate
+	
+	init(certificate: SecCertificate) {
+		self.secCertificate = certificate
+	}
 
 	var data: Data {
 

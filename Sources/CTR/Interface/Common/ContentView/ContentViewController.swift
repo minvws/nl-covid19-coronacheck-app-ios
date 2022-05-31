@@ -10,7 +10,7 @@ import UIKit
 class ContentViewController: BaseViewController {
 
 	internal let viewModel: ContentViewModel
-	private let sceneView = ContentView()
+	internal let sceneView = ContentView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model

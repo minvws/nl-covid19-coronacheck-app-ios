@@ -12,15 +12,15 @@ import SnapshotTesting
 
 class ErrorViewTests: XCTestCase {
 
-    var sut: ErrorView!
-
-    override func setUp() {
-        super.setUp()
-
+	var sut: ErrorView!
+	
+	override func setUp() {
+		super.setUp()
+		
 		sut = ErrorView()
-        sut.frame = CGRect(x: 0, y: 0, width: 390, height: 100)
+		sut.frame = CGRect(x: 0, y: 0, width: 390, height: 100)
 		sut.backgroundColor = C.white()
-    }
+	}
 
 	func test_singleLine() {
 
