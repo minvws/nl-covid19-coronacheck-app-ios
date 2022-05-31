@@ -28,6 +28,18 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 	
+	func test_start() throws {
+		
+		// Given
+		
+		// When
+		sut.start()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
+	}
+	
 	func test_consumeLink() {
 		
 		// Given
@@ -178,6 +190,30 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 	}
 
+	func test_eventFlowDidCancelFromBackSwipe() {
+
+		// Given
+		sut.token = "test"
+		sut.scannedDCC = "test"
+		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		navigationSpy.viewControllers = [
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
+		]
+
+		// When
+		sut.eventFlowDidCancelFromBackSwipe()
+
+		// Then
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
+		expect(self.sut.token).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.childCoordinators).to((haveCount(0)))
+		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(self.navigationSpy.viewControllers).to(haveCount(3))
+	}
+	
 	func test_eventFlowDidCancel() {
 
 		// Given
@@ -285,6 +321,53 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_displayErrorForPaperProofCheck() throws {
+		
+		// Given
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle()
+		)
+		
+		// When
+		sut.displayErrorForPaperProofCheck(content: content)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_userWishesToCancelPaperProofFlow() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCancelPaperProofFlow()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopViewController) == true
+		expect(self.flowSpy.invokedAddPaperProofFlowDidCancel) == true
+	}
+	
+	func test_userWantsToGoBackToEnterToken() {
+		
+		// Given
+		navigationSpy.viewControllers = [
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
+		]
+		expect(self.navigationSpy.viewControllers).to(haveCount(3))
+		
+		// When
+		sut.userWantsToGoBackToEnterToken()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == true
+		expect(self.navigationSpy.viewControllers).to(haveCount(2))
 	}
 }
 
