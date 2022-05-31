@@ -75,7 +75,8 @@ class VerifierScanViewModelTests: XCTestCase {
 		sut.parseQRMessage("test_parseQRMessage_shouldAddScanLogEntry")
 
 		// Then
-		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == false	}
+		expect(self.environmentSpies.scanLogManagerSpy.invokedAddScanEntry) == false
+	}
 
 	func test_parseQRMessage_shouldAddScanLogEntry_highRisk_verificationPolicyEnabled() {
 

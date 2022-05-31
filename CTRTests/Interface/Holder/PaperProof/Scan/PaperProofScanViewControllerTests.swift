@@ -41,7 +41,7 @@ class PaperProofScanViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 	
-	func test_content() {
+	func test_showPermissionError() {
 		
 		// Given
 		let alertVerifier = AlertVerifier()
@@ -61,6 +61,7 @@ class PaperProofScanViewControllerTests: XCTestCase {
 			]
 		)
 	}
+	
 	func test_parseQRMessage_whenQRisCTB_shouldShowErrorState() {
 
 		// Given
