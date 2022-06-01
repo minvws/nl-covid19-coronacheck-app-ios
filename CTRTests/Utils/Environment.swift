@@ -95,11 +95,6 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	var logHandlerSpy: LogHandlerSpy = {
-		let spy = LogHandlerSpy()
-		return spy
-	}()
-	
 	var mappingManagerSpy: MappingManagerSpy = {
 		let spy = MappingManagerSpy()
 		return spy
@@ -201,7 +196,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		greenCardLoader: spies.greenCardLoaderSpy,
 		identityChecker: spies.identityCheckerSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,
-		logHandler: spies.logHandlerSpy,
+		logHandler: LogHandler(),
 		mappingManager: spies.mappingManagerSpy,
 		networkManager: spies.networkManagerSpy,
 		newFeaturesManager: spies.newFeaturesManagerSpy,
