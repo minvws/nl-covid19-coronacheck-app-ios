@@ -10,74 +10,64 @@ import XCTest
 
 class LogHandlerSpy: Logging {
 
-	var invokedLoggingCategoryGetter = false
-	var invokedLoggingCategoryGetterCount = 0
-	var stubbedLoggingCategory: String! = ""
-
-	var loggingCategory: String {
-		invokedLoggingCategoryGetter = true
-		invokedLoggingCategoryGetterCount += 1
-		return stubbedLoggingCategory
-	}
-
 	var invokedLogVerbose = false
 	var invokedLogVerboseCount = 0
-	var invokedLogVerboseParameters: (message: String, function: StaticString, file: StaticString, line: UInt)?
-	var invokedLogVerboseParametersList = [(message: String, function: StaticString, file: StaticString, line: UInt)]()
+	var invokedLogVerboseParameters: (message: String, Void)?
+	var invokedLogVerboseParametersList = [(message: String, Void)]()
 
-	func logVerbose(_ message: String, function: StaticString, file: StaticString, line: UInt) {
+	func logVerbose(_ message: String) {
 		invokedLogVerbose = true
 		invokedLogVerboseCount += 1
-		invokedLogVerboseParameters = (message, function, file, line)
-		invokedLogVerboseParametersList.append((message, function, file, line))
+		invokedLogVerboseParameters = (message, ())
+		invokedLogVerboseParametersList.append((message, ()))
 	}
 
 	var invokedLogDebug = false
 	var invokedLogDebugCount = 0
-	var invokedLogDebugParameters: (message: String, function: StaticString, file: StaticString, line: UInt)?
-	var invokedLogDebugParametersList = [(message: String, function: StaticString, file: StaticString, line: UInt)]()
+	var invokedLogDebugParameters: (message: String, Void)?
+	var invokedLogDebugParametersList = [(message: String, Void)]()
 
-	func logDebug(_ message: String, function: StaticString, file: StaticString, line: UInt) {
+	func logDebug(_ message: String) {
 		invokedLogDebug = true
 		invokedLogDebugCount += 1
-		invokedLogDebugParameters = (message, function, file, line)
-		invokedLogDebugParametersList.append((message, function, file, line))
+		invokedLogDebugParameters = (message, ())
+		invokedLogDebugParametersList.append((message, ()))
 	}
 
 	var invokedLogInfo = false
 	var invokedLogInfoCount = 0
-	var invokedLogInfoParameters: (message: String, function: StaticString, file: StaticString, line: UInt)?
-	var invokedLogInfoParametersList = [(message: String, function: StaticString, file: StaticString, line: UInt)]()
+	var invokedLogInfoParameters: (message: String, Void)?
+	var invokedLogInfoParametersList = [(message: String, Void)]()
 
-	func logInfo(_ message: String, function: StaticString, file: StaticString, line: UInt) {
+	func logInfo(_ message: String) {
 		invokedLogInfo = true
 		invokedLogInfoCount += 1
-		invokedLogInfoParameters = (message, function, file, line)
-		invokedLogInfoParametersList.append((message, function, file, line))
+		invokedLogInfoParameters = (message, ())
+		invokedLogInfoParametersList.append((message, ()))
 	}
 
 	var invokedLogWarning = false
 	var invokedLogWarningCount = 0
-	var invokedLogWarningParameters: (message: String, function: StaticString, file: StaticString, line: UInt)?
-	var invokedLogWarningParametersList = [(message: String, function: StaticString, file: StaticString, line: UInt)]()
+	var invokedLogWarningParameters: (message: String, Void)?
+	var invokedLogWarningParametersList = [(message: String, Void)]()
 
-	func logWarning(_ message: String, function: StaticString, file: StaticString, line: UInt) {
+	func logWarning(_ message: String) {
 		invokedLogWarning = true
 		invokedLogWarningCount += 1
-		invokedLogWarningParameters = (message, function, file, line)
-		invokedLogWarningParametersList.append((message, function, file, line))
+		invokedLogWarningParameters = (message, ())
+		invokedLogWarningParametersList.append((message, ()))
 	}
 
 	var invokedLogError = false
 	var invokedLogErrorCount = 0
-	var invokedLogErrorParameters: (message: String, function: StaticString, file: StaticString, line: UInt)?
-	var invokedLogErrorParametersList = [(message: String, function: StaticString, file: StaticString, line: UInt)]()
+	var invokedLogErrorParameters: (message: String, Void)?
+	var invokedLogErrorParametersList = [(message: String, Void)]()
 
-	func logError(_ message: String, function: StaticString, file: StaticString, line: UInt) {
+	func logError(_ message: String) {
 		invokedLogError = true
 		invokedLogErrorCount += 1
-		invokedLogErrorParameters = (message, function, file, line)
-		invokedLogErrorParametersList.append((message, function, file, line))
+		invokedLogErrorParameters = (message, ())
+		invokedLogErrorParametersList.append((message, ()))
 	}
 
 	var invokedSetup = false
