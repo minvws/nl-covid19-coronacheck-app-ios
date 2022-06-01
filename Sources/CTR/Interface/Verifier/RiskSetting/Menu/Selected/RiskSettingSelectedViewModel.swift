@@ -50,7 +50,7 @@ final class RiskSettingSelectedViewModel: Logging {
 		scanLockMinutes = scanLockSeconds / 60
 
 		guard let scanLock = Current.remoteConfigManager.storedConfiguration.scanLockWarningSeconds else { return }
-		didWeRecentlyScanQRs = Current.scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
+		didWeRecentlyScanQRs = Current.scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock, now: Current.now())
 		header = didWeRecentlyScanQRs ? L.verifier_risksetting_active_lock_warning_header(scanLockMinutes) : nil
 	}
 	
