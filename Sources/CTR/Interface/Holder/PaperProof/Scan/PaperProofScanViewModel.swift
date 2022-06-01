@@ -25,8 +25,6 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
-	
-	@Bindable private(set) var alert: AlertContent?
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
 

@@ -42,7 +42,6 @@ class LoginTVSViewController: BaseViewController {
 		}
 
 		viewModel.$content.binding = { [weak self] in self?.sceneView.applyContent($0) }
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 		viewModel.login()
 		
 		addBackButton()

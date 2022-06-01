@@ -71,12 +71,16 @@ private extension RiskSettingSelectedViewModel {
 		alert = AlertContent(
 			title: L.verifier_risksetting_confirmation_dialog_title(),
 			subTitle: L.verifier_risksetting_confirmation_dialog_message(scanLockMinutes),
-			cancelTitle: L.verifier_risksetting_confirmation_dialog_negative_button(),
-			okAction: { [weak self] _ in
-				self?.saveSettingAndGoBackToStart(enablingLock: true)
-			},
-			okTitle: L.verifier_risksetting_confirmation_dialog_positive_button(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.verifier_risksetting_confirmation_dialog_positive_button(),
+				action: { [weak self] _ in
+					self?.saveSettingAndGoBackToStart(enablingLock: true)
+				},
+				isDestructive: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.verifier_risksetting_confirmation_dialog_negative_button()
+			)
 		)
 	}
 	

@@ -602,10 +602,15 @@ extension InputRetrievalCodeViewModel {
 		self.networkErrorAlert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.fetchProviders(requestToken, verificationCode: verificationCode)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 
@@ -615,10 +620,16 @@ extension InputRetrievalCodeViewModel {
 		self.networkErrorAlert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.fetchProviders(requestToken, verificationCode: verificationCode)
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 
