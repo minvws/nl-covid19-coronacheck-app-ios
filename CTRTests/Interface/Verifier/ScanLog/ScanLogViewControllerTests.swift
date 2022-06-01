@@ -66,7 +66,7 @@ class ScanLogViewControllerTests: XCTestCase {
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry])
 		
 		var config: RemoteConfiguration = .default
-		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
+		config.scanLogStorageSeconds = 3600
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
 		sut = ScanLogViewController(viewModel: ScanLogViewModel(coordinator: coordinatorSpy))
 		
@@ -88,7 +88,7 @@ class ScanLogViewControllerTests: XCTestCase {
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
 		
 		var config: RemoteConfiguration = .default
-		config.scanLogStorageSeconds = Int(Date().timeIntervalSince1970 - now.timeIntervalSince1970 + 3600)
+		config.scanLogStorageSeconds = 3600
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
 		sut = ScanLogViewController(viewModel: ScanLogViewModel(coordinator: coordinatorSpy))
 		
