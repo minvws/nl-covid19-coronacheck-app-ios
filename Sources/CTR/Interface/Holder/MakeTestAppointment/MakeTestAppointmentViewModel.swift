@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class MakeTestAppointmentViewModel: Logging {
+final class MakeTestAppointmentViewModel {
 	
 	/// The coordinator to open Url
 	weak var coordinator: OpenUrlProtocol?

@@ -13,7 +13,7 @@ protocol GreenCardLoading {
 		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void)
 }
 
-class GreenCardLoader: GreenCardLoading, Logging {
+class GreenCardLoader: GreenCardLoading {
 
 	enum Error: Swift.Error, Equatable, LocalizedError {
 		case noSignedEvents
@@ -55,6 +55,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	private let walletManager: WalletManaging
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
+	private let logHandler: Logging
 	
 	required init(
 		now: @escaping () -> Date,
@@ -62,7 +63,8 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		cryptoManager: CryptoManaging,
 		walletManager: WalletManaging,
 		remoteConfigManager: RemoteConfigManaging,
-		userSettings: UserSettingsProtocol
+		userSettings: UserSettingsProtocol,
+		logHandler: Logging
 	) {
 
 		self.now = now
@@ -71,6 +73,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		self.walletManager = walletManager
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
+		self.logHandler = logHandler
 	}
 
 	func signTheEventsIntoGreenCardsAndCredentials(
@@ -80,17 +83,17 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
 				case .failure(let serverError):
-					self.logError("error: \(serverError)")
+					self.logHandler.logError("error: \(serverError)")
 					completion(.failure(Error.preparingIssue(serverError)))
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self.logError("Can't parse the nonce / prepareIssueMessage")
+						self.logHandler.logError("Can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
 
-					self.logVerbose("ok: \(prepareIssueEnvelope)")
+					Current.logHandler.logVerbose("ok: \(prepareIssueEnvelope)")
 					self.cryptoManager.setNonce(nonce)
 					self.cryptoManager.setStoken(prepareIssueEnvelope.stoken)
 					self.fetchGreenCards { response in
@@ -106,7 +109,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
-										self.logError("Failed to save greenCards")
+										self.logHandler.logError("Failed to save greenCards")
 										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
@@ -145,11 +148,11 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
 				case .failure(let serverError):
-					self?.logError("error: \(serverError)")
+					self?.logHandler.logError("error: \(serverError)")
 					onCompletion(.failure(Error.credentials(serverError)))
 
 				case let .success(greencardResponse):
-					self?.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
+					self?.logHandler.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
 					onCompletion(.success(greencardResponse))
 			}
 		}

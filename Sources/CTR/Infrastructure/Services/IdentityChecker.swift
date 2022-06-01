@@ -17,7 +17,13 @@ protocol IdentityCheckerProtocol {
 	func compare(eventGroups: [EventGroup], with remoteEvents: [RemoteEvent]) -> Bool
 }
 
-class IdentityChecker: IdentityCheckerProtocol, Logging {
+class IdentityChecker: IdentityCheckerProtocol {
+	
+	private let logHandler: Logging
+	
+	init(logHandler: Logging) {
+		self.logHandler = logHandler
+	}
 
 	/// Check if the identities in event groups and remote events match
 	/// - Parameters:
@@ -37,7 +43,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 			if let existing = existingIdentity as? EventFlow.Identity {
 				existingTuple = existing.asIdentityTuple()
 			}
-			logVerbose("existingIdentity: \(String(describing: existingTuple))")
+			logHandler.logVerbose("existingIdentity: \(String(describing: existingTuple))")
 
 			for remoteIdentity in remoteIdentities {
 
@@ -46,7 +52,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				if let remote = remoteIdentity as? EventFlow.Identity {
 					remoteTuple = remote.asIdentityTuple()
 				}
-				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
+				logHandler.logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
 
 				match = match &&
 					remoteTuple?.day == existingTuple?.day &&
@@ -56,7 +62,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 			}
 		}
 		if !match {
-			logDebug("Does the identity of the new events match with the existing ones? \(match)")
+			logHandler.logDebug("Does the identity of the new events match with the existing ones? \(match)")
 		}
 		return match
 	}

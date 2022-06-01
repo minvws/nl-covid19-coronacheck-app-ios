@@ -77,7 +77,7 @@ class ScanLogViewModel {
 	}
 }
 
-private struct ScanLogDataSource: Logging {
+private struct ScanLogDataSource {
 
 	// One record of similar scan log entries
 	struct ScanLogLineItem {

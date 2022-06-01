@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ListRemoteEventsViewModel: Logging {
+class ListRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -220,7 +220,7 @@ class ListRemoteEventsViewModel: Logging {
 		   let credentialData = dccEvent.credential.data(using: .utf8),
 		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
 		   let dccEventType = euCredentialAttributes.eventMode {
-			logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
+			Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
 			return dccEventType
 		}
 		return eventMode
@@ -246,7 +246,7 @@ class ListRemoteEventsViewModel: Logging {
 				storageEventMode = .recovery
 			}
 		}
-		logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
+		Current.logHandler.logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 
@@ -492,7 +492,7 @@ class ListRemoteEventsViewModel: Logging {
 
 		guard let firstRecoveryOrigin = firstRecoveryOrigin, let firstVaccinationOrigin = firstVaccinationOrigin else {
 			// Should not happen, part of the if let flow.
-			self.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
+			Current.logHandler.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
 			self.completeFlow()
 			return
 		}
@@ -654,7 +654,7 @@ class ListRemoteEventsViewModel: Logging {
 					providerIdentifier: response.wrapper.providerIdentifier
 				)
 			} else {
-				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
+				Current.logHandler.logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
 			}
 
 			// Store the new event group
@@ -670,7 +670,7 @@ class ListRemoteEventsViewModel: Logging {
 					break
 				}
 			} else {
-				logWarning("Could not store event group")
+				Current.logHandler.logWarning("Could not store event group")
 			}
 		}
 		onCompletion(success)

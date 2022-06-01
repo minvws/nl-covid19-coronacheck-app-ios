@@ -9,7 +9,7 @@ import UIKit
 import AppAuth
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
+class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 	
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 			
 			if !ProcessInfo.processInfo.isTesting {
 				// Setup Logging
-				LogHandler.setup()
+				Current.logHandler.setup()
 			}
 			
 			styleUI()
@@ -74,11 +74,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging, AppAuthState {
 		options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 			
 			// Incoming url
-			logVerbose("CTR: AppDelegate -> url = \(url)")
+			Current.logHandler.logVerbose("CTR: AppDelegate -> url = \(url)")
 			
 			// Determine who sent the URL.
 			let sendingAppID = options[.sourceApplication]
-			logVerbose("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
+			Current.logHandler.logVerbose("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
 			
 			// Sends the URL to the current authorization flow (if any) which will
 			// process it if it relates to an authorization response.

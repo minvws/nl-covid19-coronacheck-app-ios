@@ -16,7 +16,7 @@ protocol DashboardStrippenRefreshing: AnyObject {
 	var didUpdate: ((DashboardStrippenRefresher.State?, DashboardStrippenRefresher.State) -> Void)? { get set }
 }
 
-class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
+class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 	enum Error: Swift.Error, LocalizedError, Equatable {
 		case unknownErrorA
@@ -225,13 +225,13 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 	func load() {
 
 		guard !state.loadingState.isLoading else {
-			logDebug("StrippenRefresh: Skipping call to `load()` as a load is already in progress.")
+			Current.logHandler.logDebug("StrippenRefresh: Skipping call to `load()` as a load is already in progress.")
 			return
 		}
 
 		switch state.greencardsCredentialExpiryState {
 			case .noActionNeeded:
-				self.logDebug("StrippenRefresh: No greencards within threshold of needing refreshing. Skipping refresh.")
+				Current.logHandler.logDebug("StrippenRefresh: No greencards within threshold of needing refreshing. Skipping refresh.")
 
 			case .expired, .expiring:
 				state.beginLoading()

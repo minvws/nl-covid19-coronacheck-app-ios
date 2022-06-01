@@ -8,7 +8,7 @@
 import UIKit
 import LocalAuthentication
 
-class LaunchViewModel: Logging {
+class LaunchViewModel {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 	private var walletManager: WalletManaging?
@@ -95,7 +95,7 @@ class LaunchViewModel: Logging {
 					self.coordinator?.handleLaunchState(.finished)
 					
 				default:
-					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+					Current.logHandler.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
 		}
 	}
@@ -122,7 +122,7 @@ class LaunchViewModel: Logging {
 						completion(.finished)
 
 					case let .failure(error):
-						self.logError("Error getting the remote config: \(error)")
+						Current.logHandler.logError("Error getting the remote config: \(error)")
 						completion(.serverError([error]))
 				}
 			})
@@ -147,7 +147,7 @@ class LaunchViewModel: Logging {
 						completion(.finished)
 
 					case let .failure(error):
-						self.logError("Error getting the issuers public keys: \(error)")
+						Current.logHandler.logError("Error getting the issuers public keys: \(error)")
 						completion(.serverError([error]))
 				}
 			}

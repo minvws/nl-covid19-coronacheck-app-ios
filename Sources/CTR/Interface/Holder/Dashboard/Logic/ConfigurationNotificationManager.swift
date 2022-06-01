@@ -12,7 +12,7 @@ protocol ConfigurationNotificationManagerProtocol {
 	var almostOutOfDateObservatory: Observatory<Bool> { get }
 }
 
-final class ConfigurationNotificationManager: ConfigurationNotificationManagerProtocol, Logging {
+final class ConfigurationNotificationManager: ConfigurationNotificationManagerProtocol {
 
 	private let userSettings: UserSettingsProtocol
 	private let remoteConfigManager: RemoteConfigManaging

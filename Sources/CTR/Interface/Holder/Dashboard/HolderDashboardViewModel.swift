@@ -54,13 +54,10 @@ protocol HolderDashboardViewModelType: AnyObject {
 }
 
 // swiftlint:disable:next type_body_length
-final class HolderDashboardViewModel: HolderDashboardViewModelType, Logging {
+final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
-
-	/// The logging category
-	var loggingCategory: String = "HolderDashboardViewModel"
 
 	/// The title of the scene
 	let title = Observable<String>(value: L.holderDashboardTitle())
@@ -411,30 +408,30 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType, Logging {
 		// Handle combination of Loading State + Expiry State + Error presentation:
 		switch (refresherState.loadingState, refresherState.greencardsCredentialExpiryState, refresherState.userHasPreviouslyDismissedALoadingError) {
 			case (_, .noActionNeeded, _):
-				logDebug("StrippenRefresh: No action needed.")
+				Current.logHandler.logDebug("StrippenRefresh: No action needed.")
 
 			// 🔌 NO INTERNET: Refresher has no internet and wants to know what to do next
 
 			case (.noInternet, .expired, false):
-				logDebug("StrippenRefresh: Need refreshing now, but no internet. Presenting alert.")
+				Current.logHandler.logDebug("StrippenRefresh: Need refreshing now, but no internet. Presenting alert.")
 				currentlyPresentedAlert.value = AlertContent.strippenExpiredWithNoInternet(strippenRefresher: strippenRefresher)
 
 			case (.noInternet, .expired, true):
-				logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
+				Current.logHandler.logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
 				state.errorForQRCardsMissingCredentials = L.holderDashboardStrippenExpiredErrorfooterNointernet()
 
 			case (.noInternet, .expiring, true):
 				// Do nothing
-				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Do nothing.")
+				Current.logHandler.logDebug("StrippenRefresh: Need refreshing soon, but no internet. Do nothing.")
 
 			case (.noInternet, .expiring(let expiryDate), false):
-				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
+				Current.logHandler.logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
 				currentlyPresentedAlert.value = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: Current.now())
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 
 			case (.failed, .expired, _):
-				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
+				Current.logHandler.logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
 					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
@@ -443,14 +440,14 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType, Logging {
 			case (.failed, .expiring, _):
 				// In this case we just swallow the server errors.
 				// We do handle "no internet" though - see above.
-				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
+				Current.logHandler.logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
 
 			case (.serverResponseHasNoChanges, _, _) :
 				// This is a special case, and is caused by the user putting their system time
 				// so far into the future that it forces a strippen refresh, .. however the server time
 				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
 				// state which the StrippenRefresher is currently in.
-				logDebug("StrippenRefresh: .serverResponseHasNoChanges. Stopping.")
+				Current.logHandler.logDebug("StrippenRefresh: .serverResponseHasNoChanges. Stopping.")
 				
 			case (.completed, _, _):
 				// The strippen were successfully renewed.

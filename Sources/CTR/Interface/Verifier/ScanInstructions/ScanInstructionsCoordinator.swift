@@ -25,11 +25,9 @@ protocol ScanInstructionsDelegate: AnyObject {
 	func scanInstructionsDidFinish(hasScanLock: Bool)
 }
 
-class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordinatorDelegate, OpenUrlProtocol {
+class ScanInstructionsCoordinator: Coordinator, ScanInstructionsCoordinatorDelegate, OpenUrlProtocol {
 
 	weak var delegate: ScanInstructionsDelegate?
-
-	var loggingCategory: String = "ScanInstructionsCoordinator"
 	var childCoordinators: [Coordinator] = []
 	var navigationController: UINavigationController
 

@@ -191,17 +191,17 @@ extension ListRemoteEventsViewModel {
 
 					if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
 						if currentRow.providerIdentifier != nextRow.providerIdentifier {
-							logVerbose("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
+							Current.logHandler.logVerbose("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
 							rows.append(getRowFromVaccinationEvent(dataRow: currentRow, combineWith: nextRow))
 							counter += 1
 						}
 					} else {
-						logVerbose("not Matching vaccinations")
+						Current.logHandler.logVerbose("not Matching vaccinations")
 						rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
 					}
 				} else {
 					// Next row is not an vaccination
-					logVerbose("nextRow is not a vaccination")
+					Current.logHandler.logVerbose("nextRow is not a vaccination")
 					rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
 				}
 			} else if currentRow.event.hasNegativeTest {

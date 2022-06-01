@@ -16,7 +16,7 @@ protocol DisclosurePolicyManaging {
 	var hasChanges: Bool { get }
 }
 
-class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
+class DisclosurePolicyManager: DisclosurePolicyManaging {
 	
 	let factory: UpdatedDisclosurePolicyFactory = UpdatedDisclosurePolicyFactory()
 	
@@ -26,10 +26,14 @@ class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
 	
 	private var remoteConfigManagerObserverToken: Observatory.ObserverToken?
 	private var remoteConfigManager: RemoteConfigManaging
+	private let logHandler: Logging
+	private let userSettings: UserSettingsProtocol
 	
 	/// Initiializer
-	init(remoteConfigManager: RemoteConfigManaging) {
+	init(remoteConfigManager: RemoteConfigManaging, userSettings: UserSettingsProtocol, logHandler: Logging) {
 		self.remoteConfigManager = remoteConfigManager
+		self.logHandler = logHandler
+		self.userSettings = userSettings
 		(self.observatory, self.notifyObservers) = Observatory<()>.create()
 		configureRemoteConfigManager()
 	}
@@ -52,7 +56,7 @@ class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
 		}
 		
 		// Locally stored profile different than the remote ones
-		logDebug("DisclosurePolicyManager: policy changed detected")
+		logHandler.logDebug("DisclosurePolicyManager: policy changed detected")
 
 		// - Update the observers
 		notifyObservers(())
@@ -61,13 +65,13 @@ class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
 	func setDisclosurePolicyUpdateHasBeenSeen() {
 		
 		let disclosurePolicies = getDisclosurePolicies()
-		Current.userSettings.lastKnownConfigDisclosurePolicy = disclosurePolicies
+		userSettings.lastKnownConfigDisclosurePolicy = disclosurePolicies
 	}
 	
 	var hasChanges: Bool {
 		
 		let disclosurePolicies = getDisclosurePolicies()
-		return Current.userSettings.lastKnownConfigDisclosurePolicy != disclosurePolicies
+		return userSettings.lastKnownConfigDisclosurePolicy != disclosurePolicies
 	}
 	
 	func getDisclosurePolicies() -> [String] {
@@ -76,8 +80,8 @@ class DisclosurePolicyManager: Logging, DisclosurePolicyManaging {
 			return []
 		}
 		
-		if Current.userSettings.overrideDisclosurePolicies.isNotEmpty {
-			disclosurePolicies = Current.userSettings.overrideDisclosurePolicies
+		if userSettings.overrideDisclosurePolicies.isNotEmpty {
+			disclosurePolicies = userSettings.overrideDisclosurePolicies
 		}
 		return disclosurePolicies
 	}

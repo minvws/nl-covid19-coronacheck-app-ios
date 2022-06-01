@@ -68,15 +68,17 @@ protocol WalletManaging: AnyObject {
 	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
 }
 
-class WalletManager: WalletManaging, Logging {
+class WalletManager: WalletManaging {
 
 	static let walletName = "main"
 
 	private var dataStoreManager: DataStoreManaging
+	private let logHandler: Logging
 
-	required init( dataStoreManager: DataStoreManaging) {
+	required init( dataStoreManager: DataStoreManaging, logHandler: Logging) {
 		
 		self.dataStoreManager = dataStoreManager
+		self.logHandler = logHandler
 
 		guard AppFlavor.flavor == .holder else { return }
 		createMainWalletIfNotExists()
@@ -115,7 +117,7 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				
 				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, maxIssuedAt: issuedAt, jsonData: jsonData) != nil {
-					logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
+					self.logHandler.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
 					success = true
 				} else {
 					
@@ -189,9 +191,9 @@ class WalletManager: WalletManaging, Logging {
 					if let maxIssuedAt = eventGroup.maxIssuedAt,
 					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
 						if expireDate > Date() {
-							logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							self.logHandler.logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 						} else {
-							logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							self.logHandler.logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 							context.delete(eventGroup)
 						}
 					}
@@ -242,7 +244,7 @@ class WalletManager: WalletManaging, Logging {
 				if let eventGroups = wallet.eventGroups {
 					for case let eventGroup as EventGroup in eventGroups.allObjects {
 						if eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
-							self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+							self.logHandler.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 							context.delete(eventGroup)
 						}
 					}
@@ -263,7 +265,7 @@ class WalletManager: WalletManaging, Logging {
 
 				if let eventGroups = wallet.eventGroups {
 					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+						self.logHandler.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 						context.delete(eventGroup)
 					}
 					dataStoreManager.save(context)
@@ -406,10 +408,10 @@ class WalletManager: WalletManaging, Logging {
 			case let .success(credentials):
 				do {
 					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
-					logVerbose("object: \(objects)")
+					self.logHandler.logVerbose("object: \(objects)")
 					return .success(objects)
 				} catch {
-					self.logError("Error Deserializing: \(error)")
+					self.logHandler.logError("Error Deserializing: \(error)")
 					return .failure(error)
 				}
 			case let .failure(error):

@@ -213,7 +213,7 @@ class InputRetrievalCodeViewModel {
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
 				guard verificationCodeIsKnownToBeRequired else {
-					logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
+					Current.logHandler.logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
 					return
 				}
 
@@ -349,7 +349,7 @@ class InputRetrievalCodeViewModel {
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
-		logVerbose("fetching result with \(provider.resultURLString)")
+		Current.logHandler.logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
 			fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
@@ -430,7 +430,7 @@ class InputRetrievalCodeViewModel {
 						))
 				} else {
 
-					self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+					Current.logHandler.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
 					self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
 					self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 				}
@@ -582,13 +582,6 @@ extension InputRetrievalCodeViewModel.InitializationMode {
 					}
 				}
 		}
-	}
-}
-
-extension InputRetrievalCodeViewModel: Logging {
-
-	var loggingCategory: String {
-		return "TokenEntryViewModel"
 	}
 }
 

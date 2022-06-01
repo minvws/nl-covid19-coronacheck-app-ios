@@ -8,9 +8,7 @@
 import AVFoundation
 import UIKit
 
-class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDelegate, Logging {
-
-	var loggingCategory: String = "ScanViewController"
+class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDelegate {
 
 	private var captureSession: AVCaptureSession!
 	private var previewLayer: AVCaptureVideoPreviewLayer!
@@ -157,7 +155,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	func found(code: String) {
 
-		logInfo("CTR: Found code: \(code)")
+		Current.logHandler.logInfo("CTR: Found code: \(code)")
 	}
 
 	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -182,7 +180,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			}
 			device.unlockForConfiguration()
 		} catch {
-			self.logError("toggleTorch: \(error)")
+			Current.logHandler.logError("toggleTorch: \(error)")
 		}
 	}
 	

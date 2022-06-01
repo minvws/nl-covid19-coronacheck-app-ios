@@ -36,7 +36,7 @@ protocol MappingManaging {
 	func getVaccinationManufacturer(_ code: String? ) -> String?
 }
 
-class MappingManager: MappingManaging, Logging {
+class MappingManager: MappingManaging {
 
 	static let RATTest = "LP217198-3"
 

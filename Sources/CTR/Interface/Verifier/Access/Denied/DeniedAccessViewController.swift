@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DeniedAccessViewController: BaseViewController, Logging {
+final class DeniedAccessViewController: BaseViewController {
 	
 	override var enableSwipeBack: Bool { false }
 	

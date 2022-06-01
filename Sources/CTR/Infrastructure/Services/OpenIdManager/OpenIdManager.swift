@@ -19,24 +19,20 @@ protocol OpenIdManaging: AnyObject {
 		onError: @escaping (Error?) -> Void)
 }
 
-class OpenIdManager: OpenIdManaging, Logging {
-	
-	let loggingCategory: String = "OpenIdClient"
+class OpenIdManager: OpenIdManaging {
 	
 	/// The digid configuration
 	var configuration: ConfigurationDigidProtocol
 	
 	var isAuthorizationInProgress: Bool = false
-	
-	required init() {
-		configuration = Configuration()
-	}
+	private let logHandler: Logging
 	
 	/// Initializer
 	/// - Parameter configuration: the digid configuration
-	init(configuration: ConfigurationDigidProtocol) {
+	init(configuration: ConfigurationDigidProtocol, logHandler: Logging) {
 		
 		self.configuration = configuration
+		self.logHandler = logHandler
 	}
 	
 	/// Request an access token
@@ -70,7 +66,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 			isAuthorizationInProgress = true
 			
 			let request = generateRequest(serviceConfiguration: serviceConfiguration)
-			self.logVerbose("OpenIdManager: authorization request: \(request)")
+			logHandler.logVerbose("OpenIdManager: authorization request: \(request)")
 			
 			if let appAuthState = UIApplication.shared.delegate as? AppAuthState {
 				
@@ -80,7 +76,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 				
 				let callBack: OIDAuthStateAuthorizationCallback = { authState, error in
 					
-					self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
+					self.logHandler.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 					NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 					DispatchQueue.main.async {
 						
@@ -88,14 +84,14 @@ class OpenIdManager: OpenIdManaging, Logging {
 						   let idTokenString = lastTokenResponse.idToken,
 						   let idToken = OIDIDToken(idTokenString: idTokenString) {
 							
-							self.logVerbose("OpenIdManager: We got the idToken")
+							self.logHandler.logVerbose("OpenIdManager: We got the idToken")
 							
 							onCompletion(TVSAuthorizationToken(
 								idTokenString: idTokenString,
 								expiration: idToken.expiresAt
 							))
 						} else {
-							self.logError("OpenIdManager: \(String(describing: error))")
+							self.logHandler.logError("OpenIdManager: \(String(describing: error))")
 							onError(error)
 						}
 					}

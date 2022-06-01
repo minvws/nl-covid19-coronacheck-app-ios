@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PagedAnnouncementItemViewModel: Logging {
+class PagedAnnouncementItemViewModel {
 	
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var tagline: String?

@@ -15,7 +15,7 @@ protocol ClockDeviationManaging: AnyObject {
 	func update(serverResponseDateTime: Date, localResponseDateTime: Date, localResponseSystemUptime: __darwin_time_t)
 }
 
-class ClockDeviationManager: ClockDeviationManaging, Logging {
+class ClockDeviationManager: ClockDeviationManaging {
 
 	var hasSignificantDeviation: Bool? {
 		guard let serverResponseDateTime = serverResponseDateTime,
@@ -49,16 +49,19 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		remoteConfigManager.storedConfiguration.clockDeviationThresholdSeconds.map { Double($0) }
 	}
 	private let remoteConfigManager: RemoteConfigManaging
+	private let logHandler: Logging
 	private let currentSystemUptime: () -> __darwin_time_t?
 	private let now: () -> Date
 
 	required init(
 		remoteConfigManager: RemoteConfigManaging,
+		logHandler: Logging,
 		currentSystemUptime: @escaping () -> __darwin_time_t? = { ClockDeviationManager.currentSystemUptime() },
 		now: @escaping () -> Date
 	) {
 		self.remoteConfigManager = remoteConfigManager
 		self.currentSystemUptime = currentSystemUptime
+		self.logHandler = logHandler
 		self.now = now
 		(self.observatory, self.notifyObservers) = Observatory<Bool>.create()
 		
@@ -71,7 +74,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 
 	// NSSystemClockDidChangeNotification
 	@objc func systemClockDidChange() {
-		logDebug("📣 System clock did change")
+		logHandler.logDebug("📣 System clock did change")
 
 		notifyObservers(hasSignificantDeviation ?? false)
 	}
@@ -86,7 +89,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		if let ageHeader = ageHeader {
 			// CDN has a stale Date, but adds an Age field in seconds.
 			let age = TimeInterval(ageHeader) ?? 0
-			logVerbose("Added \(age) seconds to stale CDN date \(serverDate)")
+			logHandler.logVerbose("Added \(age) seconds to stale CDN date \(serverDate)")
 			serverDate = serverDate.addingTimeInterval(age)
 		}
 

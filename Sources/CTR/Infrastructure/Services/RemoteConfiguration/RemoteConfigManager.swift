@@ -26,7 +26,7 @@ protocol RemoteConfigManaging: AnyObject {
 }
 
 /// The remote configuration manager
-class RemoteConfigManager: RemoteConfigManaging, Logging {
+class RemoteConfigManager: RemoteConfigManaging {
 	typealias ConfigNotification = (RemoteConfiguration, Data, URLResponse)
 	
 	// MARK: - Vars
@@ -77,7 +77,6 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		(self.observatoryForReloads, self.notifyReloadObservers) = Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.create()
 		
 		if let configFromStoredData = fetchConfigFromStoredConfigData(), configFromStoredData != storedConfiguration {
-			logInfo("Updating from stored json")
 			storedConfiguration = configFromStoredData
 		}
 	}

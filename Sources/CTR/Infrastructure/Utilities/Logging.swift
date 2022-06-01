@@ -53,6 +53,9 @@ public protocol Logging {
 	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logError(_ message: String, function: StaticString, file: StaticString, line: UInt)
+	
+	// Setup
+	func setup()
 }
 
 public extension Logging {
@@ -136,10 +139,10 @@ public extension Logging {
 
 public final class LogHandler: Logging {
 
-	public static var isSetup = false
+	public var isSetup = false
 
 	/// Can be called multiple times, will only setup once
-	public static func setup() {
+	public func setup() {
 		
 		guard !isSetup else {
 			DDLogDebug(
@@ -184,7 +187,7 @@ public final class LogHandler: Logging {
 		DDLogDebug("🐞 Logging has been setup", file: #file, function: #function, line: #line, tag: "default")
 	}
 
-	public static func logFiles() -> [URL] {
+	public func logFiles() -> [URL] {
 
 		guard let fileLogger = DDLog.allLoggers.first(where: { $0 is DDFileLogger }) as? DDFileLogger else {
 			#if DEBUG

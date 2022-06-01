@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ShowQRViewModel: Logging {
+class ShowQRViewModel {
 
 	// MARK: - Private types
 	final private class ScreenBrightnessManager {
@@ -87,7 +87,7 @@ class ShowQRViewModel: Logging {
 
 	private var currentPage: Int {
 		didSet {
-			logVerbose("current page set to \(currentPage)")
+			Current.logHandler.logVerbose("current page set to \(currentPage)")
 			displayQRInformation()
 		}
 	}
@@ -246,7 +246,7 @@ class ShowQRViewModel: Logging {
 				openURLsInApp: true
 			)
 		} else {
-			logError("Can't read the domestic credentials")
+			Current.logHandler.logError("Can't read the domestic credentials")
 		}
 	}
 	

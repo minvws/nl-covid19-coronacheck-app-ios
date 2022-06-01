@@ -42,7 +42,7 @@ protocol CryptoLibUtilityProtocol: AnyObject {
 	func registerTriggers()
 }
 
-final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
+final class CryptoLibUtility: CryptoLibUtilityProtocol {
 	
 	struct File: OptionSet {
 		static let publicKeys = File(rawValue: 1 << 0)
@@ -83,6 +83,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
 	private let remoteConfigManager: RemoteConfigManaging
+	private let logHandler: Logging
 
 	// MARK: - Setup
 
@@ -92,7 +93,8 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		networkManager: NetworkManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
-		fileStorage: FileStorageProtocol) {
+		fileStorage: FileStorageProtocol,
+		logHandler: Logging) {
 
 		self.now = now
 		self.networkManager = networkManager
@@ -101,6 +103,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		self.remoteConfigManager = remoteConfigManager
 		self.shouldInitialize = .empty
 		self.reachability = reachability
+		self.logHandler = logHandler
 	}
 
 	func registerTriggers() {
@@ -146,10 +149,10 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		}
 		
 		if let result = result, !result.error.isEmpty {
-			logError("Error initializing library: \(result.error)")
+			logHandler.logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logVerbose("Initializing library successful")
+			logHandler.logVerbose("Initializing library successful")
 			isInitialized = true
 		}
 	}
@@ -163,7 +166,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		do {
 			try fileStorage.store(data, as: file.name)
 		} catch {
-			logError("Failed to store \(file.name)")
+			logHandler.logError("Failed to store \(file.name)")
 			return
 		}
 		shouldInitialize.insert(file)

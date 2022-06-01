@@ -92,7 +92,7 @@ class SignatureValidatorAlwaysAllow: SignatureValidator {
 #endif
 
 /// Security check for backend communication
-class SignatureValidator: SignatureValidation, Logging {
+class SignatureValidator: SignatureValidation {
 	
 	var trustedSigners: [SigningCertificate]
 	let openssl = OpenSSL()
@@ -115,13 +115,13 @@ class SignatureValidator: SignatureValidation, Logging {
 			
 			if let subjectKeyIdentifier = signer.subjectKeyIdentifier,
 			   !openssl.validateSubjectKeyIdentifier(subjectKeyIdentifier, forCertificateData: certificateData) {
-				logError("validateSubjectKeyIdentifier(subjectKeyIdentifier) failed")
+				Current.logHandler.logError("validateSubjectKeyIdentifier(subjectKeyIdentifier) failed")
 				return false
 			}
 			
 			if let serial = signer.rootSerial,
 			   !openssl.validateSerialNumber( serial, forCertificateData: certificateData) {
-				logError("validateSerialNumber(serial) is invalid")
+				Current.logHandler.logError("validateSerialNumber(serial) is invalid")
 				return false
 			}
 			

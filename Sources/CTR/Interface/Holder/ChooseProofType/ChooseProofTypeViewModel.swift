@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseProofTypeViewModel: Logging {
+class ChooseProofTypeViewModel {
 
 	// MARK: - Bindable Strings
 
