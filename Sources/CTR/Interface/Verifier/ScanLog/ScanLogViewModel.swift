@@ -38,7 +38,7 @@ class ScanLogViewModel {
 
 	private func handleScanEntries(_ scanLogStorageSeconds: Int) {
 
-		let result = Current.scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
+		let result = Current.scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds, now: Current.now())
 		switch result {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
