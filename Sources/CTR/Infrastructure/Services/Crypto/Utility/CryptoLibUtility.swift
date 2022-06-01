@@ -83,7 +83,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 	private let networkManager: NetworkManaging
 	private let reachability: ReachabilityProtocol?
 	private let remoteConfigManager: RemoteConfigManaging
-	private let logHandler: Logging
+	private let logHandler: Logging?
 
 	// MARK: - Setup
 
@@ -94,7 +94,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 		remoteConfigManager: RemoteConfigManaging,
 		reachability: ReachabilityProtocol?,
 		fileStorage: FileStorageProtocol,
-		logHandler: Logging) {
+		logHandler: Logging? = nil) {
 
 		self.now = now
 		self.networkManager = networkManager
@@ -149,10 +149,10 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 		}
 		
 		if let result = result, !result.error.isEmpty {
-			logHandler.logError("Error initializing library: \(result.error)")
+			logHandler?.logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logHandler.logVerbose("Initializing library successful")
+			logHandler?.logVerbose("Initializing library successful")
 			isInitialized = true
 		}
 	}
@@ -166,7 +166,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 		do {
 			try fileStorage.store(data, as: file.name)
 		} catch {
-			logHandler.logError("Failed to store \(file.name)")
+			logHandler?.logError("Failed to store \(file.name)")
 			return
 		}
 		shouldInitialize.insert(file)

@@ -49,13 +49,13 @@ class ClockDeviationManager: ClockDeviationManaging {
 		remoteConfigManager.storedConfiguration.clockDeviationThresholdSeconds.map { Double($0) }
 	}
 	private let remoteConfigManager: RemoteConfigManaging
-	private let logHandler: Logging
+	private let logHandler: Logging?
 	private let currentSystemUptime: () -> __darwin_time_t?
 	private let now: () -> Date
 
 	required init(
 		remoteConfigManager: RemoteConfigManaging,
-		logHandler: Logging,
+		logHandler: Logging? = nil,
 		currentSystemUptime: @escaping () -> __darwin_time_t? = { ClockDeviationManager.currentSystemUptime() },
 		now: @escaping () -> Date
 	) {
@@ -74,7 +74,7 @@ class ClockDeviationManager: ClockDeviationManaging {
 
 	// NSSystemClockDidChangeNotification
 	@objc func systemClockDidChange() {
-		logHandler.logDebug("📣 System clock did change")
+		logHandler?.logDebug("📣 System clock did change")
 
 		notifyObservers(hasSignificantDeviation ?? false)
 	}
@@ -89,7 +89,7 @@ class ClockDeviationManager: ClockDeviationManaging {
 		if let ageHeader = ageHeader {
 			// CDN has a stale Date, but adds an Age field in seconds.
 			let age = TimeInterval(ageHeader) ?? 0
-			logHandler.logVerbose("Added \(age) seconds to stale CDN date \(serverDate)")
+			logHandler?.logVerbose("Added \(age) seconds to stale CDN date \(serverDate)")
 			serverDate = serverDate.addingTimeInterval(age)
 		}
 

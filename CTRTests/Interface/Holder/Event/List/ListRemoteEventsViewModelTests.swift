@@ -34,8 +34,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,
 			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
-			userSettings: environmentSpies.userSettingsSpy,
-			logHandler: LogHandlerSpy()
+			userSettings: environmentSpies.userSettingsSpy
 		)
  
 		coordinatorSpy = EventCoordinatorDelegateSpy()

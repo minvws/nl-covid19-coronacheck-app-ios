@@ -32,7 +32,7 @@ class DataStoreManager: DataStoreManaging {
 	}
 
 	private var storageType: StorageType
-	private let logHandler: Logging
+	private let logHandler: Logging?
 
 	private let flavor: AppFlavor
 
@@ -56,7 +56,7 @@ class DataStoreManager: DataStoreManaging {
 		container.persistentStoreDescriptions = [description]
 		container.loadPersistentStores(completionHandler: { storeDescription, error in
 			if let error = error as NSError? {
-				self.logHandler.logError("DataStoreManager error \(error), \(error.userInfo)")
+				self.logHandler?.logError("DataStoreManager error \(error), \(error.userInfo)")
 				fatalError("DataStoreManager error \(error), \(error.userInfo)")
 			}
 			if let url = storeDescription.url {
@@ -75,13 +75,13 @@ class DataStoreManager: DataStoreManaging {
 		do {
 			try FileManager.default.addSkipBackupAttributeToItemAt(fileUrl as NSURL)
 		} catch {
-			logHandler.logError("DatabaseController - Error excluding \(String(describing: fileUrl.lastPathComponent)) from backup")
+			logHandler?.logError("DatabaseController - Error excluding \(String(describing: fileUrl.lastPathComponent)) from backup")
 		}
 	}
 
 	/// Initialize the database manager
 	/// - Parameter storageType: store the data in memory or on disk.
-	required init(_ storageType: StorageType, flavor: AppFlavor = AppFlavor.flavor, logHandler: Logging) {
+	required init(_ storageType: StorageType, flavor: AppFlavor = AppFlavor.flavor, logHandler: Logging? = nil) {
 
 		self.storageType = storageType
 		self.flavor = flavor
@@ -104,7 +104,7 @@ class DataStoreManager: DataStoreManaging {
 				try context.save()
 			} catch {
 				let nserror = error as NSError
-				logHandler.logError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
+				logHandler?.logError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 				fatalError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 			}
 

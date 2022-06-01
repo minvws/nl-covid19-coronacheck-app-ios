@@ -37,8 +37,7 @@ class CryptoLibUtilityTests: XCTestCase {
 			networkManager: networkSpy,
 			remoteConfigManager: remoteConfigManagerSpy,
 			reachability: reachabilitySpy,
-			fileStorage: fileStorageSpy,
-			logHandler: LogHandlerSpy()
+			fileStorage: fileStorageSpy
 		)
 	}
 

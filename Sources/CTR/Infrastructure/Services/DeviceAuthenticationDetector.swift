@@ -18,9 +18,9 @@ protocol DeviceAuthenticationProtocol: AnyObject {
 class DeviceAuthenticationDetector: DeviceAuthenticationProtocol {
 
 	let context: LAContext!
-	private let logHandler: Logging
+	private let logHandler: Logging?
 
-	required init(logHandler: Logging) {
+	required init(logHandler: Logging? = nil) {
 
 		context = LAContext()
 		self.logHandler = logHandler
@@ -33,9 +33,9 @@ class DeviceAuthenticationDetector: DeviceAuthenticationProtocol {
 		var error: NSError?
 		let deviceOwnerAuthentication = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
 		if let error = error {
-			logHandler.logError("Error checking LocalAuthentication status: \(error)")
+			logHandler?.logError("Error checking LocalAuthentication status: \(error)")
 		}
-		logHandler.logVerbose("LocalAuthentication status: \(deviceOwnerAuthentication)")
+		logHandler?.logVerbose("LocalAuthentication status: \(deviceOwnerAuthentication)")
 		return deviceOwnerAuthentication
 	}
 }

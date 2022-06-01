@@ -34,7 +34,7 @@ class NetworkManagerEventTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development, logHandler: LogHandlerSpy())
+		sut = NetworkManager(configuration: NetworkConfiguration.development)
 	}
 	
 	override func tearDown() {
@@ -359,8 +359,7 @@ class NetworkManagerEventTests: XCTestCase {
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandlerSpy()
+			signatureValidationFactory: signatureValidationFactorySpy
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -396,8 +395,7 @@ class NetworkManagerEventTests: XCTestCase {
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandlerSpy()
+			signatureValidationFactory: signatureValidationFactorySpy
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -433,8 +431,7 @@ class NetworkManagerEventTests: XCTestCase {
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandlerSpy()
+			signatureValidationFactory: signatureValidationFactorySpy
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -474,8 +471,7 @@ class NetworkManagerEventTests: XCTestCase {
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandlerSpy()
+			signatureValidationFactory: signatureValidationFactorySpy
 		)
 
 		stub(condition: isPath(path)) { _ in

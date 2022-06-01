@@ -25,11 +25,11 @@ class OpenIdManager: OpenIdManaging {
 	var configuration: ConfigurationDigidProtocol
 	
 	var isAuthorizationInProgress: Bool = false
-	private let logHandler: Logging
+	private let logHandler: Logging?
 	
 	/// Initializer
 	/// - Parameter configuration: the digid configuration
-	init(configuration: ConfigurationDigidProtocol, logHandler: Logging) {
+	init(configuration: ConfigurationDigidProtocol, logHandler: Logging? = nil) {
 		
 		self.configuration = configuration
 		self.logHandler = logHandler
@@ -66,7 +66,6 @@ class OpenIdManager: OpenIdManaging {
 			isAuthorizationInProgress = true
 			
 			let request = generateRequest(serviceConfiguration: serviceConfiguration)
-			logHandler.logVerbose("OpenIdManager: authorization request: \(request)")
 			
 			if let appAuthState = UIApplication.shared.delegate as? AppAuthState {
 				
@@ -76,7 +75,6 @@ class OpenIdManager: OpenIdManaging {
 				
 				let callBack: OIDAuthStateAuthorizationCallback = { authState, error in
 					
-					self.logHandler.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 					NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 					DispatchQueue.main.async {
 						
@@ -84,14 +82,12 @@ class OpenIdManager: OpenIdManaging {
 						   let idTokenString = lastTokenResponse.idToken,
 						   let idToken = OIDIDToken(idTokenString: idTokenString) {
 							
-							self.logHandler.logVerbose("OpenIdManager: We got the idToken")
-							
 							onCompletion(TVSAuthorizationToken(
 								idTokenString: idTokenString,
 								expiration: idToken.expiresAt
 							))
 						} else {
-							self.logHandler.logError("OpenIdManager: \(String(describing: error))")
+							self.logHandler?.logError("OpenIdManager: \(String(describing: error))")
 							onError(error)
 						}
 					}

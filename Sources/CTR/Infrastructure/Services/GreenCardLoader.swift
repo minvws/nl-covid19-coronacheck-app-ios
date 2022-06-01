@@ -55,7 +55,7 @@ class GreenCardLoader: GreenCardLoading {
 	private let walletManager: WalletManaging
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
-	private let logHandler: Logging
+	private let logHandler: Logging?
 	
 	required init(
 		now: @escaping () -> Date,
@@ -64,7 +64,7 @@ class GreenCardLoader: GreenCardLoading {
 		walletManager: WalletManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol,
-		logHandler: Logging
+		logHandler: Logging? = nil
 	) {
 
 		self.now = now
@@ -83,12 +83,12 @@ class GreenCardLoader: GreenCardLoading {
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
 				case .failure(let serverError):
-					self.logHandler.logError("error: \(serverError)")
+					self.logHandler?.logError("error: \(serverError)")
 					completion(.failure(Error.preparingIssue(serverError)))
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self.logHandler.logError("Can't parse the nonce / prepareIssueMessage")
+						self.logHandler?.logError("Can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
@@ -109,7 +109,7 @@ class GreenCardLoader: GreenCardLoading {
 
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
-										self.logHandler.logError("Failed to save greenCards")
+										self.logHandler?.logError("Failed to save greenCards")
 										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
@@ -148,11 +148,11 @@ class GreenCardLoader: GreenCardLoading {
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
 				case .failure(let serverError):
-					self?.logHandler.logError("error: \(serverError)")
+					self?.logHandler?.logError("error: \(serverError)")
 					onCompletion(.failure(Error.credentials(serverError)))
 
 				case let .success(greencardResponse):
-					self?.logHandler.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
+					self?.logHandler?.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
 					onCompletion(.success(greencardResponse))
 			}
 		}

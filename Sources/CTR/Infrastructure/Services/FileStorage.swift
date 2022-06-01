@@ -20,9 +20,9 @@ protocol FileStorageProtocol: AnyObject {
 final class FileStorage: FileStorageProtocol {
 	
 	private let fileManager: FileManager
-	private let logHandler: Logging
+	private let logHandler: Logging?
 	
-	init(fileManager: FileManager = FileManager.default, logHandler: Logging) {
+	init(fileManager: FileManager = FileManager.default, logHandler: Logging? = nil) {
 		self.fileManager = fileManager
 		self.logHandler = logHandler
 	}
@@ -39,7 +39,7 @@ final class FileStorage: FileStorageProtocol {
 	/// - Throws
 	func store(_ data: Data, as fileName: String) throws {
 		guard let url = documentsURL else {
-			logHandler.logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return
 		}
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
@@ -51,7 +51,7 @@ final class FileStorage: FileStorageProtocol {
 	func read(fileName: String) -> Data? {
 		
 		guard let url = documentsURL else {
-			logHandler.logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return nil
 		}
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
@@ -76,10 +76,10 @@ final class FileStorage: FileStorageProtocol {
 			let items = try fileManager.contentsOfDirectory(atPath: path)
 
 			for item in items {
-				logHandler.logDebug("Found \(item)")
+				logHandler?.logDebug("Found \(item)")
 			}
 		} catch {
-			logHandler.logError("Failed to read directory \(error)")
+			logHandler?.logError("Failed to read directory \(error)")
 		}
 	}
 
@@ -89,7 +89,7 @@ final class FileStorage: FileStorageProtocol {
 	func fileExists(_ fileName: String) -> Bool {
 
 		guard let url = documentsURL else {
-			logHandler.logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return false
 		}
 
@@ -103,7 +103,7 @@ final class FileStorage: FileStorageProtocol {
 	func remove(_ fileName: String) {
 
 		guard let url = documentsURL else {
-			logHandler.logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return
 		}
 
@@ -111,7 +111,7 @@ final class FileStorage: FileStorageProtocol {
 		do {
 			try fileManager.removeItem(atPath: fileUrl.path)
 		} catch {
-			logHandler.logError("Failed to read directory \(error)")
+			logHandler?.logError("Failed to read directory \(error)")
 		}
 	}
 
