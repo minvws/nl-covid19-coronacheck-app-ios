@@ -19,7 +19,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development)
+		sut = NetworkManager(configuration: NetworkConfiguration.development, logHandler: LogHandler())
 	}
 	
 	override func tearDown() {
@@ -258,7 +258,11 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		let signatureValidationSpy = SignatureValidationSpy()
 		signatureValidationSpy.stubbedValidateResult = false
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
-		sut = NetworkManager(configuration: NetworkConfiguration.development, signatureValidationFactory: signatureValidationFactorySpy)
+		sut = NetworkManager(
+			configuration: NetworkConfiguration.development,
+			signatureValidationFactory: signatureValidationFactorySpy,
+			logHandler: LogHandler()
+		)
 
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -291,7 +295,11 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		let signatureValidationSpy = SignatureValidationSpy()
 		signatureValidationSpy.stubbedValidateResult = true
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
-		sut = NetworkManager(configuration: NetworkConfiguration.development, signatureValidationFactory: signatureValidationFactorySpy)
+		sut = NetworkManager(
+			configuration: NetworkConfiguration.development,
+			signatureValidationFactory: signatureValidationFactorySpy,
+			logHandler: LogHandler()
+		)
 
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -324,7 +332,11 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		let signatureValidationSpy = SignatureValidationSpy()
 		signatureValidationSpy.stubbedValidateResult = true
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
-		sut = NetworkManager(configuration: NetworkConfiguration.development, signatureValidationFactory: signatureValidationFactorySpy)
+		sut = NetworkManager(
+			configuration: NetworkConfiguration.development,
+			signatureValidationFactory: signatureValidationFactorySpy,
+			logHandler: LogHandler()
+		)
 
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens

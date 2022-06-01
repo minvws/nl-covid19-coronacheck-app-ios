@@ -15,7 +15,7 @@ class OriginModelTests: XCTestCase {
 
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory)
+		dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandler())
 	}
 
 	// MARK: Tests
