@@ -19,7 +19,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development, logHandler: LogHandler())
+		sut = NetworkManager(configuration: NetworkConfiguration.development, logHandler: LogHandlerSpy())
 	}
 	
 	override func tearDown() {
@@ -276,7 +276,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandler()
+			logHandler: LogHandlerSpy()
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -313,7 +313,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandler()
+			logHandler: LogHandlerSpy()
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -350,7 +350,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			logHandler: LogHandler()
+			logHandler: LogHandlerSpy()
 		)
 
 		stub(condition: isPath(path)) { _ in

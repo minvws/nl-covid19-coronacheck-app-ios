@@ -27,7 +27,7 @@ class ScanLogViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, logHandler: LogHandler())
+		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, logHandler: LogHandlerSpy())
 
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy)
 		sut = ScanLogViewController(viewModel: viewModel)

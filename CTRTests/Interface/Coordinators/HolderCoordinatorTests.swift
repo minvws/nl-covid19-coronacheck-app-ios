@@ -732,7 +732,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs_differentContext() throws {
 		
 		// Given
-		let dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandler())
+		let dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandlerSpy())
 		var greenCard: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {

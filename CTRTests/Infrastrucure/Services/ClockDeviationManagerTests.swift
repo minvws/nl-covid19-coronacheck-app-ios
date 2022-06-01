@@ -25,7 +25,7 @@ class ClockDeviationManagerTests: XCTestCase {
 		
 		sut = ClockDeviationManager(
 			remoteConfigManager: remoteConfigManagerSpy,
-			logHandler: LogHandler(),
+			logHandler: LogHandlerSpy(),
 			currentSystemUptime: { 1 * 3600 },
 			now: { now }
 		)

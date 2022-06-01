@@ -33,7 +33,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			walletManager: environmentSpies.walletManagerSpy,
 			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
 			userSettings: environmentSpies.userSettingsSpy,
-			logHandler: LogHandler()
+			logHandler: LogHandlerSpy()
 		)
  
 	}

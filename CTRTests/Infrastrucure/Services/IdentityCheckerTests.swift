@@ -18,7 +18,7 @@ class IdentityCheckerTests: XCTestCase {
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
-		sut = IdentityChecker(logHandler: LogHandler())
+		sut = IdentityChecker(logHandler: LogHandlerSpy())
 	}
 
 	// MARK: - Tests

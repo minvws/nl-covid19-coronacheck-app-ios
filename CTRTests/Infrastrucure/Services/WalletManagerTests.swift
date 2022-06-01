@@ -21,8 +21,8 @@ class WalletManagerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		
-		dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandler())
-		sut = WalletManager(dataStoreManager: dataStoreManager, logHandler: LogHandler())
+		dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandlerSpy())
+		sut = WalletManager(dataStoreManager: dataStoreManager, logHandler: LogHandlerSpy())
 	}
 
 	func test_initializer() {
@@ -55,7 +55,7 @@ class WalletManagerTests: XCTestCase {
 			let exitingWallet = WalletModel.create(label: WalletManager.walletName, managedContext: context)
 
 			// When
-			sut = WalletManager(dataStoreManager: dataStoreManager, logHandler: LogHandler())
+			sut = WalletManager(dataStoreManager: dataStoreManager, logHandler: LogHandlerSpy())
 			wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
 
 			// Then

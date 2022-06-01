@@ -19,7 +19,7 @@ class NetworkManagerCredentialsTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development, logHandler: LogHandler())
+		sut = NetworkManager(configuration: NetworkConfiguration.development, logHandler: LogHandlerSpy())
 	}
 	
 	override func tearDown() {

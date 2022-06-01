@@ -16,7 +16,7 @@ class WalletModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandler())
+		dataStoreManager = DataStoreManager(.inMemory, logHandler: LogHandlerSpy())
 	}
 	
 	// MARK: Tests
