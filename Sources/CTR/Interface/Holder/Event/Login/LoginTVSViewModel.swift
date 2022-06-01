@@ -23,8 +23,6 @@ class LoginTVSViewModel {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable private(set) var alert: AlertContent?
-
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,

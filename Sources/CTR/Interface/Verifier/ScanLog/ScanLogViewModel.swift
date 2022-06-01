@@ -53,10 +53,9 @@ class ScanLogViewModel {
 		alert = AlertContent(
 			title: L.generalErrorTitle(),
 			subTitle: L.generalErrorTechnicalCustom("\(code)"),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: nil,
-			okTitle: L.generalClose()
+			okAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 

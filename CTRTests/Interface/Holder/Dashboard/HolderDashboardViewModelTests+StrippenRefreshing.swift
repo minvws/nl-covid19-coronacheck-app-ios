@@ -211,13 +211,13 @@ extension HolderDashboardViewModelTests {
 
 		expect(self.sut.currentlyPresentedAlert.value?.title) == L.holderDashboardStrippenExpiredNointernetAlertTitle()
 		expect(self.sut.currentlyPresentedAlert.value?.subTitle) == L.holderDashboardStrippenExpiredNointernetAlertMessage()
-		expect(self.sut.currentlyPresentedAlert.value?.cancelTitle) == L.generalClose()
-		expect(self.sut.currentlyPresentedAlert.value?.okTitle) == L.generalRetry()
+		expect(self.sut.currentlyPresentedAlert.value?.cancelAction?.title) == L.generalClose()
+		expect(self.sut.currentlyPresentedAlert.value?.okAction.title) == L.generalRetry()
 
-		self.sut.currentlyPresentedAlert.value?.cancelAction?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.cancelAction?.action?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedUserDismissedALoadingError) == true
 
-		self.sut.currentlyPresentedAlert.value?.okAction?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.okAction.action?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedLoad) == true
 	}
 
@@ -277,13 +277,13 @@ extension HolderDashboardViewModelTests {
 
 		expect(self.sut.currentlyPresentedAlert.value?.title) == L.holderDashboardStrippenExpiringNointernetAlertTitle()
 		expect(self.sut.currentlyPresentedAlert.value?.subTitle) == L.holderDashboardStrippenExpiringNointernetAlertMessage("3 uur")
-		expect(self.sut.currentlyPresentedAlert.value?.cancelTitle) == L.generalClose()
-		expect(self.sut.currentlyPresentedAlert.value?.okTitle) == L.generalRetry()
+		expect(self.sut.currentlyPresentedAlert.value?.cancelAction?.title) == L.generalClose()
+		expect(self.sut.currentlyPresentedAlert.value?.okAction.title) == L.generalRetry()
 
-		self.sut.currentlyPresentedAlert.value?.cancelAction?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.cancelAction?.action?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedUserDismissedALoadingError) == true
 
-		self.sut.currentlyPresentedAlert.value?.okAction?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.okAction.action?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedLoad) == true
 	}
 

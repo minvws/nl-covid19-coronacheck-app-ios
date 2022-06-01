@@ -283,16 +283,18 @@ class ListStoredEventsViewModel {
 		alert = AlertContent(
 			title: L.holder_storedEvent_alert_removeEvents_title(),
 			subTitle: L.holder_storedEvent_alert_removeEvents_message(),
-			cancelAction: nil,
-			cancelTitle: L.general_cancel(),
-			cancelActionIsPreferred: true,
-			okAction: { [weak self] _ in
-				
-				self?.viewState = .loading(content: Content(title: L.holder_storedEvents_eraseEvents_title()))
-				self?.removeEventGroup(objectID: objectID)
-			},
-			okTitle: L.general_delete(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.general_delete(),
+				action: { [weak self] _ in
+					self?.viewState = .loading(content: Content(title: L.holder_storedEvents_eraseEvents_title()))
+					self?.removeEventGroup(objectID: objectID)
+				},
+				isDestructive: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.general_cancel(),
+				isPreferred: true
+			)
 		)
 	}
 	
@@ -352,16 +354,20 @@ class ListStoredEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.viewState = self.getEventGroupListViewState()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.sendEventsToTheSigner()
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.sendEventsToTheSigner()
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.viewState = self.getEventGroupListViewState()
+				}
+			)
 		)
 	}
 	

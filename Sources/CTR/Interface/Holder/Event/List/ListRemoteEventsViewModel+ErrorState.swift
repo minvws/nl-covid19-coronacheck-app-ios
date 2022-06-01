@@ -16,16 +16,21 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderEventIdentityAlertTitle(),
 			subTitle: L.holderEventIdentityAlertMessage(),
-			cancelAction: { [weak self] _ in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.holderEventIdentityAlertCancel(),
-			okAction: { _ in
-				onReplace()
-			},
-			okTitle: L.holderEventIdentityAlertOk(),
-			okActionIsDestructive: true,
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderEventIdentityAlertOk(),
+				action: { _ in
+					onReplace()
+				},
+				isDestructive: true,
+				isPreferred: true
+				
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderEventIdentityAlertCancel(),
+				action: { [weak self] _ in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				}
+			)
 		)
 	}
 
@@ -34,13 +39,17 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorTitle(),
 			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationErrorClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR()
-			},
-			okTitle: L.holderVaccinationErrorAgain(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationErrorAgain(),
+				action: { [weak self] _ in
+					self?.userWantsToMakeQR()
+				},
+				isPreferred: true
+				
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationErrorClose()
+			)
 		)
 	}
 
@@ -50,13 +59,16 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR()
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.userWantsToMakeQR()
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 	
@@ -109,8 +121,7 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateSomeresultTitle(),
 			subTitle: L.holderErrorstateSomeresultMessage(),
-			okAction: nil,
-			okTitle: L.generalOk()
+			okAction: AlertContent.Action.okay
 		)
 	}
 }

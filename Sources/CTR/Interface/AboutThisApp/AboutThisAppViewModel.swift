@@ -214,13 +214,14 @@ class AboutThisAppViewModel {
 		alert = AlertContent(
 			title: L.holderCleardataAlertTitle(),
 			subTitle: L.holderCleardataAlertSubtitle(),
-			cancelAction: nil,
-			cancelTitle: L.general_cancel(),
-			okAction: { [weak self] _ in
-				self?.wipePersistedData()
-			},
-			okTitle: L.holderCleardataAlertRemove(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.holderCleardataAlertRemove(),
+				action: { [weak self] _ in
+					self?.wipePersistedData()
+				},
+				isDestructive: true
+			),
+			cancelAction: AlertContent.Action.cancel
 		)
 	}
 
@@ -243,13 +244,12 @@ class AboutThisAppViewModel {
 		alert = AlertContent(
 			title: "Disclosure policy updated",
 			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.outcomeHandler(.coordinatorShouldRestart)
-			},
-			okTitle: L.generalOk(),
-			okActionIsDestructive: false
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.outcomeHandler(.coordinatorShouldRestart)
+				}
+			)
 		)
 	}
 }

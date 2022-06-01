@@ -73,18 +73,14 @@ class AppStatusViewController: BaseViewController {
 
 	/// Show alert that we can't open the url
 	private func showCannotOpenUrl() {
-
-		let alertController = UIAlertController(
-			title: L.generalErrorTitle(),
-			message: errorMessage,
-			preferredStyle: .alert)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.generalOk(),
-				style: .default,
-				handler: nil)
+		
+		showAlert(
+			AlertContent(
+				title: L.generalErrorTitle(),
+				subTitle: errorMessage ?? "",
+				okAction: AlertContent.Action.okay
+			)
 		)
-		present(alertController, animated: true, completion: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

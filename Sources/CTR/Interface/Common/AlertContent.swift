@@ -8,16 +8,33 @@
 import UIKit
 
 struct AlertContent {
-	var title: String
-	var subTitle: String
-	var cancelAction: ((UIAlertAction) -> Void)?
-	var cancelTitle: String?
-	var cancelActionIsDestructive: Bool = false
-	var cancelActionIsPreferred: Bool = false
-	var okAction: ((UIAlertAction) -> Void)?
-	var okTitle: String
-	var okActionIsDestructive: Bool = false
-	var okActionIsPreferred: Bool = false
+	
+	struct Action {
+		
+		var title: String
+		var action: ((UIAlertAction) -> Void)?
+		var isDestructive: Bool = false
+		var isPreferred: Bool = false
+		
+		static let okay = AlertContent.Action(title: L.generalOk())
+		static let cancel = AlertContent.Action(title: L.general_cancel())
+	}
+	
+	private (set) var title: String
+	private (set) var subTitle: String
+	private (set) var okAction: AlertContent.Action
+	private (set) var cancelAction: AlertContent.Action?
+	
+	init(
+		title: String,
+		subTitle: String,
+		okAction: AlertContent.Action,
+		cancelAction: AlertContent.Action? = nil) {
+		self.title = title
+		self.subTitle = subTitle
+		self.okAction = okAction
+		self.cancelAction = cancelAction
+	}
 }
 
 extension UIViewController {
@@ -26,7 +43,7 @@ extension UIViewController {
 	/// - Parameters:
 	///   - alertContent: the content of the alert
 	func showAlert(_ alertContent: AlertContent?) {
-
+	
 		guard let content = alertContent else {
 			return
 		}
@@ -36,30 +53,27 @@ extension UIViewController {
 			message: content.subTitle,
 			preferredStyle: .alert
 		)
-
-		let okAction = UIAlertAction(
-			title: content.okTitle,
-			style: content.okActionIsDestructive ? .destructive : .default,
-			handler: content.okAction
-		)
-		alertController.addAction(okAction)
-		if content.okActionIsPreferred {
-			alertController.preferredAction = okAction
-		}
-
-		// Optional cancel button:
-		if let cancelTitle = content.cancelTitle {
-			let cancelAction = UIAlertAction(
-					title: cancelTitle,
-					style: content.cancelActionIsDestructive ? .destructive : .cancel,
-					handler: content.cancelAction
-				)
-			alertController.addAction(cancelAction)
-			if content.cancelActionIsPreferred {
-				alertController.preferredAction = cancelAction
-			}
+		alertController.addAlertAction(action: content.okAction)
+		if let cancelAction = content.cancelAction {
+			alertController.addAlertAction(action: cancelAction, style: .cancel)
 		}
 
 		present(alertController, animated: true, completion: nil)
+	}
+}
+
+extension UIAlertController {
+	
+	func addAlertAction(action: AlertContent.Action, style: UIAlertAction.Style = .default) {
+		
+		let alertAction = UIAlertAction(
+			title: action.title,
+			style: action.isDestructive ? .destructive : style,
+			handler: action.action
+		)
+		addAction(alertAction)
+		if action.isPreferred {
+			preferredAction = alertAction
+		}
 	}
 }

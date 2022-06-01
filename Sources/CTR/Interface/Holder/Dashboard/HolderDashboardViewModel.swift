@@ -276,13 +276,16 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 
 		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
+			guard let self = self else { return }
 			// Disclosure Policy has been updated
 			// - Reset any dismissed banners
 			Current.userSettings.lastDismissedDisclosurePolicy = []
 			// - Update the active disclosure policy
-			self?.recalculateActiveDisclosurePolicyMode()
+			self.recalculateActiveDisclosurePolicyMode()
 			// - Update the disclosure policy information banners
-			self?.recalculateDisclosureBannerState()
+			self.recalculateDisclosureBannerState()
+			// - Re-apply the currently selected tab to ensure UI consistency:
+			self.selectTab(newTab: self.selectedTab.value)
 		}
 		
 		configurationAlmostOutOfDateObserverToken = configurationNotificationManager.almostOutOfDateObservatory.append { [weak self] configIsAlmostOutOfDate in

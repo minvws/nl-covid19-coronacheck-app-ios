@@ -179,10 +179,18 @@ class PaperProofCheckViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
-			okTitle: L.holderVaccinationErrorAgain()
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationErrorAgain(),
+				action: { [weak self] _ in
+					self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				}
+			)
 		)
 	}
 
