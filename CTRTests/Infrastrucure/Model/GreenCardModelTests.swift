@@ -335,6 +335,7 @@ class GreenCardModelTests: XCTestCase {
 		expect(greenCard?.activeCredentialsNowOrInFuture(forDate: now)).to(haveCount(1))
 		expect(greenCard?.hasActiveCredentialNowOrInFuture(forDate: now)) == true
 		expect(greenCard?.currentOrNextActiveCredential(forDate: now)) == credential
+		expect(greenCard?.getLatestInternationalCredential()).to(beNil())
 	}
 	
 	func test_activeCredentialsNowOrInFuture_singleExpiredCredential() throws {
@@ -342,6 +343,7 @@ class GreenCardModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var greenCard: GreenCard?
+		var credential: Credential?
 		let context = dataStoreManager.managedObjectContext()
 		let json = try XCTUnwrap("test_activeCredentialsNowOrInFuture_singleExpiredCredential".data(using: .utf8))
 		context.performAndWait {
@@ -350,14 +352,14 @@ class GreenCardModelTests: XCTestCase {
 
 				// When
 				greenCard = GreenCardModel.create(
-					type: .domestic,
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					CredentialModel.create(
+					credential = CredentialModel.create(
 						data: json,
 						validFrom: now.addingTimeInterval(2 * days * ago) ,
 						expirationTime: now.addingTimeInterval(1 * days * ago),
@@ -372,6 +374,7 @@ class GreenCardModelTests: XCTestCase {
 		expect(greenCard?.activeCredentialsNowOrInFuture(forDate: now)).to(beEmpty())
 		expect(greenCard?.hasActiveCredentialNowOrInFuture(forDate: now)) == false
 		expect(greenCard?.currentOrNextActiveCredential(forDate: now)).to(beNil())
+		expect(greenCard?.getLatestInternationalCredential()) == credential
 	}
 	
 	func test_activeCredentialsNowOrInFuture_twoActiveCredentials() throws {
