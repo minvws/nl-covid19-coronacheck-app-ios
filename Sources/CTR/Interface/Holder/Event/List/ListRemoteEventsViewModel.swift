@@ -479,7 +479,7 @@ class ListRemoteEventsViewModel: Logging {
 
 		// While the recovery is expired, it is still in Core Data
 		// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
-		_ = walletManager.removeExpiredGreenCards()
+		_ = walletManager.removeExpiredGreenCards(forDate: Current.now())
 	}
 
 	private func recoveryFlowBothVaccinationAndRecoveryOrigins(_ greencardResponse: RemoteGreenCards.Response) {

@@ -44,7 +44,7 @@ protocol WalletManaging: AnyObject {
 
 	func listOrigins(type: OriginType) -> [Origin]
 
-	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
+	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
 	/// - Parameter configuration: remote configuration
@@ -292,7 +292,7 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Remove expired GreenCards that contain no more valid origins
 	/// returns: an array of `Greencard.type` Strings. One for each GreenCard that was deleted.
-	@discardableResult func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+	@discardableResult func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)] {
 		var deletedGreenCardTypes: [(greencardType: String, originType: String)] = []
 
 		let context = dataStoreManager.managedObjectContext()
@@ -310,7 +310,7 @@ class WalletManager: WalletManaging, Logging {
 
 						// Does the GreenCard have any valid Origins remaining?
 						let hasValidOrFutureOrigins = origins
-							.contains(where: { ($0.expirationTime ?? .distantPast) > Date() })
+							.contains(where: { ($0.expirationTime ?? .distantPast) > forDate })
 
 						if hasValidOrFutureOrigins {
 							continue
