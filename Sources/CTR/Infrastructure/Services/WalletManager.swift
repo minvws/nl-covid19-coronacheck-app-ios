@@ -425,12 +425,11 @@ class WalletManager: WalletManaging, Logging {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				if let greenCard = GreenCardModel.create(type: .eu, wallet: wallet, managedContext: context) {
-
+					// Origins
 					for remoteOrigin in remoteEuGreenCard.origins {
-
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
 					}
-
+					// Credential (DCC has 1 credential)
 					let data = Data(remoteEuGreenCard.credential.utf8)
 					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
 						result = result && CredentialModel.create(
@@ -441,9 +440,9 @@ class WalletManager: WalletManaging, Logging {
 							greenCard: greenCard,
 							managedContext: context) != nil
 						dataStoreManager.save(context)
+					} else {
+						result = false
 					}
-
-					// data, version and date should come from the CreateCredential method of the Go Library.
 				} else {
 					result = false
 				}
