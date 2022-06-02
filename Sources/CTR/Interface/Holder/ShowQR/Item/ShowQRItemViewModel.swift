@@ -12,7 +12,7 @@ protocol ShowQRItemViewModelDelegate: AnyObject {
 	func itemIsNotValid()
 }
 
-class ShowQRItemViewModel: Logging {
+class ShowQRItemViewModel {
 	
 	// MARK: - Static
 	

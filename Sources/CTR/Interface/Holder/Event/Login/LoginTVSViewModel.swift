@@ -8,7 +8,7 @@
 import UIKit
 import AppAuth
 
-class LoginTVSViewModel: Logging {
+class LoginTVSViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
@@ -74,12 +74,12 @@ extension LoginTVSViewModel {
 
 	func handleError(_ error: Error?) {
 
-		self.logError("TVS error: \(error?.localizedDescription ?? "Unknown error")")
+		Current.logHandler.logError("TVS error: \(error?.localizedDescription ?? "Unknown error")")
 		let clientCode = mapError(error)
 
 		if let error = error {
 			if  error.localizedDescription.contains("login_required") {
-				logDebug("Server busy")
+				Current.logHandler.logDebug("Server busy")
 				displayServerBusy(
 					errorCode: ErrorCode(
 						flow: eventMode.flow,
@@ -89,7 +89,7 @@ extension LoginTVSViewModel {
 				)
 				return
 			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
-				logDebug("User cancelled")
+				Current.logHandler.logDebug("User cancelled")
 				userCancelled()
 				return
 			} else if case let ServerError.error(_, _, networkError) = error {

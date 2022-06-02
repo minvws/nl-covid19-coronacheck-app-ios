@@ -17,7 +17,7 @@ enum VerifierStartResult {
 	case userTappedProceedToInstructionsOrRiskSetting
 }
 
-class VerifierStartScanningViewModel: Logging {
+class VerifierStartScanningViewModel {
 
 	// MARK: - Nested Types
 	
@@ -120,10 +120,6 @@ class VerifierStartScanningViewModel: Logging {
 			return formatter
 		}()
 	}
-	
-	// MARK: - Internal vars
-	
-	var loggingCategory: String = "VerifierStartViewModel"
 
 	// MARK: - Bindable properties
 

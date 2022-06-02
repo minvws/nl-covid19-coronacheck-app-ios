@@ -69,7 +69,7 @@ class SecurityCheckerNone: SecurityChecker {
 #endif
 
 /// Security check for backend communication
-class SecurityChecker: SecurityCheckerProtocol, Logging {
+class SecurityChecker: SecurityCheckerProtocol {
 	
 	var trustedCertificates: [Data]
 	var challenge: URLAuthenticationChallenge?
@@ -113,7 +113,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		guard challenge?.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
 			  let serverTrust = challenge?.protectionSpace.serverTrust, let host = challenge?.protectionSpace.host else {
 			
-			logWarning("SecurityChecker: invalid authenticationMethod")
+			Current.logHandler.logWarning("SecurityChecker: invalid authenticationMethod")
 			completionHandler(.performDefaultHandling, nil)
 			return
 		}
@@ -128,7 +128,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
 		}
-		logWarning("SecurityChecker: cancelAuthenticationChallenge")
+		Current.logHandler.logWarning("SecurityChecker: cancelAuthenticationChallenge")
 		completionHandler(.cancelAuthenticationChallenge, nil)
 		return
 	}

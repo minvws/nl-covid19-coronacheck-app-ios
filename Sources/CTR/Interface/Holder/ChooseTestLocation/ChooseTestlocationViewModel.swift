@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseTestLocationViewModel: Logging {
+class ChooseTestLocationViewModel {
 
 	// MARK: - Bindable Strings
 

@@ -41,7 +41,7 @@ struct AboutThisAppMenuOption {
 	let name: String
 }
 
-class AboutThisAppViewModel: Logging {
+class AboutThisAppViewModel {
 
 	enum Outcome: Equatable {
 		case openURL(_: URL, inApp: Bool)

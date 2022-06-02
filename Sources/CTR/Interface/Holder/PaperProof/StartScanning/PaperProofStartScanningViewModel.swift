@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class PaperProofStartScanningViewModel: Logging {
+final class PaperProofStartScanningViewModel {
 	
 	@Bindable private(set) var title: String = L.holder_paperproof_startscanning_title()
 	@Bindable private(set) var message: String = L.holder_paperproof_startscanning_body()

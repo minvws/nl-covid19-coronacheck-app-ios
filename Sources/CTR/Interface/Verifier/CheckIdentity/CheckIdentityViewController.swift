@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CheckIdentityViewController: BaseViewController, Logging {
+final class CheckIdentityViewController: BaseViewController {
 	
 	override var enableSwipeBack: Bool { false }
 	
@@ -75,7 +75,7 @@ final class CheckIdentityViewController: BaseViewController, Logging {
 		viewModel.$hideForCapture.binding = { [weak self] in
 
 			#if DEBUG
-			self?.logDebug("Skipping hiding of result because in DEBUG mode")
+			Current.logHandler.logDebug("Skipping hiding of result because in DEBUG mode")
 			#else
 			self?.sceneView.isHidden = $0
 			#endif

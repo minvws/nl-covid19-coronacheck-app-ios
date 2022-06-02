@@ -14,7 +14,7 @@ protocol ScreenCaptureDetectorProtocol: AnyObject {
 	var screenCaptureDidChangeCallback: ((Bool) -> Void)? { get set }
 }
 
-final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol, Logging {
+final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
@@ -87,7 +87,7 @@ private extension ScreenCaptureDetector {
 	
 	var isCaptured: Bool {
 		#if DEBUG
-		logVerbose("Screen is being captured and allowed for debug mode")
+		Current.logHandler.logVerbose("Screen is being captured and allowed for debug mode")
 		return false
 		#else
 		return UIScreen.main.isCaptured

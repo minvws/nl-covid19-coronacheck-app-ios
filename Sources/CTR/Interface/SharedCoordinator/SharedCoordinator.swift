@@ -29,9 +29,7 @@ protocol Restartable: AnyObject {
 }
 
 /// The shared base class for the holder and verifier coordinator.
-class SharedCoordinator: Coordinator, Logging {
-
-	var loggingCategory: String = "SharedCoordinator"
+class SharedCoordinator: Coordinator {
 
 	var window: UIWindow
 
@@ -225,8 +223,6 @@ extension SharedCoordinator: NewFeaturesDelegate {
 
 	/// The user finished the new features
 	func finishNewFeatures() {
-
-		logDebug("SharedCoordinator: finishNewFeatures")
 
 		newFeaturesManager.userHasViewedNewFeatureIntro()
 		

@@ -27,7 +27,7 @@ protocol CouplingManaging {
 		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void)
 }
 
-class CouplingManager: CouplingManaging, Logging {
+class CouplingManager: CouplingManaging {
 
 	let cryptoManager: CryptoManaging
 	let networkManager: NetworkManaging
