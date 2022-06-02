@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
@@ -690,6 +691,9 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be now for a CTB
 		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) != Date(timeIntervalSince1970: 0)
+		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == true
+		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
+		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 	
 	func test_storeDomesticGreenCard_recovery() throws {
@@ -720,6 +724,9 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
 		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
+		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == true
+		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 	
 	func test_storeDomesticGreenCard_vaccinationAssessment() throws {
@@ -750,6 +757,9 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
 		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(haveCount(1))
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
+		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
+		expect(self.sut.hasDomesticGreenCard(originType: "vaccinationassessment")) == true
 	}
 	
 	func test_storeInternationalGreenCard_vaccination() throws {
@@ -776,6 +786,9 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be epoch for a DCC (immediately valid)
 		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) == Date(timeIntervalSince1970: 0)
+		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
+		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
+		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 
 	func test_storeInternationalGreenCard_vaccination_failedCredential() throws {
