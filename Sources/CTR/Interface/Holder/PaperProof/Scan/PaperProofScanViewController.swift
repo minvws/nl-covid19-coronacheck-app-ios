@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -42,8 +42,6 @@ class PaperProofScanViewController: ScanViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-	
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
 		viewModel.$shouldResumeScanning.binding = { [weak self] in
 			if let value = $0, value {
@@ -54,10 +52,10 @@ class PaperProofScanViewController: ScanViewController {
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self, let enableLabel = $0.first, let disableLabel = $0.last else { return }
 			strongSelf.addTorchButton(
-                action: #selector(strongSelf.toggleTorch),
-                enableLabel: enableLabel,
-                disableLabel: disableLabel
-            )
+				action: #selector(strongSelf.toggleTorch),
+				enableLabel: enableLabel,
+				disableLabel: disableLabel
+			)
 		}
 		viewModel.$showPermissionWarning.binding = { [weak self] in
 			if $0 {
@@ -82,28 +80,19 @@ class PaperProofScanViewController: ScanViewController {
 
 	/// Show alert
 	func showPermissionError() {
-
-		let alertController = UIAlertController(
-			title: L.holder_scanner_permission_title(),
-			message: L.holder_scanner_permission_message(),
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.holder_scanner_permission_settings(),
-				style: .default,
-				handler: { [weak self] _ in
-					self?.viewModel.gotoSettings()
-				}
+		
+		showAlert(
+			AlertContent(
+				title: L.holder_scanner_permission_title(),
+				subTitle: L.holder_scanner_permission_message(),
+				okAction: AlertContent.Action(
+					title: L.holder_scanner_permission_settings(),
+					action: { [weak self] _ in
+						self?.viewModel.gotoSettings()
+					}
+				),
+				cancelAction: AlertContent.Action.cancel
 			)
 		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.general_cancel(),
-				style: .cancel,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
 	}
 }

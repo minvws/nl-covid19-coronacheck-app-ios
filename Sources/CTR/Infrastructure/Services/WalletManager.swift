@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -58,7 +58,7 @@ protocol WalletManaging: AnyObject {
 	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
 	
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error>
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
@@ -201,9 +201,9 @@ class WalletManager: WalletManaging, Logging {
 		}
 	}
 	
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Bool, Error> {
+	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		
-		return EventGroupModel.delete(objectID)
+		dataStoreManager.delete(objectID)
 	}
 
 	func fetchSignedEvents() -> [String] {
@@ -433,10 +433,9 @@ class WalletManager: WalletManaging, Logging {
 
 					let data = Data(remoteEuGreenCard.credential.utf8)
 					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
-						logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 						result = result && CredentialModel.create(
 							data: data,
-							validFrom: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt),
+							validFrom: Date(timeIntervalSince1970: 0), // DCC are always immediately valid
 							expirationTime: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime),
 							version: Int32(euCredentialAttributes.credentialVersion),
 							greenCard: greenCard,
@@ -582,7 +581,7 @@ class WalletManager: WalletManaging, Logging {
 	func hasDomesticGreenCard(originType: String) -> Bool {
 
 		let allDomesticGreencards = listGreenCards()
-			.filter { $0.getType() == .domestic }
+			.filter { $0.getType() == GreenCardType.domestic }
 			.filter { greencard in
 				guard let origins = greencard.castOrigins() else { return false }
 				return !origins.filter({ $0.type == originType }).isEmpty

@@ -1,40 +1,40 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
-
+	
 	func itemIsNotValid()
 }
 
 class ShowQRItemViewModel: Logging {
-
+	
 	// MARK: - Static
 	
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
 	static let screenshotWarningMessageDuration: TimeInterval = 3 * 60
-
+	
 	// MARK: - vars
-
+	
 	weak private var delegate: ShowQRItemViewModelDelegate?
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	weak private var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
-
+	
 	weak var validityTimer: Timer?
 	weak private var screenshotWarningTimer: Timer?
-
+	
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 	private var qrShouldBeHidden: Bool
 	private let qrShouldInitiallyBeHidden: Bool
 	private let disclosusePolicy: DisclosurePolicy?
-
+	
 	private var currentQRImage: UIImage? {
 		didSet {
 			updateQRVisibility()
@@ -45,19 +45,19 @@ class ShowQRItemViewModel: Logging {
 			updateQRVisibility()
 		}
 	}
-
+	
 	private var screenIsBlockedForScreenshotWithSecondsRemaining: Int? {
 		didSet {
 			updateQRVisibility()
 		}
 	}
-    
-    @Bindable private(set) var qrAccessibility: String?
-
+	
+	@Bindable private(set) var qrAccessibility: String?
+	
 	@Bindable private(set) var visibilityState: ShowQRItemView.VisibilityState = .loading
-
+	
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
-
+	
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -72,26 +72,26 @@ class ShowQRItemViewModel: Logging {
 		qrShouldInitiallyBeHidden: Bool = false,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()
 	) {
-
+		
 		self.delegate = delegate
 		self.greenCard = greenCard
 		self.disclosusePolicy = disclosurePolicy
 		self.screenCaptureDetector = screenCaptureDetector
 		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
 		self.qrShouldInitiallyBeHidden = qrShouldInitiallyBeHidden
-
-		if greenCard.type == GreenCardType.domestic.rawValue {
+		
+		if greenCard.getType() == GreenCardType.domestic {
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
-		} else if greenCard.type == GreenCardType.eu.rawValue {
-            qrAccessibility = L.holderShowqrEuQrTitle()
+		} else if greenCard.getType() == GreenCardType.eu {
+			qrAccessibility = L.holderShowqrEuQrTitle()
 		}
-
+		
 		screenIsBeingCaptured = screenCaptureDetector.screenIsBeingCaptured
-
+		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.screenIsBeingCaptured = isBeingCaptured
 		}
-
+		
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
 			guard self?.screenIsBlockedForScreenshotWithSecondsRemaining == nil else { return }
 			
@@ -99,7 +99,7 @@ class ShowQRItemViewModel: Logging {
 			Current.userSettings.lastScreenshotTime = now
 			self?.screenshotWasTaken(blockQRUntil: now.addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration))
 		}
-
+		
 		if let lastScreenshotTime = Current.userSettings.lastScreenshotTime {
 			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRItemViewModel.screenshotWarningMessageDuration)
 			if expiryDate > Current.now() {
@@ -108,41 +108,38 @@ class ShowQRItemViewModel: Logging {
 				Current.userSettings.lastScreenshotTime = nil
 			}
 		}
-
+		
 		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			self?.validityTimer?.fire()
 		}
-
+		
 		updateQRVisibility()
 	}
-
+	
 	deinit {
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 	}
-
+	
 	func updateQRVisibility() {
-
+		
 		if let screenshotBlockTimeRemaining = screenIsBlockedForScreenshotWithSecondsRemaining {
 			let mins = screenshotBlockTimeRemaining / 60 % 60
 			let secs = screenshotBlockTimeRemaining % 60
 			let zeroPaddedSeconds = String(format: "%02d", secs)
-
+			
 			let message = L.holderShowqrScreenshotwarningMessage("\(mins):\(zeroPaddedSeconds)")
-
+			
 			// Attempt to make a nicer voiceover string:
 			let voiceoverTimeRemaining: String
-
-			let durationFormatter = DateComponentsFormatter()
-			durationFormatter.unitsStyle = . full
-			durationFormatter.maximumUnitCount = 2
-			durationFormatter.allowedUnits = [.minute, .second]
-
+			
+			let durationFormatter = DateFormatter.Relative.minutesSeconds
+			
 			// e.g. "in ten seconds"
 			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))
 			voiceoverTimeRemaining = relativeString.map { L.holderShowqrScreenshotwarningMessage($0) } ?? message
-
+			
 			self.visibilityState = .screenshotBlocking(timeRemainingText: message, voiceoverTimeRemainingText: voiceoverTimeRemaining)
-
+			
 		} else if screenIsBeingCaptured {
 			self.visibilityState = .hiddenForScreenCapture
 		} else if let currentQRImage = self.currentQRImage {
@@ -155,17 +152,17 @@ class ShowQRItemViewModel: Logging {
 			self.visibilityState = .loading
 		}
 	}
-
+	
 	private func screenshotWasTaken(blockQRUntil: Date) {
 		// Cleanup the old timer
 		screenshotWarningTimer?.invalidate()
 		screenshotWarningTimer = nil
-
+		
 		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
 			guard let self = self else { return }
-
+			
 			let timeRemaining = blockQRUntil.timeIntervalSince(Current.now())
-
+			
 			if timeRemaining <= 1 {
 				timer.invalidate()
 				self.screenIsBlockedForScreenshotWithSecondsRemaining = nil
@@ -175,66 +172,67 @@ class ShowQRItemViewModel: Logging {
 		}
 		screenshotWarningTimer?.fire() // don't wait 1s
 	}
-
+	
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
-
-		guard let credential = self.greenCard.getActiveCredential(),
-			  let data = credential.data,
-			  let expirationTime = credential.expirationTime, expirationTime > Date() else {
-			setQRNotValid()
-			return
-		}
-
-		if greenCard.type == GreenCardType.domestic.rawValue {
-			DispatchQueue.global(qos: .userInitiated).async {
 				
-				if let policy = self.disclosusePolicy,
-				   let message = self.cryptoManager?.discloseCredential(data, disclosurePolicy: policy),
-				   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
-					DispatchQueue.main.async {
-						self.setQRValid(image: image)
-					}
-				} else {
-					DispatchQueue.main.async {
-						self.setQRNotValid()
+		switch greenCard.getType() {
+			case .none:
+				setQRNotValid()
+			case .domestic:
+				guard let data = greenCard.getActiveDomesticCredential()?.data else {
+					setQRNotValid()
+					return
+				}
+				DispatchQueue.global(qos: .userInitiated).async {
+					
+					if let policy = self.disclosusePolicy,
+					   let message = self.cryptoManager?.discloseCredential(data, disclosurePolicy: policy),
+					   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
+						DispatchQueue.main.async {
+							self.setQRValid(image: image)
+						}
+					} else {
+						DispatchQueue.main.async {
+							self.setQRNotValid()
+						}
 					}
 				}
-			}
-		} else {
-			DispatchQueue.global(qos: .userInitiated).async {
-				// International
-				if let image = data.generateQRCode(correctionLevel: ShowQRItemViewModel.internationalCorrectionLevel) {
-					DispatchQueue.main.async {
-						self.setQRValid(image: image)
+			case .eu:
+				guard let data = greenCard.getLatestInternationalCredential()?.data else {
+					setQRNotValid()
+					return
+				}
+				DispatchQueue.global(qos: .userInitiated).async {
+					if let image = data.generateQRCode(correctionLevel: ShowQRItemViewModel.internationalCorrectionLevel) {
+						DispatchQueue.main.async {
+							self.setQRValid(image: image)
+						}
 					}
 				}
-			}
 		}
 	}
-
+	
 	private func setQRValid(image: UIImage) {
-
-		logVerbose("Credential is valid")
+		
 		currentQRImage = image
 		startValidityTimer()
 	}
-
+	
 	private func setQRNotValid() {
-
-		logWarning("Credential is not valid")
+		
 		currentQRImage = nil
 		stopValidityTimer()
 		delegate?.itemIsNotValid()
 	}
-
+	
 	/// Start the validity timer, check every 90 seconds.
 	private func startValidityTimer() {
-
+		
 		guard validityTimer == nil else {
 			return
 		}
-
+		
 		validityTimer = Timer.scheduledTimer(
 			timeInterval: TimeInterval(remoteConfigManager?.storedConfiguration.domesticQRRefreshSeconds ?? 60),
 			target: self,
@@ -243,21 +241,21 @@ class ShowQRItemViewModel: Logging {
 			repeats: true
 		)
 	}
-
+	
 	func stopValidityTimer() {
 		
 		validityTimer?.invalidate()
 		validityTimer = nil
 	}
-
+	
 	func revealIrrelevantQR() {
-
+		
 		qrShouldBeHidden = false
 		updateQRVisibility()
 	}
-
+	
 	func resetIrrelevancy() {
-
+		
 		qrShouldBeHidden = qrShouldInitiallyBeHidden
 	}
 }

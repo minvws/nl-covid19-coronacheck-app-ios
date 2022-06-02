@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -102,19 +102,19 @@ class ListStoredEventsViewModel: Logging {
 		
 		if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
 		   let decodedPayloadData = Data(base64Encoded: object.payload),
-		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
-		   let identity = wrapper.identity {
+		   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
 			
 			let sortedEvents = wrapper.events?.sorted(by: { lhs, rhs in
-				lhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture > rhs.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) ?? .distantFuture
+				lhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture > rhs.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantFuture
 			})
 			
 			guard let sortedEvents = sortedEvents else { return result }
 			result.append(contentsOf: sortedEvents.compactMap { event in
-				guard let date = event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) else {
+				guard let date = event.getSortDate(with: DateFormatter.Event.iso8601),
+						let identity = wrapper.identity else {
 					return nil
 				}
-				let dateString = ListRemoteEventsViewModel.printDateFormatter.string(from: date)
+				let dateString = DateFormatter.Format.dayMonthYear.string(from: date)
 				
 				if event.hasNegativeTest {
 					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
@@ -228,7 +228,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? vaccination.dateOfVaccination
+			.map(DateFormatter.Format.dayMonthYear.string) ?? vaccination.dateOfVaccination
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_vaccination().capitalizingFirstLetter(),
@@ -245,7 +245,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(DateFormatter.Format.dayMonthYear.string) ?? recovery.firstPositiveTestDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -262,7 +262,7 @@ class ListStoredEventsViewModel: Logging {
 	private func getRowFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_negativeTest().capitalizingFirstLetter(),
@@ -283,16 +283,18 @@ class ListStoredEventsViewModel: Logging {
 		alert = AlertContent(
 			title: L.holder_storedEvent_alert_removeEvents_title(),
 			subTitle: L.holder_storedEvent_alert_removeEvents_message(),
-			cancelAction: nil,
-			cancelTitle: L.general_cancel(),
-			cancelActionIsPreferred: true,
-			okAction: { [weak self] _ in
-				
-				self?.viewState = .loading(content: Content(title: L.holder_storedEvents_eraseEvents_title()))
-				self?.removeEventGroup(objectID: objectID)
-			},
-			okTitle: L.general_delete(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.general_delete(),
+				action: { [weak self] _ in
+					self?.viewState = .loading(content: Content(title: L.holder_storedEvents_eraseEvents_title()))
+					self?.removeEventGroup(objectID: objectID)
+				},
+				isDestructive: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.general_cancel(),
+				isPreferred: true
+			)
 		)
 	}
 	
@@ -300,12 +302,8 @@ class ListStoredEventsViewModel: Logging {
 		
 		let removalResult = Current.walletManager.removeEventGroup(objectID)
 		switch removalResult {
-			case .success(let success):
-				if success {
-					sendEventsToTheSigner()
-				} else {
-					handleCoreDataError()
-				}
+			case .success:
+				sendEventsToTheSigner()
 			case .failure(let error):
 				logError("Failed to remove event groups: \(error)")
 				handleCoreDataError()
@@ -356,16 +354,20 @@ class ListStoredEventsViewModel: Logging {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.viewState = self.getEventGroupListViewState()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.sendEventsToTheSigner()
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.sendEventsToTheSigner()
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.viewState = self.getEventGroupListViewState()
+				}
+			)
 		)
 	}
 	
@@ -385,7 +387,7 @@ class ListStoredEventsViewModel: Logging {
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content, backAction: nil)
+			self.coordinator?.presentError(content: content, backAction: nil)
 		}
 	}
 }

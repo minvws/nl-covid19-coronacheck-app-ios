@@ -1,30 +1,11 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
 import Foundation
-
-struct QRDetailsGenerator {
-
-	static let printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
-		return dateFormatter
-	}()
-
-	static let printDateTimeFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
-		return dateFormatter
-	}()
-}
 
 class NegativeTestQRDetailsGenerator {
 
@@ -33,10 +14,10 @@ class NegativeTestQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(QRDetailsGenerator.printDateTimeFormatter.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? test.sampleDate
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
 
@@ -66,7 +47,10 @@ class NegativeTestQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsTest.result, value: testResult),
 			DCCQRDetails(field: DCCQRDetailsTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			DCCQRDetails(field: DCCQRDetailsTest.manufacturer, value: manufacturer),
-			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager.getBiLingualDisplayCountry(test.country)),
+			DCCQRDetails(field: DCCQRDetailsTest.country, value: mappingManager.getBilingualDisplayCountry(
+				test.country,
+				languageCode: Locale.current.languageCode)
+			),
 			DCCQRDetails(field: DCCQRDetailsTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer, country: test.country)),
 			DCCQRDetails(field: DCCQRDetailsTest.uniqueIdentifer, value: test.certificateIdentifier)
 		]
@@ -94,10 +78,10 @@ class VaccinationQRDetailsGenerator {
 		let vaccineManufacturer = mappingManager.getVaccinationManufacturer(vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? vaccination.dateOfVaccination
+			.map(DateFormatter.Format.numericDate.string) ?? vaccination.dateOfVaccination
 
 		return [
 			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
@@ -108,7 +92,10 @@ class VaccinationQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage, dosageMessage: dosageMessage),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
-			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBiLingualDisplayCountry(vaccination.country)),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBilingualDisplayCountry(
+				vaccination.country,
+				languageCode: Locale.current.languageCode)
+			),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer, country: vaccination.country)),
 			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
 		]
@@ -122,22 +109,28 @@ class RecoveryQRDetailsGenerator {
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
-		let formattedBirthDate = euCredentialAttributes.dateOfBirth(QRDetailsGenerator.printDateFormatter)
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? recovery.firstPositiveTestDate
+			.map(DateFormatter.Format.numericDate.string) ?? recovery.firstPositiveTestDate
 		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? recovery.validFrom
+			.map(DateFormatter.Format.numericDate.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
-			.map(QRDetailsGenerator.printDateFormatter.string) ?? recovery.expiresAt
+			.map(DateFormatter.Format.numericDate.string) ?? recovery.expiresAt
 
 		return [
 			DCCQRDetails(field: DCCQRDetailsRecovery.name, value: name),
 			DCCQRDetails(field: DCCQRDetailsRecovery.dateOfBirth, value: formattedBirthDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.pathogen, value: L.holderShowqrEuAboutRecoveryPathogenvalue()),
 			DCCQRDetails(field: DCCQRDetailsRecovery.date, value: formattedFirstPostiveDate),
-			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager.getBiLingualDisplayCountry(recovery.country)),
-			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer, country: recovery.country)),
+			DCCQRDetails(field: DCCQRDetailsRecovery.country, value: mappingManager.getBilingualDisplayCountry(
+				recovery.country,
+				languageCode: Locale.current.languageCode)
+			),
+			DCCQRDetails(field: DCCQRDetailsRecovery.issuer, value: mappingManager.getDisplayIssuer(
+				recovery.issuer,
+				country: recovery.country)
+			),
 			DCCQRDetails(field: DCCQRDetailsRecovery.validFrom, value: formattedValidFromDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.validUntil, value: formattedValidUntilDate),
 			DCCQRDetails(field: DCCQRDetailsRecovery.uniqueIdentifer, value: recovery.certificateIdentifier)

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -303,7 +303,14 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					}
 					return
 				}
-
+				
+				// Filter expired foreign DCCs, those should not lead to a refresh
+				if greencard.getType() == GreenCardType.eu,
+				   let lastCredentialData = allCredentialsForGreencard.last?.data,
+				   Current.cryptoManager.isForeignDCC(lastCredentialData) {
+					return
+				}
+				
 				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
 				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
 
@@ -323,7 +330,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 				guard greencardIsWithinThresholdForRefresh
 				else { return } // There are still plenty of credentials remaining, no need to refresh.
-
+				
 				if daysUntilLastCredentialExpiry <= 0 {
 					expiredGreencards += [greencard]
 				} else {

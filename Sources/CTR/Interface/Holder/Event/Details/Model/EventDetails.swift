@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -69,7 +69,7 @@ enum EventDetailsVaccination: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .country: return true
+			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
 			default: return false
 		}
 	}
@@ -108,7 +108,7 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .country: return true
+			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
 			default: return false
 		}
 	}
@@ -151,7 +151,7 @@ enum EventDetailsTest: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .manufacturer: return true
+			case .subtitle, .dateOfBirth, .manufacturer, .uniqueIdentifer: return true
 			default: return false
 		}
 	}
@@ -188,7 +188,7 @@ enum EventDetailsRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth: return true
+			case .subtitle, .dateOfBirth, .uniqueIdentifer: return true
 			default: return false
 		}
 	}
@@ -231,14 +231,14 @@ enum EventDetailsDCCVaccination: EventDetailable {
 			case .dosage: return L.holderDccVaccinationDosage()
 			case .date: return L.holderDccVaccinationDate()
 			case .country: return L.holderDccVaccinationCountry()
-			case .issuer: return L.holderDccVaccinationIssuer()
+			case .issuer: return L.holder_dcc_issuer()
 			case .certificateIdentifier: return L.holderDccVaccinationIdentifier()
 		}
 	}
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
 			default: return false
 		}
 	}
@@ -280,14 +280,14 @@ enum EventDetailsDCCTest: EventDetailable {
 			case .facility: return L.holderDccTestFacility()
 			case .manufacturer: return L.holderDccTestManufacturer()
 			case .country: return L.holderDccTestCountry()
-			case .issuer: return L.holderDccTestIssuer()
+			case .issuer: return L.holder_dcc_issuer()
 			case .certificateIdentifier: return L.holderDccTestIdentifier()
 		}
 	}
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
 			default: return false
 		}
 	}
@@ -321,7 +321,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 			case .pathogen: return L.holderDccRecoveryPathogen()
 			case .date: return L.holderDccRecoveryDate()
 			case .country: return L.holderDccRecoveryCountry()
-			case .issuer: return L.holderDccRecoveryIssuer()
+			case .issuer: return L.holder_dcc_issuer()
 			case .validFrom: return L.holderDccRecoveryValidfrom()
 			case .validUntil: return L.holderDccRecoveryValiduntil()
 			case .certificateIdentifier: return L.holderDccRecoveryIdentifier()
@@ -330,7 +330,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer: return true
+			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
 			default: return false
 		}
 	}

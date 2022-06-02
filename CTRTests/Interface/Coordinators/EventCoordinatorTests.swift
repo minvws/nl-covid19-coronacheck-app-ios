@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -332,8 +332,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
@@ -551,8 +551,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
@@ -655,8 +655,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
@@ -673,7 +673,7 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "title"
 		expect(viewModel.content.body) == "body"
 	}

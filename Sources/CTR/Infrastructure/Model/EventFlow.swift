@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -120,10 +120,9 @@ struct EventFlow {
 
 		var providerIdentifier: String
 		let protocolVersion: String
-		let identity: Identity? // 3.0
+		let identity: Identity?
 		let status: EventState
-		let result: TestResult? // 2.0
-		var events: [Event]? = [] // 3.0
+		var events: [Event]? = []
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -133,7 +132,6 @@ struct EventFlow {
 			case providerIdentifier
 			case status
 			case events
-			case result
 		}
 	}
 

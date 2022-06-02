@@ -50,7 +50,7 @@
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nullable instancetype)init:(NSString* _Nullable)pksPath expectEuropeanKeys:(BOOL)expectEuropeanKeys;
+- (nullable instancetype)init:(NSString* _Nullable)pksPath;
 // skipped field PublicKeysConfig.DomesticPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-mobile-core.DomesticPksLookup
 
 // skipped field PublicKeysConfig.EuropeanPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-hcert/verifier.PksLookup
@@ -107,6 +107,8 @@
 
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreCATEGORY_ATTRIBUTE_1G;
 FOUNDATION_EXPORT const int64_t MobilecoreCREATE_CREDENTIAL_VERSION;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDCC_DOMESTIC_ISSUER_COUNTRY_CODE;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDCC_DOMESTIC_ISSUER_KEY_SAN;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_1G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISCLOSURE_POLICY_3G;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
@@ -129,12 +131,6 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 @interface Mobilecore : NSObject
 // skipped variable DATE_OF_BIRTH_REGEX with unsupported type: *regexp.Regexp
 
-/**
- * DEPRECATED: See deprecation of LoadDomesticIssuerPks
- */
-+ (BOOL) hasLoadedDomesticIssuerPks;
-+ (void) setHasLoadedDomesticIssuerPks:(BOOL)v;
-
 @end
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issueSpecificationMessageJson);
@@ -152,21 +148,21 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 // skipped function GetVerifiersForCLI with unsupported parameter or return types
 
 
+FOUNDATION_EXPORT BOOL MobilecoreHasDomesticPrefix(NSData* _Nullable proofQREncoded);
+
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeHolder(NSString* _Nullable configDirectoryPath);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeVerifier(NSString* _Nullable configDirectoryPath);
 
-/**
- * DEPRECATED: Remove this method when the mobile apps have migrated to using
- InitializeHolder and the holder package directly
- */
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreLoadDomesticIssuerPks(NSData* _Nullable annotatedPksJson);
+FOUNDATION_EXPORT BOOL MobilecoreIsDCC(NSData* _Nullable proofQREncoded);
 
-FOUNDATION_EXPORT MobilecorePublicKeysConfig* _Nullable MobilecoreNewPublicKeysConfig(NSString* _Nullable pksPath, BOOL expectEuropeanKeys, NSError* _Nullable* _Nullable error);
+FOUNDATION_EXPORT BOOL MobilecoreIsForeignDCC(NSData* _Nullable proofQREncoded);
+
+FOUNDATION_EXPORT MobilecorePublicKeysConfig* _Nullable MobilecoreNewPublicKeysConfig(NSString* _Nullable pksPath, NSError* _Nullable* _Nullable error);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofQREncoded);
 
 FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded, NSString* _Nullable verificationPolicy);
 

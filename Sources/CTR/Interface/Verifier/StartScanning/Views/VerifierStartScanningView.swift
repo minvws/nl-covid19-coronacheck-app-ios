@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -305,7 +305,7 @@ class VerifierStartScanningView: BaseView {
 			// Due to TextView rendering issue, check attributedText directly for old value.
 			// This prevents VoiceOver unable to focus on other subviews.
 			guard contentTextView.attributedText?.string != message else { return }
-			contentTextView.html(message)
+			contentTextView.applyHTML(message)
 		}
 	}
 
@@ -342,13 +342,17 @@ class VerifierStartScanningView: BaseView {
 		}
 		riskIndicatorStackView.isHidden = false
 		riskIndicatorIconView.tintColor = params.0
-		riskIndicatorLabel.attributedText = .makeFromHtml(
+		
+		NSAttributedString.makeFromHtml(
 			text: params.1,
 			style: .bodyDark
-		)
-		riskIndicatorStackView.setupLargeContentViewer(title: riskIndicatorLabel.attributedText?.string)
-		riskIndicatorStackView.isAccessibilityElement = true
-		riskIndicatorStackView.accessibilityLabel = riskIndicatorLabel.attributedText?.string
+		) { attributedString in
+			
+			self.riskIndicatorLabel.attributedText = attributedString
+			self.riskIndicatorStackView.setupLargeContentViewer(title: self.riskIndicatorLabel.attributedText?.string)
+			self.riskIndicatorStackView.isAccessibilityElement = true
+			self.riskIndicatorStackView.accessibilityLabel = self.riskIndicatorLabel.attributedText?.string
+		}
 	}
 
 	/// The user tapped on the primary button

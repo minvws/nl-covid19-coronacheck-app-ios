@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -109,7 +109,7 @@ class CryptoManager: CryptoManaging, Logging {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
 			} else {
-				self.logDebug("ICM: \(result.error)")
+				self.logError("ICM: \(result.error)")
 			}
 		}
 		return nil
@@ -129,7 +129,7 @@ class CryptoManager: CryptoManaging, Logging {
 			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
-				logDebug("QR message: \(message)")
+				logVerbose("QR message: \(message)")
 				return payload
 			} else if let error = disclosed?.error {
 				logError("generateQRmessage: \(error)")
@@ -194,16 +194,24 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
-
+	
+	var euCredentialAttributesCache: [Data: EuCredentialAttributes?] = [:]
+	
 	/// Read the crypto credential
 	/// - Returns: the crypto attributes
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
-
+		
+		if let entry = euCredentialAttributesCache[data.sha256] {
+			logVerbose("Using cache hit for \(String(decoding: data, as: UTF8.self))")
+			return entry
+		}
+		
 		if let response = MobilecoreReadEuropeanCredential(data) {
 			if let value = response.value {
 				do {
 					logVerbose("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
+					euCredentialAttributesCache[data.sha256] = object
 					return object
 				} catch {
 					self.logError("Error: \(String(decoding: value, as: UTF8.self))")
@@ -215,12 +223,12 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
-
+	
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-
+		
 		let result = MobilecoreCreateCredentials(ism)
 		if let credential = result?.value {
 			return .success(credential)
@@ -229,5 +237,29 @@ class CryptoManager: CryptoManaging, Logging {
 			return .failure(CryptoError.credentialCreateFail(reason: reason))
 		}
 		return .failure(CryptoError.unknown)
+	}
+	
+	/// Is this data a foreign DCC
+	/// - Parameter data: the data of the DCC
+	/// - Returns: True if the DCC is foreign
+	func isForeignDCC(_ data: Data) -> Bool {
+		
+		return MobilecoreIsForeignDCC(data)
+	}
+	
+	/// Is this data a DCC
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a DCC
+	func isDCC(_ data: Data) -> Bool {
+		
+		return MobilecoreIsDCC(data)
+	}
+	
+	/// Is this data a CTB
+	/// - Parameter data: the data
+	/// - Returns: True if the data is a CTB
+	func hasDomesticPrefix(_ data: Data) -> Bool {
+		
+		return MobilecoreHasDomesticPrefix(data)
 	}
 }

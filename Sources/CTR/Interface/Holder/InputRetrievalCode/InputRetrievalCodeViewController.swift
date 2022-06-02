@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -56,49 +56,46 @@ class InputRetrievalCodeViewController: BaseViewController {
 	
 	func setupBinding() {
 		
+		setupContent()
+		setupEntry()
+		setupVerification()
+		setupPrimaryButton()
+		setupResendButton()
+		setupUserNeedsTokenButtons()
+	}
+	
+	func setupContent() {
+		
 		viewModel.$title.binding = { [weak self] title in
 			self?.sceneView.title = title
 		}
-		
 		viewModel.$message.binding = { [weak self] message in
 			self?.sceneView.message = message
 		}
+		viewModel.$shouldShowProgress.binding = { [weak self] in
+			if $0 {
+				self?.sceneView.shouldShowLoadingSpinner = true
+				UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
+			} else {
+				self?.sceneView.shouldShowLoadingSpinner = false
+			}
+		}
+		viewModel.$networkErrorAlert.binding = { [weak self] in
+			self?.showAlert($0)
+		}
+	}
+	
+	func setupEntry() {
 		
 		viewModel.$tokenEntryHeaderTitle.binding = { [weak self] in
 			self?.sceneView.tokenEntryView.header = $0
 		}
-		
 		viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
 			self?.sceneView.tokenEntryFieldPlaceholder = $0
 		}
-		
-		viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
-			self?.sceneView.verificationEntryView.header = $0
+		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
+			self?.sceneView.tokenEntryView.isHidden = !$0
 		}
-		
-		viewModel.$verificationInfo.binding = { [weak self] in
-			self?.sceneView.text = $0
-		}
-		
-		viewModel.$primaryTitle.binding = { [weak self] in
-			self?.sceneView.primaryTitle = $0
-		}
-		
-		viewModel.$verificationPlaceholder.binding = { [weak self] in
-			self?.sceneView.verificationEntryFieldPlaceholder = $0
-		}
-		
-		viewModel.$shouldShowProgress.binding = { [weak self] in
-			if $0 {
-				self?.sceneView.spinner.isHidden = false
-				self?.sceneView.spinner.startAnimating()
-				UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
-			} else {
-				self?.sceneView.spinner.stopAnimating()
-				self?.sceneView.spinner.isHidden = true
-			}
-		}
-		
 		viewModel.$fieldErrorMessage.binding = { [weak self] message in
 			self?.sceneView.fieldErrorMessage = message
 			if message != nil {
@@ -110,19 +107,19 @@ class InputRetrievalCodeViewController: BaseViewController {
 				}
 			}
 		}
+	}
+	
+	func setupVerification() {
 		
-		viewModel.$networkErrorAlert.binding = { [weak self] in
-			self?.showAlert($0)
+		viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
+			self?.sceneView.verificationEntryView.header = $0
 		}
-
-		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
-			self?.sceneView.tokenEntryView.isHidden = !$0
+		viewModel.$verificationInfo.binding = { [weak self] in
+			self?.sceneView.text = $0
 		}
-
-		viewModel.$shouldShowNextButton.binding = { [weak self] in
-			self?.sceneView.primaryButton.isHidden = !$0
+		viewModel.$verificationPlaceholder.binding = { [weak self] in
+			self?.sceneView.verificationEntryFieldPlaceholder = $0
 		}
-
 		viewModel.$shouldShowVerificationEntryField.binding = { [weak self] shouldShowVerificationEntryField in
 			guard let strongSelf = self else { return }
 			
@@ -133,7 +130,6 @@ class InputRetrievalCodeViewController: BaseViewController {
 			if strongSelf.sceneView.errorView.isHidden {
 				strongSelf.sceneView.textLabel.isHidden = !shouldShowVerificationEntryField
 			}
-			
 			if shouldShowVerificationEntryField {
 				// Don't want the following code executing during viewDidLoad because it causes
 				// a glitch, so let's do it with a slight delay:
@@ -143,15 +139,24 @@ class InputRetrievalCodeViewController: BaseViewController {
 					}
 				}
 			}
-			
 			if wasHidden && shouldShowVerificationEntryField {
 				// Only post once
 				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
 			}
 		}
+	}
+	
+	func setupPrimaryButton() {
 		
-		viewModel.$shouldEnableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
-		
+		viewModel.$primaryTitle.binding = { [weak self] in
+			self?.sceneView.primaryTitle = $0
+		}
+		viewModel.$shouldShowNextButton.binding = { [weak self] in
+			self?.sceneView.primaryButton.isHidden = !$0
+		}
+		viewModel.$shouldEnableNextButton.binding = { [weak self] in
+			self?.sceneView.primaryButton.isEnabled = $0
+		}
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			
@@ -160,27 +165,29 @@ class InputRetrievalCodeViewController: BaseViewController {
 				verificationInput: strongSelf.sceneView.verificationEntryView.inputField.text
 			)
 		}
-		
+	}
+	
+	func setupResendButton() {
+				
 		viewModel.$resendVerificationButtonTitle.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButtonTitle = $0
 		}
-
-		viewModel.$userNeedsATokenButtonTitle.binding = { [weak self] in
-			self?.sceneView.userNeedsATokenButtonTitle = $0
-		}
-
-		viewModel.$shouldShowUserNeedsATokenButton.binding = { [weak self] in
-			self?.sceneView.userNeedsATokenButton.isHidden = !$0
-		}
-		
 		viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButton.isHidden = !$0
 		}
-		
 		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in
 			self?.displayResendVerificationConfirmationAlert()
 		}
-
+	}
+	
+	func setupUserNeedsTokenButtons() {
+		
+		viewModel.$userNeedsATokenButtonTitle.binding = { [weak self] in
+			self?.sceneView.userNeedsATokenButtonTitle = $0
+		}
+		viewModel.$shouldShowUserNeedsATokenButton.binding = { [weak self] in
+			self?.sceneView.userNeedsATokenButton.isHidden = !$0
+		}
 		sceneView.userNeedsATokenButtonTappedCommand = { [weak self] in
 			self?.viewModel.userHasNoTokenButtonTapped()
 		}
@@ -226,51 +233,21 @@ class InputRetrievalCodeViewController: BaseViewController {
 	// MARK: Keyboard
 
 	@objc func keyBoardWillShow(notification: Notification) {
-
-		let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
-		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
-		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
-
-		// Create a property animator to manage the animation
-		let animator = UIViewPropertyAnimator(
-			duration: animationDuration,
-			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
-		) {
-			let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
-			self.sceneView.footerButtonView.bottomButtonConstraint?.constant = -keyboardHeight + buttonOffset
-
-			// Required to trigger NSLayoutConstraint changes
-			// to animate
-			self.view?.layoutIfNeeded()
+		
+		KeyboardAnimator.keyBoardWillShow(notification: notification) { [weak self] bottomOffset in
+			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
+			self?.view?.layoutIfNeeded()
+			self?.tapGestureRecognizer?.isEnabled = true
 		}
-
-		animator.addCompletion { _ in
-			self.tapGestureRecognizer?.isEnabled = true
-		}
-
-		// Start the animation
-		animator.startAnimation()
 	}
-
+	
 	@objc func keyBoardWillHide(notification: Notification) {
-
+		
 		tapGestureRecognizer?.isEnabled = false
-
-		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
-		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
-
-		// Create a property animator to manage the animation
-		let animator = UIViewPropertyAnimator(
-			duration: animationDuration,
-			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
-		) {
-			self.sceneView.footerButtonView.bottomButtonConstraint?.constant = -20
-
-			self.view?.layoutIfNeeded()
+		KeyboardAnimator.keyBoardWillHide(notification: notification) { [weak self] bottomOffset in
+			self?.sceneView.footerButtonView.bottomButtonConstraint?.constant = bottomOffset
+			self?.view?.layoutIfNeeded()
 		}
-
-		// Start the animation
-		animator.startAnimation()
 	}
 	
 	// MARK: Alerts
@@ -286,15 +263,18 @@ class InputRetrievalCodeViewController: BaseViewController {
 		let alert = AlertContent(
 			title: title,
 			subTitle: subTitle,
-			cancelAction: nil,
-			cancelTitle: viewModel.confirmResendVerificationAlertCancelButton,
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.sceneView.verificationEntryView.inputField.text = nil
-				self.viewModel.resendVerificationCodeButtonTapped()
-			},
-			okTitle: okTitle,
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: okTitle,
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.sceneView.verificationEntryView.inputField.text = nil
+					self.viewModel.resendVerificationCodeButtonTapped()
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: viewModel.confirmResendVerificationAlertCancelButton ?? ""
+			)
 		)
 
 		showAlert(alert)

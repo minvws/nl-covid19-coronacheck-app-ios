@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -36,9 +36,13 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	
 	func userWantsToGoBackToDashboard()
 
+	func userWantsToGoBackToEnterToken()
+	
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
 	func displayError(content: Content, backAction: @escaping () -> Void)
+	
+	func displayErrorForPaperProofCheck(content: Content)
 }
 
 final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
@@ -91,7 +95,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnNoInputToken() {
 
-		let viewModel = PaperProofContentViewModel(
+		let viewModel = ContentViewModel(
 			content: Content(
 				title: L.holderPaperproofNotokenTitle(),
 				body: L.holderPaperproofNotokenMessage(),
@@ -102,16 +106,20 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 					self?.navigationController.popToRootViewController(animated: false)
 					self?.delegate?.switchToAddRegularProof()
 				}
-			)
+			),
+			backAction: { [weak navigationController] in
+				navigationController?.popViewController(animated: true, completion: {})
+			},
+			allowsSwipeBack: true
 		)
-		let destination = PaperProofContentViewController(viewModel: viewModel)
+		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
+		let viewController = BottomSheetContentViewController(
+			viewModel: BottomSheetContentViewModel(
 				coordinator: self,
 				content: Content(
 					title: L.holder_paperproof_whichProofsCanBeUsed_title(),
@@ -165,7 +173,19 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		token = nil
 		delegate?.addPaperProofFlowDidFinish()
 	}
-
+	
+	func userWantsToGoBackToEnterToken() {
+		
+		if let viewController = navigationController.viewControllers
+			.first(where: { $0 is PaperProofInputCouplingCodeViewController }) {
+			
+			navigationController.popToViewController(
+				viewController,
+				animated: true
+			)
+		}
+	}
+	
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
 
 		let eventCoordinator = EventCoordinator(
@@ -198,14 +218,26 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	}
 
 	func displayError(content: Content, backAction: @escaping () -> Void) {
-
-		let viewController = ErrorStateViewController(
-			viewModel: ErrorStateViewModel(
+		
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
 				content: content,
-				backAction: backAction
+				backAction: backAction,
+				allowsSwipeBack: true
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
+	}
+	
+	func displayErrorForPaperProofCheck(content: Content) {
+
+		// Remove the check view controller. Fixes backswipe issue.
+		navigationController.popViewController(animated: false)
+		
+		// Present the error
+		displayError(content: content) { [weak self] in
+			self?.userWantsToGoBackToEnterToken()
+		}
 	}
 
 	private func presentAsBottomSheet(_ viewController: UIViewController) {

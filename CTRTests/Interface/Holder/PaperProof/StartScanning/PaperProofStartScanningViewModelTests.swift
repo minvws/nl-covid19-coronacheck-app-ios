@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -27,7 +27,7 @@ final class PaperProofStartScanningViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holder_paperproof_startscanning_body()
 		expect(self.sut.nextButtonTitle) == L.holder_paperproof_startscanning_button_startScanning()
 		expect(self.sut.secondaryButtonTitle) == L.holder_paperproof_startscanning_button_whichProofs()
-		expect(self.sut.internationalQROnly) == I.internationalQROnly()
+		expect(self.sut.internationalQROnly) == I.scannableQRs()
 	}
 
 	func test_backButtonTapped_shouldInvokeCoordinator() {

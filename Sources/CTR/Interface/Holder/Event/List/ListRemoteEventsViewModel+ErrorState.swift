@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -16,16 +16,21 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderEventIdentityAlertTitle(),
 			subTitle: L.holderEventIdentityAlertMessage(),
-			cancelAction: { [weak self] _ in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.holderEventIdentityAlertCancel(),
-			okAction: { _ in
-				onReplace()
-			},
-			okTitle: L.holderEventIdentityAlertOk(),
-			okActionIsDestructive: true,
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderEventIdentityAlertOk(),
+				action: { _ in
+					onReplace()
+				},
+				isDestructive: true,
+				isPreferred: true
+				
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderEventIdentityAlertCancel(),
+				action: { [weak self] _ in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				}
+			)
 		)
 	}
 
@@ -34,13 +39,17 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorTitle(),
 			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationErrorClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR()
-			},
-			okTitle: L.holderVaccinationErrorAgain(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationErrorAgain(),
+				action: { [weak self] _ in
+					self?.userWantsToMakeQR()
+				},
+				isPreferred: true
+				
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationErrorClose()
+			)
 		)
 	}
 
@@ -50,13 +59,16 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR()
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.userWantsToMakeQR()
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 	
@@ -98,11 +110,7 @@ extension ListRemoteEventsViewModel {
 			case .test:
 
 				if let identifier = remoteEvents.first?.wrapper.providerIdentifier {
-					if identifier.lowercased() == "ggd" {
-						return .ggdTest
-					} else {
-						return.commercialTest
-					}
+					return identifier.lowercased() == "ggd" ? .ggdTest : .commercialTest
 				}
 				return ErrorCode.Flow(value: "")
 		}
@@ -113,8 +121,7 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateSomeresultTitle(),
 			subTitle: L.holderErrorstateSomeresultMessage(),
-			okAction: nil,
-			okTitle: L.generalOk()
+			okAction: AlertContent.Action.okay
 		)
 	}
 }

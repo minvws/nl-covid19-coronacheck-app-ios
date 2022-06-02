@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -13,7 +13,7 @@ protocol MappingManaging {
 
 	func getDisplayIssuer(_ issuer: String, country: String) -> String
 
-	func getBiLingualDisplayCountry(_ country: String) -> String
+	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String
 	
 	func getDisplayCountry(_ country: String) -> String
 	
@@ -34,8 +34,6 @@ protocol MappingManaging {
 	func getVaccinationType(_ code: String? ) -> String?
 
 	func getVaccinationManufacturer(_ code: String? ) -> String?
-
-	func getNlTestType(_ code: String? ) -> String?
 }
 
 class MappingManager: MappingManaging, Logging {
@@ -64,9 +62,14 @@ class MappingManager: MappingManaging, Logging {
 		return L.holderVaccinationAboutIssuer()
 	}
 
-	func getBiLingualDisplayCountry(_ country: String) -> String {
+	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String {
 		guard ["NL", "NLD"].contains(country) else {
-			return country
+			if "nl" == languageCode {
+				return (Locale.current.localizedString(forRegionCode: country) ?? country) + " / "
+				+ (Locale(identifier: "en_GB").localizedString(forRegionCode: country) ?? country)
+			} else {
+				return Locale.current.localizedString(forRegionCode: country) ?? country
+			}
 		}
 		return L.holderVaccinationAboutCountry()
 	}
@@ -128,11 +131,5 @@ class MappingManager: MappingManaging, Logging {
 	func getVaccinationManufacturer(_ code: String? ) -> String? {
 
 		return remoteConfigManager.storedConfiguration.euManufacturers?.first(where: { $0.code == code })?.name
-	}
-
-	// Test 2.0
-	func getNlTestType(_ code: String? ) -> String? {
-
-		return remoteConfigManager.storedConfiguration.nlTestTypes?.first(where: { $0.code == code })?.name
 	}
 }

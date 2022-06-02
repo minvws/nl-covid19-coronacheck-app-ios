@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -37,18 +37,18 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetDisplayIssuerResult
 	}
 
-	var invokedGetBiLingualDisplayCountry = false
-	var invokedGetBiLingualDisplayCountryCount = 0
-	var invokedGetBiLingualDisplayCountryParameters: (country: String, Void)?
-	var invokedGetBiLingualDisplayCountryParametersList = [(country: String, Void)]()
-	var stubbedGetBiLingualDisplayCountryResult: String! = ""
+	var invokedGetBilingualDisplayCountry = false
+	var invokedGetBilingualDisplayCountryCount = 0
+	var invokedGetBilingualDisplayCountryParameters: (country: String, languageCode: String?)?
+	var invokedGetBilingualDisplayCountryParametersList = [(country: String, languageCode: String?)]()
+	var stubbedGetBilingualDisplayCountryResult: String! = ""
 
-	func getBiLingualDisplayCountry(_ country: String) -> String {
-		invokedGetBiLingualDisplayCountry = true
-		invokedGetBiLingualDisplayCountryCount += 1
-		invokedGetBiLingualDisplayCountryParameters = (country, ())
-		invokedGetBiLingualDisplayCountryParametersList.append((country, ()))
-		return stubbedGetBiLingualDisplayCountryResult
+	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String {
+		invokedGetBilingualDisplayCountry = true
+		invokedGetBilingualDisplayCountryCount += 1
+		invokedGetBilingualDisplayCountryParameters = (country, languageCode)
+		invokedGetBilingualDisplayCountryParametersList.append((country, languageCode))
+		return stubbedGetBilingualDisplayCountryResult
 	}
 
 	var invokedGetDisplayCountry = false
@@ -189,19 +189,5 @@ class MappingManagerSpy: MappingManaging {
 		invokedGetVaccinationManufacturerParameters = (code, ())
 		invokedGetVaccinationManufacturerParametersList.append((code, ()))
 		return stubbedGetVaccinationManufacturerResult
-	}
-
-	var invokedGetNlTestType = false
-	var invokedGetNlTestTypeCount = 0
-	var invokedGetNlTestTypeParameters: (code: String?, Void)?
-	var invokedGetNlTestTypeParametersList = [(code: String?, Void)]()
-	var stubbedGetNlTestTypeResult: String!
-
-	func getNlTestType(_ code: String? ) -> String? {
-		invokedGetNlTestType = true
-		invokedGetNlTestTypeCount += 1
-		invokedGetNlTestTypeParameters = (code, ())
-		invokedGetNlTestTypeParametersList.append((code, ()))
-		return stubbedGetNlTestTypeResult
 	}
 }

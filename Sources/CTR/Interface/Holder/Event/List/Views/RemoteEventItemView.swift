@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -72,7 +72,7 @@ class RemoteEventItemView: BaseView {
 		linkLabel.textColor = C.primaryBlue()
 		backgroundButton.addTarget(
 			self,
-			action: #selector(disclaimerButtonTapped),
+			action: #selector(backgroundButtonTapped),
 			for: .touchUpInside
 		)
 	}
@@ -136,6 +136,8 @@ class RemoteEventItemView: BaseView {
 				constant: -ViewTraits.Link.bottomMargin
 			)
 		])
+		
+		bringSubviewToFront(backgroundButton)
 	}
 	
 	/// Setup all the accessibility traits
@@ -149,10 +151,10 @@ class RemoteEventItemView: BaseView {
 		accessibilityElements = [titleLabel, detailsStackView, backgroundButton]
 	}
 	
-	/// User tapped on the primary button
-	@objc func disclaimerButtonTapped() {
+	/// User tapped on the background button
+	@objc func backgroundButtonTapped() {
 		
-		disclaimerButtonTappedCommand?()
+		backgroundButtonTappedCommand?()
 	}
 	
 	// MARK: Public Access
@@ -173,7 +175,8 @@ class RemoteEventItemView: BaseView {
 			detailsStackView.removeArrangedSubviews()
 			details.forEach { detail in
 				let label = Label(subhead: nil).multiline()
-				label.attributedText = .makeFromHtml(
+				
+				NSAttributedString.makeFromHtml(
 					text: detail,
 					style: NSAttributedString.HTMLStyle(
 						font: Fonts.subhead,
@@ -181,8 +184,10 @@ class RemoteEventItemView: BaseView {
 						lineHeight: ViewTraits.Message.lineHeight,
 						kern: ViewTraits.Message.kerning
 					)
-				)
-				detailsStackView.addArrangedSubview(label)
+				) { attributedString in
+					label.attributedText = attributedString
+					self.detailsStackView.addArrangedSubview(label)
+				}
 			}
 		}
 	}
@@ -194,10 +199,15 @@ class RemoteEventItemView: BaseView {
 				kerning: ViewTraits.Link.kerning,
 				textColor: C.primaryBlue()!
 			)
-			backgroundButton.accessibilityLabel = link
 		}
 	}
 	
-	/// The user tapped on the disclaimer button
-	var disclaimerButtonTappedCommand: (() -> Void)?
+	var accessibilityTitle: String? {
+		didSet {
+			backgroundButton.accessibilityLabel = accessibilityTitle
+		}
+	}
+	
+	/// The user tapped on the  button
+	var backgroundButtonTappedCommand: (() -> Void)?
 }

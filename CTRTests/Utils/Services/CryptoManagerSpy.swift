@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -77,6 +77,48 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedCreateCredentialParameters = (ism, ())
 		invokedCreateCredentialParametersList.append((ism, ()))
 		return stubbedCreateCredentialResult
+	}
+
+	var invokedIsForeignDCC = false
+	var invokedIsForeignDCCCount = 0
+	var invokedIsForeignDCCParameters: (data: Data, Void)?
+	var invokedIsForeignDCCParametersList = [(data: Data, Void)]()
+	var stubbedIsForeignDCCResult: Bool! = false
+
+	func isForeignDCC(_ data: Data) -> Bool {
+		invokedIsForeignDCC = true
+		invokedIsForeignDCCCount += 1
+		invokedIsForeignDCCParameters = (data, ())
+		invokedIsForeignDCCParametersList.append((data, ()))
+		return stubbedIsForeignDCCResult
+	}
+
+	var invokedIsDCC = false
+	var invokedIsDCCCount = 0
+	var invokedIsDCCParameters: (data: Data, Void)?
+	var invokedIsDCCParametersList = [(data: Data, Void)]()
+	var stubbedIsDCCResult: Bool! = false
+
+	func isDCC(_ data: Data) -> Bool {
+		invokedIsDCC = true
+		invokedIsDCCCount += 1
+		invokedIsDCCParameters = (data, ())
+		invokedIsDCCParametersList.append((data, ()))
+		return stubbedIsDCCResult
+	}
+
+	var invokedHasDomesticPrefix = false
+	var invokedHasDomesticPrefixCount = 0
+	var invokedHasDomesticPrefixParameters: (data: Data, Void)?
+	var invokedHasDomesticPrefixParametersList = [(data: Data, Void)]()
+	var stubbedHasDomesticPrefixResult: Bool! = false
+
+	func hasDomesticPrefix(_ data: Data) -> Bool {
+		invokedHasDomesticPrefix = true
+		invokedHasDomesticPrefixCount += 1
+		invokedHasDomesticPrefixParameters = (data, ())
+		invokedHasDomesticPrefixParametersList.append((data, ()))
+		return stubbedHasDomesticPrefixResult
 	}
 
 	var invokedDiscloseCredential = false

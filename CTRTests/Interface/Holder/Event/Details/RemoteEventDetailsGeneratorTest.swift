@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -41,22 +41,6 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[7].value) == "GGD XL Factory"
 		expect(details[8].value) == "testNegativeTestGenerator"
 		expect(details[9].value) == "1234"
-	}
-
-	func testNegativeTestV2DetailsGenerator() {
-
-		// Given
-
-		// When
-		let details = NegativeTestV2DetailsGenerator.getDetails(testResult: TestResult.negativeResult)
-
-		// Then
-		expect(details).to(haveCount(5))
-		expect(details[0].value) == "T D 12 DEC"
-		expect(details[1].value) == "PCR"
-		expect(details[2].value) == "vrijdag 1 januari 01:00"
-		expect(details[3].value) == "negatief (geen corona)"
-		expect(details[4].value) == "test"
 	}
 
 	func testPositiveTestDetailsGenerator() {

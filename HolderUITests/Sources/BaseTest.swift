@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -18,10 +18,11 @@ class BaseTest: XCTestCase {
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
-		app.launchArguments.append(contentsOf: ["-resetOnStart"])
-		app.launchArguments.append(contentsOf: ["-skipOnboarding"])
-		app.launchArguments.append(contentsOf: ["-showAccessibilityLabels"])
-		app.launchArguments.append(contentsOf: [disclosureMode.rawValue])
+		app.launchArguments.append("-resetOnStart")
+		app.launchArguments.append("-skipOnboarding")
+		app.launchArguments.append("-disableTransitions")
+		app.launchArguments.append("-showAccessibilityLabels")
+		app.launchArguments.append(disclosureMode.rawValue)
 		app.launch()
 		XCTAssertTrue(app.waitForExistence(timeout: loginTimeout), "App did not start")
 		

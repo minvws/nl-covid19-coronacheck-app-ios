@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -51,19 +51,11 @@ final class DeniedQRScanMoreInfoView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(stackView)
-	}
-
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-			stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: ViewTraits.horizontalMargin),
-			stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -ViewTraits.horizontalMargin),
-			stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -ViewTraits.bottomMargin)
-		])
-
+		stackView.embed(
+			in: layoutMarginsGuide,
+			insets: UIEdgeInsets(top: 0, left: ViewTraits.horizontalMargin, bottom: ViewTraits.bottomMargin, right: ViewTraits.horizontalMargin)
+		)
+		
 		stackView.addArrangedSubview(titleLabel)
 	}
 

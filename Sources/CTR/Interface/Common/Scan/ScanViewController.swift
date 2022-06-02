@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -15,8 +15,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	private var captureSession: AVCaptureSession!
 	private var previewLayer: AVCaptureVideoPreviewLayer!
 
-	private var previousOrientation: UIInterfaceOrientation?
-    
     private var torchButton: UIBarButtonItem?
     private var torchEnableLabel: String?
     private var torchDisableLabel: String?
@@ -112,7 +110,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		// Force navigation title color to white
 		overrideNavigationBarTitleColor(with: .white)
 
-		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
 
@@ -124,18 +121,23 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 
 		navigationControllerTeardown?()
-
-		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		
+		super.viewDidDisappear(animated)
+		OrientationUtility.unlockOrientation()
 	}
 
 	func failed() {
-		let ac = UIAlertController(
-			title: "Scanning not supported",
-			message: "Your device does not support scanning a code from an item. Please use a device with a camera.",
-			preferredStyle: .alert
+		
+		showAlert(
+			AlertContent(
+				title: "Scanning not supported",
+				subTitle: "Your device does not support scanning a code from an item. Please use a device with a camera.",
+				okAction: AlertContent.Action.okay
+			)
 		)
-		ac.addAction(UIAlertAction(title: L.generalOk(), style: .default))
-		present(ac, animated: true)
 		captureSession = nil
 	}
 
@@ -165,31 +167,31 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	/// Toggle the torch
 	@objc func toggleTorch() {
-
+		
 		guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else {
 			// No camera or no torch
 			return
 		}
 		do {
 			try device.lockForConfiguration()
-            if device.torchMode == .on {
+			if device.torchMode == .on {
 				device.torchMode = .off
-                torchChanged(enabled: false)
+				torchChanged(enabled: false)
 			} else {
 				try device.setTorchModeOn(level: 1.0)
-                torchChanged(enabled: true)
+				torchChanged(enabled: true)
 			}
 			device.unlockForConfiguration()
 		} catch {
 			self.logError("toggleTorch: \(error)")
 		}
 	}
-    
-    func torchChanged(enabled: Bool) {
-        let label = enabled ? torchDisableLabel : torchEnableLabel
-        torchButton?.accessibilityLabel = label
-        torchButton?.title = label
-    }
+	
+	func torchChanged(enabled: Bool) {
+		let label = enabled ? torchDisableLabel : torchEnableLabel
+		torchButton?.accessibilityLabel = label
+		torchButton?.title = label
+	}
 
 	/// Add a torch button to the navigation bar.
 	/// - Parameters:
@@ -201,14 +203,16 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		enableLabel: String,
 		disableLabel: String) {
 		
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: action,
-												   content: .image(I.torch()),
-												   accessibilityIdentifier: "TorchButton",
-												   accessibilityLabel: enableLabel)
-		let button: UIBarButtonItem = .create(config)
-		navigationItem.rightBarButtonItem = button
-		
+			let config = UIBarButtonItem.Configuration(
+				target: self,
+				action: action,
+				content: .image(I.torch()),
+				accessibilityIdentifier: "TorchButton",
+				accessibilityLabel: enableLabel
+			)
+			let button: UIBarButtonItem = .create(config)
+			navigationItem.rightBarButtonItem = button
+			
 		self.torchButton = button
 		self.torchEnableLabel = enableLabel
 		self.torchDisableLabel = disableLabel

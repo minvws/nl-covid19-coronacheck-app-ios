@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -191,7 +191,7 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard state.shouldShowRecommendCoronaMelderCard else { return [] }
+		guard state.shouldShowRecommendCoronaMelderCard else { return [] } // based on feature flag
 		
 		let regionFilteredQRCards = state.regionFilteredQRCards(validityRegion: validityRegion)
 		
@@ -679,10 +679,10 @@ private func countdownText(now: Date, to futureExpiryDate: Date) -> String? {
 		let fiveMinutes: TimeInterval = 5 * 60
 		if futureExpiryDate < now.addingTimeInterval(fiveMinutes) {
 			// e.g. "4 minuten en 15 seconden"
-			return HolderDashboardViewModel.hmsRelativeFormatter
+			return DateFormatter.Relative.hoursMinutesSeconds
 		} else {
 			// e.g. "23 uur en 59 minuten"
-			return HolderDashboardViewModel.hmRelativeFormatter
+			return DateFormatter.Relative.hoursMinutes
 		}
 	}()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -88,7 +88,7 @@ class ShowQRViewModel: Logging {
 	private var currentPage: Int {
 		didSet {
 			logVerbose("current page set to \(currentPage)")
-			handleVaccinationDosageInformation()
+			displayQRInformation()
 		}
 	}
 
@@ -133,7 +133,7 @@ class ShowQRViewModel: Logging {
 		self.currentPage = mostRelevantPage
 		self.disclosurePolicy = disclosurePolicy
 
-		handleVaccinationDosageInformation()
+		displayQRInformation()
 		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
 		setupListeners()
 	}
@@ -145,12 +145,12 @@ class ShowQRViewModel: Logging {
 	private func setupContent(greenCards: [GreenCard], thirdPartyTicketAppName: String?) {
 
 		if let greenCard = greenCards.first {
-			if greenCard.type == GreenCardType.domestic.rawValue {
+			if greenCard.getType() == GreenCardType.domestic {
 				title = L.holderShowqrDomesticTitle()
 				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
 				showInternationalAnimation = false
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
-			} else if greenCard.type == GreenCardType.eu.rawValue {
+			} else if greenCard.getType() == GreenCardType.eu {
 				title = L.holderShowqrEuTitle()
 				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
 				showInternationalAnimation = true
@@ -187,49 +187,62 @@ class ShowQRViewModel: Logging {
 	}
 
 	func showMoreInformation() {
-
-		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
-			  let credential = greenCard.getActiveCredential(),
-			  let data = credential.data else {
-				return
-		}
-
-		if greenCard.type == GreenCardType.domestic.rawValue {
-			showDomesticDetails(data, greenCard: greenCard)
-		} else if greenCard.type == GreenCardType.eu.rawValue {
-			showInternationalDetails(data)
-		}
-	}
-
-	func handleVaccinationDosageInformation() {
-
-		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
-			  let credential = greenCard.getActiveCredential(),
-			  let data = credential.data else {
+		
+		guard let greenCard = dataSource.getGreenCardForIndex(currentPage) else {
 			return
 		}
-
-		if greenCard.type == GreenCardType.eu.rawValue {
-			if let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
-			   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
-			   let doseNumber = euVaccination.doseNumber,
-			   let totalDose = euVaccination.totalDose {
-				dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-				if dataSource.shouldGreenCardBeHidden(greenCard) {
-					relevancyInformation = L.holderShowqrNotneeded()
-				} else {
-					relevancyInformation = nil
-				}
+		
+		if greenCard.getType() == GreenCardType.domestic {
+			guard let credentialData = greenCard.getActiveDomesticCredential()?.data else { return }
+			
+			showDomesticDetails(credentialData)
+		} else if greenCard.getType() == GreenCardType.eu {
+			guard let credentialData = greenCard.getLatestInternationalCredential()?.data else { return }
+			
+			if let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
+				showInternationalDetails(euCredentialAttributes)
 			}
 		}
 	}
-
-	private func showDomesticDetails(_ data: Data, greenCard: GreenCard) {
+	
+	private func displayQRInformation() {
+		
+		guard let greenCard = dataSource.getGreenCardForIndex(currentPage),
+			  greenCard.getType() == GreenCardType.eu else {
+			return
+		}
+		// Dosage
+		displayDosageInformation(greenCard)
+		// Relevancy
+		displayRelevancyInformation(greenCard)
+	}
+	
+	private func displayDosageInformation(_ greenCard: GreenCard) {
+		
+		if let euCredentialAttributes = dataSource.getEuCredentialAttributes(greenCard),
+		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
+		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
+			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
+		}
+	}
+	
+	private func displayRelevancyInformation(_ greenCard: GreenCard) {
+		
+		if dataSource.isCredentialExpired(greenCard) {
+			relevancyInformation = L.holder_showQR_label_expiredQR()
+		} else if dataSource.isDosenumberSmallerThanTotalDose(greenCard) {
+			relevancyInformation = L.holder_showQR_label_newerQRAvailable()
+		} else {
+			relevancyInformation = nil
+		}
+	}
+	
+	private func showDomesticDetails(_ data: Data) {
 		
 		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
 			coordinator?.presentInformationPage(
 				title: L.holderShowqrDomesticAboutTitle(),
-				body: getDomesticDetailsBody(domesticCredentialAttributes, greenCard: greenCard),
+				body: getDomesticDetailsBody(domesticCredentialAttributes),
 				hideBodyForScreenCapture: true,
 				openURLsInApp: true
 			)
@@ -238,7 +251,7 @@ class ShowQRViewModel: Logging {
 		}
 	}
 	
-	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes, greenCard: GreenCard) -> String {
+	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes) -> String {
 		
 		let identity = domesticCredentialAttributes
 			.mapIdentity(months: String.shortMonths)
@@ -251,16 +264,14 @@ class ShowQRViewModel: Logging {
 		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
-	private func showInternationalDetails(_ data: Data) {
-
-		if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
-			if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-				showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
-			} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-				showTestDetails(euCredentialAttributes: euCredentialAttributes, test: test)
-			} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-				showRecoveryDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
-			}
+	private func showInternationalDetails(_ euCredentialAttributes: EuCredentialAttributes) {
+		
+		if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
+			showVaccinationDetails(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
+		} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
+			showTestDetails(euCredentialAttributes: euCredentialAttributes, test: test)
+		} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+			showRecoveryDetails(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 		}
 	}
 

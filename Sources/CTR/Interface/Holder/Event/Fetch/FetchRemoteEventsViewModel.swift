@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -178,13 +178,16 @@ final class FetchRemoteEventsViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode.alertBody,
-			cancelAction: { _ in
-				self.goBack()
-			},
-			cancelTitle: L.holderVaccinationAlertStop(),
-			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationAlertContinue(),
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationAlertStop(),
+				action: { _ in
+					self.goBack()
+				}
+			)
 		)
 	}
 
@@ -358,20 +361,10 @@ final class FetchRemoteEventsViewModel: Logging {
 				from: provider,
 				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
 
-					let mappedToProvider = result.mapError { serverError -> ServerError in
+					let mappedToProvider = result
 						// Transform regular .error to .provider to display the provider identifier
-						switch serverError {
-							case let ServerError.error(statusCode, serverResponse, networkError):
-								return ServerError.provider(
-									provider: provider.identifier,
-									statusCode: statusCode,
-									response: serverResponse,
-									error: networkError
-								)
-							default:
-								return serverError
-						}
-					}.map { info in
+						.mapError { $0.toProviderError(provider: provider) }
+						.map { info in
 						// Map the right provider identifier (fixes duplication on ACC for ZZZ and GGD)
 						return EventFlow.EventInformationAvailable(
 							providerIdentifier: provider.identifier,
@@ -441,19 +434,10 @@ final class FetchRemoteEventsViewModel: Logging {
 				eventFetchingGroup.enter()
 				fetchRemoteEvent(from: provider) { result in
 
-					let mapped = result.mapError { serverError -> ServerError in
-						switch serverError {
-							case let ServerError.error(statusCode, serverResponse, networkError):
-								return ServerError.provider(
-									provider: provider.identifier,
-									statusCode: statusCode,
-									response: serverResponse,
-									error: networkError
-								)
-							default:
-								return serverError
-						}
-					}
+					let mapped = result
+						// Transform regular .error to .provider to display the provider identifier
+						.mapError { $0.toProviderError(provider: provider) }
+					
 					if Configuration().getEnvironment() == "production" {
 						eventResponseResults += [mapped.map({ ($0, $1) })]
 					} else {
@@ -631,13 +615,13 @@ private extension FetchRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { _ in
-				self.coordinator?.fetchEventsScreenDidFinish(.stop)
-			},
-			okTitle: L.generalClose(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				isPreferred: true
+			)
 		)
 	}
 
@@ -743,16 +727,20 @@ private extension FetchRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { _ in
-				self.coordinator?.fetchEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { _ in
+					self.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			)
 		)
 	}
 }
@@ -764,4 +752,23 @@ extension ErrorCode.ClientCode {
 	static let noTestProviderAvailable = ErrorCode.ClientCode(value: "080")
 	static let noRecoveryProviderAvailable = ErrorCode.ClientCode(value: "081")
 	static let noVaccinationProviderAvailable = ErrorCode.ClientCode(value: "082")
+}
+
+extension ServerError {
+	
+	// Transform regular .error to .provider to display the provider identifier
+	fileprivate func toProviderError(provider: EventFlow.EventProvider) -> ServerError {
+		
+		switch self {
+			case let ServerError.error(statusCode, serverResponse, networkError):
+				return ServerError.provider(
+					provider: provider.identifier,
+					statusCode: statusCode,
+					response: serverResponse,
+					error: networkError
+				)
+			default:
+				return self
+		}
+	}
 }

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -73,18 +73,14 @@ class AppStatusViewController: BaseViewController {
 
 	/// Show alert that we can't open the url
 	private func showCannotOpenUrl() {
-
-		let alertController = UIAlertController(
-			title: L.generalErrorTitle(),
-			message: errorMessage,
-			preferredStyle: .alert)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.generalOk(),
-				style: .default,
-				handler: nil)
+		
+		showAlert(
+			AlertContent(
+				title: L.generalErrorTitle(),
+				subTitle: errorMessage ?? "",
+				okAction: AlertContent.Action.okay
+			)
 		)
-		present(alertController, animated: true, completion: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

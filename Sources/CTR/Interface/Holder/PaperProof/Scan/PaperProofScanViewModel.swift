@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -25,8 +25,6 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
-	
-	@Bindable private(set) var alert: AlertContent?
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
 
@@ -54,7 +52,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	func parseQRMessage(_ message: String) {
 		
 		switch paperProofIdentifier.identify(message) {
-			case .ctb:
+			case .hasDomesticPrefix:
 				displayContent(
 					L.holder_scanner_error_title_ctb(),
 					body: L.holder_scanner_error_message_ctb()
@@ -84,7 +82,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	private func displayConvertError() {
 		
 		let errorCode = ErrorCode(flow: .paperproof, step: .scan, clientCode: .failedToConvertDCCToV3Event)
-		logError("errorCode")
+		logError("displayConvertError: \(errorCode)")
 		
 		theCoordinator?.displayError(
 			content: Content(

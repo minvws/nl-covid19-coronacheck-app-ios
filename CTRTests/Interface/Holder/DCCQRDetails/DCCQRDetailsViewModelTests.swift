@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -25,7 +25,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 	func test_negativeTest() {
 		
 		// Given
-		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayFacilityResult = "Test Centrum XXL"
 		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "CoronaCheck Manufacturer"
@@ -79,7 +79,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 	func test_recovery() {
 		
 		// Given
-		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		let details = RecoveryQRDetailsGenerator.getDetails(
 			euCredentialAttributes: EuCredentialAttributes.fake(
@@ -125,7 +125,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 	func test_vaccination() {
 		
 		// Given
-		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		let details = VaccinationQRDetailsGenerator.getDetails(
 			euCredentialAttributes: EuCredentialAttributes.fakeVaccination(),
@@ -188,7 +188,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 			totalDose: totalDose,
 			vaccineOrProphylaxis: "test"
 		)
-		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		let details = VaccinationQRDetailsGenerator.getDetails(
 			euCredentialAttributes: EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: doseNumber, totalDose: totalDose)),

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -103,7 +103,13 @@ class VerifierStartScanningViewController: BaseViewController {
 		viewModel.$headerMode.binding = { [weak self] in self?.sceneView.headerMode = $0 }
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
+				self?.showAlert(
+					AlertContent(
+						title: L.generalErrorTitle(),
+						subTitle: L.verifierStartOntimeinternet(),
+						okAction: AlertContent.Action.okay
+					)
+				)
 			}
 		}
 		viewModel.$riskIndicator.binding = { [weak self] in

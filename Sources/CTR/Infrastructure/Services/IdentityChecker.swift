@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -36,8 +36,6 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 
 			if let existing = existingIdentity as? EventFlow.Identity {
 				existingTuple = existing.asIdentityTuple()
-			} else if let existing = existingIdentity as? TestHolderIdentity {
-				existingTuple = existing.asIdentityTuple()
 			}
 			logVerbose("existingIdentity: \(String(describing: existingTuple))")
 
@@ -46,8 +44,6 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				var remoteTuple: IdentityTuple?
 
 				if let remote = remoteIdentity as? EventFlow.Identity {
-					remoteTuple = remote.asIdentityTuple()
-				} else if let remote = remoteIdentity as? TestHolderIdentity {
 					remoteTuple = remote.asIdentityTuple()
 				}
 				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
@@ -83,13 +79,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 			if let jsonData = storedEvent.jsonData {
 				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
 				   let decodedPayloadData = Data(base64Encoded: object.payload),
-				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
-
-					if let identity = wrapper.identity {
+				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData),
+				   let identity = wrapper.identity {
 						identities.append(identity)
-					} else if let holder = wrapper.result?.holder {
-						identities.append(holder)
-					}
 				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
 					if let credentialData = object.credential.data(using: .utf8),
 					   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
@@ -104,12 +96,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 	private func convertRemoteEventsToIdentities(_ remoteEvents: [RemoteEvent]) -> [Any] {
 
 		return remoteEvents.compactMap {
-			if let identity = $0.wrapper.identity {
-				return identity
-			} else if let holder = $0.wrapper.result?.holder {
-				return holder
-			}
-			return nil
+			return $0.wrapper.identity
 		}
 	}
 }
@@ -198,13 +185,5 @@ class Normalizer {
 			return nil
 		}
 		return capitalizedInitial
-	}
-}
-
-extension TestHolderIdentity {
-
-	func asIdentityTuple() -> IdentityTuple {
-
-		return (firstNameInitial: firstNameInitial.uppercased(), lastNameInitial: lastNameInitial.uppercased(), day: birthDay, month: birthMonth)
 	}
 }

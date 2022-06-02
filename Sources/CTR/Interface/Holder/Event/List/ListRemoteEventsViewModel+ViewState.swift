@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -13,7 +13,7 @@ extension ListRemoteEventsViewModel {
 
 	func getViewState(from remoteEvents: [RemoteEvent]) -> ListRemoteEventsViewController.State {
 
-		var event30DataSource = [EventDataTuple]()
+		var eventDataSource = [EventDataTuple]()
 
 		// If there is just one pending negative/positive test: Pending State.
 		if remoteEvents.count == 1 &&
@@ -23,37 +23,23 @@ extension ListRemoteEventsViewModel {
 		}
 
 		for eventResponse in remoteEvents {
-			if let identity = eventResponse.wrapper.identity,
-			   let events30 = eventResponse.wrapper.events {
-				for event in events30 where isEventAllowed(event) {
-					event30DataSource.append(
-						(
-							identity: identity,
-							event: event,
-							providerIdentifier: eventResponse.wrapper.providerIdentifier
+			if let events = eventResponse.wrapper.events {
+				for event in events where isEventAllowed(event) {
+					if let identity = eventResponse.wrapper.identity {
+						eventDataSource.append(
+							(
+								identity: identity,
+								event: event,
+								providerIdentifier: eventResponse.wrapper.providerIdentifier
+							)
 						)
-					)
+					}
 				}
 			}
 		}
 
-		if event30DataSource.isEmpty {
-
-			if let event = remoteEvents.first, event.wrapper.protocolVersion == "2.0" {
-				// A test 2.0
-				switch event.wrapper.status {
-					case .complete:
-						if let result = event.wrapper.result, result.negativeResult {
-							return listTest20EventsState(event)
-						}
-					case .pending:
-						return pendingEventsState()
-					default:
-						break
-				}
-			}
-		} else {
-			return listEventsState(event30DataSource)
+		if eventDataSource.isNotEmpty {
+			return listEventsState(eventDataSource)
 		}
 
 		return emptyEventsState()
@@ -72,22 +58,6 @@ extension ListRemoteEventsViewModel {
 			case .test: return event.hasNegativeTest
 			case .vaccination: return event.hasVaccination
 		}
-	}
-
-	internal func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListRemoteEventsViewController.State {
-
-		return .feedback(
-			content: Content(
-				title: title,
-				body: subTitle,
-				primaryActionTitle: primaryActionTitle,
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
 	}
 
 	// MARK: List State
@@ -186,8 +156,8 @@ extension ListRemoteEventsViewModel {
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListRemoteEventsViewController.Row] {
 
 		var sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter),
-			   let rhsDate = rhs.event.getSortDate(with: ListRemoteEventsViewModel.iso8601DateFormatter) {
+			if let lhsDate = lhs.event.getSortDate(with: DateFormatter.Event.iso8601),
+			   let rhsDate = rhs.event.getSortDate(with: DateFormatter.Event.iso8601) {
 
 				if lhsDate == rhsDate {
 					return lhs.providerIdentifier < rhs.providerIdentifier
@@ -238,13 +208,14 @@ extension ListRemoteEventsViewModel {
 				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
 			} else if currentRow.event.hasPaperCertificate {
 				if let credentialData = currentRow.event.dccEvent?.credential.data(using: .utf8),
+				   let isForeignDcc = cryptoManager?.isForeignDCC(credentialData),
 				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination, isForeign: euCredentialAttributes.isForeignDCC))
+						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination, isForeign: isForeignDcc))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery, isForeign: euCredentialAttributes.isForeignDCC))
+						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery, isForeign: isForeignDcc))
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: euCredentialAttributes.isForeignDCC))
+						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test, isForeign: isForeignDcc))
 					}
 				}
 			}
@@ -257,10 +228,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
@@ -285,10 +256,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printMonthFormatter.string) ?? ""
+			.map(DateFormatter.Format.month.string) ?? ""
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var details = VaccinationDetailsGenerator.getDetails(
@@ -335,10 +306,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printAssessmentDateFormatter.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonth.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),
@@ -363,10 +334,10 @@ extension ListRemoteEventsViewModel {
 		
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
 		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -391,10 +362,10 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printTestDateYearFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -422,7 +393,7 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		var title: String = L.general_vaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -454,7 +425,7 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -481,7 +452,7 @@ extension ListRemoteEventsViewModel {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(ListRemoteEventsViewModel.printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
@@ -495,254 +466,6 @@ extension ListRemoteEventsViewModel {
 						title: L.holderDccTestDetailsTitle(),
 						details: DCCTestDetailsGenerator.getDetails(identity: dataRow.identity, test: test),
 						footer: isForeign ? L.holder_listRemoteEvents_somethingWrong_foreignDCC_body() : L.holderDccTestFooter()
-					)
-				)
-			}
-		)
-	}
-
-	// MARK: Empty States
-
-	internal func emptyEventsState() -> ListRemoteEventsViewController.State {
-
-		switch eventMode {
-			case .vaccinationassessment: return emptyAssessmentState()
-			case .paperflow: return emptyDccState()
-			case .vaccinationAndPositiveTest, .vaccination: return emptyVaccinationState()
-			case .recovery: return emptyRecoveryState()
-			case .test: return emptyTestState()
-		}
-	}
-
-	internal func originMismatchState(flow: ErrorCode.Flow) -> ListRemoteEventsViewController.State {
-		
-		let errorCode = ErrorCode(
-			flow: flow,
-			step: .signer,
-			clientCode: .originMismatch
-		)
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderEventOriginmismatchTitle(),
-			subTitle: Strings.originsMismatchBody(errorCode: errorCode, forEventMode: eventMode),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: Vaccination End State
-
-	internal func emptyVaccinationState() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderVaccinationNolistTitle(),
-			subTitle: L.holderVaccinationNolistMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: Negative Test End State
-
-	internal func emptyTestState() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderTestNolistTitle(),
-			subTitle: L.holderTestNolistMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-	
-	internal func negativeTestInVaccinationAssessmentFlow() -> ListRemoteEventsViewController.State {
-
-		return .feedback(
-			content: Content(
-				title: L.holder_event_negativeTestEndstate_addVaccinationAssessment_title(),
-				body: L.holder_event_negativeTestEndstate_addVaccinationAssessment_body(),
-				primaryActionTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-	
-	// MARK: Assessment End State
-	
-	internal func emptyAssessmentState() -> ListRemoteEventsViewController.State {
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_event_vaccination_assessment_nolist_title(),
-			subTitle: L.holder_event_vaccination_assessment_nolist_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: Paper Flow End State
-
-	internal func emptyDccState() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderCheckdccExpiredTitle(),
-			subTitle: L.holderCheckdccExpiredMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: international QR Only
-
-	internal func internationalQROnly() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
-			subTitle: L.holder_listRemoteEvents_endStateInternationalQROnly_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: Positive test end states
-
-	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateVaccinationsAndRecovery_title(),
-			subTitle: L.holder_listRemoteEvents_endStateVaccinationsAndRecovery_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func positiveTestFlowRecoveryAndInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title(),
-			subTitle: L.holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-	
-	internal func positiveTestFlowInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
-			subTitle: L.holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateRecoveryOnly_title(),
-			subTitle: L.holder_listRemoteEvents_endStateRecoveryOnly_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: Recovery end states
-
-	internal func emptyRecoveryState() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryNolistTitle(),
-			subTitle: L.holderRecoveryNolistMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryRecoveryAndVaccinationTitle(),
-			subTitle: L.holderRecoveryRecoveryAndVaccinationMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func recoveryFlowVaccinationOnly() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryVaccinationOnlyTitle(),
-			subTitle: L.holderRecoveryVaccinationOnlyMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func recoveryFlowPositiveTestTooOld() -> ListRemoteEventsViewController.State {
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateRecoveryTooOld_title(),
-			subTitle: L.holder_listRemoteEvents_endStateRecoveryTooOld_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-}
-
-// MARK: Test 2.0
-
-private extension ListRemoteEventsViewModel {
-
-	func pendingEventsState() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderTestresultsPendingTitle(),
-			subTitle: L.holderTestresultsPendingText(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListRemoteEventsViewController.State {
-
-		var rows = [ListRemoteEventsViewController.Row]()
-		if let row = getTest20Row(remoteEvent) {
-			rows.append(row)
-		}
-
-		return .listEvents(
-			content: Content(
-				title: L.holder_listRemoteEvents_title(),
-				body: L.holderTestresultsResultsText(),
-				primaryActionTitle: L.holderTestresultsResultsButton(),
-				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR()
-				},
-				secondaryActionTitle: L.holderVaccinationListWrong(),
-				secondaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(
-						.moreInformation(
-							title: L.holder_listRemoteEvents_somethingWrong_title(),
-							body: L.holder_listRemoteEvents_somethingWrong_test_body(),
-							hideBodyForScreenCapture: false
-						)
-					)
-				}
-			),
-			rows: rows
-		)
-	}
-
-	func getTest20Row(_ remoteEvent: RemoteEvent) -> ListRemoteEventsViewController.Row? {
-
-		guard let result = remoteEvent.wrapper.result,
-			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
-			return nil
-		}
-
-		let printSampleDate: String = ListRemoteEventsViewModel.printTestDateFormatter.string(from: sampleDate)
-		let holderID = NegativeTestV2DetailsGenerator.getDisplayIdentity(result.holder)
-		
-		return ListRemoteEventsViewController.Row(
-			title: L.holderTestresultsNegative(),
-			details: [
-				L.holder_listRemoteEvents_listElement_testDate(printSampleDate),
-				L.holder_listRemoteEvents_listElement_yourDetails(holderID)
-			],
-			action: { [weak self] in
-				
-				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(
-						title: L.holderEventAboutTitle(),
-						details: NegativeTestV2DetailsGenerator.getDetails(testResult: result),
-						footer: nil
 					)
 				)
 			}

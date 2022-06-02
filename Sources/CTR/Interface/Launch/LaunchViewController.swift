@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -45,9 +45,9 @@ class LaunchViewController: BaseViewController {
 
 		// Bindings
 		viewModel.$message.binding = { [weak self] in
-            self?.sceneView.message = $0
-            UIAccessibility.post(notification: .announcement, argument: $0)
-        }
+			self?.sceneView.message = $0
+			UIAccessibility.post(notification: .announcement, argument: $0)
+		}
 		viewModel.$appIcon.binding = { [weak self] in self?.sceneView.appIcon = $0 }
 	}
 

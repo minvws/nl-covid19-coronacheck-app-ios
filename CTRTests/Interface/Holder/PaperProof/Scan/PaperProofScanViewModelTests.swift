@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -42,7 +42,7 @@ final class PaperProofScanViewModelTests: XCTestCase {
 	func test_parseQRMessage_whenQRisCTB_shouldShowErrorState() {
 
 		// Given
-		paperProofIdentifierSpy.stubbedIdentifyResult = .ctb
+		paperProofIdentifierSpy.stubbedIdentifyResult = .hasDomesticPrefix
 		
 		// When
 		sut.parseQRMessage("test")
@@ -90,9 +90,8 @@ final class PaperProofScanViewModelTests: XCTestCase {
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
-			identity: nil,
-			status: .complete,
-			result: nil
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .complete
 		)
 		
 		// When

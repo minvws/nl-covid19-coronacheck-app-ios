@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -10,17 +10,11 @@ import Foundation
 extension AlertContent {
 
 	static func strippenExpiredWithNoInternet(strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
-		AlertContent(
+		
+		return strippenExpiredWithNoInternet(
 			title: L.holderDashboardStrippenExpiredNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiredNointernetAlertMessage(),
-			cancelAction: { _ in
-				strippenRefresher.userDismissedALoadingError()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { _ in
-				strippenRefresher.load()
-			},
-			okTitle: L.generalRetry()
+			strippenRefresher: strippenRefresher
 		)
 	}
 
@@ -28,23 +22,38 @@ extension AlertContent {
 
 		let localizedTimeRemainingUntilExpiry: String = {
 			if expiryDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day in future
-				return HolderDashboardViewModel.daysRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
+				return DateFormatter.Relative.days.string(from: now, to: expiryDate) ?? "-"
 			} else {
-				return HolderDashboardViewModel.hmRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
+				return DateFormatter.Relative.hoursMinutes.string(from: now, to: expiryDate) ?? "-"
 			}
 		}()
-
-		return AlertContent(
+		
+		return strippenExpiredWithNoInternet(
 			title: L.holderDashboardStrippenExpiringNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(localizedTimeRemainingUntilExpiry),
-			cancelAction: { _ in
-				strippenRefresher.userDismissedALoadingError()
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { _ in
-				strippenRefresher.load()
-			},
-			okTitle: L.generalRetry()
+			strippenRefresher: strippenRefresher
+		)
+	}
+	
+	static func strippenExpiredWithNoInternet(
+		title: String,
+		subTitle: String,
+		strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
+		AlertContent(
+			title: title,
+			subTitle: subTitle,
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { _ in
+					strippenRefresher.load()
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { _ in
+					strippenRefresher.userDismissedALoadingError()
+				}
+			)
 		)
 	}
 }

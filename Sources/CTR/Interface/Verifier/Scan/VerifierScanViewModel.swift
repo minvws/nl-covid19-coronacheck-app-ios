@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -144,10 +144,12 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		alert = AlertContent(
 			title: title,
 			subTitle: message,
-			okAction: { [weak self] _ in
-				self?.shouldResumeScanning = true
-			},
-			okTitle: L.generalOk()
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.shouldResumeScanning = true
+				}
+			)
 		)
 	}
 

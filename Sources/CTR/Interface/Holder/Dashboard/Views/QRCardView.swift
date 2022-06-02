@@ -1,9 +1,10 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import UIKit
 
@@ -127,8 +128,8 @@ class QRCardView: BaseView {
 	// MARK: - init
 
 	init(stackSize: Int) {
-		self.stackSize = stackSize
-		squashedCards = (0 ..< stackSize - 1).map { _ in UIView() }
+		self.stackSize = min(stackSize, 3)
+		squashedCards = (0 ..< self.stackSize - 1).map { _ in UIView() }
 
 		super.init(frame: .zero)
 
@@ -165,7 +166,7 @@ class QRCardView: BaseView {
 
 		super.setupViewHierarchy()
 		
-		addSubview(accessibilityRoleView)
+		accessibilityRoleView.embed(in: self)
 
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
@@ -195,60 +196,22 @@ class QRCardView: BaseView {
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
-
+		
 		super.setupViewConstraints()
-
-		// Setup Stack constraints:
-
+		
+		// Setup HostingView constraints:
 		NSLayoutConstraint.activate([
 			hostView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			hostView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			hostView.topAnchor.constraint(equalTo: topAnchor)
 		])
-
+		
 		// Setup the squashed cards (the QR Cards that are apparently layered beneath this one):
-
-		if squashedCards.isEmpty {
-
-			NSLayoutConstraint.activate([
-				hostView.bottomAnchor.constraint(equalTo: bottomAnchor)
-			])
-		} else {
-
-			var nextTopAnchor: NSLayoutYAxisAnchor? = hostView.topAnchor
-			var nextBottomAnchor: NSLayoutYAxisAnchor?
-
-			squashedCards.forEach { squashedCardView in
-				if let nextTopAnchor = nextTopAnchor {
-					NSLayoutConstraint.activate([
-						nextTopAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: -1 * ViewTraits.interSquashedCardSpacing)
-					])
-				}
-				NSLayoutConstraint.activate([
-					squashedCardView.leadingAnchor.constraint(equalTo: leadingAnchor),
-					squashedCardView.trailingAnchor.constraint(equalTo: trailingAnchor),
-					squashedCardView.heightAnchor.constraint(equalTo: hostView.heightAnchor)
-				])
-				nextTopAnchor = squashedCardView.topAnchor
-				nextBottomAnchor = squashedCardView.bottomAnchor
-			}
-
-			if let nextBottomAnchor = nextBottomAnchor {
-				NSLayoutConstraint.activate([
-					nextBottomAnchor.constraint(equalTo: bottomAnchor)
-				])
-			}
-		}
-
-		// Setup HostingView constraints:
-
+		setupSquashedCards()
+		
 		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
-
+		
 		NSLayoutConstraint.activate([
-			accessibilityRoleView.topAnchor.constraint(equalTo: topAnchor),
-			accessibilityRoleView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			accessibilityRoleView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			accessibilityRoleView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			
 			largeIconImageView.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.imageMargin),
 			largeIconImageView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -ViewTraits.imageMargin),
@@ -281,23 +244,80 @@ class QRCardView: BaseView {
 			}()
 		])
 		
-		titleTrailingToLargeIconImageViewConstraint = titleLabel.trailingAnchor.constraint(
-			lessThanOrEqualTo: largeIconImageView.leadingAnchor,
-			constant: -ViewTraits.titleTrailingToLargeIconMargin
-		)
-		titleTrailingToLargeIconImageViewConstraint?.isActive = true
+		setupMutableContraints()
+	}
+	
+	private func setupSquashedCards() {
 		
-		titleTrailingToDisclosurePolicyIndicatorViewConstraint = titleLabel.trailingAnchor.constraint(
-			lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
-			constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
-		)
-		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = false
+		if squashedCards.isEmpty {
+			
+			NSLayoutConstraint.activate([
+				hostView.bottomAnchor.constraint(equalTo: bottomAnchor)
+			])
+		} else {
+			
+			var nextTopAnchor: NSLayoutYAxisAnchor? = hostView.topAnchor
+			var nextBottomAnchor: NSLayoutYAxisAnchor?
+			
+			squashedCards.forEach { squashedCardView in
+				if let nextTopAnchor = nextTopAnchor {
+					NSLayoutConstraint.activate([
+						nextTopAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: -1 * ViewTraits.interSquashedCardSpacing)
+					])
+				}
+				NSLayoutConstraint.activate([
+					squashedCardView.leadingAnchor.constraint(equalTo: leadingAnchor),
+					squashedCardView.trailingAnchor.constraint(equalTo: trailingAnchor),
+					squashedCardView.heightAnchor.constraint(equalTo: hostView.heightAnchor)
+				])
+				nextTopAnchor = squashedCardView.topAnchor
+				nextBottomAnchor = squashedCardView.bottomAnchor
+			}
+			
+			if let nextBottomAnchor = nextBottomAnchor {
+				NSLayoutConstraint.activate([
+					nextBottomAnchor.constraint(equalTo: bottomAnchor)
+				])
+			}
+		}
+	}
+	
+	private func setupMutableContraints() {
 		
-		titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: ViewTraits.titleLeadingAnchorDCCMargin)
-		titleLeadingAnchor?.isActive = true
-		
-		titleTopAnchor = titleLabel.topAnchor.constraint(equalTo: hostView.topAnchor, constant: ViewTraits.titleTopAnchorDCCMargin)
-		titleTopAnchor?.isActive = true
+		NSLayoutConstraint.activate([
+			{
+				let constraint = titleLabel.trailingAnchor.constraint(
+					lessThanOrEqualTo: largeIconImageView.leadingAnchor,
+					constant: -ViewTraits.titleTrailingToLargeIconMargin
+				)
+				titleTrailingToLargeIconImageViewConstraint = constraint
+				return constraint
+			}(),
+			{
+				let constraint = titleLabel.trailingAnchor.constraint(
+					lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
+					constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
+				)
+				titleTrailingToDisclosurePolicyIndicatorViewConstraint = constraint
+				return constraint
+			}(),
+			{
+				let constraint = titleLabel.leadingAnchor.constraint(
+					equalTo: hostView.leadingAnchor,
+					constant: ViewTraits.titleLeadingAnchorDCCMargin
+				)
+				titleLeadingAnchor = constraint
+				return constraint
+			}(),
+			{
+				let constraint = titleLabel.topAnchor.constraint(
+					equalTo: hostView.topAnchor,
+					constant: ViewTraits.titleTopAnchorDCCMargin
+				)
+				titleTopAnchor = constraint
+				return constraint
+			}()
+		])
 	}
 	
 	// MARK: - Private funcs
@@ -390,6 +410,7 @@ class QRCardView: BaseView {
 
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 
@@ -404,6 +425,8 @@ class QRCardView: BaseView {
 	}
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 

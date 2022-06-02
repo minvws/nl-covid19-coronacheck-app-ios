@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -12,29 +12,29 @@ class ScanLogManagingSpy: ScanLogManaging {
 
 	var invokedDidWeScanQRs = false
 	var invokedDidWeScanQRsCount = 0
-	var invokedDidWeScanQRsParameters: (withinLastNumberOfSeconds: Int, Void)?
-	var invokedDidWeScanQRsParametersList = [(withinLastNumberOfSeconds: Int, Void)]()
+	var invokedDidWeScanQRsParameters: (withinLastNumberOfSeconds: Int, now: Date)?
+	var invokedDidWeScanQRsParametersList = [(withinLastNumberOfSeconds: Int, now: Date)]()
 	var stubbedDidWeScanQRsResult: Bool! = false
 
-	func didWeScanQRs(withinLastNumberOfSeconds: Int) -> Bool {
+	func didWeScanQRs(withinLastNumberOfSeconds: Int, now: Date) -> Bool {
 		invokedDidWeScanQRs = true
 		invokedDidWeScanQRsCount += 1
-		invokedDidWeScanQRsParameters = (withinLastNumberOfSeconds, ())
-		invokedDidWeScanQRsParametersList.append((withinLastNumberOfSeconds, ()))
+		invokedDidWeScanQRsParameters = (withinLastNumberOfSeconds, now)
+		invokedDidWeScanQRsParametersList.append((withinLastNumberOfSeconds, now))
 		return stubbedDidWeScanQRsResult
 	}
 
 	var invokedGetScanEntries = false
 	var invokedGetScanEntriesCount = 0
-	var invokedGetScanEntriesParameters: (withinLastNumberOfSeconds: Int, Void)?
-	var invokedGetScanEntriesParametersList = [(withinLastNumberOfSeconds: Int, Void)]()
+	var invokedGetScanEntriesParameters: (withinLastNumberOfSeconds: Int, now: Date)?
+	var invokedGetScanEntriesParametersList = [(withinLastNumberOfSeconds: Int, now: Date)]()
 	var stubbedGetScanEntriesResult: Result<[ScanLogEntry], Error>!
 
-	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error> {
+	func getScanEntries(withinLastNumberOfSeconds: Int, now: Date) -> Result<[ScanLogEntry], Error> {
 		invokedGetScanEntries = true
 		invokedGetScanEntriesCount += 1
-		invokedGetScanEntriesParameters = (withinLastNumberOfSeconds, ())
-		invokedGetScanEntriesParametersList.append((withinLastNumberOfSeconds, ()))
+		invokedGetScanEntriesParameters = (withinLastNumberOfSeconds, now)
+		invokedGetScanEntriesParametersList.append((withinLastNumberOfSeconds, now))
 		return stubbedGetScanEntriesResult
 	}
 
@@ -52,14 +52,14 @@ class ScanLogManagingSpy: ScanLogManaging {
 
 	var invokedDeleteExpiredScanLogEntries = false
 	var invokedDeleteExpiredScanLogEntriesCount = 0
-	var invokedDeleteExpiredScanLogEntriesParameters: (seconds: Int, Void)?
-	var invokedDeleteExpiredScanLogEntriesParametersList = [(seconds: Int, Void)]()
+	var invokedDeleteExpiredScanLogEntriesParameters: (seconds: Int, now: Date)?
+	var invokedDeleteExpiredScanLogEntriesParametersList = [(seconds: Int, now: Date)]()
 
-	func deleteExpiredScanLogEntries(seconds: Int) {
+	func deleteExpiredScanLogEntries(seconds: Int, now: Date) {
 		invokedDeleteExpiredScanLogEntries = true
 		invokedDeleteExpiredScanLogEntriesCount += 1
-		invokedDeleteExpiredScanLogEntriesParameters = (seconds, ())
-		invokedDeleteExpiredScanLogEntriesParametersList.append((seconds, ()))
+		invokedDeleteExpiredScanLogEntriesParameters = (seconds, now)
+		invokedDeleteExpiredScanLogEntriesParametersList.append((seconds, now))
 	}
 
 	var invokedWipePersistedData = false

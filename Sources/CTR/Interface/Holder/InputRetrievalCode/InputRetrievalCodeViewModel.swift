@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -92,7 +92,6 @@ class InputRetrievalCodeViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging? = Current.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -314,7 +313,7 @@ class InputRetrievalCodeViewModel {
 
 		progressIndicationCounter.increment()
 
-		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
+		Current.networkManager.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
 			guard let self = self else { return }
 
@@ -360,7 +359,7 @@ class InputRetrievalCodeViewModel {
 
 		progressIndicationCounter.increment()
 
-		networkManager?.fetchTestResult(
+		Current.networkManager.fetchTestResult(
 			provider: provider,
 			token: requestToken,
 			code: verificationCode,
@@ -603,10 +602,15 @@ extension InputRetrievalCodeViewModel {
 		self.networkErrorAlert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.fetchProviders(requestToken, verificationCode: verificationCode)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 
@@ -616,10 +620,16 @@ extension InputRetrievalCodeViewModel {
 		self.networkErrorAlert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.fetchProviders(requestToken, verificationCode: verificationCode)
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 
@@ -642,7 +652,7 @@ extension InputRetrievalCodeViewModel {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		coordinator?.displayError(content: content) { [weak self] in
+		coordinator?.presentError(content: content) { [weak self] in
 			self?.coordinator?.navigateBackToStart()
 		}
 	}
@@ -729,7 +739,7 @@ extension InputRetrievalCodeViewModel {
 			secondaryAction: nil
 		)
 
-		coordinator?.displayError(content: content) { [weak self] in
+		coordinator?.presentError(content: content) { [weak self] in
 			self?.coordinator?.navigateBackToStart()
 		}
 	}

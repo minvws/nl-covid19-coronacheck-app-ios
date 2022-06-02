@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -526,7 +526,7 @@ class HolderCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.userHasNotBeenTested()
+		sut.userWishesMoreInfoAboutGettingTested()
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
@@ -620,7 +620,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Over je vaccinatiebewijs"
 	}
 	
@@ -633,7 +633,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is VisitorPassCompleteCertificateViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -650,7 +650,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Over je bezoekersbewijs"
 	}
 
@@ -667,7 +667,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Controleer de tijd van je telefoon"
 	}
 	
@@ -684,7 +684,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Maak verbinding met het internet"
 	}
 	
@@ -714,7 +714,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verlopen vaccinatiebewijs"
 	}
 	
@@ -787,12 +787,12 @@ class HolderCoordinatorTests: XCTestCase {
 		)
 		
 		// When
-		sut.displayError(content: content, backAction: {})
+		sut.presentError(content: content, backAction: {})
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
@@ -809,7 +809,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Heb je geen ophaalcode?"
 	}
 
@@ -826,7 +826,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel)
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Heb je geen beoordelingscode?"
 	}
 	

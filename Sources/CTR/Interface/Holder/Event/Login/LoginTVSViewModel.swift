@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -22,8 +22,6 @@ class LoginTVSViewModel: Logging {
 	@Bindable internal var content: Content
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
-
-	@Bindable private(set) var alert: AlertContent?
 
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -17,6 +17,12 @@ protocol ShowQRDatasourceProtocol {
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool
+	
+	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
+	
+	func isCredentialExpired(_ greenCard: GreenCard) -> Bool
+	
+	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool
 
 	func getIndexForMostRelevantGreenCard() -> Int
 }
@@ -65,12 +71,11 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 		let vaccinationGreenCardsWithAttributes: [(greenCard: GreenCard, attributes: EuCredentialAttributes)] = items
 		// only international
-			.filter { $0.greenCard.type == GreenCardType.eu.rawValue }
+			.filter { $0.greenCard.getType() == GreenCardType.eu }
 		// only with attributes
 			.compactMap { cardsWithSortedOrigin in
-				if let credential = cardsWithSortedOrigin.greenCard.getActiveCredential(),
-				   let data = credential.data,
-				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data) {
+				if let credentialData = cardsWithSortedOrigin.greenCard.getLatestInternationalCredential()?.data,
+				   let euCredentialAttributes = self.cryptoManager?.readEuCredentials(credentialData) {
 
 					return (cardsWithSortedOrigin.greenCard, attributes: euCredentialAttributes)
 				}
@@ -97,23 +102,49 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 
 	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool {
 
+		return isDosenumberSmallerThanTotalDose(greenCard) || isCredentialExpired(greenCard)
+	}
+
+	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
+
 		guard self.items.count > 1,
-			greenCard.type == GreenCardType.eu.rawValue,
+			  greenCard.getType() == GreenCardType.eu,
 			let highestFullyVaccinatedGreenCard = fullyVaccinatedGreenCards.first,
-			let credential = greenCard.getActiveCredential(),
-			let data = credential.data,
-			let euCredentialAttributes = self.cryptoManager?.readEuCredentials(data),
+			let euCredentialAttributes = getEuCredentialAttributes(greenCard),
 			let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
 			let doseNumber = euVaccination.doseNumber,
 			let totalDose = euVaccination.totalDose,
 			totalDose != doseNumber else {
+			// Total Dose equals doseNumber
 			return false
 		}
-
+		
 		logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
-
+	
+	func isCredentialExpired(_ greenCard: GreenCard) -> Bool {
+		
+		guard greenCard.getType() == GreenCardType.eu,
+			  let euCredentialAttributes = getEuCredentialAttributes(greenCard) else {
+			// No attributes
+			return false
+		}
+		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
+		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
+	}
+	
+	 func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
+		 
+		 guard greenCard.getType() == GreenCardType.eu else { return nil }
+		 
+		 if let credentialData = greenCard.getLatestInternationalCredential()?.data,
+			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
+			 return euCredentialAttributes
+		 }
+		return nil
+	}
+	
 	func getIndexForMostRelevantGreenCard() -> Int {
 		
 		// Sort by doseNumber, totalDose

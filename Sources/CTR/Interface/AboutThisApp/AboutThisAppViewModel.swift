@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -43,9 +43,14 @@ struct AboutThisAppMenuOption {
 
 class AboutThisAppViewModel: Logging {
 
-	/// Coordination Delegate
-	weak private var coordinator: (OpenUrlProtocol & Restartable)?
-
+	enum Outcome: Equatable {
+		case openURL(_: URL, inApp: Bool)
+		case userWishesToSeeStoredEvents
+		case userWishesToOpenScanLog
+		case coordinatorShouldRestart
+	}
+	
+	private let outcomeHandler: (Outcome) -> Void
 	private var flavor: AppFlavor
 
 	// MARK: - Bindable
@@ -65,13 +70,13 @@ class AboutThisAppViewModel: Logging {
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor
 	init(
-		coordinator: (OpenUrlProtocol & Restartable),
 		versionSupplier: AppVersionSupplierProtocol,
-		flavor: AppFlavor) {
+		flavor: AppFlavor,
+		outcomeHandler: @escaping (Outcome) -> Void
+	) {
 
-		self.coordinator = coordinator
+		self.outcomeHandler = outcomeHandler
 		self.flavor = flavor
-
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
 
@@ -84,10 +89,7 @@ class AboutThisAppViewModel: Logging {
 				  let hash = Current.userSettings.configFetchedHash
 			else { return nil }
 
-			// 13-10-2021 00:00
-			let dateformatter = DateFormatter()
-			dateformatter.dateFormat = "dd-MM-yyyy HH:mm"
-			let dateString = dateformatter.string(from: Date(timeIntervalSince1970: timestamp))
+			let dateString = DateFormatter.Format.numericDateWithTime.string(from: Date(timeIntervalSince1970: timestamp))
 
 			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
 		}()
@@ -162,7 +164,7 @@ class AboutThisAppViewModel: Logging {
 			case .reset:
 				showClearDataAlert()
 			case .storedEvents:
-				(coordinator as? HolderCoordinatorDelegate)?.userWishesToSeeStoredEvents()
+				outcomeHandler(.userWishesToSeeStoredEvents)
 			case .deeplink:
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:
@@ -203,7 +205,7 @@ class AboutThisAppViewModel: Logging {
 	private func openUrlString(_ urlString: String, inApp: Bool = true) {
 
 		if let url = URL(string: urlString) {
-			coordinator?.openUrl(url, inApp: inApp)
+			outcomeHandler(.openURL(url, inApp: inApp))
 		}
 	}
 
@@ -212,27 +214,26 @@ class AboutThisAppViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderCleardataAlertTitle(),
 			subTitle: L.holderCleardataAlertSubtitle(),
-			cancelAction: nil,
-			cancelTitle: L.general_cancel(),
-			okAction: { [weak self] _ in
-				self?.wipePersistedData()
-			},
-			okTitle: L.holderCleardataAlertRemove(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.holderCleardataAlertRemove(),
+				action: { [weak self] _ in
+					self?.wipePersistedData()
+				},
+				isDestructive: true
+			),
+			cancelAction: AlertContent.Action.cancel
 		)
 	}
 
 	func wipePersistedData() {
 
 		Current.wipePersistedData(flavor: flavor)
-		self.coordinator?.restart()
+		outcomeHandler(.coordinatorShouldRestart)
 	}
 
 	func openScanLog() {
 
-		if let coordinator = coordinator as? VerifierCoordinatorDelegate {
-			coordinator.userWishesToOpenScanLog()
-		}
+		outcomeHandler(.userWishesToOpenScanLog)
 	}
 	
 	private func setDisclosurePolicy(_ newPolicy: [String], message: String) {
@@ -243,13 +244,12 @@ class AboutThisAppViewModel: Logging {
 		alert = AlertContent(
 			title: "Disclosure policy updated",
 			subTitle: message,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.coordinator?.restart()
-			},
-			okTitle: L.generalOk(),
-			okActionIsDestructive: false
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.outcomeHandler(.coordinatorShouldRestart)
+				}
+			)
 		)
 	}
 }

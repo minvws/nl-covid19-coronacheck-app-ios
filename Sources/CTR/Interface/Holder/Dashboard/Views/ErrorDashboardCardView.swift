@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -71,7 +71,8 @@ final class ErrorDashboardCardView: BaseView {
 	
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(
+			
+			NSAttributedString.makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
 					font: Fonts.subhead,
@@ -79,8 +80,10 @@ final class ErrorDashboardCardView: BaseView {
 					lineHeight: ViewTraits.Font.lineHeight,
 					kern: ViewTraits.Font.kern,
 					paragraphSpacing: ViewTraits.Font.paragraphSpacing
-				)
-			)
+				)) {
+					self.messageTextView.attributedText = $0
+				}
+
 			// Apply link color
 			messageTextView.linkTextAttributes = [.foregroundColor: ViewTraits.Color.tint]
 		}

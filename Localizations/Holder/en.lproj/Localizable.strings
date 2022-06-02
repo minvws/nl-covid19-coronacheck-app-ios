@@ -48,7 +48,7 @@
 "general.vaccinationdate" = "Vaccination date";
 /* MARK: - General */
 "general_cancel" = "Cancel";
-"general_delete" = "Clear data";
+"general_delete" = "Remove data";
 "general_menu" = "Menu";
 "general_negativeTest" = "Negative test result";
 "general_newintheapp" = "New in the app";
@@ -147,7 +147,7 @@
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "am";
 "holder.dashboard.qr.backToThirdPartyApp" = "Back to the %@";
-"holder.dashboard.qr.button.viewQR" = "View QR";
+"holder.dashboard.qr.button.viewQR" = "View QR code";
 "holder.dashboard.qr.button.viewQRs" = "View QR codes";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
@@ -182,9 +182,8 @@
 "holder.dcc.recovery.date" = "Test date:";
 "holder.dcc.recovery.dateofbirth" = "Date of birth:";
 "holder.dcc.recovery.details.title" = "Details";
-"holder.dcc.recovery.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.recovery.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.recovery.identifier" = "Unique certificate identifier:";
-"holder.dcc.recovery.issuer" = "Certificate issuer:";
 "holder.dcc.recovery.name" = "Name:";
 "holder.dcc.recovery.pathogen" = "Disease recovered from:";
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
@@ -195,9 +194,8 @@
 "holder.dcc.test.dateofbirth" = "Date of birth:";
 "holder.dcc.test.details.title" = "Details";
 "holder.dcc.test.facility" = "Testing centre:";
-"holder.dcc.test.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
-"holder.dcc.test.issuer" = "Certificate issuer:";
 "holder.dcc.test.manufacturer" = "Test manufacturer:";
 "holder.dcc.test.name" = "Name:";
 "holder.dcc.test.pathogen" = "Disease targeted:";
@@ -211,9 +209,8 @@
 "holder.dcc.vaccination.dateofbirth" = "Date of birth:";
 "holder.dcc.vaccination.details.title" = "Details";
 "holder.dcc.vaccination.dosage" = "Number in series of doses:";
-"holder.dcc.vaccination.footer" = "<p></p><p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.vaccination.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
 "holder.dcc.vaccination.identifier" = "Unique vaccination identifier:";
-"holder.dcc.vaccination.issuer" = "Certificate issuer:";
 "holder.dcc.vaccination.list.title" = "Vaccination certificate dose %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Vaccine manufacturer:";
 "holder.dcc.vaccination.name" = "Name:";
@@ -224,10 +221,10 @@
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
 "holder.dcctokenentry.error.emptycode" = "Please enter a letter combination first";
 "holder.dcctokenentry.error.invalidcode" = "This letter combination is invalid. A valid combination looks like this: FLBRXQ.";
-"holder.dcctokenentry.header" = "Please enter the letter combination. You’ve received this together with the paper certificate.";
+"holder.dcctokenentry.header" = "Please enter the letter combination you’ve received together with the paper certificate.";
 "holder.dcctokenentry.next" = "Next";
 "holder.dcctokenentry.retry.title" = "I haven't received a code";
-"holder.dcctokenentry.title" = "Your letter combination";
+"holder.dcctokenentry.title" = "Enter your letter combination";
 "holder.dcctokenentry.tokenField.placeholder" = "E.g. FLBRXQ";
 "holder.dcctokenentry.tokenField.placeholder.screenreader" = "Enter your letter combination here";
 "holder.dcctokenentry.tokenField.title" = "Letter combination";
@@ -347,8 +344,8 @@
 "holder.onboarding.title.validity" = "Your certificate contains a QR code";
 "holder.onboarding.title.yourqr" = "Certificate of vaccination, recovery or test";
 "holder.paperproof.notoken.action" = "Add certificate via DigiD";
-"holder.paperproof.notoken.message" = "<p>Then you won't be able to add your certificates to the app this way.</p><p>You only have a letter combination if you requested your paper certificates from your healthcare provider, or had them delivered by mail.</p><p><b>Did you print your certificate yourself?</b><br />Then you can add your certificates to the app using DigiD.</p>";
-"holder.paperproof.notoken.title" = "No letter combination?";
+"holder.paperproof.notoken.message" = "<p>You only have a letter combination if your healthcare provider or the Dutch government has sent your certificate to you.</p><p>Don’t have a letter combination or lost it? Then it’s not possible to add your certificate right now. First, request a new certificate with corresponding letter combination.</p><p><b>Did you print your certificate yourself?</b><br />Then you can only add your certificates to the app via DigiD.</p>";
+"holder.paperproof.notoken.title" = "Don’t have a letter combination?";
 "holder.provider.commercial.title" = "Other test location";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
 "holder.provider.ggd.title" = "GGD";
@@ -417,7 +414,6 @@
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "holder.showqr.eu.title" = "International QR";
 "holder.showqr.nextbutton" = "Next QR code";
-"holder.showqr.notneeded" = "You probably won't need this QR code because you have a more recent dose.";
 "holder.showqr.previousbutton" = "Previous QR code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
 "holder.showqr.qrhidden" = "QR code hidden";
@@ -581,6 +577,7 @@
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
 "holder_dccDetails_subtitle" = "These details are in your certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
+"holder_dcc_issuer" = "Certificate issuer:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
 "holder_endOfLife_button" = "Go to CoronaCheck.nl";
 "holder_endOfLife_description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
@@ -634,9 +631,10 @@
 "holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body" = "<p>At this moment, we can't create a certificate from your retrieved details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_vaccinationAssessment_body" = "<p>At this moment, we can't create a certificate from your vaccination approval. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_originMismatch_vaccination_body" = "<p>At this moment, we can't create a certificate from your vaccination. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
-"holder_listRemoteEvents_paperflow_message" = "You can create a certificate with these details.";
+"holder_listRemoteEvents_paperflow_message" = "If the details below are correct, you can add your certificate to the app.";
 "holder_listRemoteEvents_paperflow_title" = "Scanned details";
 "holder_listRemoteEvents_recovery_message" = "If the details about your test are correct, you can create a recovery certificate.";
+"holder_listRemoteEvents_somethingWrong_foreignDCC_body" = "<p><b>Are your details incorrect?</b><br />Please check in the country where you were tested or vaccinated how you can adjust your details.</p>";
 "holder_listRemoteEvents_somethingWrong_recovery_body" = "<p>Please contact your test location. They can help you change these details.</p>";
 "holder_listRemoteEvents_somethingWrong_test_body" = "<p>Please contact the test location. They can help you change your details.</p>";
 "holder_listRemoteEvents_somethingWrong_title" = "Is something wrong?";
@@ -647,7 +645,8 @@
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
-"holder_menu_paperproof_title" = "Add paper certificate";
+"holder_menu_paperproof_subTitle" = "Add (paper) certificate";
+"holder_menu_paperproof_title" = "Scan to add certificate";
 "holder_menu_resetApp" = "Reset the app";
 "holder_menu_storedEvents" = "Stored data";
 /* Menu item for short stay route */
@@ -668,6 +667,8 @@
 "holder_newintheapp_content_only3G_title" = "3G access in the Netherlands";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_body" = "The coronavirus entry pass is no longer used in the Netherlands. Dutch certificates are therefore removed from the app. International certificates can still be made and used for travelling abroad.";
 "holder_newintheapp_content_onlyInternationalCertificates_0G_title" = "Only international certificates";
+"holder_newintheapp_foreignproofs_body" = "Do you have a coronavirus certificate with QR code of a test or vaccination from abroad? Now you can add your certificate to CoronaCheck. Choose “Scan to add certificate” in the menu.";
+"holder_newintheapp_foreignproofs_title" = "Adding foreign certificates";
 "holder_notvalidinthisregionmodal_visitorpass_international_body" = "<p>Your visitor pass is only valid in the Netherlands. Want to visit another country? Then please check the rules of the country you're planning to visit.</p>\n<p><b>Want to know more?</b><br />Read more on <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_notvalidinthisregionmodal_visitorpass_international_title" = "About your visitor pass";
 "holder_onboarding_content_TravelSafe_0G_message" = "Are you travelling to a country where a coronavirus pass is required? Then you can create your certificate with this app.";
@@ -680,24 +681,36 @@
 "holder_onboarding_disclosurePolicyChanged_only1GAccess_title" = "Only 1G access in the Netherlands";
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_message" = "Visiting a place in the Netherlands where a coronavirus pass is required? 3G access currently applies everywhere. This means you can enter with a vaccination or recovery certificate, or a negative test.";
 "holder_onboarding_disclosurePolicyChanged_only3GAccess_title" = "3G access in the Netherlands";
+"holder_paperproof_startscanning_body" = "<p>Have you already received a coronavirus certificate and do you want to add it to the app? You can do this by scanning the QR code with your phone’s camera.</p><p>You can add a certificate of your vaccination or test from abroad. Or a certificate that you received from your health care provider or the Dutch government.</p>";
+"holder_paperproof_startscanning_button_startScanning" = "Start scanning";
+"holder_paperproof_startscanning_button_whichProofs" = "Which certificates can I scan?";
+"holder_paperproof_startscanning_title" = "Scan to add a certificate";
+"holder_paperproof_whichProofsCanBeUsed_body" = "<p>You can scan and add the following certificates to the app:</p><ul><li>A paper certificate you got from your health care provider or the government. Did you receive a certificate for in the Netherlands and for international use? Scan the <b>international QR code</b>.</li><li>A coronavirus certificate with QR code of your test or vaccination from abroad. You have the QR code on paper or in a foreign coronavirus app.</li></ul>";
+"holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
-"holder_scanner_error_title_ctb" = "Scan your international QR code";
+"holder_scanner_error_action" = "Scan again";
+"holder_scanner_error_message_ctb" = "You don’t need to scan your Dutch QR code. Scan the QR code on the international certificate you received from your health care provider or the government. It contains the information needed to add your certificate to the app. You can recognise this certificate by the European flag.";
+"holder_scanner_error_message_unknown" = "The QR code you are trying to scan is not recognised as a coronavirus pass. Make sure you are holding the correct QR code in front of the camera.";
+"holder_scanner_error_title_ctb" = "Scan the international QR code";
+"holder_scanner_error_title_unknown" = "QR code not recognised";
 "holder_scanner_message" = "Point your phone at the QR code";
 "holder_scanner_permission_message" = "The app wants to access your camera to scan the QR code.";
 "holder_scanner_permission_settings" = "To Settings";
 "holder_scanner_permission_title" = "No access to camera";
 "holder_scanner_title" = "Scan QR code";
+"holder_showQR_label_expiredQR" = "This QR code is no longer valid";
+"holder_showQR_label_newerQRAvailable" = "You probably won't need this QR code because you have a more recent dose.";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/en/dose\">Read more about the dose</a>";
 /* Voice Over Details Button International QR */
 "holder_showqr_international_accessibility_button_details" = "Details international QR code";
-"holder_storedEvent_alert_removeEvents_message" = "Clearing this data will possibly remove certificates with QR codes from the app.";
-"holder_storedEvent_alert_removeEvents_title" = "Clear this data?";
+"holder_storedEvent_alert_removeEvents_message" = "Removing this data will possibly also remove certificates with QR codes from the app.";
+"holder_storedEvent_alert_removeEvents_title" = "Remove this data?";
 "holder_storedEvents_button_handleData" = "How does Coronacheck handle my data?";
-"holder_storedEvents_button_removeEvents" = "Clear this data";
-"holder_storedEvents_eraseEvents_title" = "Clearing data";
+"holder_storedEvents_button_removeEvents" = "Remove from the app";
+"holder_storedEvents_eraseEvents_title" = "Removing data";
 "holder_storedEvents_listHeader_fetchedFromProvider" = "Retrieved at %@";
 "holder_storedEvents_listHeader_paperFlow" = "Scanned certificate";
 "holder_storedEvents_list_noEvents" = "No stored data";

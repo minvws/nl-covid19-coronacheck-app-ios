@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -223,7 +223,7 @@ final class MenuRowView: UIControl {
 		
 		var constraints = [NSLayoutConstraint]()
 		constraints += [subTitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)]
-		constraints += [subTitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)]
+		constraints += [subTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronImageView.leadingAnchor, constant: -ViewTraits.Title.margin)]
 		constraints += [subTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.SubTitle.margin)]
 		constraints += [subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.SubTitle.spacing)]
 		NSLayoutConstraint.activate(constraints)

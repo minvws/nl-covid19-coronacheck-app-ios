@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -27,6 +27,7 @@ class ScanLogViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier)
 
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy)
 		sut = ScanLogViewController(viewModel: viewModel)
@@ -41,18 +42,62 @@ class ScanLogViewControllerTests: XCTestCase {
 	// MARK: - Tests
 
 	func test_content() {
-
+		
 		// Given
-
+		
 		// When
 		loadView()
-
+		
 		// Then
 		expect(self.sut.title) == L.scan_log_title()
 		expect(self.sut.sceneView.message) == L.scan_log_message(60)
 		expect(self.sut.sceneView.footer) == L.scan_log_footer_long_time()
 		expect(self.sut.sceneView.listHeader) == L.scan_log_list_header(60)
-
+		expect(self.sut.sceneView.logStackView.arrangedSubviews).to(haveCount(3))
+		
+		// Snapshot
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_oneEntry() {
+		
+		// Given
+		let entry: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry])
+		
+		var config: RemoteConfiguration = .default
+		config.scanLogStorageSeconds = 3600
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		sut = ScanLogViewController(viewModel: ScanLogViewModel(coordinator: coordinatorSpy))
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.logStackView.arrangedSubviews).to(haveCount(3))
+		
+		// Snapshot
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_twoEntries_differentMode() {
+		
+		// Given
+		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
+		
+		var config: RemoteConfiguration = .default
+		config.scanLogStorageSeconds = 3600
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = config
+		sut = ScanLogViewController(viewModel: ScanLogViewModel(coordinator: coordinatorSpy))
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.logStackView.arrangedSubviews).to(haveCount(5))
+		
 		// Snapshot
 		sut.assertImage(containedInNavigationController: true)
 	}

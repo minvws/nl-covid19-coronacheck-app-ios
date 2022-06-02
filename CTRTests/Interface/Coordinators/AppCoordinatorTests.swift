@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -32,6 +32,18 @@ class AppCoordinatorTests: XCTestCase {
 	}
 
 	// MARK: - Tests
+	
+	func test_start() {
+		
+		// Given
+		sut.flavor = .holder
+		
+		// When
+		sut.start()
+		
+		// Then
+		expect(self.navigationSpy.invokedSetViewController) == true
+	}
 
 	func test_holder_handleLaunchState_finished() {
 

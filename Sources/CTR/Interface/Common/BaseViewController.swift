@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -100,24 +100,6 @@ class BaseViewController: UIViewController {
 			accessibilityLabel: L.generalBack()
 		)
 		navigationItem.leftBarButtonItem = .create(config)
-	}
-
-	/// Show alert
-	func showError(_ title: String = L.generalErrorTitle(), message: String) {
-
-		let alertController = UIAlertController(
-			title: title,
-			message: message,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.generalOk(),
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
 	}
 }
 

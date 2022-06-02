@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -7,8 +7,8 @@
 
 import UIKit
 
-enum PaperProofType {
-	case ctb
+enum PaperProofType: Equatable {
+	case hasDomesticPrefix
 	case dutchDCC(dcc: String)
 	case foreignDCC(dcc: String)
 	case unknown
@@ -26,14 +26,18 @@ class PaperProofIdentifier: PaperProofIdentifierProtocol {
 	
 	func identify(_ code: String) -> PaperProofType {
 		
-		if code.lowercased().hasPrefix("nl") {
-			return .ctb
-		} else if let euCredential = cryptoManager?.readEuCredentials(Data(code.utf8)) {
-			if euCredential.isForeignDCC {
-				return .foreignDCC(dcc: code)
-			} else {
-				return .dutchDCC(dcc: code)
-			}
+		guard let cryptoManager = cryptoManager else {
+			return .unknown
+		}
+	
+		let data = Data(code.utf8)
+		
+		if cryptoManager.hasDomesticPrefix(data) {
+			return .hasDomesticPrefix
+		} else if cryptoManager.isForeignDCC(data) {
+			return .foreignDCC(dcc: code)
+		} else if cryptoManager.isDCC(data) {
+			return .dutchDCC(dcc: code)
 		} else {
 			return .unknown
 		}

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -108,6 +108,34 @@ class ShowQRViewModelTests: XCTestCase {
 		expect(self.sut.items).toEventually(haveCount(1))
 	}
 
+	func test_content_withEuGreenCard_expiredForeignVaccination() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = .foreignExpiredFakeVaccination()
+
+		// When
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			disclosurePolicy: nil,
+			thirdPartyTicketAppName: nil
+		)
+
+		// Then
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.dosage) == "Dosis 1/2"
+		expect(self.sut.relevancyInformation) == "Deze QR-code is niet meer geldig"
+		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_international_accessibility_button_details()
+		expect(self.sut.items).toEventually(haveCount(1))
+	}
+	
 	func test_delegate_itemIsNotValid() {
 
 		// Given
@@ -291,7 +319,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 	func test_moreInformation_euGreenCard_validCredential() throws {
 		// Given
-		environmentSpies.mappingManagerSpy.stubbedGetBiLingualDisplayCountryResult = "Nederland / The Netherlands"
+		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -237,40 +237,5 @@ struct RemoteConfiguration: Codable, Equatable {
 			}
 		}
 		return result
-	}
-}
-
-// MARK: Mapping
-
-extension RemoteConfiguration {
-
-	func getNlTestType(_ code: String? ) -> String? {
-
-		return nlTestTypes?.first(where: { $0.code == code })?.name
-	}
-
-	func getBrandMapping(_ code: String? ) -> String? {
-
-		return euBrands?.first(where: { $0.code == code })?.name
-	}
-
-	func getTypeMapping(_ code: String? ) -> String? {
-
-		return euVaccinationTypes?.first(where: { $0.code == code })?.name
-	}
-
-	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
-
-		return euManufacturers?.first(where: { $0.code == code })?.name
-	}
-
-	func getTestTypeMapping(_ code: String? ) -> String? {
-
-		return euTestTypes?.first(where: { $0.code == code })?.name
-	}
-
-	func getTestManufacturerMapping(_ code: String? ) -> String? {
-
-		return euTestManufacturers?.first(where: { $0.code == code })?.name
 	}
 }

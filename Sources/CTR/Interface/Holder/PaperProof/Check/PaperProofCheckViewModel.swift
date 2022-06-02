@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -169,9 +169,7 @@ class PaperProofCheckViewModel: Logging {
 			secondaryAction: nil
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.dismiss()
-			}
+			self.coordinator?.displayErrorForPaperProofCheck(content: content)
 		}
 	}
 
@@ -181,10 +179,18 @@ class PaperProofCheckViewModel: Logging {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
-			okTitle: L.holderVaccinationErrorAgain()
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationErrorAgain(),
+				action: { [weak self] _ in
+					self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				}
+			)
 		)
 	}
 
@@ -204,9 +210,7 @@ class PaperProofCheckViewModel: Logging {
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
-			self.coordinator?.displayError(content: content) { [weak self] in
-				self?.coordinator?.dismiss()
-			}
+			self.coordinator?.displayErrorForPaperProofCheck(content: content)
 		}
 	}
 }

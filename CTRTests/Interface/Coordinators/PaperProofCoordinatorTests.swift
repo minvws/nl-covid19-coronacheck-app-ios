@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -27,6 +27,18 @@ class PaperProofCoordinatorTests: XCTestCase {
 	}
 
 	// MARK: - Tests
+	
+	func test_start() throws {
+		
+		// Given
+		
+		// When
+		sut.start()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
+	}
 	
 	func test_consumeLink() {
 		
@@ -165,9 +177,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "CC",
 				protocolVersion: "3.0",
-				identity: nil,
-				status: .complete,
-				result: nil
+				identity: EventFlow.Identity.fakeIdentity,
+				status: .complete
 			),
 			signedResponse: nil
 		)
@@ -179,6 +190,30 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 	}
 
+	func test_eventFlowDidCancelFromBackSwipe() {
+
+		// Given
+		sut.token = "test"
+		sut.scannedDCC = "test"
+		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		navigationSpy.viewControllers = [
+			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
+		]
+
+		// When
+		sut.eventFlowDidCancelFromBackSwipe()
+
+		// Then
+		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
+		expect(self.sut.token).to(beNil())
+		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.childCoordinators).to((haveCount(0)))
+		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(self.navigationSpy.viewControllers).to(haveCount(3))
+	}
+	
 	func test_eventFlowDidCancel() {
 
 		// Given
@@ -246,8 +281,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofContentViewController) == true
-		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? PaperProofContentViewController)?.viewModel)
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.holderPaperproofNotokenTitle()
 		expect(viewModel.content.body) == L.holderPaperproofNotokenMessage()
 	}
@@ -265,7 +300,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
-		let viewModel: ContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? ContentViewController)?.viewModel
+		let viewModel: BottomSheetContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel
 		
 		expect(viewModel?.content.title) == L.holder_paperproof_whichProofsCanBeUsed_title()
 		expect(viewModel?.content.body) == L.holder_paperproof_whichProofsCanBeUsed_body()
@@ -283,9 +318,56 @@ class PaperProofCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ErrorStateViewController) == true
-		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ErrorStateViewController)?.viewModel)
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_displayErrorForPaperProofCheck() throws {
+		
+		// Given
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle()
+		)
+		
+		// When
+		sut.displayErrorForPaperProofCheck(content: content)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+	}
+	
+	func test_userWishesToCancelPaperProofFlow() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToCancelPaperProofFlow()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopViewController) == true
+		expect(self.flowSpy.invokedAddPaperProofFlowDidCancel) == true
+	}
+	
+	func test_userWantsToGoBackToEnterToken() {
+		
+		// Given
+		navigationSpy.viewControllers = [
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut)),
+			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
+			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
+		]
+		expect(self.navigationSpy.viewControllers).to(haveCount(3))
+		
+		// When
+		sut.userWantsToGoBackToEnterToken()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == true
+		expect(self.navigationSpy.viewControllers).to(haveCount(2))
 	}
 }
 

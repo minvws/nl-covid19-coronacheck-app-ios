@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -10,13 +10,13 @@ import CoreData
 
 protocol ScanLogManaging: AnyObject {
 
-	func didWeScanQRs(withinLastNumberOfSeconds: Int) -> Bool
+	func didWeScanQRs(withinLastNumberOfSeconds: Int, now: Date) -> Bool
 
-	func getScanEntries(withinLastNumberOfSeconds: Int) -> Result<[ScanLogEntry], Error>
+	func getScanEntries(withinLastNumberOfSeconds: Int, now: Date) -> Result<[ScanLogEntry], Error>
 
 	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date)
 
-	func deleteExpiredScanLogEntries(seconds: Int)
+	func deleteExpiredScanLogEntries(seconds: Int, now: Date)
 
 	func wipePersistedData()
 }
@@ -49,23 +49,24 @@ class ScanLogManager: ScanLogManaging {
 		
 		notificationCenter.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.deleteExpiredScanLogEntries(
-				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600
+				seconds: Current.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600,
+				now: Current.now()
 			)
 		}
 	}
 
-	func didWeScanQRs(withinLastNumberOfSeconds seconds: Int) -> Bool {
+	func didWeScanQRs(withinLastNumberOfSeconds seconds: Int, now: Date) -> Bool {
 
-		switch getScanEntries(withinLastNumberOfSeconds: seconds) {
+		switch getScanEntries(withinLastNumberOfSeconds: seconds, now: now) {
 			case .success(let log): return !log.isEmpty
 			case .failure: return false
 		}
 	}
 
-	func getScanEntries(withinLastNumberOfSeconds seconds: Int) -> Result<[ScanLogEntry], Error> {
+	func getScanEntries(withinLastNumberOfSeconds seconds: Int, now: Date) -> Result<[ScanLogEntry], Error> {
 
 		var result: Result<[ScanLogEntry], Error> = .success([])
-		let fromDate = Date().addingTimeInterval(TimeInterval(seconds) * -1)
+		let fromDate = now.addingTimeInterval(TimeInterval(seconds) * -1)
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -95,9 +96,9 @@ class ScanLogManager: ScanLogManaging {
 		}
 	}
 
-	func deleteExpiredScanLogEntries(seconds: Int) {
+	func deleteExpiredScanLogEntries(seconds: Int, now: Date) {
 
-		let untilDate = Date().addingTimeInterval(TimeInterval(seconds) * -1)
+		let untilDate = now.addingTimeInterval(TimeInterval(seconds) * -1)
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let result = ScanLogEntryModel.listEntriesUpTo(date: untilDate, managedContext: context)

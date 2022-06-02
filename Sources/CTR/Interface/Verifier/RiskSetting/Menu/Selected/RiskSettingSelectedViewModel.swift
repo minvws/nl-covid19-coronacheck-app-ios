@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -50,7 +50,7 @@ final class RiskSettingSelectedViewModel: Logging {
 		scanLockMinutes = scanLockSeconds / 60
 
 		guard let scanLock = Current.remoteConfigManager.storedConfiguration.scanLockWarningSeconds else { return }
-		didWeRecentlyScanQRs = Current.scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock)
+		didWeRecentlyScanQRs = Current.scanLogManager.didWeScanQRs(withinLastNumberOfSeconds: scanLock, now: Current.now())
 		header = didWeRecentlyScanQRs ? L.verifier_risksetting_active_lock_warning_header(scanLockMinutes) : nil
 	}
 	
@@ -71,12 +71,16 @@ private extension RiskSettingSelectedViewModel {
 		alert = AlertContent(
 			title: L.verifier_risksetting_confirmation_dialog_title(),
 			subTitle: L.verifier_risksetting_confirmation_dialog_message(scanLockMinutes),
-			cancelTitle: L.verifier_risksetting_confirmation_dialog_negative_button(),
-			okAction: { [weak self] _ in
-				self?.saveSettingAndGoBackToStart(enablingLock: true)
-			},
-			okTitle: L.verifier_risksetting_confirmation_dialog_positive_button(),
-			okActionIsDestructive: true
+			okAction: AlertContent.Action(
+				title: L.verifier_risksetting_confirmation_dialog_positive_button(),
+				action: { [weak self] _ in
+					self?.saveSettingAndGoBackToStart(enablingLock: true)
+				},
+				isDestructive: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.verifier_risksetting_confirmation_dialog_negative_button()
+			)
 		)
 	}
 	

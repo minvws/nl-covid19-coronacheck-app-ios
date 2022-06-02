@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -25,13 +25,6 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		set { secureUserSettings.appInstalledDate = newValue }
 	}
 	
-	private lazy var serverHeaderDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.locale = Locale(identifier: "en_GB") // because the server date contains day name
-		dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
-		return dateFormatter
-	}()
-	
 	var firstUseDate: Date? {
 		return appInstalledDate
 	}
@@ -51,7 +44,7 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 		// it can only be set once
 		guard appInstalledDate == nil else { return }
 
-		guard var serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate) else { return }
+		guard var serverDate = DateFormatter.Header.serverDate.date(from: serverHeaderDate) else { return }
 
 		if let ageHeader = ageHeader {
 			

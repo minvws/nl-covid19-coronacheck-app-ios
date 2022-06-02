@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -50,7 +50,7 @@ final class PaperProofStartScanningViewController: BaseViewController {
 
 	private func setupButtons() {
 
-		viewModel.$nextButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
+		viewModel.$nextButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.userTappedNextButton() }
 
 		viewModel.$secondaryButtonTitle.binding = { [weak self] in self?.sceneView.secondaryButton.title = $0 }
