@@ -133,9 +133,9 @@ extension BaseTest {
 	}
 	
 	func deleteItemFromWallet(atIndex: Int = 0, confirm: Bool = true) {
-		app.tapButton("Deze gegevens wissen", index: atIndex)
-		app.textExists("Deze gegevens wissen?")
-		app.tapButton(confirm ? "Wis gegevens" : "Annuleer")
+		app.tapButton("Uit de app verwijderen", index: atIndex)
+		app.textExists("Deze gegevens verwijderen?")
+		app.tapButton(confirm ? "Verwijderen" : "Annuleer")
 		waitUntilSpinnerIsGone()
 	}
 	

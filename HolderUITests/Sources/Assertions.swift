@@ -204,7 +204,7 @@ extension BaseTest {
 		card(of: .test).containsText(CertificateType.test.rawValue)
 		card(of: .test).containsText("Type test: " + testType.rawValue)
 		card(of: .test).containsText("Testdatum: " + formattedOffsetDate(with: testDateOffsetInDays, withYear: false, withDay: true))
-		card(of: .test).textExists("Bekijk QR")
+		card(of: .test).containsText("Bekijk QR")
 	}
 	
 	func assertCertificateIsNotValidInternationally(ofType certificateType: CertificateType) {

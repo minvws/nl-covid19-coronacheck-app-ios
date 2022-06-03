@@ -199,7 +199,7 @@ final class TestData {
 	static let posPcrDifferentBirthMonth = TestPerson(bsn: "999991991", recUntil: 150) // Positive PCR (NAAT) different birth month
 	
 	// Positive tests - multiples
-	static let posPcr2Recent = TestPerson(bsn: "999993689", recUntil: 120) // Positive PCR (NAAT) both new
+	static let posPcr2Recent = TestPerson(bsn: "999993689", recUntil: 150) // Positive PCR (NAAT) both new
 	static let posPcr2Old = TestPerson(bsn: "999993690", recUntil: 150) // Positive PCR (NAAT) new and old
 	
 	// Negative tests (and combinations)
