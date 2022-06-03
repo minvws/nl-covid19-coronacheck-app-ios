@@ -445,7 +445,8 @@ extension RemoteGreenCards.Response {
 	static var emptyResponse: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
 			domesticGreenCard: nil,
-			euGreenCards: []
+			euGreenCards: [],
+			blobExpiries: []
 		)
 	}
 
@@ -464,7 +465,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -478,7 +480,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 
@@ -503,7 +506,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential2"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 
@@ -518,7 +522,8 @@ extension RemoteGreenCards.Response {
 					origins: [],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 
@@ -544,7 +549,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -570,7 +576,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -595,7 +602,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -615,7 +623,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -629,7 +638,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -641,7 +651,8 @@ extension RemoteGreenCards.Response {
 				],
 				createCredentialMessages: "test"
 			),
-			euGreenCards: []
+			euGreenCards: [],
+			blobExpiries: []
 		)
 	}
 	
@@ -653,7 +664,8 @@ extension RemoteGreenCards.Response {
 				],
 				createCredentialMessages: "test"
 			),
-			euGreenCards: []
+			euGreenCards: [],
+			blobExpiries: []
 		)
 	}
 	
@@ -673,7 +685,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 
@@ -692,7 +705,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 	
@@ -711,7 +725,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 
@@ -749,7 +764,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "recovery credential"
 				)
-			]
+			],
+			blobExpiries: []
 		)
 	}
 }
