@@ -8,10 +8,7 @@
 import UIKit
 import AVFoundation
 
-class ScanPermissionViewModel: Logging {
-
-	/// The logging category
-	var loggingCategory: String = "ScanPermissionViewModel"
+class ScanPermissionViewModel {
 
 	/// Coordination Delegate
 	weak var coordinator: OpenUrlProtocol?
@@ -35,7 +32,7 @@ class ScanPermissionViewModel: Logging {
 
 		let avStatus = AVCaptureDevice.authorizationStatus(for: .video)
 		if avStatus == .denied {
-			logWarning("Camera permission denied.")
+			Current.logHandler.logWarning("Camera permission denied.")
 			showPermissionWarning = true
 		}
 	}

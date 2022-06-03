@@ -875,8 +875,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal( L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalRetry()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
 	}
 
@@ -1091,8 +1091,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal( L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalRetry()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
 	}
 
@@ -1689,8 +1689,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateSomeresultTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderErrorstateSomeresultMessage()))
-		expect(self.sut.alert?.cancelTitle).to(beNil())
-		expect(self.sut.alert?.okTitle).toEventually(equal( L.generalOk()))
+		expect(self.sut.alert?.cancelAction?.title).to(beNil())
+		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalOk()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
 	}
 
@@ -1819,8 +1819,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderEventIdentityAlertTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderEventIdentityAlertMessage()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.holderEventIdentityAlertCancel()))
-		expect(self.sut.alert?.okTitle).toEventually(equal( L.holderEventIdentityAlertOk()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.holderEventIdentityAlertCancel()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderEventIdentityAlertOk()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
 	}
 	

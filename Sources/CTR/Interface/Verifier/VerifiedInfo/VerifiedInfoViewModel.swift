@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class VerifiedInfoViewModel: Logging {
+final class VerifiedInfoViewModel {
 	
 	/// The coordinator delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?

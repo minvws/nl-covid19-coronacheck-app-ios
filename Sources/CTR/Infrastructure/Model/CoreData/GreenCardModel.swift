@@ -102,7 +102,7 @@ extension GreenCard {
 
 	func activeCredentialsNowOrInFuture(forDate now: Date = Date()) -> [Credential] {
 		
-		guard let list = credentials?.allObjects as? [Credential] else { return [] }
+		guard let list = castCredentials() else { return [] }
 
 		let activeCredentialsNowOrInFuture = list
 			.filter { $0.expirationTime != nil }

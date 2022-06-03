@@ -38,7 +38,7 @@ class ScanLogViewModel {
 
 	private func handleScanEntries(_ scanLogStorageSeconds: Int) {
 
-		let result = Current.scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds)
+		let result = Current.scanLogManager.getScanEntries(withinLastNumberOfSeconds: scanLogStorageSeconds, now: Current.now())
 		switch result {
 			case let .success(log):
 				displayEntries.append(contentsOf: ScanLogDataSource(entries: log).getDisplayEntries())
@@ -53,10 +53,9 @@ class ScanLogViewModel {
 		alert = AlertContent(
 			title: L.generalErrorTitle(),
 			subTitle: L.generalErrorTechnicalCustom("\(code)"),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: nil,
-			okTitle: L.generalClose()
+			okAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 
@@ -77,7 +76,7 @@ class ScanLogViewModel {
 	}
 }
 
-private struct ScanLogDataSource: Logging {
+private struct ScanLogDataSource {
 
 	// One record of similar scan log entries
 	struct ScanLogLineItem {

@@ -31,9 +31,7 @@ protocol OnboardingDelegate: AnyObject {
 	func consentGiven()
 }
 
-class OnboardingCoordinator: Coordinator, Logging {
-	
-	var loggingCategory: String = "OnboardingCoordinator"
+class OnboardingCoordinator: Coordinator {
 	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -152,7 +150,7 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		}
 
 		guard let privacyUrl = URL(string: urlString) else {
-			logError("No privacy url for \(urlString)")
+			Current.logHandler.logError("No privacy url for \(urlString)")
 			return
 		}
 		openUrl(privacyUrl, inApp: true)

@@ -56,10 +56,16 @@ final class PaperProofScanView: BaseView {
 	}
 	
 	override func setupViewConstraints() {
+		
 		super.setupViewConstraints()
+		setupDummyViewConstraints()
+		setupScrollViewConstraints()
+		setupMessageLabelViewConstraints()
+	}
+	
+	func setupDummyViewConstraints() {
 		
 		NSLayoutConstraint.activate([
-			
 			// Dummy
 			dummyView.topAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.topAnchor,
@@ -67,14 +73,24 @@ final class PaperProofScanView: BaseView {
 			),
 			dummyView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			dummyView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			dummyView.heightAnchor.constraint(equalTo: widthAnchor),
-			
+			dummyView.heightAnchor.constraint(equalTo: widthAnchor)
+		])
+	}
+	
+	func setupScrollViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			// ScrollView
 			scrollView.topAnchor.constraint(equalTo: dummyView.bottomAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
+	}
+	
+	func setupMessageLabelViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			// Message
 			messageLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			messageLabel.leadingAnchor.constraint(

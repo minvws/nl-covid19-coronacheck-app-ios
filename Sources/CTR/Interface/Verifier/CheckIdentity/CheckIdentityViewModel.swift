@@ -8,7 +8,7 @@
 import UIKit
 import Clcore
 
-final class CheckIdentityViewModel: Logging {
+final class CheckIdentityViewModel {
 	
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
@@ -248,7 +248,7 @@ private extension CheckIdentityViewModel {
 
 	@objc func autoCloseScene() {
 
-		logInfo("Auto closing the check identity view")
+		Current.logHandler.logInfo("Auto closing the check identity view")
 		stopAutoCloseTimer()
 		scanAgain()
 	}

@@ -103,7 +103,13 @@ class VerifierStartScanningViewController: BaseViewController {
 		viewModel.$headerMode.binding = { [weak self] in self?.sceneView.headerMode = $0 }
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
+				self?.showAlert(
+					AlertContent(
+						title: L.generalErrorTitle(),
+						subTitle: L.verifierStartOntimeinternet(),
+						okAction: AlertContent.Action.okay
+					)
+				)
 			}
 		}
 		viewModel.$riskIndicator.binding = { [weak self] in

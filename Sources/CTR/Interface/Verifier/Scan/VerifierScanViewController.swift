@@ -51,11 +51,11 @@ class VerifierScanViewController: ScanViewController {
 
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self, let enableLabel = $0.first, let disableLabel = $0.last else { return }
-            strongSelf.addTorchButton(
-                action: #selector(strongSelf.toggleTorch),
-                enableLabel: enableLabel,
-                disableLabel: disableLabel
-            )
+			strongSelf.addTorchButton(
+				action: #selector(strongSelf.toggleTorch),
+				enableLabel: enableLabel,
+				disableLabel: disableLabel
+			)
 		}
 
 		viewModel.$showPermissionWarning.binding = { [weak self] in
@@ -97,28 +97,19 @@ class VerifierScanViewController: ScanViewController {
 
 	/// Show alert
 	func showPermissionError() {
-
-		let alertController = UIAlertController(
-			title: L.verifierScanPermissionTitle(),
-			message: L.verifierScanPermissionMessage(),
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.verifierScanPermissionSettings(),
-				style: .default,
-				handler: { [weak self] _ in
-					self?.viewModel.gotoSettings()
-				}
+		
+		showAlert(
+			AlertContent(
+				title: L.verifierScanPermissionTitle(),
+				subTitle: L.verifierScanPermissionMessage(),
+				okAction: AlertContent.Action(
+					title: L.verifierScanPermissionSettings(),
+					action: { [weak self] _ in
+						self?.viewModel.gotoSettings()
+					}
+				),
+				cancelAction: AlertContent.Action.cancel
 			)
 		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.general_cancel(),
-				style: .cancel,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
 	}
 }

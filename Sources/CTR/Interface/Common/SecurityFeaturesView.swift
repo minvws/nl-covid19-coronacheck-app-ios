@@ -10,8 +10,6 @@ import Lottie
 
 class SecurityFeaturesView: BaseView {
 
-	var loggingCategory: String = "SecurityFeaturesView"
-
 	private var animatingLeftToRight = true
 
 	/// The animation view
@@ -95,10 +93,7 @@ class SecurityFeaturesView: BaseView {
 	func resume() {
 
 		if !animationView.isAnimationPlaying {
-			logVerbose("Animation resuming")
 			playCurrentAnimation()
-		} else {
-			logVerbose("Animation is playing!")
 		}
 	}
 

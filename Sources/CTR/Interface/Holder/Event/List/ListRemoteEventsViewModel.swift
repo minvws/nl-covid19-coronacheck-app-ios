@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ListRemoteEventsViewModel: Logging {
+class ListRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -85,19 +85,22 @@ class ListRemoteEventsViewModel: Logging {
 	}
 
 	func warnBeforeGoBack() {
-
+		
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode.alertBody,
-			cancelAction: { [weak self] _ in
-				self?.goBack()
-			},
-			cancelTitle: L.holderVaccinationAlertStop(),
-			cancelActionIsDestructive: true,
-			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue(),
-			okActionIsPreferred: true
- 		)
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationAlertContinue(),
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationAlertStop(),
+				action: { [weak self] _ in
+					self?.goBack()
+				},
+				isDestructive: true
+			)
+		)
 	}
 
 	func goBack() {
@@ -220,7 +223,7 @@ class ListRemoteEventsViewModel: Logging {
 		   let credentialData = dccEvent.credential.data(using: .utf8),
 		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
 		   let dccEventType = euCredentialAttributes.eventMode {
-			logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
+			Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
 			return dccEventType
 		}
 		return eventMode
@@ -246,7 +249,7 @@ class ListRemoteEventsViewModel: Logging {
 				storageEventMode = .recovery
 			}
 		}
-		logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
+		Current.logHandler.logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 
@@ -476,7 +479,7 @@ class ListRemoteEventsViewModel: Logging {
 
 		// While the recovery is expired, it is still in Core Data
 		// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
-		_ = walletManager.removeExpiredGreenCards()
+		_ = walletManager.removeExpiredGreenCards(forDate: Current.now())
 	}
 
 	private func recoveryFlowBothVaccinationAndRecoveryOrigins(_ greencardResponse: RemoteGreenCards.Response) {
@@ -492,7 +495,7 @@ class ListRemoteEventsViewModel: Logging {
 
 		guard let firstRecoveryOrigin = firstRecoveryOrigin, let firstVaccinationOrigin = firstVaccinationOrigin else {
 			// Should not happen, part of the if let flow.
-			self.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
+			Current.logHandler.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
 			self.completeFlow()
 			return
 		}
@@ -654,7 +657,7 @@ class ListRemoteEventsViewModel: Logging {
 					providerIdentifier: response.wrapper.providerIdentifier
 				)
 			} else {
-				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
+				Current.logHandler.logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
 			}
 
 			// Store the new event group
@@ -670,7 +673,7 @@ class ListRemoteEventsViewModel: Logging {
 					break
 				}
 			} else {
-				logWarning("Could not store event group")
+				Current.logHandler.logWarning("Could not store event group")
 			}
 		}
 		onCompletion(success)

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DeniedAccessViewModel: Logging {
+final class DeniedAccessViewModel {
 	
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
@@ -90,7 +90,7 @@ private extension DeniedAccessViewModel {
 
 	@objc func autoCloseScene() {
 
-		logInfo("Auto closing the denied access view")
+		Current.logHandler.logInfo("Auto closing the denied access view")
 		stopAutoCloseTimer()
 		scanAgain()
 	}

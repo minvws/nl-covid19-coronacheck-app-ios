@@ -25,8 +25,6 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
-	
-	@Bindable private(set) var alert: AlertContent?
 
 	@Bindable private(set) var shouldResumeScanning: Bool?
 
@@ -84,7 +82,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	private func displayConvertError() {
 		
 		let errorCode = ErrorCode(flow: .paperproof, step: .scan, clientCode: .failedToConvertDCCToV3Event)
-		logError("displayConvertError: \(errorCode)")
+		Current.logHandler.logError("displayConvertError: \(errorCode)")
 		
 		theCoordinator?.displayError(
 			content: Content(

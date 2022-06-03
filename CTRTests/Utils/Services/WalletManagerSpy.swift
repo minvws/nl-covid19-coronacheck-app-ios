@@ -127,11 +127,15 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExpiredGreenCards = false
 	var invokedRemoveExpiredGreenCardsCount = 0
+	var invokedRemoveExpiredGreenCardsParameters: (forDate: Date, Void)?
+	var invokedRemoveExpiredGreenCardsParametersList = [(forDate: Date, Void)]()
 	var stubbedRemoveExpiredGreenCardsResult: [(greencardType: String, originType: String)]! = []
 
-	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)] {
 		invokedRemoveExpiredGreenCards = true
 		invokedRemoveExpiredGreenCardsCount += 1
+		invokedRemoveExpiredGreenCardsParameters = (forDate, ())
+		invokedRemoveExpiredGreenCardsParametersList.append((forDate, ()))
 		return stubbedRemoveExpiredGreenCardsResult
 	}
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ContentViewModel: Logging {
+final class ContentViewModel {
 
 	@Bindable private(set) var content: Content
 	

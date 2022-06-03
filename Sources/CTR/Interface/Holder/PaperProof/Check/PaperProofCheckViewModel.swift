@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PaperProofCheckViewModel: Logging {
+class PaperProofCheckViewModel {
 
 	weak var coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
 
@@ -131,7 +131,7 @@ class PaperProofCheckViewModel: Logging {
 	}
 
 	private func handleError(serverError: ServerError, scannedDcc: String, couplingCode: String) {
-		logError("CouplingManager handleError: \(serverError)")
+		Current.logHandler.logError("CouplingManager handleError: \(serverError)")
 		
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			switch error {
@@ -179,10 +179,18 @@ class PaperProofCheckViewModel: Logging {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
-			okTitle: L.holderVaccinationErrorAgain()
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationErrorAgain(),
+				action: { [weak self] _ in
+					self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				}
+			)
 		)
 	}
 

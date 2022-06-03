@@ -8,7 +8,7 @@
 import Foundation
 @testable import CTR
 
-final class TestModalViewModel: Logging {
+final class TestModalViewModel {
 	
 	@Bindable private(set) var testTitle = "Veilig op reis met je coronabewijs"
 	

@@ -92,7 +92,6 @@ class InputRetrievalCodeViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let networkManager: NetworkManaging? = Current.networkManager
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -214,7 +213,7 @@ class InputRetrievalCodeViewModel {
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
 				guard verificationCodeIsKnownToBeRequired else {
-					logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
+					Current.logHandler.logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
 					return
 				}
 
@@ -314,7 +313,7 @@ class InputRetrievalCodeViewModel {
 
 		progressIndicationCounter.increment()
 
-		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
+		Current.networkManager.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
 			guard let self = self else { return }
 
@@ -350,7 +349,7 @@ class InputRetrievalCodeViewModel {
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
-		logVerbose("fetching result with \(provider.resultURLString)")
+		Current.logHandler.logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
 			fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
@@ -360,7 +359,7 @@ class InputRetrievalCodeViewModel {
 
 		progressIndicationCounter.increment()
 
-		networkManager?.fetchTestResult(
+		Current.networkManager.fetchTestResult(
 			provider: provider,
 			token: requestToken,
 			code: verificationCode,
@@ -431,7 +430,7 @@ class InputRetrievalCodeViewModel {
 						))
 				} else {
 
-					self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+					Current.logHandler.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
 					self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
 					self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 				}
@@ -586,13 +585,6 @@ extension InputRetrievalCodeViewModel.InitializationMode {
 	}
 }
 
-extension InputRetrievalCodeViewModel: Logging {
-
-	var loggingCategory: String {
-		return "TokenEntryViewModel"
-	}
-}
-
 // MARK: - Error States
 
 extension InputRetrievalCodeViewModel {
@@ -603,10 +595,15 @@ extension InputRetrievalCodeViewModel {
 		self.networkErrorAlert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.fetchProviders(requestToken, verificationCode: verificationCode)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 
@@ -616,10 +613,16 @@ extension InputRetrievalCodeViewModel {
 		self.networkErrorAlert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
-			okTitle: L.generalRetry()
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					self?.fetchProviders(requestToken, verificationCode: verificationCode)
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose()
+			)
 		)
 	}
 

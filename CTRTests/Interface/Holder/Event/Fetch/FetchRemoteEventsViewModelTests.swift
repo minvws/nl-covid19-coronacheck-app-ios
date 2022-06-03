@@ -163,8 +163,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalRetry()))
 	}
 
 	func test_accessTokenNoInternet_providersOK() {
@@ -185,8 +185,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalRetry()))
 	}
 
 	func test_accessTokenNoInternet_providersNoInternet() {
@@ -208,8 +208,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalRetry()))
 	}
 
 	func test_accessTokenOK_providersServerBusy() {
@@ -375,8 +375,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
 	}
 
 	func test_accessTokenNoBSN() {
@@ -692,8 +692,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.cancelTitle).toEventually(beNil())
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(beNil())
 	}
 
 	func test_unomiOK_eventServerBusy() {
@@ -716,8 +716,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.cancelTitle).toEventually(beNil())
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(beNil())
 	}
 	
 	func test_unomiOK_eventServerError() {

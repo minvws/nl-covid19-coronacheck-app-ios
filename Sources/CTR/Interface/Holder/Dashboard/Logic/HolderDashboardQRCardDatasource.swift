@@ -72,7 +72,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 
 	private func removeExpiredGreenCards() -> [ExpiredQR] {
-		return Current.walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
+		return Current.walletManager.removeExpiredGreenCards(forDate: Current.now()).compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
 			guard let region = QRCodeValidityRegion(rawValue: greencardType) else { return nil }
 			guard let originType = QRCodeOriginType(rawValue: originType) else { return nil }
 			return ExpiredQR(region: region, type: originType)

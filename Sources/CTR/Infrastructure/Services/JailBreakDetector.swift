@@ -14,7 +14,7 @@ protocol JailBreakProtocol: AnyObject {
 	func isJailBroken() -> Bool
 }
 
-class JailBreakDetector: JailBreakProtocol, Logging {
+class JailBreakDetector: JailBreakProtocol {
 
 	/// Is this device jail broken?
 	func isJailBroken() -> Bool {

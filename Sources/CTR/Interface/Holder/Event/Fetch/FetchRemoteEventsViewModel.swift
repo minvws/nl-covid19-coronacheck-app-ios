@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class FetchRemoteEventsViewModel: Logging {
+final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -111,7 +111,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			return
 		}
 
-		logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
+		Current.logHandler.logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
 
 		switch (hasNoResult, someServerUnreachableErrror, someNetworkDidError) {
 
@@ -147,7 +147,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			step: .event,
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
-					self.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
+					Current.logHandler.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
 					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
@@ -178,13 +178,16 @@ final class FetchRemoteEventsViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode.alertBody,
-			cancelAction: { _ in
-				self.goBack()
-			},
-			cancelTitle: L.holderVaccinationAlertStop(),
-			okAction: nil,
-			okTitle: L.holderVaccinationAlertContinue(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.holderVaccinationAlertContinue(),
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holderVaccinationAlertStop(),
+				action: { _ in
+					self.goBack()
+				}
+			)
 		)
 	}
 
@@ -237,13 +240,13 @@ final class FetchRemoteEventsViewModel: Logging {
 		var providers = [EventFlow.EventProvider]()
 
 		if let providerError = remoteEventProvidersResult?.failureError {
-			self.logError("Error getting event providers: \(providerError)")
+			Current.logHandler.logError("Error getting event providers: \(providerError)")
 			errorCodes.append(self.convert(providerError, for: eventMode.flow, step: .providers))
 			serverErrors.append(providerError)
 		}
 
 		if let accessError = accessTokenResult?.failureError {
-			self.logError("Error getting access tokens: \(accessError)")
+			Current.logHandler.logError("Error getting access tokens: \(accessError)")
 			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
@@ -399,14 +402,14 @@ final class FetchRemoteEventsViewModel: Logging {
 		from provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
+		Current.logHandler.logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
 			// Result<EventFlow.EventInformationAvailable, ServerError>
 
 			if case let .success(info) = result {
-				self?.logVerbose("EventInformationAvailable: \(info)")
+				Current.logHandler.logVerbose("EventInformationAvailable: \(info)")
 			}
 			completion(result)
 			self?.progressIndicationCounter.decrement()
@@ -612,13 +615,13 @@ private extension FetchRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateTitle(),
 			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { _ in
-				self.coordinator?.fetchEventsScreenDidFinish(.stop)
-			},
-			okTitle: L.generalClose(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { [weak self] _ in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				isPreferred: true
+			)
 		)
 	}
 
@@ -724,16 +727,20 @@ private extension FetchRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			cancelAction: { _ in
-				self.coordinator?.fetchEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				guard let self = self else { return }
-				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
-			},
-			okTitle: L.generalRetry(),
-			okActionIsPreferred: true
+			okAction: AlertContent.Action(
+				title: L.generalRetry(),
+				action: { [weak self] _ in
+					guard let self = self else { return }
+					self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+				},
+				isPreferred: true
+			),
+			cancelAction: AlertContent.Action(
+				title: L.generalClose(),
+				action: { _ in
+					self.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			)
 		)
 	}
 }

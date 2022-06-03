@@ -51,7 +51,7 @@ extension QRCard {
 					
 				case (_, .europeanUnion(let dccEvaluator), .test):
 					if let euTest = dccEvaluator(greencard, now)?.digitalCovidCertificate.tests?.first {
-						let testType = Current.remoteConfigManager.storedConfiguration.getTestTypeMapping(euTest.typeOfTest) ?? euTest.typeOfTest
+						let testType = Current.mappingManager.getTestType(euTest.typeOfTest) ?? euTest.typeOfTest
 						return validityText_hasBegun_eu_test(testType: testType, validFrom: origin.eventDate)
 					} else {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)

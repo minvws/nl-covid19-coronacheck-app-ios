@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum PaperProofType {
+enum PaperProofType: Equatable {
 	case hasDomesticPrefix
 	case dutchDCC(dcc: String)
 	case foreignDCC(dcc: String)

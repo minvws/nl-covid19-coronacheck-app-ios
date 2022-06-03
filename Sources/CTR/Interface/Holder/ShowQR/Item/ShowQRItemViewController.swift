@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShowQRItemViewController: BaseViewController, Logging {
+class ShowQRItemViewController: BaseViewController {
 
 	private let viewModel: ShowQRItemViewModel
 

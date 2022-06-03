@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-class SecurityCheckerWorker: Logging {
+class SecurityCheckerWorker {
 	
 	internal func certificateFromPEM(certificateAsPemData: Data) -> SecCertificate? {
 		
@@ -20,7 +20,7 @@ class SecurityCheckerWorker: Logging {
 		
 		// Fix if certificate has different line endings.
 		if str.hasSuffix("\r-") {
-			logVerbose("certificateAsPemData: \(String(decoding: certificateAsPemData, as: UTF8.self))")
+			Current.logHandler.logVerbose("certificateAsPemData: \(String(decoding: certificateAsPemData, as: UTF8.self))")
 			str = String(str.replacingOccurrences(of: "\r", with: "").dropLast())
 		}
 		
@@ -46,14 +46,14 @@ class SecurityCheckerWorker: Logging {
 			if trustList.isEmpty {
 				// add main chain back in.
 				if errSecSuccess != SecTrustSetAnchorCertificatesOnly(serverTrust, false) {
-					logError("checkATS: SecTrustSetAnchorCertificatesOnly failed)")
+					Current.logHandler.logError("checkATS: SecTrustSetAnchorCertificatesOnly failed)")
 					return false
 				}
 			} else {
 				// rely on just the anchors specified.
 				let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
 				if errSecSuccess != erm {
-					logError("checkATS: SecTrustSetAnchorCertificates failed: \(erm)")
+					Current.logHandler.logError("checkATS: SecTrustSetAnchorCertificates failed: \(erm)")
 					return false
 				}
 			}
@@ -73,9 +73,9 @@ class SecurityCheckerWorker: Logging {
 		for certificateAsPemData in trustedCertificates {
 			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
 				result.append(cert)
-				logVerbose("checkATS: adding cert \(cert.hashValue)")
+				Current.logHandler.logVerbose("checkATS: adding cert \(cert.hashValue)")
 			} else {
-				logError("checkATS: Trust cert conversion failed")
+				Current.logHandler.logError("checkATS: Trust cert conversion failed")
 			}
 		}
 		return result
@@ -86,7 +86,7 @@ class SecurityCheckerWorker: Logging {
 		var error: CFError?
 		let result = SecTrustEvaluateWithError(serverTrust, &error)
 		if let error = error {
-			logError("checkATS: SecTrustEvaluateWithError: \(error)")
+			Current.logHandler.logError("checkATS: SecTrustEvaluateWithError: \(error)")
 		}
 		return result
 	}
@@ -96,7 +96,7 @@ class SecurityCheckerWorker: Logging {
 		
 		var result = SecTrustResultType.invalid
 		if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
-			logError("checkATS: SecTrustEvaluate: \(result)")
+			Current.logHandler.logError("checkATS: SecTrustEvaluate: \(result)")
 			return false
 		}
 		switch result {
@@ -105,25 +105,25 @@ class SecurityCheckerWorker: Logging {
 				// so we have a weakness here - we cannot readily distinguish between the users chain
 				// and our own lists. So that is a second stage comparison that we need to do.
 				//
-				logError("SecTrustEvaluate: unspecified - trusted by the OS or Us")
+				Current.logHandler.logError("SecTrustEvaluate: unspecified - trusted by the OS or Us")
 				return true
 			case .proceed:
-				logError("SecTrustEvaluate: proceed - trusted by the user; but not from our list.")
+				Current.logHandler.logError("SecTrustEvaluate: proceed - trusted by the user; but not from our list.")
 			case .deny:
-				logError("SecTrustEvaluate: deny")
+				Current.logHandler.logError("SecTrustEvaluate: deny")
 			case .invalid:
-				logError("SecTrustEvaluate: invalid")
+				Current.logHandler.logError("SecTrustEvaluate: invalid")
 			case .recoverableTrustFailure:
-				logDebug(SecTrustCopyResult(serverTrust).debugDescription)
-				logError("SecTrustEvaluate: recoverableTrustFailure.")
+				Current.logHandler.logDebug(SecTrustCopyResult(serverTrust).debugDescription)
+				Current.logHandler.logError("SecTrustEvaluate: recoverableTrustFailure.")
 			case .fatalTrustFailure:
-				logError("SecTrustEvaluate: fatalTrustFailure")
+				Current.logHandler.logError("SecTrustEvaluate: fatalTrustFailure")
 			case .otherError:
-				logError("SecTrustEvaluate: otherError")
+				Current.logHandler.logError("SecTrustEvaluate: otherError")
 			default:
-				logError("SecTrustEvaluate: unknown")
+				Current.logHandler.logError("SecTrustEvaluate: unknown")
 		}
-		logError("SecTrustEvaluate: returning false.")
+		Current.logHandler.logError("SecTrustEvaluate: returning false.")
 		return false
 	}
 	
@@ -140,12 +140,12 @@ class SecurityCheckerWorker: Logging {
 			serverTrust: serverTrust,
 			policies: policies,
 			trustedCertificates: trustedCertificates) else {
-				logError("Bail on ATS")
+			Current.logHandler.logError("Bail on ATS")
 				return false
 			}
 		
 		guard trustedCertificates.isNotEmpty else {
-			logVerbose("Skipping trustedCertificates check")
+			Current.logHandler.logVerbose("Skipping trustedCertificates check")
 			return true
 		}
 			
@@ -158,34 +158,34 @@ class SecurityCheckerWorker: Logging {
 			
 			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
 				let serverCert = Certificate(certificate: serverCertificate)
-				logVerbose("Server set at \(index) is \(serverCert)")
+				Current.logHandler.logVerbose("Server set at \(index) is \(serverCert)")
 				
 				if let name = serverCert.commonName {
-					logVerbose("Hostname CN \(name)")
+					Current.logHandler.logVerbose("Hostname CN \(name)")
 					if name.lowercased() == hostnameLC {
 						foundValidFullyQualifiedDomainName = true
-						logVerbose("Host matched CN \(name)")
+						Current.logHandler.logVerbose("Host matched CN \(name)")
 					}
 					if !foundValidCommonNameEndsWithTrustedName {
 						for trustedName in trustedNames where name.lowercased().hasSuffix(trustedName.lowercased()) {
 							foundValidCommonNameEndsWithTrustedName = true
-							logVerbose("Found a valid name \(name)")
+							Current.logHandler.logVerbose("Found a valid name \(name)")
 						}
 					}
 				}
 				if openssl.validateSubjectAlternativeDNSName(hostnameLC, forCertificateData: serverCert.data) {
 					foundValidFullyQualifiedDomainName = true
-					logVerbose("Host matched SAN \(hostname)")
+					Current.logHandler.logVerbose("Host matched SAN \(hostname)")
 				}
 				for trustedCertificate in trustedCertificates {
 					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-						logVerbose("Found a match with a trusted Certificate")
+						Current.logHandler.logVerbose("Found a match with a trusted Certificate")
 						foundValidCertificate = true
 					}
 				}
 			}
 		}
-		logVerbose("Server trust for \(hostname): validCert \(foundValidCertificate), CN ending \(foundValidCommonNameEndsWithTrustedName), fqdn \(foundValidFullyQualifiedDomainName)")
+		Current.logHandler.logVerbose("Server trust for \(hostname): validCert \(foundValidCertificate), CN ending \(foundValidCommonNameEndsWithTrustedName), fqdn \(foundValidFullyQualifiedDomainName)")
 		return foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName
 	} // checkSSL worker
 	

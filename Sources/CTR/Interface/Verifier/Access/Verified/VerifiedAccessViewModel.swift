@@ -14,7 +14,7 @@ enum VerifiedAccess: Equatable {
 	case demo(VerificationPolicy)
 }
 
-final class VerifiedAccessViewModel: Logging {
+final class VerifiedAccessViewModel {
 	
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?

@@ -25,13 +25,14 @@ protocol DataStoreManaging {
 	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 }
 
-class DataStoreManager: DataStoreManaging, Logging {
+class DataStoreManager: DataStoreManaging {
 
 	private var containerName: String {
 		flavor == .holder ? "CoronaCheck" : "Verifier"
 	}
 
 	private var storageType: StorageType
+	private let logHandler: Logging?
 
 	private let flavor: AppFlavor
 
@@ -55,7 +56,7 @@ class DataStoreManager: DataStoreManaging, Logging {
 		container.persistentStoreDescriptions = [description]
 		container.loadPersistentStores(completionHandler: { storeDescription, error in
 			if let error = error as NSError? {
-				self.logError("DataStoreManager error \(error), \(error.userInfo)")
+				self.logHandler?.logError("DataStoreManager error \(error), \(error.userInfo)")
 				fatalError("DataStoreManager error \(error), \(error.userInfo)")
 			}
 			if let url = storeDescription.url {
@@ -74,16 +75,17 @@ class DataStoreManager: DataStoreManaging, Logging {
 		do {
 			try FileManager.default.addSkipBackupAttributeToItemAt(fileUrl as NSURL)
 		} catch {
-			logError("DatabaseController - Error excluding \(String(describing: fileUrl.lastPathComponent)) from backup")
+			logHandler?.logError("DatabaseController - Error excluding \(String(describing: fileUrl.lastPathComponent)) from backup")
 		}
 	}
 
 	/// Initialize the database manager
 	/// - Parameter storageType: store the data in memory or on disk.
-	required init(_ storageType: StorageType, flavor: AppFlavor = AppFlavor.flavor) {
+	required init(_ storageType: StorageType, flavor: AppFlavor = AppFlavor.flavor, logHandler: Logging? = nil) {
 
 		self.storageType = storageType
 		self.flavor = flavor
+		self.logHandler = logHandler
 	}
 
 	/// Get a context to perform a query on
@@ -102,7 +104,7 @@ class DataStoreManager: DataStoreManaging, Logging {
 				try context.save()
 			} catch {
 				let nserror = error as NSError
-				self.logError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
+				logHandler?.logError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 				fatalError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 			}
 

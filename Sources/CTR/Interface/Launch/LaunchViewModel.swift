@@ -8,7 +8,7 @@
 import UIKit
 import LocalAuthentication
 
-class LaunchViewModel: Logging {
+class LaunchViewModel {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 	private var walletManager: WalletManaging?
@@ -95,7 +95,7 @@ class LaunchViewModel: Logging {
 					self.coordinator?.handleLaunchState(.finished)
 					
 				default:
-					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+					Current.logHandler.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
 		}
 	}
@@ -122,7 +122,7 @@ class LaunchViewModel: Logging {
 						completion(.finished)
 
 					case let .failure(error):
-						self.logError("Error getting the remote config: \(error)")
+						Current.logHandler.logError("Error getting the remote config: \(error)")
 						completion(.serverError([error]))
 				}
 			})
@@ -147,7 +147,7 @@ class LaunchViewModel: Logging {
 						completion(.finished)
 
 					case let .failure(error):
-						self.logError("Error getting the issuers public keys: \(error)")
+						Current.logHandler.logError("Error getting the issuers public keys: \(error)")
 						completion(.serverError([error]))
 				}
 			}
@@ -171,12 +171,12 @@ class LaunchViewModel: Logging {
 		alert = AlertContent(
 			title: L.jailbrokenTitle(),
 			subTitle: L.jailbrokenMessage(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.userDismissedJailBreakWarning()
-			},
-			okTitle: L.generalOk()
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.userDismissedJailBreakWarning()
+				}
+			)
 		)
 	}
 
@@ -208,12 +208,12 @@ class LaunchViewModel: Logging {
 		alert = AlertContent(
 			title: L.holderDeviceAuthenticationWarningTitle(),
 			subTitle: L.holderDeviceAuthenticationWarningMessage(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.userDismissedDeviceAuthenticationWarning()
-			},
-			okTitle: L.generalOk()
+			okAction: AlertContent.Action(
+				title: L.generalOk(),
+				action: { [weak self] _ in
+					self?.userDismissedDeviceAuthenticationWarning()
+				}
+			)
 		)
 	}
 
