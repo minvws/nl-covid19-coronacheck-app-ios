@@ -24,6 +24,8 @@ class Configuration {
 			plistPath = Bundle.main.path(forResource: "configuration-production", ofType: "plist")
 		} else if getEnvironment() == "acc" {
 			plistPath = Bundle.main.path(forResource: "configuration-acceptance", ofType: "plist")
+		} else if getEnvironment() == "test" {
+			plistPath = Bundle.main.path(forResource: "configuration-test", ofType: "plist")
 		} else {
 			plistPath = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
 		}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>general</key>
+	<dict>
+		<key>autoCloseTime</key>
+		<integer>20</integer>
+	</dict>
+	<key>digid</key>
+	<dict>
+		<key>host</key>
+		<string>https://max.test.coronacheck.nl</string>
+		<key>consumerId</key>
+		<string>cc_app</string>
+		<key>redirectUri</key>
+		<string>https://web.test.coronacheck.nl/app/auth2</string>
+	</dict>
+</dict>
+</plist>

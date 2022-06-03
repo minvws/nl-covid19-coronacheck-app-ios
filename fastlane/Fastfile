@@ -164,7 +164,7 @@ platform :ios do
       configuration: "FirebaseTest",
       provisioningprofilename: "CoronaCheck Holder Test",
       bundleid: "nl.rijksoverheid.ctr.test",
-      firebaseappid: "1:168257592968:ios:5b5b37bd2aa002a526493d",
+      firebaseappid: "1:168257592968:ios:fdf9202f0c3e579b26493d",
       firebasegroupscsv: "testers"
     )
   end
@@ -179,7 +179,7 @@ platform :ios do
       configuration: "FirebaseTest",
       provisioningprofilename: "CoronaCheck Verifier Test",
       bundleid: "nl.rijksoverheid.ctr.verifier.test",
-      firebaseappid: "1:168257592968:ios:f8f08363d969e6bc26493d",
+      firebaseappid: "1:168257592968:ios:cb0aec1f7163acbe26493d",
       firebasegroupscsv: "verifiers"
     )
   end

@@ -5,12 +5,12 @@ on:
   workflow_dispatch:
     inputs:
       holder:
-        description: "Build Holder ACC + Prod"
+        description: "Build Holder Test + ACC + Prod"
         type: boolean
         default: false
         required: false
       verifier:
-        description: "Build Verifier ACC + Prod"
+        description: "Build Verifier Test + ACC + Prod"
         type: boolean
         default: false
         required: false
@@ -35,6 +35,32 @@ jobs:
     with:
       fastlane_command: bundle exec fastlane ios deploy_verifier_acc_ci
       app_title: Acc Verifier App
+      app_filename: Verifier
+    secrets:
+      DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+      DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}    
+
+  firebase-deploy-holder-test:
+    if: ${{ github.event.inputs.holder == 'true' }}
+    uses: ./.github/workflows/template_firebase-deploy.yml
+    with:
+      fastlane_command: bundle exec fastlane ios deploy_holder_test_ci
+      app_title: Test Holder App
+      app_filename: CTR Test
+    secrets:
+      DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+      DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+    
+  firebase-deploy-verifier-test:
+    if: ${{ github.event.inputs.verifier == 'true' }}
+    uses: ./.github/workflows/template_firebase-deploy.yml
+    with:
+      fastlane_command: bundle exec fastlane ios deploy_verifier_test_ci
+      app_title: Test Verifier App
       app_filename: Verifier
     secrets:
       DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
