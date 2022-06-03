@@ -220,8 +220,11 @@ class WalletManager: WalletManaging {
 					for case let eventGroup as EventGroup in eventGroups.allObjects {
 
 						if let data = eventGroup.jsonData,
-						   let convertedToString = String(data: data, encoding: .utf8) {
-							result.append(convertedToString.replacingOccurrences(of: "\\/", with: "/"))
+						   var convertedToString = String(data: data, encoding: .utf8) {
+							let prependAutoId = "{\"id\":\"\(eventGroup.autoId)\","
+							convertedToString = convertedToString.replacingOccurrences(of: "{", with: prependAutoId)
+							convertedToString = convertedToString.replacingOccurrences(of: "\\/", with: "/")
+							result.append(convertedToString)
 						}
 					}
 				}
