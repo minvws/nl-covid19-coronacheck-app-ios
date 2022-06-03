@@ -44,7 +44,7 @@ protocol WalletManaging: AnyObject {
 
 	func listOrigins(type: OriginType) -> [Origin]
 
-	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
+	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
 	/// - Parameter configuration: remote configuration
@@ -68,15 +68,17 @@ protocol WalletManaging: AnyObject {
 	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
 }
 
-class WalletManager: WalletManaging, Logging {
+class WalletManager: WalletManaging {
 
 	static let walletName = "main"
 
 	private var dataStoreManager: DataStoreManaging
+	private let logHandler: Logging?
 
-	required init( dataStoreManager: DataStoreManaging) {
+	required init( dataStoreManager: DataStoreManaging, logHandler: Logging? = nil) {
 		
 		self.dataStoreManager = dataStoreManager
+		self.logHandler = logHandler
 
 		guard AppFlavor.flavor == .holder else { return }
 		createMainWalletIfNotExists()
@@ -115,7 +117,7 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				
 				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, maxIssuedAt: issuedAt, jsonData: jsonData) != nil {
-					logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
+					self.logHandler?.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
 					success = true
 				} else {
 					
@@ -189,9 +191,9 @@ class WalletManager: WalletManaging, Logging {
 					if let maxIssuedAt = eventGroup.maxIssuedAt,
 					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
 						if expireDate > Date() {
-							logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							self.logHandler?.logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 						} else {
-							logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							self.logHandler?.logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 							context.delete(eventGroup)
 						}
 					}
@@ -242,7 +244,7 @@ class WalletManager: WalletManaging, Logging {
 				if let eventGroups = wallet.eventGroups {
 					for case let eventGroup as EventGroup in eventGroups.allObjects {
 						if eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
-							self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+							self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 							context.delete(eventGroup)
 						}
 					}
@@ -263,7 +265,7 @@ class WalletManager: WalletManaging, Logging {
 
 				if let eventGroups = wallet.eventGroups {
 					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+						self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 						context.delete(eventGroup)
 					}
 					dataStoreManager.save(context)
@@ -292,7 +294,7 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Remove expired GreenCards that contain no more valid origins
 	/// returns: an array of `Greencard.type` Strings. One for each GreenCard that was deleted.
-	@discardableResult func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+	@discardableResult func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)] {
 		var deletedGreenCardTypes: [(greencardType: String, originType: String)] = []
 
 		let context = dataStoreManager.managedObjectContext()
@@ -310,7 +312,7 @@ class WalletManager: WalletManaging, Logging {
 
 						// Does the GreenCard have any valid Origins remaining?
 						let hasValidOrFutureOrigins = origins
-							.contains(where: { ($0.expirationTime ?? .distantPast) > Date() })
+							.contains(where: { ($0.expirationTime ?? .distantPast) > forDate })
 
 						if hasValidOrFutureOrigins {
 							continue
@@ -406,10 +408,10 @@ class WalletManager: WalletManaging, Logging {
 			case let .success(credentials):
 				do {
 					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
-					logVerbose("object: \(objects)")
+					self.logHandler?.logVerbose("object: \(objects)")
 					return .success(objects)
 				} catch {
-					self.logError("Error Deserializing: \(error)")
+					self.logHandler?.logError("Error Deserializing: \(error)")
 					return .failure(error)
 				}
 			case let .failure(error):
@@ -425,12 +427,11 @@ class WalletManager: WalletManaging, Logging {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				if let greenCard = GreenCardModel.create(type: .eu, wallet: wallet, managedContext: context) {
-
+					// Origins
 					for remoteOrigin in remoteEuGreenCard.origins {
-
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
 					}
-
+					// Credential (DCC has 1 credential)
 					let data = Data(remoteEuGreenCard.credential.utf8)
 					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
 						result = result && CredentialModel.create(
@@ -441,9 +442,9 @@ class WalletManager: WalletManaging, Logging {
 							greenCard: greenCard,
 							managedContext: context) != nil
 						dataStoreManager.save(context)
+					} else {
+						result = false
 					}
-
-					// data, version and date should come from the CreateCredential method of the Go Library.
 				} else {
 					result = false
 				}

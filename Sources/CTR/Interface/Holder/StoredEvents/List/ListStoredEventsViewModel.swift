@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class ListStoredEventsViewModel: Logging {
+class ListStoredEventsViewModel {
 
 	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -305,7 +305,7 @@ class ListStoredEventsViewModel: Logging {
 			case .success:
 				sendEventsToTheSigner()
 			case .failure(let error):
-				logError("Failed to remove event groups: \(error)")
+				Current.logHandler.logError("Failed to remove event groups: \(error)")
 				handleCoreDataError()
 		}
 	}

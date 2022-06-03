@@ -19,7 +19,7 @@ protocol AppCoordinatorDelegate: AnyObject {
 	func reset()
 }
 
-class AppCoordinator: Coordinator, Logging {
+class AppCoordinator: Coordinator {
 	
 	let window: UIWindow
 	
@@ -390,11 +390,11 @@ extension AppCoordinator: AppCoordinatorDelegate {
 		
 		if let lastSeenRecommendedUpdate = Current.userSettings.lastSeenRecommendedUpdate,
 		   lastSeenRecommendedUpdate == recommendedVersion {
-			logDebug("The recommended version \(recommendedVersion) is the last seen version")
+			Current.logHandler.logDebug("The recommended version \(recommendedVersion) is the last seen version")
 			startApplication()
 		} else {
 			// User has not seen a dialog for this recommended Version
-			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
+			Current.logHandler.logDebug("The recommended version \(recommendedVersion) is not the last seen version")
 			Current.userSettings.lastSeenRecommendedUpdate = recommendedVersion
 			showRecommendedUpdate(updateURL: appStoreUrl)
 		}

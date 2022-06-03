@@ -27,7 +27,7 @@ protocol ShowQRDatasourceProtocol {
 	func getIndexForMostRelevantGreenCard() -> Int
 }
 
-class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
+class ShowQRDatasource: ShowQRDatasourceProtocol {
 
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 
@@ -119,7 +119,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			return false
 		}
 		
-		logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
+		Current.logHandler.logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
 	
@@ -130,7 +130,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 			// No attributes
 			return false
 		}
-		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
+		Current.logHandler.logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
 		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
 	}
 	
@@ -158,7 +158,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol, Logging {
 		// Rule 1: return the card with the highest doseNumber
 		if let card = sorted.first,
 		   let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
-			logVerbose("getIndexForMostRelevantGreenCard -> \(index)")
+			Current.logHandler.logVerbose("getIndexForMostRelevantGreenCard -> \(index)")
 			return index
 		}
 		return 0

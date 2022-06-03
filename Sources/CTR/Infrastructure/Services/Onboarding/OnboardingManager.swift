@@ -26,9 +26,7 @@ protocol OnboardingManaging: AnyObject {
 }
 
 /// - Tag: OnboardingManager
-class OnboardingManager: OnboardingManaging, Logging {
-
-	var loggingCategory: String = "OnboardingManager"
+class OnboardingManager: OnboardingManaging {
 
 	/// The onboarding data to persist
 	struct OnboardingData: Codable {

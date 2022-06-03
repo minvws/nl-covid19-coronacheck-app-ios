@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class FetchRemoteEventsViewModel: Logging {
+final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -111,7 +111,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			return
 		}
 
-		logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
+		Current.logHandler.logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
 
 		switch (hasNoResult, someServerUnreachableErrror, someNetworkDidError) {
 
@@ -147,7 +147,7 @@ final class FetchRemoteEventsViewModel: Logging {
 			step: .event,
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
-					self.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
+					Current.logHandler.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
 					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
@@ -240,13 +240,13 @@ final class FetchRemoteEventsViewModel: Logging {
 		var providers = [EventFlow.EventProvider]()
 
 		if let providerError = remoteEventProvidersResult?.failureError {
-			self.logError("Error getting event providers: \(providerError)")
+			Current.logHandler.logError("Error getting event providers: \(providerError)")
 			errorCodes.append(self.convert(providerError, for: eventMode.flow, step: .providers))
 			serverErrors.append(providerError)
 		}
 
 		if let accessError = accessTokenResult?.failureError {
-			self.logError("Error getting access tokens: \(accessError)")
+			Current.logHandler.logError("Error getting access tokens: \(accessError)")
 			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
@@ -402,14 +402,14 @@ final class FetchRemoteEventsViewModel: Logging {
 		from provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
+		Current.logHandler.logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
 			// Result<EventFlow.EventInformationAvailable, ServerError>
 
 			if case let .success(info) = result {
-				self?.logVerbose("EventInformationAvailable: \(info)")
+				Current.logHandler.logVerbose("EventInformationAvailable: \(info)")
 			}
 			completion(result)
 			self?.progressIndicationCounter.decrement()

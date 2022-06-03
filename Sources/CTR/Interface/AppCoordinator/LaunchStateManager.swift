@@ -33,7 +33,7 @@ protocol LaunchStateManagerDelegate: AnyObject {
 	func updateIsRecommended(version: String, appStoreUrl: URL)
 }
 
-final class LaunchStateManager: LaunchStateManaging, Logging {
+final class LaunchStateManager: LaunchStateManaging {
 	
 	private var remoteConfigManagerUpdateObserverToken: Observatory<RemoteConfigManager.ConfigNotification>.ObserverToken?
 	private var remoteConfigManagerReloadObserverToken: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>.ObserverToken?

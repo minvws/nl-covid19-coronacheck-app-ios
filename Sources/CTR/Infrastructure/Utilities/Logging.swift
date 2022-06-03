@@ -9,137 +9,43 @@ import CocoaLumberjack
 import CocoaLumberjackSwift
 import Foundation
 
-public protocol Logging {
-
-	/// The category with which the class that conforms to the `Logging`-protocol is logging.
-	var loggingCategory: String { get }
+protocol Logging {
 
 	/// Log for verbose purpose
 	/// - Parameters:
 	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logVerbose(_ message: String, function: StaticString, file: StaticString, line: UInt)
+	func logVerbose(_ message: String)
 
 	/// Log for debug purpose
 	/// - Parameters:
 	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logDebug(_ message: String, function: StaticString, file: StaticString, line: UInt)
+	func logDebug(_ message: String)
 
 	/// Log for information purpose
 	/// - Parameters:
 	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logInfo(_ message: String, function: StaticString, file: StaticString, line: UInt)
+	func logInfo(_ message: String)
 
 	/// Log for warning purpose
 	/// - Parameters:
 	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logWarning(_ message: String, function: StaticString, file: StaticString, line: UInt)
+	func logWarning(_ message: String)
 
 	/// Log for error purpose
 	/// - Parameters:
 	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logError(_ message: String, function: StaticString, file: StaticString, line: UInt)
+	func logError(_ message: String)
+	
+	// Setup
+	func setup()
 }
 
-public extension Logging {
+final class LogHandler: Logging {
 
-	/// The category with which the class that conforms to the `Logging`-protocol is logging.
-	var loggingCategory: String {
-		return "CoronaTester"
-	}
-
-	/// Log for verbose purpose
-	/// - Parameters:
-	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logVerbose(
-		_ message: String,
-		function: StaticString = #function,
-		file: StaticString = #file,
-		line: UInt = #line) {
-
-		DDLogVerbose("💤 \(message)", file: file, function: function, line: line, tag: loggingCategory)
-	}
-
-	/// Log for debug purpose
-	/// - Parameters:
-	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logDebug(
-		_ message: String,
-		function: StaticString = #function,
-		file: StaticString = #file,
-		line: UInt = #line) {
-		DDLogDebug("🐞 \(message)", file: file, function: function, line: line, tag: loggingCategory)
-	}
-
-	/// Log for information purpose
-	/// - Parameters:
-	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logInfo(
-		_ message: String,
-		function: StaticString = #function,
-		file: StaticString = #file,
-		line: UInt = #line) {
-		DDLogInfo("📋 \(message)", file: file, function: function, line: line, tag: loggingCategory)
-	}
-
-	/// Log for warning purpose
-	/// - Parameters:
-	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logWarning(
-		_ message: String,
-		function: StaticString = #function,
-		file: StaticString = #file,
-		line: UInt = #line) {
-		DDLogWarn("❗️ \(message)", file: file, function: function, line: line, tag: loggingCategory)
-	}
-
-	/// Log for error purpose
-	/// - Parameters:
-	///   - message: the message to log
-	///   - function: the function in which the the method is called
-	///   - file: the file in which the method is called
-	///   - line: the line on wicht the method is called
-	func logError(
-		_ message: String,
-		function: StaticString = #function,
-		file: StaticString = #file,
-		line: UInt = #line) {
-		DDLogError("🔥 \(message)", file: file, function: function, line: line, tag: loggingCategory)
-	}
-}
-
-public final class LogHandler: Logging {
-
-	public static var isSetup = false
+	private var isSetup = false
 
 	/// Can be called multiple times, will only setup once
-	public static func setup() {
+	func setup() {
 		
 		guard !isSetup else {
 			DDLogDebug(
@@ -184,7 +90,7 @@ public final class LogHandler: Logging {
 		DDLogDebug("🐞 Logging has been setup", file: #file, function: #function, line: #line, tag: "default")
 	}
 
-	public static func logFiles() -> [URL] {
+	func logFiles() -> [URL] {
 
 		guard let fileLogger = DDLog.allLoggers.first(where: { $0 is DDFileLogger }) as? DDFileLogger else {
 			#if DEBUG
@@ -193,5 +99,45 @@ public final class LogHandler: Logging {
 			return []
 		}
 		return fileLogger.logFileManager.sortedLogFilePaths.compactMap { URL(fileURLWithPath: $0) }
+	}
+	
+	// MARK: Logging
+	
+	/// The category with which the class that conforms to the `Logging`-protocol is logging.
+	private let loggingCategory = "CoronaCheck"
+
+	/// Log for verbose purpose
+	/// - Parameters:
+	///   - message: the message to log
+	func logVerbose(_ message: String) {
+		DDLogVerbose("💤 \(message)", tag: loggingCategory)
+	}
+
+	/// Log for debug purpose
+	/// - Parameters:
+	///   - message: the message to log
+	func logDebug(_ message: String) {
+		DDLogDebug("🐞 \(message)", tag: loggingCategory)
+	}
+
+	/// Log for information purpose
+	/// - Parameters:
+	///   - message: the message to log
+	func logInfo(_ message: String) {
+		DDLogInfo("📋 \(message)", tag: loggingCategory)
+	}
+
+	/// Log for warning purpose
+	/// - Parameters:
+	///   - message: the message to log
+	func logWarning(_ message: String) {
+		DDLogWarn("❗️ \(message)", tag: loggingCategory)
+	}
+
+	/// Log for error purpose
+	/// - Parameters:
+	///   - message: the message to log
+	func logError(_ message: String) {
+		DDLogError("🔥 \(message)", tag: loggingCategory)
 	}
 }

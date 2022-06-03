@@ -7,10 +7,7 @@
 
 import UIKit
 
-class SnapshotViewModel: Logging {
-
-	/// The logging Category
-	var loggingCategory: String = "SnapshotViewModel"
+class SnapshotViewModel {
 
 	var willEnterForegroundObserver: NSObjectProtocol?
 
