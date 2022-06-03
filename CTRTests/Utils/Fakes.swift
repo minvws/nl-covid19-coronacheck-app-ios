@@ -1169,6 +1169,7 @@ extension EventGroup {
 					type: type,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: maxIssuedAt,
+					expiryDate: nil,
 					jsonData: Data(),
 					wallet: wallet,
 					managedContext: context

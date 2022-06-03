@@ -462,6 +462,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 						type: EventMode.recovery,
 						providerIdentifier: "CoronaCheck",
 						maxIssuedAt: Date(),
+						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
 						managedContext: context

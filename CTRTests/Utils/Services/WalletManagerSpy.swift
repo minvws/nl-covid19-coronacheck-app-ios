@@ -13,15 +13,20 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date, expiryDate: Date?)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date, expiryDate: Date?)]()
 	var stubbedStoreEventGroupResult: Bool! = false
 
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool {
+	func storeEventGroup(
+		_ type: EventMode,
+		providerIdentifier: String,
+		jsonData: Data,
+		issuedAt: Date,
+		expiryDate: Date?) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
-		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, issuedAt)
-		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, issuedAt))
+		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, issuedAt, expiryDate)
+		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, issuedAt, expiryDate))
 		return stubbedStoreEventGroupResult
 	}
 
@@ -217,5 +222,17 @@ class WalletManagerSpy: WalletManaging {
 		invokedHasEventGroupParameters = (type, providerIdentifier)
 		invokedHasEventGroupParametersList.append((type, providerIdentifier))
 		return stubbedHasEventGroupResult
+	}
+
+	var invokedUpdateEventGroup = false
+	var invokedUpdateEventGroupCount = 0
+	var invokedUpdateEventGroupParameters: (identifier: String, expiryDate: Date)?
+	var invokedUpdateEventGroupParametersList = [(identifier: String, expiryDate: Date)]()
+
+	func updateEventGroup(identifier: String, expiryDate: Date) {
+		invokedUpdateEventGroup = true
+		invokedUpdateEventGroupCount += 1
+		invokedUpdateEventGroupParameters = (identifier, expiryDate)
+		invokedUpdateEventGroupParametersList.append((identifier, expiryDate))
 	}
 }

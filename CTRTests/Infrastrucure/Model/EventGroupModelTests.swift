@@ -38,6 +38,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: date,
+					expiryDate: nil,
 					jsonData: unwrappedJson,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -69,6 +70,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -77,6 +79,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -103,6 +106,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -111,6 +115,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -143,6 +148,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -151,6 +157,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -183,6 +190,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: now,
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -192,6 +200,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "Other Provider",
 					maxIssuedAt: now,
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -202,7 +211,6 @@ class EventGroupModelTests: XCTestCase {
 					wallet: unwrappedWallet,
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: now,
 					jsonData: json
 				)
 			}
@@ -227,6 +235,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: now,
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -236,6 +245,7 @@ class EventGroupModelTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "Other Provider",
 					maxIssuedAt: now,
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -246,7 +256,6 @@ class EventGroupModelTests: XCTestCase {
 					wallet: unwrappedWallet,
 					type: EventMode.test,
 					providerIdentifier: "Third Provider",
-					maxIssuedAt: now,
 					jsonData: json
 				)
 			}

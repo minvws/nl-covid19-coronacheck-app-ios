@@ -75,7 +75,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// Then
@@ -94,13 +95,15 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: json,
-			issuedAt: now
+			issuedAt: now,
+			expiryDate: nil
 		)
 		let result2 = sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: json,
-			issuedAt: now
+			issuedAt: now,
+			expiryDate: nil
 		)
 
 		// Then
@@ -117,7 +120,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -135,7 +139,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -153,7 +158,8 @@ class WalletManagerTests: XCTestCase {
 			.test,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -171,19 +177,22 @@ class WalletManagerTests: XCTestCase {
 			.test,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GGD",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -200,19 +209,22 @@ class WalletManagerTests: XCTestCase {
 			.test,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GGD",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -240,7 +252,8 @@ class WalletManagerTests: XCTestCase {
 			.test,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("test".utf8),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -258,13 +271,15 @@ class WalletManagerTests: XCTestCase {
 			.test,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("test".utf8),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("vaccination".utf8),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -283,7 +298,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GGD",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -300,7 +316,8 @@ class WalletManagerTests: XCTestCase {
 			.recovery,
 			providerIdentifier: "DCC",
 			jsonData: Data(),
-			issuedAt: Date()
+			issuedAt: Date(),
+			expiryDate: nil
 		)
 
 		// When
@@ -333,7 +350,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -350,7 +368,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -367,14 +386,16 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CC",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(20 * hours * ago)
+			issuedAt: Date().addingTimeInterval(20 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -391,28 +412,32 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.vaccinationassessment,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -429,21 +454,24 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -460,21 +488,24 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -491,28 +522,32 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		sut.storeEventGroup(
 			.vaccinationassessment,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			issuedAt: Date().addingTimeInterval(10 * hours * ago)
+			issuedAt: Date().addingTimeInterval(10 * hours * ago),
+			expiryDate: nil
 		)
 		
 		// When
@@ -538,6 +573,7 @@ class WalletManagerTests: XCTestCase {
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context

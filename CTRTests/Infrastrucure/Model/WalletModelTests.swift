@@ -117,6 +117,7 @@ class WalletModelTests: XCTestCase {
 					type: EventMode.recovery,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: date,
+					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -144,6 +145,7 @@ class WalletModelTests: XCTestCase {
 				type: EventMode.recovery,
 				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: Date(),
+				expiryDate: nil,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
