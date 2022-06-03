@@ -16,8 +16,14 @@ protocol WalletManaging: AnyObject {
 	///   - providerIdentifier: the identifier of the provider
 	///   - jsonData: the json  data of the original signed event or dcc
 	///   - issuedAt: when was this event administered?
+	///   - expiryDate: when will this event expire?
 	/// - Returns: True if stored
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool
+	func storeEventGroup(
+		_ type: EventMode,
+		providerIdentifier: String,
+		jsonData: Data,
+		issuedAt: Date,
+		expiryDate: Date?) -> Bool
 
 	func fetchSignedEvents() -> [String]
 
@@ -66,6 +72,8 @@ protocol WalletManaging: AnyObject {
 	func hasDomesticGreenCard(originType: String) -> Bool
 
 	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
+	
+	func updateEventGroup(identifier: String, expiryDate: Date)
 }
 
 class WalletManager: WalletManaging {
@@ -107,7 +115,8 @@ class WalletManager: WalletManaging {
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		issuedAt: Date) -> Bool {
+		issuedAt: Date,
+		expiryDate: Date?) -> Bool {
 
 		var success = true
 
@@ -116,7 +125,7 @@ class WalletManager: WalletManaging {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				
-				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, maxIssuedAt: issuedAt, jsonData: jsonData) != nil {
+				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, jsonData: jsonData) != nil {
 					self.logHandler?.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
 					success = true
 				} else {
@@ -125,6 +134,7 @@ class WalletManager: WalletManaging {
 						type: type,
 						providerIdentifier: providerIdentifier,
 						maxIssuedAt: issuedAt,
+						expiryDate: expiryDate,
 						jsonData: jsonData,
 						wallet: wallet,
 						managedContext: context
@@ -482,7 +492,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let greenCards = wallet.greenCards?.allObjects as? [GreenCard] {
+			   let greenCards = wallet.castGreenCards() {
 				result = greenCards
 			}
 		}
@@ -532,7 +542,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				guard let greenCards = wallet.greenCards?.allObjects as? [GreenCard] else {
+				guard let greenCards = wallet.castGreenCards() else {
 					return
 				}
 				for greenCard in greenCards {
@@ -554,7 +564,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-				  let allGreenCards = wallet.greenCards?.allObjects as? [GreenCard]
+				  let allGreenCards = wallet.castGreenCards()
 			else { return }
 
 			for greenCard in allGreenCards {
@@ -592,5 +602,25 @@ class WalletManager: WalletManaging {
 			}
 
 		return !allDomesticGreencards.isEmpty
+	}
+	
+	func updateEventGroup(identifier: String, expiryDate: Date) {
+		
+		Current.logHandler.logDebug("WalletManager: Should update eventGroup \(identifier) with expiry \(expiryDate)")
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+				  let allEventGroups = wallet.castEventGroups()
+			else { return }
+		
+			allEventGroups.forEach { eventGroup in
+				if String(eventGroup.autoId) == identifier {
+					eventGroup.expiryDate = expiryDate
+				}
+			}
+			dataStoreManager.save(context)
+		}
 	}
 }

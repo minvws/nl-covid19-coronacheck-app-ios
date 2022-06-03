@@ -63,3 +63,18 @@ class WalletModel {
 		return nil
 	}
 }
+
+extension Wallet {
+	
+	/// Get the greencards, strongly typed.
+	func castGreenCards() -> [GreenCard]? {
+		
+		return greenCards?.compactMap({ $0 as? GreenCard })
+	}
+	
+	/// Get the eventgroups, strongly typed.
+	func castEventGroups() -> [EventGroup]? {
+		
+		return eventGroups?.compactMap({ $0 as? EventGroup })
+	}
+}

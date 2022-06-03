@@ -667,7 +667,8 @@ class ListRemoteEventsViewModel {
 					storageMode,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					jsonData: jsonData,
-					issuedAt: maxIssuedAt
+					issuedAt: maxIssuedAt,
+					expiryDate: nil
 				)
 				if !success {
 					break

@@ -168,14 +168,22 @@ class GreenCardLoader: GreenCardLoading {
 
 		walletManager.removeExistingGreenCards()
 
+		// Domestic
 		if let domestic = response.domesticGreenCard {
 			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
 		}
+		// International
 		if let remoteEuGreenCards = response.euGreenCards {
 			for remoteEuGreenCard in remoteEuGreenCards {
 				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard, cryptoManager: cryptoManager)
 			}
 		}
-		onCompletion(success)
+			// Expiries
+			if let blobExpiries = response.blobExpiries {
+				for expiry in blobExpiries {
+					walletManager.updateEventGroup(identifier: expiry.identifier, expiryDate: expiry.expirationDate)
+				}
+			}
+			onCompletion(success)
 	}
 }
