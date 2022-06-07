@@ -15,7 +15,6 @@ class EventGroupModel {
 	@discardableResult class func create(
 		type: EventMode,
 		providerIdentifier: String,
-		maxIssuedAt: Date,
 		expiryDate: Date?,
 		jsonData: Data,
 		wallet: Wallet,
@@ -27,7 +26,6 @@ class EventGroupModel {
 
 		object.type = type.rawValue
 		object.providerIdentifier = providerIdentifier
-		object.maxIssuedAt = maxIssuedAt
 		object.expiryDate = expiryDate
 		object.jsonData = jsonData
 		object.wallet = wallet

@@ -10,7 +10,6 @@
     <entity name="EventGroup" representedClassName="EventGroup" syncable="YES" codeGenerationType="class">
         <attribute name="expiryDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="jsonData" attributeType="Binary"/>
-        <attribute name="maxIssuedAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="providerIdentifier" attributeType="String"/>
         <attribute name="type" attributeType="String"/>
         <relationship name="wallet" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="eventGroups" inverseEntity="Wallet"/>
@@ -36,7 +35,7 @@
     </entity>
     <elements>
         <element name="Credential" positionX="322.51953125" positionY="-208.2158203125" width="128" height="118"/>
-        <element name="EventGroup" positionX="-89.9326171875" positionY="-138.9628753662109" width="128" height="119"/>
+        <element name="EventGroup" positionX="-89.9326171875" positionY="-138.9628753662109" width="128" height="104"/>
         <element name="GreenCard" positionX="130.821044921875" positionY="-141.7990264892578" width="128" height="103"/>
         <element name="Origin" positionX="319.337646484375" positionY="-67.99729919433594" width="128" height="119"/>
         <element name="Wallet" positionX="7.106201171875" positionY="-270.4821319580078" width="128" height="74"/>

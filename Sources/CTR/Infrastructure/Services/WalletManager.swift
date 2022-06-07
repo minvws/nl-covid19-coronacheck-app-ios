@@ -22,7 +22,6 @@ protocol WalletManaging: AnyObject {
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		issuedAt: Date,
 		expiryDate: Date?) -> Bool
 
 	func fetchSignedEvents() -> [String]
@@ -53,16 +52,16 @@ protocol WalletManaging: AnyObject {
 	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
-	/// - Parameter configuration: remote configuration
-	func expireEventGroups(configuration: RemoteConfiguration)
+	/// - Parameter forDate: Current date
+	func expireEventGroups(forDate: Date)
 	
-	/// Expire event groups that are no longer valid
-	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
-	///   - recoveryValidity: the max validity for recovery  (in HOURS)
-	///   - testValidity: the max validity for test  (in HOURS)
-	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
+//	/// Expire event groups that are no longer valid
+//	/// - Parameters:
+//	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
+//	///   - recoveryValidity: the max validity for recovery  (in HOURS)
+//	///   - testValidity: the max validity for test  (in HOURS)
+//	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
+//	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
 	
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 
@@ -115,7 +114,6 @@ class WalletManager: WalletManaging {
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		issuedAt: Date,
 		expiryDate: Date?) -> Bool {
 
 		var success = true
@@ -133,7 +131,6 @@ class WalletManager: WalletManaging {
 					EventGroupModel.create(
 						type: type,
 						providerIdentifier: providerIdentifier,
-						maxIssuedAt: issuedAt,
 						expiryDate: expiryDate,
 						jsonData: jsonData,
 						wallet: wallet,
@@ -149,66 +146,19 @@ class WalletManager: WalletManaging {
 	}
 	
 	/// Expire event groups that are no longer valid
-	/// - Parameter configuration: remote configuration
-	func expireEventGroups(configuration: RemoteConfiguration) {
-
-		expireEventGroups(
-			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
-			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
-			testValidity: configuration.testEventValidityHours,
-			vaccinationAssessmentValidity: (configuration.vaccinationAssessmentEventValidityDays ?? 14) * 24
-		)
+	/// - Parameter forDate: Current date
+	func expireEventGroups(forDate: Date) {
 		
-	}
-
-	/// Expire event groups that are no longer valid
-	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
-	///   - recoveryValidity: the max validity for recovery  (in HOURS)
-	///   - testValidity: the max validity for test  (in HOURS)
-	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
-
-		if let maxValidity = vaccinationValidity {
-			findAndExpireEventGroups(for: .vaccination, maxValidity: maxValidity)
-		}
-
-		if let maxValidity = recoveryValidity {
-			findAndExpireEventGroups(for: .recovery, maxValidity: maxValidity)
-			findAndExpireEventGroups(for: .vaccinationAndPositiveTest, maxValidity: maxValidity)
-		}
-
-		if let maxValidity = testValidity {
-			findAndExpireEventGroups(for: .test, maxValidity: maxValidity)
-		}
-		
-		if let maxValidity = vaccinationAssessmentValidity {
-			findAndExpireEventGroups(for: .vaccinationassessment, maxValidity: maxValidity)
-		}
-	}
-
-	/// Find event groups that exceed their validity and remove them from the database
-	/// - Parameters:
-	///   - type: the type of event group (vaccination, test, recovery)
-	///   - maxValidity: the max validity (in HOURS) of the event group beyond the max issued at date. (from remote config)
-	private func findAndExpireEventGroups(for type: EventMode, maxValidity: Int) {
-
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.eventGroups {
-				for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
-					if let maxIssuedAt = eventGroup.maxIssuedAt,
-					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
-						if expireDate > Date() {
-							self.logHandler?.logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
-						} else {
-							self.logHandler?.logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
-							context.delete(eventGroup)
-						}
+			   let eventGroups = wallet.castEventGroups() {
+				for eventGroup in eventGroups {
+					if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
+						self.logHandler?.logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
+						context.delete(eventGroup)
 					}
 				}
-				dataStoreManager.save(context)
 			}
 		}
 	}
