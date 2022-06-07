@@ -69,17 +69,7 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	var configAlmostOutOfDateWarningSeconds: Int?
 
-	/// What is the waiting period before a recovery is valid?
-	var recoveryWaitingPeriodDays: Int?
-
-	/// Event validity
-	var recoveryEventValidityDays: Int?
-
 	var recoveryExpirationDays: Int?
-	
-	var testEventValidityHours: Int?
-
-	var vaccinationEventValidityDays: Int?
 
 	var domesticQRRefreshSeconds: Int?
 	
@@ -121,10 +111,6 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	/// The number of seconds to keep scan entries in the log
 	var scanLogStorageSeconds: Int?
-
-	var showNewValidityInfoCard: Bool?
-	
-	var vaccinationAssessmentEventValidityDays: Int?
 	
 	var visitorPassEnabled: Bool?
 	
@@ -149,11 +135,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case configTTL = "configTTL"
 		case configMinimumIntervalSeconds = "configMinimumIntervalSeconds"
 		case configAlmostOutOfDateWarningSeconds = "configAlmostOutOfDateWarningSeconds"
-		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
-		case recoveryEventValidityDays = "recoveryEventValidityDays"
 		case recoveryExpirationDays = "recoveryExpirationDays"
-		case testEventValidityHours = "testEventValidityHours"
-		case vaccinationEventValidityDays = "vaccinationEventValidityDays"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
 		case nlTestTypes = "nlTestTypes"
@@ -171,8 +153,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		case scanLockSeconds = "scanLockSeconds"
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
-		case showNewValidityInfoCard = "showNewValidityInfoCard"
-		case vaccinationAssessmentEventValidityDays = "vaccinationAssessmentEventValidityDays"
 		case visitorPassEnabled = "visitorPassEnabled"
 		case shouldShowCoronaMelderRecommendation = "shouldShowCoronaMelderRecommendation"
 		case verificationPolicies = "verificationPolicies"
@@ -199,11 +179,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.configTTL = 3600
 		config.configMinimumIntervalSeconds = 300
 		config.configAlmostOutOfDateWarningSeconds = 300
-		config.recoveryWaitingPeriodDays = 11
-		config.recoveryEventValidityDays = 365
 		config.recoveryExpirationDays = 180
-		config.testEventValidityHours = 96
-		config.vaccinationEventValidityDays = 730
 		config.isGGDEnabled = true
 		config.credentialRenewalDays = 5
 		config.domesticQRRefreshSeconds = 60
@@ -213,7 +189,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.scanLockSeconds = 300
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
-		config.vaccinationAssessmentEventValidityDays = 14
 		config.visitorPassEnabled = true
 		config.shouldShowCoronaMelderRecommendation = false
 		config.verificationPolicies = ["3G"]
