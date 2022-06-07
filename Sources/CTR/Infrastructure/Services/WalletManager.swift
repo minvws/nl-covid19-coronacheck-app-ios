@@ -15,8 +15,7 @@ protocol WalletManaging: AnyObject {
 	///   - type: the event type (vaccination, recovery, test)
 	///   - providerIdentifier: the identifier of the provider
 	///   - jsonData: the json  data of the original signed event or dcc
-	///   - issuedAt: when was this event administered?
-	///   - expiryDate: when will this event expire?
+	///   - expiryDate: when will this eventgroup expire?
 	/// - Returns: True if stored
 	func storeEventGroup(
 		_ type: EventMode,
@@ -54,14 +53,6 @@ protocol WalletManaging: AnyObject {
 	/// Expire event groups that are no longer valid
 	/// - Parameter forDate: Current date
 	func expireEventGroups(forDate: Date)
-	
-//	/// Expire event groups that are no longer valid
-//	/// - Parameters:
-//	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
-//	///   - recoveryValidity: the max validity for recovery  (in HOURS)
-//	///   - testValidity: the max validity for test  (in HOURS)
-//	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
-//	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
 	
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 
@@ -108,7 +99,7 @@ class WalletManager: WalletManaging {
 	///   - type: the event type (vaccination, recovery, test)
 	///   - providerIdentifier: the identifier of the provider
 	///   - signedResponse: the json of the signed response to store
-	///   - issuedAt: when was this event administered?
+	///   - expiryDate: when will this eventgroup expire?
 	/// - Returns: optional event group
 	@discardableResult func storeEventGroup(
 		_ type: EventMode,
