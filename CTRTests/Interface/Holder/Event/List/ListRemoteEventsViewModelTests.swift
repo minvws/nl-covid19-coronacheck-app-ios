@@ -1878,6 +1878,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beFalse())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedUpdateEventGroup).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 
 		guard case let .feedback(content: feedback) = sut.viewState else {

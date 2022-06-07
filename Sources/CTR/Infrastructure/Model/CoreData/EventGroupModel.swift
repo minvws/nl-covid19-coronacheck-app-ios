@@ -39,7 +39,7 @@ class EventGroupModel {
 		providerIdentifier: String,
 		jsonData: Data) -> EventGroup? {
 			
-		if let list = wallet.eventGroups?.allObjects as? [EventGroup] {
+		if let list = wallet.castEventGroups() {
 			
 			return list
 				.filter { $0.type == type.rawValue }

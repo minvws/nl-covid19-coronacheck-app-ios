@@ -481,7 +481,12 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpiries: []
+			blobExpiries: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: "12345",
+					expirationDate: Formatter.getDateFrom(dateString8601: "2024-07-06:12:00:00+00:00")!
+				)
+			]
 		)
 	}
 

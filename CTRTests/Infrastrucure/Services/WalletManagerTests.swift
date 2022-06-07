@@ -853,4 +853,41 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
+	
+	func test_updateEventGroup() throws {
+		
+		// Given
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data(),
+			expiryDate: nil
+		)
+		let autoId = try XCTUnwrap(self.sut.listEventGroups().first?.autoId)
+		
+		// When
+		sut.updateEventGroup(identifier: "\(autoId)", expiryDate: now)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+		expect(self.sut.listEventGroups().first?.expiryDate) == now
+	}
+	
+	func test_updateEventGroup_invalidIdentifier() {
+		
+		// Given
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data(),
+			expiryDate: nil
+		)
+		
+		// When
+		sut.updateEventGroup(identifier: "wrongIdentifier", expiryDate: now)
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+		expect(self.sut.listEventGroups().first?.expiryDate).to(beNil())
+	}
 }

@@ -259,7 +259,7 @@ class WalletManager: WalletManaging {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
-						guard let origins = greenCard.origins?.compactMap({ $0 as? Origin }) else {
+						guard let origins = greenCard.castOrigins() else {
 							context.delete(greenCard)
 							break
 						}
