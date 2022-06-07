@@ -538,7 +538,9 @@ extension HolderDashboardViewModel.QRCard {
 				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: nil)
 			},
 			buttonEnabledEvaluator: evaluateEnabledState,
-			expiryCountdownEvaluator: nil
+			expiryCountdownEvaluator: { now in
+				internationalCountdownText(now: now, origins: origins)
+			}
 		)]
 	}
 
@@ -660,10 +662,38 @@ private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]
 		}
 	}()
 	
-	guard let expiringMostDistantlyInFutureOrigin = expiringMostDistantlyInFutureOrigin else { return nil }
+	guard let expiringMostDistantlyInFutureOrigin = expiringMostDistantlyInFutureOrigin,
+		  let countdownTimerVisibleThreshold: TimeInterval = expiringMostDistantlyInFutureOrigin.countdownTimerVisibleThreshold(isInternational: false)
+	else { return nil }
 	
 	let expirationTime: Date = expiringMostDistantlyInFutureOrigin.expirationTime
-	let countdownTimerVisibleThreshold: TimeInterval = expiringMostDistantlyInFutureOrigin.countdownTimerVisibleThreshold
+	
+	guard expirationTime > now && expirationTime < now.addingTimeInterval(countdownTimerVisibleThreshold)
+	else { return nil }
+
+	return countdownText(now: now, to: expirationTime)
+}
+
+private func internationalCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]) -> String? {
+	
+	let uniqueOrigins = Set(origins.map { $0.type })
+	guard uniqueOrigins.count == 1, let originType = uniqueOrigins.first else { return nil } // assumption: international cards have a single QRCodeOriginType per-card.
+	
+	guard originType == .recovery else { return nil } // Only show a countdown on international cards when it's for type Recovery
+	
+	let expiringMostDistantlyInFutureOrigin: QRCard.GreenCard.Origin? = {
+		// Calculate which is the origin with the furthest future expiration:
+		return origins.reduce(QRCard.GreenCard.Origin?.none) { previous, next in
+			guard let previous = previous else { return next }
+			return next.expirationTime > previous.expirationTime ? next : previous
+		}
+	}()
+	
+	guard let expiringMostDistantlyInFutureOrigin = expiringMostDistantlyInFutureOrigin,
+		  let countdownTimerVisibleThreshold: TimeInterval = expiringMostDistantlyInFutureOrigin.countdownTimerVisibleThreshold(isInternational: true)
+	else { return nil }
+	
+	let expirationTime: Date = expiringMostDistantlyInFutureOrigin.expirationTime
 	
 	guard expirationTime > now && expirationTime < now.addingTimeInterval(countdownTimerVisibleThreshold)
 	else { return nil }
@@ -676,13 +706,28 @@ private func countdownText(now: Date, to futureExpiryDate: Date) -> String? {
 	guard futureExpiryDate > now else { return nil }
 	
 	let formatter: DateComponentsFormatter = {
-		let fiveMinutes: TimeInterval = 5 * 60
-		if futureExpiryDate < now.addingTimeInterval(fiveMinutes) {
+		let minute: TimeInterval = 60; let hour = minute * 60; let day = hour * 24
+
+		if futureExpiryDate < now.addingTimeInterval(5 * minute) {
+			
+			// < 5 minutes: show minutes + seconds
 			// e.g. "4 minuten en 15 seconden"
 			return DateFormatter.Relative.hoursMinutesSeconds
-		} else {
-			// e.g. "23 uur en 59 minuten"
+		} else if futureExpiryDate < now.addingTimeInterval(25 * hour) {
+			
+			// < 1 day + 1 hour: show hours + minutes
+			// e.g. "24 uur en 59 minuten"
 			return DateFormatter.Relative.hoursMinutes
+		} else if futureExpiryDate < now.addingTimeInterval(2 * day) {
+			
+			// < 2 days: show days + hours
+			// e.g. "1 day, 2 hours"
+			return DateFormatter.Relative.daysHours
+		} else {
+			
+			// > 2 days: show days
+			// e.g. "10 days"
+			return DateFormatter.Relative.days
 		}
 	}()
 
