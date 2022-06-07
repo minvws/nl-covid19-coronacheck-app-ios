@@ -321,219 +321,201 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listEventGroups()).to(haveCount(0))
 	}
 	
-//	func test_expireEventGroups_oneVaccination_notExpired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 11, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(haveCount(1))
-//	}
-//
-//	func test_expireEventGroups_oneVaccination_expired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 9, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(haveCount(0))
-//	}
-//
-//	func test_expireEventGroups_oneVaccination_expired_oneVaccination_notExpired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "CC",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(20 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: nil, testValidity: nil, vaccinationAssessmentValidity: nil)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(haveCount(1))
-//	}
-//
-//	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_oneVaccinationAssessment_notExpired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.recovery,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.test,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.vaccinationassessment,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 15, recoveryValidity: 15, testValidity: 15, vaccinationAssessmentValidity: 15)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(haveCount(4))
-//	}
-//
-//	func test_expireEventGroups_oneVaccination_expired_oneRecovery_notExpired_oneTest_notExpired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.recovery,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.test,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 15, testValidity: 15, vaccinationAssessmentValidity: nil)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(haveCount(2))
-//	}
-//
-//	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_notExpired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.recovery,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.test,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 15, vaccinationAssessmentValidity: nil)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(haveCount(1))
-//	}
-//
-//	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_expired_oneVaccinationAssessment_expired() {
-//
-//		// Given
-//		sut.storeEventGroup(
-//			.vaccination,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.recovery,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.test,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		sut.storeEventGroup(
-//			.vaccinationassessment,
-//			providerIdentifier: "GDD",
-//			jsonData: Data(),
-//			issuedAt: Date().addingTimeInterval(10 * hours * ago),
-//			expiryDate: nil
-//		)
-//
-//		// When
-//		sut.expireEventGroups(vaccinationValidity: 5, recoveryValidity: 5, testValidity: 5, vaccinationAssessmentValidity: 5)
-//
-//		// Then
-//		expect(self.sut.listEventGroups()).to(beEmpty())
-//	}
+	func test_expireEventGroups_oneVaccination_notExpired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * days)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+	}
+
+	func test_expireEventGroups_oneVaccination_expired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(0))
+	}
+
+	func test_expireEventGroups_oneVaccination_expired_oneVaccination_notExpired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CC",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+	}
+
+	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_oneVaccinationAssessment_notExpired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		sut.storeEventGroup(
+			.vaccinationassessment,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(4))
+	}
+
+	func test_expireEventGroups_oneVaccination_expired_oneRecovery_notExpired_oneTest_notExpired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(2))
+	}
+
+	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_notExpired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+	}
+
+	func test_expireEventGroups_oneVaccination_oneRecovery_oneTest_oneVaccinationAssessment_allExpired() {
+
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.recovery,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		sut.storeEventGroup(
+			.vaccinationassessment,
+			providerIdentifier: "GDD",
+			jsonData: Data(),
+			expiryDate: now.addingTimeInterval(10 * hours * ago)
+		)
+
+		// When
+		sut.expireEventGroups(forDate: now)
+
+		// Then
+		expect(self.sut.listEventGroups()).to(beEmpty())
+	}
 	
 	func test_removeEventGroup() throws {
 		
