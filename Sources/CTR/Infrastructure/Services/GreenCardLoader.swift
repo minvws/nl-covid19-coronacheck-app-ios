@@ -178,12 +178,12 @@ class GreenCardLoader: GreenCardLoading {
 				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard, cryptoManager: cryptoManager)
 			}
 		}
-			// Expiries
-			if let blobExpiries = response.blobExpiries {
-				for expiry in blobExpiries {
-					walletManager.updateEventGroup(identifier: expiry.identifier, expiryDate: expiry.expirationDate)
-				}
+		// Expiries
+		if let blobExpiries = response.blobExpiries {
+			for expiry in blobExpiries {
+				walletManager.updateEventGroup(identifier: expiry.identifier, expiryDate: expiry.expirationDate)
 			}
-			onCompletion(success)
+		}
+		onCompletion(success)
 	}
 }
