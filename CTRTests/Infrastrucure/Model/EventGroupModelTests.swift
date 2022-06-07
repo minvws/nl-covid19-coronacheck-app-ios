@@ -37,8 +37,7 @@ class EventGroupModelTests: XCTestCase {
 				eventGroup = EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: date,
-					expiryDate: nil,
+					expiryDate: date,
 					jsonData: unwrappedJson,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -49,7 +48,7 @@ class EventGroupModelTests: XCTestCase {
 		// Then
 		expect(eventGroup?.type).toEventually(equal(EventMode.test.rawValue))
 		expect(eventGroup?.providerIdentifier).toEventually(equal("CoronaCheck"))
-		expect(eventGroup?.maxIssuedAt).toEventually(equal(date))
+		expect(eventGroup?.expiryDate).toEventually(equal(date))
 		expect(eventGroup?.jsonData).toEventually(equal(json))
 		expect(eventGroup?.wallet).toEventually(equal(wallet))
 		expect(wallet?.eventGroups).toEventually(haveCount(1))
@@ -69,7 +68,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -78,7 +76,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -105,7 +102,6 @@ class EventGroupModelTests: XCTestCase {
 				event1 = EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -114,7 +110,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -147,7 +142,6 @@ class EventGroupModelTests: XCTestCase {
 				event1 = EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -156,7 +150,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: Date(),
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -189,7 +182,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: now,
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -199,7 +191,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "Other Provider",
-					maxIssuedAt: now,
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -234,7 +225,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: now,
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -244,7 +234,6 @@ class EventGroupModelTests: XCTestCase {
 				EventGroupModel.create(
 					type: EventMode.test,
 					providerIdentifier: "Other Provider",
-					maxIssuedAt: now,
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,

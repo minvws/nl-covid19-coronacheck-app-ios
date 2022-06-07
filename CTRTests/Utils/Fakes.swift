@@ -1159,7 +1159,7 @@ extension EuCredentialAttributes {
 
 extension EventGroup {
 	
-	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, maxIssuedAt: Date) -> EventGroup? {
+	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, expiryDate: Date) -> EventGroup? {
 		
 		var eventGroup: EventGroup?
 		let context = dataStoreManager.managedObjectContext()
@@ -1168,8 +1168,7 @@ extension EventGroup {
 				eventGroup = EventGroupModel.create(
 					type: type,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: maxIssuedAt,
-					expiryDate: nil,
+					expiryDate: expiryDate,
 					jsonData: Data(),
 					wallet: wallet,
 					managedContext: context

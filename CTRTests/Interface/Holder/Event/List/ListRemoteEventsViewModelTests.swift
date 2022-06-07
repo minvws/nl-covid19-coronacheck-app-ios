@@ -3055,7 +3055,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.test,
-				maxIssuedAt: now
+				expiryDate: now
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]

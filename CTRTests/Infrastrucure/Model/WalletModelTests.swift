@@ -110,13 +110,11 @@ class WalletModelTests: XCTestCase {
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet, let json = "test_addEvent".data(using: .utf8) {
-				let date = Date()
 				
 				// When
 				eventGroup = EventGroupModel.create(
 					type: EventMode.recovery,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: date,
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
@@ -144,7 +142,6 @@ class WalletModelTests: XCTestCase {
 			   let eventGroup = EventGroupModel.create(
 				type: EventMode.recovery,
 				providerIdentifier: "CoronaCheck",
-				maxIssuedAt: Date(),
 				expiryDate: nil,
 				jsonData: json,
 				wallet: wallet,

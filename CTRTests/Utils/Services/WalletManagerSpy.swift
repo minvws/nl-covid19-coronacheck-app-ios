@@ -13,20 +13,19 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date, expiryDate: Date?)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date, expiryDate: Date?)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)]()
 	var stubbedStoreEventGroupResult: Bool! = false
 
 	func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		issuedAt: Date,
 		expiryDate: Date?) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
-		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, issuedAt, expiryDate)
-		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, issuedAt, expiryDate))
+		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, expiryDate)
+		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, expiryDate))
 		return stubbedStoreEventGroupResult
 	}
 
@@ -146,26 +145,14 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedExpireEventGroups = false
 	var invokedExpireEventGroupsCount = 0
-	var invokedExpireEventGroupsParameters: (configuration: RemoteConfiguration, Void)?
-	var invokedExpireEventGroupsParametersList = [(configuration: RemoteConfiguration, Void)]()
+	var invokedExpireEventGroupsParameters: (forDate: Date, Void)?
+	var invokedExpireEventGroupsParametersList = [(forDate: Date, Void)]()
 
-	func expireEventGroups(configuration: RemoteConfiguration) {
+	func expireEventGroups(forDate: Date) {
 		invokedExpireEventGroups = true
 		invokedExpireEventGroupsCount += 1
-		invokedExpireEventGroupsParameters = (configuration, ())
-		invokedExpireEventGroupsParametersList.append((configuration, ()))
-	}
-
-	var invokedExpireEventGroupsVaccinationValidity = false
-	var invokedExpireEventGroupsVaccinationValidityCount = 0
-	var invokedExpireEventGroupsVaccinationValidityParameters: (vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)?
-	var invokedExpireEventGroupsVaccinationValidityParametersList = [(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)]()
-
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
-		invokedExpireEventGroupsVaccinationValidity = true
-		invokedExpireEventGroupsVaccinationValidityCount += 1
-		invokedExpireEventGroupsVaccinationValidityParameters = (vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity)
-		invokedExpireEventGroupsVaccinationValidityParametersList.append((vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity))
+		invokedExpireEventGroupsParameters = (forDate, ())
+		invokedExpireEventGroupsParametersList.append((forDate, ()))
 	}
 
 	var invokedRemoveEventGroup = false
