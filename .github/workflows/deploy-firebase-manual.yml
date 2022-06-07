@@ -7,7 +7,7 @@ on:
       holder:
         description: "Build Holder Test + ACC + Prod"
         type: boolean
-        default: false
+        default: true
         required: false
       verifier:
         description: "Build Verifier Test + ACC + Prod"
