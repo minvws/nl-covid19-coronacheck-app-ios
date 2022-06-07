@@ -42,7 +42,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		reloadTimer?.invalidate()
 		reloadTimer = nil
 
-		removeExpiredEvents() // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
+		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
 		
 		let expiredGreenCards: [ExpiredQR] = removeExpiredGreenCards()
 		let cards: [HolderDashboardViewModel.QRCard] = fetchMyQRCards()
@@ -77,12 +77,6 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 			guard let originType = QRCodeOriginType(rawValue: originType) else { return nil }
 			return ExpiredQR(region: region, type: originType)
 		}
-	}
-	
-	private func removeExpiredEvents() {
-
-		let configuration = Current.remoteConfigManager.storedConfiguration
-		Current.walletManager.expireEventGroups(configuration: configuration)
 	}
 
 	/// Fetch the Greencards+Origins from Database
