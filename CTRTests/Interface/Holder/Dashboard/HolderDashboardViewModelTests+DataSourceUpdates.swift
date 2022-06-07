@@ -1096,7 +1096,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 			
 			// Exercise the validityText with different sample dates:
-			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(299 * days * fromNow))
 			expect(futureValidityTexts[0].kind) == .current
 			expect(futureValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 			
@@ -1107,6 +1107,10 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow))) == "Verloopt over 24 uur"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval((299 * days) - (6 * hours) * fromNow))) == "Verloopt over 1 dag en 6 uur"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval((299 * days) + (12 * hours) * fromNow))) == "Verloopt over 12 uur"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval((299 * days) + (23 * hours) + (30 * minutes) * fromNow))) == "Verloopt over 30 minuten"
 		}))
 	}
 	

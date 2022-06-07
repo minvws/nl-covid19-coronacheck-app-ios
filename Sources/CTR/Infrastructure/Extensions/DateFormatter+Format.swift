@@ -142,4 +142,12 @@ extension DateFormatter.Relative {
 		formatter.allowedUnits = [.day]
 		return formatter
 	}()
+	
+	/// e.g. `"1 day, 1 hour"`
+	static let daysHours: DateComponentsFormatter = {
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.allowedUnits = [.day, .hour]
+		return formatter
+	}()
 }

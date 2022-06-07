@@ -80,10 +80,17 @@ extension HolderDashboardViewModel {
 				}
 				
 				/// The point at which a countdown timer will be shown for this origin `type`
-				var countdownTimerVisibleThreshold: TimeInterval {
-					return type == .test
-						? 6 * 60 * 60 // tests have a countdown for last 6 hours
-						: 24 * 60 * 60 // everything else has countdown for last 24 hours
+				func countdownTimerVisibleThreshold(isInternational: Bool) -> TimeInterval? {
+					switch (isInternational, type) {
+						case (_, .test):
+							return 6 * 60 * 60 // tests have a countdown of 6 hours
+						case (_, .recovery):
+							return 21 * 24 * 60 * 60 // recoveries have a 21 day countdown
+						case (false, _):
+							return 24 * 60 * 60 // everything else Domestic has countdown for the last 24 hours
+						case (true, _):
+							return nil // other international `type`s have no countdown.
+					}
 				}
 			}
 			
