@@ -8,35 +8,35 @@
 import UIKit
 
 class ShowQROverlayView: BaseView {
-
+	
 	private var overlay: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = C.white()!.withAlphaComponent(0.8)
 		return view
 	}()
-
+	
 	private var innerView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = C.white()
 		return view
 	}()
-
+	
 	private let iconView: UIImageView = {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-
+	
 	/// The title label
 	private let titleLabel: UILabel = {
 		
 		return Label(bodyBold: nil).header().multiline()
 	}()
-
+	
 	let revealButton: Button = {
-
+		
 		let button = Button(title: "", style: .roundedBlackBorder)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
@@ -44,13 +44,13 @@ class ShowQROverlayView: BaseView {
 	}()
 	
 	let infoButton: Button = {
-
+		
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
 		return button
 	}()
-
+	
 	/// The display constants
 	private struct ViewTraits {
 		
@@ -74,19 +74,19 @@ class ShowQROverlayView: BaseView {
 			static let bottomMargin: CGFloat = 58.0
 		}
 	}
-
+	
 	/// Setup all the views
 	override func setupViews() {
-
+		
 		super.setupViews()
 		revealButton.addTarget(self, action: #selector(revealButtonTapped), for: .touchUpInside)
 		infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
 	}
-
+	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
-
+		
 		overlay.embed(in: self)
 		addSubview(innerView)
 		addSubview(iconView)
@@ -94,10 +94,10 @@ class ShowQROverlayView: BaseView {
 		addSubview(infoButton)
 		addSubview(revealButton)
 	}
-
+	
 	/// Setup the constraints
 	override func setupViewConstraints() {
-
+		
 		super.setupViewConstraints()
 		
 		setupInnerViewConstraints()
@@ -178,28 +178,28 @@ class ShowQROverlayView: BaseView {
 			)
 		])
 	}
-
+	
 	/// Setup all the accessibility traits
 	override func setupAccessibility() {
 		super.setupAccessibility()
-
+		
 		accessibilityElements = [titleLabel, infoButton, revealButton]
 	}
-
+	
 	// MARK: - Callbacks
-
+	
 	@objc func revealButtonTapped() {
-
+		
 		revealButtonCommand?()
 	}
 	
 	@objc func infoButtonTapped() {
-
+		
 		infoButtonCommand?()
 	}
-
+	
 	// MARK: Public Access
-
+	
 	/// The  title
 	var title: String? {
 		didSet {
@@ -208,22 +208,19 @@ class ShowQROverlayView: BaseView {
 				alignment: .center,
 				kerning: ViewTraits.Title.kerning
 			)
-			setupAccessibility()
 		}
 	}
-
+	
 	/// The  title
 	var action: String? {
 		didSet {
 			revealButton.title = action
-			setupAccessibility()
 		}
 	}
 	
 	var info: String? {
 		didSet {
 			infoButton.title = info
-			setupAccessibility()
 		}
 	}
 	
@@ -232,7 +229,7 @@ class ShowQROverlayView: BaseView {
 			iconView.image = icon
 		}
 	}
-
+	
 	var revealButtonCommand: (() -> Void)?
 	
 	var infoButtonCommand: (() -> Void)?

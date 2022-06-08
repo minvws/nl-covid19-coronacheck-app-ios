@@ -212,7 +212,7 @@ class ShowQRItemViewModel {
 	
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
-				
+		
 		switch greenCard.getType() {
 			case .none:
 				setQRNotValid()
