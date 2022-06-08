@@ -63,7 +63,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[5].field) == "Testdatum / Test date:"
 		expect(self.sut.details[5].value) == "woensdag 17 november 16:00"
 		expect(self.sut.details[6].field) == "Testuitslag / Test result:"
-		expect(self.sut.details[6].value) == "negatief (geen corona)"
+		expect(self.sut.details[6].value) == "negatief (geen corona) / negative (no coronavirus)"
 		expect(self.sut.details[7].field) == "Testlocatie / Testing centre:"
 		expect(self.sut.details[7].value) == "Test Centrum XXL"
 		expect(self.sut.details[8].field) == "Producent / Test manufacturer:"

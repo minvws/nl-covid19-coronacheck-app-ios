@@ -107,6 +107,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount += 1
 	}
 
+	var invokedUserWishesMoreInfoAboutExpiredQR = false
+	var invokedUserWishesMoreInfoAboutExpiredQRCount = 0
+
+	func userWishesMoreInfoAboutExpiredQR() {
+		invokedUserWishesMoreInfoAboutExpiredQR = true
+		invokedUserWishesMoreInfoAboutExpiredQRCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutHiddenQR = false
+	var invokedUserWishesMoreInfoAboutHiddenQRCount = 0
+
+	func userWishesMoreInfoAboutHiddenQR() {
+		invokedUserWishesMoreInfoAboutHiddenQR = true
+		invokedUserWishesMoreInfoAboutHiddenQRCount += 1
+	}
+
 	var invokedUserWishesMoreInfoAboutGettingTested = false
 	var invokedUserWishesMoreInfoAboutGettingTestedCount = 0
 
