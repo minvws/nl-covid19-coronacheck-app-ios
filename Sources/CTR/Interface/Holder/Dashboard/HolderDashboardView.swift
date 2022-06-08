@@ -85,6 +85,12 @@ final class HolderDashboardView: BaseView {
 		tabBar.delegate = self
 		scrollView.delegate = self
 		footerButtonView.isHidden = true
+		
+		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.updateStackViewInsets()
+		}
+		
+		updateStackViewInsets()
 	}
 	
 	/// Setup the view hierarchy
@@ -193,6 +199,32 @@ final class HolderDashboardView: BaseView {
 		
 		// Scroll via swipe gesture
 		return false
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		
+		updateStackViewInsets()
+	}
+	
+	private func updateStackViewInsets() {
+		let insets: NSDirectionalEdgeInsets = {
+			let horizontalInset: CGFloat
+			if traitCollection.preferredContentSizeCategory.isAccessibilityCategory || traitCollection.horizontalSizeClass == .compact {
+				horizontalInset = 0
+			} else {
+				// sometimes width/height are briefly mixed-up on app-launch:
+				let screenWidth = UIApplication.shared.statusBarOrientation.isPortrait
+					? min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+					: max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+				horizontalInset = CGFloat((screenWidth - screenWidth * 0.65) / 2)
+			}
+						
+			return NSDirectionalEdgeInsets(top: 0, leading: horizontalInset, bottom: 0, trailing: horizontalInset)
+		}()
+		
+		domesticScrollView.stackView.insets(insets)
+		internationalScrollView.stackView.insets(insets)
 	}
 	
 	// MARK: - Public Access
