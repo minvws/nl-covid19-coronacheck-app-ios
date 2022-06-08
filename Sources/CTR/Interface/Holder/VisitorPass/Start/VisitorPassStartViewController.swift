@@ -45,6 +45,6 @@ final class VisitorPassStartViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.navigateToTokenEntry() }
-		sceneView.contentTextView.linkTouched { [weak self] url in self?.viewModel.openUrl(url) }
+		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in self?.viewModel.openUrl(url) }
 	}
 }

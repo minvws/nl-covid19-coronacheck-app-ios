@@ -61,7 +61,7 @@ class FetchRemoteEventsViewController: BaseViewController {
 			self?.showAlert($0)
 		}
 
-		sceneView.contentTextView.linkTouched { [weak self] url in
+		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in
 
 			self?.viewModel.openUrl(url)
 		}

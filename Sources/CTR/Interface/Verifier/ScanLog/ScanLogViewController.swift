@@ -49,7 +49,7 @@ class ScanLogViewController: BaseViewController {
 		viewModel.$listHeader.binding = { [weak self] in self?.sceneView.listHeader = $0 }
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
-		sceneView.messageTextView.linkTouched { [weak self] url in
+		sceneView.messageTextView.linkTouchedHandler = { [weak self] url in
 
 			self?.viewModel.openUrl(url)
 		}

@@ -190,8 +190,7 @@ class ListStoredEventsView: ScrolledStackView {
 	
 	var messageLinkTapHandler: ((URL) -> Void)? {
 		didSet {
-			guard let linkTapHandler = messageLinkTapHandler else { return }
-			contentTextView.linkTouched(handler: linkTapHandler)
+			contentTextView.linkTouchedHandler = messageLinkTapHandler
 		}
 	}
 

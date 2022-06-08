@@ -74,7 +74,7 @@ class IncompleteDutchVaccinationView: ScrolledStackWithButtonView {
 	var linkTouchedHandler: ((URL) -> Void)? {
 		didSet {
 			[secondVaccineTextView].forEach { textView in
-				textView.linkTouched { [weak self] url in
+				textView.linkTouchedHandler = { [weak self] url in
 					self?.linkTouchedHandler?(url)
 				}
 			}

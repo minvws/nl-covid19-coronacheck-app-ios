@@ -13,9 +13,25 @@ import UIKit
 /// Can listen to selected links and updated text.
 class TextElement: UITextView, UITextViewDelegate {
     
-    private var linkHandlers = [(URL) -> Void]()
-    private var textChangedHandlers = [(String?) -> Void]()
-    
+	/// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
+	///
+	/// - parameter handler: The closure to be called when the user selects a link
+	var linkTouchedHandler: ((URL) -> Void)? {
+		didSet {
+			isSelectable = textChangedHandler != nil || linkTouchedHandler != nil
+		}
+	}
+	
+	/// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
+	///
+	/// - parameter handler: The closure to be called when the text is updated
+	var textChangedHandler: ((String?) -> Void)? {
+		didSet {
+			isSelectable = textChangedHandler != nil || linkTouchedHandler != nil
+			isEditable = textChangedHandler != nil
+		}
+	}
+	
     ///  Initializes the TextView with the given attributed string
     init(
         attributedText: NSAttributedString,
@@ -103,42 +119,21 @@ class TextElement: UITextView, UITextViewDelegate {
         }
     }
     
-    /// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
-    ///
-    /// - parameter handler: The closure to be called when the user selects a link
-    @discardableResult
-	func linkTouched(handler: @escaping (URL) -> Void) -> Self {
-        isSelectable = true
-        linkHandlers.append(handler)
-        return self
-    }
-    
-    /// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
-    ///
-    /// - parameter handler: The closure to be called when the text is updated
-    @discardableResult
-    func textChanged(handler: @escaping (String?) -> Void) -> Self {
-        isSelectable = true
-        isEditable = true
-        textChangedHandlers.append(handler)
-        return self
-    }
-    
     /// Delegate method to determine whether a URL can be interacted with
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+    func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         switch interaction {
             case .invokeDefaultAction:
-                linkHandlers.forEach { $0(URL) }
+				guard let linkTouchedHandler = linkTouchedHandler else { return false }
+				linkTouchedHandler(url)
             default:
-                return false
+                break
         }
-        
-        return false
+		return false
     }
     
     /// Delegate method which is called when the user has ended editing
     func textViewDidEndEditing(_ textView: UITextView) {
-        textChangedHandlers.forEach { $0(textView.text) }
+		textChangedHandler?(textView.text)
     }
     
     /// Delegate method which is called when the user has changed selection

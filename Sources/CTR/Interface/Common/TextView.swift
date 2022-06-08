@@ -69,6 +69,12 @@ class TextView: UIStackView {
                 
                 addArrangedSubview(element)
             }
+			
+			// Re-apply the `didSet` effect for the following
+			// (because `textElements` are nil until this callback):
+			self.applyLinkTouchedHandlerToTextElements()
+			self.applyTextChangedHandlerToTextElements()
+			self.applyLinkTextAttributesToTextElements()
         }
     }
     
@@ -82,9 +88,21 @@ class TextView: UIStackView {
     /// Helper variable to pass linkTextAttributes to each subview
     var linkTextAttributes: [NSAttributedString.Key: Any]? {
         didSet {
-            textElements.forEach { $0.linkTextAttributes = linkTextAttributes }
+            applyLinkTextAttributesToTextElements()
         }
     }
+	
+	var linkTouchedHandler: ((URL) -> Void)? {
+		didSet {
+			applyLinkTouchedHandlerToTextElements()
+		}
+	}
+	
+	var textChangedHandler: ((String?) -> Void)? {
+		didSet {
+			applyTextChangedHandlerToTextElements()
+		}
+	}
     
     /// Initializes the TextView by parsing the given string to HTML
     init(htmlText: String) {
@@ -124,28 +142,17 @@ class TextView: UIStackView {
 	func applyHTML(_ htmlText: String?, completion: (() -> Void)? = nil) {
 		NSAttributedString.makeFromHtml(text: htmlText, style: .bodyDark) { attributedString in
 			self.attributedText = attributedString
+			
+			// Re-apply the `didSet` effect for the following
+			// (because `textElements` are nil until this callback):
+			self.applyLinkTouchedHandlerToTextElements()
+			self.applyTextChangedHandlerToTextElements()
+			self.applyLinkTextAttributesToTextElements()
+			
 			completion?()
 		}
 	}
-    
-    /// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
-    ///
-    /// - parameter handler: The closure to be called when the user selects a link
-    @discardableResult
-    func linkTouched(handler: @escaping (URL) -> Void) -> Self {
-        textElements.forEach({ $0.linkTouched(handler: handler) })
-        return self
-    }
-    
-    /// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
-    ///
-    /// - parameter handler: The closure to be called when the text is updated
-    @discardableResult
-    func textChanged(handler: @escaping (String?) -> Void) -> Self {
-        textElements.forEach({ $0.textChanged(handler: handler) })
-        return self
-    }
-    
+ 
     /// Removes all arranged subviews
     @discardableResult
     func removeAllArrangedSubviews() -> [UIView] {
@@ -157,6 +164,20 @@ class TextView: UIStackView {
         }
         return removedSubviews
     }
+	
+	// MARK: - private functions
+	
+	private func applyLinkTouchedHandlerToTextElements() {
+		textElements.forEach { $0.linkTouchedHandler = linkTouchedHandler }
+	}
+	
+	private func applyTextChangedHandlerToTextElements() {
+		textElements.forEach({ $0.textChangedHandler = textChangedHandler })
+	}
+	
+	private func applyLinkTextAttributesToTextElements() {
+		textElements.forEach { $0.linkTextAttributes = linkTextAttributes }
+	}
 }
 
 extension NSAttributedString {
