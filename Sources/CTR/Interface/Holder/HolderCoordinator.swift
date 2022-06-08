@@ -4,6 +4,7 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -30,6 +31,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
+	func userWishesMoreInfoAboutExpiredQR()
+	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 	func userWishesMoreInfoAboutNoTestToken()
@@ -443,6 +446,56 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 						animated: true,
 						completion: self.userWishesToCreateAVaccinationQR
 					)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func userWishesMoreInfoAboutExpiredQR() {
+	
+		let viewModel = BottomSheetContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: "Verlopen QR Code",
+				body: "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>",
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: "Lees meer op CoronaCheck.nl",
+				secondaryAction: { [weak self] in
+					guard let self = self, let url = URL(string: "https://coronacheck.nl") else { return }
+					self.openUrl(url, inApp: true)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
+	}
+
+	func userWishesMoreInfoAboutHiddenQR() {
+		
+		let viewModel = BottomSheetContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: "Verborgen QR Code",
+				body: "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>",
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: "Lees meer op CoronaCheck.nl",
+				secondaryAction: { [weak self] in
+					guard let self = self, let url = URL(string: "https://coronacheck.nl") else { return }
+					self.openUrl(url, inApp: true)
 				}
 			),
 			linkTapHander: { [weak self] url in

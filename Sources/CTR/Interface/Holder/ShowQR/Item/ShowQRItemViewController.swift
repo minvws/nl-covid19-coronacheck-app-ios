@@ -42,10 +42,14 @@ class ShowQRItemViewController: BaseViewController {
 		
 		setupBinding()
 		setupListeners()
-
-		sceneView.irrelevantView.title = L.holderShowqrQrhidden()
-		sceneView.irrelevantView.action = L.holderShowqrShowqr()
-		sceneView.irrelevantView.actionButtonCommand = { [weak self] in self?.viewModel.revealIrrelevantQR() }
+		
+		viewModel.$overlayTitle.binding = { [weak self] in self?.sceneView.overlayView.title = $0 }
+		viewModel.$overlayRevealTitle.binding = { [weak self] in self?.sceneView.overlayView.action = $0 }
+		viewModel.$overlayInfoTitle.binding = { [weak self] in self?.sceneView.overlayView.info = $0 }
+		viewModel.$overlayIcon.binding = { [weak self] in self?.sceneView.overlayView.icon = $0 }
+		
+		sceneView.overlayView.revealButtonCommand = { [weak self] in self?.viewModel.revealHiddenQR() }
+		sceneView.overlayView.infoButtonCommand = { [weak self] in self?.viewModel.infoButtonTapped() }
 	}
 
 	private func setupBinding() {
@@ -105,6 +109,6 @@ class ShowQRItemViewController: BaseViewController {
 	override func viewDidDisappear(_ animated: Bool) {
 
 		super.viewDidDisappear(animated)
-		viewModel.resetIrrelevancy()
+		viewModel.resetHiddenState()
 	}
 }
