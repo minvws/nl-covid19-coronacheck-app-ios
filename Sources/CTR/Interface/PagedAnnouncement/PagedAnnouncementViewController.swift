@@ -46,7 +46,7 @@ class PagedAnnouncementViewController: BaseViewController {
 	// MARK: View lifecycle
 	override func loadView() {
 		
-		view = TraitWrapper(sceneView)
+		view = sceneView
 	}
 	
 	// the back button
