@@ -92,8 +92,7 @@ class BottomSheetContentView: BaseView {
 
 	var messageLinkTapHandler: ((URL) -> Void)? {
 		didSet {
-			guard let linkTapHandler = messageLinkTapHandler else { return }
-			messageLabel.linkTouched(handler: linkTapHandler)
+			messageLabel.linkTouchedHandler = messageLinkTapHandler
 		}
 	}
 	

@@ -143,7 +143,7 @@ private extension DCCQRDetailsView {
 				labelView.field = detail.field
 				labelView.value = detail.value
 				labelView.message = dosageMessage
-				labelView.messageTextView.linkTouched { [weak self] url in
+				labelView.messageTextView.linkTouchedHandler = { [weak self] url in
 					self?.dosageLinkTouchedCommand?(url)
 				}
 				stackView.addArrangedSubview(labelView)
