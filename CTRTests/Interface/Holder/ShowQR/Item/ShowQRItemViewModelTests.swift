@@ -45,6 +45,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -70,6 +71,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy1G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		
@@ -95,6 +97,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: nil,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -123,6 +126,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -147,6 +151,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: nil,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -172,6 +177,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
@@ -201,6 +207,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy1G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
@@ -230,6 +237,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: nil,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
@@ -255,6 +263,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: nil,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -266,8 +275,76 @@ class ShowQRItemViewModelTests: XCTestCase {
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
+		expect(self.sut.overlayIcon).to(beNil())
+		expect(self.sut.overlayTitle).to(beNil())
+		expect(self.sut.overlayInfoTitle).to(beNil())
+		expect(self.sut.overlayRevealTitle).to(beNil())
 	}
 
+	func test_validity_withEuGreenCard_withValidCredential_expired() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: nil,
+			state: .expired,
+			screenCaptureDetector: screenCaptureDetector
+		)
+
+		// When
+		sut?.checkQRValidity()
+
+		// Then
+		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beFalse())
+		expect(self.sut.visibilityState).toEventually(beOverlay())
+		expect(self.sut.validityTimer).toEventuallyNot(beNil())
+		expect(self.delegateSpy.invokedItemIsNotValid) == false
+		expect(self.sut.overlayIcon) == I.expired()
+		expect(self.sut.overlayTitle) == L.holder_qr_code_expired_overlay_title()
+		expect(self.sut.overlayInfoTitle) == L.holder_qr_code_hidden_explanation_button()
+		expect(self.sut.overlayRevealTitle) == L.holderShowqrShowqr()
+	}
+
+	func test_validity_withEuGreenCard_withValidCredential_irrelevant() throws {
+
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: nil,
+			state: .irrelevant,
+			screenCaptureDetector: screenCaptureDetector
+		)
+
+		// When
+		sut?.checkQRValidity()
+
+		// Then
+		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beFalse())
+		expect(self.sut.visibilityState).toEventually(beOverlay())
+		expect(self.sut.validityTimer).toEventuallyNot(beNil())
+		expect(self.delegateSpy.invokedItemIsNotValid) == false
+		expect(self.sut.overlayIcon) == I.eye()
+		expect(self.sut.overlayTitle) == L.holderShowqrQrhidden()
+		expect(self.sut.overlayInfoTitle) == L.holder_qr_code_hidden_explanation_button()
+		expect(self.sut.overlayRevealTitle) == L.holderShowqrShowqr()
+	}
+	
 	/// Test taking a screenshot
 	func testScreenshot() throws {
 
@@ -283,6 +360,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -309,6 +387,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -336,6 +415,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -359,6 +439,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
@@ -423,7 +504,7 @@ extension GreenCardModel {
 }
 
 private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
-	return Predicate.define("be .expiredQR with matching values") { expression, message in
+	return Predicate.define("be .visible with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .visible(qrImage: image) = actual {
 			test(image)
@@ -432,8 +513,18 @@ private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicat
 		return PredicateResult(status: .fail, message: message)
 	}
 }
+private func beOverlay(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
+	return Predicate.define("be .overlay with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .overlay(qrImage: image) = actual {
+			test(image)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
 private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
-	return Predicate.define("be .expiredQR with matching values") { expression, message in
+	return Predicate.define("be .screenshotBlocking with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .screenshotBlocking(timeRemainingText, voiceoverTimeRemainingText) = actual {
 			test(timeRemainingText, voiceoverTimeRemainingText)
