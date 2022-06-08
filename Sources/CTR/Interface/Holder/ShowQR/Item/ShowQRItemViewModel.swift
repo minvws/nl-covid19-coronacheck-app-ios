@@ -143,15 +143,15 @@ class ShowQRItemViewModel {
 		
 		switch state {
 			case .expired:
-				overlayTitle = "QR-code is verlopen"
+				overlayTitle = L.holder_qr_code_expired_overlay_title()
 				overlayIcon = I.expired()
-				overlayRevealTitle = "Laat toch zien"
-				overlayInfoTitle = "Wat betekent dit?"
+				overlayRevealTitle = L.holderShowqrShowqr()
+				overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
 			case .irrelevant:
-				overlayTitle = "QR-code is verborgen"
+				overlayTitle = L.holderShowqrQrhidden()
 				overlayIcon = I.eye()
-				overlayRevealTitle = "Laat toch zien"
-				overlayInfoTitle = "Wat betekent dit?"
+				overlayRevealTitle = L.holderShowqrShowqr()
+				overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
 			case .regular:
 				break
 		}
