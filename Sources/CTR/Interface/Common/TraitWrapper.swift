@@ -9,17 +9,17 @@ import UIKit
 
 class TraitWrapper<View: BaseView>: BaseView {
 	
-	let sceneView: View
+	let wrappedView: View
 	
-	private lazy var constrainedWidthConstraint: NSLayoutConstraint = sceneView.widthAnchor.constraint(equalTo: widthAnchor)
+	private lazy var constrainedWidthConstraint: NSLayoutConstraint = wrappedView.widthAnchor.constraint(equalTo: widthAnchor)
 	private lazy var regularWidthConstraint: NSLayoutConstraint = {
-		NSLayoutConstraint(item: sceneView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 0.666, constant: 1)
+		NSLayoutConstraint(item: wrappedView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 0.666, constant: 1)
 	}()
 	
 	private var backgroundColorObserverToken: NSKeyValueObservation?
 
 	init(_ sceneView: View) {
-		self.sceneView = sceneView
+		self.wrappedView = sceneView
 		super.init(frame: .zero)
 	}
 	
@@ -30,13 +30,13 @@ class TraitWrapper<View: BaseView>: BaseView {
 	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
-		sceneView.translatesAutoresizingMaskIntoConstraints = false
+		wrappedView.translatesAutoresizingMaskIntoConstraints = false
 	}
 
 	/// Setup the view hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
-		addSubview(sceneView)
+		addSubview(wrappedView)
 
 		setupBackgroundColorObserver()
 	}
@@ -51,9 +51,9 @@ class TraitWrapper<View: BaseView>: BaseView {
 		])
 		
 		NSLayoutConstraint.activate([
-			sceneView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			sceneView.topAnchor.constraint(equalTo: topAnchor),
-			sceneView.bottomAnchor.constraint(equalTo: bottomAnchor)
+			wrappedView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			wrappedView.topAnchor.constraint(equalTo: topAnchor),
+			wrappedView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 		
 		activateCorrectConstraint(forTraitCollection: traitCollection)
@@ -72,10 +72,10 @@ class TraitWrapper<View: BaseView>: BaseView {
 	
 	private func setupBackgroundColorObserver() {
 		// Observe the sceneView background color for changes and apply to self:
-		backgroundColorObserverToken = sceneView.observe(\.observableBackgroundColor, options: [.new]) { [weak self] _, change in
+		backgroundColorObserverToken = wrappedView.observe(\.observableBackgroundColor, options: [.new]) { [weak self] _, change in
 			self?.backgroundColor = change.newValue!
 		}
-		self.backgroundColor = sceneView.backgroundColor
+		self.backgroundColor = wrappedView.backgroundColor
 	}
 	
 	private func activateCorrectConstraint(forTraitCollection traitCollection: UITraitCollection) {
