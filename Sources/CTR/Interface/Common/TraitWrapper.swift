@@ -80,8 +80,8 @@ class TraitWrapper<View: BaseView>: BaseView {
 	
 	private func activateCorrectConstraint(forTraitCollection traitCollection: UITraitCollection) {
 		
-		switch traitCollection.horizontalSizeClass {
-			case .regular:
+		switch (traitCollection.preferredContentSizeCategory.isAccessibilityCategory, traitCollection.horizontalSizeClass) {
+			case (false, .regular):
 				constrainedWidthConstraint.isActive = false
 				regularWidthConstraint.isActive = true
 			default:
