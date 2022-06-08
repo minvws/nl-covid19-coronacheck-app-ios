@@ -10,17 +10,19 @@ import UIKit
 /// A styled UIButton subclass
 class Button: TappableButton {
 	
-    enum ButtonType {
+	enum ButtonType {
 		/// Rounded, blue background, white text
-        case roundedBlue
+		case roundedBlue
 		/// Rounded, white background, dark text
-        case roundedWhite
+		case roundedWhite
 		/// Rounded, clear background, dark border
 		case roundedClear
 		/// Rounded, white background, blue text, blue border
 		case roundedBlueBorder
+		/// Rounded, white background, black text, black border
+		case roundedBlackBorder
 		/// Text only, blue text
-        case textLabelBlue
+		case textLabelBlue
 		/// Rounded, blue background, white text, right image with label in center
 		case roundedBlueImage
 		
@@ -28,7 +30,7 @@ class Button: TappableButton {
 			switch self {
 				case .roundedBlue, .roundedBlueImage:
 					return isEnabled ? C.primaryBlue()! : C.grey5()!
-				case .roundedWhite, .roundedBlueBorder:
+				case .roundedWhite, .roundedBlueBorder, .roundedBlackBorder:
 					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedClear, .textLabelBlue:
 					return .clear
@@ -41,7 +43,7 @@ class Button: TappableButton {
 					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedWhite:
 					return C.black()!
-				case .roundedClear:
+				case .roundedClear, .roundedBlackBorder:
 					return isEnabled ? C.black()! : C.grey2()!
 				case .textLabelBlue:
 					return isEnabled ? C.primaryBlue()! : C.grey2()!
@@ -69,6 +71,8 @@ class Button: TappableButton {
 			switch self {
 				case .roundedBlueBorder:
 					return isEnabled ? C.primaryBlue()! : C.grey2()!
+				case .roundedBlackBorder:
+					return C.black()!
 				default:
 					return isEnabled ? C.black()! : C.grey2()!
 			}
@@ -76,7 +80,7 @@ class Button: TappableButton {
 		
 		var borderWidth: CGFloat {
 			switch self {
-				case .roundedClear, .roundedBlueBorder: return 1
+				case .roundedClear, .roundedBlueBorder, .roundedBlackBorder: return 1
 				default: return 0
 			}
 		}
@@ -94,34 +98,34 @@ class Button: TappableButton {
 				default: return 0
 			}
 		}
-    }
-
-    var style = ButtonType.roundedBlue {
-        didSet {
+	}
+	
+	var style = ButtonType.roundedBlue {
+		didSet {
 			setupButtonType()
-        }
-    }
-
+		}
+	}
+	
 	var title: String? = "" {
-        didSet {
-            setTitle(title, for: .normal)
-        }
-    }
-
-    override var isEnabled: Bool {
-        didSet {
+		didSet {
+			setTitle(title, for: .normal)
+		}
+	}
+	
+	override var isEnabled: Bool {
+		didSet {
 			setupColors()
-        }
-    }
-
-    var useHapticFeedback = true
-
-    // MARK: - Init
-
-    required init(title: String = "", style: ButtonType = .roundedBlue) {
-
-        super.init(frame: .zero)
-
+		}
+	}
+	
+	var useHapticFeedback = true
+	
+	// MARK: - Init
+	
+	required init(title: String = "", style: ButtonType = .roundedBlue) {
+		
+		super.init(frame: .zero)
+		
 		defer {
 			self.title = title
 			self.style = style
@@ -130,54 +134,54 @@ class Button: TappableButton {
 		// multiline
 		self.titleLabel?.lineBreakMode = .byWordWrapping
 		self.titleLabel?.numberOfLines = 0
-
-        self.clipsToBounds = true
-
+		
+		self.clipsToBounds = true
+		
 		self.addTarget(self, action: #selector(self.touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
-        self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
-
+		self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
+		
 		self.translatesAutoresizingMaskIntoConstraints = false
 		
 		setupAccessibility()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    @discardableResult
-    func touchUpInside(_ target: Any?, action: Selector) -> Self {
-
-        super.addTarget(target, action: action, for: .touchUpInside)
-        return self
-    }
-
-    // MARK: - Overrides
-
-    override func layoutSubviews() {
-
-        super.layoutSubviews()
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	@discardableResult
+	func touchUpInside(_ target: Any?, action: Selector) -> Self {
+		
+		super.addTarget(target, action: action, for: .touchUpInside)
+		return self
+	}
+	
+	// MARK: - Overrides
+	
+	override func layoutSubviews() {
+		
+		super.layoutSubviews()
 		layer.cornerRadius = style.isRounded ? min(bounds.width, bounds.height) / 2 : 0
 		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
-    }
+	}
 	
 	/// Calculates content size including insets for dynamic font size scaling
 	override var intrinsicContentSize: CGSize {
-        let fittingSize = titleLabel?.sizeThatFits(
-            CGSize(width: frame.width, height: .greatestFiniteMagnitude)
-        ) ?? .zero
-        let intrinsicSize = titleLabel?.intrinsicContentSize ?? CGSize.zero
-
-        let maxWidth = max(fittingSize.width, intrinsicSize.width)
-        let maxHeight = max(fittingSize.height, intrinsicSize.height)
-
-        let horizontalContentPadding = contentEdgeInsets.left + contentEdgeInsets.right
-        let verticalContentPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
-
-        return CGSize(
-            width: maxWidth + horizontalContentPadding,
-            height: maxHeight + verticalContentPadding
-        )
+		let fittingSize = titleLabel?.sizeThatFits(
+			CGSize(width: frame.width, height: .greatestFiniteMagnitude)
+		) ?? .zero
+		let intrinsicSize = titleLabel?.intrinsicContentSize ?? CGSize.zero
+		
+		let maxWidth = max(fittingSize.width, intrinsicSize.width)
+		let maxHeight = max(fittingSize.height, intrinsicSize.height)
+		
+		let horizontalContentPadding = contentEdgeInsets.left + contentEdgeInsets.right
+		let verticalContentPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
+		
+		return CGSize(
+			width: maxWidth + horizontalContentPadding,
+			height: maxHeight + verticalContentPadding
+		)
 	}
 	
 	override func setImage(_ image: UIImage?, for state: UIControl.State) {
@@ -199,9 +203,9 @@ class Button: TappableButton {
 		
 		super.setImage(image, for: state)
 	}
-
-    // MARK: - Private
-
+	
+	// MARK: - Private
+	
 	private func setupButtonType() {
 		
 		setupColors()
@@ -231,20 +235,20 @@ class Button: TappableButton {
 			largeContentImage = nil
 		}
 	}
-
-    @objc private func touchDownAnimation() {
-
-        if useHapticFeedback { Haptic.light() }
-
-        UIButton.animate(withDuration: 0.2, animations: {
-            self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
-        })
-    }
-
-    @objc private func touchUpAnimation() {
-
-        UIButton.animate(withDuration: 0.2, animations: {
-            self.transform = CGAffineTransform.identity
-        })
-    }
+	
+	@objc private func touchDownAnimation() {
+		
+		if useHapticFeedback { Haptic.light() }
+		
+		UIButton.animate(withDuration: 0.2, animations: {
+			self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+		})
+	}
+	
+	@objc private func touchUpAnimation() {
+		
+		UIButton.animate(withDuration: 0.2, animations: {
+			self.transform = CGAffineTransform.identity
+		})
+	}
 }
