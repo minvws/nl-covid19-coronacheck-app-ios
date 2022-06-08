@@ -463,13 +463,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = BottomSheetContentViewModel(
 			coordinator: self,
 			content: Content(
-				title: "Verlopen QR Code",
-				body: "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>",
+				title: L.holder_qr_code_expired_explanation_title(),
+				body: L.holder_qr_code_expired_explanation_description(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
-				secondaryActionTitle: "Lees meer op CoronaCheck.nl",
+				secondaryActionTitle: L.holder_qr_code_expired_explanation_action(),
 				secondaryAction: { [weak self] in
-					guard let self = self, let url = URL(string: "https://coronacheck.nl") else { return }
+					guard let self = self,
+						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
 					self.openUrl(url, inApp: true)
 				}
 			),
@@ -488,13 +489,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewModel = BottomSheetContentViewModel(
 			coordinator: self,
 			content: Content(
-				title: "Verborgen QR Code",
-				body: "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>",
+				title: L.holder_qr_code_hidden_explanation_title(),
+				body: L.holder_qr_code_hidden_explanation_description(),
 				primaryActionTitle: nil,
 				primaryAction: nil,
-				secondaryActionTitle: "Lees meer op CoronaCheck.nl",
+				secondaryActionTitle: L.holder_qr_code_hidden_explanation_action(),
 				secondaryAction: { [weak self] in
-					guard let self = self, let url = URL(string: "https://coronacheck.nl") else { return }
+					guard let self = self,
+							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
 					self.openUrl(url, inApp: true)
 				}
 			),
