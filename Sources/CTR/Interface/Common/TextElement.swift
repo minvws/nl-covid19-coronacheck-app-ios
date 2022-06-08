@@ -122,11 +122,11 @@ class TextElement: UITextView, UITextViewDelegate {
 	/// Delegate method to determine whether a URL can be interacted with
 	func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
 		switch interaction {
-		case .invokeDefaultAction:
-			guard let linkTouchedHandler = linkTouchedHandler else { return false }
-			linkTouchedHandler(url)
-		default:
-			break
+			case .invokeDefaultAction:
+				guard let linkTouchedHandler = linkTouchedHandler else { return false }
+				linkTouchedHandler(url)
+			default:
+				break
 		}
 		return false
 	}
