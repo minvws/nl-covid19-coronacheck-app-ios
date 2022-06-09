@@ -26,23 +26,17 @@ final class PaperProofScanView: BaseView {
 	}()
 	
 	let scanView = ScanView()
-	
-	// A dummy view to move the scrollview below the mask on the overlay
-	let dummyView: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
 
 	let scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
+		scrollView.accessibilityIdentifier = "scrollViewA"
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		return scrollView
 	}()
 	
 	override func setupViews() {
 		super.setupViews()
-		
+		scanView.accessibilityIdentifier = "scanView"
 		backgroundColor = C.white()
 	}
 	
@@ -50,7 +44,6 @@ final class PaperProofScanView: BaseView {
 		super.setupViewHierarchy()
 		
 		scanView.embed(in: self)
-		addSubview(dummyView)
 		addSubview(scrollView)
 		scrollView.addSubview(messageLabel)
 	}
@@ -58,30 +51,15 @@ final class PaperProofScanView: BaseView {
 	override func setupViewConstraints() {
 		
 		super.setupViewConstraints()
-		setupDummyViewConstraints()
 		setupScrollViewConstraints()
 		setupMessageLabelViewConstraints()
-	}
-	
-	func setupDummyViewConstraints() {
-		
-		NSLayoutConstraint.activate([
-			// Dummy
-			dummyView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
-			),
-			dummyView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			dummyView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			dummyView.heightAnchor.constraint(equalTo: widthAnchor)
-		])
 	}
 	
 	func setupScrollViewConstraints() {
 		
 		NSLayoutConstraint.activate([
 			// ScrollView
-			scrollView.topAnchor.constraint(equalTo: dummyView.bottomAnchor),
+			scrollView.topAnchor.constraint(lessThanOrEqualTo: scanView.maskLayoutGuide.bottomAnchor, constant: 40),
 			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
