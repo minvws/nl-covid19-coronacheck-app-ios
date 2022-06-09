@@ -13,13 +13,13 @@ struct RemoteGreenCards: Codable {
 
 		let domesticGreenCard: DomesticGreenCard?
 		let euGreenCards: [EuGreenCard]?
-		let blobExpiries: [BlobExpiry]?
+		let blobExpireDates: [BlobExpiry]?
 
 		enum CodingKeys: String, CodingKey {
 
 			case domesticGreenCard = "domesticGreencard"
 			case euGreenCards = "euGreencards"
-			case blobExpiries
+			case blobExpireDates
 		}
 
 		func getOrigins(ofType: String) -> [RemoteGreenCards.Origin] {

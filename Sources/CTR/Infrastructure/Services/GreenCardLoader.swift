@@ -179,8 +179,8 @@ class GreenCardLoader: GreenCardLoading {
 			}
 		}
 		// Expiries
-		if let blobExpiries = response.blobExpiries {
-			for expiry in blobExpiries {
+		if let blobExpireDates = response.blobExpireDates {
+			for expiry in blobExpireDates {
 				walletManager.updateEventGroup(identifier: expiry.identifier, expiryDate: expiry.expirationDate)
 			}
 		}
