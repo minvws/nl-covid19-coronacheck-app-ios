@@ -344,6 +344,7 @@ class ShowQRViewModelTests: XCTestCase {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: "Test"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: "2 / 2"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: "01-06-2021"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.daysElapsed, value: "44 dagen"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: "Nederland / The Netherlands"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: "Test"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "test")
