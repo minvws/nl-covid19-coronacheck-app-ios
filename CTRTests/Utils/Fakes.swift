@@ -445,7 +445,8 @@ extension RemoteGreenCards.Response {
 	static var emptyResponse: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
 			domesticGreenCard: nil,
-			euGreenCards: []
+			euGreenCards: [],
+			blobExpireDates: []
 		)
 	}
 
@@ -464,7 +465,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -477,6 +479,12 @@ extension RemoteGreenCards.Response {
 						RemoteGreenCards.Origin.fakeVaccinationOrigin
 					],
 					credential: "test credential"
+				)
+			],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: "12345",
+					expirationDate: Formatter.getDateFrom(dateString8601: "2024-07-06:12:00:00+00:00")!
 				)
 			]
 		)
@@ -503,7 +511,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential2"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 
@@ -518,7 +527,8 @@ extension RemoteGreenCards.Response {
 					origins: [],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 
@@ -544,7 +554,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -570,7 +581,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -595,7 +607,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -615,7 +628,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -629,7 +643,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -641,7 +656,8 @@ extension RemoteGreenCards.Response {
 				],
 				createCredentialMessages: "test"
 			),
-			euGreenCards: []
+			euGreenCards: [],
+			blobExpireDates: []
 		)
 	}
 	
@@ -653,7 +669,8 @@ extension RemoteGreenCards.Response {
 				],
 				createCredentialMessages: "test"
 			),
-			euGreenCards: []
+			euGreenCards: [],
+			blobExpireDates: []
 		)
 	}
 	
@@ -673,7 +690,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 
@@ -692,7 +710,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 	
@@ -711,7 +730,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "test credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 
@@ -749,7 +769,8 @@ extension RemoteGreenCards.Response {
 					],
 					credential: "recovery credential"
 				)
-			]
+			],
+			blobExpireDates: []
 		)
 	}
 }
@@ -1143,7 +1164,7 @@ extension EuCredentialAttributes {
 
 extension EventGroup {
 	
-	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, maxIssuedAt: Date) -> EventGroup? {
+	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, expiryDate: Date) -> EventGroup? {
 		
 		var eventGroup: EventGroup?
 		let context = dataStoreManager.managedObjectContext()
@@ -1152,7 +1173,7 @@ extension EventGroup {
 				eventGroup = EventGroupModel.create(
 					type: type,
 					providerIdentifier: "CoronaCheck",
-					maxIssuedAt: maxIssuedAt,
+					expiryDate: expiryDate,
 					jsonData: Data(),
 					wallet: wallet,
 					managedContext: context

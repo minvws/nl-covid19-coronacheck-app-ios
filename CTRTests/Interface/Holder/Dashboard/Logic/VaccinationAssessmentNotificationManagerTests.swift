@@ -66,7 +66,7 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.test,
-				maxIssuedAt: now
+				expiryDate: now
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
@@ -86,7 +86,7 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.vaccinationassessment,
-				maxIssuedAt: now
+				expiryDate: now.addingTimeInterval(14 * days)
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
@@ -101,13 +101,12 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 	func test_noAssessmentOrigin_withAlmostExpiredAssessmentEvent_twoHoursBeforeExpiration() throws {
 		
 		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
 		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
 		let eventGroup = try XCTUnwrap(
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.vaccinationassessment,
-				maxIssuedAt: now
+				expiryDate: now.addingTimeInterval(14 * days)
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
@@ -122,13 +121,12 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 	func test_noAssessmentOrigin_withAlmostExpiredAssessmentEvent_oneHourBeforeExpiration() throws {
 		
 		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
 		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
 		let eventGroup = try XCTUnwrap(
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.vaccinationassessment,
-				maxIssuedAt: now
+				expiryDate: now.addingTimeInterval(14 * days)
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
@@ -137,19 +135,18 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 		let result = sut.hasVaccinationAssessmentEventButNoOrigin(now: now.addingTimeInterval(((14 * 24) - 1) * hours)) // one hour before expiration
 		
 		// Then
-		expect(result) == false
+		expect(result) == true
 	}
 	
 	func test_noAssessmentOrigin_withExpiredAssessmentEvent_atExpiration() throws {
 		
 		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
 		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
 		let eventGroup = try XCTUnwrap(
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.vaccinationassessment,
-				maxIssuedAt: now
+				expiryDate: now.addingTimeInterval(14 * days)
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
@@ -164,13 +161,12 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 	func test_noAssessmentOrigin_withExpiredAssessmentEvent_oneDayLater() throws {
 		
 		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.vaccinationAssessmentEventValidityDays = 14
 		environmentSpies.walletManagerSpy.stubbedGreencardsWithUnexpiredOriginsResult = []
 		let eventGroup = try XCTUnwrap(
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.vaccinationassessment,
-				maxIssuedAt: now
+				expiryDate: now.addingTimeInterval(14 * days)
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
@@ -198,7 +194,7 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
 				type: EventMode.vaccinationassessment,
-				maxIssuedAt: now
+				expiryDate: now
 			)
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
