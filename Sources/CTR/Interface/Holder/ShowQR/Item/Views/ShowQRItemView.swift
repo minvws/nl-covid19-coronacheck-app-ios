@@ -15,11 +15,6 @@ class ShowQRItemView: BaseView {
 		case overlay(qrImage: UIImage)
 		case hiddenForScreenCapture
 		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
-		
-		var isVisible: Bool {
-			if case .visible = self { return true }
-			return false
-		}
 	}
 	/// The display constants
 	private struct ViewTraits {

@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import UIKit
 import XCTest
@@ -456,6 +457,84 @@ class ShowQRItemViewModelTests: XCTestCase {
 		// And disable again:
 		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(false)
 		expect(self.sut.visibilityState).toEventually(beVisible())
+	}
+		
+	func test_infoButtonTapped_regular() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
+			state: .regular,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		
+		// When
+		sut.infoButtonTapped()
+		
+		// Then
+		expect(self.delegateSpy.invokedShowInfoHiddenQR) == false
+		expect(self.delegateSpy.invokedShowInfoExpiredQR) == false
+	}
+	
+	func test_infoButtonTapped_expired() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
+			state: .expired,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		
+		// When
+		sut.infoButtonTapped()
+		
+		// Then
+		expect(self.delegateSpy.invokedShowInfoHiddenQR) == false
+		expect(self.delegateSpy.invokedShowInfoExpiredQR) == true
+	}
+	
+	func test_infoButtonTapped_irrelevant() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+		sut = ShowQRItemViewModel(
+			delegate: delegateSpy,
+			greenCard: greenCard,
+			disclosurePolicy: .policy3G,
+			state: .irrelevant,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		
+		// When
+		sut.infoButtonTapped()
+		
+		// Then
+		expect(self.delegateSpy.invokedShowInfoHiddenQR) == true
+		expect(self.delegateSpy.invokedShowInfoExpiredQR) == false
 	}
 }
 
