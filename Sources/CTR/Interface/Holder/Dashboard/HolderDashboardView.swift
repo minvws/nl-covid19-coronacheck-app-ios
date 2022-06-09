@@ -208,21 +208,21 @@ final class HolderDashboardView: BaseView {
 	}
 	
 	private func updateStackViewInsets() {
-		let insets: NSDirectionalEdgeInsets = {
-			let horizontalInset: CGFloat
-			if traitCollection.preferredContentSizeCategory.isAccessibilityCategory || traitCollection.horizontalSizeClass == .compact {
-				horizontalInset = 0
-			} else {
-				// sometimes width/height are briefly mixed-up on app-launch:
-				let screenWidth = UIApplication.shared.statusBarOrientation.isPortrait
-					? min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-					: max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-				horizontalInset = CGFloat((screenWidth - screenWidth * 0.65) / 2)
-			}
-						
-			return NSDirectionalEdgeInsets(top: 0, leading: horizontalInset, bottom: 0, trailing: horizontalInset)
+		let insets: NSDirectionalEdgeInsets? = {
+			guard !(traitCollection.preferredContentSizeCategory.isAccessibilityCategory || traitCollection.horizontalSizeClass == .compact)
+			else { return nil }
+			
+			// sometimes width/height are briefly mixed-up on app-launch:
+			let screenWidth = UIApplication.shared.statusBarOrientation.isPortrait
+				? min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+				: max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+			
+			let horizontalInset = CGFloat((screenWidth - screenWidth * 0.65) / 2)
+			return NSDirectionalEdgeInsets(top: 8, leading: horizontalInset, bottom: 8, trailing: horizontalInset)
 		}()
 		
+		guard let insets = insets else { return }
+
 		domesticScrollView.stackView.insets(insets)
 		internationalScrollView.stackView.insets(insets)
 	}
