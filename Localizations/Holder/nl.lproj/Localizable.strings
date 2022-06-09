@@ -388,7 +388,7 @@
 "holder.showqr.eu.about.test.issuer" = "Afgever certificaat / Certificate issuer:";
 "holder.showqr.eu.about.test.manufacturer" = "Producent / Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Naam / Name:";
-"holder.showqr.eu.about.test.negative" = "negatief (geen corona) / negative (no coronavirus)";
+"holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
