@@ -10,6 +10,10 @@ import UIKit
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	
 	func itemIsNotValid()
+	
+	func showInfoExpiredQR()
+	
+	func showInfoHiddenQR()
 }
 
 class ShowQRItemViewModel {
@@ -31,9 +35,10 @@ class ShowQRItemViewModel {
 	
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
-	private var qrShouldBeHidden: Bool
+	private var qrShouldBeHidden: Bool = false
 	private let qrShouldInitiallyBeHidden: Bool
 	private let disclosusePolicy: DisclosurePolicy?
+	private let state: ShowQRState
 	
 	private var currentQRImage: UIImage? {
 		didSet {
@@ -52,8 +57,11 @@ class ShowQRItemViewModel {
 		}
 	}
 	
+	@Bindable private(set) var overlayTitle: String?
+	@Bindable private(set) var overlayIcon: UIImage?
+	@Bindable private(set) var overlayRevealTitle: String?
+	@Bindable private(set) var overlayInfoTitle: String?
 	@Bindable private(set) var qrAccessibility: String?
-	
 	@Bindable private(set) var visibilityState: ShowQRItemView.VisibilityState = .loading
 	
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
@@ -63,13 +71,13 @@ class ShowQRItemViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - greenCard: a greencard to display
 	///   - disclosurePolicy: the policy to disclose the QR with (1G / 3G)
-	///   - qrShouldInitiallyBeHidden: boolean indicating if the QR should initially be hidden.
+	///   - state: ShowQR State (normal, irrelevant, expired)
 	///   - screenCaptureDetector: the screen capture detector
 	init(
 		delegate: ShowQRItemViewModelDelegate,
 		greenCard: GreenCard,
 		disclosurePolicy: DisclosurePolicy?,
-		qrShouldInitiallyBeHidden: Bool = false,
+		state: ShowQRState,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()
 	) {
 		
@@ -77,8 +85,18 @@ class ShowQRItemViewModel {
 		self.greenCard = greenCard
 		self.disclosusePolicy = disclosurePolicy
 		self.screenCaptureDetector = screenCaptureDetector
-		self.qrShouldBeHidden = qrShouldInitiallyBeHidden
-		self.qrShouldInitiallyBeHidden = qrShouldInitiallyBeHidden
+		self.state = state
+		switch self.state {
+			case .irrelevant:
+				self.qrShouldBeHidden = true
+				self.qrShouldInitiallyBeHidden = true
+			case .expired:
+				self.qrShouldBeHidden = true
+				self.qrShouldInitiallyBeHidden = true
+			case .regular:
+				self.qrShouldBeHidden = false
+				self.qrShouldInitiallyBeHidden = false
+		}
 		
 		if greenCard.getType() == GreenCardType.domestic {
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
@@ -114,10 +132,29 @@ class ShowQRItemViewModel {
 		}
 		
 		updateQRVisibility()
+		setupOverlay()
 	}
 	
 	deinit {
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
+	}
+	
+	func setupOverlay() {
+		
+		switch state {
+			case .expired:
+				overlayTitle = L.holder_qr_code_expired_overlay_title()
+				overlayIcon = I.expired()
+				overlayRevealTitle = L.holderShowqrShowqr()
+				overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
+			case .irrelevant:
+				overlayTitle = L.holderShowqrQrhidden()
+				overlayIcon = I.eye()
+				overlayRevealTitle = L.holderShowqrShowqr()
+				overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
+			case .regular:
+				break
+		}
 	}
 	
 	func updateQRVisibility() {
@@ -144,7 +181,7 @@ class ShowQRItemViewModel {
 			self.visibilityState = .hiddenForScreenCapture
 		} else if let currentQRImage = self.currentQRImage {
 			if qrShouldBeHidden {
-				self.visibilityState = .irrelevant(qrImage: currentQRImage)
+				self.visibilityState = .overlay(qrImage: currentQRImage)
 			} else {
 				self.visibilityState = .visible(qrImage: currentQRImage)
 			}
@@ -175,7 +212,7 @@ class ShowQRItemViewModel {
 	
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
-				
+		
 		switch greenCard.getType() {
 			case .none:
 				setQRNotValid()
@@ -248,14 +285,26 @@ class ShowQRItemViewModel {
 		validityTimer = nil
 	}
 	
-	func revealIrrelevantQR() {
+	func revealHiddenQR() {
 		
 		qrShouldBeHidden = false
 		updateQRVisibility()
 	}
 	
-	func resetIrrelevancy() {
+	func resetHiddenState() {
 		
 		qrShouldBeHidden = qrShouldInitiallyBeHidden
+	}
+	
+	func infoButtonTapped() {
+		
+		switch state {
+			case .expired:
+				delegate?.showInfoExpiredQR()
+			case .irrelevant:
+				delegate?.showInfoHiddenQR()
+			case .regular:
+				break
+		}
 	}
 }

@@ -17,4 +17,20 @@ class ShowQRItemViewModelDelegateSpy: ShowQRItemViewModelDelegate {
 		invokedItemIsNotValid = true
 		invokedItemIsNotValidCount += 1
 	}
+
+	var invokedShowInfoExpiredQR = false
+	var invokedShowInfoExpiredQRCount = 0
+
+	func showInfoExpiredQR() {
+		invokedShowInfoExpiredQR = true
+		invokedShowInfoExpiredQRCount += 1
+	}
+
+	var invokedShowInfoHiddenQR = false
+	var invokedShowInfoHiddenQRCount = 0
+
+	func showInfoHiddenQR() {
+		invokedShowInfoHiddenQR = true
+		invokedShowInfoHiddenQRCount += 1
+	}
 }

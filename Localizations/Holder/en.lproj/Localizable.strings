@@ -416,7 +416,7 @@
 "holder.showqr.nextbutton" = "Next QR code";
 "holder.showqr.previousbutton" = "Previous QR code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
-"holder.showqr.qrhidden" = "QR code hidden";
+"holder.showqr.qrhidden" = "QR code is hidden";
 "holder.showqr.screenshotwarning.countdownAccessibilityLabel" = "Time remaining:";
 "holder.showqr.screenshotwarning.message" = "Your QR code returns in %@";
 "holder.showqr.screenshotwarning.subtitle" = "Use the QR code in the app";
@@ -687,6 +687,16 @@
 "holder_paperproof_startscanning_title" = "Scan to add a certificate";
 "holder_paperproof_whichProofsCanBeUsed_body" = "<p>You can scan and add the following certificates to the app:</p><ul><li>A paper certificate you got from your health care provider or the government. Did you receive a certificate for in the Netherlands and for international use? Scan the <b>international QR code</b>.</li><li>A coronavirus certificate with QR code of your test or vaccination from abroad. You have the QR code on paper or in a foreign coronavirus app.</li></ul>";
 "holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
+"holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
+"holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired this means your vaccination is still valid, but the certificate that you’ve added is no longer. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
+"holder_qr_code_expired_explanation_title" = "Expired QR code";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/en/";
+"holder_qr_code_expired_overlay_title" = "QR code has expired";
+"holder_qr_code_hidden_explanation_action" = "Read more on CoronaCheck.nl";
+"holder_qr_code_hidden_explanation_button" = "What does this mean?";
+"holder_qr_code_hidden_explanation_description" = "<p>If the QR code of your vaccination is hidden, you probably don’t need it. This is because there are QR codes of your more recent vaccinations in the app too.</p><p>You can still show and use hidden QR codes if needed.</p>";
+"holder_qr_code_hidden_explanation_title" = "Hidden QR code";
+"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/en/";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_scanner_error_action" = "Scan again";

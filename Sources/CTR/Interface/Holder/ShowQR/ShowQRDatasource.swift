@@ -15,16 +15,19 @@ protocol ShowQRDatasourceProtocol {
 	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?)
 
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
-
-	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool
 	
 	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
-	
-	func isCredentialExpired(_ greenCard: GreenCard) -> Bool
-	
-	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool
 
 	func getIndexForMostRelevantGreenCard() -> Int
+	
+	func getState(_ greenCard: GreenCard) -> ShowQRState
+}
+
+enum ShowQRState {
+	
+	case regular
+	case expired
+	case irrelevant
 }
 
 class ShowQRDatasource: ShowQRDatasourceProtocol {
@@ -100,12 +103,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 		fullyVaccinatedGreenCards = greencardsWithDosage.filter { $0.doseNumber == $0.totalDose }.sorted { lhs, rhs in lhs.totalDose > rhs.totalDose }
 	}
 
-	func shouldGreenCardBeHidden(_ greenCard: GreenCard) -> Bool {
-
-		return isDosenumberSmallerThanTotalDose(greenCard) || isCredentialExpired(greenCard)
-	}
-
-	func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
+	private func isDosenumberSmallerThanTotalDose(_ greenCard: GreenCard) -> Bool {
 
 		guard self.items.count > 1,
 			  greenCard.getType() == GreenCardType.eu,
@@ -123,7 +121,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
 	
-	func isCredentialExpired(_ greenCard: GreenCard) -> Bool {
+	private func isCredentialExpired(_ greenCard: GreenCard) -> Bool {
 		
 		guard greenCard.getType() == GreenCardType.eu,
 			  let euCredentialAttributes = getEuCredentialAttributes(greenCard) else {
@@ -134,14 +132,14 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
 	}
 	
-	 func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
-		 
-		 guard greenCard.getType() == GreenCardType.eu else { return nil }
-		 
-		 if let credentialData = greenCard.getLatestInternationalCredential()?.data,
-			let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
-			 return euCredentialAttributes
-		 }
+	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
+		
+		guard greenCard.getType() == GreenCardType.eu else { return nil }
+		
+		if let credentialData = greenCard.getLatestInternationalCredential()?.data,
+		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
+			return euCredentialAttributes
+		}
 		return nil
 	}
 	
@@ -162,5 +160,15 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 			return index
 		}
 		return 0
+	}
+	
+	func getState(_ greenCard: GreenCard) -> ShowQRState {
+		
+		if isDosenumberSmallerThanTotalDose(greenCard) {
+			return .irrelevant
+		} else if isCredentialExpired(greenCard) {
+			return .expired
+		}
+		return .regular
 	}
 }
