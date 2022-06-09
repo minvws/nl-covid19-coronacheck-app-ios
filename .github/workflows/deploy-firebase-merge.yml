@@ -21,18 +21,18 @@ jobs:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       SLACK_URL: ${{ secrets.SLACK_URL }}      
     
-  firebase-deploy-verifier-acc:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
-    uses: ./.github/workflows/template_firebase-deploy.yml
-    with:
-      fastlane_command: bundle exec fastlane ios deploy_verifier_acc_ci
-      app_title: Acc Verifier App
-      app_filename: Verifier
-    secrets:
-      DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
-      DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      SLACK_URL: ${{ secrets.SLACK_URL }}
+  # firebase-deploy-verifier-acc:
+  #   if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
+  #   uses: ./.github/workflows/template_firebase-deploy.yml
+  #   with:
+  #     fastlane_command: bundle exec fastlane ios deploy_verifier_acc_ci
+  #     app_title: Acc Verifier App
+  #     app_filename: Verifier
+  #   secrets:
+  #     DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+  #     DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+  #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  #     SLACK_URL: ${{ secrets.SLACK_URL }}
 
   firebase-deploy-holder-prod:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/holder-') || contains(github.event.ref, 'refs/heads/main'))
@@ -47,15 +47,15 @@ jobs:
       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       SLACK_URL: ${{ secrets.SLACK_URL }}
         
-  firebase-deploy-verifier-prod:
-    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
-    uses: ./.github/workflows/template_firebase-deploy.yml
-    with:
-      fastlane_command: bundle exec fastlane ios deploy_verifier_prod_ci
-      app_title: Prod Verifier App
-      app_filename: Verifier
-    secrets:
-      DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
-      DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      SLACK_URL: ${{ secrets.SLACK_URL }}
+  # firebase-deploy-verifier-prod:
+  #   if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/verifier-') || contains(github.event.ref, 'refs/heads/main'))
+  #   uses: ./.github/workflows/template_firebase-deploy.yml
+  #   with:
+  #     fastlane_command: bundle exec fastlane ios deploy_verifier_prod_ci
+  #     app_title: Prod Verifier App
+  #     app_filename: Verifier
+  #   secrets:
+  #     DIST_CERT_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+  #     DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+  #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  #     SLACK_URL: ${{ secrets.SLACK_URL }}

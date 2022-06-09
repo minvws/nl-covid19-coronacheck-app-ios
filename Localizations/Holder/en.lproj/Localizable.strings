@@ -182,7 +182,7 @@
 "holder.dcc.recovery.date" = "Test date:";
 "holder.dcc.recovery.dateofbirth" = "Date of birth:";
 "holder.dcc.recovery.details.title" = "Details";
-"holder.dcc.recovery.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.recovery.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.recovery.identifier" = "Unique certificate identifier:";
 "holder.dcc.recovery.name" = "Name:";
 "holder.dcc.recovery.pathogen" = "Disease recovered from:";
@@ -194,7 +194,7 @@
 "holder.dcc.test.dateofbirth" = "Date of birth:";
 "holder.dcc.test.details.title" = "Details";
 "holder.dcc.test.facility" = "Testing centre:";
-"holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 "holder.dcc.test.manufacturer" = "Test manufacturer:";
 "holder.dcc.test.name" = "Name:";
@@ -209,7 +209,7 @@
 "holder.dcc.vaccination.dateofbirth" = "Date of birth:";
 "holder.dcc.vaccination.details.title" = "Details";
 "holder.dcc.vaccination.dosage" = "Number in series of doses:";
-"holder.dcc.vaccination.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.vaccination.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.vaccination.identifier" = "Unique vaccination identifier:";
 "holder.dcc.vaccination.list.title" = "Vaccination certificate dose %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Vaccine manufacturer:";
@@ -423,7 +423,7 @@
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
 "holder.showqr.showqr" = "Show anyway";
 "holder.test.list.title" = "Retrieve test result";
-"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.test.nolist.title" = "No test result available";
 "holder.testresults.alert.cancel" = "No";
 "holder.testresults.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
@@ -527,7 +527,7 @@
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.nolist.message" = "<p>There are no available vaccination details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available.</p>";
-"holder.vaccination.nolist.title" = "Vaccinations not available";
+"holder.vaccination.nolist.title" = "No vaccinations available";
 "holder.vaccination.start.action" = "Log in with DigiD";
 "holder.vaccination.start.message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you often need a vaccination less to be considered fully vaccinated. Retrieve your positive test result to record it into your vaccination certificate.</p>";
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
