@@ -80,9 +80,17 @@ class VaccinationQRDetailsGenerator {
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
-		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(DateFormatter.Format.numericDate.string) ?? vaccination.dateOfVaccination
-
+		var formattedVaccinationDate = vaccination.dateOfVaccination
+		var relativeDays = "-"
+		
+		if let vaccinationDate = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination) {
+			formattedVaccinationDate = DateFormatter.Format.numericDate.string(from: vaccinationDate)
+			let formatter: DateComponentsFormatter = {
+				return DateFormatter.Relative.days
+			}()
+			relativeDays = formatter.string(from: vaccinationDate, to: Current.now()) ?? "-"
+		}
+		
 		return [
 			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: formattedBirthDate),
@@ -92,6 +100,7 @@ class VaccinationQRDetailsGenerator {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage, dosageMessage: dosageMessage),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.daysElapsed, value: relativeDays),
 			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: mappingManager.getBilingualDisplayCountry(
 				vaccination.country,
 				languageCode: Locale.current.languageCode)

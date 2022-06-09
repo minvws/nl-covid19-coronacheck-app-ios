@@ -388,7 +388,7 @@
 "holder.showqr.eu.about.test.issuer" = "Afgever certificaat / Certificate issuer:";
 "holder.showqr.eu.about.test.manufacturer" = "Producent / Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Naam / Name:";
-"holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
+"holder.showqr.eu.about.test.negative" = "negatief (geen corona) / negative (no coronavirus)";
 "holder.showqr.eu.about.test.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
@@ -702,6 +702,7 @@
 "holder_scanner_permission_settings" = "Naar instellingen";
 "holder_scanner_permission_title" = "Geen toegang tot camera";
 "holder_scanner_title" = "Scan QR-code";
+"holder_showQR_euAboutVaccination_daysSince" = "Dagen sinds vaccinatie / Days since vaccination:";
 "holder_showQR_label_expiredQR" = "Deze QR-code is niet meer geldig";
 "holder_showQR_label_newerQRAvailable" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
 /* Voice Over Details Button Domestic QR */
