@@ -233,13 +233,30 @@ class WalletManagerTests: XCTestCase {
 		expect(signedEvents).to(beEmpty())
 	}
 
+	func test_fetchSignedEvents_invalidData() {
+
+		// Given
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data("WRONG".utf8),
+			expiryDate: nil
+		)
+
+		// When
+		let signedEvents = sut.fetchSignedEvents()
+
+		// Then
+		expect(signedEvents).to(beEmpty())
+	}
+	
 	func test_fetchSignedEvents_oneEvent() {
 
 		// Given
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "CoronaCheck",
-			jsonData: Data("test".utf8),
+			jsonData: Data("{\"payload\": \"test\"}".utf8),
 			expiryDate: nil
 		)
 
@@ -248,7 +265,8 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(signedEvents).toNot(beEmpty())
-		expect(signedEvents).to(contain("test"))
+		expect(signedEvents).to(haveCount(1))
+		expect(signedEvents.first).to(contain("test"))
 	}
 
 	func test_fetchSignedEvents_twoEvents() {
@@ -257,13 +275,13 @@ class WalletManagerTests: XCTestCase {
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "CoronaCheck",
-			jsonData: Data("test".utf8),
+			jsonData: Data("{\"payload\": \"test\"}".utf8),
 			expiryDate: nil
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
-			jsonData: Data("vaccination".utf8),
+			jsonData: Data("{\"payload\": \"vaccination\"}".utf8),
 			expiryDate: nil
 		)
 
@@ -272,8 +290,9 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(signedEvents).toNot(beEmpty())
-		expect(signedEvents).to(contain("test"))
-		expect(signedEvents).to(contain("vaccination"))
+		expect(signedEvents).to(haveCount(2))
+		expect(signedEvents.first).to(contain("test"))
+		expect(signedEvents.last).to(contain("vaccination"))
 	}
 
 	func test_hasEventGroup_vaccination() {

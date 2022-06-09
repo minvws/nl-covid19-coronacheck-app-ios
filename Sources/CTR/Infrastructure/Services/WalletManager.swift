@@ -112,25 +112,25 @@ class WalletManager: WalletManaging {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				
-				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, jsonData: jsonData) != nil {
-					self.logHandler?.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
-					success = true
-				} else {
-					
-					EventGroupModel.create(
-						type: type,
-						providerIdentifier: providerIdentifier,
-						expiryDate: expiryDate,
-						jsonData: jsonData,
-						wallet: wallet,
-						managedContext: context
-					)
-					dataStoreManager.save(context)
-				}
-			} else {
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
 				success = false
+				return
+			}
+			
+			if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, jsonData: jsonData) != nil {
+				self.logHandler?.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
+				success = true
+			} else {
+				
+				EventGroupModel.create(
+					type: type,
+					providerIdentifier: providerIdentifier,
+					expiryDate: expiryDate,
+					jsonData: jsonData,
+					wallet: wallet,
+					managedContext: context
+				)
+				dataStoreManager.save(context)
 			}
 		}
 		return success
@@ -142,13 +142,13 @@ class WalletManager: WalletManaging {
 		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.castEventGroups() {
-				for eventGroup in eventGroups {
-					if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
-						self.logHandler?.logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
-						context.delete(eventGroup)
-					}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
+					self.logHandler?.logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
+					context.delete(eventGroup)
 				}
 			}
 		}
@@ -161,27 +161,20 @@ class WalletManager: WalletManaging {
 
 	func fetchSignedEvents() -> [String] {
 
-		var result = [String]()
+		var signedEvents = [String]()
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects {
-
-						if let data = eventGroup.jsonData,
-						   var convertedToString = String(data: data, encoding: .utf8) {
-							let prependAutoId = "{\"id\":\"\(eventGroup.autoId)\","
-							convertedToString = convertedToString.replacingOccurrences(of: "{", with: prependAutoId)
-							convertedToString = convertedToString.replacingOccurrences(of: "\\/", with: "/")
-							result.append(convertedToString)
-						}
-					}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				if let jsonString = eventGroup.getSignedEvents() {
+					signedEvents.append(jsonString)
 				}
 			}
 		}
-		return result
+		return signedEvents
 	}
 
 	/// Remove any existing event groups for the type and provider identifier
@@ -189,42 +182,34 @@ class WalletManager: WalletManaging {
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
-
+		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						if eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
-							self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
-							context.delete(eventGroup)
-						}
-					}
-					dataStoreManager.save(context)
-				}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
+				self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				context.delete(eventGroup)
 			}
+			dataStoreManager.save(context)
 		}
 	}
 
 	/// Remove any existing event groups
 	func removeExistingEventGroups() {
-
+		
 		let context = dataStoreManager.managedObjectContext()
-
+		
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
-						context.delete(eventGroup)
-					}
-					dataStoreManager.save(context)
-				}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				context.delete(eventGroup)
 			}
+			dataStoreManager.save(context)
 		}
 	}
 
@@ -448,10 +433,9 @@ class WalletManager: WalletManaging {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
-				result = eventGroups
-			}
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			result = wallet.castEventGroups()
 		}
 		return result
 	}
@@ -461,12 +445,11 @@ class WalletManager: WalletManaging {
 		var result = false
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
-				for eventGroup in eventGroups where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type {
-					result = true
-				}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type {
+				result = true
 			}
 		}
 		return result
@@ -552,11 +535,9 @@ class WalletManager: WalletManaging {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-				  let allEventGroups = wallet.castEventGroups()
-			else { return }
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 		
-			allEventGroups.forEach { eventGroup in
+			wallet.castEventGroups().forEach { eventGroup in
 				if String(eventGroup.autoId) == identifier {
 					eventGroup.expiryDate = expiryDate
 				}

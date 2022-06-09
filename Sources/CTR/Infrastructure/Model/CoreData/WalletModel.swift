@@ -73,8 +73,8 @@ extension Wallet {
 	}
 	
 	/// Get the eventgroups, strongly typed.
-	func castEventGroups() -> [EventGroup]? {
+	func castEventGroups() -> [EventGroup] {
 		
-		return eventGroups?.compactMap({ $0 as? EventGroup })
+		return eventGroups?.compactMap({ $0 as? EventGroup }).sorted(by: { $0.autoId < $1.autoId }) ?? []
 	}
 }
