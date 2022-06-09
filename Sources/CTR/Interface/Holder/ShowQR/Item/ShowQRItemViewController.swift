@@ -32,8 +32,8 @@ class ShowQRItemViewController: BaseViewController {
 	// MARK: View lifecycle
 	
 	override func loadView() {
-		
-		view = sceneView
+
+		view = TraitWrapper(sceneView)
 	}
 	
 	override func viewDidLoad() {
