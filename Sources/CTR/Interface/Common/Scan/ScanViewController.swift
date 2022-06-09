@@ -83,6 +83,19 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 	}
 	
+	func updateCameraPreviewFrame(cameraView: UIView) {
+		if UIDevice.current.orientation == .portrait {
+			previewLayer?.connection?.videoOrientation = .portrait
+		} else if UIDevice.current.orientation == .portraitUpsideDown {
+			previewLayer?.connection?.videoOrientation = .portraitUpsideDown
+		} else if UIDevice.current.orientation == .landscapeLeft {
+			previewLayer?.connection?.videoOrientation = .landscapeRight
+		} else if UIDevice.current.orientation == .landscapeRight {
+			previewLayer?.connection?.videoOrientation = .landscapeLeft
+		}
+		previewLayer.frame = cameraView.layer.bounds
+	}
+
 	func attachCameraViewAndStartRunning(_ cameraView: UIView) {
 		
 		guard !Platform.isSimulator else {
