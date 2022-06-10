@@ -22,27 +22,27 @@ final class ScanView: BaseView {
 	let cameraView = UIView()
 	let maskLayoutGuide = UILayoutGuide()
 	
-	private let maskLayoutGuideView: UIView = {
+	static var shouldAllowCameraRotationForCurrentDevice: Bool {
+		UIDevice.current.userInterfaceIdiom == .pad
+	}
+	
+	private let viewfinderView: UIView = {
 
 		let view = UIView()
-		view.accessibilityIdentifier = "maskLayoutGuideView"
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isHidden = false
-		view.backgroundColor = .yellow
+		view.isHidden = true
 		view.setContentCompressionResistancePriority(.required, for: .vertical)
-		view.setContentHuggingPriority(.defaultLow, for: .vertical)
 		return view
 	}()
 	
 	private let backgroundView: UIView = {
 
 		let view = UIView()
-		view.accessibilityIdentifier = "backgroundView"
-		view.backgroundColor = UIColor.red.withAlphaComponent(0.6)
+		view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 		return view
 	}()
 
-	private lazy var maskLayoutGuideViewTopConstraint = maskLayoutGuideView.topAnchor.constraint(equalTo: topAnchor, constant: 167)
+	private lazy var viewfinderTopConstraint = viewfinderView.topAnchor.constraint(equalTo: topAnchor, constant: 167)
 
 	init() {
 		super.init(frame: .zero)
@@ -50,9 +50,6 @@ final class ScanView: BaseView {
 		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { _ in
 			self.setNeedsUpdateConstraints()
 		}
-
-		maskLayoutGuideViewTopConstraint.accessibilityLabel = "maskLayoutGuideViewTopConstraint"
-		maskLayoutGuide.identifier = "MaskLayoutGuide"
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -63,53 +60,66 @@ final class ScanView: BaseView {
 		super.setupViewHierarchy()
 		
 		cameraView.embed(in: self)
-		cameraView.accessibilityIdentifier = "cameraView"
 		backgroundView.embed(in: self)
 
-		addSubview(maskLayoutGuideView)
+		addSubview(viewfinderView)
 
 		addLayoutGuide(maskLayoutGuide)
 	}
 
-	private func setupMaskLayoutGuideConstraints() {
-		// The maskLayoutGuide pins itself to maskAutoLayoutGuideView, to act as guide for other views aligning to the mask.
-		maskLayoutGuide.leftAnchor.constraint(equalTo: maskLayoutGuideView.leftAnchor, constant: 0).isActive = true
-		maskLayoutGuide.rightAnchor.constraint(equalTo: maskLayoutGuideView.rightAnchor, constant: 0).isActive = true
-		maskLayoutGuide.topAnchor.constraint(equalTo: maskLayoutGuideView.topAnchor, constant: 0).isActive = true
-		maskLayoutGuide.bottomAnchor.constraint(equalTo: maskLayoutGuideView.bottomAnchor, constant: 0).isActive = true
-	}
-	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		setupMaskLayoutGuideConstraints()
-
-		// First of all, pin maskLayoutGuideView to left/right/bottom. Top is special case (`maskLayoutGuideViewTopConstraint`), as adjusts based on rotation.
-		maskLayoutGuideViewTopConstraint.isActive = true
-		maskLayoutGuideView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 186).isActive = true
-		maskLayoutGuideView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: 186).isActive = true
-		maskLayoutGuideView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: 172).isActive = true
-
-		// Next center it
-		maskLayoutGuideView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-
-		// Make it square
-		maskLayoutGuideView.heightAnchor.constraint(equalTo: maskLayoutGuideView.widthAnchor, multiplier: 1).isActive = true
-
-		// Make the square the size of 55% of the shortest screen dimension:
-		let shortestScreenDimension = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * 0.50
-		maskLayoutGuideView.heightAnchor.constraint(equalToConstant: shortestScreenDimension).isActive = true
+		setupViewfinderConstraints()
 	}
 	
 	override func layoutSubviews() {
 		super.layoutSubviews()
-		// self.backgroundView.layer.mask = ScanView.calculateMaskLayer(fromView: self.maskLayoutGuideView, inSuperview: self)
+		backgroundView.layer.mask = ScanView.calculateMaskLayer(fromView: self.viewfinderView, inSuperview: self)
 	}
 
 	override func updateConstraints() {
 		super.updateConstraints()
-		maskLayoutGuideViewTopConstraint.constant = UIScreen.main.bounds.height * 0.15
+		viewfinderTopConstraint.constant = UIScreen.main.bounds.height * 0.15
 	}
-
+	
+	private func setupMaskLayoutGuideConstraints() {
+		// The maskLayoutGuide pins itself to maskAutoLayoutGuideView, to act as guide for other views aligning to the mask.
+		maskLayoutGuide.leftAnchor.constraint(equalTo: viewfinderView.leftAnchor, constant: 0).isActive = true
+		maskLayoutGuide.rightAnchor.constraint(equalTo: viewfinderView.rightAnchor, constant: 0).isActive = true
+		maskLayoutGuide.topAnchor.constraint(equalTo: viewfinderView.topAnchor, constant: 0).isActive = true
+		maskLayoutGuide.bottomAnchor.constraint(equalTo: viewfinderView.bottomAnchor, constant: 0).isActive = true
+	}
+	
+	private func setupViewfinderConstraints() {
+		// First of all, activate top constraint, which adjusts based on rotation.
+		viewfinderTopConstraint.isActive = true
+		
+		// Bottom shouldn't get too close to bottom of screen:
+		viewfinderView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: 172).isActive = true
+		
+		// Left and Right have a required minimum border (which can grow)
+		viewfinderView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 20).isActive = true
+		viewfinderView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: 20).isActive = true
+		
+		// It should always be square:
+		viewfinderView.heightAnchor.constraint(equalTo: viewfinderView.widthAnchor, multiplier: 1).isActive = true
+		
+		// It should always be x-centered
+		viewfinderView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+		
+		// It should have a max-width of 650pt
+		viewfinderView.heightAnchor.constraint(lessThanOrEqualToConstant: 650).isActive = true
+		
+		// On iPad, make the square side max 55% of the shortest screen dimension:
+		if UIDevice.current.userInterfaceIdiom == .pad {
+			let shortestScreenDimension = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+			let max60PercentOfScreenHeight = viewfinderView.heightAnchor.constraint(lessThanOrEqualToConstant: shortestScreenDimension * 0.60)
+			max60PercentOfScreenHeight.priority = .defaultHigh
+			max60PercentOfScreenHeight.isActive = true
+		}
+	}
+		
 	private static func calculateMaskLayer(fromView sampleMaskView: UIView, inSuperview superview: UIView) -> CALayer {
 
 		// Path starts with full area of screen:
