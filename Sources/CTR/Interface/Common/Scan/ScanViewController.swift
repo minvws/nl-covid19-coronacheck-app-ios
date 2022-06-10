@@ -269,4 +269,13 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	func resumeScanning() {
 		captureSession.startRunning()
 	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		
+		DispatchQueue.main.async {
+			self.view.layoutIfNeeded()
+			self.updateCameraPreviewFrame()
+		}
+	}
 }
