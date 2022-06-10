@@ -17,6 +17,12 @@ final class ScanView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let margin: CGFloat = 20.0
 		static let maskOffset: CGFloat = 100.0
+		
+		static let viewfinderBottomMargin: CGFloat = 170
+		static let viewfinderMinimumHorizontalMargin: CGFloat = 20
+		static let viewFinderMaximumSquareLength: CGFloat = 650
+		static let viewFinderiPadMaxPercentageOfShortestScreenDimension: CGFloat = 0.6
+		static let viewFinderTopMarginPercentageOfScreenHeight: CGFloat = 0.15
 	}
 	
 	let cameraView = UIView()
@@ -80,7 +86,7 @@ final class ScanView: BaseView {
 
 	override func updateConstraints() {
 		super.updateConstraints()
-		viewfinderTopConstraint.constant = UIScreen.main.bounds.height * 0.15
+		viewfinderTopConstraint.constant = UIScreen.main.bounds.height * ViewTraits.viewFinderTopMarginPercentageOfScreenHeight
 	}
 	
 	private func setupMaskLayoutGuideConstraints() {
@@ -96,11 +102,11 @@ final class ScanView: BaseView {
 		viewfinderTopConstraint.isActive = true
 		
 		// Bottom shouldn't get too close to bottom of screen:
-		viewfinderView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: 172).isActive = true
+		viewfinderView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: ViewTraits.viewfinderBottomMargin).isActive = true
 		
 		// Left and Right have a required minimum border (which can grow)
-		viewfinderView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 20).isActive = true
-		viewfinderView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: 20).isActive = true
+		viewfinderView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.viewfinderMinimumHorizontalMargin).isActive = true
+		viewfinderView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: ViewTraits.viewfinderMinimumHorizontalMargin).isActive = true
 		
 		// It should always be square:
 		viewfinderView.heightAnchor.constraint(equalTo: viewfinderView.widthAnchor, multiplier: 1).isActive = true
@@ -109,12 +115,14 @@ final class ScanView: BaseView {
 		viewfinderView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
 		
 		// It should have a max-width of 650pt
-		viewfinderView.heightAnchor.constraint(lessThanOrEqualToConstant: 650).isActive = true
+		viewfinderView.heightAnchor.constraint(lessThanOrEqualToConstant: ViewTraits.viewFinderMaximumSquareLength).isActive = true
 		
-		// On iPad, make the square side max 55% of the shortest screen dimension:
+		// On iPad, make the square side max 60% of the shortest screen dimension:
 		if UIDevice.current.userInterfaceIdiom == .pad {
 			let shortestScreenDimension = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-			let max60PercentOfScreenHeight = viewfinderView.heightAnchor.constraint(lessThanOrEqualToConstant: shortestScreenDimension * 0.60)
+			let max60PercentOfScreenHeight = viewfinderView.heightAnchor.constraint(
+				lessThanOrEqualToConstant: shortestScreenDimension * ViewTraits.viewFinderiPadMaxPercentageOfShortestScreenDimension
+			)
 			max60PercentOfScreenHeight.priority = .defaultHigh
 			max60PercentOfScreenHeight.isActive = true
 		}
