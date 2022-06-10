@@ -633,46 +633,49 @@ class ListRemoteEventsViewModel {
 			(wrapper.events ?? []).isNotEmpty
 		}
 
-		for response in storableEvents where response.wrapper.status == .complete {
+		for storableEvent in storableEvents where storableEvent.wrapper.status == .complete {
 
 			var data: Data?
 
-			if let signedResponse = response.signedResponse,
+			if let signedResponse = storableEvent.signedResponse,
 			   let jsonData = try? JSONEncoder().encode(signedResponse) {
 				data = jsonData
-			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
+			} else if let dccEvent = storableEvent.wrapper.events?.first?.dccEvent,
 					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
 
-			guard let storageMode = getStorageMode(remoteEvent: response) else {
+			guard let jsonData = data,
+				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
 				return
 			}
 
-			// Remove any existing events for the provider
-			// 2463: Allow multiple vaccinations for paperflow.
-			if eventMode != .paperflow || storageMode != .vaccination {
-				walletManager.removeExistingEventGroups(
-					type: storageMode,
-					providerIdentifier: response.wrapper.providerIdentifier
-				)
-			} else {
-				Current.logHandler.logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
-			}
-
-			// Store the new event group
-			if let jsonData = data {
-				success = success && walletManager.storeEventGroup(
-					storageMode,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					jsonData: jsonData,
-					expiryDate: nil
-				)
-				if !success {
-					break
+			var uniqueIdentifier = storableEvent.wrapper.providerIdentifier
+			if (storageMode == .test || eventMode == .paperflow) &&
+				!(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
+				// We must allow multiple test and scanned event, but do not want duplicates.
+				// So we append the unique of the event to the provider identifier.
+				// For vaccinations and recoveries do not want multiple events,
+				// for those we do want to overwrite the existing ones (so we do not append the unqiue)
+				for event in storableEvent.wrapper.events ?? [] {
+					if let unique = event.unique {
+						uniqueIdentifier += "-\(unique)"
+					}
 				}
-			} else {
-				Current.logHandler.logWarning("Could not store event group")
+			}
+			
+			// Remove any existing events for the uniqueIdentifier -> so we do not have duplicates
+			walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
+			
+			// Store the event group
+			success = success && walletManager.storeEventGroup(
+				storageMode,
+				providerIdentifier: uniqueIdentifier,
+				jsonData: jsonData,
+				expiryDate: nil
+			)
+			if !success {
+				break
 			}
 		}
 		onCompletion(success)

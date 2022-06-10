@@ -1573,7 +1573,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())

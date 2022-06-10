@@ -81,15 +81,17 @@ class ListStoredEventsViewModel {
 			return nil
 		}
 		
-		if EventFlow.paperproofIdentier.lowercased() == provider.lowercased() {
+		// Provider Identifier can have an appended unique. Let's strip that.
+		let shortProvider = provider.count > 3 ? String(provider.prefix(3)) : provider
+		
+		// DCC (HKVI or foreign)
+		if EventFlow.paperproofIdentier.lowercased() == shortProvider.lowercased() {
 			return L.holder_storedEvents_listHeader_paperFlow()
 		}
-
-		if let providerName = Current.mappingManager.getProviderIdentifierMapping(provider) {
-			return L.holder_storedEvents_listHeader_fetchedFromProvider(providerName)
-		} else {
-			return L.holder_storedEvents_listHeader_fetchedFromProvider(provider)
-		}
+		
+		let providerName = Current.mappingManager.getProviderIdentifierMapping(shortProvider)
+		
+		return L.holder_storedEvents_listHeader_fetchedFromProvider(providerName ?? provider)
 	}
 	
 	private func getEventRows(_ storedEvent: EventGroup) -> [ListStoredEventsViewController.Row] {
