@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol HasScanView {
+	var scanView: ScanView { get }
+}
+
 final class ScanView: BaseView {
 	
 	private struct ViewTraits {

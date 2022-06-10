@@ -65,20 +65,8 @@ class PaperProofScanViewController: ScanViewController {
 
 		// Only show an arrow as back button
 		addBackButton()
-		
-		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { _ in
-			DispatchQueue.main.async {
-				self.updateCameraPreviewFrame(cameraView: self.sceneView.scanView.cameraView)
-			}
-		}
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		
-		attachCameraViewAndStartRunning(sceneView.scanView.cameraView)
-	}
-
 	override func found(code: String) {
 
 		viewModel.parseQRMessage(code)

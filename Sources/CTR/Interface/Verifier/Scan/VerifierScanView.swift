@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class VerifierScanView: BaseView {
+final class VerifierScanView: BaseView, HasScanView {
 	
 	/// The display constants
 	private struct ViewTraits {

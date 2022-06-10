@@ -40,6 +40,15 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 		
 		setupScan()
+		
+		if ScanView.shouldAllowCameraRotationForCurrentDevice {
+			NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { _ in
+				DispatchQueue.main.async {
+					guard let scanView = (self.view as? HasScanView)?.scanView else { return }
+					self.updateCameraPreviewFrame(cameraView: scanView.cameraView)
+				}
+			}
+		}
 	}
 
 	func setupScan() {
@@ -84,7 +93,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	}
 	
 	func updateCameraPreviewFrame(cameraView: UIView) {
-		if UIDevice.current.orientation == .portrait {
+		if UIDevice.current.orientation == .portrait || !ScanView.shouldAllowCameraRotationForCurrentDevice {
 			previewLayer?.connection?.videoOrientation = .portrait
 		} else if UIDevice.current.orientation == .portraitUpsideDown {
 			previewLayer?.connection?.videoOrientation = .portraitUpsideDown
@@ -93,7 +102,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		} else if UIDevice.current.orientation == .landscapeRight {
 			previewLayer?.connection?.videoOrientation = .landscapeLeft
 		}
-		previewLayer.frame = cameraView.layer.bounds
+		previewLayer?.frame = cameraView.layer.bounds
 	}
 
 	func attachCameraViewAndStartRunning(_ cameraView: UIView) {
@@ -111,6 +120,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		
 		if captureSession?.isRunning == false {
 			captureSession.startRunning()
+		}
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		if let cameraView = (self.view as? HasScanView)?.scanView.cameraView {
+			attachCameraViewAndStartRunning(cameraView)
 		}
 	}
 

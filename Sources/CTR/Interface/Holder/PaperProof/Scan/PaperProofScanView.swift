@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PaperProofScanView: BaseView {
+final class PaperProofScanView: BaseView, HasScanView {
 	
 	/// The display constants
 	private struct ViewTraits {
