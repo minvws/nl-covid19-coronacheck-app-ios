@@ -133,6 +133,18 @@ struct EventFlow {
 			case status
 			case events
 		}
+		
+		var isGGD: Bool {
+			return providerIdentifier.lowercased() == "ggd"
+		}
+		
+		var isRIVM: Bool {
+			return providerIdentifier.lowercased() == "rvv"
+		}
+		
+		var isZKVI: Bool {
+			return providerIdentifier.lowercased() == "zkv"
+		}
 	}
 
 	/// The state of a test

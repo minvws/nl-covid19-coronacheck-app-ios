@@ -117,21 +117,15 @@ class WalletManager: WalletManaging {
 				return
 			}
 			
-			if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, jsonData: jsonData) != nil {
-				self.logHandler?.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
-				success = true
-			} else {
-				
-				EventGroupModel.create(
-					type: type,
-					providerIdentifier: providerIdentifier,
-					expiryDate: expiryDate,
-					jsonData: jsonData,
-					wallet: wallet,
-					managedContext: context
-				)
-				dataStoreManager.save(context)
-			}
+			EventGroupModel.create(
+				type: type,
+				providerIdentifier: providerIdentifier,
+				expiryDate: expiryDate,
+				jsonData: jsonData,
+				wallet: wallet,
+				managedContext: context
+			)
+			dataStoreManager.save(context)
 		}
 		return success
 	}
