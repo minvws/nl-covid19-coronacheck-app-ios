@@ -230,7 +230,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		action: Selector,
 		enableLabel: String,
 		disableLabel: String) {
-		
+
+			let deviceHasTorch: Bool = {
+				let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back)
+				return discoverySession.devices.contains(where: { $0.hasTorch })
+			}()
+			
+			guard deviceHasTorch else { return }
+			
 			let config = UIBarButtonItem.Configuration(
 				target: self,
 				action: action,
