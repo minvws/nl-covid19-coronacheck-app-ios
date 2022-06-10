@@ -138,7 +138,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		// Force navigation title color to white
 		overrideNavigationBarTitleColor(with: .white)
 
-		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+		if !ScanView.shouldAllowCameraRotationForCurrentDevice {
+			OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -154,7 +156,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	override func viewDidDisappear(_ animated: Bool) {
 		
 		super.viewDidDisappear(animated)
-		OrientationUtility.unlockOrientation()
+
+		if !ScanView.shouldAllowCameraRotationForCurrentDevice {
+			OrientationUtility.unlockOrientation()
+		}
 	}
 
 	func failed() {
