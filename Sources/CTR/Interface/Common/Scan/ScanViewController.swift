@@ -40,6 +40,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 		
 		setupScan()
+		
+		if ScanView.shouldAllowCameraRotationForCurrentDevice {
+			NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { _ in
+				DispatchQueue.main.async {
+					self.updateCameraPreviewFrame()
+				}
+			}
+		}
 	}
 
 	func setupScan() {
@@ -83,6 +91,25 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 	}
 	
+	func updateCameraPreviewFrame() {
+		guard let cameraView = (self.view as? HasScanView)?.scanView.cameraView,
+			  let previewLayer = previewLayer
+		else { return }
+		
+		switch UIApplication.shared.statusBarOrientation {
+			case .landscapeLeft:
+				previewLayer.connection?.videoOrientation = .landscapeLeft
+			case .landscapeRight:
+				previewLayer.connection?.videoOrientation = .landscapeRight
+			case .portraitUpsideDown:
+				previewLayer.connection?.videoOrientation = .portraitUpsideDown
+			default:
+				previewLayer.connection?.videoOrientation = .portrait
+		}
+		
+		previewLayer.frame = cameraView.layer.bounds
+	}
+
 	func attachCameraViewAndStartRunning(_ cameraView: UIView) {
 		
 		guard !Platform.isSimulator else {
@@ -99,6 +126,16 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		if captureSession?.isRunning == false {
 			captureSession.startRunning()
 		}
+		
+		updateCameraPreviewFrame()
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		if let cameraView = (self.view as? HasScanView)?.scanView.cameraView {
+			attachCameraViewAndStartRunning(cameraView)
+		}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -108,7 +145,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		// Force navigation title color to white
 		overrideNavigationBarTitleColor(with: .white)
 
-		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+		if !ScanView.shouldAllowCameraRotationForCurrentDevice {
+			OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -124,7 +163,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	override func viewDidDisappear(_ animated: Bool) {
 		
 		super.viewDidDisappear(animated)
-		OrientationUtility.unlockOrientation()
+		
+		if !ScanView.shouldAllowCameraRotationForCurrentDevice {
+			OrientationUtility.unlockOrientation()
+		}
 	}
 
 	func failed() {
@@ -200,7 +242,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		action: Selector,
 		enableLabel: String,
 		disableLabel: String) {
-		
+
+			let deviceHasTorch: Bool = {
+				let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back)
+				return discoverySession.devices.contains(where: { $0.hasTorch })
+			}()
+			
+			guard deviceHasTorch else { return }
+			
 			let config = UIBarButtonItem.Configuration(
 				target: self,
 				action: action,
@@ -219,5 +268,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	/// Resume scanning after being stopped
 	func resumeScanning() {
 		captureSession.startRunning()
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		
+		DispatchQueue.main.async {
+			self.view.layoutIfNeeded()
+			self.updateCameraPreviewFrame()
+		}
 	}
 }

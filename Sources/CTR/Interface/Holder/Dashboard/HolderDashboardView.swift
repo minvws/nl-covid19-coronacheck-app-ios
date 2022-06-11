@@ -208,21 +208,17 @@ final class HolderDashboardView: BaseView {
 	}
 	
 	private func updateStackViewInsets() {
+		guard let windowWidth = UIApplication.shared.keyWindow?.bounds.width else { return }
+		
 		let insets: NSDirectionalEdgeInsets? = {
 			guard !(traitCollection.preferredContentSizeCategory.isAccessibilityCategory || traitCollection.horizontalSizeClass == .compact)
 			else { return nil }
 			
-			// sometimes width/height are briefly mixed-up on app-launch:
-			let screenWidth = UIApplication.shared.statusBarOrientation.isPortrait
-				? min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-				: max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-			
-			let horizontalInset = CGFloat((screenWidth - screenWidth * 0.65) / 2)
+			let contentPercentageWidth: CGFloat = 0.65
+			let horizontalInset = CGFloat((windowWidth - windowWidth * contentPercentageWidth) / 2)
 			return NSDirectionalEdgeInsets(top: 8, leading: horizontalInset, bottom: 8, trailing: horizontalInset)
 		}()
 		
-		guard let insets = insets else { return }
-
 		domesticScrollView.stackView.insets(insets)
 		internationalScrollView.stackView.insets(insets)
 	}
