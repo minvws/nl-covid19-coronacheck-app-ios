@@ -78,12 +78,6 @@ class VerifierScanViewController: ScanViewController {
 		)
 	}
 
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		
-		attachCameraViewAndStartRunning(sceneView.scanView.cameraView)
-	}
-
 	override func found(code: String) {
 
 		viewModel.parseQRMessage(code)

@@ -131,7 +131,6 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
 		expect(self.sut.dosage) == "Dosis 1/2"
-		expect(self.sut.relevancyInformation) == "Deze QR-code is niet meer geldig"
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_international_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
 	}

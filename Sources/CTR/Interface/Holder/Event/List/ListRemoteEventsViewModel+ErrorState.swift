@@ -109,8 +109,8 @@ extension ListRemoteEventsViewModel {
 			case .recovery: return ErrorCode.Flow.recovery
 			case .test:
 
-				if let identifier = remoteEvents.first?.wrapper.providerIdentifier {
-					return identifier.lowercased() == "ggd" ? .ggdTest : .commercialTest
+				if let wrapper = remoteEvents.first?.wrapper {
+					return wrapper.isGGD ? .ggdTest : .commercialTest
 				}
 				return ErrorCode.Flow(value: "")
 		}

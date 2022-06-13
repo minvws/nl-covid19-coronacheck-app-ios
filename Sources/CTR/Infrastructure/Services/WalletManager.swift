@@ -15,9 +15,13 @@ protocol WalletManaging: AnyObject {
 	///   - type: the event type (vaccination, recovery, test)
 	///   - providerIdentifier: the identifier of the provider
 	///   - jsonData: the json  data of the original signed event or dcc
-	///   - issuedAt: when was this event administered?
+	///   - expiryDate: when will this eventgroup expire?
 	/// - Returns: True if stored
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool
+	func storeEventGroup(
+		_ type: EventMode,
+		providerIdentifier: String,
+		jsonData: Data,
+		expiryDate: Date?) -> Bool
 
 	func fetchSignedEvents() -> [String]
 
@@ -47,16 +51,8 @@ protocol WalletManaging: AnyObject {
 	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
-	/// - Parameter configuration: remote configuration
-	func expireEventGroups(configuration: RemoteConfiguration)
-	
-	/// Expire event groups that are no longer valid
-	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
-	///   - recoveryValidity: the max validity for recovery  (in HOURS)
-	///   - testValidity: the max validity for test  (in HOURS)
-	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)
+	/// - Parameter forDate: Current date
+	func expireEventGroups(forDate: Date)
 	
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 
@@ -66,6 +62,8 @@ protocol WalletManaging: AnyObject {
 	func hasDomesticGreenCard(originType: String) -> Bool
 
 	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
+	
+	func updateEventGroup(identifier: String, expiryDate: Date)
 }
 
 class WalletManager: WalletManaging {
@@ -101,104 +99,51 @@ class WalletManager: WalletManaging {
 	///   - type: the event type (vaccination, recovery, test)
 	///   - providerIdentifier: the identifier of the provider
 	///   - signedResponse: the json of the signed response to store
-	///   - issuedAt: when was this event administered?
+	///   - expiryDate: when will this eventgroup expire?
 	/// - Returns: optional event group
 	@discardableResult func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		issuedAt: Date) -> Bool {
+		expiryDate: Date?) -> Bool {
 
 		var success = true
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				
-				if EventGroupModel.findBy(wallet: wallet, type: type, providerIdentifier: providerIdentifier, maxIssuedAt: issuedAt, jsonData: jsonData) != nil {
-					self.logHandler?.logDebug("Skipping storing eventgroup, found an existing eventgroup for \(type.rawValue), \(providerIdentifier)")
-					success = true
-				} else {
-					
-					EventGroupModel.create(
-						type: type,
-						providerIdentifier: providerIdentifier,
-						maxIssuedAt: issuedAt,
-						jsonData: jsonData,
-						wallet: wallet,
-						managedContext: context
-					)
-					dataStoreManager.save(context)
-				}
-			} else {
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
 				success = false
+				return
 			}
+			
+			EventGroupModel.create(
+				type: type,
+				providerIdentifier: providerIdentifier,
+				expiryDate: expiryDate,
+				jsonData: jsonData,
+				wallet: wallet,
+				managedContext: context
+			)
+			dataStoreManager.save(context)
 		}
 		return success
 	}
 	
 	/// Expire event groups that are no longer valid
-	/// - Parameter configuration: remote configuration
-	func expireEventGroups(configuration: RemoteConfiguration) {
-
-		expireEventGroups(
-			vaccinationValidity: (configuration.vaccinationEventValidityDays ?? 730) * 24,
-			recoveryValidity: (configuration.recoveryEventValidityDays ?? 365) * 24,
-			testValidity: configuration.testEventValidityHours,
-			vaccinationAssessmentValidity: (configuration.vaccinationAssessmentEventValidityDays ?? 14) * 24
-		)
+	/// - Parameter forDate: Current date
+	func expireEventGroups(forDate: Date) {
 		
-	}
-
-	/// Expire event groups that are no longer valid
-	/// - Parameters:
-	///   - vaccinationValidity: the max validity for vaccination  (in HOURS)
-	///   - recoveryValidity: the max validity for recovery  (in HOURS)
-	///   - testValidity: the max validity for test  (in HOURS)
-	///   - vaccinationAssessmentValidity: the max validity for vaccination assessments  (in HOURS)
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
-
-		if let maxValidity = vaccinationValidity {
-			findAndExpireEventGroups(for: .vaccination, maxValidity: maxValidity)
-		}
-
-		if let maxValidity = recoveryValidity {
-			findAndExpireEventGroups(for: .recovery, maxValidity: maxValidity)
-			findAndExpireEventGroups(for: .vaccinationAndPositiveTest, maxValidity: maxValidity)
-		}
-
-		if let maxValidity = testValidity {
-			findAndExpireEventGroups(for: .test, maxValidity: maxValidity)
-		}
-		
-		if let maxValidity = vaccinationAssessmentValidity {
-			findAndExpireEventGroups(for: .vaccinationassessment, maxValidity: maxValidity)
-		}
-	}
-
-	/// Find event groups that exceed their validity and remove them from the database
-	/// - Parameters:
-	///   - type: the type of event group (vaccination, test, recovery)
-	///   - maxValidity: the max validity (in HOURS) of the event group beyond the max issued at date. (from remote config)
-	private func findAndExpireEventGroups(for type: EventMode, maxValidity: Int) {
-
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.eventGroups {
-				for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
-					if let maxIssuedAt = eventGroup.maxIssuedAt,
-					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
-						if expireDate > Date() {
-							self.logHandler?.logVerbose("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
-						} else {
-							self.logHandler?.logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
-							context.delete(eventGroup)
-						}
-					}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
+					self.logHandler?.logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
+					context.delete(eventGroup)
 				}
-				dataStoreManager.save(context)
 			}
 		}
 	}
@@ -210,24 +155,20 @@ class WalletManager: WalletManaging {
 
 	func fetchSignedEvents() -> [String] {
 
-		var result = [String]()
+		var signedEvents = [String]()
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects {
-
-						if let data = eventGroup.jsonData,
-						   let convertedToString = String(data: data, encoding: .utf8) {
-							result.append(convertedToString.replacingOccurrences(of: "\\/", with: "/"))
-						}
-					}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				if let jsonString = eventGroup.getSignedEvents() {
+					signedEvents.append(jsonString)
 				}
 			}
 		}
-		return result
+		return signedEvents
 	}
 
 	/// Remove any existing event groups for the type and provider identifier
@@ -235,42 +176,34 @@ class WalletManager: WalletManaging {
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
-
+		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						if eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
-							self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
-							context.delete(eventGroup)
-						}
-					}
-					dataStoreManager.save(context)
-				}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
+				self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				context.delete(eventGroup)
 			}
+			dataStoreManager.save(context)
 		}
 	}
 
 	/// Remove any existing event groups
 	func removeExistingEventGroups() {
-
+		
 		let context = dataStoreManager.managedObjectContext()
-
+		
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
-						context.delete(eventGroup)
-					}
-					dataStoreManager.save(context)
-				}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				context.delete(eventGroup)
 			}
+			dataStoreManager.save(context)
 		}
 	}
 
@@ -305,7 +238,7 @@ class WalletManager: WalletManaging {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
-						guard let origins = greenCard.origins?.compactMap({ $0 as? Origin }) else {
+						guard let origins = greenCard.castOrigins() else {
 							context.delete(greenCard)
 							break
 						}
@@ -479,7 +412,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let greenCards = wallet.greenCards?.allObjects as? [GreenCard] {
+			   let greenCards = wallet.castGreenCards() {
 				result = greenCards
 			}
 		}
@@ -494,10 +427,9 @@ class WalletManager: WalletManaging {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
-				result = eventGroups
-			}
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			result = wallet.castEventGroups()
 		}
 		return result
 	}
@@ -507,12 +439,11 @@ class WalletManager: WalletManaging {
 		var result = false
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
-				for eventGroup in eventGroups where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type {
-					result = true
-				}
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type {
+				result = true
 			}
 		}
 		return result
@@ -529,7 +460,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				guard let greenCards = wallet.greenCards?.allObjects as? [GreenCard] else {
+				guard let greenCards = wallet.castGreenCards() else {
 					return
 				}
 				for greenCard in greenCards {
@@ -551,7 +482,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-				  let allGreenCards = wallet.greenCards?.allObjects as? [GreenCard]
+				  let allGreenCards = wallet.castGreenCards()
 			else { return }
 
 			for greenCard in allGreenCards {
@@ -589,5 +520,23 @@ class WalletManager: WalletManaging {
 			}
 
 		return !allDomesticGreencards.isEmpty
+	}
+	
+	func updateEventGroup(identifier: String, expiryDate: Date) {
+		
+		Current.logHandler.logDebug("WalletManager: Should update eventGroup \(identifier) with expiry \(expiryDate)")
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+		
+			wallet.castEventGroups().forEach { eventGroup in
+				if String(eventGroup.autoId) == identifier {
+					eventGroup.expiryDate = expiryDate
+				}
+			}
+			dataStoreManager.save(context)
+		}
 	}
 }

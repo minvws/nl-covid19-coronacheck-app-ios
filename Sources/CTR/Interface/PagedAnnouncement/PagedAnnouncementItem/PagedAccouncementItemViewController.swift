@@ -45,7 +45,7 @@ class PagedAnnouncementItemViewController: BaseViewController {
 	// MARK: View lifecycle
 	override func loadView() {
 		
-		view = sceneView
+		view = TraitWrapper(sceneView)
 	}
     
     /// Use accessibility scroll event to navigate.

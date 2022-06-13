@@ -41,6 +41,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 			delegate: delegateSpy,
 			greenCard: greenCard,
 			disclosurePolicy: .policy3G,
+			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
@@ -53,7 +54,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		RunLoop.current.run(until: Date())
 	}
 
-//	// MARK: - Tests
+	// MARK: - Tests
 
 	func test_content_domestic() throws {
 
@@ -68,7 +69,8 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			disclosurePolicy: .policy3G
+			disclosurePolicy: .policy3G,
+			state: .regular
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 
@@ -93,7 +95,8 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			disclosurePolicy: nil
+			disclosurePolicy: nil,
+			state: .regular
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)
 

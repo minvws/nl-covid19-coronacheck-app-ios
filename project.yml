@@ -285,6 +285,7 @@ targets:
         MARKETING_VERSION: 4.4.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
+        TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad
 
       configs:
         Development:

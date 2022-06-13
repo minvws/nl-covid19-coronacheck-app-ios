@@ -54,7 +54,8 @@ class FakeNavigationBarView: BaseView {
 	private var axisForStackView: NSLayoutConstraint.Axis {
 		
 		if traitCollection.verticalSizeClass == .regular,
-			traitCollection.preferredContentSizeCategory >= .extraExtraExtraLarge {
+		   traitCollection.preferredContentSizeCategory >= .extraExtraExtraLarge,
+		   UIDevice.current.userInterfaceIdiom != .pad {
 			return .vertical
 		} else {
 			return .horizontal

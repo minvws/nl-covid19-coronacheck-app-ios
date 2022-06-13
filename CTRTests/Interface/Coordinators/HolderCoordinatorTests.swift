@@ -717,6 +717,40 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verlopen vaccinatiebewijs"
 	}
+
+	func test_userWishesMoreInfoAboutExpiredQR() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutExpiredQR()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verlopen QR-code"
+	}
+
+	func test_userWishesMoreInfoAboutHiddenQR() throws {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutHiddenQR()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verborgen QR-code"
+	}
 	
 	func test_userWishesToViewQRs() {
 		

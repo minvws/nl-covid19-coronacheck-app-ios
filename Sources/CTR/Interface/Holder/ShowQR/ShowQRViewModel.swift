@@ -98,8 +98,6 @@ class ShowQRViewModel {
 	
 	@Bindable private(set) var dosage: String?
 
-	@Bindable private(set) var relevancyInformation: String?
-
 	@Bindable private(set) var infoButtonAccessibility: String?
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
@@ -213,8 +211,6 @@ class ShowQRViewModel {
 		}
 		// Dosage
 		displayDosageInformation(greenCard)
-		// Relevancy
-		displayRelevancyInformation(greenCard)
 	}
 	
 	private func displayDosageInformation(_ greenCard: GreenCard) {
@@ -223,17 +219,6 @@ class ShowQRViewModel {
 		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
 		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
 			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-		}
-	}
-	
-	private func displayRelevancyInformation(_ greenCard: GreenCard) {
-		
-		if dataSource.isCredentialExpired(greenCard) {
-			relevancyInformation = L.holder_showQR_label_expiredQR()
-		} else if dataSource.isDosenumberSmallerThanTotalDose(greenCard) {
-			relevancyInformation = L.holder_showQR_label_newerQRAvailable()
-		} else {
-			relevancyInformation = nil
 		}
 	}
 	
@@ -316,7 +301,7 @@ class ShowQRViewModel {
 				delegate: self,
 				greenCard: item.greenCard,
 				disclosurePolicy: item.policy,
-				qrShouldInitiallyBeHidden: dataSource.shouldGreenCardBeHidden(item.greenCard)
+				state: dataSource.getState(item.greenCard)
 			)
 		)
 		viewController.isAccessibilityElement = true
@@ -327,8 +312,16 @@ class ShowQRViewModel {
 // MARK: - ShowQRItemViewModelDelegate
 
 extension ShowQRViewModel: ShowQRItemViewModelDelegate {
-
+	
 	func itemIsNotValid() {
 		coordinator?.navigateBackToStart()
+	}
+	
+	func showInfoExpiredQR() {
+		coordinator?.userWishesMoreInfoAboutExpiredQR()
+	}
+	
+	func showInfoHiddenQR() {
+		coordinator?.userWishesMoreInfoAboutHiddenQR()
 	}
 }

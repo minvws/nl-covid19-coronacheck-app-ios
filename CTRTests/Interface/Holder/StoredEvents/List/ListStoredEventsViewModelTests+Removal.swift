@@ -461,7 +461,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 					eventGroup = EventGroupModel.create(
 						type: EventMode.recovery,
 						providerIdentifier: "CoronaCheck",
-						maxIssuedAt: Date(),
+						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
 						managedContext: context

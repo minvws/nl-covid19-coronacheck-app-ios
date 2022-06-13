@@ -19,6 +19,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
+		
+		_ = setupEnvironmentSpies()
 		viewModelSpy = HolderDashboardViewModelSpy()
 		viewModelSpy.stubbedTitle = Observable(value: L.holderDashboardTitle())
 		viewModelSpy.stubbedSelectedTab = Observable(value: .domestic)

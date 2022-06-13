@@ -417,7 +417,7 @@
 "holder.showqr.nextbutton" = "Volgende QR-code";
 "holder.showqr.previousbutton" = "Vorige QR-code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dosis %@/%@";
-"holder.showqr.qrhidden" = "QR-code verborgen";
+"holder.showqr.qrhidden" = "QR-code is verborgen";
 "holder.showqr.screenshotwarning.countdownAccessibilityLabel" = "Overgebleven tijd:";
 "holder.showqr.screenshotwarning.message" = "Je QR-code komt terug in %@";
 "holder.showqr.screenshotwarning.subtitle" = "Gebruik de QR-code in de app";
@@ -689,6 +689,16 @@
 "holder_paperproof_startscanning_title" = "Een coronabewijs inscannen";
 "holder_paperproof_whichProofsCanBeUsed_body" = "<p>Je kunt de volgende bewijzen inscannen en toevoegen aan de app:</p><ul><li>Een papieren bewijs gekregen van je zorgverlener of de overheid. Heb je een bewijs voor in Nederland en voor internationaal gebruik? Scan dan de <b>internationale QR-code</b>.</li><li>Een coronabewijs met QR-code van je test of vaccinatie uit het buitenland. Je hebt je QR-code op papier of in een buitenlandse corona-app staan.</li></ul>";
 "holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";
+"holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
+"holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
+"holder_qr_code_expired_explanation_title" = "Verlopen QR-code";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl";
+"holder_qr_code_expired_overlay_title" = "QR-code is verlopen";
+"holder_qr_code_hidden_explanation_action" = "Lees meer op CoronaCheck.nl";
+"holder_qr_code_hidden_explanation_button" = "Wat betekent dit?";
+"holder_qr_code_hidden_explanation_description" = "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>";
+"holder_qr_code_hidden_explanation_title" = "Verborgen QR-code";
+"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl";
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder_recoveryAlmostExpiredModal_message" = "Je herstelbewijs verloopt op %@. Daarna heb je geen coronabewijs meer. Heb je een nieuw coronabewijs nodig? Dan zijn er verschillende mogelijkheden. Lees meer op <a href=\"https://www.rijksoverheid.nl/onderwerpen/coronavirus-coronabewijs-en-coronatoegangsbewijs\">Rijksoverheid.nl</a>";
 "holder_recoveryAlmostExpiredModal_title" = "Herstelbewijs verloopt bijna";

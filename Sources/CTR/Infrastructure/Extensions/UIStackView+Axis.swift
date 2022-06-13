@@ -31,9 +31,9 @@ extension UIStackView {
         return self
     }
  
-	func insets(_ insets: NSDirectionalEdgeInsets) {
-		directionalLayoutMargins = insets
-		isLayoutMarginsRelativeArrangement = true
+	func insets(_ insets: NSDirectionalEdgeInsets?) {
+		directionalLayoutMargins = insets ?? NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+		isLayoutMarginsRelativeArrangement = insets != nil
 	}
 	
 	func removeArrangedSubviews() {
