@@ -25,6 +25,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
+		environmentSpies.cryptoManagerSpy.stubbedGenerateSecretKeyResult = Data()
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
@@ -981,7 +982,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1026,7 +1026,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1071,7 +1070,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1113,7 +1111,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1159,7 +1156,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .invalidSignature)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1205,7 +1201,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .authenticationCancelled)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1251,7 +1246,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99857), error: .serverError)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1296,7 +1290,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.emptyResponse), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1340,7 +1333,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.emptyResponse), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1386,7 +1378,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1434,7 +1425,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1475,7 +1465,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1517,8 +1506,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
 			return
@@ -1553,7 +1541,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
 		sut = ListRemoteEventsViewModel(
@@ -1597,7 +1584,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithRecovery())
 		
 		sut = ListRemoteEventsViewModel(
@@ -1641,7 +1627,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithTest())
 		
 		sut = ListRemoteEventsViewModel(
@@ -1861,8 +1846,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
 			return
@@ -1911,7 +1895,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1958,7 +1941,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2009,7 +1991,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2060,7 +2041,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2111,7 +2091,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2156,7 +2135,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2202,7 +2180,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2253,7 +2230,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2299,7 +2275,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2344,7 +2319,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2394,7 +2368,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2446,8 +2419,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
 			return
@@ -2495,7 +2467,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -2538,8 +2509,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
@@ -2589,8 +2559,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
@@ -2633,8 +2602,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
@@ -2682,8 +2650,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
@@ -2732,8 +2699,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
-
+		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
@@ -2777,7 +2743,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -2822,7 +2787,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -2872,7 +2836,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -2918,7 +2881,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -2962,7 +2924,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3006,7 +2967,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3065,7 +3025,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3117,7 +3076,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3163,7 +3121,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3207,7 +3164,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3259,7 +3215,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3303,7 +3258,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -3354,7 +3308,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		environmentSpies.cryptoManagerSpy.stubbedGetStokenResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,

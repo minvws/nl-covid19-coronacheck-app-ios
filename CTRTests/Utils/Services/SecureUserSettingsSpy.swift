@@ -53,28 +53,6 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedCryptoDataSetter = false
-	var invokedCryptoDataSetterCount = 0
-	var invokedCryptoData: CryptoData?
-	var invokedCryptoDataList = [CryptoData]()
-	var invokedCryptoDataGetter = false
-	var invokedCryptoDataGetterCount = 0
-	var stubbedCryptoData: CryptoData!
-
-	var cryptoData: CryptoData {
-		set {
-			invokedCryptoDataSetter = true
-			invokedCryptoDataSetterCount += 1
-			invokedCryptoData = newValue
-			invokedCryptoDataList.append(newValue)
-		}
-		get {
-			invokedCryptoDataGetter = true
-			invokedCryptoDataGetterCount += 1
-			return stubbedCryptoData
-		}
-	}
-
 	var invokedForcedInformationDataSetter = false
 	var invokedForcedInformationDataSetterCount = 0
 	var invokedForcedInformationData: ForcedInformationData?
@@ -94,6 +72,28 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 			invokedForcedInformationDataGetter = true
 			invokedForcedInformationDataGetterCount += 1
 			return stubbedForcedInformationData
+		}
+	}
+
+	var invokedHolderSecretKeySetter = false
+	var invokedHolderSecretKeySetterCount = 0
+	var invokedHolderSecretKey: Data?
+	var invokedHolderSecretKeyList = [Data?]()
+	var invokedHolderSecretKeyGetter = false
+	var invokedHolderSecretKeyGetterCount = 0
+	var stubbedHolderSecretKey: Data!
+
+	var holderSecretKey: Data? {
+		set {
+			invokedHolderSecretKeySetter = true
+			invokedHolderSecretKeySetterCount += 1
+			invokedHolderSecretKey = newValue
+			invokedHolderSecretKeyList.append(newValue)
+		}
+		get {
+			invokedHolderSecretKeyGetter = true
+			invokedHolderSecretKeyGetterCount += 1
+			return stubbedHolderSecretKey
 		}
 	}
 

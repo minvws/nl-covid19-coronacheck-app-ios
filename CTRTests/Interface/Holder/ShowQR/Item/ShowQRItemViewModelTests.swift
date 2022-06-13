@@ -24,6 +24,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 		super.setUp()
 		delegateSpy = ShowQRItemViewModelDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.secureUserSettingsSpy.stubbedHolderSecretKey = Data()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 	}
 
