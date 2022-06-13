@@ -283,41 +283,35 @@ class QRCardView: BaseView {
 	}
 	
 	private func setupMutableContraints() {
+
+		// Initialise constraints:
+
+		titleTrailingToLargeIconImageViewConstraint = titleLabel.trailingAnchor.constraint(
+			lessThanOrEqualTo: largeIconImageView.leadingAnchor,
+			constant: -ViewTraits.titleTrailingToLargeIconMargin
+		)
 		
-		NSLayoutConstraint.activate([
-			{
-				let constraint = titleLabel.trailingAnchor.constraint(
-					lessThanOrEqualTo: largeIconImageView.leadingAnchor,
-					constant: -ViewTraits.titleTrailingToLargeIconMargin
-				)
-				titleTrailingToLargeIconImageViewConstraint = constraint
-				return constraint
-			}(),
-			{
-				let constraint = titleLabel.trailingAnchor.constraint(
-					lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
-					constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
-				)
-				titleTrailingToDisclosurePolicyIndicatorViewConstraint = constraint
-				return constraint
-			}(),
-			{
-				let constraint = titleLabel.leadingAnchor.constraint(
-					equalTo: hostView.leadingAnchor,
-					constant: ViewTraits.titleLeadingAnchorDCCMargin
-				)
-				titleLeadingAnchor = constraint
-				return constraint
-			}(),
-			{
-				let constraint = titleLabel.topAnchor.constraint(
-					equalTo: hostView.topAnchor,
-					constant: ViewTraits.titleTopAnchorDCCMargin
-				)
-				titleTopAnchor = constraint
-				return constraint
-			}()
-		])
+		titleTrailingToDisclosurePolicyIndicatorViewConstraint = titleLabel.trailingAnchor.constraint(
+			lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
+			constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
+		)
+
+		titleLeadingAnchor = titleLabel.leadingAnchor.constraint(
+			equalTo: hostView.leadingAnchor,
+			constant: ViewTraits.titleLeadingAnchorDCCMargin
+		)
+
+		titleTopAnchor = titleLabel.topAnchor.constraint(
+			equalTo: hostView.topAnchor,
+			constant: ViewTraits.titleTopAnchorDCCMargin
+		)
+
+		// Activate above constraints:
+
+		titleTrailingToLargeIconImageViewConstraint?.isActive = true
+		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = true
+		titleLeadingAnchor?.isActive = true
+		titleTopAnchor?.isActive = true
 	}
 	
 	// MARK: - Private funcs
