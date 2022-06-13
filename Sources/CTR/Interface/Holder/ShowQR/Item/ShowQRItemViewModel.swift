@@ -228,7 +228,7 @@ class ShowQRItemViewModel {
 					   let message = self.cryptoManager?.discloseCredential(data, forPolicy: policy, withKey: key),
 					   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
 						DispatchQueue.main.async {
-							Current.logHandler.logInfo("Update message \(String(decoding: message, as: UTF8.self).prefix(20))")
+							Current.logHandler.logVerbose("Update message \(String(decoding: message, as: UTF8.self).prefix(20))")
 							self.setQRValid(image: image)
 						}
 					} else {
@@ -273,7 +273,7 @@ class ShowQRItemViewModel {
 		}
 		
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: 2, // TimeInterval(remoteConfigManager?.storedConfiguration.domesticQRRefreshSeconds ?? 60),
+			timeInterval: TimeInterval(remoteConfigManager?.storedConfiguration.domesticQRRefreshSeconds ?? 60),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,

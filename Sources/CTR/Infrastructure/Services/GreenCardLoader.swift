@@ -88,36 +88,35 @@ class GreenCardLoader: GreenCardLoading {
 				case .failure(let serverError):
 					self.logHandler?.logError("GreenCardLoader - prepareIssue error: \(serverError)")
 					completion(.failure(Error.preparingIssue(serverError)))
-
+					
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
 						self.logHandler?.logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
-
-					Current.logHandler.logVerbose("ok: \(prepareIssueEnvelope)")
+					
 					self.nonce = nonce
 					self.stoken = prepareIssueEnvelope.stoken
-
+					
 					self.fetchGreenCards { response in
 						switch response {
 							case .failure(let error):
 								completion(.failure(error))
-
+								
 							case .success(let greenCardResponse):
 								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
 									completion(.failure(Error.didNotEvaluate))
 									return
 								}
-
+								
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self.logHandler?.logError("GreenCardLoader - failed to save greenCards")
 										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
-
+									
 									completion(.success(greenCardResponse))
 								}
 						}
