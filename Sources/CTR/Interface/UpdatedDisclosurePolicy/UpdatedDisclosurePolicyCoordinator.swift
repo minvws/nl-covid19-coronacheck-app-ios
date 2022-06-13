@@ -55,7 +55,7 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator {
 			),
 			allowsBackButton: multipaneMode,
 			allowsCloseButton: !multipaneMode,
-			allowsNextButton: true // multipaneMode
+			allowsNextButton: true
 		)
 		
 		let modalNavigationController = UINavigationController(rootViewController: viewController)
