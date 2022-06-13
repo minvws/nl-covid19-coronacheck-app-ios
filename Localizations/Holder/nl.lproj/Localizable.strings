@@ -388,7 +388,8 @@
 "holder.showqr.eu.about.test.issuer" = "Afgever certificaat / Certificate issuer:";
 "holder.showqr.eu.about.test.manufacturer" = "Producent / Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Naam / Name:";
-"holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
+"holder.showqr.eu.about.test.negative" = "negatief (geen corona) / negative (no coronavirus)";
+"holder.showqr.eu.about.test.negative.singleLanguage" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
@@ -570,7 +571,6 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Je bezoekersbewijs is verlopen";
-"holder_dashboard_recoveryAlmostExpiredBanner_title" = "Je herstelbewijs verloopt bijna";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
@@ -699,8 +699,6 @@
 "holder_qr_code_hidden_explanation_title" = "Verborgen QR-code";
 "holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl";
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
-"holder_recoveryAlmostExpiredModal_message" = "Je herstelbewijs verloopt op %@. Daarna heb je geen coronabewijs meer. Heb je een nieuw coronabewijs nodig? Dan zijn er verschillende mogelijkheden. Lees meer op <a href=\"https://www.rijksoverheid.nl/onderwerpen/coronavirus-coronabewijs-en-coronatoegangsbewijs\">Rijksoverheid.nl</a>";
-"holder_recoveryAlmostExpiredModal_title" = "Herstelbewijs verloopt bijna";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_scanner_error_action" = "Opnieuw scannen";
 "holder_scanner_error_message_ctb" = "Je hoeft je Nederlandse QR-code niet te scannen. Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
@@ -712,6 +710,7 @@
 "holder_scanner_permission_settings" = "Naar instellingen";
 "holder_scanner_permission_title" = "Geen toegang tot camera";
 "holder_scanner_title" = "Scan QR-code";
+"holder_showQR_euAboutVaccination_daysSince" = "Dagen sinds vaccinatie / Days since vaccination:";
 "holder_showQR_label_expiredQR" = "Deze QR-code is niet meer geldig";
 "holder_showQR_label_newerQRAvailable" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";
 /* Voice Over Details Button Domestic QR */

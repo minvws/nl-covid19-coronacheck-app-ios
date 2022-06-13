@@ -28,6 +28,7 @@ enum DCCQRDetailsVaccination: DCCQRDetailable {
 	case vaccineManufacturer
 	case dosage
 	case date
+	case daysElapsed
 	case country
 	case issuer
 	case uniqueIdentifer
@@ -42,6 +43,7 @@ enum DCCQRDetailsVaccination: DCCQRDetailable {
 			case .vaccineManufacturer: return L.holderShowqrEuAboutVaccinationManufacturer()
 			case .dosage: return L.holderShowqrEuAboutVaccinationDosage()
 			case .date: return L.holderShowqrEuAboutVaccinationDate()
+			case .daysElapsed: return L.holder_showQR_euAboutVaccination_daysSince()
 			case .country: return L.holderShowqrEuAboutVaccinationCountry()
 			case .issuer: return L.holderShowqrEuAboutVaccinationIssuer()
 			case .uniqueIdentifer: return L.holderShowqrEuAboutVaccinationIdentifier()

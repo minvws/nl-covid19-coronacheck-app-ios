@@ -389,6 +389,7 @@
 "holder.showqr.eu.about.test.manufacturer" = "Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Name:";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
+"holder.showqr.eu.about.test.negative.singleLanguage" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.pathogen" = "Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
@@ -709,6 +710,7 @@
 "holder_scanner_permission_settings" = "To Settings";
 "holder_scanner_permission_title" = "No access to camera";
 "holder_scanner_title" = "Scan QR code";
+"holder_showQR_euAboutVaccination_daysSince" = "Days since vaccination:";
 "holder_showQR_label_expiredQR" = "This QR code is no longer valid";
 "holder_showQR_label_newerQRAvailable" = "You probably won't need this QR code because you have a more recent dose.";
 /* Voice Over Details Button Domestic QR */

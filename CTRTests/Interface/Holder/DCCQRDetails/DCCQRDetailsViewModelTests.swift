@@ -63,7 +63,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[5].field) == "Testdatum / Test date:"
 		expect(self.sut.details[5].value) == "woensdag 17 november 16:00"
 		expect(self.sut.details[6].field) == "Testuitslag / Test result:"
-		expect(self.sut.details[6].value) == "negatief (geen corona)"
+		expect(self.sut.details[6].value) == "negatief (geen corona) / negative (no coronavirus)"
 		expect(self.sut.details[7].field) == "Testlocatie / Testing centre:"
 		expect(self.sut.details[7].value) == "Test Centrum XXL"
 		expect(self.sut.details[8].field) == "Producent / Test manufacturer:"
@@ -145,7 +145,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.title) == "title"
 		expect(self.sut.description) == "body"
 		expect(self.sut.dateInformation) == "information"
-		expect(self.sut.details).to(haveCount(11))
+		expect(self.sut.details).to(haveCount(12))
 		expect(self.sut.details[0].field) == "Naam / Name:"
 		expect(self.sut.details[0].value) == "Corona, Check"
 		expect(self.sut.details[1].field) == "Geboortedatum / Date of birth*:"
@@ -163,12 +163,14 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[6].dosageMessage).to(beNil())
 		expect(self.sut.details[7].field) == "Vaccinatiedatum / Date of vaccination*:"
 		expect(self.sut.details[7].value) == "01-06-2021"
-		expect(self.sut.details[8].field) == "Gevaccineerd in / Member state of vaccination:"
-		expect(self.sut.details[8].value) == "Nederland / The Netherlands"
-		expect(self.sut.details[9].field) == "Afgever certificaat / Certificate issuer:"
-		expect(self.sut.details[9].value) == "Test"
-		expect(self.sut.details[10].field) == "Uniek certificaatnummer / Unique certificate identifier:"
-		expect(self.sut.details[10].value) == "1234"
+		expect(self.sut.details[8].field) == "Dagen sinds vaccinatie / Days since vaccination:"
+		expect(self.sut.details[8].value) == "44 dagen"
+		expect(self.sut.details[9].field) == "Gevaccineerd in / Member state of vaccination:"
+		expect(self.sut.details[9].value) == "Nederland / The Netherlands"
+		expect(self.sut.details[10].field) == "Afgever certificaat / Certificate issuer:"
+		expect(self.sut.details[10].value) == "Test"
+		expect(self.sut.details[11].field) == "Uniek certificaatnummer / Unique certificate identifier:"
+		expect(self.sut.details[11].value) == "1234"
 	}
 	
 	func test_vaccination_whenDosageNumberIsHigherThanTotalDosage() {
@@ -208,7 +210,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.title) == "title"
 		expect(self.sut.description) == "body"
 		expect(self.sut.dateInformation) == "information"
-		expect(self.sut.details).to(haveCount(11))
+		expect(self.sut.details).to(haveCount(12))
 		expect(self.sut.details[0].field) == "Naam / Name:"
 		expect(self.sut.details[0].value) == "Corona, Check"
 		expect(self.sut.details[1].field) == "Geboortedatum / Date of birth*:"
@@ -226,12 +228,14 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[6].dosageMessage) == L.holder_showqr_eu_about_vaccination_dosage_message()
 		expect(self.sut.details[7].field) == "Vaccinatiedatum / Date of vaccination*:"
 		expect(self.sut.details[7].value) == "01-06-2021"
-		expect(self.sut.details[8].field) == "Gevaccineerd in / Member state of vaccination:"
-		expect(self.sut.details[8].value) == "Nederland / The Netherlands"
-		expect(self.sut.details[9].field) == "Afgever certificaat / Certificate issuer:"
-		expect(self.sut.details[9].value) == "Test"
-		expect(self.sut.details[10].field) == "Uniek certificaatnummer / Unique certificate identifier:"
-		expect(self.sut.details[10].value) == "1234"
+		expect(self.sut.details[8].field) == "Dagen sinds vaccinatie / Days since vaccination:"
+		expect(self.sut.details[8].value) == "44 dagen"
+		expect(self.sut.details[9].field) == "Gevaccineerd in / Member state of vaccination:"
+		expect(self.sut.details[9].value) == "Nederland / The Netherlands"
+		expect(self.sut.details[10].field) == "Afgever certificaat / Certificate issuer:"
+		expect(self.sut.details[10].value) == "Test"
+		expect(self.sut.details[11].field) == "Uniek certificaatnummer / Unique certificate identifier:"
+		expect(self.sut.details[11].value) == "1234"
 	}
 	
 	func test_nilValue_shouldBeFiltered() {
