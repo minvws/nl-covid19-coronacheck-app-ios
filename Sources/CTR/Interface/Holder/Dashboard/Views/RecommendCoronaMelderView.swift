@@ -65,7 +65,7 @@ final class RecommendCoronaMelderCardView: BaseView {
 	/// The user tapped on a link
 	var urlTapHandler: ((URL) -> Void)? {
 		didSet {
-			contentTextView.linkTouched { [weak self] (url: URL) in
+			contentTextView.linkTouchedHandler = { [weak self] (url: URL) in
 				self?.urlTapHandler?(url)
 			}
 		}

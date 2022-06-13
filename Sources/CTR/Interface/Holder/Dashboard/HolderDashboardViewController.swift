@@ -337,7 +337,7 @@ private extension ErrorDashboardCardView {
 	static func make(message: String, didTapTryAgain: @escaping () -> Void, openURLHandler: @escaping (URL) -> Void) -> ErrorDashboardCardView {
 		let view = ErrorDashboardCardView()
 		view.message = message
-		view.messageTextView.linkTouched { url in
+		view.messageTextView.linkTouchedHandler = { url in
 			if url.absoluteString == AppAction.tryAgain {
 				didTapTryAgain()
 			} else {
@@ -354,7 +354,7 @@ private extension HeaderMessageCardView {
 		let view = HeaderMessageCardView()
 		view.message = message
 		view.buttonTitle = buttonTitle
-		view.contentTextView.linkTouched { url in
+		view.contentTextView.linkTouchedHandler = { url in
 			openURLHandler(url)
 		}
 		view.buttonTappedCommand = {
@@ -371,7 +371,7 @@ private extension EmptyDashboardDescriptionCardView {
 		let view = EmptyDashboardDescriptionCardView()
 		view.message = message
 		view.buttonTitle = buttonTitle
-		view.contentTextView.linkTouched { url in
+		view.contentTextView.linkTouchedHandler = { url in
 			openURLHandler(url)
 		}
 		view.buttonTappedCommand = {

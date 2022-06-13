@@ -140,7 +140,7 @@ class ListRemoteEventsViewController: BaseViewController {
 		sceneView.title = content.title
 		sceneView.message = content.body
 
-		sceneView.contentTextView.linkTouched { [weak self] url in
+		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in
 
 			self?.viewModel.openUrl(url)
 		}
