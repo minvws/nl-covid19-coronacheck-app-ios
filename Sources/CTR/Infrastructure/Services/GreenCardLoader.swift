@@ -56,7 +56,9 @@ class GreenCardLoader: GreenCardLoading {
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
 	private let logHandler: Logging?
-	private var holderSecretKey: Data?
+	private var secretKey: Data?
+	private var nonce: String?
+	private var stoken: String?
 	
 	required init(
 		now: @escaping () -> Date,
@@ -95,8 +97,9 @@ class GreenCardLoader: GreenCardLoading {
 					}
 
 					Current.logHandler.logVerbose("ok: \(prepareIssueEnvelope)")
-					self.cryptoManager.setNonce(nonce)
-					self.cryptoManager.setStoken(prepareIssueEnvelope.stoken)
+					self.nonce = nonce
+					self.stoken = prepareIssueEnvelope.stoken
+
 					self.fetchGreenCards { response in
 						switch response {
 							case .failure(let error):
@@ -132,15 +135,17 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		guard let key = cryptoManager.generateSecretKey(), let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(holderSecretKey: key),
-			let utf8 = issueCommitmentMessage.data(using: .utf8),
-			let stoken = cryptoManager.getStoken()
+		guard let key = cryptoManager.generateSecretKey(),
+			  let nonce = nonce,
+			  let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: key),
+			  let utf8 = issueCommitmentMessage.data(using: .utf8),
+			  let stoken = stoken
 		else {
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
 		// Hold on to the secret key until we save the greencards.
-		self.holderSecretKey = key
+		self.secretKey = key
 
 		let dictionary: [String: AnyObject] = [
 			"stoken": stoken as AnyObject,
@@ -171,8 +176,9 @@ class GreenCardLoader: GreenCardLoading {
 
 		walletManager.removeExistingGreenCards()
 			
-		if let key = holderSecretKey {
-			cryptoManager.storeSecretKey(key)
+		if let key = secretKey {
+			// Store the new secret key
+			Current.secureUserSettings.holderSecretKey = key
 		}
 
 		// Domestic
