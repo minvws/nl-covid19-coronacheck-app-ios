@@ -193,6 +193,7 @@ extension BaseTest {
 	}
 	
 	func assertInternationalVaccination(of vaccination: Vaccination, dose: String? = nil) {
+		tapOnInternationalTab()
 		card(of: .vaccination).containsText(vaccination.internationalEventCertificate)
 		if let dose = dose {
 			card(of: .vaccination).containsText("Dosis \(dose)")
@@ -205,6 +206,12 @@ extension BaseTest {
 		tapOnInternationalTab()
 		card(of: .recovery).containsText(CertificateType.recovery.rawValue)
 		card(of: .recovery).containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
+		card(of: .recovery).containsText("Bekijk QR")
+	}
+	
+	func assertInternationalRecovery(of positiveTest: PositiveTest) {
+		card(of: .recovery).containsText(positiveTest.internationalEventCertificate)
+		card(of: .recovery).containsText("Geldig tot " + positiveTest.validUntil!.toString(.written))
 		card(of: .recovery).containsText("Bekijk QR")
 	}
 	
@@ -271,7 +278,7 @@ extension BaseTest {
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: dose.map { String($0) }.joined(separator: " "))
 		}
 		app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vaccination.eventDate.toString(.dutch))
-		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.eventCountry.rawValue)
+		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.country.rawValue)
 		
 		closeQRDetails()
 	}
@@ -285,6 +292,22 @@ extension BaseTest {
 		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: "COVID-19")
 		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: formattedOffsetDate(with: person.recFrom, short: true))
 		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value: formattedOffsetDate(with: person.recUntil, short: true))
+		closeQRDetails()
+		app.tapButton("Terug")
+	}
+	
+	func assertInternationalRecoveryQR(for positiveTest: PositiveTest, for person: Person? = nil) {
+		card(of: .recovery).tapButton("Bekijk QR")
+		app.textExists("Internationale QR")
+		
+		openQRDetails(for: person)
+		app.textExists("Over mijn internationale QR-code")
+		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: positiveTest.disease)
+		app.labelValuePairExist(label: "Testdatum / Test date:", value: positiveTest.eventDate.toString(.dutch))
+		app.labelValuePairExist(label: "Getest in / Member state of test:", value: positiveTest.country.rawValue)
+		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: positiveTest.validFrom!.toString(.dutch))
+		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value:
+									positiveTest.validUntil!.toString(.dutch))
 		closeQRDetails()
 		app.tapButton("Terug")
 	}

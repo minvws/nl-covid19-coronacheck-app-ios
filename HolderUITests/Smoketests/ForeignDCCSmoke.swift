@@ -100,21 +100,15 @@ class DccValidVac3of3DE: BaseTest {
 
 class DccExpiredVac1of2DE: BaseTest {
 	
-	let person = TestData.vacP1
-	
-	let vac1 = TestData.expiredVac1of2DE
-	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
+	let vaccination = TestData.expiredVac1of2DE
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vaccination.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_expiredVac1of2DE() {
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
 		addScannedQR()
 		assertSomethingWentWrong()
 	}
@@ -122,21 +116,15 @@ class DccExpiredVac1of2DE: BaseTest {
 
 class DccExpiredVac2of2DE: BaseTest {
 	
-	let person = TestData.vacP1
-	
-	let vac1 = TestData.expiredVac2of2DE
-	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
+	let vaccination = TestData.expiredVac2of2DE
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vaccination.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_expiredVac2of2DE() {
-		addVaccinationCertificate(for: person)
-		addRetrievedCertificateToApp()
-		
 		addScannedQR()
 		assertSomethingWentWrong()
 	}
@@ -144,21 +132,57 @@ class DccExpiredVac2of2DE: BaseTest {
 
 class DccExpiredVac3of3DE: BaseTest {
 	
-	let person = TestData.vacP1
-	
-	let vac1 = TestData.expiredVac3of3DE
-	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
+	let vaccination = TestData.expiredVac3of3DE
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vaccination.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_expiredVac3of3DE() {
+		addScannedQR()
+		assertSomethingWentWrong()
+	}
+}
+
+// MARK: - Positive tests
+
+class DccValidRecDE: BaseTest {
+	
+	let person = TestData.vacP1
+	
+	let positiveTest = TestData.validRecDE
+	let vaccination = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
+	
+	override func setUpWithError() throws {
+		app.launchArguments.append("-scanneddcc:" + positiveTest.dcc!)
+		
+		try super.setUpWithError()
+	}
+	
+	func test_validVac1of2DE() {
 		addVaccinationCertificate(for: person)
 		addRetrievedCertificateToApp()
 		
+		addScannedQR()
+		
+		assertInternationalRecovery(of: positiveTest)
+		assertInternationalRecoveryQR(for: positiveTest)
+	}
+}
+
+class DccExpiredRecDE: BaseTest {
+	
+	let positiveTest = TestData.expiredRecDE
+	
+	override func setUpWithError() throws {
+		app.launchArguments.append("-scanneddcc:" + positiveTest.dcc!)
+		
+		try super.setUpWithError()
+	}
+	
+	func test_validVac1of2DE() {
 		addScannedQR()
 		assertSomethingWentWrong()
 	}

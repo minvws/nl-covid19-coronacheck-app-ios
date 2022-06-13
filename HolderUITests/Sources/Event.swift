@@ -11,7 +11,9 @@ open class Event {
 	
 	let type: EventType
 	let eventDate: Date
-	let eventCountry: Country
+	let country: Country
+	let validFrom: Date?
+	let validUntil: Date?
 	let disease: String
 	let dcc: String?
 	let couplingCode: String?
@@ -31,13 +33,17 @@ open class Event {
 		type: EventType,
 		eventDate: Date,
 		country: Country,
+		validFrom: Date? = nil,
+		validUntil: Date? = nil,
 		dcc: String? = nil,
 		couplingCode: String? = nil
 	) {
 		self.type = type
 		self.eventDate = eventDate
+		self.country = country
 		self.disease = "COVID-19"
-		self.eventCountry = country
+		self.validFrom = validFrom
+		self.validUntil = validUntil
 		self.dcc = dcc
 		self.couplingCode = couplingCode
 	}
@@ -50,6 +56,7 @@ open class Event {
 	
 	enum Country: String {
 		case nl = "Nederland / The Netherlands"
+		case de = "Duitsland / Germany"
 	}
 }
 
@@ -60,6 +67,8 @@ final class Vaccination: Event {
 	init(
 		eventDate: Date,
 		country: Country = .nl,
+		validFrom: Date? = nil,
+		validUntil: Date? = nil,
 		dcc: String? = nil,
 		couplingCode: String? = nil,
 		vaccine: VaccineType
@@ -70,6 +79,8 @@ final class Vaccination: Event {
 			type: .vaccination,
 			eventDate: eventDate,
 			country: country,
+			validFrom: validFrom,
+			validUntil: validUntil,
 			dcc: dcc,
 			couplingCode: couplingCode
 		)
@@ -87,6 +98,8 @@ final class PositiveTest: Event {
 	init(
 		eventDate: Date,
 		country: Country = .nl,
+		validFrom: Date? = nil,
+		validUntil: Date,
 		dcc: String? = nil,
 		couplingCode: String? = nil
 	) {
@@ -94,6 +107,8 @@ final class PositiveTest: Event {
 			type: .positiveTest,
 			eventDate: eventDate,
 			country: country,
+			validFrom: validFrom,
+			validUntil: validUntil,
 			dcc: dcc,
 			couplingCode: couplingCode
 		)
@@ -105,6 +120,8 @@ final class NegativeTest: Event {
 	init(
 		eventDate: Date,
 		country: Country = .nl,
+		validFrom: Date? = nil,
+		validUntil: Date? = nil,
 		dcc: String? = nil,
 		couplingCode: String? = nil
 	) {
@@ -112,6 +129,8 @@ final class NegativeTest: Event {
 			type: .negativeTest,
 			eventDate: eventDate,
 			country: country,
+			validFrom: validFrom,
+			validUntil: validUntil,
 			dcc: dcc,
 			couplingCode: couplingCode
 		)
