@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class NegativeTest: BaseTest {
+class NegativeTests: BaseTest {
 	
 	// MARK: Negative tests (and combinations)
 	

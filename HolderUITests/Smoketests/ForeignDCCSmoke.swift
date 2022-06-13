@@ -7,136 +7,159 @@
 
 import Foundation
 
-class DccValidVac2of2NL: BaseTest {
-	
-	let person = TestData.validVac2of2NL
-	
-	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
-		app.launchArguments.append("-couplingCode:" + person.couplingCode!)
-		
-		try super.setUpWithError()
-	}
-	
-	func test_validVac2of2NL() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
-		
-		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
-	}
-}
+// MARK: Valid vaccinations
 
 class DccValidVac1of2DE: BaseTest {
 	
-	let person = TestData.validVac1of2DE
+	let person = TestData.vacP1
+	
+	let vac1 = TestData.validVac1of2DE
+	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_validVac1of2DE() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
+		
+		assertInternationalVaccination(of: vac1, dose: "2/2")
+		assertInternationalVaccination(of: vac2, dose: "1/2")
+		
+		viewQRCode(of: .vaccination)
+		assertInternationalVaccinationQR(of: vac2, dose: "2/2")
+		viewPreviousQR(hidden: true)
+		assertInternationalVaccinationQR(of: vac1, dose: "1/2")
 	}
 }
 
 class DccValidVac2of2DE: BaseTest {
 	
-	let person = TestData.validVac2of2DE
+	let person = TestData.vacP1
+	
+	let vac1 = TestData.validVac2of2DE
+	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_validVac2of2DE() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
+		
+		assertInternationalVaccination(of: vac1, dose: "3/3")
+		assertInternationalVaccination(of: vac2, dose: "2/2")
+		
+		viewQRCode(of: .vaccination)
+		assertInternationalVaccinationQR(of: vac2, dose: "3/3")
+		viewPreviousQR()
+		assertInternationalVaccinationQR(of: vac1, dose: "2/2")
 	}
 }
 
 class DccValidVac3of3DE: BaseTest {
 	
-	let person = TestData.validVac3of3DE
+	let person = TestData.vacP1
+	
+	let vac1 = TestData.validVac3of3DE
+	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_validVac3of3DE() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
+		
+		assertInternationalVaccination(of: vac1, dose: "4/4")
+		assertInternationalVaccination(of: vac2, dose: "3/3")
+		
+		viewQRCode(of: .vaccination)
+		assertInternationalVaccinationQR(of: vac2, dose: "4/4")
+		viewPreviousQR()
+		assertInternationalVaccinationQR(of: vac1, dose: "3/3")
 	}
 }
 
+// MARK: - Expired vaccinations
+
 class DccExpiredVac1of2DE: BaseTest {
 	
-	let person = TestData.expiredVac1of2DE
+	let person = TestData.vacP1
+	
+	let vac1 = TestData.expiredVac1of2DE
+	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_expiredVac1of2DE() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
+		assertSomethingWentWrong()
 	}
 }
 
 class DccExpiredVac2of2DE: BaseTest {
 	
-	let person = TestData.expiredVac2of2DE
+	let person = TestData.vacP1
+	
+	let vac1 = TestData.expiredVac2of2DE
+	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_expiredVac2of2DE() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
+		assertSomethingWentWrong()
 	}
 }
 
 class DccExpiredVac3of3DE: BaseTest {
 	
-	let person = TestData.expiredVac3of3DE
+	let person = TestData.vacP1
+	
+	let vac1 = TestData.expiredVac3of3DE
+	let vac2 = Vaccination(eventDate: Date(-30), vaccine: .pfizer)
 	
 	override func setUpWithError() throws {
-		app.launchArguments.append("-scanneddcc:" + person.dcc!)
+		app.launchArguments.append("-scanneddcc:" + vac1.dcc!)
 		
 		try super.setUpWithError()
 	}
 	
 	func test_expiredVac3of3DE() {
-		let offsetDate = calculateOffset(for: person.vacDate!)
+		addVaccinationCertificate(for: person)
+		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: offsetDate)
-		assertInternationalVaccinationQRDetails(for: person, vaccinationDateOffsetInDays: offsetDate)
+		assertSomethingWentWrong()
 	}
 }

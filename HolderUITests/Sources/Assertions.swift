@@ -192,6 +192,15 @@ extension BaseTest {
 		card(of: .vaccination).containsText("Bekijk QR")
 	}
 	
+	func assertInternationalVaccination(of vaccination: Vaccination, dose: String? = nil) {
+		card(of: .vaccination).containsText(vaccination.internationalEventCertificate)
+		if let dose = dose {
+			card(of: .vaccination).containsText("Dosis \(dose)")
+		}
+		card(of: .vaccination).containsText("Vaccinatiedatum: " + vaccination.eventDate.toString(.written))
+		card(of: .vaccination).containsText("Bekijk QR")
+	}
+	
 	func assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: Int) {
 		tapOnInternationalTab()
 		card(of: .recovery).containsText(CertificateType.recovery.rawValue)
@@ -235,12 +244,7 @@ extension BaseTest {
 			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
 			
-			var vacDate: String
-			if let personVacDate = person.vacDate {
-				vacDate = formattedDate(of: personVacDate, short: true)
-			} else {
-				vacDate = formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true)
-			}
+			let vacDate = formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true)
 			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vacDate)
 			
 			closeQRDetails()
@@ -250,6 +254,26 @@ extension BaseTest {
 			}
 		}
 		app.tapButton("Terug")
+	}
+	
+	func assertInternationalVaccinationQR(of vaccination: Vaccination, dose: String? = nil, for person: Person? = nil) {
+		if let dose = dose {
+			app.textExists("Dosis " + dose)
+		}
+		
+		openQRDetails(for: person)
+		if let dose = dose {
+			app.textExists("Over je dosis " + dose)
+		}
+		app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: vaccination.disease)
+		app.labelValuePairExist(label: "Vaccin / Vaccine:", value: vaccination.vaccine.rawValue)
+		if let dose = dose {
+			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: dose.map { String($0) }.joined(separator: " "))
+		}
+		app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vaccination.eventDate.toString(.dutch))
+		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.eventCountry.rawValue)
+		
+		closeQRDetails()
 	}
 	
 	func assertInternationalRecoveryQRDetails(for person: TestPerson) {
@@ -275,6 +299,14 @@ extension BaseTest {
 		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
 		closeQRDetails()
 		app.tapButton("Terug")
+	}
+	
+	private func openQRDetails(for person: Person? = nil) {
+		openQRDetails()
+		if let person = person {
+			app.labelValuePairExist(label: "Naam / Name:", value: person.name)
+			app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: person.birthDate.toString(.dutch))
+		}
 	}
 	
 	private func openQRDetails(for person: TestPerson) {
