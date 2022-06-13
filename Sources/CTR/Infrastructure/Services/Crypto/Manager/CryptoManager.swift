@@ -55,21 +55,27 @@ class CryptoManager: CryptoManaging {
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
-		generateSecretKey()
 	}
 	
-	func generateSecretKey() {
+	func generateSecretKey() -> Data? {
 		
-		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
-			if let result = MobilecoreGenerateHolderSk(),
-			   let data = result.value {
-				self.cryptoData = CryptoData(
-					holderSecretKey: data,
-					nonce: nil,
-					stoken: nil
-				)
-			}
+		if let result = MobilecoreGenerateHolderSk(),
+		   let data = result.value {
+			return data
+		} else {
+			return nil
 		}
+	}
+	
+	/// Store the secret key
+	/// - Parameter holderSecretKey: the holder secret key
+	func storeSecretKey(_ holderSecretKey: Data) {
+		
+		self.cryptoData = CryptoData(
+			holderSecretKey: holderSecretKey,
+			nonce: nil,
+			stoken: nil
+		)
 	}
 	
 	// MARK: - Getters and Setters
@@ -102,12 +108,10 @@ class CryptoManager: CryptoManaging {
 		return cryptoLibUtility.hasPublicKeys
 	}
 	
-	/// Generate the commitment message
-	/// - Returns: the issuer commitment message
-	func generateCommitmentMessage() -> String? {
-		
+	func generateCommitmentMessage(holderSecretKey: Data) -> String? {
+
 		if let nonce = cryptoData.nonce,
-		   let result = MobilecoreCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
+		   let result = MobilecoreCreateCommitmentMessage(holderSecretKey, Data(nonce.bytes)) {
 			if let value = result.value, result.error.isEmpty {
 				let string = String(decoding: value, as: UTF8.self)
 				return string

@@ -56,6 +56,7 @@ class GreenCardLoader: GreenCardLoading {
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
 	private let logHandler: Logging?
+	private var holderSecretKey: Data?
 	
 	required init(
 		now: @escaping () -> Date,
@@ -83,12 +84,12 @@ class GreenCardLoader: GreenCardLoading {
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
 				case .failure(let serverError):
-					self.logHandler?.logError("error: \(serverError)")
+					self.logHandler?.logError("GreenCardLoader - prepareIssue error: \(serverError)")
 					completion(.failure(Error.preparingIssue(serverError)))
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self.logHandler?.logError("Can't parse the nonce / prepareIssueMessage")
+						self.logHandler?.logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
@@ -109,7 +110,7 @@ class GreenCardLoader: GreenCardLoading {
 
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
-										self.logHandler?.logError("Failed to save greenCards")
+										self.logHandler?.logError("GreenCardLoader - failed to save greenCards")
 										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
@@ -131,20 +132,22 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
+		guard let key = cryptoManager.generateSecretKey(), let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(holderSecretKey: key),
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
 		else {
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
+		// Hold on to the secret key until we save the greencards.
+		self.holderSecretKey = key
 
 		let dictionary: [String: AnyObject] = [
 			"stoken": stoken as AnyObject,
 			"events": signedEvents as AnyObject,
 			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
 		]
-
+		
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
 				case .failure(let serverError):
@@ -167,10 +170,16 @@ class GreenCardLoader: GreenCardLoading {
 		var success = true
 
 		walletManager.removeExistingGreenCards()
+			
+		if let key = holderSecretKey {
+			cryptoManager.storeSecretKey(key)
+		}
 
 		// Domestic
 		if let domestic = response.domesticGreenCard {
 			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
+		} else {
+			
 		}
 		// International
 		if let remoteEuGreenCards = response.euGreenCards {

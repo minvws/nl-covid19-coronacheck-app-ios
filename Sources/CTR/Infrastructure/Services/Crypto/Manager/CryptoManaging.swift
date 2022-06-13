@@ -36,9 +36,17 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: the stoken
 	func getStoken() -> String?
 	
+	/// Generate a secret key
+	/// - Returns: optional secret key
+	func generateSecretKey() -> Data?
+	
 	/// Generate the commitment message
 	/// - Returns: commitment message
-	func generateCommitmentMessage() -> String?
+	func generateCommitmentMessage(holderSecretKey: Data) -> String?
+	
+	/// Store the secret key
+	/// - Parameter holderSecretKey: the holder secret key
+	func storeSecretKey(_ holderSecretKey: Data)
 	
 	// MARK: Public Keys
 	
@@ -47,7 +55,7 @@ protocol CryptoManaging: AnyObject {
 	func hasPublicKeys() -> Bool
 	
 	// MARK: Credential
-
+	
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
@@ -67,9 +75,19 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter data: the data
 	/// - Returns: True if the data looks like a domestic credential
 	func hasDomesticPrefix(_ data: Data) -> Bool
-
+	
+	/// Get the domestic credential attributes
+	/// - Parameter data: the incoming domestic ctb
+	/// - Returns: optional domstic credential attributes
+	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
+	
+	/// Get the eu credential attributes
+	/// - Parameter data: the incoming eu dcc
+	/// - Returns: optional eu credential attributes
+	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
+	
 	// MARK: QR
-
+	
 	///  Disclose the credential
 	/// - Parameters:
 	///   - credential: the (domestic) credential to generate the QR from
@@ -81,14 +99,6 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Verification result if the QR is valid or error if not
 	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError>
-
-	// MARK: Migration
-
-	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
-
-	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
-	
-	func generateSecretKey()
 }
 
 /// The errors returned by the crypto library
