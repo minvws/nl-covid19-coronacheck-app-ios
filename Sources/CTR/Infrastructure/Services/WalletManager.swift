@@ -293,12 +293,12 @@ class WalletManager: WalletManaging {
 								}
 						}
 					}
-					if result {
-						dataStoreManager.save(context)
-					}
 				}
 			} else {
 				result = false
+			}
+			if result {
+				dataStoreManager.save(context)
 			}
 		}
 		return result
@@ -374,13 +374,15 @@ class WalletManager: WalletManaging {
 							version: Int32(euCredentialAttributes.credentialVersion),
 							greenCard: greenCard,
 							managedContext: context) != nil
-						dataStoreManager.save(context)
 					} else {
 						result = false
 					}
 				} else {
 					result = false
 				}
+			}
+			if result {
+				dataStoreManager.save(context)
 			}
 		}
 		return result
