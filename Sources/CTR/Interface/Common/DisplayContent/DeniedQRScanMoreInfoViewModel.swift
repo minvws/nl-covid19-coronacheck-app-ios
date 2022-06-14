@@ -6,7 +6,7 @@
 */
 
 import UIKit
-typealias DisplayContent = (view: UIView, customSpacing: CGFloat)
+typealias DisplayContent = (text: String, customSpacing: CGFloat)
 
 class DeniedQRScanMoreInfoViewModel {
 
@@ -45,12 +45,12 @@ class DeniedQRScanMoreInfoViewModel {
 		let shouldDisplay1GText = verificationPolicyManager?.state == .policy1G
 		
 		self.content = [
-			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne()), spacing),
-			(TextView(htmlText: L.verifierDeniedMessageTwo()), bulletSpacing),
-			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageThree_1G() : L.verifierDeniedMessageThree()), spacing),
-			(TextView(htmlText: L.verifierDeniedMessageFour()), 0),
-			(TextView(htmlText: L.verifierDeniedMessageFive()), spacing),
-			(TextView(htmlText: shouldDisplay1GText ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix()), spacing)
+			(shouldDisplay1GText ? L.verifierDeniedMessageOne_1G() : L.verifierDeniedMessageOne(), spacing),
+			(L.verifierDeniedMessageTwo(), bulletSpacing),
+			(shouldDisplay1GText ? L.verifierDeniedMessageThree_1G() : L.verifierDeniedMessageThree(), spacing),
+			(L.verifierDeniedMessageFour(), 0),
+			(L.verifierDeniedMessageFive(), spacing),
+			(shouldDisplay1GText ? L.verifierDeniedMessageSix_1G() : L.verifierDeniedMessageSix(), spacing)
 		]
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
