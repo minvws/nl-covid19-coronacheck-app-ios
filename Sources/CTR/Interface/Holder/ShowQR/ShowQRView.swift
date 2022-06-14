@@ -31,7 +31,7 @@ class ShowQRView: BaseView {
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		enum Spacing {
-			static let buttonToPageControl: CGFloat = 16
+			static let buttonToPageControl: CGFloat = 4
 			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
 		}
 	}
@@ -55,7 +55,7 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The security features
-	let securityView: SecurityFeaturesView = {
+	let securityAnimationView: SecurityFeaturesView = {
 
 		let view = SecurityFeaturesView()
 		view.contentMode = .bottom
@@ -97,12 +97,17 @@ class ShowQRView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(securityView)
+		addSubview(securityAnimationView)
 		addSubview(containerView)
 		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
 		addSubview(navigationInfoView)
+		
+		addLayoutGuide(qrFrameLayoutGuide)
+		qrFrameLayoutGuide.identifier = "qrFrameLayoutGuide"
 	}
+	
+	var qrFrameLayoutGuide: UILayoutGuide = UILayoutGuide()
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
@@ -122,14 +127,21 @@ class ShowQRView: BaseView {
 				constant: ViewTraits.Margin.returnToThirdPartyAppButton
 			),
 			
+			qrFrameLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+			qrFrameLayoutGuide.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 1.03),
+			qrFrameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor),
+			qrFrameLayoutGuide.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			
 			navigationInfoView.topAnchor.constraint(
-				equalTo: containerView.bottomAnchor
+				equalTo: containerView.bottomAnchor,
+				constant: 2
 			),
 			navigationInfoView.leadingAnchor.constraint(
-				greaterThanOrEqualTo: containerView.leadingAnchor
+				equalTo: qrFrameLayoutGuide.leadingAnchor
 			),
+			
 			navigationInfoView.trailingAnchor.constraint(
-				lessThanOrEqualTo: containerView.trailingAnchor
+				equalTo: qrFrameLayoutGuide.trailingAnchor
 			),
 			
 			pageControl.topAnchor.constraint(
@@ -138,8 +150,6 @@ class ShowQRView: BaseView {
 			),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
-		bringSubviewToFront(containerView)
-		bringSubviewToFront(navigationInfoView)
 	}
 	
 	private func setupContainerViewConstraints() {
@@ -162,6 +172,11 @@ class ShowQRView: BaseView {
 		
 		containerHeightRestrictionConstraint = containerView.heightAnchor.constraint(lessThanOrEqualToConstant: containerHeightRestrictionConstant)
 		containerHeightRestrictionConstraint?.isActive = true
+		
+		// On iPhone, the QR should be the full-width:
+		if UIDevice.current.userInterfaceIdiom == .phone {
+			containerView.heightAnchor.constraint(equalTo: widthAnchor).isActive = true
+		}
 	}
 	
 	var containerHeightRestrictionConstraint: NSLayoutConstraint?
@@ -175,24 +190,25 @@ class ShowQRView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			// Security
-			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
-			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			securityAnimationView.widthAnchor.constraint(equalTo: widthAnchor),
+			securityAnimationView.widthAnchor.constraint(equalTo: securityAnimationView.heightAnchor, multiplier: 1.34), // the animation is not quite square
+			securityAnimationView.centerXAnchor.constraint(equalTo: securityAnimationView.centerXAnchor),
 			{
-				let constraint = securityView.bottomAnchor.constraint(
-					equalTo: bottomAnchor,
-					constant: ViewTraits.Margin.domesticSecurity
+				let constraint = securityAnimationView.bottomAnchor.constraint(
+					greaterThanOrEqualTo: bottomAnchor,
+					constant: 0//ViewTraits.Margin.domesticSecurity
 				)
 				securityViewBottomConstraint = constraint
 				return constraint
-			}()
+			}(),
+			securityAnimationView.topAnchor.constraint(greaterThanOrEqualTo: containerView.bottomAnchor, constant: -300)
 		])
 	}
 	
 	override func safeAreaInsetsDidChange() {
 		super.safeAreaInsetsDidChange()
-		guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
-		securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+		guard securityAnimationView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
+//		securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
 	}
 	
 	override func updateConstraints() {
@@ -247,18 +263,18 @@ class ShowQRView: BaseView {
 	/// Play the animation
 	func play() {
 
-		securityView.play()
+		securityAnimationView.play()
 	}
 
 	/// Resume the animation
 	func resume() {
 
-		securityView.resume()
+		securityAnimationView.resume()
 	}
 
 	func setupForInternational() {
 
-		securityView.setupForInternational()
-		securityViewBottomConstraint?.constant = ViewTraits.Margin.internationalSecurity
+		securityAnimationView.setupForInternational()
+//		securityViewBottomConstraint?.constant = ViewTraits.Margin.internationalSecurity
 	}
 }
