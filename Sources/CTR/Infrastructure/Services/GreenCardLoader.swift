@@ -55,6 +55,7 @@ class GreenCardLoader: GreenCardLoading {
 	private let walletManager: WalletManaging
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
+	private let secureUserSettings: SecureUserSettingsProtocol
 	private let logHandler: Logging?
 	private var secretKey: Data?
 	private var nonce: String?
@@ -67,6 +68,7 @@ class GreenCardLoader: GreenCardLoading {
 		walletManager: WalletManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol,
+		secureUserSettings: SecureUserSettingsProtocol,
 		logHandler: Logging? = nil
 	) {
 
@@ -76,6 +78,7 @@ class GreenCardLoader: GreenCardLoading {
 		self.walletManager = walletManager
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
+		self.secureUserSettings = secureUserSettings
 		self.logHandler = logHandler
 	}
 
@@ -177,14 +180,15 @@ class GreenCardLoader: GreenCardLoading {
 			
 		if let key = secretKey {
 			// Store the new secret key
-			Current.secureUserSettings.holderSecretKey = key
+			secureUserSettings.holderSecretKey = key
 		}
 
 		// Domestic
 		if let domestic = response.domesticGreenCard {
 			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
 		} else {
-			
+			// Don't hold on to the key if there are no domestic greencards.
+			secureUserSettings.holderSecretKey = nil
 		}
 		// International
 		if let remoteEuGreenCards = response.euGreenCards {

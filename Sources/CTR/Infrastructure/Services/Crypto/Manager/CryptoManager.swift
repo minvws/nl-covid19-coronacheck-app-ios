@@ -13,20 +13,17 @@ class CryptoManager: CryptoManaging {
 	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol
 	private let verificationPolicyManager: VerificationPolicyManaging
-	private let secureUserSettings: SecureUserSettingsProtocol
 	private let featureFlagManager: FeatureFlagManaging
 	private let logHandler: Logging?
 	
 	/// Initializer
 
 	required init(
-		secureUserSettings: SecureUserSettingsProtocol,
 		cryptoLibUtility: CryptoLibUtilityProtocol,
 		verificationPolicyManager: VerificationPolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
 		logHandler: Logging? = nil
 	) {
-		self.secureUserSettings = secureUserSettings
 		self.cryptoLibUtility = cryptoLibUtility
 		self.verificationPolicyManager = verificationPolicyManager
 		self.featureFlagManager = featureFlagManager
