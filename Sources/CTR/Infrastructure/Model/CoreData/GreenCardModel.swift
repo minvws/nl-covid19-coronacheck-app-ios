@@ -139,4 +139,13 @@ extension GreenCard {
 		// An international greencard has 1 credential, that may be expired.
 		return castCredentials()?.last
 	}
+	
+	func delete(context: NSManagedObjectContext) {
+		
+		if type == GreenCardType.domestic.rawValue {
+			// Reset the secret key to nil if the domestic greencard is deleted.
+			Current.secureUserSettings.holderSecretKey = nil
+		}
+		context.delete(self)
+	}
 }

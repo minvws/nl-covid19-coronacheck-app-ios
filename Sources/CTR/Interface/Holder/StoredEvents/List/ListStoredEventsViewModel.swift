@@ -340,8 +340,9 @@ class ListStoredEventsViewModel {
 							
 						case .noSignedEvents:
 							
-							// No more stored events. Remove existing greencards.
+							// No more stored events. Remove existing greencards, remove key.
 							Current.walletManager.removeExistingGreenCards()
+							Current.secureUserSettings.holderSecretKey = nil
 							self.viewState = self.getEventGroupListViewState()
 							
 						case let .customError(title: title, message: message):
