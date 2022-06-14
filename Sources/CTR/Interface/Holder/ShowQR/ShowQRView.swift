@@ -87,6 +87,10 @@ class ShowQRView: BaseView {
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		navigationInfoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
 		navigationInfoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
+		
+		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { [weak self] _ in
+			self?.setNeedsUpdateConstraints()
+		}
 	}
 	
 	/// Setup the hierarchy
@@ -109,13 +113,6 @@ class ShowQRView: BaseView {
 		setupSecurityViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			pageControl.topAnchor.constraint(
-				equalTo: navigationInfoView.bottomAnchor,
-				constant: ViewTraits.Spacing.buttonToPageControl
-			),
-			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
-
 			returnToThirdPartyAppButton.topAnchor.constraint(
 				equalTo: containerView.bottomAnchor,
 				constant: ViewTraits.Spacing.containerToReturnToThirdPartyAppButton
@@ -133,7 +130,13 @@ class ShowQRView: BaseView {
 			),
 			navigationInfoView.trailingAnchor.constraint(
 				lessThanOrEqualTo: containerView.trailingAnchor
-			)
+			),
+			
+			pageControl.topAnchor.constraint(
+				equalTo: navigationInfoView.bottomAnchor,
+				constant: ViewTraits.Spacing.buttonToPageControl
+			),
+			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 		bringSubviewToFront(containerView)
 		bringSubviewToFront(navigationInfoView)
@@ -154,8 +157,18 @@ class ShowQRView: BaseView {
 			containerView.trailingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.trailingAnchor
 			),
-			containerView.heightAnchor.constraint(equalTo: widthAnchor)
+			containerView.heightAnchor.constraint(lessThanOrEqualTo: widthAnchor)
 		])
+		
+		containerHeightRestrictionConstraint = containerView.heightAnchor.constraint(lessThanOrEqualToConstant: containerHeightRestrictionConstant)
+		containerHeightRestrictionConstraint?.isActive = true
+	}
+	
+	var containerHeightRestrictionConstraint: NSLayoutConstraint?
+	var containerHeightRestrictionConstant: CGFloat {
+		let smallestDimension = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+		let ratio = UIScreen.main.bounds.width > UIScreen.main.bounds.height ? 0.50 : 0.65
+		return ratio * smallestDimension
 	}
 
 	private func setupSecurityViewConstraints() {
@@ -180,6 +193,11 @@ class ShowQRView: BaseView {
 		super.safeAreaInsetsDidChange()
 		guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
 		securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+	}
+	
+	override func updateConstraints() {
+		super.updateConstraints()
+		containerHeightRestrictionConstraint?.constant = containerHeightRestrictionConstant
 	}
 
 	@objc func didTapThirdPartyAppButton() {
