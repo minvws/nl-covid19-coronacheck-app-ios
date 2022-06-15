@@ -263,11 +263,6 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 
-	private func presentAsBottomSheet(_ viewController: UIViewController) {
-
-		navigationController.visibleViewController?.presentBottomSheet(viewController)
-	}
-
 	@discardableResult private func navigateBackToEventStart() -> Bool {
 
 		if let eventStartViewController = navigationController.viewControllers

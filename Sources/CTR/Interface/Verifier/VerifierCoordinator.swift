@@ -322,7 +322,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = DeniedQRScanMoreInfoViewController(
 			viewModel: DeniedQRScanMoreInfoViewModel(coordinator: self)
 		)
-		navigationController.presentBottomSheet(viewController)
+		presentAsBottomSheet(viewController)
 	}
 }
 
