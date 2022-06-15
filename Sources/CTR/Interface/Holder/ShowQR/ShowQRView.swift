@@ -28,7 +28,7 @@ class ShowQRView: BaseView {
 		}
 	}
 	
-	enum AnimationStyle {
+	enum AnimationStyle: Equatable {
 		
 		case domestic(isWithinWinterPeriod: Bool = false)
 		case international(isWithinWinterPeriod: Bool = false)

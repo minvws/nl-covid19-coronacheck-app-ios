@@ -136,7 +136,7 @@ class ShowQRViewModel {
 		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
-
+		
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
 		self.dataSource = ShowQRDatasource(greenCards: greenCards, disclosurePolicy: disclosurePolicy)

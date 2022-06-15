@@ -410,4 +410,100 @@ class ShowQRViewModelTests: XCTestCase {
 
 		expect(self.sut.thirdPartyTicketAppButtonTitle).to(beNil())
 	}
+
+	func test_selectedanimation_domesticsummer() throws {
+		
+		// Arrange
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 3, day: 21).date! }
+		
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+
+		// Act
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
+			thirdPartyTicketAppName: nil
+		)
+		
+		expect(self.sut.animationStyle) == .domestic(isWithinWinterPeriod: false)
+	}
+	
+	func test_selectedanimation_domesticwinter() throws {
+		
+		// Arrange
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 21).date! }
+		
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
+
+		// Act
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
+			thirdPartyTicketAppName: nil
+		)
+		
+		expect(self.sut.animationStyle) == .domestic(isWithinWinterPeriod: true)
+	}
+
+	func test_selectedanimation_internationalsummer() throws {
+		
+		// Arrange
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 3, day: 21).date! }
+		
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+
+		// Act
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
+			thirdPartyTicketAppName: nil
+		)
+		
+		expect(self.sut.animationStyle) == .international(isWithinWinterPeriod: false)
+	}
+	
+	func test_selectedanimation_internationalwinter() throws {
+		
+		// Arrange
+		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 21).date! }
+		
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+
+		// Act
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCards: [greenCard],
+			disclosurePolicy: .policy3G,
+			thirdPartyTicketAppName: nil
+		)
+		
+		expect(self.sut.animationStyle) == .international(isWithinWinterPeriod: true)
+	}
 }
