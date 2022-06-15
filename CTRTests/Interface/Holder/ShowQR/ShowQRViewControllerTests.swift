@@ -220,17 +220,4 @@ class ShowQRViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.pageControl.currentPageIndex).toEventually(equal(1))
 		expect(self.sut.sceneView.pageControl.numberOfPages) == 2
 	}
-
-	/// Test the security features
-	func test_securityFeaturesAnimation() {
-
-		// Given
-		loadView()
-
-		// When
-		sut?.sceneView.securityView.tapFlipAnimation()
-
-		// Then
-		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
-	}
 }

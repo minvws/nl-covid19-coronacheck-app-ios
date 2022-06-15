@@ -53,8 +53,8 @@ final class ScanView: BaseView {
 	init() {
 		super.init(frame: .zero)
 
-		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { _ in
-			self.setNeedsUpdateConstraints()
+		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { [weak self] _ in
+			self?.setNeedsUpdateConstraints()
 		}
 	}
 

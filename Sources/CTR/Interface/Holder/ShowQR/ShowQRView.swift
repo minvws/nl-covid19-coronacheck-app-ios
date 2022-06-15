@@ -19,20 +19,57 @@ class ShowQRView: BaseView {
 		enum Margin {
 			static let edge: CGFloat = 10
 			static let infoEdge: CGFloat = 20
-			static var domesticSecurity: CGFloat {
-				SecurityAnimation.isWithinWinterPeriod ? 57 : 56
-			}
-			static var internationalSecurity: CGFloat {
-				SecurityAnimation.isWithinWinterPeriod ? 90 : 52
-			}
-			static var internationalSecurityExtraSafeAreaInset: CGFloat {
-				SecurityAnimation.isWithinWinterPeriod ? 60 : 20
-			}
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
+		
 		enum Spacing {
-			static let buttonToPageControl: CGFloat = 16
+			static let buttonToPageControl: CGFloat = 4
 			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
+		}
+	}
+	
+	enum AnimationStyle: Equatable {
+		
+		case domestic(isWithinWinterPeriod: Bool = false)
+		case international(isWithinWinterPeriod: Bool = false)
+		
+		var animation: SecurityAnimation {
+			switch self {
+				case let .domestic(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? .domesticWinterAnimation : .domesticSummerAnimation
+				case let .international(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? .internationalWinterAnimation : .internationalSummerAnimation
+			}
+		}
+		
+		/// Value to set on `securityViewTopConstraint?.constant` when QR takes up most of the screen
+		var animationTopOffsetWhenQRMostOfScreen: CGFloat {
+			switch self {
+				case let .domestic(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? -140 : -175
+				case let .international(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? 0 : -300
+			}
+		}
+		
+		/// Value to set on `securityViewTopConstraint?.constant` when QR does not take up most of the screen
+		var animationTopOffsetWhenQRNotMostOfScreen: CGFloat {
+			switch self {
+				case let .domestic(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? -310 : -400
+				case let .international(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? -60 : -150
+			}
+		}
+		
+		/// The default ratio of width to height of the animation:
+		var ratioWidthToHeight: CGFloat {
+			switch self {
+				case let .domestic(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? 1.33 : 1
+				case let .international(isWithinWinterPeriod):
+					return isWithinWinterPeriod ? 1.768 : 1.34
+			}
 		}
 	}
 
@@ -55,7 +92,7 @@ class ShowQRView: BaseView {
 	}()
 
 	/// The security features
-	let securityView: SecurityFeaturesView = {
+	let securityAnimationView: SecurityFeaturesView = {
 
 		let view = SecurityFeaturesView()
 		view.contentMode = .bottom
@@ -87,19 +124,38 @@ class ShowQRView: BaseView {
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		navigationInfoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
 		navigationInfoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
+		
+		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { [weak self] _ in
+			self?.setNeedsUpdateConstraints()
+		}
 	}
 	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(securityView)
+		addSubview(securityAnimationView)
 		addSubview(containerView)
 		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
 		addSubview(navigationInfoView)
+		
+		addLayoutGuide(qrFrameLayoutGuide)
+		qrFrameLayoutGuide.identifier = "qrFrameLayoutGuide"
 	}
+	
+	private var qrFrameLayoutGuide: UILayoutGuide = UILayoutGuide()
 
+	private var containerHeightRestrictionConstraint: NSLayoutConstraint?
+	private var containerHeightRestrictionConstant: CGFloat {
+		let smallestDimension = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+		let ratio = UIScreen.main.bounds.width > UIScreen.main.bounds.height ? 0.50 : 0.65
+		return ratio * smallestDimension
+	}
+	
+	private var securityViewWidthHeightConstraint: NSLayoutConstraint?
+	private var securityViewTopConstraint: NSLayoutConstraint?
+	
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
@@ -109,13 +165,6 @@ class ShowQRView: BaseView {
 		setupSecurityViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			pageControl.topAnchor.constraint(
-				equalTo: navigationInfoView.bottomAnchor,
-				constant: ViewTraits.Spacing.buttonToPageControl
-			),
-			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
-
 			returnToThirdPartyAppButton.topAnchor.constraint(
 				equalTo: containerView.bottomAnchor,
 				constant: ViewTraits.Spacing.containerToReturnToThirdPartyAppButton
@@ -125,18 +174,29 @@ class ShowQRView: BaseView {
 				constant: ViewTraits.Margin.returnToThirdPartyAppButton
 			),
 			
+			qrFrameLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+			qrFrameLayoutGuide.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 1.03),
+			qrFrameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor),
+			qrFrameLayoutGuide.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+			
 			navigationInfoView.topAnchor.constraint(
-				equalTo: containerView.bottomAnchor
+				equalTo: containerView.bottomAnchor,
+				constant: 2
 			),
 			navigationInfoView.leadingAnchor.constraint(
-				greaterThanOrEqualTo: containerView.leadingAnchor
+				equalTo: qrFrameLayoutGuide.leadingAnchor
 			),
+			
 			navigationInfoView.trailingAnchor.constraint(
-				lessThanOrEqualTo: containerView.trailingAnchor
-			)
+				equalTo: qrFrameLayoutGuide.trailingAnchor
+			),
+			
+			pageControl.topAnchor.constraint(
+				equalTo: navigationInfoView.bottomAnchor,
+				constant: ViewTraits.Spacing.buttonToPageControl
+			),
+			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
-		bringSubviewToFront(containerView)
-		bringSubviewToFront(navigationInfoView)
 	}
 	
 	private func setupContainerViewConstraints() {
@@ -154,32 +214,55 @@ class ShowQRView: BaseView {
 			containerView.trailingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.trailingAnchor
 			),
-			containerView.heightAnchor.constraint(equalTo: widthAnchor)
+			containerView.heightAnchor.constraint(lessThanOrEqualTo: widthAnchor)
 		])
+		
+		containerHeightRestrictionConstraint = containerView.heightAnchor.constraint(lessThanOrEqualToConstant: containerHeightRestrictionConstant)
+		containerHeightRestrictionConstraint?.isActive = true
+		
+		// On iPhone, the QR should be the full-width:
+		if UIDevice.current.userInterfaceIdiom == .phone {
+			containerView.heightAnchor.constraint(equalTo: widthAnchor).isActive = true
+		}
 	}
-
+	
 	private func setupSecurityViewConstraints() {
 		
 		NSLayoutConstraint.activate([
 			// Security
-			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
-			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			securityAnimationView.widthAnchor.constraint(equalTo: widthAnchor),
+			securityAnimationView.centerXAnchor.constraint(equalTo: securityAnimationView.centerXAnchor),
 			{
-				let constraint = securityView.bottomAnchor.constraint(
-					equalTo: bottomAnchor,
-					constant: ViewTraits.Margin.domesticSecurity
-				)
+				let constraint = securityAnimationView.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor)
 				securityViewBottomConstraint = constraint
 				return constraint
 			}()
 		])
+
+		// the animation is not quite square.. and each animation is unsquare in its own way.
+		// this is replaced each time `animationStyle` is set.
+		securityViewWidthHeightConstraint = securityAnimationView.widthAnchor.constraint(equalTo: securityAnimationView.heightAnchor, multiplier: animationStyle.ratioWidthToHeight)
+		securityViewWidthHeightConstraint?.isActive = true
+		
+		securityViewTopConstraint = securityAnimationView.topAnchor.constraint(greaterThanOrEqualTo: containerView.bottomAnchor) // This is updated on each layoutSubviews
+		securityViewTopConstraint?.isActive = true
 	}
 	
-	override func safeAreaInsetsDidChange() {
-		super.safeAreaInsetsDidChange()
-		guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
-		securityViewBottomConstraint?.constant = safeAreaInsets.bottom + ViewTraits.Margin.internationalSecurityExtraSafeAreaInset
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		
+		if let window = window {
+			// Don't allow the animation to overlap the containerView (QR) too much:
+			let qrWidth = containerView.frame.height // using width because width == height
+			let qrWidthFractionOfWholeWindow = qrWidth / window.bounds.width
+			let thresholdToBeConsideredMostOfWindow: CGFloat = 0.58
+			securityViewTopConstraint?.constant = qrWidthFractionOfWholeWindow > thresholdToBeConsideredMostOfWindow ? animationStyle.animationTopOffsetWhenQRMostOfScreen : animationStyle.animationTopOffsetWhenQRNotMostOfScreen
+		}
+	}
+	
+	override func updateConstraints() {
+		super.updateConstraints()
+		containerHeightRestrictionConstraint?.constant = containerHeightRestrictionConstant
 	}
 
 	@objc func didTapThirdPartyAppButton() {
@@ -228,19 +311,24 @@ class ShowQRView: BaseView {
 
 	/// Play the animation
 	func play() {
-
-		securityView.play()
+		securityAnimationView.play()
 	}
 
 	/// Resume the animation
 	func resume() {
 
-		securityView.resume()
+		securityAnimationView.resume()
 	}
 
-	func setupForInternational() {
-
-		securityView.setupForInternational()
-		securityViewBottomConstraint?.constant = ViewTraits.Margin.internationalSecurity
+	var animationStyle: AnimationStyle = .domestic(isWithinWinterPeriod: false) {
+		didSet {
+			securityAnimationView.currentAnimation = animationStyle.animation
+ 
+			securityViewWidthHeightConstraint?.isActive = false
+			
+			securityViewWidthHeightConstraint = securityAnimationView.widthAnchor.constraint(equalTo: securityAnimationView.heightAnchor, multiplier: animationStyle.ratioWidthToHeight) // the animation is not quite square
+			securityViewWidthHeightConstraint?.isActive = true
+			
+		}
 	}
 }
