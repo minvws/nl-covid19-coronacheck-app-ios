@@ -262,7 +262,6 @@ class ShowQRView: BaseView {
 
 	/// Play the animation
 	func play() {
-
 		securityAnimationView.play()
 	}
 
@@ -272,9 +271,15 @@ class ShowQRView: BaseView {
 		securityAnimationView.resume()
 	}
 
-	func setupForInternational() {
+	var animationStyle: AnimationStyle = .domestic(isWithinWinterPeriod: false) {
+		didSet {
+			securityAnimationView.currentAnimation = animationStyle.animation
 
-		securityAnimationView.setupForInternational()
-//		securityViewBottomConstraint?.constant = ViewTraits.Margin.internationalSecurity
+			securityViewWidthHeightConstraint?.isActive = false
+
+			securityViewWidthHeightConstraint = securityAnimationView.widthAnchor.constraint(equalTo: securityAnimationView.heightAnchor, multiplier: animationStyle.ratioWidthToHeight) // the animation is not quite square
+			securityViewWidthHeightConstraint?.isActive = true
+
+		}
 	}
 }
