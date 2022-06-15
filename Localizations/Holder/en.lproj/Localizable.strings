@@ -182,7 +182,7 @@
 "holder.dcc.recovery.date" = "Test date:";
 "holder.dcc.recovery.dateofbirth" = "Date of birth:";
 "holder.dcc.recovery.details.title" = "Details";
-"holder.dcc.recovery.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.recovery.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.recovery.identifier" = "Unique certificate identifier:";
 "holder.dcc.recovery.name" = "Name:";
 "holder.dcc.recovery.pathogen" = "Disease recovered from:";
@@ -194,7 +194,7 @@
 "holder.dcc.test.dateofbirth" = "Date of birth:";
 "holder.dcc.test.details.title" = "Details";
 "holder.dcc.test.facility" = "Testing centre:";
-"holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 "holder.dcc.test.manufacturer" = "Test manufacturer:";
 "holder.dcc.test.name" = "Name:";
@@ -209,7 +209,7 @@
 "holder.dcc.vaccination.dateofbirth" = "Date of birth:";
 "holder.dcc.vaccination.details.title" = "Details";
 "holder.dcc.vaccination.dosage" = "Number in series of doses:";
-"holder.dcc.vaccination.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor.They can help you change these details.</p>";
+"holder.dcc.vaccination.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.vaccination.identifier" = "Unique vaccination identifier:";
 "holder.dcc.vaccination.list.title" = "Vaccination certificate dose %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Vaccine manufacturer:";
@@ -389,6 +389,7 @@
 "holder.showqr.eu.about.test.manufacturer" = "Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Name:";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
+"holder.showqr.eu.about.test.negative.singleLanguage" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.pathogen" = "Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
@@ -416,14 +417,14 @@
 "holder.showqr.nextbutton" = "Next QR code";
 "holder.showqr.previousbutton" = "Previous QR code";
 "holder.showqr.qr.eu.vaccinecertificatedoses" = "Dose %@/%@";
-"holder.showqr.qrhidden" = "QR code hidden";
+"holder.showqr.qrhidden" = "QR code is hidden";
 "holder.showqr.screenshotwarning.countdownAccessibilityLabel" = "Time remaining:";
 "holder.showqr.screenshotwarning.message" = "Your QR code returns in %@";
 "holder.showqr.screenshotwarning.subtitle" = "Use the QR code in the app";
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
 "holder.showqr.showqr" = "Show anyway";
 "holder.test.list.title" = "Retrieve test result";
-"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.test.nolist.title" = "No test result available";
 "holder.testresults.alert.cancel" = "No";
 "holder.testresults.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
@@ -527,7 +528,7 @@
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.nolist.message" = "<p>There are no available vaccination details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available.</p>";
-"holder.vaccination.nolist.title" = "Vaccinations not available";
+"holder.vaccination.nolist.title" = "No vaccinations available";
 "holder.vaccination.start.action" = "Log in with DigiD";
 "holder.vaccination.start.message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p><p><b>Had coronavirus before your first vaccination?</b><br />Then you often need a vaccination less to be considered fully vaccinated. Retrieve your positive test result to record it into your vaccination certificate.</p>";
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
@@ -687,6 +688,16 @@
 "holder_paperproof_startscanning_title" = "Scan to add a certificate";
 "holder_paperproof_whichProofsCanBeUsed_body" = "<p>You can scan and add the following certificates to the app:</p><ul><li>A paper certificate you got from your health care provider or the government. Did you receive a certificate for in the Netherlands and for international use? Scan the <b>international QR code</b>.</li><li>A coronavirus certificate with QR code of your test or vaccination from abroad. You have the QR code on paper or in a foreign coronavirus app.</li></ul>";
 "holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
+"holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
+"holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired this means your vaccination is still valid, but the certificate that you’ve added is no longer. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
+"holder_qr_code_expired_explanation_title" = "Expired QR code";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/en/";
+"holder_qr_code_expired_overlay_title" = "QR code has expired";
+"holder_qr_code_hidden_explanation_action" = "Read more on CoronaCheck.nl";
+"holder_qr_code_hidden_explanation_button" = "What does this mean?";
+"holder_qr_code_hidden_explanation_description" = "<p>If the QR code of your vaccination is hidden, you probably don’t need it. This is because there are QR codes of your more recent vaccinations in the app too.</p><p>You can still show and use hidden QR codes if needed.</p>";
+"holder_qr_code_hidden_explanation_title" = "Hidden QR code";
+"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/en/";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_scanner_error_action" = "Scan again";
@@ -699,6 +710,7 @@
 "holder_scanner_permission_settings" = "To Settings";
 "holder_scanner_permission_title" = "No access to camera";
 "holder_scanner_title" = "Scan QR code";
+"holder_showQR_euAboutVaccination_daysSince" = "Days since vaccination:";
 "holder_showQR_label_expiredQR" = "This QR code is no longer valid";
 "holder_showQR_label_newerQRAvailable" = "You probably won't need this QR code because you have a more recent dose.";
 /* Voice Over Details Button Domestic QR */

@@ -453,7 +453,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 					eventGroup = EventGroupModel.create(
 						type: EventMode.recovery,
 						providerIdentifier: "CoronaCheck",
-						maxIssuedAt: Date(),
+						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
 						managedContext: context
@@ -474,7 +474,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 				eventGroup = EventGroupModel.create(
 					type: EventMode.recovery,
 					providerIdentifier: "DCC",
-					maxIssuedAt: Date(),
+					expiryDate: nil,
 					jsonData: jsonData,
 					wallet: wallet,
 					managedContext: context

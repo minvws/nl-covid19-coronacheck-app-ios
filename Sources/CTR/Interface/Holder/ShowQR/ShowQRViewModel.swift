@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ShowQRViewModel: Logging {
+class ShowQRViewModel {
 
 	// MARK: - Private types
 	final private class ScreenBrightnessManager {
@@ -87,7 +87,7 @@ class ShowQRViewModel: Logging {
 
 	private var currentPage: Int {
 		didSet {
-			logVerbose("current page set to \(currentPage)")
+			Current.logHandler.logVerbose("current page set to \(currentPage)")
 			displayQRInformation()
 		}
 	}
@@ -97,8 +97,6 @@ class ShowQRViewModel: Logging {
 	@Bindable private(set) var title: String?
 	
 	@Bindable private(set) var dosage: String?
-
-	@Bindable private(set) var relevancyInformation: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
@@ -213,8 +211,6 @@ class ShowQRViewModel: Logging {
 		}
 		// Dosage
 		displayDosageInformation(greenCard)
-		// Relevancy
-		displayRelevancyInformation(greenCard)
 	}
 	
 	private func displayDosageInformation(_ greenCard: GreenCard) {
@@ -223,17 +219,6 @@ class ShowQRViewModel: Logging {
 		   let euVaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first,
 		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
 			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
-		}
-	}
-	
-	private func displayRelevancyInformation(_ greenCard: GreenCard) {
-		
-		if dataSource.isCredentialExpired(greenCard) {
-			relevancyInformation = L.holder_showQR_label_expiredQR()
-		} else if dataSource.isDosenumberSmallerThanTotalDose(greenCard) {
-			relevancyInformation = L.holder_showQR_label_newerQRAvailable()
-		} else {
-			relevancyInformation = nil
 		}
 	}
 	
@@ -247,7 +232,7 @@ class ShowQRViewModel: Logging {
 				openURLsInApp: true
 			)
 		} else {
-			logError("Can't read the domestic credentials")
+			Current.logHandler.logError("Can't read the domestic credentials")
 		}
 	}
 	
@@ -316,7 +301,7 @@ class ShowQRViewModel: Logging {
 				delegate: self,
 				greenCard: item.greenCard,
 				disclosurePolicy: item.policy,
-				qrShouldInitiallyBeHidden: dataSource.shouldGreenCardBeHidden(item.greenCard)
+				state: dataSource.getState(item.greenCard)
 			)
 		)
 		viewController.isAccessibilityElement = true
@@ -327,8 +312,16 @@ class ShowQRViewModel: Logging {
 // MARK: - ShowQRItemViewModelDelegate
 
 extension ShowQRViewModel: ShowQRItemViewModelDelegate {
-
+	
 	func itemIsNotValid() {
 		coordinator?.navigateBackToStart()
+	}
+	
+	func showInfoExpiredQR() {
+		coordinator?.userWishesMoreInfoAboutExpiredQR()
+	}
+	
+	func showInfoHiddenQR() {
+		coordinator?.userWishesMoreInfoAboutHiddenQR()
 	}
 }

@@ -51,6 +51,7 @@ attributes:
 configs:
   Development: debug
   FirebaseAcceptance: debug
+  FirebaseTest: debug
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
@@ -123,6 +124,9 @@ targetTemplates:
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
+        FirebaseTest:
+          NETWORK_CONFIGURATION: TEST
+          LOG_LEVEL: debug
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
@@ -278,9 +282,10 @@ targets:
       base:
         APP_FLAVOR: holder
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 4.3.0 # holder
+        MARKETING_VERSION: 4.4.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
+        TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad
 
       configs:
         Development:
@@ -289,6 +294,12 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
+        FirebaseTest:
+          DISPLAY_NAME: "🧪 Test Holder"
+          PRODUCT_NAME: CTR Test
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Test.entitlements
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Holder"
           PRODUCT_NAME: CTR ACC
@@ -320,6 +331,10 @@ targets:
               CFBundleURLSchemes:
                 - coronacheck-dev
             - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.test
+              CFBundleURLSchemes:
+                - coronacheck-test
+            - CFBundleTypeRole: Editor
               CFBundleURLName: nl.rijksoverheid.ctr.acc
               CFBundleURLSchemes:
                 - coronacheck-acc
@@ -349,6 +364,11 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Dev.entitlements
+        FirebaseTest:
+          DISPLAY_NAME: "🧪 Test Scanner"
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Test.entitlements
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Acc
@@ -376,6 +396,10 @@ targets:
               CFBundleURLName: nl.rijksoverheid.ctr.verifier.dev
               CFBundleURLSchemes:
                 - coronacheck-verifier-dev
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.verifier.test
+              CFBundleURLSchemes:
+                - coronacheck-verifier-test
             - CFBundleTypeRole: Editor
               CFBundleURLName: nl.rijksoverheid.ctr.verifier.acc
               CFBundleURLSchemes:
@@ -505,6 +529,13 @@ schemes:
     templateAttributes:
       appTargetName: Holder
       configEnvironment: FirebaseAcceptance
+  
+  Holder Test:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseTest
 
   Holder Production:
     templates:
@@ -535,6 +566,13 @@ schemes:
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: FirebaseAcceptance
+
+  Verifier Test:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseTest
 
   Verifier Production:
     templates:

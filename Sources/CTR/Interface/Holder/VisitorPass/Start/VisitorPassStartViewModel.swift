@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class VisitorPassStartViewModel: Logging {
+final class VisitorPassStartViewModel {
 	
 	/// The coordinator to open Url
 	weak var coordinator: (OpenUrlProtocol & HolderCoordinatorDelegate)?

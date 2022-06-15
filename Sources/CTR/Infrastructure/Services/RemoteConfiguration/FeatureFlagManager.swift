@@ -30,7 +30,7 @@ protocol FeatureFlagManaging {
 	func shouldShowCoronaMelderRecommendation() -> Bool
 }
 
-class FeatureFlagManager: FeatureFlagManaging, Logging {
+class FeatureFlagManager: FeatureFlagManaging {
 	
 	private var remoteConfigManager: RemoteConfigManaging
 	private var versionSupplier: AppVersionSupplierProtocol?

@@ -4,6 +4,7 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -30,6 +31,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
+	func userWishesMoreInfoAboutExpiredQR()
+	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 	func userWishesMoreInfoAboutNoTestToken()
@@ -443,6 +446,58 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 						animated: true,
 						completion: self.userWishesToCreateAVaccinationQR
 					)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func userWishesMoreInfoAboutExpiredQR() {
+	
+		let viewModel = BottomSheetContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: L.holder_qr_code_expired_explanation_title(),
+				body: L.holder_qr_code_expired_explanation_description(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holder_qr_code_expired_explanation_action(),
+				secondaryAction: { [weak self] in
+					guard let self = self,
+						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
+					self.openUrl(url, inApp: true)
+				}
+			),
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			},
+			hideBodyForScreenCapture: false
+		)
+		
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
+	}
+
+	func userWishesMoreInfoAboutHiddenQR() {
+		
+		let viewModel = BottomSheetContentViewModel(
+			coordinator: self,
+			content: Content(
+				title: L.holder_qr_code_hidden_explanation_title(),
+				body: L.holder_qr_code_hidden_explanation_description(),
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: L.holder_qr_code_hidden_explanation_action(),
+				secondaryAction: { [weak self] in
+					guard let self = self,
+							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
+					self.openUrl(url, inApp: true)
 				}
 			),
 			linkTapHander: { [weak self] url in

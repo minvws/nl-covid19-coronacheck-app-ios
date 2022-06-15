@@ -74,7 +74,7 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.primaryButton.titleLabel?.text, L.generalNext(), "Button title should match")
+		XCTAssertEqual(sut.sceneView.primaryButton.titleLabel?.text, L.general_toMyOverview(), "Button title should match")
 	}
 
 	/// Test tap on the next button with only one item

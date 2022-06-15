@@ -14,7 +14,7 @@ protocol NewFeaturesDelegate: AnyObject {
 	func finishNewFeatures()
 }
 
-class NewFeaturesCoordinator: Coordinator, Logging {
+class NewFeaturesCoordinator: Coordinator {
 
 	/// The child coordinators
 	var childCoordinators: [Coordinator] = []
@@ -46,7 +46,7 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 	/// Start the scene
 	func start() {
 
-		logVerbose("Starting New Features Information Flow")
+		Current.logHandler.logVerbose("Starting New Features Information Flow")
 		
 		if let pagedAnnouncementItems = newFeaturesManager.pagedAnnouncementItems() {
 			
@@ -59,7 +59,7 @@ class NewFeaturesCoordinator: Coordinator, Logging {
 				),
 				allowsBackButton: false,
 				allowsCloseButton: pagedAnnouncementItems.count == 1,
-				allowsNextButton: pagedAnnouncementItems.count > 1
+				allowsNextButton: true
 			)
 			navigationController.viewControllers = [viewController]
 			navigationController.view.window?.replaceRootViewController(with: navigationController)

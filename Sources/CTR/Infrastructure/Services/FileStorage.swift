@@ -17,12 +17,14 @@ protocol FileStorageProtocol: AnyObject {
 	var documentsURL: URL? { get }
 }
 
-final class FileStorage: FileStorageProtocol, Logging {
+final class FileStorage: FileStorageProtocol {
 	
 	private let fileManager: FileManager
+	private let logHandler: Logging?
 	
-	init(fileManager: FileManager = FileManager.default) {
+	init(fileManager: FileManager = FileManager.default, logHandler: Logging? = nil) {
 		self.fileManager = fileManager
+		self.logHandler = logHandler
 	}
 
 	/// Get url to documents directory
@@ -37,7 +39,7 @@ final class FileStorage: FileStorageProtocol, Logging {
 	/// - Throws
 	func store(_ data: Data, as fileName: String) throws {
 		guard let url = documentsURL else {
-			logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return
 		}
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
@@ -49,7 +51,7 @@ final class FileStorage: FileStorageProtocol, Logging {
 	func read(fileName: String) -> Data? {
 		
 		guard let url = documentsURL else {
-			logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return nil
 		}
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
@@ -74,10 +76,10 @@ final class FileStorage: FileStorageProtocol, Logging {
 			let items = try fileManager.contentsOfDirectory(atPath: path)
 
 			for item in items {
-				logDebug("Found \(item)")
+				logHandler?.logDebug("Found \(item)")
 			}
 		} catch {
-			logError("Failed to read directory \(error)")
+			logHandler?.logError("Failed to read directory \(error)")
 		}
 	}
 
@@ -87,7 +89,7 @@ final class FileStorage: FileStorageProtocol, Logging {
 	func fileExists(_ fileName: String) -> Bool {
 
 		guard let url = documentsURL else {
-			logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return false
 		}
 
@@ -101,7 +103,7 @@ final class FileStorage: FileStorageProtocol, Logging {
 	func remove(_ fileName: String) {
 
 		guard let url = documentsURL else {
-			logError("Failed to load documents directory")
+			logHandler?.logError("Failed to load documents directory")
 			return
 		}
 
@@ -109,7 +111,7 @@ final class FileStorage: FileStorageProtocol, Logging {
 		do {
 			try fileManager.removeItem(atPath: fileUrl.path)
 		} catch {
-			logError("Failed to read directory \(error)")
+			logHandler?.logError("Failed to read directory \(error)")
 		}
 	}
 

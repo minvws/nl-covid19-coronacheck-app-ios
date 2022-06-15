@@ -28,7 +28,7 @@ extension UILayoutGuide: Embeddable {
 	}
 }
 
-extension UIView: Logging {
+extension UIView {
 
 	/// Convenience method for a common layout where a subview is added to a view and needs constraints for all four sides.
 	///
@@ -47,7 +47,7 @@ extension UIView: Logging {
 		insets: UIEdgeInsets = .zero) -> Self {
 
 		guard let view = embeddable.view else {
-			logError("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
+			Current.logHandler.logError("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
 			return self
 		}
 

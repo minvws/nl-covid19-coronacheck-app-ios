@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class ListStoredEventsViewModel: Logging {
+class ListStoredEventsViewModel {
 
 	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -81,15 +81,17 @@ class ListStoredEventsViewModel: Logging {
 			return nil
 		}
 		
-		if EventFlow.paperproofIdentier.lowercased() == provider.lowercased() {
+		// Provider Identifier can have an appended unique. Let's strip that.
+		let shortProvider = String(provider.prefix(3))
+		
+		// DCC (HKVI or foreign)
+		if EventFlow.paperproofIdentier.lowercased() == shortProvider.lowercased() {
 			return L.holder_storedEvents_listHeader_paperFlow()
 		}
-
-		if let providerName = Current.mappingManager.getProviderIdentifierMapping(provider) {
-			return L.holder_storedEvents_listHeader_fetchedFromProvider(providerName)
-		} else {
-			return L.holder_storedEvents_listHeader_fetchedFromProvider(provider)
-		}
+		
+		let providerName = Current.mappingManager.getProviderIdentifierMapping(shortProvider)
+		
+		return L.holder_storedEvents_listHeader_fetchedFromProvider(providerName ?? provider)
 	}
 	
 	private func getEventRows(_ storedEvent: EventGroup) -> [ListStoredEventsViewController.Row] {
@@ -305,7 +307,7 @@ class ListStoredEventsViewModel: Logging {
 			case .success:
 				sendEventsToTheSigner()
 			case .failure(let error):
-				logError("Failed to remove event groups: \(error)")
+				Current.logHandler.logError("Failed to remove event groups: \(error)")
 				handleCoreDataError()
 		}
 	}

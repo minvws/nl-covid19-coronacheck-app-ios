@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ListRemoteEventsViewModel: Logging {
+class ListRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -223,7 +223,7 @@ class ListRemoteEventsViewModel: Logging {
 		   let credentialData = dccEvent.credential.data(using: .utf8),
 		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
 		   let dccEventType = euCredentialAttributes.eventMode {
-			logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
+			Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
 			return dccEventType
 		}
 		return eventMode
@@ -249,7 +249,7 @@ class ListRemoteEventsViewModel: Logging {
 				storageEventMode = .recovery
 			}
 		}
-		logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
+		Current.logHandler.logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 
@@ -479,7 +479,7 @@ class ListRemoteEventsViewModel: Logging {
 
 		// While the recovery is expired, it is still in Core Data
 		// Let's remove it, to avoid any banner issues on the dashboard (Je bewijs is verlopen)
-		_ = walletManager.removeExpiredGreenCards()
+		_ = walletManager.removeExpiredGreenCards(forDate: Current.now())
 	}
 
 	private func recoveryFlowBothVaccinationAndRecoveryOrigins(_ greencardResponse: RemoteGreenCards.Response) {
@@ -495,7 +495,7 @@ class ListRemoteEventsViewModel: Logging {
 
 		guard let firstRecoveryOrigin = firstRecoveryOrigin, let firstVaccinationOrigin = firstVaccinationOrigin else {
 			// Should not happen, part of the if let flow.
-			self.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
+			Current.logHandler.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
 			self.completeFlow()
 			return
 		}
@@ -633,86 +633,52 @@ class ListRemoteEventsViewModel: Logging {
 			(wrapper.events ?? []).isNotEmpty
 		}
 
-		for response in storableEvents where response.wrapper.status == .complete {
+		for storableEvent in storableEvents where storableEvent.wrapper.status == .complete {
 
 			var data: Data?
 
-			if let signedResponse = response.signedResponse,
+			if let signedResponse = storableEvent.signedResponse,
 			   let jsonData = try? JSONEncoder().encode(signedResponse) {
 				data = jsonData
-			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
+			} else if let dccEvent = storableEvent.wrapper.events?.first?.dccEvent,
 					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
 
-			guard let storageMode = getStorageMode(remoteEvent: response) else {
+			guard let jsonData = data,
+				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
 				return
 			}
 
-			// Remove any existing events for the provider
-			// 2463: Allow multiple vaccinations for paperflow.
-			if eventMode != .paperflow || storageMode != .vaccination {
-				walletManager.removeExistingEventGroups(
-					type: storageMode,
-					providerIdentifier: response.wrapper.providerIdentifier
-				)
-			} else {
-				logDebug("Skipping remove existing eventgroup for \(eventMode) [\(storageMode)]")
-			}
-
-			// Store the new event group
-			if let maxIssuedAt = getMaxIssuedAt(wrapper: response.wrapper),
-			   let jsonData = data {
-				success = success && walletManager.storeEventGroup(
-					storageMode,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					jsonData: jsonData,
-					issuedAt: maxIssuedAt
-				)
-				if !success {
-					break
+			var uniqueIdentifier = storableEvent.wrapper.providerIdentifier
+			if (storageMode == .test || eventMode == .paperflow) &&
+				!(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
+				// We must allow multiple test and scanned event, but do not want duplicates.
+				// So we append the unique of the event to the provider identifier.
+				// For vaccinations and recoveries do not want multiple events,
+				// for those we do want to overwrite the existing ones (so we do not append the unqiue)
+				for event in storableEvent.wrapper.events ?? [] {
+					if let unique = event.unique {
+						uniqueIdentifier += "-\(unique)"
+					}
 				}
-			} else {
-				logWarning("Could not store event group")
+			}
+			
+			// Remove any existing events for the uniqueIdentifier -> so we do not have duplicates
+			walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
+			
+			// Store the event group
+			success = success && walletManager.storeEventGroup(
+				storageMode,
+				providerIdentifier: uniqueIdentifier,
+				jsonData: jsonData,
+				expiryDate: nil
+			)
+			if !success {
+				break
 			}
 		}
 		onCompletion(success)
-	}
-
-	private func getMaxIssuedAt(wrapper: EventFlow.EventResultWrapper) -> Date? {
-
-		// 3.0
-		let maxIssuedAt: Date? = wrapper.events?
-			.compactMap {
-				if $0.hasVaccination {
-					return $0.vaccination?.dateString
-				} else if $0.hasVaccinationAssessment {
-					return $0.vaccinationAssessment?.dateTimeString
-				} else if $0.hasNegativeTest {
-					return $0.negativeTest?.sampleDateString
-				} else if $0.hasRecovery {
-					return $0.recovery?.sampleDate
-				} else if $0.hasPaperCertificate {
-					if let credentialData = $0.dccEvent?.credential.data(using: .utf8) {
-						return cryptoManager?.readEuCredentials(credentialData)?.maxIssuedAt
-					}
-					return nil
-				}
-				return $0.positiveTest?.sampleDateString
-			}
-			.compactMap(Formatter.getDateFrom)
-			.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
-
-				switch latestDateFound {
-					case let latestDateFound? where nextDate > latestDateFound:
-						return nextDate
-					case .none:
-						return nextDate
-					default:
-						return latestDateFound
-				}
-			}
-		return maxIssuedAt
 	}
 }
 

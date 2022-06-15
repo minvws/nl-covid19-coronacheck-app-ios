@@ -100,7 +100,7 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidCancelFromBackSwipe()
 }
 
-class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
+class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 

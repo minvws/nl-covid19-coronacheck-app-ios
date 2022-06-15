@@ -324,7 +324,7 @@ class QRCardView: BaseView {
 
 	var originDesiresToShowAutomaticallyBecomesValidFooter = false
 
-	private func reapplyLabels(now: Date = Date()) {
+	private func reapplyLabels(now: Date = Current.now()) {
 
 		// Remove previous labels
 		verticalLabelsStackView.removeArrangedSubviews()
@@ -352,7 +352,7 @@ class QRCardView: BaseView {
 			}
 			
 			if let buttonEnabledEvaluator = buttonEnabledEvaluator {
-				let enabledState = buttonEnabledEvaluator(Date())
+				let enabledState = buttonEnabledEvaluator(now)
 				if !enabledState && originDesiresToShowAutomaticallyBecomesValidFooter {
 					let becomesValidLabel = Label(bodyBold: L.holderDashboardQrValidityDateAutomaticallyBecomesValidOn())
 					becomesValidLabel.numberOfLines = 0
@@ -371,10 +371,10 @@ class QRCardView: BaseView {
 		}
 
 		if let expiryEvaluator = expiryEvaluator {
-			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
+			let expiryLabel = Label(bodyBold: expiryEvaluator(now))
 			expiryLabel.numberOfLines = 0
 
-			if let text = expiryEvaluator(Date()) {
+			if let text = expiryEvaluator(now) {
 				expiryLabel.isHidden = false
 				expiryLabel.attributedText = text.setLineHeight(ViewTraits.expiryLabelLineHeight, kerning: ViewTraits.expiryLabelKerning)
 			} else {
@@ -399,7 +399,7 @@ class QRCardView: BaseView {
 
 	private func reapplyButtonEnabledState() {
 		if let buttonEnabledEvaluator = buttonEnabledEvaluator {
-			let enabledState = buttonEnabledEvaluator(Date())
+			let enabledState = buttonEnabledEvaluator(Current.now())
 			viewQRButton.isEnabled = enabledState
 			if shouldStyleForEU && enabledState {
 				applyEUStyle()

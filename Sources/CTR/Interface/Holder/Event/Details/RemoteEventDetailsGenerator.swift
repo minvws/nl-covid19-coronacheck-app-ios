@@ -39,7 +39,7 @@ class NegativeTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.testType, value: testType),
 			EventDetails(field: EventDetailsTest.testName, value: testName),
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
-			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
+			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage()),
 			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
 			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
@@ -105,7 +105,7 @@ class DCCTestDetailsGenerator {
 
 		let testResult: String
 		switch test.testResult {
-			case "260415000": testResult = L.holderShowqrEuAboutTestNegative()
+			case "260415000": testResult = L.holderShowqrEuAboutTestNegativeSingleLanguage()
 			case "260373001": testResult = L.holderShowqrEuAboutTestPostive()
 			default: testResult = ""
 		}

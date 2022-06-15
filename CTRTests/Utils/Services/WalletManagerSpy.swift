@@ -13,15 +13,19 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)]()
 	var stubbedStoreEventGroupResult: Bool! = false
 
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool {
+	func storeEventGroup(
+		_ type: EventMode,
+		providerIdentifier: String,
+		jsonData: Data,
+		expiryDate: Date?) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
-		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, issuedAt)
-		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, issuedAt))
+		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, expiryDate)
+		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, expiryDate))
 		return stubbedStoreEventGroupResult
 	}
 
@@ -127,36 +131,28 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExpiredGreenCards = false
 	var invokedRemoveExpiredGreenCardsCount = 0
+	var invokedRemoveExpiredGreenCardsParameters: (forDate: Date, Void)?
+	var invokedRemoveExpiredGreenCardsParametersList = [(forDate: Date, Void)]()
 	var stubbedRemoveExpiredGreenCardsResult: [(greencardType: String, originType: String)]! = []
 
-	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)] {
 		invokedRemoveExpiredGreenCards = true
 		invokedRemoveExpiredGreenCardsCount += 1
+		invokedRemoveExpiredGreenCardsParameters = (forDate, ())
+		invokedRemoveExpiredGreenCardsParametersList.append((forDate, ()))
 		return stubbedRemoveExpiredGreenCardsResult
 	}
 
 	var invokedExpireEventGroups = false
 	var invokedExpireEventGroupsCount = 0
-	var invokedExpireEventGroupsParameters: (configuration: RemoteConfiguration, Void)?
-	var invokedExpireEventGroupsParametersList = [(configuration: RemoteConfiguration, Void)]()
+	var invokedExpireEventGroupsParameters: (forDate: Date, Void)?
+	var invokedExpireEventGroupsParametersList = [(forDate: Date, Void)]()
 
-	func expireEventGroups(configuration: RemoteConfiguration) {
+	func expireEventGroups(forDate: Date) {
 		invokedExpireEventGroups = true
 		invokedExpireEventGroupsCount += 1
-		invokedExpireEventGroupsParameters = (configuration, ())
-		invokedExpireEventGroupsParametersList.append((configuration, ()))
-	}
-
-	var invokedExpireEventGroupsVaccinationValidity = false
-	var invokedExpireEventGroupsVaccinationValidityCount = 0
-	var invokedExpireEventGroupsVaccinationValidityParameters: (vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)?
-	var invokedExpireEventGroupsVaccinationValidityParametersList = [(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?)]()
-
-	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?, vaccinationAssessmentValidity: Int?) {
-		invokedExpireEventGroupsVaccinationValidity = true
-		invokedExpireEventGroupsVaccinationValidityCount += 1
-		invokedExpireEventGroupsVaccinationValidityParameters = (vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity)
-		invokedExpireEventGroupsVaccinationValidityParametersList.append((vaccinationValidity, recoveryValidity, testValidity, vaccinationAssessmentValidity))
+		invokedExpireEventGroupsParameters = (forDate, ())
+		invokedExpireEventGroupsParametersList.append((forDate, ()))
 	}
 
 	var invokedRemoveEventGroup = false
@@ -213,5 +209,17 @@ class WalletManagerSpy: WalletManaging {
 		invokedHasEventGroupParameters = (type, providerIdentifier)
 		invokedHasEventGroupParametersList.append((type, providerIdentifier))
 		return stubbedHasEventGroupResult
+	}
+
+	var invokedUpdateEventGroup = false
+	var invokedUpdateEventGroupCount = 0
+	var invokedUpdateEventGroupParameters: (identifier: String, expiryDate: Date)?
+	var invokedUpdateEventGroupParametersList = [(identifier: String, expiryDate: Date)]()
+
+	func updateEventGroup(identifier: String, expiryDate: Date) {
+		invokedUpdateEventGroup = true
+		invokedUpdateEventGroupCount += 1
+		invokedUpdateEventGroupParameters = (identifier, expiryDate)
+		invokedUpdateEventGroupParametersList.append((identifier, expiryDate))
 	}
 }

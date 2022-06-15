@@ -78,28 +78,6 @@ class ShowQRView: BaseView {
 		return view
 	}()
 
-	/// The scrollview
-	let scrollView: UIScrollView = {
-
-		let view = UIScrollView(frame: .zero)
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
-	/// The info label
-	private let infoLabel: Label = {
-
-		return Label(body: nil).multiline()
-	}()
-
-	private let scrollContentView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = C.white()?.withAlphaComponent(0.8)
-		return view
-	}()
-
 	/// Setup all the views
 	override func setupViews() {
 
@@ -109,15 +87,6 @@ class ShowQRView: BaseView {
 		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		navigationInfoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
 		navigationInfoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
-
-		// ScrollView is blocking the Security Animation Reversal
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped))
-		scrollView.addGestureRecognizer(tapGesture)
-	}
-
-	@objc func scrollViewTapped() {
-		// Reverse the security animation
-		securityView.tapFlipAnimation()
 	}
 	
 	/// Setup the hierarchy
@@ -129,8 +98,6 @@ class ShowQRView: BaseView {
 		addSubview(pageControl)
 		addSubview(returnToThirdPartyAppButton)
 		addSubview(navigationInfoView)
-		addSubview(scrollView)
-		scrollView.addSubview(scrollContentView)
 	}
 
 	/// Setup the constraints
@@ -170,8 +137,6 @@ class ShowQRView: BaseView {
 		])
 		bringSubviewToFront(containerView)
 		bringSubviewToFront(navigationInfoView)
-
-		setupScrollViewConstraints()
 	}
 	
 	private func setupContainerViewConstraints() {
@@ -211,34 +176,6 @@ class ShowQRView: BaseView {
 		])
 	}
 	
-	private func setupScrollViewConstraints() {
-
-		infoLabel.embed(
-			in: scrollContentView,
-			insets: UIEdgeInsets(
-				top: 0,
-				left: ViewTraits.Margin.infoEdge,
-				bottom: ViewTraits.Margin.infoEdge,
-				right: ViewTraits.Margin.infoEdge
-			)
-		)
-
-		NSLayoutConstraint.activate([
-			scrollContentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			scrollContentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-			scrollContentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-			scrollContentView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor),
-			scrollContentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-			scrollContentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-
-			scrollView.topAnchor.constraint(equalTo: pageControl.bottomAnchor),
-			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
-		])
-		bringSubviewToFront(scrollView)
-	}
-	
 	override func safeAreaInsetsDidChange() {
 		super.safeAreaInsetsDidChange()
 		guard securityView.currentAnimation == .internationalAnimation, safeAreaInsets.bottom > 0 else { return }
@@ -266,14 +203,6 @@ class ShowQRView: BaseView {
 	var dosage: String? {
 		didSet {
 			navigationInfoView.dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
-		}
-	}
-
-	/// The info
-	var info: String? {
-		didSet {
-			infoLabel.attributedText = info?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
-			scrollView.isHidden = info == nil
 		}
 	}
 

@@ -131,7 +131,6 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
 		expect(self.sut.dosage) == "Dosis 1/2"
-		expect(self.sut.relevancyInformation) == "Deze QR-code is niet meer geldig"
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_international_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
 	}
@@ -344,6 +343,7 @@ class ShowQRViewModelTests: XCTestCase {
 			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: "Test"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: "2 / 2"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: "01-06-2021"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.daysElapsed, value: "44 dagen"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: "Nederland / The Netherlands"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: "Test"),
 			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "test")

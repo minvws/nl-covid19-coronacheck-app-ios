@@ -48,7 +48,13 @@ class PagedAnnouncementViewModel {
 	}
 	
 	func primaryButtonTitle(forStep step: Int) -> String {
-		return pages[step].nextButtonTitle ?? L.generalNext()
+		if let title = pages[step].nextButtonTitle {
+			return title
+		} else if step == (pages.count - 1) {
+			return L.general_toMyOverview()
+		} else {
+			return L.generalNext()
+		}
 	}
 	
 	/// User has finished viewing the finished the pages

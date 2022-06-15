@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class RiskSettingUnselectedViewModel: Logging {
+final class RiskSettingUnselectedViewModel {
 	
 	/// Coordination Delegate
 	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?

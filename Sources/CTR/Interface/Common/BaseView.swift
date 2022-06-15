@@ -9,6 +9,18 @@ import UIKit
 
 class BaseView: UIView {
 
+	override var backgroundColor: UIColor? {
+		didSet {
+			guard let backgroundColor = backgroundColor else {
+				return
+			}
+
+			observableBackgroundColor = backgroundColor
+		}
+	}
+	
+	@objc dynamic var observableBackgroundColor: UIColor = .black
+	
 	/// Initializer
 	/// - Parameter frame: the frame for the view
 	override init(frame: CGRect) {

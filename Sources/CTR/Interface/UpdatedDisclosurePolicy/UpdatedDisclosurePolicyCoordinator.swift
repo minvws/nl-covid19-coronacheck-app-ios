@@ -13,7 +13,7 @@ protocol UpdatedDisclosurePolicyDelegate: AnyObject {
 	func finishNewDisclosurePolicy()
 }
 
-class UpdatedDisclosurePolicyCoordinator: Coordinator, Logging {
+class UpdatedDisclosurePolicyCoordinator: Coordinator {
 
 	/// The child coordinators
 	var childCoordinators: [Coordinator] = []
@@ -42,7 +42,7 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator, Logging {
 	/// Start the scene
 	func start() {
 
-		logVerbose("Starting UpdatedDisclosurePolicy Flow")
+		Current.logHandler.logVerbose("Starting UpdatedDisclosurePolicy Flow")
 		
 		let multipaneMode: Bool = pagedAnnouncmentItems.count > 1
 		
@@ -55,7 +55,7 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator, Logging {
 			),
 			allowsBackButton: multipaneMode,
 			allowsCloseButton: !multipaneMode,
-			allowsNextButton: multipaneMode
+			allowsNextButton: true
 		)
 		
 		let modalNavigationController = UINavigationController(rootViewController: viewController)
