@@ -58,8 +58,6 @@ class GreenCardLoader: GreenCardLoading {
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let logHandler: Logging?
 	private var secretKey: Data?
-	private var nonce: String?
-	private var stoken: String?
 	
 	required init(
 		now: @escaping () -> Date,
@@ -99,10 +97,7 @@ class GreenCardLoader: GreenCardLoading {
 						return
 					}
 					
-					self.nonce = nonce
-					self.stoken = prepareIssueEnvelope.stoken
-					
-					self.fetchGreenCards { response in
+					self.fetchGreenCards(nonce: nonce, stoken: prepareIssueEnvelope.stoken) { response in
 						switch response {
 							case .failure(let error):
 								completion(.failure(error))
@@ -128,7 +123,10 @@ class GreenCardLoader: GreenCardLoading {
 		}
 	}
 
-	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+	private func fetchGreenCards(
+		nonce: String,
+		stoken: String,
+		onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
@@ -138,10 +136,8 @@ class GreenCardLoader: GreenCardLoading {
 		}
 
 		guard let key = cryptoManager.generateSecretKey(),
-			  let nonce = nonce,
 			  let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: key),
-			  let utf8 = issueCommitmentMessage.data(using: .utf8),
-			  let stoken = stoken
+			  let utf8 = issueCommitmentMessage.data(using: .utf8)
 		else {
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
