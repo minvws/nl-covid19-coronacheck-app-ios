@@ -124,6 +124,14 @@ class QRCardView: BaseView {
 		return overlay
 	}()
 
+	private let errorRowView: ErrorRowView = {
+		let errorRowView = ErrorRowView()
+		errorRowView.setContentCompressionResistancePriority(.required, for: .vertical)
+		errorRowView.translatesAutoresizingMaskIntoConstraints = false
+		errorRowView.accessibilityIdentifier = "errorRowView"
+		return errorRowView
+	}()
+	
 	private let largeIconImageView: UIImageView = {
 
 		let view = UIImageView(image: I.dashboard.domestic())
@@ -200,10 +208,9 @@ class QRCardView: BaseView {
 		hostView.addSubview(disclosurePolicyIndicatorView)
 		hostView.addSubview(verticalLabelsStackView)
 		hostView.addSubview(viewQRButtonStackView)
-		
 		viewQRButtonStackView.addArrangedSubview(viewQRButton)
 		viewQRButtonStackView.addArrangedSubview(viewQRButtonCompressingSpacer)
-		
+
 		viewQRButton.addSubview(loadingButtonOverlay)
 
 		// This has a edge-case bug if you set it in the `let viewQRButton: Button = {}` declaration, so setting it here instead.
@@ -241,12 +248,12 @@ class QRCardView: BaseView {
 			
 			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing),
 			verticalLabelsStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+			verticalLabelsStackView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -24),
 
 			viewQRButtonStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
 			viewQRButtonStackView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -24),
-			viewQRButtonStackView.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 30),
-			viewQRButtonStackView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: -24),
+			viewQRButtonStackView.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 32),
+			viewQRButtonStackView.bottomAnchor.constraint(lessThanOrEqualTo: hostView.bottomAnchor, constant: -24),
 
 			loadingButtonOverlay.leadingAnchor.constraint(equalTo: viewQRButton.leadingAnchor),
 			loadingButtonOverlay.trailingAnchor.constraint(equalTo: viewQRButton.trailingAnchor),
@@ -302,7 +309,7 @@ class QRCardView: BaseView {
 	private func setupMutableContraints() {
 
 		// Initialise constraints:
-
+		
 		titleTrailingToLargeIconImageViewConstraint = titleLabel.trailingAnchor.constraint(
 			lessThanOrEqualTo: largeIconImageView.leadingAnchor,
 			constant: -ViewTraits.titleTrailingToLargeIconMargin
@@ -312,24 +319,24 @@ class QRCardView: BaseView {
 			lessThanOrEqualTo: disclosurePolicyIndicatorView.leadingAnchor,
 			constant: -ViewTraits.titleTrailingToDisclosurePolicyIndicatorMargin
 		)
-
+		
 		titleLeadingAnchor = titleLabel.leadingAnchor.constraint(
 			equalTo: hostView.leadingAnchor,
 			constant: ViewTraits.titleLeadingAnchorDCCMargin
 		)
-
+		
 		titleTopAnchor = titleLabel.topAnchor.constraint(
 			equalTo: hostView.topAnchor,
 			constant: ViewTraits.titleTopAnchorDCCMargin
 		)
 
 		// Activate above constraints:
-
+		
 		titleTrailingToLargeIconImageViewConstraint?.isActive = true
 		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = true
 		titleLeadingAnchor?.isActive = true
 		titleTopAnchor?.isActive = true
-
+		
 		titleTrailingToLargeIconImageViewConstraint?.identifier = "titleTrailingToLargeIconImageViewConstraint"
 		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.identifier = "titleTrailingToDisclosurePolicyIndicatorViewConstraint"
 		titleLeadingAnchor?.identifier = "titleLeadingAnchor"
@@ -562,6 +569,29 @@ class QRCardView: BaseView {
 			setNeedsLayout()
 		}
 	}
+	
+	var errorMessage: String? {
+		didSet {
+			errorRowView.message = errorMessage
+			errorRowView.superview?.removeConstraints(errorRowView.constraints)
+			errorRowView.removeFromSuperview()
+			
+			if errorMessage != nil {
+				hostView.addSubview(errorRowView)
+				
+				viewQRButtonStackView.bottomAnchor.constraint(equalTo: errorRowView.topAnchor, constant: -16).isActive = true
+				errorRowView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
+				errorRowView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -24).isActive = true
+				errorRowView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: -24).isActive = true
+			}
+		}
+	}
+	
+	var errorMessageTapHandler: ((URL) -> Void)? {
+		didSet {
+			errorRowView.messageTextView.linkTouchedHandler = errorMessageTapHandler
+		}
+	}
 }
 
 private final class ThisCertificateIsNotUsedOverlayView: BaseView {
@@ -680,10 +710,10 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 }
 
 private final class ErrorRowView: BaseView {
-
+	
 	/// The display constants
 	private enum ViewTraits {
-
+		
 		enum Color {
 			static let tint: UIColor = C.error()!
 		}
@@ -700,7 +730,7 @@ private final class ErrorRowView: BaseView {
 			static let icon: CGFloat = 12
 		}
 	}
-
+	
 	private let iconImageView: UIImageView = {
 		let imageView = UIImageView(image: I.dashboard.error())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -709,7 +739,7 @@ private final class ErrorRowView: BaseView {
 		imageView.accessibilityIdentifier = "ErrorRowView/iconImageView"
 		return imageView
 	}()
-
+	
 	let messageTextView: TextView = {
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -717,36 +747,36 @@ private final class ErrorRowView: BaseView {
 		view.accessibilityIdentifier = "ErrorRowView/messageTextView"
 		return view
 	}()
-
+	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
-
+		
 		addSubview(iconImageView)
 		addSubview(messageTextView)
 	}
-
+	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
-
+		
 		let iconOffset = ViewTraits.Font.lineHeight - ViewTraits.Font.font.ascender
-
+		
 		NSLayoutConstraint.activate([
 			iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			iconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
 			iconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
-
+			
 			iconImageView.centerYAnchor.constraint(equalTo: messageTextView.centerYAnchor),
-
+			
 			messageTextView.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Spacing.iconToMessage),
 			messageTextView.topAnchor.constraint(equalTo: topAnchor),
 			messageTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
-
+	
 	var message: String? {
 		didSet {
-
+			
 			NSAttributedString.makeFromHtml(
 				text: message,
 				style: NSAttributedString.HTMLStyle(
