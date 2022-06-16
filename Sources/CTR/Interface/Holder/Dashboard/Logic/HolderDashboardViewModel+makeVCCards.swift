@@ -416,12 +416,6 @@ extension HolderDashboardViewModel.QRCard {
 			case .europeanUnion:
 				cards = internationalQRCard(state: state, localDisclosurePolicy: localDisclosurePolicy, actionHandler: actionHandler)
 		}
-
-		if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-			cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: { [weak actionHandler] in
-				actionHandler?.didTapRetryLoadQRCards()
-			})]
-		}
 		
 		return cards
 	}
@@ -505,7 +499,8 @@ extension HolderDashboardViewModel.QRCard {
 			buttonEnabledEvaluator: { buttonIsEnabled(now: $0) },
 			expiryCountdownEvaluator: { now in
 				domesticCountdownText(now: now, origins: origins, localDisclosurePolicy: localDisclosurePolicy)
-			}
+			},
+			error: qrCardError(state: state, actionHandler: actionHandler)
 		)]
 	}
 	
@@ -540,10 +535,23 @@ extension HolderDashboardViewModel.QRCard {
 			buttonEnabledEvaluator: evaluateEnabledState,
 			expiryCountdownEvaluator: { now in
 				internationalCountdownText(now: now, origins: origins)
-			}
+			},
+			error: qrCardError(state: state, actionHandler: actionHandler)
 		)]
 	}
 
+	/// Returns `HolderDashboardViewController.Card.Error`, if appropriate, which configures the display of an error on the QRCardView.
+	private func qrCardError(state: HolderDashboardViewModel.State, actionHandler: HolderDashboardCardUserActionHandling) -> HolderDashboardViewController.Card.Error? {
+		guard let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard else { return nil }
+		return HolderDashboardViewController.Card.Error(message: error, didTapURL: { [weak actionHandler] url in
+			if url.absoluteString == AppAction.tryAgain {
+				actionHandler?.didTapRetryLoadQRCards()
+			} else {
+				actionHandler?.openUrl(url)
+			}
+		})
+	}
+	
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
 	private func validityTextsGenerator(
 		greencards: [HolderDashboardViewModel.QRCard.GreenCard],
