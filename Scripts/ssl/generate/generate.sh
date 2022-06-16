@@ -3,7 +3,7 @@
 TMPDIR=${TMPDIR:-/tmp}
 set -e
 
-OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1m/bin/openssl}
+OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1o/bin/openssl}
 
 # Create a 'staat der nederlanden' root certificate that looks like
 # the real thing. 
