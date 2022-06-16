@@ -239,11 +239,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 			self?.userWantsToGoBackToEnterToken()
 		}
 	}
-
-	private func presentAsBottomSheet(_ viewController: UIViewController) {
-
-		navigationController.visibleViewController?.presentBottomSheet(viewController)
-	}
 }
 
 // MARK: - Dismissable

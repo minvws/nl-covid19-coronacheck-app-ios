@@ -411,12 +411,18 @@ class VerifierCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutDeniedQRScan() throws {
 		
 		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
 		
 		// When
 		sut.userWishesMoreInfoAboutDeniedQRScan()
 				
 		// Then
-		expect(self.navigationSpy.invokedPresent) == true
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? DeniedQRScanMoreInfoViewController)?.viewModel)
+		expect(viewModel.title) == "Wat kan ik doen?"
 	}
 	
 	// MARK: ScanInstructions Delegate

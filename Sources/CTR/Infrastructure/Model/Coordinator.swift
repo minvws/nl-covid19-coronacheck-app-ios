@@ -58,6 +58,11 @@ extension Coordinator {
 		addChildCoordinator(coordinator)
 		coordinator.start()
 	}
+	
+	func presentAsBottomSheet(_ viewController: UIViewController) {
+
+		navigationController.visibleViewController?.presentBottomSheet(viewController)
+	}
 }
 
 // MARK: - Universal Links
