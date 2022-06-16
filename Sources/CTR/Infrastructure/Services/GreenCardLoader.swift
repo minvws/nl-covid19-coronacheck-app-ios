@@ -145,8 +145,7 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey),
-			  let issueCommitmentMessageData = issueCommitmentMessage.data(using: .utf8) else {
+		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey)?.data(using: .utf8)?.base64EncodedString() else {
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
@@ -154,7 +153,7 @@ class GreenCardLoader: GreenCardLoading {
 		let dictionary: [String: AnyObject] = [
 			"stoken": stoken as AnyObject,
 			"events": signedEvents as AnyObject,
-			"issueCommitmentMessage": issueCommitmentMessageData.base64EncodedString() as AnyObject
+			"issueCommitmentMessage": issueCommitmentMessage as AnyObject
 		]
 		
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
