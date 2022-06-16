@@ -6,7 +6,7 @@ if [ $# -gt 2 ]; then
 	echo "Syntax: $0 [example.json [client.crt]]"
 	exit 1
 fi
-OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1m/bin/openssl}
+OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1o/bin/openssl}
 JSON=${1:-example.json}
 CERT=${2:-client.crt}
 

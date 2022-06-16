@@ -20,7 +20,6 @@ class SecurityCheckerWorker {
 		
 		// Fix if certificate has different line endings.
 		if str.hasSuffix("\r-") {
-			Current.logHandler.logVerbose("certificateAsPemData: \(String(decoding: certificateAsPemData, as: UTF8.self))")
 			str = String(str.replacingOccurrences(of: "\r", with: "").dropLast())
 		}
 		
