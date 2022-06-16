@@ -651,11 +651,10 @@ class ListRemoteEventsViewModel {
 			}
 
 			var uniqueIdentifier = storableEvent.wrapper.providerIdentifier
-			if (storageMode == .test || eventMode == .paperflow) &&
-				!(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
-				// We must allow multiple test and scanned event, but do not want duplicates.
+			if !(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
+				// We must allow multiple events, but do not want duplicates.
 				// So we append the unique of the event to the provider identifier.
-				// For vaccinations and recoveries do not want multiple events,
+				// For GGD, RIVM and ZKVI events, we can not rely on the unique of the event,
 				// for those we do want to overwrite the existing ones (so we do not append the unqiue)
 				for event in storableEvent.wrapper.events ?? [] {
 					if let unique = event.unique {
