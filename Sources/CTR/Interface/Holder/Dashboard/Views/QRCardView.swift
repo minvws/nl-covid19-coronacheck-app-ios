@@ -351,7 +351,7 @@ class QRCardView: BaseView {
 		// Each Row contains an *array* of texts (simply to force newlines when needed)
 		// and they are rendered as grouped together.
 
-		validityTexts.enumerated().forEach { index, validityText in
+		zip(1..., validityTexts).forEach { index, validityText in
 			guard validityText.kind != .past else { return }
 
 			validityText.lines.forEach { text in
