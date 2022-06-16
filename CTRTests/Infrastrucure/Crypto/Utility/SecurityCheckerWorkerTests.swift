@@ -25,8 +25,8 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func test_checkSSL_noTrustCertificates_shouldSucceed() throws {
 		
 		// Given
-		let realLeafCert = try getCertificate("api-test.coronatester.nl")
-		let policy = SecPolicyCreateSSL(true, "api-test.coronatester.nl" as CFString)
+		let realLeafCert = try getCertificate("holder-api.coronacheck.nl")
+		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
 		let chain = try constructChain()
 		
 		var optionalServerTrust: SecTrust?
@@ -49,15 +49,15 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func test_checkSSL_wrongHostname_shouldFail() throws {
 		
 		// Given
-		let realLeafCert = try getCertificate("api-test.coronatester.nl")
-		let policy = SecPolicyCreateSSL(true, "api-test.coronatester.nl" as CFString)
+		let realLeafCert = try getCertificate("holder-api.coronacheck.nl")
+		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
 		let chain = try constructChain()
 		
 		var optionalServerTrust: SecTrust?
 		XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + chain  as CFArray, policy, &optionalServerTrust))
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
-		let trustedServerCertificate = try getCertificateData("api-test.coronatester.nl")
+		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
 		
 		// When
 		let result = sut.checkSSL(
@@ -75,23 +75,23 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func test_checkSSL_doesMatchTrustedHost_shouldSucceed() throws {
 		
 		// Given
-		let realLeafCert = try getCertificate("api-test.coronatester.nl")
-		let policy = SecPolicyCreateSSL(true, "api-test.coronatester.nl" as CFString)
+		let realLeafCert = try getCertificate("holder-api.coronacheck.nl")
+		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
 		let chain = try constructChain()
 		
 		var optionalServerTrust: SecTrust?
 		XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + chain  as CFArray, policy, &optionalServerTrust))
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
-		let trustedServerCertificate = try getCertificateData("api-test.coronatester.nl")
+		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
 		
 		// When
 		let result = sut.checkSSL(
 			serverTrust: serverTrust,
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
-			hostname: "api-test.coronatester.nl",
-			trustedNames: [".coronatester.nl"]
+			hostname: "holder-api.coronacheck.nl",
+			trustedNames: [".coronacheck.nl"]
 		)
 		
 		// Then
@@ -101,23 +101,23 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func test_checkSSL_doesNotMatchTrustedHost_shouldSucceed() throws {
 		
 		// Given
-		let realLeafCert = try getCertificate("api-test.coronatester.nl")
-		let policy = SecPolicyCreateSSL(true, "api-test.coronatester.nl" as CFString)
+		let realLeafCert = try getCertificate("holder-api.coronacheck.nl")
+		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
 		let chain = try constructChain()
 		
 		var optionalServerTrust: SecTrust?
 		XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + chain  as CFArray, policy, &optionalServerTrust))
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
-		let trustedServerCertificate = try getCertificateData("api-test.coronatester.nl")
+		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
 		
 		// When
 		let result = sut.checkSSL(
 			serverTrust: serverTrust,
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
-			hostname: "api-test.coronatester.nl",
-			trustedNames: [".coronacheck.nl"]
+			hostname: "holder-api.coronacheck.nl",
+			trustedNames: [".google.com"]
 		)
 		
 		// Then
@@ -127,22 +127,22 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func test_checkSSL_shouldSucceed() throws {
 		
 		// Given
-		let realLeafCert = try getCertificate("api-test.coronatester.nl")
-		let policy = SecPolicyCreateSSL(true, "api-test.coronatester.nl" as CFString)
+		let realLeafCert = try getCertificate("holder-api.coronacheck.nl")
+		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
 		let chain = try constructChain()
 		
 		var optionalServerTrust: SecTrust?
 		XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + chain  as CFArray, policy, &optionalServerTrust))
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
-		let trustedServerCertificate = try getCertificateData("api-test.coronatester.nl")
+		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
 		
 		// When
 		let result = sut.checkSSL(
 			serverTrust: serverTrust,
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
-			hostname: "api-test.coronatester.nl",
+			hostname: "holder-api.coronacheck.nl",
 			trustedNames: []
 		)
 		
@@ -153,7 +153,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func test_checkSSL_expiredChain_shouldFail() throws {
 		
 		// Given
-		let policy = SecPolicyCreateSSL(true, "api-test.coronatester.nl" as CFString)
+		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
 		let chain = [try getCertificate("certRealLeaf")]
 		
 		var optionalServerTrust: SecTrust?
@@ -167,7 +167,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			serverTrust: serverTrust,
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
-			hostname: "api-test.coronatester.nl",
+			hostname: "holder-api.coronacheck.nl",
 			trustedNames: []
 		)
 		
@@ -180,7 +180,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func constructChain() throws -> [SecCertificate?] {
 		
 		// getting the chain certificates:
-		// openssl s_client -showcerts -servername api-test.coronatester.nl -connect api-test.coronatester.nl:443
+		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
 		let realChain = [
 			try getCertificate("Staat der Nederlanden EV Root CA"),
 			try getCertificate("Staat der Nederlanden Domein Server CA 2020"),
