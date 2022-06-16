@@ -57,11 +57,14 @@ class QRCardView: BaseView {
 		view.accessibilityTraits = .staticText
 		view.backgroundColor = .clear
 		view.isAccessibilityElement = true
+		view.accessibilityIdentifier = "accessibilityRoleView"
 		return view
 	}()
 
 	private let titleLabel: Label = {
-        return Label(title3: nil, montserrat: true).multiline().header()
+        let label = Label(title3: nil, montserrat: true).multiline().header()
+		label.accessibilityIdentifier = "titleLabel"
+		return label
 	}()
 
 	private let disclosurePolicyIndicatorView: DisclosurePolicyIndicatorView = {
@@ -70,6 +73,7 @@ class QRCardView: BaseView {
 		view.setContentCompressionResistancePriority(.required, for: .vertical)
 		view.isHidden = true
 		view.isAccessibilityElement = false
+		view.accessibilityIdentifier = "disclosurePolicyIndicatorView"
 		return view
 	}()
 	
@@ -77,6 +81,7 @@ class QRCardView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
+		stackView.accessibilityIdentifier = "verticalLabelsStackView"
 		return stackView
 	}()
 
@@ -85,6 +90,7 @@ class QRCardView: BaseView {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .horizontal
+		stackView.accessibilityIdentifier = "viewQRButtonStackView"
 		return stackView
 	}()
 	
@@ -92,19 +98,29 @@ class QRCardView: BaseView {
 
 		let button = Button(title: "", style: .roundedBlue)
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
+		button.accessibilityIdentifier = "viewQRButton"
 		return button
 	}()
 
 	// Exerts horizontal compression on viewQRButton in its stackView so that the button isn't full-width.
-	private let viewQRButtonCompressingSpacer = UIView()
+	private let viewQRButtonCompressingSpacer: UIView = {
+		let view = UIView()
+		view.accessibilityIdentifier = "viewQRButtonCompressingSpacer"
+		return view
+	}()
 	
-	private let thisCertificateIsNotUsedOverlayView = ThisCertificateIsNotUsedOverlayView()
+	private let thisCertificateIsNotUsedOverlayView: ThisCertificateIsNotUsedOverlayView = {
+		let view = ThisCertificateIsNotUsedOverlayView()
+		view.accessibilityIdentifier = "thisCertificateIsNotUsedOverlayView"
+		return view
+	}()
 
 	private lazy var loadingButtonOverlay: ButtonLoadingOverlayView = {
 		let overlay = ButtonLoadingOverlayView()
 		
 		overlay.translatesAutoresizingMaskIntoConstraints = false
 		overlay.isHidden = true
+		overlay.accessibilityIdentifier = "loadingButtonOverlay"
 		return overlay
 	}()
 
@@ -115,6 +131,7 @@ class QRCardView: BaseView {
 		view.isAccessibilityElement = false
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
+		view.accessibilityIdentifier = "largeIconImageView"
 		return view
 	}()
 	
@@ -312,6 +329,11 @@ class QRCardView: BaseView {
 		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.isActive = true
 		titleLeadingAnchor?.isActive = true
 		titleTopAnchor?.isActive = true
+
+		titleTrailingToLargeIconImageViewConstraint?.identifier = "titleTrailingToLargeIconImageViewConstraint"
+		titleTrailingToDisclosurePolicyIndicatorViewConstraint?.identifier = "titleTrailingToDisclosurePolicyIndicatorViewConstraint"
+		titleLeadingAnchor?.identifier = "titleLeadingAnchor"
+		titleTopAnchor?.identifier = "titleTopAnchor"
 	}
 	
 	// MARK: - Private funcs
@@ -594,6 +616,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 	private let iconImageView: UIImageView = {
 		
 		let view = UIImageView(image: I.dashboard.domestic())
+		view.accessibilityIdentifier = "DisclosurePolicyIndicatorView/iconImageView"
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -605,6 +628,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(.required, for: .horizontal)
 		label.adjustsFontForContentSizeCategory = true
+		label.accessibilityIdentifier = "DisclosurePolicyIndicatorView/label"
 		return label
 	}()
 	
