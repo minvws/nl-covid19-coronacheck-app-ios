@@ -386,10 +386,9 @@ class QRCardView: BaseView {
 				}
 			}
 			
-			// Add some padding after the last label (if it's not the last one)
-			let isLastIndex = (validityTexts.count - 1) == index
+			// Add some padding after the last label
 			if let lastLabel = verticalLabelsStackView.arrangedSubviews.last as? Label {
-				verticalLabelsStackView.setCustomSpacing(isLastIndex ? 2 : 22, after: lastLabel)
+				verticalLabelsStackView.setCustomSpacing(22, after: lastLabel)
 			}
 		}
 
