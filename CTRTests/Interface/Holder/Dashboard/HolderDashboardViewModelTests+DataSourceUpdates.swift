@@ -69,11 +69,10 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 	
@@ -102,7 +101,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle).to(beNil())
 		}))
 		
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -162,7 +161,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == true
@@ -208,7 +207,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -253,7 +252,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -303,7 +302,7 @@ extension HolderDashboardViewModelTests {
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -353,7 +352,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -408,7 +407,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -466,7 +465,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -518,7 +517,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -542,7 +541,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(isDisabledByDisclosurePolicy) == false
@@ -600,7 +599,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
 			expect(isDisabledByDisclosurePolicy) == false
 			expect(disclosurePolicyLabel) == "3G"
@@ -656,7 +655,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
 			expect(title) == L.holder_dashboard_only1GaccessBanner_title()
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			expect(isDisabledByDisclosurePolicy) == true
 			expect(disclosurePolicyLabel) == "3G"
 			
@@ -701,7 +700,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			expect(isDisabledByDisclosurePolicy) == false
 			expect(disclosurePolicyLabel) == "3G"
 			
@@ -752,7 +751,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -806,7 +805,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -880,7 +879,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -891,7 +890,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == "Dosis 1/2 (Duitsland)" // only vaccine has country in UI
 			expect(nowValidityTexts[0].lines[1]) == "Vaccinatiedatum: 15 juni 2021"
 		}))
-		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -902,7 +901,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == "Type test: LP6464-4"
 			expect(nowValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
 		}))
-		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -941,7 +940,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -988,7 +987,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1038,7 +1037,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1087,7 +1086,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
@@ -1141,7 +1140,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1202,7 +1201,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle).to(beNil())
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -1260,7 +1259,7 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(
-			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 				
 				// check isLoading
 				expect(isLoading) == false
@@ -1305,7 +1304,7 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(
-			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 				
 				expect(isLoading) == false
 				expect(title) == L.holder_dashboard_domesticQRCard_1G_title()
@@ -1324,7 +1323,7 @@ extension HolderDashboardViewModelTests {
 			}
 		))
 		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(
-			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 				
 				expect(isLoading) == false
 				expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -1375,7 +1374,7 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(
-			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 				
 				expect(isLoading) == false
 				expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -1395,7 +1394,7 @@ extension HolderDashboardViewModelTests {
 			}
 		))
 		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(
-			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 				
 				expect(isLoading) == false
 				expect(title) == L.holder_dashboard_domesticQRCard_1G_title()
@@ -1443,7 +1442,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1483,7 +1482,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1539,7 +1538,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.general_vaccinationcertificate().capitalizingFirstLetter()
@@ -1553,7 +1552,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.general_recoverycertificate().capitalizingFirstLetter()
@@ -1566,7 +1565,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 		
-		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.general_testcertificate().capitalizingFirstLetter()
@@ -1758,7 +1757,7 @@ extension HolderDashboardViewModelTests {
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -1779,7 +1778,7 @@ extension HolderDashboardViewModelTests {
 			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
 			expect(callToActionButtonText) == L.general_readmore()
 		}))
-		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(title) == L.general_testcertificate().capitalized
 			expect(isLoading) == false
@@ -1843,7 +1842,7 @@ extension HolderDashboardViewModelTests {
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -1870,7 +1869,7 @@ extension HolderDashboardViewModelTests {
 			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
 			expect(callToActionButtonText) == L.general_readmore()
 		}))
-		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(title) == L.general_testcertificate().capitalized
 			expect(isLoading) == false
@@ -1934,7 +1933,7 @@ extension HolderDashboardViewModelTests {
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -1961,7 +1960,7 @@ extension HolderDashboardViewModelTests {
 			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
 			expect(callToActionButtonText) == L.general_readmore()
 		}))
-		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(title) == L.general_testcertificate().capitalized
 			expect(isLoading) == false
@@ -2001,7 +2000,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2050,7 +2049,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2099,7 +2098,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2149,7 +2148,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
@@ -2196,7 +2195,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
 			expect(isDisabledByDisclosurePolicy) == false
@@ -2246,7 +2245,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2289,7 +2288,7 @@ extension HolderDashboardViewModelTests {
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
@@ -2481,7 +2480,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
 			
@@ -2556,7 +2555,7 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 		
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(title) == L.general_vaccinationcertificate().capitalizingFirstLetter()
 			expect(isLoading) == false

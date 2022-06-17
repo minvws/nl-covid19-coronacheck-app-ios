@@ -208,14 +208,48 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image(precision: 0.96))
 	}
 	
-	func test_errorMessage() {
+	func test_errorMessage_short() {
 
 		// Arrange
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
 		viewModelSpy.stubbedDomesticCards.value = [
-			.errorMessage(message: "message", didTapTryAgain: {})
+			.domesticQR(
+				disclosurePolicyLabel: "NL",
+				title: "title",
+				isDisabledByDisclosurePolicy: false,
+				validityTexts: { _ in [] },
+				isLoading: false,
+				didTapViewQR: {},
+				buttonEnabledEvaluator: { _ in true },
+				expiryCountdownEvaluator: nil,
+				error: .init(message: "Here is an error message", didTapURL: { _ in })
+			)
+		]
+		
+		// Assert
+		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+	}
+	
+	func test_errorMessage_long() {
+
+		// Arrange
+		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
+		
+		// Act
+		viewModelSpy.stubbedDomesticCards.value = [
+			.domesticQR(
+				disclosurePolicyLabel: "NL",
+				title: "title",
+				isDisabledByDisclosurePolicy: false,
+				validityTexts: { _ in [] },
+				isLoading: false,
+				didTapViewQR: {},
+				buttonEnabledEvaluator: { _ in true },
+				expiryCountdownEvaluator: nil,
+				error: .init(message: "Here is a much longer error message that almost certainly takes up numerous many or several lines", didTapURL: { _ in })
+			)
 		]
 		
 		// Assert
@@ -323,7 +357,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -346,7 +381,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -369,7 +405,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -392,7 +429,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: true,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -415,7 +453,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: true,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -438,7 +477,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: { _ in "Expiry text" }
+				expiryCountdownEvaluator: { _ in "Expiry text" },
+				error: nil
 			)
 		]
 		
@@ -466,7 +506,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -494,7 +535,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -526,7 +568,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -554,7 +597,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -582,7 +626,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -610,7 +655,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -634,7 +680,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -656,7 +703,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -678,7 +726,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -700,7 +749,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -722,7 +772,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: true,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -744,7 +795,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: true,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -766,7 +818,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: { _ in "expiryCountdownEvaluator" }
+				expiryCountdownEvaluator: { _ in "expiryCountdownEvaluator" },
+				error: nil
 			)
 		]
 		
@@ -790,7 +843,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -814,7 +868,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -840,7 +895,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
@@ -866,7 +922,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				isLoading: false,
 				didTapViewQR: {},
 				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil
+				expiryCountdownEvaluator: nil,
+				error: nil
 			)
 		]
 		
