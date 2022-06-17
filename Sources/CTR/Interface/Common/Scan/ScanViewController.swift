@@ -48,6 +48,14 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 				}
 			}
 		}
+		
+		NotificationCenter.default.addObserver(forName: NSNotification.Name.AVCaptureSessionWasInterrupted, object: nil, queue: OperationQueue.main) { [weak self] notification in
+			(self?.view as? HasScanView)?.scanView.shouldShowCurtain = true
+		}
+		
+		NotificationCenter.default.addObserver(forName: NSNotification.Name.AVCaptureSessionInterruptionEnded, object: nil, queue: OperationQueue.main) { [weak self]  notification in
+			(self?.view as? HasScanView)?.scanView.shouldShowCurtain = false
+		}
 	}
 
 	func setupScan() {

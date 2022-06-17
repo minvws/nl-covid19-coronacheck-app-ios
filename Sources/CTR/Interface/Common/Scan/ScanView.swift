@@ -25,12 +25,29 @@ final class ScanView: BaseView {
 		static let viewFinderTopMarginPercentageOfScreenHeight: CGFloat = 0.15
 	}
 	
-	let cameraView = UIView()
-	let maskLayoutGuide = UILayoutGuide()
+	let cameraView: UIView = {
+		let view = UIView()
+		view.accessibilityIdentifier = "cameraView"
+		return view
+	}()
+	let maskLayoutGuide: UILayoutGuide = {
+		let guide = UILayoutGuide()
+		guide.identifier = "maskLayoutGuide"
+		return guide
+	}()
 	
 	static var shouldAllowCameraRotationForCurrentDevice: Bool {
 		UIDevice.current.userInterfaceIdiom == .pad
 	}
+
+	/// When there is a interruption to the camera (e.g. iPad splitscreen is started), show this view over the top:
+	private let cameraInterruptedCurtain: UIView = {
+		let view = UIView()
+		view.backgroundColor = .white
+		view.accessibilityIdentifier = "cameraInterruptedCurtain"
+		view.isHidden = true
+		return view
+	}()
 	
 	private let viewfinderView: UIView = {
 
@@ -66,6 +83,7 @@ final class ScanView: BaseView {
 		super.setupViewHierarchy()
 		
 		cameraView.embed(in: self)
+		cameraInterruptedCurtain.embed(in: self)
 		backgroundView.embed(in: self)
 
 		addSubview(viewfinderView)
@@ -166,5 +184,11 @@ final class ScanView: BaseView {
 		maskLayer.addSublayer(rectLayer)
 
 		return maskLayer
+	}
+	
+	var shouldShowCurtain: Bool = false {
+		didSet {
+			cameraInterruptedCurtain.isHidden = !shouldShowCurtain
+		}
 	}
 }
