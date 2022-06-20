@@ -11,9 +11,9 @@ class NegativeTests: BaseTest {
 	
 	func test_negPcrP1() {
 		let person = TestData.negPcrP1
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -26,9 +26,9 @@ class NegativeTests: BaseTest {
 	
 	func test_negRatP1() {
 		let person = TestData.negRatP1
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -41,11 +41,11 @@ class NegativeTests: BaseTest {
 	
 	func test_negAgobP1() {
 		let person = TestData.negAgobP1
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -59,14 +59,14 @@ class NegativeTests: BaseTest {
 	// MARK: Negative tests - 30 days old
 	
 	func test_negOldRat() {
-		addTestCertificateFromGGD(for: TestData.negOldRat)
+		addTestCertificateFromGGD(for: TestData.negOldRat.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
 	}
 	
 	func test_negOldAgob() {
-		addTestCertificateFromGGD(for: TestData.negOldAgob)
+		addTestCertificateFromGGD(for: TestData.negOldAgob.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
@@ -76,7 +76,7 @@ class NegativeTests: BaseTest {
 	
 	func test_negPrematureRat() {
 		let person = TestData.negPrematureRat
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
@@ -85,7 +85,7 @@ class NegativeTests: BaseTest {
 	
 	func test_negPrematureAgob() {
 		let person = TestData.negPrematureAgob
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
@@ -94,7 +94,7 @@ class NegativeTests: BaseTest {
 	// MARK: Negative tests - event matching
 	
 	func test_negPcrDifferentFirstName() {
-		addTestCertificateFromGGD(for: TestData.negPcrDifferentFirstName)
+		addTestCertificateFromGGD(for: TestData.negPcrDifferentFirstName.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -102,7 +102,7 @@ class NegativeTests: BaseTest {
 	}
 	
 	func test_negPcrDifferentLastName() {
-		addTestCertificateFromGGD(for: TestData.negPcrDifferentLastName)
+		addTestCertificateFromGGD(for: TestData.negPcrDifferentLastName.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -110,7 +110,7 @@ class NegativeTests: BaseTest {
 	}
 	
 	func test_negPcrDifferentBirthdate() {
-		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthdate)
+		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthdate.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -118,7 +118,7 @@ class NegativeTests: BaseTest {
 	}
 	
 	func test_negPcrDifferentBirthDay() {
-		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthDay)
+		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthDay.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -126,7 +126,7 @@ class NegativeTests: BaseTest {
 	}
 	
 	func test_negPcrDifferentBirthMonth() {
-		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthMonth)
+		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthMonth.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()

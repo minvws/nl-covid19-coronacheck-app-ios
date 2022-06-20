@@ -9,7 +9,7 @@ class VaccinationNearlyValidTest: BaseTest {
 	
 	func test_vacP2ValidTomorrow() {
 		let person = TestData.vacP2ValidTomorrow
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffsetInDays: person.vacFrom)
@@ -18,7 +18,7 @@ class VaccinationNearlyValidTest: BaseTest {
 	
 	func test_vacJ1ValidTomorrow() {
 		let person = TestData.vacJ1ValidTomorrow
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffsetInDays: person.vacFrom)
@@ -27,7 +27,7 @@ class VaccinationNearlyValidTest: BaseTest {
 	
 	func test_vacM2ValidTomorrow() {
 		let person = TestData.vacM2ValidTomorrow
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffsetInDays: person.vacFrom)
@@ -36,7 +36,7 @@ class VaccinationNearlyValidTest: BaseTest {
 	
 	func test_vacP2ValidToday() {
 		let person = TestData.vacP2ValidToday
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -45,7 +45,7 @@ class VaccinationNearlyValidTest: BaseTest {
 	
 	func test_vacJ1ValidToday() {
 		let person = TestData.vacJ1ValidToday
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -54,7 +54,7 @@ class VaccinationNearlyValidTest: BaseTest {
 	
 	func test_vacM2ValidToday() {
 		let person = TestData.vacM2ValidToday
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)

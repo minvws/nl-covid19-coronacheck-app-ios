@@ -6,7 +6,7 @@
  */
 
 struct TestPerson {
-	let bsn: String?
+	let bsn: String
 	let name: String
 	let birthDate: String
 	let dose: Int
@@ -21,7 +21,7 @@ struct TestPerson {
 	let testUntil: Int
 	
 	init(
-		bsn: String? = nil,
+		bsn: String,
 		name: String = "van Geer, Corrie",
 		birthDate: String = "1960-01-01",
 		dose: Int = 0,

@@ -9,7 +9,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 	
 	func test_vacP1Old() {
 		let person = TestData.vacP1Old
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
@@ -19,7 +19,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 	
 	func test_vacP2Old() {
 		let person = TestData.vacP2Old
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
@@ -29,7 +29,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 	
 	func test_vacJ1Old() {
 		let person = TestData.vacJ1Old
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
@@ -39,7 +39,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 	
 	func test_vacM1Old() {
 		let person = TestData.vacM1Old
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
@@ -49,7 +49,7 @@ class VaccinationOlderThanOneYearSmoke: BaseTest {
 	
 	func test_vacM2Old() {
 		let person = TestData.vacM2Old
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()

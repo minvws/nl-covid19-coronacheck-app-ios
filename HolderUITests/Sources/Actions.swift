@@ -46,27 +46,27 @@ extension BaseTest {
 		if hidden { assertHiddenQR() }
 	}
 	
-	func addVaccinationCertificate(for person: TestPerson, combinedWithPositiveTest: Bool = false) {
+	func addVaccinationCertificate(for bsn: String, combinedWithPositiveTest: Bool = false) {
 		addEvent()
 		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
 		if combinedWithPositiveTest { app.enableSwitch("Haal ook mijn positieve testuitslag op") }
 		app.tapButton("Log in met DigiD")
-		retrieveCertificateFromServer(for: person.bsn!)
+		retrieveCertificateFromServer(for: bsn)
 	}
 	
-	func addRecoveryCertificate(for person: TestPerson) {
+	func addRecoveryCertificate(for bsn: String) {
 		addEvent()
 		app.tapButton("Positieve test. Uit de test blijkt dat ik corona heb gehad")
 		app.tapButton("Log in met DigiD")
-		retrieveCertificateFromServer(for: person.bsn!)
+		retrieveCertificateFromServer(for: bsn)
 	}
 	
-	func addTestCertificateFromGGD(for person: TestPerson) {
+	func addTestCertificateFromGGD(for bsn: String) {
 		addEvent()
 		app.tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
 		app.tapButton("GGD")
 		app.tapButton("Log in met DigiD")
-		retrieveCertificateFromServer(for: person.bsn!)
+		retrieveCertificateFromServer(for: bsn)
 	}
 	
 	private func retrieveCertificateFromServer(for bsn: String) {

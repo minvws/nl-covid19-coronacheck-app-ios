@@ -23,7 +23,7 @@ class DccValidVac1of2DE: BaseTest {
 	}
 	
 	func test_validVac1of2DE() {
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		addScannedQR()
@@ -52,7 +52,7 @@ class DccValidVac2of2DE: BaseTest {
 	}
 	
 	func test_validVac2of2DE() {
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		addScannedQR()
@@ -81,7 +81,7 @@ class DccValidVac3of3DE: BaseTest {
 	}
 	
 	func test_validVac3of3DE() {
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		addScannedQR()
@@ -161,8 +161,8 @@ class DccValidRecDE: BaseTest {
 		try super.setUpWithError()
 	}
 	
-	func test_validVac1of2DE() {
-		addVaccinationCertificate(for: person)
+	func test_validRecDE() {
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		addScannedQR()

@@ -9,7 +9,7 @@ class VaccinationCombinationsSmoke: BaseTest {
 	
 	func test_vacP1M1() {
 		let person = TestData.vacP1M1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -18,7 +18,7 @@ class VaccinationCombinationsSmoke: BaseTest {
 	
 	func test_vacP1M2() {
 		let person = TestData.vacP1M2
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -27,7 +27,7 @@ class VaccinationCombinationsSmoke: BaseTest {
 	
 	func test_vacP1M3() {
 		let person = TestData.vacP1M3
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -36,7 +36,7 @@ class VaccinationCombinationsSmoke: BaseTest {
 	
 	func test_vacP2M2() {
 		let person = TestData.vacP2M2
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -45,7 +45,7 @@ class VaccinationCombinationsSmoke: BaseTest {
 	
 	func test_vacJ1M1() {
 		let person = TestData.vacJ1M1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -54,7 +54,7 @@ class VaccinationCombinationsSmoke: BaseTest {
 	
 	func test_vacJ1M2() {
 		let person = TestData.vacJ1M2
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
