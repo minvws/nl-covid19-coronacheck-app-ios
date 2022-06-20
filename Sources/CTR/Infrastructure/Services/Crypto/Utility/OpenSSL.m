@@ -124,7 +124,7 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 	
 	NSArray * sans = [self getSubjectAlternativeDNSNames:certificateData];
 	for(NSString * object in sans) {
-		if ([[object lowercaseString] isEqual:host])
+		if ([[object lowercaseString] isEqual: [host lowercaseString]])
 			return true;
 	}
 	return false;

@@ -24,7 +24,7 @@ struct SecurityCheckerFactory {
 		}
 #endif
 		// Default for .config
-		var trustedNames = [TrustConfiguration.commonNameContent]
+		var trustedName: String? = TrustConfiguration.commonNameContent
 		var trustedCertificates = [Data]()
 		
 		if case SecurityStrategy.data = strategy {
@@ -35,7 +35,7 @@ struct SecurityCheckerFactory {
 		}
 		
 		if case let .provider(provider) = strategy {
-			trustedNames = [] // No trusted name check.
+			trustedName = nil // No trusted name check.
 			trustedCertificates = [] // Only trust provided certificates
 			for tlsCertificate in provider.getTLSCertificates() {
 				trustedCertificates.append(tlsCertificate)
@@ -43,7 +43,7 @@ struct SecurityCheckerFactory {
 		}
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
-			trustedNames: trustedNames,
+			trustedName: trustedName,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
@@ -74,17 +74,17 @@ class SecurityChecker: SecurityCheckerProtocol {
 	var trustedCertificates: [Data]
 	var challenge: URLAuthenticationChallenge?
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-	var trustedNames: [String]
+	var trustedName: String?
 	var openssl = OpenSSL()
 	
 	init(
 		trustedCertificates: [Data] = [],
-		trustedNames: [String] = [],
+		trustedName: String? = nil,
 		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 			
 			self.trustedCertificates = trustedCertificates
-			self.trustedNames = trustedNames
+			self.trustedName = trustedName
 			self.challenge = challenge
 			self.completionHandler = completionHandler
 		}
@@ -124,7 +124,7 @@ class SecurityChecker: SecurityCheckerProtocol {
 			policies: policies,
 			trustedCertificates: trustedCertificates,
 			hostname: host,
-			trustedNames: trustedNames) {
+			trustedName: trustedName) {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
 		}

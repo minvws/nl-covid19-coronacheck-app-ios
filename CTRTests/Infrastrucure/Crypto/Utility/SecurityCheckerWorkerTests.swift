@@ -39,7 +39,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			policies: [policy],
 			trustedCertificates: [],
 			hostname: "test",
-			trustedNames: ["test"]
+			trustedName: "test"
 		)
 		
 		// Then
@@ -65,7 +65,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
 			hostname: "coronacheck",
-			trustedNames: []
+			trustedName: nil
 		)
 		
 		// Then
@@ -91,7 +91,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
 			hostname: "holder-api.coronacheck.nl",
-			trustedNames: [".coronacheck.nl"]
+			trustedName: ".coronacheck.nl"
 		)
 		
 		// Then
@@ -117,7 +117,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
 			hostname: "holder-api.coronacheck.nl",
-			trustedNames: [".google.com"]
+			trustedName: ".google.com"
 		)
 		
 		// Then
@@ -143,7 +143,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
 			hostname: "holder-api.coronacheck.nl",
-			trustedNames: []
+			trustedName: nil
 		)
 		
 		// Then
@@ -168,7 +168,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
 			hostname: "holder-api.coronacheck.nl",
-			trustedNames: []
+			trustedName: nil
 		)
 		
 		// Then
