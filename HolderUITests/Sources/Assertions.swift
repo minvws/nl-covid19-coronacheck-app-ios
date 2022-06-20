@@ -25,9 +25,6 @@ extension BaseTest {
 	func assertSomethingWentWrong(error: String = "") {
 		app.textExists("Sorry, er gaat iets mis")
 		if !error.isEmpty {
-			print(app.debugDescription)
-			print(app.staticTexts)
-			print(app.staticTexts.elementMap())
 			app.containsValue(error)
 		}
 		returnToCertificateOverview()
@@ -93,7 +90,6 @@ extension BaseTest {
 		app.tapButton("Details", index: position)
 		app.containsText("Naam: " + person.name)
 		app.containsText("Geboortedatum: " + person.birthDate.toString(.written))
-		print(app.debugDescription)
 		app.containsText("Ziekteverwekker: " + vaccination.disease)
 		app.containsText("Vaccin: " + vaccination.vaccine.rawValue)
 		app.containsText("Vaccinatiedatum: " + vaccination.eventDate.toString(.written))
