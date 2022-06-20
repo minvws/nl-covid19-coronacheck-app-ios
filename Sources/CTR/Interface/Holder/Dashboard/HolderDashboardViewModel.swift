@@ -31,6 +31,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapDisclosurePolicyInformation3GBannerClose()
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
 	func didTapDisclosurePolicyInformation0GBannerClose()
+	func openUrl(_ url: URL)
 }
 
 protocol HolderDashboardViewModelType: AnyObject {
