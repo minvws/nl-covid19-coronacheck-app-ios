@@ -597,7 +597,7 @@ extension HolderDashboardViewModel.QRCard {
 						default: return true
 					}
 				}
-				// for NL certificate multiple tests are combined: longest validity is noted.
+				// for NL certificate multiple tests are combined: longest validity is shown.
 				.filter { greenCard, origin in
 					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
 					guard origin.type == .test else { return true } // We can skip visitorpass, recovery and vaccination
@@ -612,6 +612,8 @@ extension HolderDashboardViewModel.QRCard {
 
 					guard sortedTestOrigins.count > 1 else { return true } // We can skip greencards with just one test origin
 
+					// So if we have multiple valid test origins, we only thow the one with the longest validity
+					// By only returning the longest validty, we only get one ValidityText line for the test.
 					return origin == sortedTestOrigins.first
 				}
 				// Map to the ValidityText
