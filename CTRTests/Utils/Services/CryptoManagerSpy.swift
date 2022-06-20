@@ -11,47 +11,27 @@ import Clcore
 
 class CryptoManagerSpy: CryptoManaging {
 
-	var invokedSetNonce = false
-	var invokedSetNonceCount = 0
-	var invokedSetNonceParameters: (nonce: String, Void)?
-	var invokedSetNonceParametersList = [(nonce: String, Void)]()
+	var invokedGenerateSecretKey = false
+	var invokedGenerateSecretKeyCount = 0
+	var stubbedGenerateSecretKeyResult: Data!
 
-	func setNonce(_ nonce: String) {
-		invokedSetNonce = true
-		invokedSetNonceCount += 1
-		invokedSetNonceParameters = (nonce, ())
-		invokedSetNonceParametersList.append((nonce, ()))
-	}
-
-	var invokedSetStoken = false
-	var invokedSetStokenCount = 0
-	var invokedSetStokenParameters: (stoken: String, Void)?
-	var invokedSetStokenParametersList = [(stoken: String, Void)]()
-
-	func setStoken(_ stoken: String) {
-		invokedSetStoken = true
-		invokedSetStokenCount += 1
-		invokedSetStokenParameters = (stoken, ())
-		invokedSetStokenParametersList.append((stoken, ()))
-	}
-
-	var invokedGetStoken = false
-	var invokedGetStokenCount = 0
-	var stubbedGetStokenResult: String!
-
-	func getStoken() -> String? {
-		invokedGetStoken = true
-		invokedGetStokenCount += 1
-		return stubbedGetStokenResult
+	func generateSecretKey() -> Data? {
+		invokedGenerateSecretKey = true
+		invokedGenerateSecretKeyCount += 1
+		return stubbedGenerateSecretKeyResult
 	}
 
 	var invokedGenerateCommitmentMessage = false
 	var invokedGenerateCommitmentMessageCount = 0
+	var invokedGenerateCommitmentMessageParameters: (nonce: String, holderSecretKey: Data)?
+	var invokedGenerateCommitmentMessageParametersList = [(nonce: String, holderSecretKey: Data)]()
 	var stubbedGenerateCommitmentMessageResult: String!
 
-	func generateCommitmentMessage() -> String? {
+	func generateCommitmentMessage(nonce: String, holderSecretKey: Data) -> String? {
 		invokedGenerateCommitmentMessage = true
 		invokedGenerateCommitmentMessageCount += 1
+		invokedGenerateCommitmentMessageParameters = (nonce, holderSecretKey)
+		invokedGenerateCommitmentMessageParametersList.append((nonce, holderSecretKey))
 		return stubbedGenerateCommitmentMessageResult
 	}
 
@@ -121,34 +101,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedHasDomesticPrefixResult
 	}
 
-	var invokedDiscloseCredential = false
-	var invokedDiscloseCredentialCount = 0
-	var invokedDiscloseCredentialParameters: (credential: Data, disclosurePolicy: DisclosurePolicy)?
-	var invokedDiscloseCredentialParametersList = [(credential: Data, disclosurePolicy: DisclosurePolicy)]()
-	var stubbedDiscloseCredentialResult: Data!
-
-	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data? {
-		invokedDiscloseCredential = true
-		invokedDiscloseCredentialCount += 1
-		invokedDiscloseCredentialParameters = (credential, disclosurePolicy)
-		invokedDiscloseCredentialParametersList.append((credential, disclosurePolicy))
-		return stubbedDiscloseCredentialResult
-	}
-
-	var invokedVerifyQRMessage = false
-	var invokedVerifyQRMessageCount = 0
-	var invokedVerifyQRMessageParameters: (message: String, Void)?
-	var invokedVerifyQRMessageParametersList = [(message: String, Void)]()
-	var stubbedVerifyQRMessageResult: Result<MobilecoreVerificationResult, CryptoError>!
-
-	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError> {
-		invokedVerifyQRMessage = true
-		invokedVerifyQRMessageCount += 1
-		invokedVerifyQRMessageParameters = (message, ())
-		invokedVerifyQRMessageParametersList.append((message, ()))
-		return stubbedVerifyQRMessageResult
-	}
-
 	var invokedReadDomesticCredentials = false
 	var invokedReadDomesticCredentialsCount = 0
 	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?
@@ -177,11 +129,31 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedReadEuCredentialsResult
 	}
 
-	var invokedGenerateSecretKey = false
-	var invokedGenerateSecretKeyCount = 0
+	var invokedDiscloseCredential = false
+	var invokedDiscloseCredentialCount = 0
+	var invokedDiscloseCredentialParameters: (credential: Data, disclosurePolicy: DisclosurePolicy, holderSecretKey: Data)?
+	var invokedDiscloseCredentialParametersList = [(credential: Data, disclosurePolicy: DisclosurePolicy, holderSecretKey: Data)]()
+	var stubbedDiscloseCredentialResult: Data!
 
-	func generateSecretKey() {
-		invokedGenerateSecretKey = true
-		invokedGenerateSecretKeyCount += 1
+	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
+		invokedDiscloseCredential = true
+		invokedDiscloseCredentialCount += 1
+		invokedDiscloseCredentialParameters = (credential, disclosurePolicy, holderSecretKey)
+		invokedDiscloseCredentialParametersList.append((credential, disclosurePolicy, holderSecretKey))
+		return stubbedDiscloseCredentialResult
+	}
+
+	var invokedVerifyQRMessage = false
+	var invokedVerifyQRMessageCount = 0
+	var invokedVerifyQRMessageParameters: (message: String, Void)?
+	var invokedVerifyQRMessageParametersList = [(message: String, Void)]()
+	var stubbedVerifyQRMessageResult: Result<MobilecoreVerificationResult, CryptoError>!
+
+	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError> {
+		invokedVerifyQRMessage = true
+		invokedVerifyQRMessageCount += 1
+		invokedVerifyQRMessageParameters = (message, ())
+		invokedVerifyQRMessageParametersList.append((message, ()))
+		return stubbedVerifyQRMessageResult
 	}
 }

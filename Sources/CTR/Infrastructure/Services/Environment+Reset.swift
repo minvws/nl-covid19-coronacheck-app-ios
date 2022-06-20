@@ -30,7 +30,5 @@ extension Environment {
 				scanLockManager.wipePersistedData()
 				scanLogManager.wipePersistedData()
 		}
-		
-		cryptoManager.generateSecretKey()
 	}
 }

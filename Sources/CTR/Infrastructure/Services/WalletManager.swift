@@ -217,7 +217,7 @@ class WalletManager: WalletManaging {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
-						context.delete(greenCard)
+						greenCard.delete(context: context)
 					}
 					dataStoreManager.save(context)
 				}
@@ -239,7 +239,7 @@ class WalletManager: WalletManaging {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
 						guard let origins = greenCard.castOrigins() else {
-							context.delete(greenCard)
+							greenCard.delete(context: context)
 							break
 						}
 
@@ -255,7 +255,7 @@ class WalletManager: WalletManaging {
 							if let greencardType = greenCard.type, let originType = lastExpiredOrigin?.type {
 								deletedGreenCardTypes += [(greencardType: greencardType, originType: originType)]
 							}
-							context.delete(greenCard)
+							greenCard.delete(context: context)
 						}
 					}
 				}
@@ -293,12 +293,12 @@ class WalletManager: WalletManaging {
 								}
 						}
 					}
-					if result {
-						dataStoreManager.save(context)
-					}
 				}
 			} else {
 				result = false
+			}
+			if result {
+				dataStoreManager.save(context)
 			}
 		}
 		return result
@@ -374,13 +374,15 @@ class WalletManager: WalletManaging {
 							version: Int32(euCredentialAttributes.credentialVersion),
 							greenCard: greenCard,
 							managedContext: context) != nil
-						dataStoreManager.save(context)
 					} else {
 						result = false
 					}
 				} else {
 					result = false
 				}
+			}
+			if result {
+				dataStoreManager.save(context)
 			}
 		}
 		return result

@@ -22,6 +22,7 @@ class GreenCardLoader: GreenCardLoading {
 		case preparingIssue(ServerError)
 		case failedToParsePrepareIssue
 		case failedToGenerateCommitmentMessage
+		case failedToGenerateDomesticSecretKey
 		case credentials(ServerError)
 		case failedToSaveGreenCards
 
@@ -43,6 +44,8 @@ class GreenCardLoader: GreenCardLoading {
 					return "failedToParsePrepareIssue"
 				case .failedToGenerateCommitmentMessage:
 					return "failedToGenerateCommitmentMessage"
+				case .failedToGenerateDomesticSecretKey:
+					return "failedToGenerateDomesticSecretKey"
 				case .failedToSaveGreenCards:
 					return "failedToSaveGreenCards"
 			}
@@ -55,6 +58,7 @@ class GreenCardLoader: GreenCardLoading {
 	private let walletManager: WalletManaging
 	private let remoteConfigManager: RemoteConfigManaging
 	private let userSettings: UserSettingsProtocol
+	private let secureUserSettings: SecureUserSettingsProtocol
 	private let logHandler: Logging?
 	
 	required init(
@@ -64,6 +68,7 @@ class GreenCardLoader: GreenCardLoading {
 		walletManager: WalletManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol,
+		secureUserSettings: SecureUserSettingsProtocol,
 		logHandler: Logging? = nil
 	) {
 
@@ -73,6 +78,7 @@ class GreenCardLoader: GreenCardLoading {
 		self.walletManager = walletManager
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
+		self.secureUserSettings = secureUserSettings
 		self.logHandler = logHandler
 	}
 
@@ -80,40 +86,44 @@ class GreenCardLoader: GreenCardLoading {
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 		
-		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
+		guard let newSecretKey = self.cryptoManager.generateSecretKey() else {
+			self.logHandler?.logError("GreenCardLoader - can't create new secret key")
+			completion(.failure(Error.failedToGenerateDomesticSecretKey))
+			return
+		}
+
+		networkManager.prepareIssue { [weak self] (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
 				case .failure(let serverError):
-					self.logHandler?.logError("error: \(serverError)")
+					self?.logHandler?.logError("GreenCardLoader - prepareIssue error: \(serverError)")
 					completion(.failure(Error.preparingIssue(serverError)))
-
+					
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self.logHandler?.logError("Can't parse the nonce / prepareIssueMessage")
+						self?.logHandler?.logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
-
-					Current.logHandler.logVerbose("ok: \(prepareIssueEnvelope)")
-					self.cryptoManager.setNonce(nonce)
-					self.cryptoManager.setStoken(prepareIssueEnvelope.stoken)
-					self.fetchGreenCards { response in
+					self?.fetchGreenCards(
+						secretKey: newSecretKey,
+						nonce: nonce,
+						stoken: prepareIssueEnvelope.stoken) { response in
 						switch response {
 							case .failure(let error):
 								completion(.failure(error))
-
+								
 							case .success(let greenCardResponse):
 								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
 									completion(.failure(Error.didNotEvaluate))
 									return
 								}
-
-								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+								
+								self?.storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
-										self.logHandler?.logError("Failed to save greenCards")
+										self?.logHandler?.logError("GreenCardLoader - failed to save greenCards")
 										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
-
 									completion(.success(greenCardResponse))
 								}
 						}
@@ -122,7 +132,11 @@ class GreenCardLoader: GreenCardLoading {
 		}
 	}
 
-	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+	private func fetchGreenCards(
+		secretKey: Data,
+		nonce: String,
+		stoken: String,
+		onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
@@ -131,10 +145,7 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
-			let utf8 = issueCommitmentMessage.data(using: .utf8),
-			let stoken = cryptoManager.getStoken()
-		else {
+		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey)?.data(using: .utf8)?.base64EncodedString() else {
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
@@ -142,9 +153,9 @@ class GreenCardLoader: GreenCardLoading {
 		let dictionary: [String: AnyObject] = [
 			"stoken": stoken as AnyObject,
 			"events": signedEvents as AnyObject,
-			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
+			"issueCommitmentMessage": issueCommitmentMessage as AnyObject
 		]
-
+		
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
 				case .failure(let serverError):
@@ -161,16 +172,23 @@ class GreenCardLoader: GreenCardLoading {
 	// MARK: Store green cards
 
 	private func storeGreenCards(
+		secretKey: Data?,
 		response: RemoteGreenCards.Response,
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
 
 		walletManager.removeExistingGreenCards()
-
+		
+		// Store the new secret key
+		secureUserSettings.holderSecretKey = secretKey
+		
 		// Domestic
 		if let domestic = response.domesticGreenCard {
 			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
+		} else {
+			// Don't hold on to the key if there are no domestic greencards.
+			secureUserSettings.holderSecretKey = nil
 		}
 		// International
 		if let remoteEuGreenCards = response.euGreenCards {

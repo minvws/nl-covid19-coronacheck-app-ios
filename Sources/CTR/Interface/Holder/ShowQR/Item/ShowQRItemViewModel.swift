@@ -224,9 +224,11 @@ class ShowQRItemViewModel {
 				DispatchQueue.global(qos: .userInitiated).async {
 					
 					if let policy = self.disclosusePolicy,
-					   let message = self.cryptoManager?.discloseCredential(data, disclosurePolicy: policy),
+					   let key = Current.secureUserSettings.holderSecretKey,
+					   let message = self.cryptoManager?.discloseCredential(data, forPolicy: policy, withKey: key),
 					   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
 						DispatchQueue.main.async {
+							Current.logHandler.logVerbose("Update message \(String(decoding: message, as: UTF8.self).prefix(20))")
 							self.setQRValid(image: image)
 						}
 					} else {

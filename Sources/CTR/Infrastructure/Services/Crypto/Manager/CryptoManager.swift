@@ -11,43 +11,19 @@ import Clcore
 /// The cryptography manager
 class CryptoManager: CryptoManaging {
 	
-	/// Structure to hold cryptography data
-	struct CryptoData: Codable {
-		
-		/// The key of the holder
-		var holderSecretKey: Data?
-		var nonce: String?
-		var stoken: String?
-		var ism: Data?
-		var credential: Data?
-		
-		/// Empty crypto data
-		static var empty: CryptoData {
-			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, ism: nil, credential: nil)
-		}
-	}
-	
-	private var cryptoData: CryptoData {
-		get { secureUserSettings.cryptoData }
-		set { secureUserSettings.cryptoData = newValue }
-	}
-	
 	private let cryptoLibUtility: CryptoLibUtilityProtocol
 	private let verificationPolicyManager: VerificationPolicyManaging
-	private let secureUserSettings: SecureUserSettingsProtocol
 	private let featureFlagManager: FeatureFlagManaging
 	private let logHandler: Logging?
 	
 	/// Initializer
 
 	required init(
-		secureUserSettings: SecureUserSettingsProtocol,
 		cryptoLibUtility: CryptoLibUtilityProtocol,
 		verificationPolicyManager: VerificationPolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
 		logHandler: Logging? = nil
 	) {
-		self.secureUserSettings = secureUserSettings
 		self.cryptoLibUtility = cryptoLibUtility
 		self.verificationPolicyManager = verificationPolicyManager
 		self.featureFlagManager = featureFlagManager
@@ -55,44 +31,16 @@ class CryptoManager: CryptoManaging {
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
-		generateSecretKey()
 	}
 	
-	func generateSecretKey() {
+	func generateSecretKey() -> Data? {
 		
-		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
-			if let result = MobilecoreGenerateHolderSk(),
-			   let data = result.value {
-				self.cryptoData = CryptoData(
-					holderSecretKey: data,
-					nonce: nil,
-					stoken: nil
-				)
-			}
+		if let result = MobilecoreGenerateHolderSk(),
+		   let data = result.value {
+			return data
+		} else {
+			return nil
 		}
-	}
-	
-	// MARK: - Getters and Setters
-	
-	/// Set the nonce
-	/// - Parameter nonce: the nonce
-	func setNonce(_ nonce: String) {
-		
-		cryptoData.nonce = nonce
-	}
-	
-	/// set the stoken
-	/// - Parameter stoken: the stoken
-	func setStoken(_ stoken: String) {
-		
-		cryptoData.stoken = stoken
-	}
-	
-	/// Get the stoken
-	/// - Returns: the stoken
-	func getStoken() -> String? {
-		
-		return cryptoData.stoken
 	}
 	
 	/// Do we have public keys
@@ -102,12 +50,9 @@ class CryptoManager: CryptoManaging {
 		return cryptoLibUtility.hasPublicKeys
 	}
 	
-	/// Generate the commitment message
-	/// - Returns: the issuer commitment message
-	func generateCommitmentMessage() -> String? {
-		
-		if let nonce = cryptoData.nonce,
-		   let result = MobilecoreCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
+	func generateCommitmentMessage(nonce: String, holderSecretKey: Data) -> String? {
+
+		if let result = MobilecoreCreateCommitmentMessage(holderSecretKey, Data(nonce.bytes)) {
 			if let value = result.value, result.error.isEmpty {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
@@ -119,15 +64,10 @@ class CryptoManager: CryptoManaging {
 	}
 	
 	// MARK: - QR
+	
+	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
 
-	///  Disclose the credential
-	/// - Parameters:
-	///   - credential: the (domestic) credential to generate the QR from
-	///   - disclosurePolicy: the disclosure policy (1G / 3G) to genearte the QR with
-	/// - Returns: the QR message
-	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data? {
-
-		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
+		if hasPublicKeys() {
 			Current.logHandler.logVerbose("Disclosing with policy: \(disclosurePolicy)")
 			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
