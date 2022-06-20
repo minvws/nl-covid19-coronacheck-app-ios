@@ -11,7 +11,7 @@ open class Event {
 	
 	let type: EventType
 	let eventDate: Date
-	let country: Country
+	private let countryCode: Country
 	let validFrom: Date?
 	let validUntil: Date?
 	let disease: String
@@ -29,6 +29,24 @@ open class Event {
 		}
 	}
 	
+	var country: String {
+		switch countryCode {
+			case .nl:
+				return "Nederland"
+			case .de:
+				return "Duitsland"
+		}
+	}
+	
+	var countryInternational: String {
+		switch countryCode {
+			case .nl:
+				return "Nederland / The Netherlands"
+			case .de:
+				return "Duitsland / Germany"
+		}
+	}
+	
 	init(
 		type: EventType,
 		eventDate: Date,
@@ -40,7 +58,7 @@ open class Event {
 	) {
 		self.type = type
 		self.eventDate = eventDate
-		self.country = country
+		self.countryCode = country
 		self.disease = "COVID-19"
 		self.validFrom = validFrom
 		self.validUntil = validUntil
@@ -54,9 +72,14 @@ open class Event {
 		case negativeTest
 	}
 	
-	enum Country: String {
-		case nl = "Nederland / The Netherlands"
-		case de = "Duitsland / Germany"
+	enum Country {
+		case nl
+		case de
+	}
+	
+	enum TestType: String {
+		case pcr = "PCR (NAAT)"
+		case rat = "Sneltest (RAT)"
 	}
 }
 
@@ -95,14 +118,19 @@ final class Vaccination: Event {
 
 final class PositiveTest: Event {
 	
+	let testType: TestType
+	
 	init(
 		eventDate: Date,
 		country: Country = .nl,
 		validFrom: Date? = nil,
-		validUntil: Date,
+		validUntil: Date? = nil,
 		dcc: String? = nil,
-		couplingCode: String? = nil
+		couplingCode: String? = nil,
+		testType: TestType
 	) {
+		self.testType = testType
+		
 		super.init(
 			type: .positiveTest,
 			eventDate: eventDate,
@@ -117,14 +145,19 @@ final class PositiveTest: Event {
 
 final class NegativeTest: Event {
 	
+	let testType: TestType
+	
 	init(
 		eventDate: Date,
 		country: Country = .nl,
 		validFrom: Date? = nil,
 		validUntil: Date? = nil,
 		dcc: String? = nil,
-		couplingCode: String? = nil
+		couplingCode: String? = nil,
+		testType: TestType
 	) {
+		self.testType = testType
+		
 		super.init(
 			type: .negativeTest,
 			eventDate: eventDate,

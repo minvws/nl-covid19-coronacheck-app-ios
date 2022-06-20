@@ -19,6 +19,7 @@ struct DateHandler {
 	
 	static let short = DateHandler(format: "yyyy-MM-dd")
 	static let written = DateHandler(format: "d MMMM yyyy")
+	static let recently = DateHandler(format: "EEEE d MMMM")
 	static let dutch = DateHandler(format: "dd-MM-yyyy")
 	
 	init(format: String) {

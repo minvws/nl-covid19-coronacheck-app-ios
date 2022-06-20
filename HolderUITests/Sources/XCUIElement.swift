@@ -58,4 +58,11 @@ extension XCUIElement {
 		let element = elementQuery.element(matching: predicate)
 		_ = element.assertExistence()
 	}
+	
+	func containsValue(_ text: String) {
+		let elementQuery = self.descendants(matching: .staticText)
+		let predicate = NSPredicate(format: "value contains[c] %@", text)
+		let element = elementQuery.element(matching: predicate)
+		_ = element.assertExistence()
+	}
 }

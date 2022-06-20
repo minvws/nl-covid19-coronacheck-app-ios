@@ -22,8 +22,14 @@ extension BaseTest {
 		app.tapButton("Naar mijn bewijzen")
 	}
 	
-	func assertSomethingWentWrong() {
+	func assertSomethingWentWrong(error: String = "") {
 		app.textExists("Sorry, er gaat iets mis")
+		if !error.isEmpty {
+			print(app.debugDescription)
+			print(app.staticTexts)
+			print(app.staticTexts.elementMap())
+			app.containsValue(error)
+		}
 		returnToCertificateOverview()
 	}
 	
@@ -80,6 +86,19 @@ extension BaseTest {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
+		app.tapButton("Sluiten")
+	}
+
+	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int) {
+		app.tapButton("Details", index: position)
+		app.containsText("Naam: " + person.name)
+		app.containsText("Geboortedatum: " + person.birthDate.toString(.written))
+		print(app.debugDescription)
+		app.containsText("Ziekteverwekker: " + vaccination.disease)
+		app.containsText("Vaccin: " + vaccination.vaccine.rawValue)
+		app.containsText("Vaccinatiedatum: " + vaccination.eventDate.toString(.written))
+		app.containsText("Gevaccineerd in: " + vaccination.country)
+		
 		app.tapButton("Sluiten")
 	}
 	
@@ -223,6 +242,14 @@ extension BaseTest {
 		card(of: .test).containsText("Bekijk QR")
 	}
 	
+	func assertInternationalTest(of negativeTest: NegativeTest) {
+		tapOnInternationalTab()
+		card(of: .test).containsText(negativeTest.internationalEventCertificate)
+		card(of: .test).containsText("Type test: " + negativeTest.testType.rawValue)
+		card(of: .test).containsText("Testdatum: " + negativeTest.eventDate.toString(.recently))
+		card(of: .test).containsText("Bekijk QR")
+	}
+	
 	func assertCertificateIsNotValidInternationally(ofType certificateType: CertificateType) {
 		guard disclosureMode != .mode0G else { return }
 		tapOnInternationalTab()
@@ -278,7 +305,7 @@ extension BaseTest {
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: dose.map { String($0) }.joined(separator: " "))
 		}
 		app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vaccination.eventDate.toString(.dutch))
-		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.country.rawValue)
+		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.countryInternational)
 		
 		closeQRDetails()
 	}
@@ -304,7 +331,7 @@ extension BaseTest {
 		app.textExists("Over mijn internationale QR-code")
 		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: positiveTest.disease)
 		app.labelValuePairExist(label: "Testdatum / Test date:", value: positiveTest.eventDate.toString(.dutch))
-		app.labelValuePairExist(label: "Getest in / Member state of test:", value: positiveTest.country.rawValue)
+		app.labelValuePairExist(label: "Getest in / Member state of test:", value: positiveTest.countryInternational)
 		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: positiveTest.validFrom!.toString(.dutch))
 		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value:
 									positiveTest.validUntil!.toString(.dutch))
