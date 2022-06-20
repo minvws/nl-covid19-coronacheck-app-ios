@@ -5,6 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+// Inspired by https://prograils.com/swift-date-handler
+
 import Foundation
 
 extension DateFormatter {
