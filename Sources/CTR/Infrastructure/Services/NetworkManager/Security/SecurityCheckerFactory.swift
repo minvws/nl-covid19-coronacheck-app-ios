@@ -75,7 +75,7 @@ class SecurityChecker: SecurityCheckerProtocol {
 	var challenge: URLAuthenticationChallenge?
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
 	var trustedName: String?
-	var openssl = OpenSSL()
+	var worker = SecurityCheckerWorker()
 	
 	init(
 		trustedCertificates: [Data] = [],
@@ -89,24 +89,6 @@ class SecurityChecker: SecurityCheckerProtocol {
 			self.completionHandler = completionHandler
 		}
 	
-	// Though ATS will validate this (too) - we force an early verification against a known list
-	// ahead of time (defined here, no keychain) - also to trust the (relatively loose) comparisons
-	// later (as we need to work with this data; which otherwise would be untrusted).
-	//
-	func checkATS(serverTrust: SecTrust) -> Bool {
-		
-		guard let host = challenge?.protectionSpace.host else {
-			return false
-		}
-		
-		let policies = [SecPolicyCreateSSL(true, host as CFString)]
-		
-		return SecurityCheckerWorker().checkATS(
-			serverTrust: serverTrust,
-			policies: policies,
-			trustedCertificates: trustedCertificates)
-	}
-	
 	/// Check the SSL Connection
 	func checkSSL() {
 		
@@ -117,9 +99,10 @@ class SecurityChecker: SecurityCheckerProtocol {
 			completionHandler(.performDefaultHandling, nil)
 			return
 		}
+		
 		let policies = [SecPolicyCreateSSL(true, host as CFString)]
 		
-		if SecurityCheckerWorker().checkSSL(
+		if worker.checkSSL(
 			serverTrust: serverTrust,
 			policies: policies,
 			trustedCertificates: trustedCertificates,
