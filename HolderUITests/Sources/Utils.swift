@@ -15,18 +15,6 @@ extension BaseTest {
 		return offsetDate
 	}
 	
-	func calculateOffset(for date: String) -> Int {
-		let calendar = Calendar.current
-		let today = calendar.startOfDay(for: Date())
-		
-		let formatter = DateFormatter()
-		formatter.dateFormat = "yyyy-MM-dd"
-		let calculatedDate = formatter.date(from: date)
-
-		let components = calendar.dateComponents([.day], from: today, to: calculatedDate!)
-		return components.day!
-	}
-	
 	private func formatDate(of date: Date, withYear: Bool, withDay: Bool, short: Bool) -> String {
 		let formatter = DateFormatter()
 		var dateFormat = "d MMMM"
