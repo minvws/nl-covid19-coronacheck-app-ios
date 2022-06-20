@@ -574,6 +574,73 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value[4]).toEventually(beAddCertificateCard())
 	}
 	
+	// MARK: - Multiple TEST, Currently Valid, Domestic
+	
+	func test_datasourceupdate_multpileCurrentlyValidDomesticTests_3G() {
+		
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
+		
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .netherlands(evaluateCredentialAttributes: { _, _ in
+					DomesticCredentialAttributes.sample(category: "3")
+				}),
+				greencards: [.init(
+					id: sampleGreencardObjectID,
+					origins: [
+						.validOneDayAgo_test_expires1HourFromNow(),
+						.validOneHourAgo_test_expires23HoursFromNow(),
+						.validOneDayAgo_test_expires5MinutesFromNow()
+					])
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
+			expect(buttonTitle).to(beNil())
+		}))
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
+			// check isLoading
+			expect(isLoading) == false
+			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
+			expect(isDisabledByDisclosurePolicy) == false
+			expect(disclosurePolicyLabel) == "3G"
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02"
+			
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
+			expect(futureValidityTexts[0].kind) == .current
+			expect(futureValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
+			expect(futureValidityTexts[0].lines[1]) == "geldig tot vrijdag 16 juli 16:02"
+			
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+			
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+		}))
+	}
+	
 	// MARK: - Single RECOVERY, Currently Valid, Domestic
 	
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery_3g() {

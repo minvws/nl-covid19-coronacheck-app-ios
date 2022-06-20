@@ -602,7 +602,7 @@ extension HolderDashboardViewModel.QRCard {
 					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
 					guard origin.type == .test else { return true } // We can skip visitorpass, recovery and vaccination
 
-					// Test origings sorted by longest validity
+					// Test origins sorted by longest validity
 					let sortedTestOrigins = greenCard.origins
 						.sorted { lhs, rhs in
 							return lhs.customSortIndex < rhs.customSortIndex
