@@ -80,6 +80,8 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
+	// MARK: - Universal Link handling
+	
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
 	}
