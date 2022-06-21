@@ -124,15 +124,19 @@ targetTemplates:
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
         FirebaseTest:
           NETWORK_CONFIGURATION: TEST
           LOG_LEVEL: debug
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
         AppStore:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
     info:
       properties:
         # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
