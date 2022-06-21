@@ -133,7 +133,7 @@ class SecurityCheckerWorker {
 		policies: [SecPolicy],
 		trustedCertificates: [Data],
 		hostname: String,
-		trustedNames: [String]) -> Bool {
+		trustedName: String?) -> Bool {
 			
 		guard checkATS(
 			serverTrust: serverTrust,
@@ -148,44 +148,63 @@ class SecurityCheckerWorker {
 			return true
 		}
 			
-		let hostnameLC = hostname.lowercased()
-		var foundValidCertificate = false
-		var foundValidCommonNameEndsWithTrustedName = trustedNames.isEmpty ? true : false
-		var foundValidFullyQualifiedDomainName = false
+		var validCertificate = false
+		// No trusted name for providers. Use true if nil to bypass the check
+		var validCommonNameEndsWithTrustedName = trustedName == nil ? true : false
+		var validFQDN = false
 		
 		for index in 0 ..< SecTrustGetCertificateCount(serverTrust) {
-			
 			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
 				let serverCert = Certificate(certificate: serverCertificate)
-				Current.logHandler.logVerbose("Server set at \(index) is \(serverCert)")
 				
 				if let name = serverCert.commonName {
-					Current.logHandler.logVerbose("Hostname CN \(name)")
-					if name.lowercased() == hostnameLC {
-						foundValidFullyQualifiedDomainName = true
-						Current.logHandler.logVerbose("Host matched CN \(name)")
-					}
-					if !foundValidCommonNameEndsWithTrustedName {
-						for trustedName in trustedNames where name.lowercased().hasSuffix(trustedName.lowercased()) {
-							foundValidCommonNameEndsWithTrustedName = true
-							Current.logHandler.logVerbose("Found a valid name \(name)")
-						}
-					}
+					Current.logHandler.logVerbose("Host Common Name: \(name)")
+					validFQDN = validFQDN || checkFQDN(serverCert: serverCert, expectedName: hostname)
+					validCommonNameEndsWithTrustedName = validCommonNameEndsWithTrustedName || checkCommonName(name, trustedName: trustedName)
 				}
-				if openssl.validateSubjectAlternativeDNSName(hostnameLC, forCertificateData: serverCert.data) {
-					foundValidFullyQualifiedDomainName = true
+				if openssl.validateSubjectAlternativeDNSName(hostname, forCertificateData: serverCert.data) {
+					validFQDN = true
 					Current.logHandler.logVerbose("Host matched SAN \(hostname)")
 				}
-				for trustedCertificate in trustedCertificates {
-					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-						Current.logHandler.logVerbose("Found a match with a trusted Certificate")
-						foundValidCertificate = true
-					}
-				}
+				validCertificate = validCertificate || checkCertificate(serverCert: serverCert, trustedCertificates: trustedCertificates)
 			}
 		}
-		Current.logHandler.logVerbose("Server trust for \(hostname): validCert \(foundValidCertificate), CN ending \(foundValidCommonNameEndsWithTrustedName), fqdn \(foundValidFullyQualifiedDomainName)")
-		return foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName
+		Current.logHandler.logVerbose("Server trust for \(hostname): validCert \(validCertificate), CN ending \(validCommonNameEndsWithTrustedName), fqdn \(validFQDN)")
+		return validCertificate && validCommonNameEndsWithTrustedName && validFQDN
 	} // checkSSL worker
 	
+	/// Check the fully qualified domain name (see https://en.wikipedia.org/wiki/Fully_qualified_domain_name)
+	/// - Parameters:
+	///   - serverCert: the certificate to check
+	///   - expectedName: the expected domain name
+	/// - Returns: True if they match
+	private func checkFQDN(serverCert: Certificate, expectedName: String) -> Bool {
+		
+		return serverCert.commonName?.lowercased() == expectedName.lowercased()
+	}
+	
+	/// Check the common name
+	/// - Parameters:
+	///   - commonName: the common name
+	///   - trustedName: the trusted name
+	/// - Returns: True if the common name is in the trusted names
+	private func checkCommonName(_ commonName: String, trustedName: String?) -> Bool {
+		
+		guard let trustedName = trustedName else { return false }
+		
+		return commonName.lowercased().hasSuffix(trustedName.lowercased())
+	}
+	
+	/// Check if the certificate matches any of the trusted cerfificates
+	/// - Parameters:
+	///   - serverCert: the certificate to check
+	///   - trustedCertificates: the list of trusted certificates
+	/// - Returns: True if the certificate is in the trusted list.
+	private func checkCertificate(serverCert: Certificate, trustedCertificates: [Data]) -> Bool {
+		
+		for trustedCertificate in trustedCertificates where openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
+			return true
+		}
+		return false
+	}
 } // SecurityCheckerWorker

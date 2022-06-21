@@ -24,7 +24,7 @@ struct SecurityCheckerFactory {
 		}
 #endif
 		// Default for .config
-		var trustedNames = [TrustConfiguration.commonNameContent]
+		var trustedName: String? = TrustConfiguration.commonNameContent
 		var trustedCertificates = [Data]()
 		
 		if case SecurityStrategy.data = strategy {
@@ -35,7 +35,7 @@ struct SecurityCheckerFactory {
 		}
 		
 		if case let .provider(provider) = strategy {
-			trustedNames = [] // No trusted name check.
+			trustedName = nil // No trusted name check.
 			trustedCertificates = [] // Only trust provided certificates
 			for tlsCertificate in provider.getTLSCertificates() {
 				trustedCertificates.append(tlsCertificate)
@@ -43,7 +43,7 @@ struct SecurityCheckerFactory {
 		}
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
-			trustedNames: trustedNames,
+			trustedName: trustedName,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
@@ -74,38 +74,20 @@ class SecurityChecker: SecurityCheckerProtocol {
 	var trustedCertificates: [Data]
 	var challenge: URLAuthenticationChallenge?
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-	var trustedNames: [String]
-	var openssl = OpenSSL()
+	var trustedName: String?
+	var worker = SecurityCheckerWorker()
 	
 	init(
 		trustedCertificates: [Data] = [],
-		trustedNames: [String] = [],
+		trustedName: String? = nil,
 		challenge: URLAuthenticationChallenge?,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 			
 			self.trustedCertificates = trustedCertificates
-			self.trustedNames = trustedNames
+			self.trustedName = trustedName
 			self.challenge = challenge
 			self.completionHandler = completionHandler
 		}
-	
-	// Though ATS will validate this (too) - we force an early verification against a known list
-	// ahead of time (defined here, no keychain) - also to trust the (relatively loose) comparisons
-	// later (as we need to work with this data; which otherwise would be untrusted).
-	//
-	func checkATS(serverTrust: SecTrust) -> Bool {
-		
-		guard let host = challenge?.protectionSpace.host else {
-			return false
-		}
-		
-		let policies = [SecPolicyCreateSSL(true, host as CFString)]
-		
-		return SecurityCheckerWorker().checkATS(
-			serverTrust: serverTrust,
-			policies: policies,
-			trustedCertificates: trustedCertificates)
-	}
 	
 	/// Check the SSL Connection
 	func checkSSL() {
@@ -117,14 +99,15 @@ class SecurityChecker: SecurityCheckerProtocol {
 			completionHandler(.performDefaultHandling, nil)
 			return
 		}
+		
 		let policies = [SecPolicyCreateSSL(true, host as CFString)]
 		
-		if SecurityCheckerWorker().checkSSL(
+		if worker.checkSSL(
 			serverTrust: serverTrust,
 			policies: policies,
 			trustedCertificates: trustedCertificates,
 			hostname: host,
-			trustedNames: trustedNames) {
+			trustedName: trustedName) {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
 		}
