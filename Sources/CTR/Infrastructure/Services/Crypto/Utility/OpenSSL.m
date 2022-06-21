@@ -324,13 +324,16 @@ errit:
 	// So we use the more modern CMS family of functions.
 	//
 	// result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
-
-	if ( 1 != CMS_verify(cms, NULL, store, contentBlob, NULL, CMS_BINARY) ) {
+	@try {
+		if ( 1 != CMS_verify(cms, NULL, store, contentBlob, NULL, CMS_BINARY) ) {
 #ifdef __DEBUG
-		char buff[1024];
-		EXITOUT("CMS_verify fail (%d.%s)!", result,ERR_error_string(ERR_get_error(), buff));
+			char buff[1024];
+			EXITOUT("CMS_verify fail (%d.%s)!", result,ERR_error_string(ERR_get_error(), buff));
 #endif
-		EXITOUT("CMS_verify fail");
+			EXITOUT("CMS_verify fail");
+		}
+	} @catch (NSException *exception) {
+		EXITOUT("CMS_verify crashed");
 	}
 
 #ifdef __DEBUG
