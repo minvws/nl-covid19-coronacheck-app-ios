@@ -644,11 +644,7 @@ class ListRemoteEventsViewModel {
 				// So we append the unique of the event to the provider identifier.
 				// For GGD, RIVM and ZKVI events, we can not rely on the unique of the event,
 				// for those we do want to overwrite the existing ones (so we do not append the unqiue)
-				for event in storableEvent.wrapper.events ?? [] {
-					if let unique = event.unique {
-						uniqueIdentifier += "-\(unique)"
-					}
-				}
+				uniqueIdentifier += "-" + storableEvent.uniqueIdentifier
 			}
 			
 			// Remove any existing events for the uniqueIdentifier -> so we do not have duplicates

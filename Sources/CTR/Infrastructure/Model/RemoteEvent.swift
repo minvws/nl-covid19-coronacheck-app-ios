@@ -27,4 +27,8 @@ extension RemoteEvent {
 		}
 		return nil
 	}
+	
+	var uniqueIdentifier: String {
+		return (wrapper.events ?? []).compactMap { $0.unique }.joined(separator: "-")
+	}
 }
