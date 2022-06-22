@@ -638,12 +638,12 @@ class ListRemoteEventsViewModel {
 				return
 			}
 
+			// We must allow multiple events, but do not want duplicates.
+			// So we append the unique of the event to the provider identifier.
+			// For GGD, RIVM and ZKVI events, we can not rely on the unique of the event,
+			// for those we do want to overwrite the existing ones (so we do not append the unqiue)
 			var uniqueIdentifier = storableEvent.wrapper.providerIdentifier
 			if !(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
-				// We must allow multiple events, but do not want duplicates.
-				// So we append the unique of the event to the provider identifier.
-				// For GGD, RIVM and ZKVI events, we can not rely on the unique of the event,
-				// for those we do want to overwrite the existing ones (so we do not append the unqiue)
 				uniqueIdentifier += "-" + storableEvent.uniqueIdentifier
 			}
 			
