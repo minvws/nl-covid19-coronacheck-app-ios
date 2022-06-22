@@ -34,8 +34,7 @@
 "verifier.consent.item.1" = "Location data is <b>not saved or used</b>";
 "verifier.consent.item.2" = "You're only allowed to use the visitor's details to <b>check the certificate</b>";
 "verifier.consent.item.3" = "The visitor's data is <b>not centrally stored anywhere</b>";
-"verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
-"verifier.consent.message.underlined" = "acceptable use policy";
+"verifier.consent.message" = "<p>The <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\"acceptable use policy</a> details how CoronaCheck Scanner uses your data and what your rights are.</p>";
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.denied.message.five" = "<p>Ask the visitor to contact the CoronaCheck help desk.</p>";

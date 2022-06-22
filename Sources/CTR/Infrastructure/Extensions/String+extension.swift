@@ -10,22 +10,6 @@ import UIKit
 extension String {
 
 	/// Underline a part of the text
-	/// - Parameter underlined: the part to underline
-	/// - Returns: attributed string
-	func underline(underlined: String) -> NSAttributedString {
-
-		let underlineRange = (self as NSString).range(of: underlined)
-		let attributes: [NSAttributedString.Key: Any] = [
-			.underlineStyle: NSUnderlineStyle.single.rawValue
-		]
-		let attributedText = NSMutableAttributedString(
-			string: self
-		)
-		attributedText.addAttributes(attributes, range: underlineRange)
-		return attributedText
-	}
-
-	/// Underline a part of the text
 	/// - Parameters:
 	///   - underlined: the part to underline
 	///   - color: the color to underline with
@@ -35,42 +19,6 @@ extension String {
 		let underlineRange = (self as NSString).range(of: underlined)
 		let attributes: [NSAttributedString.Key: Any] = [
 			.underlineStyle: NSUnderlineStyle.single.rawValue,
-			.foregroundColor: color
-		]
-		let attributedText = NSMutableAttributedString(
-			string: self
-		)
-		attributedText.addAttributes(attributes, range: underlineRange)
-		return attributedText
-	}
-
-	/// Underline a part of the text
-	/// - Parameters:
-	///   - underlined: the part to underline
-	/// - Returns: attributed string
-	func underlineAsLink(underlined: String) -> NSAttributedString {
-
-		let underlineRange = (self as NSString).range(of: underlined)
-		let attributes: [NSAttributedString.Key: Any] = [
-			.foregroundColor: C.primaryBlue()!,
-			.underlineStyle: NSUnderlineStyle.single.rawValue
-		]
-		let attributedText = NSMutableAttributedString(
-			string: self
-		)
-		attributedText.addAttributes(attributes, range: underlineRange)
-		return attributedText
-	}
-
-	/// Change the color a part of the text
-	/// - Parameters:
-	///   - text: the part to color
-	///   - color: the color to underline with
-	/// - Returns: attributed string
-	func color(text: String, with color: UIColor) -> NSAttributedString {
-
-		let underlineRange = (self as NSString).range(of: text)
-		let attributes: [NSAttributedString.Key: Any] = [
 			.foregroundColor: color
 		]
 		let attributedText = NSMutableAttributedString(

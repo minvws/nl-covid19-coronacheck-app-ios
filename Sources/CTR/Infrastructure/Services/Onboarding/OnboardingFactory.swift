@@ -19,9 +19,6 @@ protocol OnboardingFactoryProtocol {
 	/// Get the Consent message
 	func getConsentMessage() -> String
 
-	/// Get the Consent underlined message
-	func getConsentLink() -> String
-
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String
 	
@@ -170,11 +167,6 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 
 		return L.holderConsentMessage()
 	}
-	/// Get the Consent underlined message
-	func getConsentLink() -> String {
-
-		return L.holderConsentMessageUnderlined()
-	}
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String {
@@ -235,11 +227,6 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	func getConsentMessage() -> String {
 
 		return L.verifierConsentMessage()
-	}
-	/// Get the Consent underlined message
-	func getConsentLink() -> String {
-
-		return L.verifierConsentMessageUnderlined()
 	}
 
 	/// Get the Consent Button Title
