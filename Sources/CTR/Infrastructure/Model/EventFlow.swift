@@ -7,8 +7,6 @@
 
 import Foundation
 
-typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?)
-
 struct EventFlow {
 
 	/// The access token used to fetch fat and thin ID Hashes

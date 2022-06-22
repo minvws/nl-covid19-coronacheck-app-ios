@@ -444,7 +444,7 @@ class ListRemoteEventsViewModel {
 		if hasDomesticVaccinationOrigins {
 			self.completeFlow()
 		} else {
-			let hasPositiveTestRemoteEvent = self.remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
+			let hasPositiveTestRemoteEvent = self.remoteEvents.contains { $0.wrapper.events?.first?.hasPositiveTest ?? false }
 			if hasPositiveTestRemoteEvent {
 				// End state 9
 				self.viewState = self.positiveTestFlowInternationalVaccinationCreated()
@@ -627,25 +627,13 @@ class ListRemoteEventsViewModel {
 			walletManager.removeExistingEventGroups()
 		}
 
-		let storableEvents = remoteEvents.filter { (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) in
-			// We can not store empty remoteEvents without an v2 result or a v3 event.
-			// ZZZ sometimes returns an empty array of events in the combined flow.
-			(wrapper.events ?? []).isNotEmpty
-		}
+		// We can not store empty remoteEvents without an event. (happens with .pending)
+		// ZZZ sometimes returns an empty array of events in the combined flow.
+		let storableEvents = remoteEvents.filter { ($0.wrapper.events ?? []).isNotEmpty }
 
 		for storableEvent in storableEvents where storableEvent.wrapper.status == .complete {
-
-			var data: Data?
-
-			if let signedResponse = storableEvent.signedResponse,
-			   let jsonData = try? JSONEncoder().encode(signedResponse) {
-				data = jsonData
-			} else if let dccEvent = storableEvent.wrapper.events?.first?.dccEvent,
-					  let jsonData = try? JSONEncoder().encode(dccEvent) {
-				data = jsonData
-			}
-
-			guard let jsonData = data,
+			
+			guard let jsonData = storableEvent.getEventsAsJSON(),
 				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
 				return
 			}
