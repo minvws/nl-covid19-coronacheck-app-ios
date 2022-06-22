@@ -15,6 +15,9 @@ endif
 	bundle install
 
 homebrew_dev:
+ifeq (, $(shell which brew))
+$(error "You must install homebrew on your system before setup can continue. Visit: https://brew.sh to get started with that.")
+endif
 	@brew bundle --file Brewfile
 
 homebrew_ci:
