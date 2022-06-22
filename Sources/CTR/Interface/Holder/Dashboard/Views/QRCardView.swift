@@ -757,8 +757,6 @@ private final class ErrorRowView: BaseView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		let iconOffset = ViewTraits.Font.lineHeight - ViewTraits.Font.font.ascender
-		
 		NSLayoutConstraint.activate([
 			iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			iconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
