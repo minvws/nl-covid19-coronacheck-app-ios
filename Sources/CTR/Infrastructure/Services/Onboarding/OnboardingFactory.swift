@@ -210,7 +210,8 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.safely(),
 				imageBackgroundColor: nil,
 				tagline: nil,
-				step: 1
+				step: 1,
+				nextButtonTitle: L.generalNext()
 			)
 		]
 
