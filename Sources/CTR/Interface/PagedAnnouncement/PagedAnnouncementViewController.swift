@@ -68,6 +68,7 @@ class PagedAnnouncementViewController: BaseViewController {
 				return viewController
 			}
 			
+			self.sceneView.footerButtonView.topButtonConstraint?.constant = $0.count > 1 ? 0 : 24
 			self.sceneView.pageControl.numberOfPages = $0.count
 			self.updateFooterView(for: 0)
 		}
@@ -185,18 +186,18 @@ extension PagedAnnouncementViewController: PageViewControllerDelegate {
 // MARK: - OnboardingPageViewControllerDelegate
 
 extension PagedAnnouncementViewController: PagedAnnouncementItemViewControllerDelegate {
-    
-    /// Enables swipe to navigate behaviour for assistive technologies
-    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        if direction == .right {
-            backbuttonTapped()
-            return true
-        } else if direction == .left {
-            primaryButtonTapped()
-            return true
-        }
-        return false
-    }
+	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		if direction == .right {
+			backbuttonTapped()
+			return true
+		} else if direction == .left {
+			primaryButtonTapped()
+			return true
+		}
+		return false
+	}
 }
 
 // MARK: - PageControlDelegate
