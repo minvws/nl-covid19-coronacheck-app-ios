@@ -3,21 +3,16 @@ ci: install_ci_deps generate_project
 
 # -- setup environment --
 
-install_dev_deps: xcode_check homebrew_dev bundler
+install_dev_deps: homebrew_dev bundler
 	@echo "All dev dependencies are installed"
 
-install_ci_deps: xcode_check homebrew_ci
+install_ci_deps: homebrew_ci
 
 bundler: 
 ifeq (, $(shell which bundle))
 $(error "You must install bundler on your system before setup can continue. You could try running 'gem install bundler'.")
 endif
 	bundle install
-
-xcode_check: 
-ifeq (, $(shell xcode-select -p | grep "/Applications"))
-$(error "You must install Xcode on your system (or set its path correctly using, for example, `sudo xcode-select -s /Applications/Xcode.app`))")
-endif
 
 homebrew_dev:
 ifeq (, $(shell which brew))
