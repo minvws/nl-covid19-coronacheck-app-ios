@@ -46,3 +46,4 @@ report.xml
 /Brewfile_CI.lock.json
 /Brewfile.lock.json
 /Vendor/bundle/
+/.bundle
