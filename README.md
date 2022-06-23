@@ -1,13 +1,11 @@
-# COVID-19 CoronaCheck Prototype - iOS
+# COVID-19 CoronaCheck - iOS
 
 ## Introduction
 
-This repository contains the iOS prototype of the Dutch COVID-19 CoronaCheck project.
+This repository contains the iOS release of the Dutch COVID-19 CoronaCheck project.
 
 * The iOS app is located in the repository you are currently viewing.
 * The Android app can also be [found on GitHub](https://github.com/minvws/nl-covid19-coronacheck-app-android)
-
-The project is currently an experimental prototype to explore technical possibilities.
 
 ## Development & Contribution process
 
@@ -20,7 +18,9 @@ Note that all commits should be signed using a gpg key.
 
 ## Getting started
 
-The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./.project.yml) file. There is a [Makefile](./Makefile) which makes it easy to get started:
+The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./.project.yml) file. 
+
+There is a [Makefile](./Makefile) which makes it easy to get started (if you encounter any issues running this, please do open an issue):
 
 Simply run `make dev` from the command line.  
 
