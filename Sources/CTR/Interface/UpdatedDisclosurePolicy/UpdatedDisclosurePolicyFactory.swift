@@ -30,7 +30,7 @@ struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
 			)]
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			
-			if Current.userSettings.lastKnownConfigDisclosurePolicy == [] {
+			if Current.userSettings.lastKnownConfigDisclosurePolicy == [] || Current.userSettings.lastKnownConfigDisclosurePolicy == ["0G"] {
 				
 				// Special case: 0G -> 3G
 				return [
