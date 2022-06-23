@@ -136,19 +136,6 @@ class PrivacyConsentViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	/// Test the user tapped on the link
-	func testLink() {
-
-		// Given
-		loadView()
-
-		// When
-		sut.linkTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedShowPrivacyPage) == true
-	}
-
 	/// Test the user tapped on the consent button
 	func test_consentValueChanged_whenButtonSelectedIsTrue_shouldHideConsentError() {
 

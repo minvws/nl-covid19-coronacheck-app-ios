@@ -43,9 +43,10 @@ final class PrivacyConsentViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$underlinedText.binding = { [weak self] in
-			self?.sceneView.underline($0)
-			self?.setupLink()
+		
+		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in
+			
+			self?.viewModel.openUrl(url)
 		}
 
 		viewModel.$actionTitle.binding = { [weak self] in self?.sceneView.primaryButton.setTitle($0, for: .normal) }
@@ -76,26 +77,12 @@ final class PrivacyConsentViewController: BaseViewController {
 		}
 	}
 
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-		sceneView.messageLabel.isUserInteractionEnabled = true
-	}
-
 	/// User tapped on the consent button
 	@objc func consentValueChanged(_ sender: LabelWithCheckbox) {
 
 		// Hide error
 		guard sender.isSelected else { return }
 		viewModel.consentGiven(true)
-	}
-
-	/// User tapped on the link
-	@objc func linkTapped() {
-
-		viewModel.linkTapped()
 	}
 
 	/// The user tapped on the primary button

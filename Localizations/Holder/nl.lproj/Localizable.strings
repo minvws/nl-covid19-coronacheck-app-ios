@@ -112,8 +112,7 @@
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app met mijn gegevens omgaat.";
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
 "holder.consent.item.2" = "Er worden <b>geen locatiegegevens</b> gebruikt of bewaard";
-"holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
-"holder.consent.message.underlined" = "privacyverklaring";
+"holder.consent.message" = "<p>In de <a href=\"https://coronacheck.nl/nl/privacy-in-app\">privacyverklaring</a> staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:</p>";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
 "holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";

@@ -112,8 +112,7 @@
 "holder.consent.button" = "I have read the privacy statement and understand how CoronaCheck processes my data.";
 "holder.consent.item.1" = "Your data is <b>not centrally stored anywhere</b>";
 "holder.consent.item.2" = "No location data is <b>used or saved</b>";
-"holder.consent.message" = "The privacy statement details how CoronaCheck handles your data. These are the most important points:";
-"holder.consent.message.underlined" = "privacy statement";
+"holder.consent.message" = "<p>The <a href=\"https://coronacheck.nl/en/privacy-in-app\">privacy statement</a> details how CoronaCheck handles your data. These are the most important points:</p>";
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
 "holder.dashboard.clockDeviationDetected.message" = "Check your phone's time settings. They might be incorrect.";
