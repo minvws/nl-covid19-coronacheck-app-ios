@@ -68,7 +68,6 @@ class PagedAnnouncementViewController: BaseViewController {
 				return viewController
 			}
 			
-			self.sceneView.footerButtonView.topButtonConstraint?.constant = $0.count > 1 ? 0 : 24
 			self.sceneView.pageControl.numberOfPages = $0.count
 			self.updateFooterView(for: 0)
 		}

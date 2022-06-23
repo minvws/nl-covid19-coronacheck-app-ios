@@ -54,7 +54,6 @@ class PagedAnnouncementView: BaseView {
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		footerView.buttonStackView.alignment = .center
 		footerView.buttonStackView.spacing = UIDevice.current.isSmallScreen ? ViewTraits.pageControlSpacingSmallScreen : ViewTraits.pageControlSpacing
-		footerView.topButtonConstraint?.constant = 0
 		return footerView
 	}()
 	

@@ -22,6 +22,7 @@ final class FooterButtonView: BaseView {
 		}
 		enum Margin {
 			static let edge: CGFloat = 20.0
+			static let top: CGFloat = 24.0
 		}
 		enum Spacing {
 			static let buttonStack: CGFloat = 16
@@ -107,7 +108,7 @@ final class FooterButtonView: BaseView {
 			{
 				let constraint = buttonStackView.topAnchor.constraint(
 					equalTo: topAnchor,
-					constant: ViewTraits.Margin.edge
+					constant: ViewTraits.Margin.top
 				)
 				topButtonConstraint = constraint
 				return constraint
