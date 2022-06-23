@@ -34,8 +34,7 @@
 "verifier.consent.item.1" = "Er worden <b>geen locatiegegevens</b> gebruikt of bewaard";
 "verifier.consent.item.2" = "Je mag gegevens van de bezoeker alleen gebruiken voor <b>controle van het bewijs</b>";
 "verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b> ";
-"verifier.consent.message" = "In de gebruikersvoorwaarden staat hoe CoronaCheck Scanner werkt en wat je rechten zijn.";
-"verifier.consent.message.underlined" = "gebruikersvoorwaarden";
+"verifier.consent.message" = "<p>In de <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">gebruikersvoorwaarden</a> staat hoe CoronaCheck Scanner werkt en wat je rechten zijn.</p>";
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Voorwaarden voor gebruik";
 "verifier.denied.message.five" = "<p>Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";

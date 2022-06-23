@@ -10,15 +10,7 @@ import XCTest
 
 // MARK: - Test Doubles
 
-class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
-
-	var invokedShowPrivacyPage = false
-	var invokedShowPrivacyPageCount = 0
-
-	func showPrivacyPage() {
-		invokedShowPrivacyPage = true
-		invokedShowPrivacyPageCount += 1
-	}
+class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedDismiss = false
 	var invokedDismissCount = 0
@@ -42,5 +34,17 @@ class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 	func consentGiven() {
 		invokedConsentGiven = true
 		invokedConsentGivenCount += 1
+	}
+
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
+	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+
+	func openUrl(_ url: URL, inApp: Bool) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, inApp)
+		invokedOpenUrlParametersList.append((url, inApp))
 	}
 }

@@ -82,7 +82,7 @@ class ListStoredEventsViewModel {
 		}
 		
 		// Provider Identifier can have an appended unique. Let's strip that.
-		let shortProvider = String(provider.prefix(3))
+		let shortProvider = String(provider.split(separator: "-").first ?? "")
 		
 		// DCC (HKVI or foreign)
 		if EventFlow.paperproofIdentier.lowercased() == shortProvider.lowercased() {
