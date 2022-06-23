@@ -563,8 +563,8 @@ extension HolderDashboardViewModel.QRCard {
 			return greencards
 				// Make a list of all origins paired with their greencard
 				.flatMap { greencard in
-					
-					greencard.origins.map { (greencard, $0) }
+					// filter duplcate origins.
+					Array(Set(greencard.origins)).map { (greencard, $0) }
 				}
 				// Sort by the customSortIndex, and then by origin eventDate (desc)
 				.sorted { lhs, rhs in
