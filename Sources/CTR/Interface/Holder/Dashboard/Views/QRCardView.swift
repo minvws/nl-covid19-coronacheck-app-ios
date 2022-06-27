@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 import UIKit
 
@@ -771,6 +772,14 @@ private final class ErrorRowView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		
+		super.setupAccessibility()
+		iconImageView.isAccessibilityElement = false
+		messageTextView.isAccessibilityElement = false
+		isAccessibilityElement = true
+	}
+	
 	var message: String? {
 		didSet {
 			
@@ -784,6 +793,7 @@ private final class ErrorRowView: BaseView {
 					paragraphSpacing: ViewTraits.Font.paragraphSpacing
 				)) {
 					self.messageTextView.attributedText = $0
+					self.accessibilityLabel = L.general_notification() + " " + $0.string
 					self.setNeedsLayout()
 					self.layoutIfNeeded()
 				}
