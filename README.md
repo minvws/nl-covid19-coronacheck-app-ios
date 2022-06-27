@@ -20,7 +20,7 @@ Note that all commits should be signed using a gpg key.
 
 ## Getting started
 
-The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./.project.yml) file. There is a [Makefile](./Makefile) which makes it easy to get started:
+The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./project.yml) file. There is a [Makefile](./Makefile) which makes it easy to get started:
 
 Simply run `make dev` from the command line.  
 
