@@ -141,7 +141,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	/// (Greencards with multiple origin types are returned ungrouped)
 	fileprivate static func groupDBGreenCards(dbGreencards: [(DBGreenCard, [DBOrigin])]) -> [[(DBGreenCard, [DBOrigin])]] {
 
-		// Group using a temporal String key
+		// Group using a transient String key
 		// (which is immediately thrown away when we return just the .values of the dictionary)
 
 		let grouped = Dictionary(
@@ -284,7 +284,7 @@ extension QRCard.GreenCard.Origin {
 
 	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [QRCard.GreenCard.Origin] {
 
-		dbOrigins
+		let structOrigins = dbOrigins
 			.compactMap { origin -> QRCard.GreenCard.Origin? in
 				guard let typeRawValue = origin.type,
 					  let type = QRCodeOriginType(rawValue: typeRawValue),
@@ -307,5 +307,8 @@ extension QRCard.GreenCard.Origin {
 				now < $0.expirationTime
 			}
 			.sorted { $0.customSortIndex < $1.customSortIndex }
+		
+		// Deduplicate: `QRCard.GreenCard.Origin` is hashable, so passing through a `Set` removes exact-duplicates
+		return Array(Set(structOrigins))
 	}
 }
