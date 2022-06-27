@@ -11,9 +11,15 @@ extension UIViewController {
 	
 	/// Set up translucent navigation bar. By default, navigation bar has an opaque background
 	func setupTranslucentNavigationBar() {
+		let titleTextAttributes = [
+			NSAttributedString.Key.foregroundColor: C.black()!,
+			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
+		]
+		
 		if #available(iOS 15.0, *) {
 			let appearance = UINavigationBarAppearance()
 			appearance.configureWithTransparentBackground()
+			appearance.titleTextAttributes = titleTextAttributes
 			navigationController?.navigationBar.standardAppearance = appearance
 			navigationController?.navigationBar.scrollEdgeAppearance = appearance
 		} else {
@@ -28,11 +34,11 @@ extension UIViewController {
 	///   - color: The color to apply
 	func overrideNavigationBarTitleColor(with color: UIColor) {
 		
-		let textAttributes = [
+		let titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
 			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
 		]
-		navigationController?.navigationBar.titleTextAttributes = textAttributes
+		navigationController?.navigationBar.titleTextAttributes = titleTextAttributes
 		navigationController?.navigationBar.tintColor = color
 		
 		if #available(iOS 15.0, *) {

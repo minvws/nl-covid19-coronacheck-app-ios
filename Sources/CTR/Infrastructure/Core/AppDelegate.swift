@@ -126,10 +126,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 		
 		// Custom navigation bar appearance
 		let color = C.black()!
-		UINavigationBar.appearance().titleTextAttributes = [
+		let titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
 			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
 		]
+		
+		UINavigationBar.appearance().titleTextAttributes = titleTextAttributes
 		UINavigationBar.appearance().tintColor = color
 		UINavigationBar.appearance().barTintColor = C.white()
 		
@@ -138,8 +140,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 		
 		if #available(iOS 15.0, *) {
 			// By default iOS 15 has no shadow bottom separator
-			UINavigationBar.appearance().standardAppearance.titleTextAttributes = [.foregroundColor: color]
-			UINavigationBar.appearance().scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: color]
+			UINavigationBar.appearance().standardAppearance.titleTextAttributes = titleTextAttributes
+			UINavigationBar.appearance().scrollEdgeAppearance?.titleTextAttributes = titleTextAttributes
 		} else {
 			// White navigation bar without bottom separator
 			UINavigationBar.appearance().isTranslucent = false
