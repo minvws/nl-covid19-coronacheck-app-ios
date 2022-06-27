@@ -170,9 +170,12 @@ extension QRCard {
 			
 			if dbGreencard.getType() == GreenCardType.eu {
 				
-				let hasValidOrigin = origins.contains(where: { $0.validFromDate <= date && $0.expirationTime > date })
+				let hasValidOrigin = origins.contains(where: { $0.isValid(duringDate: date) })
 				let credential = dbGreencard.getLatestInternationalCredential()
-				let hasValidCredential = (credential?.expirationTime ?? Date.distantPast) >= date
+				let hasValidCredential = date.isWithinTimeWindow(
+					from: credential?.validFrom ?? Date.distantFuture,
+					to: credential?.expirationTime ?? Date.distantPast
+				)
 				return hasValidOrigin && hasValidCredential
 			} else {
 				
