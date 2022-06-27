@@ -170,8 +170,13 @@ extension QRCard {
 			
 			if dbGreencard.getType() == GreenCardType.eu {
 				
-				// The button is enabled for expired dccs, not for future dccs.
-				return origins.contains(where: { $0.validFromDate <= date }) && dbGreencard.getLatestInternationalCredential() != nil
+				let hasValidOrigin = origins.contains(where: { $0.isValid(duringDate: date) })
+				let credential = dbGreencard.getLatestInternationalCredential()
+				let hasValidCredential = date.isWithinTimeWindow(
+					from: credential?.validFrom ?? Date.distantFuture,
+					to: credential?.expirationTime ?? Date.distantPast
+				)
+				return hasValidOrigin && hasValidCredential
 			} else {
 				
 				let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
