@@ -48,6 +48,7 @@ class RemoteEventStartViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$primaryButtonIcon.binding = { [weak self] in self?.sceneView.primaryButtonIcon = $0 }
 		viewModel.$checkboxTitle.binding = { [weak self] in self?.sceneView.checkboxTitle = $0 }
+		viewModel.$combineVaccinationAndPositiveTest.binding = { [weak self] in self?.sceneView.info = $0 }
 	}
 
 	private func setupInteraction() {

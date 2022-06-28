@@ -32,8 +32,9 @@ class RemoteEventStartViewModelTests: XCTestCase {
 	func test_content_vaccinationMode() {
 
 		// Then
-		expect(self.sut.title) == L.holderVaccinationStartTitle()
-		expect(self.sut.message) == L.holderVaccinationStartMessage()
+		expect(self.sut.title) == L.holder_addVaccination_title()
+		expect(self.sut.message) == L.holder_addVaccination_message()
+		expect(self.sut.combineVaccinationAndPositiveTest) == L.holder_addVaccination_alsoCollectPositiveTestResults_message()
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
@@ -45,6 +46,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderRecoveryStartTitle()
 		expect(self.sut.message) == L.holderRecoveryStartMessage()
+		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 	
@@ -56,6 +58,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == ""
 		expect(self.sut.message) == ""
+		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
 	
@@ -67,6 +70,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == ""
 		expect(self.sut.message) == ""
+		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
 	
@@ -78,6 +82,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == ""
 		expect(self.sut.message) == ""
+		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
 	
@@ -89,6 +94,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holder_negativetest_ggd_title()
 		expect(self.sut.message) == L.holder_negativetest_ggd_message()
+		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
