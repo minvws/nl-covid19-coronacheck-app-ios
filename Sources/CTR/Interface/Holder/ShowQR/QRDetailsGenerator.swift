@@ -22,8 +22,8 @@ class NegativeTestQRDetailsGenerator {
 		// dinsdag 25-05-2021 12:33 (CET) 
 		var formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(sampleDateFormatterWithCurrentTimezone.string) ?? test.sampleDate
-		if let timeZone = sampleDateFormatterWithCurrentTimezone.timeZone.localizedName(for: .shortDaylightSaving, locale: Locale.autoupdatingCurrent) {
-			formattedTestDate += " (\(timeZone))"
+		if let localizedTimeZone = sampleDateFormatterWithCurrentTimezone.timeZone.localizedName(for: .shortDaylightSaving, locale: Locale.autoupdatingCurrent) {
+			formattedTestDate += " (\(localizedTimeZone))"
 		}
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
 
