@@ -22,18 +22,20 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 	}
 	
-	func test_negativeTest() {
+	func test_negativeTest() throws {
 		
 		// Given
 		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayFacilityResult = "Test Centrum XXL"
 		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "CoronaCheck Manufacturer"
+		let timeZone = try XCTUnwrap(TimeZone(abbreviation: "CET"))
 		let details = NegativeTestQRDetailsGenerator.getDetails(
 			euCredentialAttributes: EuCredentialAttributes.fake(
 				dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithTest()
 			),
-			test: EuCredentialAttributes.TestEntry.negativeTest
+			test: EuCredentialAttributes.TestEntry.negativeTest,
+			timeZone: timeZone
 		)
 		
 		// When

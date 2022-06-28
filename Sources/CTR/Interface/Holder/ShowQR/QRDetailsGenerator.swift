@@ -9,7 +9,7 @@ import Foundation
 
 class NegativeTestQRDetailsGenerator {
 
-	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) -> [DCCQRDetails] {
+	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry, timeZone: TimeZone) -> [DCCQRDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
@@ -17,12 +17,12 @@ class NegativeTestQRDetailsGenerator {
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
 		let sampleDateFormatterWithCurrentTimezone = DateFormatter.Format.dayNameDayNumericMonthWithTime
-		sampleDateFormatterWithCurrentTimezone.timeZone = TimeZone.autoupdatingCurrent
+		sampleDateFormatterWithCurrentTimezone.timeZone = timeZone
 		
 		// dinsdag 25-05-2021 12:33 (CET) 
 		var formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(sampleDateFormatterWithCurrentTimezone.string) ?? test.sampleDate
-		if let localizedTimeZone = sampleDateFormatterWithCurrentTimezone.timeZone.localizedName(for: .shortDaylightSaving, locale: Locale.autoupdatingCurrent) {
+		if let localizedTimeZone = timeZone.localizedName(for: .shortDaylightSaving, locale: Locale.autoupdatingCurrent) {
 			formattedTestDate += " (\(localizedTimeZone))"
 		}
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
