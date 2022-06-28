@@ -16,9 +16,15 @@ class NegativeTestQRDetailsGenerator {
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
-		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? test.sampleDate
-
+		let sampleDateFormatterWithCurrentTimezone = DateFormatter.Format.dayNameDayNumericMonthWithTime
+		sampleDateFormatterWithCurrentTimezone.timeZone = TimeZone.autoupdatingCurrent
+		
+		// dinsdag 25-05-2021 12:33 (CET) 
+		var formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
+			.map(sampleDateFormatterWithCurrentTimezone.string) ?? test.sampleDate
+		if let timeZone = sampleDateFormatterWithCurrentTimezone.timeZone.localizedName(for: .shortDaylightSaving, locale: Locale.autoupdatingCurrent) {
+			formattedTestDate += " (\(timeZone))"
+		}
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
 
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
