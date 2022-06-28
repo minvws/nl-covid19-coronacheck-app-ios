@@ -56,8 +56,8 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationAndPositiveTest)
 		
 		// Then
-		expect(self.sut.title) == ""
-		expect(self.sut.message) == ""
+		expect(self.sut.title).to(beNil())
+		expect(self.sut.message).to(beNil())
 		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
@@ -68,8 +68,8 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
 		
 		// Then
-		expect(self.sut.title) == ""
-		expect(self.sut.message) == ""
+		expect(self.sut.title).to(beNil())
+		expect(self.sut.message).to(beNil())
 		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}
@@ -80,8 +80,8 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationassessment)
 		
 		// Then
-		expect(self.sut.title) == ""
-		expect(self.sut.message) == ""
+		expect(self.sut.title).to(beNil())
+		expect(self.sut.message).to(beNil())
 		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
 		expect(self.sut.primaryButtonIcon).to(beNil())
 	}

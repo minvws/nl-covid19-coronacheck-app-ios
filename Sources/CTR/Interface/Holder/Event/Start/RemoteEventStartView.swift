@@ -44,9 +44,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 
 	let contentTextView: TextView = {
 
-		let view = TextView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
+		return TextView()
 	}()
 	
 	let infoCard: UIView = {

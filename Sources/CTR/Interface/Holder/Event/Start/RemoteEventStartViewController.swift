@@ -54,10 +54,7 @@ class RemoteEventStartViewController: BaseViewController {
 	private func setupInteraction() {
 
 		sceneView.primaryTitle = L.holderVaccinationStartAction()
-		sceneView.primaryButtonTappedCommand = { [weak self] in
-
-			self?.viewModel.primaryButtonTapped()
-		}
+		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.primaryButtonTapped() }
 
 		sceneView.secondaryButtonTitle = L.holderVaccinationStartNodigid()
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
@@ -67,15 +64,9 @@ class RemoteEventStartViewController: BaseViewController {
 			}
 		}
 
-		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in
+		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in self?.viewModel.openUrl(url) }
 
-			self?.viewModel.openUrl(url)
-		}
-
-		sceneView.didToggleCheckboxCommand = { [weak self] value in
-			
-			self?.viewModel.checkboxToggled(value: value)
-		}
+		sceneView.didToggleCheckboxCommand = { [weak self] value in self?.viewModel.checkboxToggled(value: value) }
 		
 		addBackButton(customAction: #selector(backButtonTapped))
 	}
