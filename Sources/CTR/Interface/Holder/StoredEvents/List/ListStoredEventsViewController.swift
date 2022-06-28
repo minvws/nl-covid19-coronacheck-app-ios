@@ -145,14 +145,14 @@ class ListStoredEventsViewController: BaseViewController {
 	}
 	
 	func createGroupStackView() -> UIStackView {
-
-			let view = UIStackView()
-			view.translatesAutoresizingMaskIntoConstraints = false
-			view.axis = .vertical
-			view.alignment = .fill
-			view.distribution = .fill
-			view.spacing = 0
-			return view
+		
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = 0
+		return view
 	}
 }
 

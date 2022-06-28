@@ -39,6 +39,8 @@ enum EventScreenResult: Equatable {
 	
 	case shouldCompleteVaccinationAssessment
 	
+	case showHints([String])
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
 			case (.back, .back), (.stop, .stop), (.continue, .continue), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
@@ -85,6 +87,8 @@ protocol EventCoordinatorDelegate: AnyObject {
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
 	func listEventsScreenDidFinish(_ result: EventScreenResult)
+	
+	func showHintsScreenDidFinish(_ result: EventScreenResult)
 }
 
 protocol EventFlowDelegate: AnyObject {
@@ -249,6 +253,11 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
+	private func navigateToShowHints(hints: [String]) {
+		let viewController = ShowHintsStartViewController(viewModel: ShowHintsStartViewModel(hints: hints, coordinator: self))
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
 	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
 		let viewController = RemoteEventDetailsViewController(
@@ -328,6 +337,10 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
+	
+	func showHintsScreenDidFinish(_ result: EventScreenResult) {
+		delegate?.eventFlowDidComplete()
+	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
@@ -424,6 +437,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToEventDetails(title, details: details, footer: footer)
 			case .shouldCompleteVaccinationAssessment:
 				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+			case let .showHints(hints):
+				navigateToShowHints(hints: hints)
 			default:
 				break
 		}
