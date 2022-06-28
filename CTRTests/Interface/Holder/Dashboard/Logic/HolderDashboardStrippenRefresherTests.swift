@@ -433,6 +433,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 				credential: "validGreenCardResponse"
 			)
 		],
-		blobExpireDates: []
+		blobExpireDates: [],
+		hints: []
 	)
 }

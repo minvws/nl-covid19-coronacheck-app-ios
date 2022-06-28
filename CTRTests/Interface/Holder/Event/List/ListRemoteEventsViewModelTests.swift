@@ -731,7 +731,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -773,7 +773,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil)), ())
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -815,7 +815,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil)), ())
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -857,7 +857,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil)), ())
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -896,7 +896,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil)), ())
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -938,7 +938,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99857), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil)), ())
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -1111,7 +1111,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1242,7 +1242,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .authenticationCancelled)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1371,7 +1371,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.emptyResponse), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
@@ -1414,7 +1414,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.emptyResponse), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
@@ -1460,7 +1460,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = nil
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1508,7 +1508,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1593,7 +1593,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 			environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -1636,7 +1636,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.multipleDCC), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1669,9 +1669,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
@@ -1712,9 +1712,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithRecovery())
 		
@@ -1755,9 +1755,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithTest())
 		
@@ -1874,7 +1874,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1925,7 +1925,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1971,9 +1971,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ()) // DCC + CTB V, DCC + CTB R
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ()) // DCC + CTB V, DCC + CTB R
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2023,9 +2023,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.internationalVaccinationAndRecovery), ()) // DCC V, DCC + CTB R
+			(.success(RemoteGreenCards.Response.internationalVaccinationAndRecovery), ()) // DCC V, DCC + CTB R
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2075,9 +2075,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.internationalVaccinationAndRecovery), ()) // DCC V, DCC + CTB R
+			(.success(RemoteGreenCards.Response.internationalVaccinationAndRecovery), ()) // DCC V, DCC + CTB R
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2127,9 +2127,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndDomesticRecovery), ()) // DCC V, CTB R
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndDomesticRecovery), ()) // DCC V, CTB R
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2173,9 +2173,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ()) // DCC + CTB V
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ()) // DCC + CTB V
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2220,9 +2220,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.internationalVaccination), ()) // DCC V
+			(.success(RemoteGreenCards.Response.internationalVaccination), ()) // DCC V
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2272,9 +2272,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.internationalVaccination), ()) // DCC V
+			(.success(RemoteGreenCards.Response.internationalVaccination), ()) // DCC V
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2319,9 +2319,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.internationalVaccination), ()) // DCC V
+			(.success(RemoteGreenCards.Response.internationalVaccination), ()) // DCC V
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2365,9 +2365,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ()) // DCC + CTB R
+			(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ()) // DCC + CTB R
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2416,9 +2416,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.noOrigins), ()) // No origins
+			(.success(RemoteGreenCards.Response.noOrigins), ()) // No origins
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2468,9 +2468,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.noOrigins), ())
+			(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2517,9 +2517,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.noOrigins), ())
+			(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2560,9 +2560,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecoveryBeforeVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecoveryBeforeVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2612,9 +2612,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = true
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationAndRecovery), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2657,9 +2657,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecoveryValidVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecoveryValidVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2707,9 +2707,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = true
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecoveryValidVaccination), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalExpiredRecoveryValidVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2758,9 +2758,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalRecovery), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2804,9 +2804,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticRecovery), ())
+			(.success(RemoteGreenCards.Response.domesticRecovery), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2850,9 +2850,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticRecovery), ())
+			(.success(RemoteGreenCards.Response.domesticRecovery), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2900,9 +2900,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.internationalRecovery), ())
+			(.success(RemoteGreenCards.Response.internationalRecovery), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2947,9 +2947,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticVaccinationAssessment), ())
+			(.success(RemoteGreenCards.Response.domesticVaccinationAssessment), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -2992,9 +2992,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticVaccinationAssessmentAndNegativeTest), ())
+			(.success(RemoteGreenCards.Response.domesticVaccinationAssessmentAndNegativeTest), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3037,9 +3037,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalTest), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalTest), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3098,9 +3098,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.noOrigins), ())
+			(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3151,9 +3151,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = []
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.noOrigins), ())
+			(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3196,9 +3196,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalTest), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalTest), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3241,9 +3241,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticAndInternationalTest), ())
+			(.success(RemoteGreenCards.Response.domesticAndInternationalTest), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3294,9 +3294,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticVaccinationAssessmentAndNegativeTest), ())
+			(.success(RemoteGreenCards.Response.domesticVaccinationAssessmentAndNegativeTest), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3339,9 +3339,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.domesticVaccinationAssessment), ())
+			(.success(RemoteGreenCards.Response.domesticVaccinationAssessment), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
@@ -3390,9 +3390,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.walletManagerSpy.stubbedHasDomesticGreenCardResult = false
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-		(.success(RemoteGreenCards.Response.noOrigins), ())
+			(.success(RemoteGreenCards.Response.noOrigins), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-		(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		sut = ListRemoteEventsViewModel(
