@@ -257,9 +257,9 @@ extension ListRemoteEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
+		let formattedShotDate: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.month.string) ?? ""
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var details = VaccinationDetailsGenerator.getDetails(
@@ -268,8 +268,9 @@ extension ListRemoteEventsViewModel {
 			providerIdentifier: dataRow.providerIdentifier
 		)
 
-		let title = L.holder_listRemoteEvents_listElement_vaccination_title("\(formattedShotMonth)")
+		let title = L.holder_listRemoteEvents_listElement_title_vaccination()
 		var listDetails: [String] = [
+			L.holder_listRemoteEvents_listElement_vaccinationDate(formattedShotDate),
 			L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
 			L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
 		]

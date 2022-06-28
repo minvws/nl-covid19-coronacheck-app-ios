@@ -59,11 +59,6 @@ extension DateFormatter.Format {
 		DateFormatter(format: "EEEE d MMMM yyyy HH:mm")
 	}()
 	
-	/// e.g. `May`
-	static let month = {
-		DateFormatter(format: "MMMM")
-	}()
-	
 	/// e.g. `03-05-2022`
 	static let numericDate = {
 		DateFormatter(format: "dd-MM-yyyy")
