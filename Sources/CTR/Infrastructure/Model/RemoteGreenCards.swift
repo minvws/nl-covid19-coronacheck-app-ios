@@ -11,10 +11,10 @@ struct RemoteGreenCards: Codable {
 
 	struct Response: Codable {
 
-		let domesticGreenCard: DomesticGreenCard?
-		let euGreenCards: [EuGreenCard]?
-		let blobExpireDates: [BlobExpiry]?
-		let hints: [String]?
+		var domesticGreenCard: DomesticGreenCard?
+		var euGreenCards: [EuGreenCard]?
+		var blobExpireDates: [BlobExpiry]?
+		var hints: [String]?
 		
 		enum CodingKeys: String, CodingKey {
 

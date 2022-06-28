@@ -71,7 +71,10 @@ enum EventScreenResult: Equatable {
 
 			case (let error(lhsContent, _), let error(rhsContent, _)):
 				return lhsContent == rhsContent
-
+			
+			case let (.showHints(lhsHints), .showHints(rhsHints)):
+				return lhsHints == rhsHints
+			
 			default:
 				return false
 		}
