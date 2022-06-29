@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShowHintsStartView: ScrolledStackWithButtonView {
+final class ShowHintsView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private struct ViewTraits {
