@@ -20,6 +20,10 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		
+		enum Icon {
+			static let size: CGSize = CGSize(width: 22.0, height: 22.0)
+		}
 	}
 
 	/// The title label
@@ -113,7 +117,8 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	
 	var primaryButtonIcon: UIImage? {
 		didSet {
-			primaryButton.setImage(primaryButtonIcon, for: .normal)
+			let resizedIcon = primaryButtonIcon?.resizedImage(toSize: ViewTraits.Icon.size)
+			primaryButton.setImage(resizedIcon, for: .normal)
 		}
 	}
 
