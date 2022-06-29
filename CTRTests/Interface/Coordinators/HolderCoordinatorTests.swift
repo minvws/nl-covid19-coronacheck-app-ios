@@ -621,7 +621,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Over je vaccinatiebewijs"
+		expect(viewModel.content.title) == "Geen Nederlands vaccinatiebewijs"
 	}
 	
 	func test_userWishesMoreInfoAboutCompletingVaccinationAssessment() {
