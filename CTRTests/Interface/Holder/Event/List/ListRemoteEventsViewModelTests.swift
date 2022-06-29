@@ -1616,7 +1616,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1704,7 +1704,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1747,7 +1747,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .paperflow)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -1790,7 +1790,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .paperflow)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -1833,7 +1833,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .paperflow)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -2201,7 +2201,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationAndPositiveTest)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -2247,7 +2247,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationAndPositiveTest)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -2346,7 +2346,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationAndPositiveTest)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -2393,7 +2393,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationAndPositiveTest)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -2691,7 +2691,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventuallyNot(beNil())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .recovery)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -2837,7 +2837,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventuallyNot(beNil())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .recovery)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -2883,7 +2883,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventuallyNot(beNil())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .recovery)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -2979,7 +2979,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventually(beNil())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .recovery)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -3026,7 +3026,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventuallyNot(beNil())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationassessment)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -3071,7 +3071,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventuallyNot(beNil())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationassessment)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
@@ -3228,7 +3228,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.continue(eventMode: .test)))
+			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccinationassessment)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 	
