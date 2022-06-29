@@ -142,7 +142,6 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "You don't have a Dutch %@.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "You don't have a Dutch vaccination certificate";
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "am";
 "holder.dashboard.qr.backToThirdPartyApp" = "Back to the %@";
