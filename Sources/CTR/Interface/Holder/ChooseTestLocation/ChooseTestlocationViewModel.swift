@@ -9,13 +9,13 @@ import UIKit
 
 class ChooseTestLocationViewModel: ListOptionsProtocol {
 	
-	var title: Observable<String?> = Observable(value: L.holderLocationTitle())
+	let title = Observable(value: L.holderLocationTitle())
 	
-	var message: Observable<String?> = Observable(value: L.holderLocationMessage())
+	let message = Observable(value: L.holderLocationMessage())
 	
-	var optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [] )
+	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
 	
-	var bottomButton: Observable<ListOptionsViewController.OptionModel?> = Observable(value: nil)
+	let bottomButton: Observable<ListOptionsViewController.OptionModel?> = Observable(value: nil)
 	
 	weak var coordinator: HolderCoordinatorDelegate?
 	
@@ -27,24 +27,20 @@ class ChooseTestLocationViewModel: ListOptionsProtocol {
 		
 		self.coordinator = coordinator
 		
-		optionModels = Observable(
-			value: [
-				ListOptionsViewController.OptionModel(
-					title: L.holderLocationGgdTitle()) { [weak self] in
-						self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
-					},
-				ListOptionsViewController.OptionModel(
-					title: L.holderLocationOtherTitle()) { [weak self] in
-						self?.coordinator?.userWishesToCreateANegativeTestQR()
-					}
-			]
-		)
-		
-		bottomButton = Observable(
-			value: ListOptionsViewController.OptionModel(
-				title: L.holderLocationNotest()) { [weak self] in
-					self?.coordinator?.userWishesMoreInfoAboutGettingTested()
+		optionModels.value = [
+			ListOptionsViewController.OptionModel(
+				title: L.holderLocationGgdTitle()) { [weak self] in
+					self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
+				},
+			ListOptionsViewController.OptionModel(
+				title: L.holderLocationOtherTitle()) { [weak self] in
+					self?.coordinator?.userWishesToCreateANegativeTestQR()
 				}
-		)
+		]
+		
+		bottomButton.value = ListOptionsViewController.OptionModel(
+			title: L.holderLocationNotest()) { [weak self] in
+				self?.coordinator?.userWishesMoreInfoAboutGettingTested()
+			}
 	}
 }

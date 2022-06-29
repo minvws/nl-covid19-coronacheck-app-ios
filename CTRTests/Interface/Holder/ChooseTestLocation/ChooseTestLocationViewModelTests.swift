@@ -27,9 +27,9 @@ class ChooseTestLocationViewModelTests: XCTestCase {
 		// Act
 
 		// Assert
-		expect(self.sut.title) == L.holderLocationTitle()
-		expect(self.sut.message) == L.holderLocationMessage()
-		expect(self.sut.buttonModels).to(haveCount(2))
-		expect(self.sut.bottomButton).toNot(beNil())
+		expect(self.sut.title.value) == L.holderLocationTitle()
+		expect(self.sut.message.value) == L.holderLocationMessage()
+		expect(self.sut.optionModels.value).to(haveCount(2))
+		expect(self.sut.bottomButton.value).toNot(beNil())
 	}
 }

@@ -27,8 +27,9 @@ class ChooseProofTypeViewModelTests: XCTestCase {
 		// Act
 
 		// Assert
-		expect(self.sut.title) == L.holderChooseqrcodetypeTitle()
-		expect(self.sut.message) == L.holderChooseqrcodetypeMessage()
-		expect(self.sut.buttonModels).to(haveCount(3))
+		expect(self.sut.title.value) == L.holderChooseqrcodetypeTitle()
+		expect(self.sut.message.value) == L.holderChooseqrcodetypeMessage()
+		expect(self.sut.optionModels.value).to(haveCount(3))
+		expect(self.sut.bottomButton.value).to(beNil())
 	}
 }
