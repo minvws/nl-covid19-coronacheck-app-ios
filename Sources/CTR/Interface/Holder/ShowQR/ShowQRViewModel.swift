@@ -295,7 +295,7 @@ class ShowQRViewModel {
 		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
 			description: L.holderShowqrEuAboutTestDescription(),
-			details: NegativeTestQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, test: test),
+			details: NegativeTestQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, test: test, timeZone: TimeZone.autoupdatingCurrent),
 			dateInformation: L.holderShowqrEuAboutTestDateinformation()
 		)
 	}

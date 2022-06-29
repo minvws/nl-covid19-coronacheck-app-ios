@@ -623,7 +623,8 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_plural" = "Data retrieved from: %@ and %@";
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Data retrieved from: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Test date: %@";
-"holder_listRemoteEvents_listElement_vaccination_title" = "Vaccination %@";
+"holder_listRemoteEvents_listElement_title_vaccination" = "Vaccination";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date: %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Your details: %@";
 "holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>At this moment, we can't create a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
