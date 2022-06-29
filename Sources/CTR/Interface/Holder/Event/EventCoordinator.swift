@@ -43,13 +43,14 @@ enum EventScreenResult: Equatable {
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe),
+				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
-			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
+			case (let .showEvents(lhsEvents, lhsMode, lhsComplete), let .showEvents(rhsEvents, rhsMode, rhsComplete)):
 
 				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
 					return false
@@ -63,14 +64,17 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
-			case (let showEventDetails(lhsTitle, lhsDetails, lhsFooter), let showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
+			case (let .showEventDetails(lhsTitle, lhsDetails, lhsFooter), let .showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
 				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
-			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
+			case (let .errorRequiringRestart(lhsMode), let .errorRequiringRestart(rhsMode)):
 				return lhsMode == rhsMode
 
-			case (let error(lhsContent, _), let error(rhsContent, _)):
+			case (let .error(lhsContent, _), let .error(rhsContent, _)):
 				return lhsContent == rhsContent
+				
+			case (let .continue(lhsEventMode), let .continue(rhsEventMode)):
+				return lhsEventMode == rhsEventMode
 			
 			case let (.showHints(lhsHints), .showHints(rhsHints)):
 				return lhsHints == rhsHints
