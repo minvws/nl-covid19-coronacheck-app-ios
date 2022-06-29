@@ -78,26 +78,3 @@ class ChooseProofTypeViewController: BaseViewController {
 		}
 	}
 }
-
-extension DisclosureSubtitleButton {
-
-	/// Create a disclosure button with subtitle
-	/// - Parameters:
-	///   - title: the title of the button
-	///   - subTitle: the sub title of the button
-	///   - command: the command to execute when tapped
-	/// - Returns: A disclosure button
-	static func makeButton(
-		title: String,
-		subtitle: String,
-		subtitleIcon: UIImage? = nil,
-		command: (() -> Void)? ) -> DisclosureSubtitleButton {
-
-		let button = DisclosureSubtitleButton()
-		button.isUserInteractionEnabled = true
-		button.title = title
-		button.subtitle = subtitle
-		button.primaryButtonTappedCommand = command
-		return button
-	}
-}

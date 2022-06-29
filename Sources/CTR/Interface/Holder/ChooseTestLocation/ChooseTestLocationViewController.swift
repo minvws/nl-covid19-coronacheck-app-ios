@@ -83,22 +83,3 @@ class ChooseTestLocationViewController: BaseViewController {
 		}
 	}
 }
-
-extension DisclosureButton {
-
-	/// Create a disclosure button with subtitle
-	/// - Parameters:
-	///   - title: the title of the button
-	///   - command: the command to execute when tapped
-	/// - Returns: A disclosure button
-	static func makeButton(
-		title: String,
-		command: (() -> Void)? ) -> DisclosureButton {
-
-		let button = DisclosureButton()
-		button.isUserInteractionEnabled = true
-		button.title = title
-		button.primaryButtonTappedCommand = command
-		return button
-	}
-}
