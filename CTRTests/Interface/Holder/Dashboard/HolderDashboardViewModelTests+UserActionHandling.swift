@@ -86,19 +86,6 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
-	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo_vaccination_domestic() {
-		
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		
-		// Act
-		sut.didTapOriginNotValidInThisRegionMoreInfo(originType: .vaccination, validityRegion: .domestic)
-		
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount) == 1
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
-	}
-	
 	func test_actionhandling_didTapOriginNotValidInThisRegionMoreInfo() {
 		
 		// Arrange
@@ -112,7 +99,6 @@ extension HolderDashboardViewModelTests {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.originType) == .vaccination
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.currentRegion) == .europeanUnion
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.availableRegion) == .domestic
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == false
 	}
 	
 	func test_actionhandling_didTapDeviceHasClockDeviationMoreInfo() {

@@ -1731,7 +1731,7 @@ extension HolderDashboardViewModelTests {
 		}))
 		
 		expect(self.sut.domesticCards.value[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
-			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination()
+			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.general_vaccinationcertificate())
 		}))
 		
 		expect(self.sut.domesticCards.value[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
@@ -1770,7 +1770,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value[2]).toEventually(beOriginNotValidInThisRegionCard(test: { _, _, didTapMoreInfo in
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
 			didTapMoreInfo()
-			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutIncompleteDutchVaccination) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == true
 		}))
 	}
 	

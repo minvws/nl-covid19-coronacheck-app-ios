@@ -688,19 +688,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewModel.content.title) == "Maak verbinding met het internet"
 	}
 	
-	func test_userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		
-		// Given
-		
-		// When
-		sut.userWishesMoreInfoAboutIncompleteDutchVaccination()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is IncompleteDutchVaccinationViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
 	func test_userWishesMoreInfoAboutExpiredDomesticVaccination() throws {
 		
 		// Given
