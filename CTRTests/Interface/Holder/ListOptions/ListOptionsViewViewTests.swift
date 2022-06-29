@@ -10,13 +10,13 @@ import Nimble
 @testable import CTR
 import SnapshotTesting
 
-class ChooseProofTypeViewTests: XCTestCase {
-	var sut: ChooseProofTypeView!
+class ListOptionsViewTests: XCTestCase {
+	var sut: ListOptionsView!
 
 	override func setUp() {
 		super.setUp()
 
-		sut = ChooseProofTypeView(frame: UIScreen.main.bounds)
+		sut = ListOptionsView(frame: UIScreen.main.bounds)
 	}
 
 	func test_snapshot() {

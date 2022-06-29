@@ -308,7 +308,7 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			ChooseTestLocationViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
+			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
 		]
 		
@@ -317,7 +317,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 		expect(self.navigationSpy.invokedPresent).toEventually(beTrue())
 	}
 	
@@ -341,7 +342,7 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			ChooseTestLocationViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
+			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment))
 		]
 		
@@ -350,7 +351,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 	}
 	
 	func test_loginTVSScreenDidFinish_back_vaccinationAssessment_visitorpass() {
@@ -389,7 +391,7 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			ChooseTestLocationViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
+			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
 		]
 		
@@ -398,14 +400,15 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 	}
 	
 	func test_loginTVSScreenDidFinish_back_test_ChooseProofType() {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			ChooseProofTypeViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
+			ListOptionsViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
 		]
 		
@@ -414,7 +417,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 	
 	func test_loginTVSScreenDidFinish_back_vaccination() {

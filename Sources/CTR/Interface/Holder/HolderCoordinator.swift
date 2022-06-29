@@ -341,7 +341,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func navigateToChooseTestLocation() {
 		
-		let destination = ChooseTestLocationViewController(
+		let destination = ListOptionsViewController(
 			viewModel: ChooseTestLocationViewModel(
 				coordinator: self
 			)

@@ -23,13 +23,13 @@ class ListOptionsViewController: BaseViewController {
 		let action: () -> Void
 	}
 
-	private let viewModel: ListOptionsViewModel
+	internal let viewModel: ListOptionsProtocol
+	
+	internal let sceneView = ListOptionsView()
 	
 	override var enableSwipeBack: Bool { true }
 
-	let sceneView = ListOptionsView()
-
-	init(viewModel: ListOptionsViewModel) {
+	init(viewModel: ListOptionsProtocol) {
 
 		self.viewModel = viewModel
 
@@ -60,15 +60,10 @@ class ListOptionsViewController: BaseViewController {
 
 	func setupBinding() {
 
-		viewModel.$title.binding = { [weak self] title in
-			self?.sceneView.title = title
-		}
+		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
+		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
 
-		viewModel.$message.binding = { [weak self] message in
-			self?.sceneView.message = message
-		}
-
-		viewModel.$bottomButton.binding = { [weak self] button in
+		viewModel.bottomButton.observe { [weak self] button in
 			guard let button = button else {
 				return
 			}
@@ -79,7 +74,7 @@ class ListOptionsViewController: BaseViewController {
 	
 	func setupOptions() {
 		
-		viewModel.$optionModels.binding = { [weak self] buttons in
+		viewModel.optionModels.observe { [weak self] buttons in
 			guard let self = self else { return }
 
 			// Remove previously added buttons:
