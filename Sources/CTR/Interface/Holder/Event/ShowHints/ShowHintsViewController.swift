@@ -7,19 +7,19 @@
 
 import UIKit
 
-final class ShowHintsStartViewController: BaseViewController {
+final class ShowHintsViewController: BaseViewController {
 	
 	/// The model
-	private let viewModel: ShowHintsStartViewModel
+	private let viewModel: ShowHintsViewModel
 
 	override var enableSwipeBack: Bool { false }
 	
 	/// The view
-	let sceneView = ShowHintsStartView()
+	let sceneView = ShowHintsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ShowHintsStartViewModel) {
+	init(viewModel: ShowHintsViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ShowHintsStartViewModel {
+final class ShowHintsViewModel {
 	
 	weak var coordinator: (OpenUrlProtocol & EventCoordinatorDelegate)?
 

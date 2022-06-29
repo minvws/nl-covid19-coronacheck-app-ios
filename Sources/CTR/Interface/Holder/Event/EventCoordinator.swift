@@ -257,7 +257,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 	}
 	
 	private func navigateToShowHints(hints: [String]) {
-		let viewController = ShowHintsStartViewController(viewModel: ShowHintsStartViewModel(hints: hints, coordinator: self))
+		let viewController = ShowHintsViewController(viewModel: ShowHintsViewModel(hints: hints, coordinator: self))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
