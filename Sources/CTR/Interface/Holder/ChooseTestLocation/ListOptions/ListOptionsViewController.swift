@@ -10,6 +10,13 @@ import UIKit
 class ListOptionsViewController: BaseViewController {
 
 	struct OptionModel {
+		init(title: String, subTitle: String? = nil, image: UIImage? = nil, action: @escaping () -> Void) {
+			self.title = title
+			self.subTitle = subTitle
+			self.image = image
+			self.action = action
+		}
+		
 		let title: String
 		let subTitle: String?
 		let image: UIImage?
@@ -17,6 +24,8 @@ class ListOptionsViewController: BaseViewController {
 	}
 
 	private let viewModel: ListOptionsViewModel
+	
+	override var enableSwipeBack: Bool { true }
 
 	let sceneView = ListOptionsView()
 
@@ -70,7 +79,7 @@ class ListOptionsViewController: BaseViewController {
 	
 	func setupOptions() {
 		
-		viewModel.$buttonModels.binding = { [weak self] buttons in
+		viewModel.$optionModels.binding = { [weak self] buttons in
 			guard let self = self else { return }
 
 			// Remove previously added buttons:

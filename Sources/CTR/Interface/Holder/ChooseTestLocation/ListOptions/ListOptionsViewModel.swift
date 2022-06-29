@@ -11,14 +11,14 @@ class ListOptionsViewModel {
 
 	// MARK: - Bindable Strings
 
-	@Bindable private(set) var title: String = L.holderLocationTitle()
-	@Bindable private(set) var message: String = L.holderLocationMessage()
-	@Bindable private(set) var buttonModels: [ListOptionsViewController.OptionModel] = []
+	@Bindable private(set) var title: String?
+	@Bindable private(set) var message: String?
+	@Bindable private(set) var optionModels: [ListOptionsViewController.OptionModel] = []
 	@Bindable private(set) var bottomButton: ListOptionsViewController.OptionModel?
 	
 	// MARK: - Private:
 	
-	private weak var coordinator: HolderCoordinatorDelegate?
+	weak var coordinator: HolderCoordinatorDelegate?
 	
 	// MARK: - Initializer
 	
@@ -27,21 +27,21 @@ class ListOptionsViewModel {
 	init(coordinator: HolderCoordinatorDelegate) {
 		
 		self.coordinator = coordinator
-		
-		bottomButton = ListOptionsViewController.OptionModel(
-			title: L.holderLocationNotest()) { [weak self] in
-				self?.coordinator?.userWishesMoreInfoAboutGettingTested()
-			}
-		
-		buttonModels = [
-			ListOptionsViewController.OptionModel(
-				title: L.holderLocationGgdTitle()) { [weak self] in
-					self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
-				},
-			ListOptionsViewController.OptionModel(
-				title: L.holderLocationOtherTitle()) { [weak self] in
-					self?.coordinator?.userWishesToCreateANegativeTestQR()
-				}
-		]
+	}
+	
+	func setTitle(_ title: String?) {
+		self.title = title
+	}
+	
+	func setMessage(_ message: String?) {
+		self.message = message
+	}
+	
+	func setOptions(_ options: [ListOptionsViewController.OptionModel]) {
+		self.optionModels = options
+	}
+	
+	func setButton(_ button: ListOptionsViewController.OptionModel) {
+		self.bottomButton = button
 	}
 }

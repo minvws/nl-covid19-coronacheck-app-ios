@@ -51,30 +51,30 @@ class ChooseProofTypeViewController: BaseViewController {
 
 	func setupBinding() {
 
-		viewModel.$title.binding = { [weak self] title in
-			self?.sceneView.title = title
-		}
-
-		viewModel.$message.binding = { [weak self] message in
-			self?.sceneView.message = message
-		}
-
-		viewModel.$buttonModels.binding = { [weak self] buttons in
-			guard let self = self else { return }
-
-			// Remove previously added buttons:
-			self.sceneView.buttonsStackView.removeArrangedSubviews()
-
-			// Add new buttons:
-			buttons
-				.map { buttonModel -> DisclosureSubtitleButton in
-					DisclosureSubtitleButton.makeButton(
-						title: buttonModel.title,
-						subtitle: buttonModel.subtitle,
-						command: buttonModel.action
-					)
-				}
-				.forEach(self.sceneView.buttonsStackView.addArrangedSubview)
-		}
+//		viewModel.$title.binding = { [weak self] title in
+//			self?.sceneView.title = title
+//		}
+//
+//		viewModel.$message.binding = { [weak self] message in
+//			self?.sceneView.message = message
+//		}
+//
+//		viewModel.$buttonModels.binding = { [weak self] buttons in
+//			guard let self = self else { return }
+//
+//			// Remove previously added buttons:
+//			self.sceneView.buttonsStackView.removeArrangedSubviews()
+//
+//			// Add new buttons:
+//			buttons
+//				.map { buttonModel -> DisclosureSubtitleButton in
+//					DisclosureSubtitleButton.makeButton(
+//						title: buttonModel.title,
+//						subtitle: buttonModel.subtitle,
+//						command: buttonModel.action
+//					)
+//				}
+//				.forEach(self.sceneView.buttonsStackView.addArrangedSubview)
+//		}
 	}
 }
