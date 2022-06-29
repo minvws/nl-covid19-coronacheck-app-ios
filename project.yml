@@ -207,7 +207,7 @@ targetTemplates:
           #Run script:
           $TEMP_DIR/strings_checker Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings && $TEMP_DIR/strings_checker Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
       - name: Run R.Swift
-        basedOnDependencyAnalysis: true
+        basedOnDependencyAnalysis: false
         script: |
           # Determine path of Rswift. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
           if [ -f "/opt/homebrew/bin/rswift" ]; then
@@ -226,8 +226,6 @@ targetTemplates:
           else
             echo $OUTPUT
           fi
-        inputFiles:
-          - $TEMP_DIR/rswift-lastrun
         outputFiles:
           - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
