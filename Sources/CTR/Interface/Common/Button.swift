@@ -69,7 +69,7 @@ class Button: TappableButton {
 		
 		var imageEdgeInsets: UIEdgeInsets {
 			switch self {
-				case .roundedBlueImage: return .left(12)
+				case .roundedBlueImage: return .left(22)
 				default: return .zero
 			}
 		}
