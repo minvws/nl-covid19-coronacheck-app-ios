@@ -16,7 +16,8 @@ class NegativeTestQRDetailsGenerator {
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
-		let sampleDateFormatterWithCurrentTimezone = DateFormatter(format: "EEEE d MMMM HH:mm")
+		let sampleDateFormatterWithCurrentTimezone = DateFormatter()
+		sampleDateFormatterWithCurrentTimezone.dateFormat = "EEEE d MMMM HH:mm"
 		sampleDateFormatterWithCurrentTimezone.timeZone = timeZone
 		
 		// dinsdag 25-05-2021 12:33 (CET) 
