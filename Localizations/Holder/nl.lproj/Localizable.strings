@@ -623,7 +623,8 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_plural" = "Gegevens opgehaald bij: %@ en %@";
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Gegevens opgehaald bij: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Testdatum: %@";
-"holder_listRemoteEvents_listElement_vaccination_title" = "Vaccinatie %@";
+"holder_listRemoteEvents_listElement_title_vaccination" = "Vaccinatie";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccinatiedatum: %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Jouw gegevens: %@";
 "holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
