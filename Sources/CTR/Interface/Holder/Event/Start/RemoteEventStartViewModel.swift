@@ -96,8 +96,10 @@ class RemoteEventStartViewModel {
 	func secondaryButtonTapped() {
 		
 		Current.logHandler.logDebug("No Digid Tapped")
-		if let url = URL(string: L.holderVaccinationStartNodigidUrl()) {
-			openUrl(url)
-		}
+		coordinator?.eventStartScreenDidFinish(.alternativeRoute(eventMode: eventMode))
+	
+//		if let url = URL(string: L.holderVaccinationStartNodigidUrl()) {
+//			openUrl(url)
+//		}
 	}
 }

@@ -9,6 +9,9 @@ import UIKit
 
 enum EventScreenResult: Equatable {
 
+	/// The user want to start an alternavite (no digid) route
+	case alternativeRoute(eventMode: EventMode)
+	
 	/// The user wants to go back a scene
 	case back(eventMode: EventMode)
 	
@@ -46,6 +49,10 @@ enum EventScreenResult: Equatable {
 			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe),
 				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
+				
+			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
+				return lhsEventMode == rhsEventMode
+				
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
@@ -349,6 +356,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
+			case let .alternativeRoute(eventMode: eventMode): startAlternativeRoute(eventMode)
 			case let .back(eventMode): handleBackAction(eventMode: eventMode)
 			case .stop: delegate?.eventFlowDidCancel()
 			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
@@ -489,6 +497,11 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		} else {
 			navigationController.popToRootViewController(animated: true, completion: presentError)
 		}
+	}
+	
+	private func startAlternativeRoute(_ eventMode: EventMode) {
+		
+		startChildCoordinator(NoDigiDCoordinator(navigationController: navigationController, eventMode: eventMode))
 	}
 }
 

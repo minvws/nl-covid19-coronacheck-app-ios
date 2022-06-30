@@ -121,7 +121,7 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		sut.sceneView.secondaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrl) == false
 	}
 	
 	func test_checkBoxTapped() {
