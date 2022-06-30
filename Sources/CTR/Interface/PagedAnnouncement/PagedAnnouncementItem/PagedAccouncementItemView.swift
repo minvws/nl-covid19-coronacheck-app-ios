@@ -17,12 +17,15 @@ class PagedAnnouncementItemView: ScrolledStackView {
 		static let imageHeightPercentage: CGFloat = 0.38
 		static let taglineLineHeight: CGFloat = 22
 		static let taglineKerning: CGFloat = -0.41
-		static let topMargin: CGFloat = 0
 		static let margin: CGFloat = 20
 		
 		// Margins
 		static let taglineSpacing: CGFloat = 8
 		static let titleSpacing: CGFloat = 24
+		
+		// Insets
+		static let regularStackViewInset = UIEdgeInsets(top: 48, left: margin, bottom: margin, right: margin)
+		static let fullWidthHeaderImageStackViewInset = UIEdgeInsets(top: 0, left: 0, bottom: margin, right: 0)
 	}
 	
 	/// The image view
@@ -79,10 +82,12 @@ class PagedAnnouncementItemView: ScrolledStackView {
 		
 		if shouldShowWithFullWidthHeaderImage {
 			// No margins on the horizontal sides to display image full width
-			stackViewInset = UIEdgeInsets(top: ViewTraits.topMargin, left: 0, bottom: ViewTraits.margin, right: 0)
+			stackViewInset = ViewTraits.fullWidthHeaderImageStackViewInset
 			
 			// Apply side margins for labels
 			bottomStackView.insets(.init(top: 0, leading: ViewTraits.margin, bottom: 0, trailing: ViewTraits.margin))
+		} else {
+			stackViewInset = ViewTraits.regularStackViewInset
 		}
 	}
 	
