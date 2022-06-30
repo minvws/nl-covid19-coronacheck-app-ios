@@ -91,6 +91,7 @@ class ListOptionsViewController: BaseViewController {
 					} else {
 						return DisclosureButton.makeButton(
 							title: optionModel.title,
+							icon: optionModel.image,
 							command: optionModel.action
 						)
 					}
@@ -114,11 +115,13 @@ extension DisclosureButton {
 	/// - Returns: A disclosure button
 	static func makeButton(
 		title: String,
+		icon: UIImage? = nil,
 		command: (() -> Void)? ) -> DisclosureButton {
 
 		let button = DisclosureButton()
 		button.isUserInteractionEnabled = true
 		button.title = title
+		button.icon = icon
 		button.primaryButtonTappedCommand = command
 		return button
 	}
@@ -135,7 +138,6 @@ extension DisclosureSubtitleButton {
 	static func makeButton(
 		title: String,
 		subtitle: String,
-		subtitleIcon: UIImage? = nil,
 		command: (() -> Void)? ) -> DisclosureSubtitleButton {
 
 		let button = DisclosureSubtitleButton()
