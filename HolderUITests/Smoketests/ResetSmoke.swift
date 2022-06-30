@@ -15,7 +15,7 @@ class ResetSmoke: BaseTest {
 	}
 	
 	func test_resetData() {
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		resetApp()
@@ -27,7 +27,7 @@ class ResetSmoke: BaseTest {
 	}
 	
 	func test_dontResetData() {
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		resetApp(confirm: false)

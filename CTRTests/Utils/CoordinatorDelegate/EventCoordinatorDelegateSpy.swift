@@ -58,6 +58,18 @@ class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol, Di
 		invokedListEventsScreenDidFinishParametersList.append((result, ()))
 	}
 
+	var invokedShowHintsScreenDidFinish = false
+	var invokedShowHintsScreenDidFinishCount = 0
+	var invokedShowHintsScreenDidFinishParameters: (result: EventScreenResult, Void)?
+	var invokedShowHintsScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
+
+	func showHintsScreenDidFinish(_ result: EventScreenResult) {
+		invokedShowHintsScreenDidFinish = true
+		invokedShowHintsScreenDidFinishCount += 1
+		invokedShowHintsScreenDidFinishParameters = (result, ())
+		invokedShowHintsScreenDidFinishParametersList.append((result, ()))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

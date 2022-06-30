@@ -9,16 +9,23 @@ import Foundation
 
 class NegativeTestQRDetailsGenerator {
 
-	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry) -> [DCCQRDetails] {
+	static func getDetails(euCredentialAttributes: EuCredentialAttributes, test: EuCredentialAttributes.TestEntry, timeZone: TimeZone) -> [DCCQRDetails] {
 
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(DateFormatter.Format.numericDate)
 
-		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? test.sampleDate
-
+		let sampleDateFormatterWithCurrentTimezone = DateFormatter()
+		sampleDateFormatterWithCurrentTimezone.dateFormat = "EEEE d MMMM HH:mm"
+		sampleDateFormatterWithCurrentTimezone.timeZone = timeZone
+		
+		// dinsdag 25-05-2021 12:33 (CET) 
+		var formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
+			.map(sampleDateFormatterWithCurrentTimezone.string) ?? test.sampleDate
+		if let localizedTimeZone = timeZone.localizedName(for: .shortDaylightSaving, locale: Locale.autoupdatingCurrent) {
+			formattedTestDate += " (\(localizedTimeZone))"
+		}
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? test.typeOfTest
 
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")

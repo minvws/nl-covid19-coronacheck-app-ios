@@ -18,8 +18,9 @@ class RemoteEventStartViewModel {
 	
 	// MARK: - Bindable
 
-	@Bindable private(set) var title: String
-	@Bindable private(set) var message: String
+	@Bindable private(set) var title: String?
+	@Bindable private(set) var message: String?
+	@Bindable private(set) var combineVaccinationAndPositiveTest: String?
 	@Bindable private(set) var primaryButtonIcon: UIImage?
 	@Bindable private(set) var checkboxTitle: String?
 	
@@ -32,28 +33,39 @@ class RemoteEventStartViewModel {
 		self.eventMode = eventMode
 
 		switch eventMode {
-			case .vaccinationassessment, .paperflow, .vaccinationAndPositiveTest:
-				// this is not the start scene for this flow
-				self.title = ""
-				self.message = ""
-				self.primaryButtonIcon = nil
-				self.checkboxTitle = nil
 			case .vaccination:
-				self.title = L.holderVaccinationStartTitle()
-				self.message = L.holderVaccinationStartMessage()
-				self.primaryButtonIcon = I.digid()
-			self.checkboxTitle = L.holder_addVaccine_alsoCollectPositiveTestResults_checkbox()
+				setupForVaccination()
 			case .recovery:
-				self.title = L.holderRecoveryStartTitle()
-				self.message = L.holderRecoveryStartMessage()
-				self.primaryButtonIcon = I.digid()
-				self.checkboxTitle = nil
+				setupForRecovery()
 			case .test:
-				self.title = L.holder_negativetest_ggd_title()
-				self.message = L.holder_negativetest_ggd_message()
-				self.primaryButtonIcon = I.digid()
-				self.checkboxTitle = nil
+				setupForNegativeTest()
+			default:
+				// No setup, the other flows do not start with this scene
+				return
 		}
+	}
+	
+	private func setupForVaccination() {
+		
+		self.title = L.holder_addVaccination_title()
+		self.message = L.holder_addVaccination_message()
+		self.primaryButtonIcon = I.digid()
+		self.combineVaccinationAndPositiveTest = L.holder_addVaccination_alsoCollectPositiveTestResults_message()
+		self.checkboxTitle = L.holder_addVaccine_alsoCollectPositiveTestResults_checkbox()
+	}
+	
+	private func setupForRecovery() {
+		
+		self.title = L.holderRecoveryStartTitle()
+		self.message = L.holderRecoveryStartMessage()
+		self.primaryButtonIcon = I.digid()
+	}
+	
+	private func setupForNegativeTest() {
+		
+		self.title = L.holder_negativetest_ggd_title()
+		self.message = L.holder_negativetest_ggd_message()
+		self.primaryButtonIcon = I.digid()
 	}
 
 	func backButtonTapped() {

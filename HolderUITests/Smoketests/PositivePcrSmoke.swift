@@ -9,7 +9,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcr() {
 		let person = TestData.posPcr
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -19,7 +19,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcrP1() {
 		let person = TestData.posPcrP1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		assertCombinedVaccinationAndRecoveryRetrieval()
@@ -35,7 +35,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcrP2() {
 		let person = TestData.posPcrP2
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -48,7 +48,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcrP3() {
 		let person = TestData.posPcrP3
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -61,7 +61,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcrJ1() {
 		let person = TestData.posPcrJ1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -74,7 +74,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcrP1M1() {
 		let person = TestData.posPcrP1M1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -87,7 +87,7 @@ class PositivePcrSmoke: BaseTest {
 	
 	func test_posPcrP2M1() {
 		let person = TestData.posPcrP2M1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		

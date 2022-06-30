@@ -19,7 +19,7 @@ class DisclosureMode0GSmoke: BaseTest {
 	
 	func test_mode0G_negPcr() {
 		let person = TestData.negPcr
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -28,7 +28,7 @@ class DisclosureMode0GSmoke: BaseTest {
 	
 	func test_mode0G_vacP3() {
 		let person = TestData.vacP3
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -37,7 +37,7 @@ class DisclosureMode0GSmoke: BaseTest {
 	
 	func test_mode0G_posPcr() {
 		let person = TestData.posPcr
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)

@@ -61,7 +61,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.vaccination
-		expect(viewModel.title) == L.holderVaccinationStartTitle()
+		expect(viewModel.title) == L.holder_addVaccination_title()
 	}
 	
 	func test_startWithVaccination() throws {
@@ -76,7 +76,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.vaccination
-		expect(viewModel.title) == L.holderVaccinationStartTitle()
+		expect(viewModel.title) == L.holder_addVaccination_title()
 	}
 	
 	func test_startWithNegativeTest() throws {

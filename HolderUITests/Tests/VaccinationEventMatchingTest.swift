@@ -12,7 +12,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	override func setUpWithError() throws {
 		try super.setUpWithError()
 		
-		addVaccinationCertificate(for: setup)
+		addVaccinationCertificate(for: setup.bsn)
 		assertRetrievedCertificate(for: setup)
 		assertRetrievedCertificateDetails(for: setup)
 		addRetrievedCertificateToApp()
@@ -20,7 +20,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentFirstName_Replaces() {
 		let person = TestData.vacJ1DifferentFirstNameReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -32,7 +32,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentLastName_Replaces() {
 		let person = TestData.vacJ1DifferentLastNameReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -44,7 +44,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentFullName_ReplaceSetup() {
 		let person = TestData.vacJ1DifferentFullNameReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -57,7 +57,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentFullName_KeepSetup() {
 		let person = TestData.vacJ1DifferentFullNameReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -70,7 +70,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentBirthDay_ReplaceSetup() {
 		let person = TestData.vacJ1DifferentBirthDayCanReplace
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -83,7 +83,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentBirthDay_KeepSetup() {
 		let person = TestData.vacJ1DifferentBirthDayCanReplace
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -96,7 +96,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentBirthMonth_ReplaceSetup() {
 		let person = TestData.vacJ1DifferentBirthMonthCanReplace
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -109,7 +109,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentBirthMonth_KeepSetup() {
 		let person = TestData.vacJ1DifferentBirthMonthCanReplace
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -122,7 +122,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentBirthYear_Replaces() {
 		let person = TestData.vacJ1DifferentBirthYearReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -134,7 +134,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentEverything_ReplaceSetup() {
 		let person = TestData.vacJ1DifferentEverythingReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -147,7 +147,7 @@ class VaccinationEventMatchingTest: BaseTest {
 	
 	func test_vacJ1DifferentEverything_KeepSetup() {
 		let person = TestData.vacJ1DifferentEverythingReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()

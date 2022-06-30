@@ -9,7 +9,7 @@ class VaccinationCombinationsTest: BaseTest {
 	
 	func test_vacP1J1() {
 		let person = TestData.vacP1J1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -18,7 +18,7 @@ class VaccinationCombinationsTest: BaseTest {
 	
 	func test_vacP2M1() {
 		let person = TestData.vacP2M1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -27,7 +27,7 @@ class VaccinationCombinationsTest: BaseTest {
 	
 	func test_vacJ2M1() {
 		let person = TestData.vacJ2M1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)

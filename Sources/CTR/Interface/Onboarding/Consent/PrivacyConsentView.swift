@@ -87,6 +87,7 @@ final class PrivacyConsentView: BaseView {
 
 		let button = LabelWithCheckbox()
 		button.translatesAutoresizingMaskIntoConstraints = false
+		button.defaultBackgroundColor = C.primaryBlue5()
 		return button
 	}()
 	

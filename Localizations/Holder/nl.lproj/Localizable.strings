@@ -142,7 +142,6 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je hebt geen Nederlands %@.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "Je hebt geen Nederlands vaccinatiebewijs";
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "'s morgens";
 "holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
@@ -529,10 +528,11 @@
 "holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie(s) beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
 "holder.vaccination.start.action" = "Log in met DigiD";
-"holder.vaccination.start.message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p><p><b>Corona gehad vóór je eerste vaccinatie?</b><br />Dan heb je vaak een prik minder nodig om volledig gevaccineerd te zijn. Haal ook je positieve testuitslag op om die mee te laten tellen in je vaccinatiebewijs.</p>";
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
-"holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
+"holder_addVaccination_alsoCollectPositiveTestResults_message" = "<p><b>Ben je genezen van Corona?</b><br />Dan heb je soms een prik minder nodig om volledig gevaccineerd te zijn. Haal ook je positieve testuitslag op om die mee te laten tellen in je vaccinatiebewijs.</p>";
+"holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
+"holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
 "holder_completecertificate_body" = "<p>Haal een negatieve testuitslag op om je bezoekersbewijs compleet te maken.</p><p>Heb je nog geen coronatest gedaan? Maak een afspraak op <a href=\"https://www.testenvoortoegang.org\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Testuitslag ophalen";
@@ -583,6 +583,7 @@
 "holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
+"holder_eventHints_title" = "Je bewijzen zijn gemaakt";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.</p><p>Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
@@ -622,7 +623,8 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_plural" = "Gegevens opgehaald bij: %@ en %@";
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Gegevens opgehaald bij: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Testdatum: %@";
-"holder_listRemoteEvents_listElement_vaccination_title" = "Vaccinatie %@";
+"holder_listRemoteEvents_listElement_title_vaccination" = "Vaccinatie";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccinatiedatum: %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Jouw gegevens: %@";
 "holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";

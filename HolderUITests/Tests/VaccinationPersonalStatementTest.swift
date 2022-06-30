@@ -9,7 +9,7 @@ class VaccinationPersonalStatementTest: BaseTest {
 	
 	func test_vacP2PersonalStatement() {
 		let person = TestData.vacP2PersonalStatement
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -18,7 +18,7 @@ class VaccinationPersonalStatementTest: BaseTest {
 	
 	func test_vacJ1PersonalStatement() {
 		let person = TestData.vacJ1PersonalStatement
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -27,7 +27,7 @@ class VaccinationPersonalStatementTest: BaseTest {
 	
 	func test_vacM1PersonalStatement() {
 		let person = TestData.vacM1PersonalStatement
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -36,7 +36,7 @@ class VaccinationPersonalStatementTest: BaseTest {
 	
 	func test_vacM3PersonalStatement() {
 		let person = TestData.vacM3PersonalStatement
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)

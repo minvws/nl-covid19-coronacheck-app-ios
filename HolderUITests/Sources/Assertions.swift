@@ -22,8 +22,11 @@ extension BaseTest {
 		app.tapButton("Naar mijn bewijzen")
 	}
 	
-	func assertSomethingWentWrong() {
+	func assertSomethingWentWrong(error: String = "") {
 		app.textExists("Sorry, er gaat iets mis")
+		if !error.isEmpty {
+			app.containsValue(error)
+		}
 		returnToCertificateOverview()
 	}
 	
@@ -80,6 +83,18 @@ extension BaseTest {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
+		app.tapButton("Sluiten")
+	}
+
+	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int) {
+		app.tapButton("Details", index: position)
+		app.containsText("Naam: " + person.name)
+		app.containsText("Geboortedatum: " + person.birthDate.toString(.written))
+		app.containsText("Ziekteverwekker: " + vaccination.disease)
+		app.containsText("Vaccin: " + vaccination.vaccine.rawValue)
+		app.containsText("Vaccinatiedatum: " + vaccination.eventDate.toString(.written))
+		app.containsText("Gevaccineerd in: " + vaccination.country)
+		
 		app.tapButton("Sluiten")
 	}
 	
@@ -189,7 +204,17 @@ extension BaseTest {
 		for (index, dose) in doses.reversed().enumerated() {
 			card(of: .vaccination).containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index)))
 		}
-		card(of: .vaccination).textExists(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
+		card(of: .vaccination).containsText("Bekijk QR")
+	}
+	
+	func assertInternationalVaccination(of vaccination: Vaccination, dose: String? = nil) {
+		tapOnInternationalTab()
+		card(of: .vaccination).containsText(vaccination.internationalEventCertificate)
+		if let dose = dose {
+			card(of: .vaccination).containsText("Dosis \(dose)")
+		}
+		card(of: .vaccination).containsText("Vaccinatiedatum: " + vaccination.eventDate.toString(.written))
+		card(of: .vaccination).containsText("Bekijk QR")
 	}
 	
 	func assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: Int) {
@@ -199,12 +224,26 @@ extension BaseTest {
 		card(of: .recovery).containsText("Bekijk QR")
 	}
 	
+	func assertInternationalRecovery(of positiveTest: PositiveTest) {
+		card(of: .recovery).containsText(positiveTest.internationalEventCertificate)
+		card(of: .recovery).containsText("Geldig tot " + positiveTest.validUntil!.toString(.written))
+		card(of: .recovery).containsText("Bekijk QR")
+	}
+	
 	func assertValidInternationalTestCertificate(testType: TestCertificateType, testDateOffsetInDays: Int = 0) {
 		tapOnInternationalTab()
 		card(of: .test).containsText(CertificateType.test.rawValue)
 		card(of: .test).containsText("Type test: " + testType.rawValue)
 		card(of: .test).containsText("Testdatum: " + formattedOffsetDate(with: testDateOffsetInDays, withYear: false, withDay: true))
-		card(of: .test).textExists("Bekijk QR")
+		card(of: .test).containsText("Bekijk QR")
+	}
+	
+	func assertInternationalTest(of negativeTest: NegativeTest) {
+		tapOnInternationalTab()
+		card(of: .test).containsText(negativeTest.internationalEventCertificate)
+		card(of: .test).containsText("Type test: " + negativeTest.testType.rawValue)
+		card(of: .test).containsText("Testdatum: " + negativeTest.eventDate.toString(.recently))
+		card(of: .test).containsText("Bekijk QR")
 	}
 	
 	func assertCertificateIsNotValidInternationally(ofType certificateType: CertificateType) {
@@ -234,7 +273,10 @@ extension BaseTest {
 			app.textExists("Over je dosis " + dose)
 			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
-			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true))
+			
+			let vacDate = formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true)
+			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vacDate)
+			
 			closeQRDetails()
 			
 			if index != doses.indices.last {
@@ -242,6 +284,26 @@ extension BaseTest {
 			}
 		}
 		app.tapButton("Terug")
+	}
+	
+	func assertInternationalVaccinationQR(of vaccination: Vaccination, dose: String? = nil, for person: Person? = nil) {
+		if let dose = dose {
+			app.textExists("Dosis " + dose)
+		}
+		
+		openQRDetails(for: person)
+		if let dose = dose {
+			app.textExists("Over je dosis " + dose)
+		}
+		app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: vaccination.disease)
+		app.labelValuePairExist(label: "Vaccin / Vaccine:", value: vaccination.vaccine.rawValue)
+		if let dose = dose {
+			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: dose.map { String($0) }.joined(separator: " "))
+		}
+		app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vaccination.eventDate.toString(.dutch))
+		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.countryInternational)
+		
+		closeQRDetails()
 	}
 	
 	func assertInternationalRecoveryQRDetails(for person: TestPerson) {
@@ -253,6 +315,22 @@ extension BaseTest {
 		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: "COVID-19")
 		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: formattedOffsetDate(with: person.recFrom, short: true))
 		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value: formattedOffsetDate(with: person.recUntil, short: true))
+		closeQRDetails()
+		app.tapButton("Terug")
+	}
+	
+	func assertInternationalRecoveryQR(for positiveTest: PositiveTest, for person: Person? = nil) {
+		card(of: .recovery).tapButton("Bekijk QR")
+		app.textExists("Internationale QR")
+		
+		openQRDetails(for: person)
+		app.textExists("Over mijn internationale QR-code")
+		app.labelValuePairExist(label: "Ziekte waarvan hersteld / Disease recovered from:", value: positiveTest.disease)
+		app.labelValuePairExist(label: "Testdatum / Test date:", value: positiveTest.eventDate.toString(.dutch))
+		app.labelValuePairExist(label: "Getest in / Member state of test:", value: positiveTest.countryInternational)
+		app.labelValuePairExist(label: "Geldig vanaf / Valid from*:", value: positiveTest.validFrom!.toString(.dutch))
+		app.labelValuePairExist(label: "Geldig tot / Valid to*:", value:
+									positiveTest.validUntil!.toString(.dutch))
 		closeQRDetails()
 		app.tapButton("Terug")
 	}
@@ -269,10 +347,22 @@ extension BaseTest {
 		app.tapButton("Terug")
 	}
 	
+	private func openQRDetails(for person: Person? = nil) {
+		openQRDetails()
+		if let person = person {
+			app.labelValuePairExist(label: "Naam / Name:", value: person.name)
+			app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: person.birthDate.toString(.dutch))
+		}
+	}
+	
 	private func openQRDetails(for person: TestPerson) {
-		app.tapButton("Details")
+		openQRDetails()
 		app.labelValuePairExist(label: "Naam / Name:", value: person.name)
 		app.labelValuePairExist(label: "Geboortedatum / Date of birth*:", value: formattedDate(of: person.birthDate, short: true))
+	}
+	
+	private func openQRDetails() {
+		app.tapButton("Details")
 	}
 	
 	private func closeQRDetails() {
