@@ -9,6 +9,13 @@ import UIKit
 
 class CheckForDigidViewController: ListOptionsViewController {
 	
+	override func viewDidLoad() {
+
+		super.viewDidLoad()
+		
+		navigationController?.delegate = self
+	}
+	
 	override func setupBackButton() {
 		
 		addBackButton(customAction: #selector(backButtonTapped))
@@ -16,7 +23,7 @@ class CheckForDigidViewController: ListOptionsViewController {
 
 	@objc func backButtonTapped() {
 
-		(viewModel as? CheckForDigidViewModel)?.goBack()
+		(viewModel as? CheckForDigidViewModel)?.backbuttonTapped()
 	}
 }
 
@@ -28,7 +35,7 @@ extension CheckForDigidViewController: UINavigationControllerDelegate {
 			coordinator.notifyWhenInteractionChanges { [weak self] context in
 				guard !context.isCancelled else { return }
 				// Clean up coordinator when swiping back
-				(self?.viewModel as? CheckForDigidViewModel)?.goBack()
+				(self?.viewModel as? CheckForDigidViewModel)?.swipeBack()
 			}
 		}
 	}

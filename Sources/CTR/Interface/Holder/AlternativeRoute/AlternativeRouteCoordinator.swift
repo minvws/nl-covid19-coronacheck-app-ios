@@ -22,7 +22,7 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToRequestADigiD()
 	
-	func userWishesToEndAlternativeRoute()
+	func userWishesToEndAlternativeRoute(popViewController: Bool)
 	
 	func userWishesToContactHelpDeksWithBSN()
 
@@ -89,8 +89,11 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		}
 	}
 	
-	func userWishesToEndAlternativeRoute() {
+	func userWishesToEndAlternativeRoute(popViewController: Bool) {
 		
+		if popViewController {
+			navigationController.popViewController(animated: true)
+		}
 		delegate?.canceledAlternativeRoute()
 	}
 

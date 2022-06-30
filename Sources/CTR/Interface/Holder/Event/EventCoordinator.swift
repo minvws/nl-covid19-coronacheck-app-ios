@@ -515,7 +515,6 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 	
 	func canceledAlternativeRoute() {
 		
-		navigationController.popViewController(animated: true)
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
 	}
