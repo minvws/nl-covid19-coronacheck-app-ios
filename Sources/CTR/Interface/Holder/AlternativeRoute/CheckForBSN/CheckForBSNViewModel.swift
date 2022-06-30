@@ -31,25 +31,18 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 			ListOptionsViewController.OptionModel(
 				title: L.holder_checkForBSN_buttonTitle_doesHaveBSN(),
 				subTitle: L.holder_checkForBSN_buttonSubTitle_doesHaveBSN(),
-				action: { [weak self] in self?.coordinator?.userWishesToRequestADigiD() }
+				action: { [weak self] in self?.coordinator?.userWishesToContactHelpDeksWithBSN() }
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_checkForBSN_buttonTitle_doesNotHaveBSN(),
 				subTitle: L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN(),
-				action: { [weak self] in self?.coordinator?.userWishesToCheckForBSN() }
+				action: { [weak self] in self?.coordinator?.userWishesToContactHelpDeksWithoutBSN() }
 			)
 		]
 	}
 }
 
 /**
- 
- holder_checkForBSN_title
- holder_checkForBSN_message
- holder_checkForBSN_buttonTitle_doesHaveBSN
- holder_checkForBSN_buttonSubTitle_doesHaveBSN
- holder_checkForBSN_buttonTitle_doesNotHaveBSN
- holder_checkForBSN_buttonSubTitle_doesNotHaveBSN
 
  holder_contactCoronaCheckHelpdesk_title
  holder_contactCoronaCheckHelpdesk_message
