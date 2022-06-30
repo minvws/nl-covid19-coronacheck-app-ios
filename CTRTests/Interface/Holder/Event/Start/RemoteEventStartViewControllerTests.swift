@@ -121,7 +121,8 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		sut.sceneView.secondaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == false
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccination)
 	}
 	
 	func test_checkBoxTapped() {

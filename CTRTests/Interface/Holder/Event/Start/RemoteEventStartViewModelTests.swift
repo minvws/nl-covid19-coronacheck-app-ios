@@ -179,4 +179,17 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
+	
+	func test_secondaryButtonTapped() {
+
+		// Given
+
+		// When
+		sut.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccination)
+	}
+	
 }
