@@ -45,9 +45,9 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == L.holderVaccinationStartTitle()
-		expect(self.sut.sceneView.message) == L.holderVaccinationStartMessage()
-
+		expect(self.sut.sceneView.title) == L.holder_addVaccination_title()
+		expect(self.sut.sceneView.message) == L.holder_addVaccination_message()
+		
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
