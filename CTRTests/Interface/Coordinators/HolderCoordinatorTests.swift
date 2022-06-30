@@ -357,7 +357,8 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -499,7 +500,8 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -584,7 +586,8 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -969,6 +972,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 }

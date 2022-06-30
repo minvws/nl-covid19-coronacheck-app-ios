@@ -57,12 +57,7 @@ class RemoteEventStartViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.primaryButtonTapped() }
 
 		sceneView.secondaryButtonTitle = L.holderVaccinationStartNodigid()
-		sceneView.secondaryButtonTappedCommand = { [weak self] in
-
-			if let url = URL(string: L.holderVaccinationStartNodigidUrl()) {
-				self?.viewModel.openUrl(url)
-			}
-		}
+		sceneView.secondaryButtonTappedCommand = { [weak self] in self?.viewModel.secondaryButtonTapped() }
 
 		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in self?.viewModel.openUrl(url) }
 

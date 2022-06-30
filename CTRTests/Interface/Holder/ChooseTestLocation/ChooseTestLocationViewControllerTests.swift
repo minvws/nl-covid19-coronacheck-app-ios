@@ -12,7 +12,7 @@ import SnapshotTesting
 
 class ChooseTestLocationViewControllerTests: XCTestCase {
 
-	var sut: ChooseTestLocationViewController!
+	var sut: ListOptionsViewController!
 	var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 
 	var window = UIWindow()
@@ -20,7 +20,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = ChooseTestLocationViewController(
+		sut = ListOptionsViewController(
 			viewModel: ChooseTestLocationViewModel(
 				coordinator: coordinatorDelegateSpy
 			)
@@ -35,7 +35,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
-        sut.assertImage()
+		sut.assertImage()
 	}
 
 	func test_notTestedButton_tapped() {
@@ -44,7 +44,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		self.sut.sceneView.noTestButtonTapped()
+		self.sut.sceneView.secondaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInfoAboutGettingTested) == true
@@ -56,7 +56,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.optionStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateANegativeTestQRFromGGD) == true
@@ -68,7 +68,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.last as? DisclosureButton)?.primaryButtonTapped()
+		(self.sut.sceneView.optionStackView.arrangedSubviews.last as? DisclosureButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateANegativeTestQR) == true

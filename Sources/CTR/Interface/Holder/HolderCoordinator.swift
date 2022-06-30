@@ -284,7 +284,7 @@ class HolderCoordinator: SharedCoordinator {
 	// "Waar wil je een QR-code van maken?"
 	func navigateToChooseQRCodeType() {
 		
-		let destination = ChooseProofTypeViewController(
+		let destination = ListOptionsViewController(
 			viewModel: ChooseProofTypeViewModel(
 				coordinator: self
 			)
@@ -340,7 +340,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func navigateToChooseTestLocation() {
 		
-		let destination = ChooseTestLocationViewController(
+		let destination = ListOptionsViewController(
 			viewModel: ChooseTestLocationViewModel(
 				coordinator: self
 			)

@@ -87,9 +87,17 @@ class RemoteEventStartViewModel {
 		
 		didCheckCheckbox = value
 	}
-
+	
 	func openUrl(_ url: URL) {
-
+		
 		coordinator?.openUrl(url, inApp: true)
+	}
+	
+	func secondaryButtonTapped() {
+		
+		Current.logHandler.logDebug("No Digid Tapped")
+		if let url = URL(string: L.holderVaccinationStartNodigidUrl()) {
+			openUrl(url)
+		}
 	}
 }

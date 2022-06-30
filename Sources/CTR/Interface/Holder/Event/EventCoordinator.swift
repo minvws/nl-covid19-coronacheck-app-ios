@@ -298,10 +298,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		let popBackToViewController = navigationController.viewControllers.first {
 			
 			switch $0 {
-				case is ChooseTestLocationViewController:
-					return true
-					// Fallback when GGD is not available
-				case is ChooseProofTypeViewController:
+				case is ListOptionsViewController:
 					return true
 				default:
 					return false
@@ -457,7 +454,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			switch $0 {
 				case is RemoteEventStartViewController:
 					return true
-				case is ChooseTestLocationViewController:
+				case is ListOptionsViewController:
 					return true
 				default:
 					return false

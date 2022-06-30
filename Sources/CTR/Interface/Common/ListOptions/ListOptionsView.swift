@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseProofTypeView: ScrolledStackView {
+class ListOptionsView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -39,8 +39,16 @@ class ChooseProofTypeView: ScrolledStackView {
 		return Label(body: nil).multiline()
 	}()
 
+	private let secondaryButton: Button = {
+
+		let button = Button(title: "", style: .textLabelBlue)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	/// The stack view for the content
-	let buttonsStackView: UIStackView = {
+	let optionStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +56,7 @@ class ChooseProofTypeView: ScrolledStackView {
 		view.alignment = .fill
 		view.distribution = .fill
 		view.spacing = ViewTraits.StackView.spacing
-		view.accessibilityIdentifier = "Buttons Stack View"
+		view.accessibilityIdentifier = "Options Stack View"
 		return view
 	}()
 
@@ -58,6 +66,7 @@ class ChooseProofTypeView: ScrolledStackView {
 		super.setupViews()
 		backgroundColor = C.white()
 		stackView.distribution = .fill
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
 	/// Setup the hierarchy
@@ -67,7 +76,8 @@ class ChooseProofTypeView: ScrolledStackView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.setCustomSpacing(ViewTraits.StackView.verticalMargin, after: messageLabel)
-		stackView.addArrangedSubview(buttonsStackView)
+		stackView.addArrangedSubview(optionStackView)
+		stackView.addArrangedSubview(secondaryButton)
 	}
 
 	override func setupViewConstraints() {
@@ -75,10 +85,17 @@ class ChooseProofTypeView: ScrolledStackView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
+
 			// StackView
-			buttonsStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-			buttonsStackView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
+			optionStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			optionStackView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
 		])
+	}
+
+	/// User tapped on the primary button
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -104,4 +121,12 @@ class ChooseProofTypeView: ScrolledStackView {
 			}
 		}
 	}
+
+	var secondaryButtonTitle: String = "" {
+		didSet {
+			secondaryButton.title = secondaryButtonTitle
+		}
+	}
+
+	var secondaryButtonTappedCommand: (() -> Void)?
 }
