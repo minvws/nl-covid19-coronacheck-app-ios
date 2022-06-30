@@ -40,4 +40,8 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 			)
 		]
 	}
+	
+	func goBack() {
+		coordinator?.userWishesToEndAlternativeRoute()
+	}
 }

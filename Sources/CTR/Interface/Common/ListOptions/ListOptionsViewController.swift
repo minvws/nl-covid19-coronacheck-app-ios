@@ -53,9 +53,7 @@ class ListOptionsViewController: BaseViewController {
 
 		setupBinding()
 		setupOptions()
-
-		// Only show an arrow as back button
-		addBackButton()
+		setupBackButton()
 	}
 
 	func setupBinding() {
@@ -99,6 +97,11 @@ class ListOptionsViewController: BaseViewController {
 				}
 				.forEach(self.sceneView.optionStackView.addArrangedSubview)
 		}
+	}
+	
+	func setupBackButton() {
+		// Only show an arrow as back button
+		addBackButton()
 	}
 }
 

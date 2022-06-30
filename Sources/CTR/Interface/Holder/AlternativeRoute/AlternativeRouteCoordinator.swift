@@ -19,6 +19,8 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	func userWishesToCheckForDigiD()
 	
 	func userWishesToRequestADigiD()
+	
+	func userWishesToEndAlternativeRoute()
 
 }
 
@@ -58,7 +60,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishesToCheckForDigiD() {
 		
-		let destination = ListOptionsViewController(
+		let destination = CheckForDigidViewController(
 			viewModel: CheckForDigidViewModel(
 				coordinator: self
 			)
@@ -70,5 +72,10 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		if let url = URL(string: L.holder_noDigiD_url()) {
 			openUrl(url, inApp: false)
 		}
+	}
+	
+	func userWishesToEndAlternativeRoute() {
+		
+		delegate?.completedAlternativeRoute()
 	}
 }
