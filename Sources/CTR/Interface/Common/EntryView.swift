@@ -35,6 +35,7 @@ class EntryView: BaseView {
 		field.returnKeyType = .send
 		field.autocorrectionType = .no
 		field.autocapitalizationType = .none
+		field.clearButtonMode = .whileEditing
 		field.font = UIFont.preferredFont(forTextStyle: .body)
 		return field
 	}()

@@ -9,7 +9,7 @@ class PositiveRatSmoke: BaseTest {
 	
 	func test_posRat() {
 		let person = TestData.posRat
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -18,11 +18,11 @@ class PositiveRatSmoke: BaseTest {
 	
 	func test_posRatP1() {
 		let person = TestData.posRatP1
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -35,11 +35,11 @@ class PositiveRatSmoke: BaseTest {
 	
 	func test_posRatP2() {
 		let person = TestData.posRatP2
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -51,11 +51,11 @@ class PositiveRatSmoke: BaseTest {
 	
 	func test_posRatP3() {
 		let person = TestData.posRatP3
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -67,11 +67,11 @@ class PositiveRatSmoke: BaseTest {
 	
 	func test_posRatJ1() {
 		let person = TestData.posRatJ1
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)

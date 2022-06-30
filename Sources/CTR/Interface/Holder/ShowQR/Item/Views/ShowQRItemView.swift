@@ -97,8 +97,8 @@ class ShowQRItemView: BaseView {
 			screenshotBlockingView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
 			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 			
-			overlayView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
-			overlayView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+			overlayView.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
+			overlayView.widthAnchor.constraint(equalTo: overlayView.heightAnchor),
 			overlayView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
 			overlayView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 			

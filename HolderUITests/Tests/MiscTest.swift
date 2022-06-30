@@ -9,7 +9,7 @@ class MiscTest: BaseTest {
 	
 	func test_miscP1Positive() {
 		let person = TestData.miscP1Positive
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -18,11 +18,11 @@ class MiscTest: BaseTest {
 	
 	func test_miscP2PosPcrNegPcr() {
 		let person = TestData.miscP2PosPcrNegPcr
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)

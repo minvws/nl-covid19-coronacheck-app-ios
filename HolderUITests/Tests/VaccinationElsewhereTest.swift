@@ -9,7 +9,7 @@ class VaccinationElsewhereTest: BaseTest {
 	
 	func test_vacP1PersonalStatementVacElsewhere() {
 		let person = TestData.vacP1PersonalStatementVacElsewhere
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -18,7 +18,7 @@ class VaccinationElsewhereTest: BaseTest {
 	
 	func test_vacP1PersonalStatementPriorEvent() {
 		let person = TestData.vacP1PersonalStatementPriorEvent
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -28,7 +28,7 @@ class VaccinationElsewhereTest: BaseTest {
 	
 	func test_vacP2PersonalStatementVacElsewhereBoth() {
 		let person = TestData.vacP2PersonalStatementVacElsewhereBoth
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -37,7 +37,7 @@ class VaccinationElsewhereTest: BaseTest {
 	
 	func test_vacP2PersonalStatementPriorEventBoth() {
 		let person = TestData.vacP2PersonalStatementPriorEventBoth
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -46,7 +46,7 @@ class VaccinationElsewhereTest: BaseTest {
 	
 	func test_vacP2PersonalStatementVacElsewhereFirst() {
 		let person = TestData.vacP2PersonalStatementVacElsewhereFirst
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -55,7 +55,7 @@ class VaccinationElsewhereTest: BaseTest {
 	
 	func test_vacP2PersonalStatementPriorEventFirst() {
 		let person = TestData.vacP2PersonalStatementPriorEventFirst
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)

@@ -9,7 +9,7 @@ class VaccinationSmoke: BaseTest {
 	
 	func test_vacP1() {
 		let person = TestData.vacP1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
@@ -20,7 +20,7 @@ class VaccinationSmoke: BaseTest {
 	
 	func test_vacP2() {
 		let person = TestData.vacP2
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -30,7 +30,7 @@ class VaccinationSmoke: BaseTest {
 	
 	func test_vacP3() {
 		let person = TestData.vacP3
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
@@ -40,7 +40,7 @@ class VaccinationSmoke: BaseTest {
 	
 	func test_vacJ1() {
 		let person = TestData.vacJ1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
