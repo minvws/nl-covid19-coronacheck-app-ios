@@ -131,14 +131,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutGettingTestedCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = false
-	var invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount = 0
-
-	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		invokedUserWishesMoreInfoAboutIncompleteDutchVaccination = true
-		invokedUserWishesMoreInfoAboutIncompleteDutchVaccinationCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutNoTestToken = false
 	var invokedUserWishesMoreInfoAboutNoTestTokenCount = 0
 

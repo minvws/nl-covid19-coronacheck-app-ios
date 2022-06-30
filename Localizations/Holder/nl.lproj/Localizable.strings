@@ -142,7 +142,6 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je hebt geen Nederlands %@.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "Je hebt geen Nederlands vaccinatiebewijs";
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "'s morgens";
 "holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
@@ -584,6 +583,7 @@
 "holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
+"holder_eventHints_title" = "Je bewijzen zijn gemaakt";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.</p><p>Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
@@ -623,7 +623,8 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_plural" = "Gegevens opgehaald bij: %@ en %@";
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Gegevens opgehaald bij: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Testdatum: %@";
-"holder_listRemoteEvents_listElement_vaccination_title" = "Vaccinatie %@";
+"holder_listRemoteEvents_listElement_title_vaccination" = "Vaccinatie";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccinatiedatum: %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Jouw gegevens: %@";
 "holder_listRemoteEvents_negativeTest_message" = "Deze testuitslag is opgehaald bij de testlocatie. Als de gegevens kloppen kun je een bewijs maken.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>Op dit moment kunnen we geen bewijs maken van je gescande QR-code. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
