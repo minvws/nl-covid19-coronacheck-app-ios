@@ -37,6 +37,8 @@ class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
 	var navigationController: UINavigationController
 
 	weak var delegate: AlternativeRouteFlowDelegate?
+	
+	var eventMode: EventMode
 
 	/// Initializer
 	/// - Parameters:
@@ -45,6 +47,7 @@ class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
+		self.eventMode = eventMode
 	}
 
 	func start() {
@@ -92,12 +95,27 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	}
 
 	func userWishesToContactHelpDeksWithBSN() {
-		Current.logHandler.logDebug("userWishesToContactHelpDeksWithBSN")
+		
+		displayContent(
+			title: L.holder_contactCoronaCheckHelpdesk_title(),
+			message: L.holder_contactCoronaCheckHelpdesk_message()
+		)
+	}
+	
+	func userWishesToContactHelpDeksWithoutBSN() {
+		
+		let title = L.holder_contactProviderHelpdesk_title(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinationLocation() : L.holder_contactProviderHelpdesk_testLocation())
+		let message = L.holder_contactProviderHelpdesk_message(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+		
+		displayContent(title: title, message: message)
+	}
+	
+	private func displayContent(title: String, message: String) {
 		
 		let viewModel = ContentViewModel(
 			content: Content(
-				title: L.holder_contactCoronaCheckHelpdesk_title(),
-				body: L.holder_contactCoronaCheckHelpdesk_message(),
+				title: title,
+				body: message,
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.delegate?.completedAlternativeRoute()
@@ -115,20 +133,4 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
 	}
-	
-	func userWishesToContactHelpDeksWithoutBSN() {
-		Current.logHandler.logDebug("userWishesToContactHelpDeksWithoutBSN")
-	}
 }
-
-/**
-
- holder_contactProviderHelpdesk_title
- holder_contactProviderHelpdesk_message
- holder_contactProviderHelpdesk_testLocation
- holder_contactProviderHelpdesk_vaccinationLocation
- holder_contactProviderHelpdesk_tested
- holder_contactProviderHelpdesk_vaccinated
- general_toMyOverview
- 
-*/
