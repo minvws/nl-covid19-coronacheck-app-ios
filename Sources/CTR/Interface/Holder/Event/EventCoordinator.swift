@@ -513,11 +513,18 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 extension EventCoordinator: AlternativeRouteFlowDelegate {
 	
-	func completedAlternativeRoute() {
+	func canceledAlternativeRoute() {
 		
 		navigationController.popViewController(animated: true)
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
+	}
+	
+	func completedAlternativeRoute() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+		delegate?.eventFlowDidComplete()
 	}
 }
 

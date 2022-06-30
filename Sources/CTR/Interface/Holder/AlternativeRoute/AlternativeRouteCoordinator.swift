@@ -9,6 +9,8 @@ import UIKit
 
 protocol AlternativeRouteFlowDelegate: AnyObject {
 
+	func canceledAlternativeRoute()
+	
 	func completedAlternativeRoute()
 }
 
@@ -86,7 +88,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishesToEndAlternativeRoute() {
 		
-		delegate?.completedAlternativeRoute()
+		delegate?.canceledAlternativeRoute()
 	}
 
 	func userWishesToContactHelpDeksWithBSN() {
@@ -98,10 +100,8 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 				body: L.holder_contactCoronaCheckHelpdesk_message(),
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
-//					self?.userWishesToCreateANegativeTestQR()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
+					self?.delegate?.completedAlternativeRoute()
+				}
 			),
 			backAction: { [weak navigationController] in
 				navigationController?.popViewController(animated: true, completion: {})
