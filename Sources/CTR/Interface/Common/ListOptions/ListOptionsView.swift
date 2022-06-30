@@ -122,7 +122,7 @@ class ListOptionsView: ScrolledStackView {
 		}
 	}
 
-	var secondaryButtonTitle: String = "" {
+	var secondaryButtonTitle: String? {
 		didSet {
 			secondaryButton.title = secondaryButtonTitle
 		}

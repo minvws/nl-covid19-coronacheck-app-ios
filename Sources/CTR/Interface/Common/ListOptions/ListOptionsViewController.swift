@@ -62,11 +62,8 @@ class ListOptionsViewController: BaseViewController {
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
 
 		viewModel.bottomButton.observe { [weak self] button in
-			guard let button = button else {
-				return
-			}
-			self?.sceneView.secondaryButtonTitle = button.title
-			self?.sceneView.secondaryButtonTappedCommand = button.action
+			self?.sceneView.secondaryButtonTitle = button?.title
+			self?.sceneView.secondaryButtonTappedCommand = button?.action
 		}
 	}
 	
