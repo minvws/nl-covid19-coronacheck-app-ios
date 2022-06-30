@@ -365,6 +365,7 @@
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.vaccinationOnly.message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Omdat je positief getest bent vóór je eerste vaccinatie kon je test wel meegeteld worden in je vaccinatiebewijs.</p>";
 "holder.recovery.vaccinationOnly.title" = "Geen herstelbewijs, wel een vaccinatiebewijs";
+"holder.showqr.animation.voiceover.label" = "[placeholder]";
 "holder.showqr.details" = "Details";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan, hersteld of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
