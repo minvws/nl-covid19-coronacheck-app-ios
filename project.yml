@@ -118,6 +118,7 @@ targetTemplates:
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: iPhone Distribution
         DEVELOPMENT_TEAM: C2H38GV99H
+        ENABLE_BITCODE: false # because it's deprecated
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR
