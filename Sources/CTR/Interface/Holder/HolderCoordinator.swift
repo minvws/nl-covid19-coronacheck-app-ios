@@ -34,7 +34,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
-	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
@@ -516,12 +515,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		presentAsBottomSheet(viewController)
-	}
-	
-	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
-		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
-		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	func userWishesMoreInfoAboutNoTestToken() {

@@ -142,7 +142,6 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je hebt geen Nederlands %@.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU.vaccination" = "Je hebt geen Nederlands vaccinatiebewijs";
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.am" = "'s morgens";
 "holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
