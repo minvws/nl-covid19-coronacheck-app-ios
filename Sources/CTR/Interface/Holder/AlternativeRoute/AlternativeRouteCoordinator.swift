@@ -22,9 +22,9 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToEndAlternativeRoute()
 	
-	func userWishesToContactHelpDeksWithoutBSN()
-
 	func userWishesToContactHelpDeksWithBSN()
+
+	func userWishesToContactHelpDeksWithoutBSN()
 
 }
 
@@ -88,12 +88,47 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		
 		delegate?.completedAlternativeRoute()
 	}
+
+	func userWishesToContactHelpDeksWithBSN() {
+		Current.logHandler.logDebug("userWishesToContactHelpDeksWithBSN")
+		
+		let viewModel = ContentViewModel(
+			content: Content(
+				title: L.holder_contactCoronaCheckHelpdesk_title(),
+				body: L.holder_contactCoronaCheckHelpdesk_message(),
+				primaryActionTitle: L.general_toMyOverview(),
+				primaryAction: { [weak self] in
+//					self?.userWishesToCreateANegativeTestQR()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			),
+			backAction: { [weak navigationController] in
+				navigationController?.popViewController(animated: true, completion: {})
+			},
+			allowsSwipeBack: true,
+			linkTapHander: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			}
+		)
+		
+		let destination = ContentViewController(viewModel: viewModel)
+		navigationController.pushViewController(destination, animated: true)
+	}
 	
 	func userWishesToContactHelpDeksWithoutBSN() {
 		Current.logHandler.logDebug("userWishesToContactHelpDeksWithoutBSN")
 	}
-
-	func userWishesToContactHelpDeksWithBSN() {
-		Current.logHandler.logDebug("userWishesToContactHelpDeksWithBSN")
-	}
 }
+
+/**
+
+ holder_contactProviderHelpdesk_title
+ holder_contactProviderHelpdesk_message
+ holder_contactProviderHelpdesk_testLocation
+ holder_contactProviderHelpdesk_vaccinationLocation
+ holder_contactProviderHelpdesk_tested
+ holder_contactProviderHelpdesk_vaccinated
+ general_toMyOverview
+ 
+*/

@@ -41,19 +41,3 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 		]
 	}
 }
-
-/**
-
- holder_contactCoronaCheckHelpdesk_title
- holder_contactCoronaCheckHelpdesk_message
- general_toMyOverview
-
- holder_contactProviderHelpdesk_title
- holder_contactProviderHelpdesk_message
- holder_contactProviderHelpdesk_testLocation
- holder_contactProviderHelpdesk_vaccinationLocation
- holder_contactProviderHelpdesk_tested
- holder_contactProviderHelpdesk_vaccinated
- general_toMyOverview
- 
- */

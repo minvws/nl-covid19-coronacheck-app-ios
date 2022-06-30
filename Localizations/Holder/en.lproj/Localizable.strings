@@ -542,6 +542,8 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
+"holder_contactCoronaCheckHelpdesk_message" = "<p>Request your certificate at the CoronaCheck helpdesk. You can call them every day between 8AM and 8PM at: <a href=\"tel:0800-1421\">0800-1421</a> (free).</p>\n<p>Or if you’re calling from abroad: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>. In the menu you can choose “request a certificate”.</p>\n<p>Or request your certificate by emailing: <a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p><p>Please provide the following:</p><ul><li>your citizen service number (BSN)</li><li>your zipcode</li></ul><p>Your certificate with QR code will be sent by post. This can take up to 7 working days.</p>";
+"holder_contactCoronaCheckHelpdesk_title" = "Request your certificate via the helpdesk";
 "holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/en/toegangsregels/3g-1g-certificate";
 "holder_dashboard_3Gand1GaccessBanner_title" = "The access rules in the Netherlands have changed. There are now separate certificates for venues with 3G access and 1G access.";
 "holder_dashboard_accessibility_access" = "Coronavirus pass";
