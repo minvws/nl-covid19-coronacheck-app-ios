@@ -21,6 +21,10 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	func userWishesToRequestADigiD()
 	
 	func userWishesToEndAlternativeRoute()
+	
+	func userWishesToContactHelpDeksWithoutBSN()
+
+	func userWishesToContactHelpDeksWithBSN()
 
 }
 
@@ -56,6 +60,12 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishesToCheckForBSN() {
 		
+		let destination = ListOptionsViewController(
+			viewModel: CheckForBSNViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	func userWishesToCheckForDigiD() {
@@ -77,5 +87,13 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	func userWishesToEndAlternativeRoute() {
 		
 		delegate?.completedAlternativeRoute()
+	}
+	
+	func userWishesToContactHelpDeksWithoutBSN() {
+		Current.logHandler.logDebug("userWishesToContactHelpDeksWithoutBSN")
+	}
+
+	func userWishesToContactHelpDeksWithBSN() {
+		Current.logHandler.logDebug("userWishesToContactHelpDeksWithBSN")
 	}
 }

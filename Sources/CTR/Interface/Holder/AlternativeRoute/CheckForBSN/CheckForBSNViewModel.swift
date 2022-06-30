@@ -1,0 +1,66 @@
+/*
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+*
+*  SPDX-License-Identifier: EUPL-1.2
+*/
+
+import UIKit
+
+class CheckForBSNViewModel: ListOptionsProtocol {
+	
+	let title = Observable(value: L.holder_checkForBSN_title())
+	
+	let message = Observable(value: L.holder_checkForBSN_message())
+	
+	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
+	
+	let bottomButton: Observable<ListOptionsViewController.OptionModel?> = Observable(value: nil)
+	
+	weak var coordinator: AlternativeRouteCoordinatorDelegate?
+	
+	// MARK: - Initializer
+	
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	init(coordinator: AlternativeRouteCoordinatorDelegate) {
+		
+		self.coordinator = coordinator
+		
+		optionModels.value = [
+			ListOptionsViewController.OptionModel(
+				title: L.holder_checkForBSN_buttonTitle_doesHaveBSN(),
+				subTitle: L.holder_checkForBSN_buttonSubTitle_doesHaveBSN(),
+				action: { [weak self] in self?.coordinator?.userWishesToRequestADigiD() }
+			),
+			ListOptionsViewController.OptionModel(
+				title: L.holder_checkForBSN_buttonTitle_doesNotHaveBSN(),
+				subTitle: L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN(),
+				action: { [weak self] in self?.coordinator?.userWishesToCheckForBSN() }
+			)
+		]
+	}
+}
+
+/**
+ 
+ holder_checkForBSN_title
+ holder_checkForBSN_message
+ holder_checkForBSN_buttonTitle_doesHaveBSN
+ holder_checkForBSN_buttonSubTitle_doesHaveBSN
+ holder_checkForBSN_buttonTitle_doesNotHaveBSN
+ holder_checkForBSN_buttonSubTitle_doesNotHaveBSN
+
+ holder_contactCoronaCheckHelpdesk_title
+ holder_contactCoronaCheckHelpdesk_message
+ general_toMyOverview
+
+ holder_contactProviderHelpdesk_title
+ holder_contactProviderHelpdesk_message
+ holder_contactProviderHelpdesk_testLocation
+ holder_contactProviderHelpdesk_vaccinationLocation
+ holder_contactProviderHelpdesk_tested
+ holder_contactProviderHelpdesk_vaccinated
+ general_toMyOverview
+ 
+ */

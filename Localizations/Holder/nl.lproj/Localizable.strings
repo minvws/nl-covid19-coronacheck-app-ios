@@ -533,6 +533,12 @@
 "holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
 "holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
+"holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Krijg je bewijs via de CoronaCheck helpdesk";
+"holder_checkForBSN_buttonSubTitle_doesNotHaveBSN" = "Krijg je bewijs via jouw test- of vaccinatielocatie";
+"holder_checkForBSN_buttonTitle_doesHaveBSN" = "Ja, ik heb een BSN";
+"holder_checkForBSN_buttonTitle_doesNotHaveBSN" = "Nee, ik heb geen BSN";
+"holder_checkForBSN_message" = "Met je BSN kun je jouw bewijs aanvragen bij de CoronaCheck helpdesk. Heb je geen BSN? Dan kun je een bewijs krijgen via je test- of vaccinatielocatie.";
+"holder_checkForBSN_title" = "Heb je wel een Nederlands burgerservicenummer (BSN)?";
 "holder_completecertificate_body" = "<p>Haal een negatieve testuitslag op om je bezoekersbewijs compleet te maken.</p><p>Heb je nog geen coronatest gedaan? Maak een afspraak op <a href=\"https://www.testenvoortoegang.org\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Testuitslag ophalen";
 "holder_completecertificate_title" = "Maak je bezoekersbewijs compleet";

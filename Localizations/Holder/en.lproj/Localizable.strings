@@ -533,6 +533,12 @@
 "holder_addVaccination_message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p>";
 "holder_addVaccination_title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
+"holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Get your certificate from the CoronaCheck helpdesk";
+"holder_checkForBSN_buttonSubTitle_doesNotHaveBSN" = "Get your certificate from your test or vaccination location";
+"holder_checkForBSN_buttonTitle_doesHaveBSN" = "Yes, I have a BSN";
+"holder_checkForBSN_buttonTitle_doesNotHaveBSN" = "No, I don’t have a BSN";
+"holder_checkForBSN_message" = "With your BSN, you can request your certificate at the CoronaCheck helpdesk. Don’t have a BSN? The you can get a certificate from your test or vaccination location.";
+"holder_checkForBSN_title" = "Do you have a Dutch citizen service number (BSN)?";
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
