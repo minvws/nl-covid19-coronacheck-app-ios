@@ -67,6 +67,13 @@ class Button: TappableButton {
 			}
 		}
 		
+		var imageEdgeInsets: UIEdgeInsets {
+			switch self {
+				case .roundedBlueImage: return .left(22)
+				default: return .zero
+			}
+		}
+		
 		func borderColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlueBorder:
@@ -89,13 +96,6 @@ class Button: TappableButton {
 			switch self {
 				case .textLabelBlue: return false
 				default: return true
-			}
-		}
-		
-		var imageSpacing: CGFloat {
-			switch self {
-				case .roundedBlueImage: return 12
-				default: return 0
 			}
 		}
 	}
@@ -165,19 +165,24 @@ class Button: TappableButton {
 		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
 	}
 	
-	/// Calculates content size including insets for dynamic font size scaling
+	// Calculates content size including insets for dynamic font size scaling
 	override var intrinsicContentSize: CGSize {
+		
+		guard style != .roundedBlueImage else {
+			return super.intrinsicContentSize
+		}
+		
 		let fittingSize = titleLabel?.sizeThatFits(
 			CGSize(width: frame.width, height: .greatestFiniteMagnitude)
 		) ?? .zero
 		let intrinsicSize = titleLabel?.intrinsicContentSize ?? CGSize.zero
-		
+
 		let maxWidth = max(fittingSize.width, intrinsicSize.width)
 		let maxHeight = max(fittingSize.height, intrinsicSize.height)
-		
+
 		let horizontalContentPadding = contentEdgeInsets.left + contentEdgeInsets.right
 		let verticalContentPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
-		
+
 		return CGSize(
 			width: maxWidth + horizontalContentPadding,
 			height: maxHeight + verticalContentPadding
@@ -185,7 +190,7 @@ class Button: TappableButton {
 	}
 	
 	override func setImage(_ image: UIImage?, for state: UIControl.State) {
-		guard style == .roundedBlueImage, let titleLabel = titleLabel else {
+		guard style == .roundedBlueImage else {
 			super.setImage(image, for: state)
 			return
 		}
@@ -193,12 +198,8 @@ class Button: TappableButton {
 		
 		if image != nil {
 			// Position image to the right of the label
-			imageView?.translatesAutoresizingMaskIntoConstraints = false
-			imageView?.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: style.imageSpacing).isActive = true
-			imageView?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-			
-			// Increase size
-			imageView?.layer.transform = CATransform3DMakeScale(1.1, 1.1, 1.1)
+			semanticContentAttribute = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
+			imageEdgeInsets = ButtonType.roundedBlueImage.imageEdgeInsets
 		}
 		
 		super.setImage(image, for: state)
