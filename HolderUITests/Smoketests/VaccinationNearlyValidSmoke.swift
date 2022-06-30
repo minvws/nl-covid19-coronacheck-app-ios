@@ -9,7 +9,7 @@ class VaccinationNearlyValidSmoke: BaseTest {
 	
 	func test_vacP2DatedToday() {
 		let person = TestData.vacP2DatedToday
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffsetInDays: person.vacFrom)
@@ -18,7 +18,7 @@ class VaccinationNearlyValidSmoke: BaseTest {
 	
 	func test_vacJ1DatedToday() {
 		let person = TestData.vacJ1DatedToday
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffsetInDays: person.vacFrom)
@@ -27,7 +27,7 @@ class VaccinationNearlyValidSmoke: BaseTest {
 	
 	func test_vacM2DatedToday() {
 		let person = TestData.vacM2DatedToday
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .vaccination, validFromOffsetInDays: person.vacFrom)

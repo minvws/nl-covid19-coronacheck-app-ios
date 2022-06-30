@@ -11,7 +11,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeP1() {
 		let person = TestData.posPcrBeforeP1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -24,7 +24,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeP2() {
 		let person = TestData.posPcrBeforeP2
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -37,7 +37,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeJ1() {
 		let person = TestData.posPcrBeforeJ1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -50,7 +50,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrBeforeM2() {
 		let person = TestData.posPcrBeforeM2
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -65,12 +65,12 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posBreathalyzerP1() {
 		let person = TestData.posBreathalyzerP1
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -82,7 +82,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posOldAgob() {
 		let person = TestData.posOldAgob
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
 	}
@@ -91,7 +91,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPrematurePcr() {
 		let person = TestData.posPrematurePcr
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
@@ -100,7 +100,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPrematureRat() {
 		let person = TestData.posPrematureRat
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
@@ -109,7 +109,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPrematureAgob() {
 		let person = TestData.posPrematureAgob
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
@@ -120,7 +120,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrDifferentFirstName() {
 		let person = TestData.posPcrDifferentFirstName
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -129,7 +129,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrDifferentLastName() {
 		let person = TestData.posPcrDifferentLastName
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -138,7 +138,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrDifferentBirthdate() {
 		let person = TestData.posPcrDifferentBirthdate
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -147,7 +147,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrDifferentBirthDay() {
 		let person = TestData.posPcrDifferentBirthDay
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -156,7 +156,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcrDifferentBirthMonth() {
 		let person = TestData.posPcrDifferentBirthMonth
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -167,7 +167,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcr2Recent() {
 		let person = TestData.posPcr2Recent
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -176,7 +176,7 @@ class PositiveOthersTest: BaseTest {
 	
 	func test_posPcr2Old() {
 		let person = TestData.posPcr2Old
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)

@@ -12,13 +12,13 @@ class DifferentCredentialsTest: BaseTest {
 	override func setUpWithError() throws {
 		try super.setUpWithError()
 		
-		addVaccinationCertificate(for: setup)
+		addVaccinationCertificate(for: setup.bsn)
 		addRetrievedCertificateToApp()
 	}
 	
 	func test_existingVaccinationAndNegativeTestOfDifferentPerson_IsNotReplaced() {
 		let person = TestData.negPcr
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
@@ -28,7 +28,7 @@ class DifferentCredentialsTest: BaseTest {
 	
 	func test_existingVaccinationAndNegativeTestOfDifferentPerson_IsReplaced() {
 		let person = TestData.negPcr
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		
@@ -38,7 +38,7 @@ class DifferentCredentialsTest: BaseTest {
 	
 	func test_existingVaccinationAndRecoveryOfDifferentPerson_IsNotReplaced() {
 		let person = TestData.posPcr
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
@@ -48,7 +48,7 @@ class DifferentCredentialsTest: BaseTest {
 	
 	func test_existingVaccinationAndRecoveryOfDifferentPerson_IsReplaced() {
 		let person = TestData.posPcr
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
 		

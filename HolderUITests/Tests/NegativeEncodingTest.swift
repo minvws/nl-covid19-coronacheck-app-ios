@@ -9,7 +9,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingLatin() {
 		let person = TestData.encodingLatin
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -20,7 +20,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingLatinDiacritic() {
 		let person = TestData.encodingLatinDiacritic
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -31,7 +31,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingArabic() {
 		let person = TestData.encodingArabic
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -42,7 +42,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingHebrew() {
 		let person = TestData.encodingHebrew
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -53,7 +53,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingChinese() {
 		let person = TestData.encodingChinese
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -64,7 +64,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingGreek() {
 		let person = TestData.encodingGreek
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -75,7 +75,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingCyrillic() {
 		let person = TestData.encodingCyrillic
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -86,7 +86,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingEmoji() {
 		let person = TestData.encodingEmoji
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -97,7 +97,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingLongStrings() {
 		let person = TestData.encodingLongStrings
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
@@ -108,7 +108,7 @@ class NegativeEncodingTest: BaseTest {
 	
 	func test_encodingLongNames() {
 		let person = TestData.encodingLongNames
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
