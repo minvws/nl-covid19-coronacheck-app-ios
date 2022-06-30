@@ -7,27 +7,36 @@
 
 import UIKit
 
-protocol NoDigiDCoordinatorDelegate: AnyObject {
+protocol AlternativeRouteFlowDelegate: AnyObject {
+
+	func completedAlternativeRoute()
+}
+
+protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCheckForBSN()
 	
 	func userWishesToCheckForDigiD()
+	
+	func userWishesToRequestADigiD()
+
 }
 
-class NoDigiDCoordinator: Coordinator, OpenUrlProtocol {
+class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
 	var navigationController: UINavigationController
 
-	weak var delegate: EventFlowDelegate?
+	weak var delegate: AlternativeRouteFlowDelegate?
 
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	init(navigationController: UINavigationController, eventMode: EventMode) {
+	init(navigationController: UINavigationController, delegate: AlternativeRouteFlowDelegate, eventMode: EventMode) {
 
 		self.navigationController = navigationController
+		self.delegate = delegate
 	}
 
 	func start() {
@@ -41,7 +50,7 @@ class NoDigiDCoordinator: Coordinator, OpenUrlProtocol {
 	}
 }
 
-extension NoDigiDCoordinator: NoDigiDCoordinatorDelegate {
+extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishesToCheckForBSN() {
 		
@@ -55,5 +64,11 @@ extension NoDigiDCoordinator: NoDigiDCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesToRequestADigiD() {
+		if let url = URL(string: L.holder_noDigiD_url()) {
+			openUrl(url, inApp: false)
+		}
 	}
 }

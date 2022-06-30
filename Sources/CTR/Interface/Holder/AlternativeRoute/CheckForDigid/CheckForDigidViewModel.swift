@@ -9,37 +9,35 @@ import UIKit
 
 class CheckForDigidViewModel: ListOptionsProtocol {
 	
-	let title = Observable(value: "Ik heb geen digid")
+	let title = Observable(value: L.holder_noDigiD_title())
 	
-	let message = Observable(value: "todo")
+	let message = Observable(value: L.holder_noDigiD_message())
 	
 	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
 	
 	let bottomButton: Observable<ListOptionsViewController.OptionModel?> = Observable(value: nil)
 	
-	weak var coordinator: NoDigiDCoordinatorDelegate?
+	weak var coordinator: AlternativeRouteCoordinatorDelegate?
 	
 	// MARK: - Initializer
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: NoDigiDCoordinatorDelegate) {
+	init(coordinator: AlternativeRouteCoordinatorDelegate) {
 		
 		self.coordinator = coordinator
 		
 		optionModels.value = [
 			ListOptionsViewController.OptionModel(
-				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
-				subTitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
-					
-//					self?.coordinator?.userWishesToCreateAVaccinationQR()
-				},
+				title: L.holder_noDigiD_buttonTitle_requestDigiD(),
+				image: I.digid(),
+				action: { [weak self] in self?.coordinator?.userWishesToRequestADigiD() }
+			),
 			ListOptionsViewController.OptionModel(
-				title: L.holderChooseqrcodetypeOptionRecoveryTitle(),
-				subTitle: L.holderChooseqrcodetypeOptionRecoverySubtitle()) { [weak self] in
-					
-//					self?.coordinator?.userWishesToCreateARecoveryQR()
-				}
+				title: L.holder_noDigiD_buttonTitle_continueWithoutDigiD(),
+				subTitle: L.holder_noDigiD_buttonSubTitle_continueWithoutDigiD(),
+				action: { [weak self] in self?.coordinator?.userWishesToCheckForBSN() }
+			)
 		]
 	}
 }

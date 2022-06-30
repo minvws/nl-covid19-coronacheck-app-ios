@@ -501,7 +501,22 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	
 	private func startAlternativeRoute(_ eventMode: EventMode) {
 		
-		startChildCoordinator(NoDigiDCoordinator(navigationController: navigationController, eventMode: eventMode))
+		startChildCoordinator(
+			AlternativeRouteCoordinator(
+				navigationController: navigationController,
+				delegate: self,
+				eventMode: eventMode
+			)
+		)
+	}
+}
+
+extension EventCoordinator: AlternativeRouteFlowDelegate {
+	
+	func completedAlternativeRoute() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
 	}
 }
 
