@@ -14,30 +14,62 @@ extension BaseTest {
 		app.tapButton("Vaccinatie of test toevoegen")
 	}
 	
-	func addVaccinationCertificate(for person: TestPerson, combinedWithPositiveTest: Bool = false) {
+	func addScannedQR() {
+		app.tapButton("Open menu")
+		app.tapButton("Coronabewijs inscannen")
+		app.tapButton("Start scannen")
+		app.tapButton("Bewijs toevoegen")
+		waitUntilSpinnerIsGone()
+	}
+	
+	private func viewQR(of certificate: CertificateType, label: String, hiddenQR: Bool) {
+		card(of: certificate).tapButton(label)
+		if hiddenQR { assertHiddenQR() }
+	}
+	
+	private func assertHiddenQR() {
+		app.containsText("QR-code verborgen")
+		app.containsText("Laat toch zien")
+		app.textExists("Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.")
+	}
+	
+	func viewQRCode(of certificate: CertificateType, hiddenQR: Bool = false) {
+		viewQR(of: certificate, label: "Bekijk QR", hiddenQR: hiddenQR)
+	}
+	
+	func viewQRCodes(of	certificate: CertificateType, hiddenQR: Bool = false) {
+		viewQR(of: certificate, label: "Bekijk QR-codes", hiddenQR: hiddenQR)
+	}
+	
+	func viewPreviousQR(hidden: Bool = false) {
+		app.tapButton("Vorige QR-code")
+		if hidden { assertHiddenQR() }
+	}
+	
+	func addVaccinationCertificate(for bsn: String, combinedWithPositiveTest: Bool = false) {
 		addEvent()
 		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
 		if combinedWithPositiveTest { app.enableSwitch("Haal ook mijn positieve testuitslag op") }
 		app.tapButton("Log in met DigiD")
-		retrieveCertificateFromServer(for: person)
+		retrieveCertificateFromServer(for: bsn)
 	}
 	
-	func addRecoveryCertificate(for person: TestPerson) {
+	func addRecoveryCertificate(for bsn: String) {
 		addEvent()
 		app.tapButton("Positieve test. Uit de test blijkt dat ik corona heb gehad")
 		app.tapButton("Log in met DigiD")
-		retrieveCertificateFromServer(for: person)
+		retrieveCertificateFromServer(for: bsn)
 	}
 	
-	func addTestCertificateFromGGD(for person: TestPerson) {
+	func addTestCertificateFromGGD(for bsn: String) {
 		addEvent()
 		app.tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
 		app.tapButton("GGD")
 		app.tapButton("Log in met DigiD")
-		retrieveCertificateFromServer(for: person)
+		retrieveCertificateFromServer(for: bsn)
 	}
 	
-	func retrieveCertificateFromServer(for person: TestPerson) {
+	private func retrieveCertificateFromServer(for bsn: String) {
 		
 		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
 		makeScreenShot(name: "Safari is ready")
@@ -49,7 +81,7 @@ extension BaseTest {
 		
 		let textField = safari.webViews.textFields.firstMatch.assertExistence()
 		textField.clearText()
-		textField.typeText(person.bsn)
+		textField.typeText(bsn)
 		makeScreenShot(name: "BSN typed")
 		
 		let submit = safari.webViews.staticTexts["Login / Submit"].assertExistence()
@@ -126,9 +158,9 @@ extension BaseTest {
 	}
 	
 	func deleteItemFromWallet(atIndex: Int = 0, confirm: Bool = true) {
-		app.tapButton("Deze gegevens wissen", index: atIndex)
-		app.textExists("Deze gegevens wissen?")
-		app.tapButton(confirm ? "Wis gegevens" : "Annuleer")
+		app.tapButton("Uit de app verwijderen", index: atIndex)
+		app.textExists("Deze gegevens verwijderen?")
+		app.tapButton(confirm ? "Verwijderen" : "Annuleer")
 		waitUntilSpinnerIsGone()
 	}
 	

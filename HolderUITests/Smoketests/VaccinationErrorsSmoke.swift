@@ -8,7 +8,7 @@
 class VaccinationErrorsSmoke: BaseTest {
 	
 	func test_vacNoVaccination() {
-		addVaccinationCertificate(for: TestData.vacNoVaccination)
+		addVaccinationCertificate(for: TestData.vacNoVaccination.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()

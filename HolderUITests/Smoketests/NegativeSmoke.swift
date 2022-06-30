@@ -11,7 +11,7 @@ class NegativeSmoke: BaseTest {
 	
 	func test_negPcr() {
 		let person = TestData.negPcr
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -21,7 +21,7 @@ class NegativeSmoke: BaseTest {
 	
 	func test_negRat() {
 		let person = TestData.negRat
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -30,7 +30,7 @@ class NegativeSmoke: BaseTest {
 	}
 	
 	func test_negAgob() {
-		addTestCertificateFromGGD(for: TestData.negAgob)
+		addTestCertificateFromGGD(for: TestData.negAgob.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchTestCertificate()
@@ -40,7 +40,7 @@ class NegativeSmoke: BaseTest {
 	// MARK: Negative tests - 30 days old
 	
 	func test_negOldPcr() {
-		addTestCertificateFromGGD(for: TestData.negOldPcr)
+		addTestCertificateFromGGD(for: TestData.negOldPcr.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertNoCertificateCouldBeCreated()
@@ -50,7 +50,7 @@ class NegativeSmoke: BaseTest {
 	
 	func test_negPrematurePcr() {
 		let person = TestData.negPrematurePcr
-		addTestCertificateFromGGD(for: TestData.negPrematurePcr)
+		addTestCertificateFromGGD(for: TestData.negPrematurePcr.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
