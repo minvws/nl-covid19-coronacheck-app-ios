@@ -105,8 +105,8 @@ extension Coordinator {
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
+		if url.scheme == "tel" || url.scheme == "mailto" {
+			// Do not open phone numbers or mailto links in app, doesn't work & will crash.
 			shouldOpenInApp = false
 		}
 

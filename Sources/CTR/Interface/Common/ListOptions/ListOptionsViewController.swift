@@ -53,9 +53,7 @@ class ListOptionsViewController: BaseViewController {
 
 		setupBinding()
 		setupOptions()
-
-		// Only show an arrow as back button
-		addBackButton()
+		setupBackButton()
 	}
 
 	func setupBinding() {
@@ -64,11 +62,8 @@ class ListOptionsViewController: BaseViewController {
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
 
 		viewModel.bottomButton.observe { [weak self] button in
-			guard let button = button else {
-				return
-			}
-			self?.sceneView.secondaryButtonTitle = button.title
-			self?.sceneView.secondaryButtonTappedCommand = button.action
+			self?.sceneView.secondaryButtonTitle = button?.title
+			self?.sceneView.secondaryButtonTappedCommand = button?.action
 		}
 	}
 	
@@ -93,12 +88,18 @@ class ListOptionsViewController: BaseViewController {
 					} else {
 						return DisclosureButton.makeButton(
 							title: optionModel.title,
+							icon: optionModel.image,
 							command: optionModel.action
 						)
 					}
 				}
 				.forEach(self.sceneView.optionStackView.addArrangedSubview)
 		}
+	}
+	
+	func setupBackButton() {
+		// Only show an arrow as back button
+		addBackButton()
 	}
 }
 
@@ -111,11 +112,13 @@ extension DisclosureButton {
 	/// - Returns: A disclosure button
 	static func makeButton(
 		title: String,
+		icon: UIImage? = nil,
 		command: (() -> Void)? ) -> DisclosureButton {
 
 		let button = DisclosureButton()
 		button.isUserInteractionEnabled = true
 		button.title = title
+		button.icon = icon
 		button.primaryButtonTappedCommand = command
 		return button
 	}
@@ -132,7 +135,6 @@ extension DisclosureSubtitleButton {
 	static func makeButton(
 		title: String,
 		subtitle: String,
-		subtitleIcon: UIImage? = nil,
 		command: (() -> Void)? ) -> DisclosureSubtitleButton {
 
 		let button = DisclosureSubtitleButton()
