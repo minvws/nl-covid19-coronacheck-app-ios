@@ -395,6 +395,9 @@ extension ListRemoteEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
+			
+		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? vaccination.dateOfVaccination
 
 		var title: String = L.general_vaccinationcertificate().capitalizingFirstLetter()
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
@@ -404,6 +407,7 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: title,
 			details: [
+				L.holder_listRemoteEvents_listElement_vaccinationDate(formattedVaccinationDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
 				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
 			],
