@@ -47,10 +47,16 @@ class DisclosureButton: DisclosureSubtitleButton {
 	override func setupViewConstraints() {
 		
 		// No super.setupViewConstraints(), override only
+
+		setupTitleLabelViewConstraints()
+		setupIconViewConstraints()
+		setupDisclosureViewConstraints()
+	}
+	
+	func setupTitleLabelViewConstraints() {
 		
 		NSLayoutConstraint.activate([
 			
-			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topAnchor,
 				constant: ViewTraits.topMargin
@@ -59,27 +65,28 @@ class DisclosureButton: DisclosureSubtitleButton {
 				equalTo: leadingAnchor,
 				constant: ViewTraits.leadingMargin
 			),
-			{
-				let constraint = titleLabel.trailingAnchor.constraint(
-					lessThanOrEqualTo: disclosureView.leadingAnchor,
-					constant: -ViewTraits.trailingMargin
-				)
-				titleLabelToDisclosureLayoutConstraint = constraint
-				return constraint
-			}(),
-			{
-				let constraint = titleLabel.trailingAnchor.constraint(
-					lessThanOrEqualTo: iconView.leadingAnchor,
-					constant: -ViewTraits.trailingMargin
-				)
-				titleLabelToIconLayoutConstraint = constraint
-				return constraint
-			}(),
-			
 			titleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.bottomMargin
-			),
+			)
+		])
+		
+		titleLabelToDisclosureLayoutConstraint = titleLabel.trailingAnchor.constraint(
+			lessThanOrEqualTo: disclosureView.leadingAnchor,
+			constant: -ViewTraits.trailingMargin
+		)
+		titleLabelToDisclosureLayoutConstraint?.isActive = true
+
+		titleLabelToIconLayoutConstraint = titleLabel.trailingAnchor.constraint(
+			lessThanOrEqualTo: iconView.leadingAnchor,
+			constant: -ViewTraits.trailingMargin
+		)
+		titleLabelToIconLayoutConstraint?.isActive = false
+	}
+	
+	func setupIconViewConstraints() {
+		
+		NSLayoutConstraint.activate([
 			
 			iconView.centerYAnchor.constraint(equalTo: centerYAnchor),
 			iconView.trailingAnchor.constraint(
@@ -89,10 +96,6 @@ class DisclosureButton: DisclosureSubtitleButton {
 			iconView.heightAnchor.constraint(equalToConstant: ViewTraits.Icon.size),
 			iconView.widthAnchor.constraint(equalToConstant: ViewTraits.Icon.size)
 		])
-		
-		titleLabelToIconLayoutConstraint?.isActive = false
-		
-		setupDisclosureViewConstraints()
 	}
 	
 	override func setAccessibilityLabel() {
