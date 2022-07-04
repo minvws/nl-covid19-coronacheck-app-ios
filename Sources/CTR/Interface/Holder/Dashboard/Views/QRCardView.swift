@@ -186,6 +186,15 @@ class QRCardView: BaseView {
 		hostView.backgroundColor = C.white()
 		hostView.translatesAutoresizingMaskIntoConstraints = false
 	}
+	
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		if #available(iOS 13.0, *) {
+			verticalLabelsStackView.accessibilityRespondsToUserInteraction = false
+		}
+	}
+	
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
