@@ -194,7 +194,6 @@ class QRCardView: BaseView {
 			verticalLabelsStackView.accessibilityRespondsToUserInteraction = false
 		}
 	}
-	
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
