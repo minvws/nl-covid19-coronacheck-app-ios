@@ -10,9 +10,9 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-class CheckForBSNViewControllerTests: XCTestCase {
+class CheckForDigidViewControllerTests: XCTestCase {
 
-	var sut: ListOptionsViewController!
+	var sut: CheckForDigidViewController!
 	var coordinatorDelegateSpy: AlternativeRouteCoordinatorDelegateSpy!
 
 	var window = UIWindow()
@@ -20,8 +20,8 @@ class CheckForBSNViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
-		sut = ListOptionsViewController(
-			viewModel: CheckForBSNViewModel(
+		sut = CheckForDigidViewController(
+			viewModel: CheckForDigidViewModel(
 				coordinator: coordinatorDelegateSpy
 			)
 		)
@@ -39,7 +39,7 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 
-	func test_withBSN_tapped() {
+	func test_requestDidig_tapped() {
 
 		// Given
 		loadView()
@@ -48,10 +48,10 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToRequestADigiD) == true
 	}
 
-	func test_withoutBSN_tapped() {
+	func test_noDigid_tapped() {
 
 		// Given
 		loadView()
@@ -60,6 +60,17 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToCheckForBSN) == true
+	}
+	
+	func test_backButtonTapped() {
+		
+		// Given
+		
+		// When
+		sut.backButtonTapped()
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRoute) == true
 	}
 }
