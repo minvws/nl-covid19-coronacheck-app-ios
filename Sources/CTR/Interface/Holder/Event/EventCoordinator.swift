@@ -515,13 +515,13 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 	
 	func canceledAlternativeRoute() {
 		
-		guard let coordinator = childCoordinators.last else { return }
+		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
 	}
 	
 	func completedAlternativeRoute() {
 		
-		guard let coordinator = childCoordinators.last else { return }
+		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
 		delegate?.eventFlowDidComplete()
 	}
