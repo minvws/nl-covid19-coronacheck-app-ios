@@ -59,12 +59,6 @@ class TraitWrapper<View: BaseView>: BaseView {
 		activateCorrectConstraint(forTraitCollection: traitCollection)
 	}
 	
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-		super.setupAccessibility()
-		
-	}
-	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		activateCorrectConstraint(forTraitCollection: traitCollection)
