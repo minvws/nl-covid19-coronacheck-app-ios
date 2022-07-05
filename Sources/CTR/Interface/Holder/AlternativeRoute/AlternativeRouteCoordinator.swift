@@ -25,9 +25,12 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	func userWishesToEndAlternativeRoute(popViewController: Bool)
 	
 	func userWishesToContactHelpDeksWithBSN()
-
+	
 	func userWishesToContactHelpDeksWithoutBSN()
-
+	
+	func userHasNoBSN()
+	
+	func userWishedToGoToGGDPortal()
 }
 
 class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
@@ -105,12 +108,43 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		)
 	}
 	
+	func userHasNoBSN() {
+		
+		if Current.featureFlagManager.isGGDPortalEnabled() {
+			userWishesToChooseEventLocation()
+		} else {
+			userWishesToContactHelpDeksWithoutBSN()
+		}
+	}
+
+	private func userWishesToChooseEventLocation() {
+		
+		let destination = ListOptionsViewController(
+			viewModel: ChooseEventLocationViewModel(
+				coordinator: self,
+				eventMode: eventMode
+			)
+		)
+		navigationController.pushViewController(destination, animated: true)
+	}
+	
 	func userWishesToContactHelpDeksWithoutBSN() {
 		
-		let title = L.holder_contactProviderHelpdesk_title(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinationLocation() : L.holder_contactProviderHelpdesk_testLocation())
-		let message = L.holder_contactProviderHelpdesk_message(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+		let title: String
+		let message: String
 		
+		if Current.featureFlagManager.isGGDPortalEnabled() {
+			title = L.holder_contactProviderHelpdesk_title_ggdEnabled()
+			message = L.holder_contactProviderHelpdesk_message_ggdEnabled(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+		} else {
+			title = L.holder_contactProviderHelpdesk_title(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinationLocation() : L.holder_contactProviderHelpdesk_testLocation())
+			message = L.holder_contactProviderHelpdesk_message(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+		}
 		displayContent(title: title, message: message)
+	}
+	
+	func userWishedToGoToGGDPortal() {
+		Current.logHandler.logInfo("Go to GGD GHOR Portal")
 	}
 	
 	private func displayContent(title: String, message: String) {

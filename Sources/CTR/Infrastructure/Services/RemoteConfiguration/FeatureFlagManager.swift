@@ -28,6 +28,7 @@ protocol FeatureFlagManaging {
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
 	func shouldShowCoronaMelderRecommendation() -> Bool
+	func isGGDPortalEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging {
@@ -141,5 +142,9 @@ class FeatureFlagManager: FeatureFlagManaging {
 		let disclosurePolicies = Current.disclosurePolicyManager.getDisclosurePolicies()
 		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
 		disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
+	}
+	
+	func isGGDPortalEnabled() -> Bool {
+		return true
 	}
 }

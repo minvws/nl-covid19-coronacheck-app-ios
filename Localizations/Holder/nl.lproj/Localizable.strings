@@ -803,3 +803,12 @@
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
 "visitorpass_token_next" = "Volgende";
+
+"holder_chooseEventLocation_title" = "Waar ben je %@?";
+"holder_chooseEventLocation_buttonSubTitle_GGD" = "Regel je bewijs via de GGD";
+"holder_chooseEventLocation_buttonSubTitle_other" = "Een andere zorgverlener";
+"holder_chooseEventLocation_buttonTitle_GGD" = "GGD";
+"holder_chooseEventLocation_buttonTitle_other" = "Regel je bewijs via bijvoorbeeld je huisarts of andere zorginstelling";
+
+"holder_contactProviderHelpdesk_title_ggdEnabled" = "Vraag je coronabewijs aan bij je zorgverlener";
+"holder_contactProviderHelpdesk_message_ggdEnabled" = "Neem contact op met de zorgverlener waar je bent %@. Hier kun je jouw coronabewijs aanvragen op papier of als pdf-bestand.";
