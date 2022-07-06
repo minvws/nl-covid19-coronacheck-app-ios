@@ -29,7 +29,7 @@ enum EventScreenResult: Equatable {
 	case `continue`(eventMode: EventMode)
 
 	// LoginTVS happy path:
-	case didLogin(token: TVSAuthorizationToken, eventMode: EventMode)
+	case didLogin(token: String, eventMode: EventMode)
 	
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
@@ -217,7 +217,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(token: TVSAuthorizationToken, eventMode: EventMode) {
+	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
 		let viewController = FetchRemoteEventsViewController(
 			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,

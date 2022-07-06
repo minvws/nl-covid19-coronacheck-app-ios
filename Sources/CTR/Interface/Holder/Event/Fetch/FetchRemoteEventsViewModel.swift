@@ -11,7 +11,7 @@ final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var tvsToken: TVSAuthorizationToken
+	private var tvsToken: String
 	private var eventMode: EventMode
 	private let networkManager: NetworkManaging = Current.networkManager
 	private let mappingManager: MappingManaging = Current.mappingManager
@@ -35,7 +35,7 @@ final class FetchRemoteEventsViewModel {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		tvsToken: TVSAuthorizationToken,
+		tvsToken: String,
 		eventMode: EventMode) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
@@ -330,7 +330,7 @@ final class FetchRemoteEventsViewModel {
 	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventAccessTokens(tvsToken: tvsToken.idTokenString) { [weak self] result in
+		networkManager.fetchEventAccessTokens(tvsToken: tvsToken) { [weak self] result in
 			completion(result)
 			self?.progressIndicationCounter.decrement()
 		}

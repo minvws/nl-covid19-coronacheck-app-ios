@@ -12,42 +12,61 @@ protocol OpenIdManaging: AnyObject {
 	
 	/// Request an access token
 	/// - Parameters:
-	///   - onCompletion: completion handler with optional access token
+	///   - configuration: openID configuration
+	///   - onCompletion: ompletion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
-		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
+		issuerConfiguration: IssuerConfiguration,
+		presentingViewController: UIViewController?,
+		onCompletion: @escaping (OIDTokenResponse) -> Void,
 		onError: @escaping (Error?) -> Void)
 }
 
+protocol IssuerConfiguration: AnyObject {
+
+	/// Get the  url
+	/// - Returns: the url
+	func getIssuerURL() -> URL
+
+	/// Get the client ID
+	/// - Returns: the client ID
+	func getClientId() -> String
+
+	/// Get the redirect uri
+	/// - Returns: the redirect uri
+	func getRedirectUri() -> URL
+}
+
 class OpenIdManager: OpenIdManaging {
-	
-	/// The digid configuration
-	var configuration: ConfigurationDigidProtocol
 	
 	var isAuthorizationInProgress: Bool = false
 	private let logHandler: Logging?
 	
 	/// Initializer
 	/// - Parameter configuration: the digid configuration
-	init(configuration: ConfigurationDigidProtocol, logHandler: Logging? = nil) {
+	init(logHandler: Logging? = nil) {
 		
-		self.configuration = configuration
 		self.logHandler = logHandler
 	}
-	
+
 	/// Request an access token
 	/// - Parameters:
-	///   - onCompletion: completion handler with optional access token
+	///   - issuerConfiguration: openID configuration
+	///   - onCompletion: ompletion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
-		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
+		issuerConfiguration: IssuerConfiguration,
+		presentingViewController: UIViewController?,
+		onCompletion: @escaping (OIDTokenResponse) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
-			discoverServiceConfiguration { [weak self] result in
+			discoverServiceConfiguration(issuerConfiguration: issuerConfiguration) { [weak self] result in
 				switch result {
 					case let .success(serviceConfiguration):
 						self?.requestAuthorization(
-							serviceConfiguration,
+							issuerConfiguration: issuerConfiguration,
+							serviceConfiguration: serviceConfiguration,
+							presentingViewController: presentingViewController,
 							onCompletion: onCompletion,
 							onError: onError
 						)
@@ -59,13 +78,18 @@ class OpenIdManager: OpenIdManaging {
 		}
 	
 	private func requestAuthorization(
-		_ serviceConfiguration: OIDServiceConfiguration,
-		onCompletion: @escaping (TVSAuthorizationToken) -> Void,
+		issuerConfiguration: IssuerConfiguration,
+		serviceConfiguration: OIDServiceConfiguration,
+		presentingViewController: UIViewController?,
+		onCompletion: @escaping (OIDTokenResponse) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
 			isAuthorizationInProgress = true
 			
-			let request = generateRequest(serviceConfiguration: serviceConfiguration)
+			let request = generateRequest(
+				issuerConfiguration: issuerConfiguration,
+				serviceConfiguration: serviceConfiguration
+			)
 			
 			if let appAuthState = UIApplication.shared.delegate as? AppAuthState {
 				
@@ -78,14 +102,8 @@ class OpenIdManager: OpenIdManaging {
 					NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 					DispatchQueue.main.async {
 						
-						if let lastTokenResponse = authState?.lastTokenResponse,
-						   let idTokenString = lastTokenResponse.idToken,
-						   let idToken = OIDIDToken(idTokenString: idTokenString) {
-							
-							onCompletion(TVSAuthorizationToken(
-								idTokenString: idTokenString,
-								expiration: idToken.expiresAt
-							))
+						if let lastTokenResponse = authState?.lastTokenResponse {
+							onCompletion(lastTokenResponse)
 						} else {
 							self.logHandler?.logError("OpenIdManager: \(String(describing: error))")
 							onError(error)
@@ -93,19 +111,29 @@ class OpenIdManager: OpenIdManaging {
 					}
 				}
 				
-				appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
-					byPresenting: request,
-					externalUserAgent: OIDExternalUserAgentIOSCustomBrowser.defaultBrowser() ?? OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari(),
-					callback: callBack
-				)
+				if let presentingViewController = presentingViewController {
+					appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
+						byPresenting: request,
+						presenting: presentingViewController,
+						callback: callBack
+					)
+				} else {
+					appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
+						byPresenting: request,
+						externalUserAgent: OIDExternalUserAgentIOSCustomBrowser.defaultBrowser() ?? OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari(),
+						callback: callBack
+					)
+				}
 			}
 		}
 	
 	/// Discover the configuration file for the open ID connection
-	/// - Parameter onCompletion: Service Configuration or error
-	private func discoverServiceConfiguration(_ onCompletion: @escaping (Result<OIDServiceConfiguration, Error>) -> Void) {
+	/// - Parameters:
+	///   - issuerConfiguration: The openID configuration
+	///   - onCompletion: Service Configuration or error
+	private func discoverServiceConfiguration(issuerConfiguration: IssuerConfiguration, onCompletion: @escaping (Result<OIDServiceConfiguration, Error>) -> Void) {
 		
-		let issuer = configuration.getTVSURL()
+		let issuer = issuerConfiguration.getIssuerURL()
 		OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { serviceConfiguration, error in
 			DispatchQueue.main.async {
 				if let service = serviceConfiguration {
@@ -118,16 +146,18 @@ class OpenIdManager: OpenIdManaging {
 	}
 	
 	/// Generate an Authorization Request
-	/// - Parameter serviceConfiguration: Service Configuration
+	/// - Parameter
+	///   - issuerConfiguration: The openID configuration
+	///   - serviceConfiguration: Service Configuration
 	/// - Returns: Open Id Authorization Request
-	private func generateRequest(serviceConfiguration: OIDServiceConfiguration) -> OIDAuthorizationRequest {
+	private func generateRequest(issuerConfiguration: IssuerConfiguration, serviceConfiguration: OIDServiceConfiguration) -> OIDAuthorizationRequest {
 		
 		// builds authentication request
 		let request = OIDAuthorizationRequest(
 			configuration: serviceConfiguration,
-			clientId: configuration.getConsumerId(),
+			clientId: issuerConfiguration.getClientId(),
 			scopes: [OIDScopeOpenID],
-			redirectURL: configuration.getRedirectUri(),
+			redirectURL: issuerConfiguration.getRedirectUri(),
 			responseType: OIDResponseTypeCode,
 			additionalParameters: nil
 		)
