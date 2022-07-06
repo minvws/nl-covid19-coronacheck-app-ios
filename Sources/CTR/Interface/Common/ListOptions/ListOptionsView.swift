@@ -125,6 +125,7 @@ class ListOptionsView: ScrolledStackView {
 	var secondaryButtonTitle: String? {
 		didSet {
 			secondaryButton.title = secondaryButtonTitle
+			secondaryButton.isAccessibilityElement = secondaryButtonTitle != nil
 		}
 	}
 
