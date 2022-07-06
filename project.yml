@@ -461,6 +461,7 @@ schemeTemplates:
         # See: https://www.donnywals.com/using-launch-arguments-for-easier-core-data-debugging/
        # "-com.apple.CoreData.SQLDebug 2": YES # choose a level from 1-4
         "-com.apple.CoreData.ConcurrencyDebug 1": YES # crash with stacktrace on concurrency mistakes
+        "-com.apple.CoreData.MigrationDebug 1": YES
 
   # Template for adding unit tests to a scheme:
   UnitTestScheme:
