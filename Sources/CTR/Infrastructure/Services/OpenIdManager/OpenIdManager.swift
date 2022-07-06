@@ -18,7 +18,7 @@ protocol OpenIdManaging: AnyObject {
 	func requestAccessToken(
 		issuerConfiguration: IssuerConfiguration,
 		presentingViewController: UIViewController?,
-		onCompletion: @escaping (OIDTokenResponse) -> Void,
+		onCompletion: @escaping (OpenIdManagerToken) -> Void,
 		onError: @escaping (Error?) -> Void)
 }
 
@@ -35,6 +35,16 @@ protocol IssuerConfiguration: AnyObject {
 	/// Get the redirect uri
 	/// - Returns: the redirect uri
 	func getRedirectUri() -> URL
+}
+
+protocol OpenIdManagerToken {
+	
+	var idToken: String? { get }
+	var accessToken: String? { get }
+}
+
+extension OIDTokenResponse: OpenIdManagerToken {
+	
 }
 
 class OpenIdManager: OpenIdManaging {
@@ -57,7 +67,7 @@ class OpenIdManager: OpenIdManaging {
 	func requestAccessToken(
 		issuerConfiguration: IssuerConfiguration,
 		presentingViewController: UIViewController?,
-		onCompletion: @escaping (OIDTokenResponse) -> Void,
+		onCompletion: @escaping (OpenIdManagerToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
 			discoverServiceConfiguration(issuerConfiguration: issuerConfiguration) { [weak self] result in
@@ -81,7 +91,7 @@ class OpenIdManager: OpenIdManaging {
 		issuerConfiguration: IssuerConfiguration,
 		serviceConfiguration: OIDServiceConfiguration,
 		presentingViewController: UIViewController?,
-		onCompletion: @escaping (OIDTokenResponse) -> Void,
+		onCompletion: @escaping (OpenIdManagerToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
 			isAuthorizationInProgress = true

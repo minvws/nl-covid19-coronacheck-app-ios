@@ -23,7 +23,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 
-		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, tvsToken: .test, eventMode: .vaccination)
+		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -82,7 +82,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -106,7 +106,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -131,7 +131,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -155,7 +155,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -177,7 +177,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -200,7 +200,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -222,7 +222,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -247,7 +247,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -271,7 +271,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -295,7 +295,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -319,7 +319,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -343,7 +343,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -367,7 +367,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -389,7 +389,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -413,7 +413,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -437,7 +437,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -461,7 +461,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -485,7 +485,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -510,7 +510,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -536,7 +536,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -561,7 +561,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -586,7 +586,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .recovery
 		)
 
@@ -611,7 +611,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .test
 		)
 
@@ -637,7 +637,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -664,7 +664,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -684,7 +684,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -708,7 +708,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 
@@ -732,7 +732,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			tvsToken: "test",
 			eventMode: .vaccination
 		)
 		

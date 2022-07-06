@@ -1106,11 +1106,6 @@ extension UIImage {
 	}
 }
 
-extension TVSAuthorizationToken {
-	
-	static var test: TVSAuthorizationToken = .init(idTokenString: "test", expiration: now.addingTimeInterval(5 * minutes * fromNow))
-}
-
 extension EventFlow.EventInformationAvailable {
 	static var fakeInformationIsAvailable: EventFlow.EventInformationAvailable {
 		EventFlow.EventInformationAvailable(

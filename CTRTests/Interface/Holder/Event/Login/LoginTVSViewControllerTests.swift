@@ -75,7 +75,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 	func test_login_success() {
 		
 		// Given
-		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 		sut = LoginTVSViewController(viewModel: viewModel)
 		
 		// When
@@ -83,7 +83,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
@@ -127,4 +127,9 @@ class LoginTVSViewControllerTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
+}
+
+struct OpenIdManagerIdToken: OpenIdManagerToken {
+	var idToken: String? = "test"
+	var accessToken: String?
 }

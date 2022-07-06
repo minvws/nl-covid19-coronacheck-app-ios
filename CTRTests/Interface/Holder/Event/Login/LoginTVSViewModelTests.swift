@@ -161,7 +161,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 
 		// When
 		sut.login()
@@ -175,7 +175,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {

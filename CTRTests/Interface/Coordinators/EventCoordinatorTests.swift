@@ -282,7 +282,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.loginTVSScreenDidFinish(.didLogin(token: TVSAuthorizationToken.test, eventMode: .vaccination))
+		sut.loginTVSScreenDidFinish(.didLogin(token: "test", eventMode: .vaccination))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -568,7 +568,7 @@ class EventCoordinatorTests: XCTestCase {
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
 			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: TVSAuthorizationToken.test, eventMode: .vaccination ))
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", eventMode: .vaccination ))
 		]
 		
 		// When
@@ -631,7 +631,7 @@ class EventCoordinatorTests: XCTestCase {
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
 			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: TVSAuthorizationToken.test, eventMode: .vaccination )),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", eventMode: .vaccination )),
 			ListRemoteEventsViewController(
 				viewModel: ListRemoteEventsViewModel(
 					coordinator: sut,
