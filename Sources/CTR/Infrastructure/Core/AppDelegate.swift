@@ -28,12 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 				// Disable UIView animations for UI testing
 				UIView.setAnimationsEnabled(false)
 			}
-			
-			if !ProcessInfo.processInfo.isTesting {
-				// Setup Logging
-				Current.logHandler.setup()
-			}
-			
+
 			styleUI()
 			
 			if #unavailable(iOS 13.0) {
