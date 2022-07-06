@@ -233,4 +233,35 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCompletedAlternativeRoute) == true
 	}
+	
+	func test_userWishesToChooseEventLocation_ggdPortalDisabled() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = false
+		
+		// When
+		sut.userHasNoBSN()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title()
+		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message(L.holder_contactProviderHelpdesk_vaccinated())
+	}
+	
+	func test_userWishesToChooseEventLocation_ggdPortalEnabled() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
+		
+		// When
+		sut.userHasNoBSN()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel is ChooseEventLocationViewModel) == true
+		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
+	}
 }
