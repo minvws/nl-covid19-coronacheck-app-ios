@@ -130,17 +130,14 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishesToContactHelpDeksWithoutBSN() {
 		
-		let title: String
 		let message: String
 		
 		if Current.featureFlagManager.isGGDPortalEnabled() {
-			title = L.holder_contactProviderHelpdesk_title_ggdEnabled()
-			message = L.holder_contactProviderHelpdesk_message_ggdEnabled(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+			message = L.holder_contactProviderHelpdesk_message_ggdPortalEnabled(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
 		} else {
-			title = L.holder_contactProviderHelpdesk_title(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinationLocation() : L.holder_contactProviderHelpdesk_testLocation())
 			message = L.holder_contactProviderHelpdesk_message(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
 		}
-		displayContent(title: title, message: message)
+		displayContent(title: L.holder_contactProviderHelpdesk_title(), message: message)
 	}
 	
 	func userWishedToGoToGGDPortal() {

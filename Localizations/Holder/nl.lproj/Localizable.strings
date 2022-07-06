@@ -545,11 +545,9 @@
 "holder_contactCoronaCheckHelpdesk_message" = "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je elke dag tussen 08.00 en 20.00 uur bellen op: <a href=\"tel:0800-1421\">0800-1421</a> (gratis).</p>\n<p>Of als je vanuit het buitenland belt: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>\n<p>Of vraag je bewijs aan door te mailen naar: <a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>";
 "holder_contactCoronaCheckHelpdesk_title" = "Vraag je coronabewijs aan via de helpdesk";
 "holder_contactProviderHelpdesk_message" = "<p>Vraag je bewijs aan bij de locatie waar je %@ bent.</p><ul><li>Was dit bij de GGD? Bel de GGD op <a href=\"tel:0888-5090\">0800 - 5090</a> om je bewijs aan te vragen.</li><li>Was dit ergens anders? Bijvoorbeeld bij je huisarts of een andere zorgverlener? Neem direct contact op met hen.</li></ul><p>Je kunt je coronabewijs aanvragen op papier of als pdf-bestand.</p>";
-"holder_contactProviderHelpdesk_testLocation" = "testlocatie";
 "holder_contactProviderHelpdesk_tested" = "getest";
-"holder_contactProviderHelpdesk_title" = "Vraag je coronabewijs aan bij je %@";
+"holder_contactProviderHelpdesk_title" = "Vraag je coronabewijs aan via een zorgverlener";
 "holder_contactProviderHelpdesk_vaccinated" = "gevaccineerd";
-"holder_contactProviderHelpdesk_vaccinationLocation" = "vaccinatielocatie";
 "holder_dashboard_3Gand1GaccessBanner_link" = "https://coronacheck.nl/toegangsregels/3g-1g-bewijs";
 "holder_dashboard_3Gand1GaccessBanner_title" = "De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.";
 "holder_dashboard_accessibility_access" = "Toegangsbewijs";
@@ -805,10 +803,9 @@
 "visitorpass_token_next" = "Volgende";
 
 "holder_chooseEventLocation_title" = "Waar ben je %@?";
-"holder_chooseEventLocation_buttonSubTitle_GGD" = "Regel je bewijs via de GGD";
-"holder_chooseEventLocation_buttonSubTitle_other" = "Een andere zorgverlener";
 "holder_chooseEventLocation_buttonTitle_GGD" = "GGD";
-"holder_chooseEventLocation_buttonTitle_other" = "Regel je bewijs via bijvoorbeeld je huisarts of andere zorginstelling";
+"holder_chooseEventLocation_buttonSubTitle_GGD" = "Regel je bewijs via de GGD";
+"holder_chooseEventLocation_buttonTitle_other" = "Een andere zorgverlener";
+"holder_chooseEventLocation_buttonSubTitle_other" = "Regel je bewijs via bijvoorbeeld je huisarts of andere zorginstelling";
 
-"holder_contactProviderHelpdesk_title_ggdEnabled" = "Vraag je coronabewijs aan bij je zorgverlener";
-"holder_contactProviderHelpdesk_message_ggdEnabled" = "Neem contact op met de zorgverlener waar je bent %@. Hier kun je jouw coronabewijs aanvragen op papier of als pdf-bestand.";
+"holder_contactProviderHelpdesk_message_ggdPortalEnabled" = "Neem contact op met de zorgverlener waar je bent %@. Hier kun je jouw coronabewijs aanvragen op papier of als pdf-bestand.";
