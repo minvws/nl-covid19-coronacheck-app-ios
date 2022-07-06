@@ -43,7 +43,7 @@ class CheckForBSNViewModelTests: XCTestCase {
 		
 		// Assert
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithBSN) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == false
+		expect(self.coordinatorDelegateSpy.invokedUserHasNoBSN) == false
 	}
 	
 	func test_doesNotHaveBSN() {
@@ -55,6 +55,6 @@ class CheckForBSNViewModelTests: XCTestCase {
 		
 		// Assert
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithBSN) == false
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserHasNoBSN) == true
 	}
 }

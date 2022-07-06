@@ -60,6 +60,6 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserHasNoBSN) == true
 	}
 }
