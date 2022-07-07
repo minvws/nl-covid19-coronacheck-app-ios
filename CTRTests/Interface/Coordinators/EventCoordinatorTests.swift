@@ -282,7 +282,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.loginTVSScreenDidFinish(.didLogin(token: "test", eventMode: .vaccination))
+		sut.loginTVSScreenDidFinish(.didLogin(tvsToken: "test", portalToken: nil, eventMode: .vaccination))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -294,7 +294,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
 		]
 		
 		// When
@@ -311,7 +311,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
 		]
 		
 		// When
@@ -345,7 +345,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment, loginMode: .tvs))
 		]
 		
 		// When
@@ -362,7 +362,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment, loginMode: .tvs))
 		]
 		
 		// When
@@ -378,7 +378,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
 		]
 		
 		// When
@@ -394,7 +394,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
 		]
 		
 		// When
@@ -411,7 +411,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
 		]
 		
 		// When
@@ -428,7 +428,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, loginMode: .tvs))
 		]
 		
 		// When
@@ -456,7 +456,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest, loginMode: .tvs))
 		]
 		
 		// When
@@ -472,7 +472,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .recovery)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .recovery))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .recovery, loginMode: .tvs))
 		]
 		
 		// When
@@ -567,8 +567,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", eventMode: .vaccination ))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, loginMode: .tvs)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", portalToken: nil, eventMode: .vaccination ))
 		]
 		
 		// When
@@ -630,8 +630,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", eventMode: .vaccination )),
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, loginMode: .tvs)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", portalToken: nil,  eventMode: .vaccination )),
 			ListRemoteEventsViewController(
 				viewModel: ListRemoteEventsViewModel(
 					coordinator: sut,
@@ -782,7 +782,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 	}
 	
-	func test_ccompletedAlternativeRoute() {
+	func test_backToMyOverview() {
 		
 		// Given
 		let alternativeCoordinator = AlternativeRouteCoordinator(
@@ -793,20 +793,20 @@ class EventCoordinatorTests: XCTestCase {
 		sut.childCoordinators = [alternativeCoordinator]
 		
 		// When
-		sut.completedAlternativeRoute()
+		sut.backToMyOverview()
 		
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
-	func test_ccompletedAlternativeRoute_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
+	func test_backToMyOverview_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
 		
 		// Given
 		sut.childCoordinators = []
 		
 		// When
-		sut.completedAlternativeRoute()
+		sut.backToMyOverview()
 		
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())

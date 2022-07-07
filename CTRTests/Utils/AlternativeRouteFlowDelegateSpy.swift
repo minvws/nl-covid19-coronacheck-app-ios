@@ -17,11 +17,23 @@ class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 		invokedCanceledAlternativeRouteCount += 1
 	}
 
-	var invokedCompletedAlternativeRoute = false
-	var invokedCompletedAlternativeRouteCount = 0
+	var invokedBackToMyOverview = false
+	var invokedBackToMyOverviewCount = 0
 
-	func completedAlternativeRoute() {
-		invokedCompletedAlternativeRoute = true
-		invokedCompletedAlternativeRouteCount += 1
+	func backToMyOverview() {
+		invokedBackToMyOverview = true
+		invokedBackToMyOverviewCount += 1
+	}
+
+	var invokedStartPortalFlow = false
+	var invokedStartPortalFlowCount = 0
+	var invokedStartPortalFlowParameters: (eventMode: EventMode, Void)?
+	var invokedStartPortalFlowParametersList = [(eventMode: EventMode, Void)]()
+
+	func startPortalFlow(eventMode: EventMode) {
+		invokedStartPortalFlow = true
+		invokedStartPortalFlowCount += 1
+		invokedStartPortalFlowParameters = (eventMode, ())
+		invokedStartPortalFlowParametersList.append((eventMode, ()))
 	}
 }

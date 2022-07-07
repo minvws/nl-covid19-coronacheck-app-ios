@@ -34,7 +34,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// When
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		// Then
@@ -53,7 +54,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// When
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .recovery
+			eventMode: .recovery,
+			loginMode: .tvs
 		)
 
 		// Then
@@ -72,7 +74,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// When
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .test
+			eventMode: .test,
+			loginMode: .tvs
 		)
 
 		// Then
@@ -91,7 +94,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// When
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .paperflow
+			eventMode: .paperflow,
+			loginMode: .tvs
 		)
 
 		// Then
@@ -108,7 +112,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		// When
@@ -125,6 +130,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
+			loginMode: .tvs,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
@@ -142,6 +148,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
+			loginMode: .tvs,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
@@ -159,12 +166,13 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 
 		// When
-		sut.login()
+		sut.login(presentingViewController: UIViewController())
 
 		// Then
 		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
@@ -175,7 +183,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(tvsToken: "test", portalToken: nil, eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {
@@ -183,13 +191,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
 
 		// When
-		sut.login()
+		sut.login(presentingViewController: UIViewController())
 
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -211,13 +220,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
 
 		// When
-		sut.login()
+		sut.login(presentingViewController: UIViewController())
 
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -239,13 +249,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
 
 		// When
-		sut.login()
+		sut.login(presentingViewController: UIViewController())
 
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -257,12 +268,13 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
 		// When
-		sut.login()
+		sut.login(presentingViewController: UIViewController())
 
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -274,7 +286,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -298,7 +311,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			// When
 			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDGeneralErrorDomain, code: code, userInfo: nil), ())
-			sut.login()
+			sut.login(presentingViewController: UIViewController())
 
 			// Then
 			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -321,7 +334,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -341,7 +355,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			// When
 			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthAuthorizationErrorDomain, code: code, userInfo: nil), ())
-			sut.login()
+			sut.login(presentingViewController: UIViewController())
 
 			// Then
 			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -364,7 +378,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -383,7 +398,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			// When
 			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthTokenErrorDomain, code: code, userInfo: nil), ())
-			sut.login()
+			sut.login(presentingViewController: UIViewController())
 
 			// Then
 			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -406,13 +421,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		// When
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: OIDResourceServerAuthorizationErrorDomain, code: 123, userInfo: nil), ())
-		sut.login()
+		sut.login(presentingViewController: UIViewController())
 
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
@@ -434,7 +450,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -450,7 +467,7 @@ class LoginTVSViewModelTests: XCTestCase {
 			// When
 			environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 				(NSError(domain: OIDOAuthRegistrationErrorDomain, code: code, userInfo: nil), ())
-			sut.login()
+			sut.login(presentingViewController: UIViewController())
 
 			// Then
 			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true

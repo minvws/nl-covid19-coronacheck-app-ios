@@ -23,7 +23,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 
-		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination)
+		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", portalToken: nil, eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -83,6 +83,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -107,6 +108,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -132,6 +134,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -156,6 +159,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -178,6 +182,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -201,6 +206,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -223,6 +229,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -248,6 +255,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -272,6 +280,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -296,6 +305,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -320,6 +330,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -344,6 +355,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -368,6 +380,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -390,6 +403,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -414,6 +428,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -438,6 +453,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -462,6 +478,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -486,6 +503,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -511,6 +529,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -537,6 +556,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -562,6 +582,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -587,6 +608,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .recovery
 		)
 
@@ -612,6 +634,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .test
 		)
 
@@ -638,6 +661,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -665,6 +689,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -685,6 +710,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -709,6 +735,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 
@@ -733,6 +760,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			portalToken: nil,
 			eventMode: .vaccination
 		)
 		

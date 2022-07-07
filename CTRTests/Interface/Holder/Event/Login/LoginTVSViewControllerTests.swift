@@ -30,7 +30,8 @@ class LoginTVSViewControllerTests: XCTestCase {
 		appAuthStateSpy = AppAuthStateSpy()
 		viewModel = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			loginMode: .tvs
 		)
 		window = UIWindow()
 	}
@@ -83,7 +84,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(tvsToken: "test", portalToken: nil, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
