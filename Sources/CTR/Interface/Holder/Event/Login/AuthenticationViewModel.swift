@@ -24,9 +24,9 @@ enum AuthenticationMode {
 	var step: ErrorCode.Step {
 		switch self {
 			case .max:
-				return .tvs
+				return .max
 			case .pap:
-				return .ggdGhorPortal
+				return .pap
 		}
 	}
 }
