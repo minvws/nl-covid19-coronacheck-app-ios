@@ -9,7 +9,7 @@
 		<key>clientId</key>
 		<string>cc_app</string>
 		<key>redirectUri</key>
-		<string>https://web.acc.coronacheck.nl/app/auth2</string>
+		<string>https://coronacheck.nl/app/auth2</string>
 	</dict>
 	<key>general</key>
 	<dict>
