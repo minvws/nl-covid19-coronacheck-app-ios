@@ -13,7 +13,7 @@ import AppAuth
 class LoginTVSViewModelTests: XCTestCase {
 
 	/// Subject under test
-	private var sut: LoginTVSViewModel!
+	private var sut: AuthenticationViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var appAuthStateSpy: AppAuthStateSpy!
@@ -32,10 +32,10 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		// Then
@@ -52,10 +52,10 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		// Then
@@ -72,10 +72,10 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		// Then
@@ -92,10 +92,10 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		// Then
@@ -110,10 +110,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_cancel() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		// When
@@ -127,10 +127,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_cancelAuthorization_whenRequestedAuthorizationIsFalse_shouldNotInvokeCoordinator() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs,
+			authenticationMode: .max,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
@@ -145,10 +145,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_abortAuthorization_whenRequestedAuthorization_shouldInvokeCoordinator() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs,
+			authenticationMode: .max,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
@@ -164,10 +164,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_success_accessToken_ok() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 
@@ -183,16 +183,16 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(tvsToken: "test", portalToken: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(maxToken: "test", papToken: nil, eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
@@ -218,10 +218,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_serverbusy() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
@@ -247,10 +247,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_userCancelled() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
@@ -266,10 +266,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_userCancelled_OIDErrorCode() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
@@ -284,10 +284,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_generalError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -332,10 +332,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_AuthAuthorizationError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -376,10 +376,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_AuthTokenError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -419,10 +419,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_ResourceServerAuthorizationError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		// When
@@ -448,10 +448,10 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_AuthRegistrationError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			issuerMode: .tvs
+			authenticationMode: .max
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [

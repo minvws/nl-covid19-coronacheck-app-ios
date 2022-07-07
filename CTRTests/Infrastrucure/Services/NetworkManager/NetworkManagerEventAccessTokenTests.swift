@@ -49,7 +49,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isSuccess) == true
@@ -73,7 +73,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -95,7 +95,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -116,7 +116,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -138,7 +138,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -160,7 +160,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -182,7 +182,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -204,7 +204,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -226,7 +226,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -247,7 +247,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(tvsToken: token) { result in
+			self.sut.fetchEventAccessTokens(maxToken: token) { result in
 				
 				// Then
 				expect(result.isFailure) == true

@@ -313,13 +313,13 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the access tokens for the various event providers
 	/// - Parameters:
-	///   - tvsToken: the tvs token
+	///   - maxToken: the tvs token
 	///   - completion: completion handler
 	func fetchEventAccessTokens(
-		tvsToken: String,
+		maxToken: String,
 		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 		
-		let tokenHeader = [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
+		let tokenHeader = [HTTPHeaderKey.authorization: "Bearer \(maxToken)"]
 		guard let url = networkConfiguration.eventAccessTokensUrl,
 			  let urlRequest = URLRequest(url: url, method: .POST, headers: tokenHeader) else {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))

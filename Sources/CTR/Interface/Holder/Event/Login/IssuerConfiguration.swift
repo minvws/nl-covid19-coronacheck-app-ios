@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TVSConfig: IssuerConfiguration {
+class MaxConfig: IssuerConfiguration {
 	
 	func getIssuerURL() -> URL {
 		return Configuration().getTVSURL()
@@ -22,7 +22,7 @@ class TVSConfig: IssuerConfiguration {
 	}
 }
 
-class GGDGHORConfig: IssuerConfiguration {
+class PapConfig: IssuerConfiguration {
 	
 	func getIssuerURL() -> URL {
 		return Configuration().getPortalURL()

@@ -25,15 +25,15 @@ class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 		invokedBackToMyOverviewCount += 1
 	}
 
-	var invokedContinueToGGDPortal = false
-	var invokedContinueToGGDPortalCount = 0
-	var invokedContinueToGGDPortalParameters: (eventMode: EventMode, Void)?
-	var invokedContinueToGGDPortalParametersList = [(eventMode: EventMode, Void)]()
+	var invokedContinueToPap = false
+	var invokedContinueToPapCount = 0
+	var invokedContinueToPapParameters: (eventMode: EventMode, Void)?
+	var invokedContinueToPapParametersList = [(eventMode: EventMode, Void)]()
 
-	func continueToGGDPortal(eventMode: EventMode) {
-		invokedContinueToGGDPortal = true
-		invokedContinueToGGDPortalCount += 1
-		invokedContinueToGGDPortalParameters = (eventMode, ())
-		invokedContinueToGGDPortalParametersList.append((eventMode, ()))
+	func continueToPap(eventMode: EventMode) {
+		invokedContinueToPap = true
+		invokedContinueToPapCount += 1
+		invokedContinueToPapParameters = (eventMode, ())
+		invokedContinueToPapParametersList.append((eventMode, ()))
 	}
 }

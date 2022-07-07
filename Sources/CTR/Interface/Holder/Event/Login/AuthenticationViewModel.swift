@@ -8,37 +8,37 @@
 import UIKit
 import AppAuth
 
-enum IssuerMode {
-	case tvs // TVS - Digid
-	case ggdGhorPortal // GGD GHOR Portal
+enum AuthenticationMode {
+	case max // TVS - Digid (many authentication exchange)
+	case pap // GGD GHOR Portal (patient authentication provider)
 	
 	var configuration: IssuerConfiguration {
 		switch self {
-			case .tvs:
-				return TVSConfig()
-			case .ggdGhorPortal:
-				return GGDGHORConfig()
+			case .max:
+				return MaxConfig()
+			case .pap:
+				return PapConfig()
 		}
 	}
 	
 	var step: ErrorCode.Step {
 		switch self {
-			case .tvs:
+			case .max:
 				return .tvs
-			case .ggdGhorPortal:
+			case .pap:
 				return .ggdGhorPortal
 		}
 	}
 }
 
-class LoginTVSViewModel {
+class AuthenticationViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
 
 	private var appAuthState: AppAuthState?
 	private var eventMode: EventMode
-	private let issuerMode: IssuerMode
+	private let authenticationMode: AuthenticationMode
 	
 	@Bindable internal var content: Content
 
@@ -47,13 +47,13 @@ class LoginTVSViewModel {
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
-		issuerMode: IssuerMode,
+		authenticationMode: AuthenticationMode,
 		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
-		self.issuerMode = issuerMode
+		self.authenticationMode = authenticationMode
 
 		content = Content(title: L.holder_fetchRemoteEvents_title())
 	}
@@ -79,10 +79,10 @@ class LoginTVSViewModel {
 		)
 		
 		openIdManager?.requestAccessToken(
-			issuerConfiguration: issuerMode.configuration,
-			// use the internal browser for GGD,
-			// use the external browser for Didid (because the Digid app redirects to external browser)
-			presentingViewController: issuerMode == .ggdGhorPortal ? presentingViewController : nil,
+			issuerConfiguration: authenticationMode.configuration,
+			// use the internal browser for pap,
+			// use the external browser for tvs (because the Digid app redirects to external browser)
+			presentingViewController: authenticationMode == .pap ? presentingViewController : nil,
 			onCompletion: { token in
 				
 				self.shouldShowProgress = false
@@ -97,31 +97,31 @@ class LoginTVSViewModel {
 	
 	func handleToken(_ token: OpenIdManagerToken) {
 		
-		switch issuerMode {
-			case .tvs:
+		switch authenticationMode {
+			case .max:
 				
 				guard let idToken = token.idToken else {
 					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
 					return
 				}
 				
-				self.coordinator?.loginTVSScreenDidFinish(.didLogin(tvsToken: idToken, portalToken: nil, eventMode: self.eventMode))
+				self.coordinator?.loginTVSScreenDidFinish(.didLogin(maxToken: idToken, papToken: nil, eventMode: self.eventMode))
 				
-			case .ggdGhorPortal:
+			case .pap:
 				
 				guard let accessToken = token.accessToken else {
 					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
 					return
 				}
 				
-				self.coordinator?.loginTVSScreenDidFinish(.didLogin(tvsToken: nil, portalToken: accessToken, eventMode: self.eventMode))
+				self.coordinator?.loginTVSScreenDidFinish(.didLogin(maxToken: nil, papToken: accessToken, eventMode: self.eventMode))
 		}
 	}
 }
 
 // MARK: Error States
 
-extension LoginTVSViewModel {
+extension AuthenticationViewModel {
 
 	func handleError(_ error: Error?) {
 
@@ -134,7 +134,7 @@ extension LoginTVSViewModel {
 				displayServerBusy(
 					errorCode: ErrorCode(
 						flow: eventMode.flow,
-						step: issuerMode.step,
+						step: authenticationMode.step,
 						errorCode: "429"
 					)
 				)
@@ -149,7 +149,7 @@ extension LoginTVSViewModel {
 
 						let errorCode = ErrorCode(
 							flow: eventMode.flow,
-							step: issuerMode.step,
+							step: authenticationMode.step,
 							clientCode: networkError.getClientErrorCode() ?? .unhandled
 						)
 						self.displayUnreachable(errorCode: errorCode)
@@ -162,7 +162,7 @@ extension LoginTVSViewModel {
 
 		let errorCode = ErrorCode(
 			flow: eventMode.flow,
-			step: issuerMode.step,
+			step: authenticationMode.step,
 			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
 		)
 		self.displayErrorCode(errorCode: errorCode)

@@ -13,7 +13,7 @@ protocol AlternativeRouteFlowDelegate: AnyObject {
 	
 	func backToMyOverview()
 	
-	func continueToGGDPortal(eventMode: EventMode)
+	func continueToPap(eventMode: EventMode)
 }
 
 protocol AlternativeRouteCoordinatorDelegate: AnyObject {
@@ -144,7 +144,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishedToGoToGGDPortal() {
 		
-		delegate?.continueToGGDPortal(eventMode: eventMode)
+		delegate?.continueToPap(eventMode: eventMode)
 	}
 	
 	private func displayContent(title: String, message: String) {

@@ -16,12 +16,12 @@ struct SecurityCheckerFactory {
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 			
 #if DEBUG
-		if case SecurityStrategy.none = strategy {
+//		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
-		}
+//		}
 #endif
 		// Default for .config
 		var trustedName: String? = TrustConfiguration.commonNameContent

@@ -29,7 +29,7 @@ enum EventScreenResult: Equatable {
 	case `continue`(eventMode: EventMode)
 
 	// Login happy path:
-	case didLogin(tvsToken: String?, portalToken: String?, eventMode: EventMode)
+	case didLogin(maxToken: String?, papToken: String?, eventMode: EventMode)
 	
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
@@ -53,8 +53,8 @@ enum EventScreenResult: Equatable {
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
 				return lhsEventMode == rhsEventMode
 				
-			case let (.didLogin(lhsToken, lhsPortalToken, lhsEventMode), .didLogin(rhsToken, rhsPortalToken, rhsEventMode)):
-				return (lhsToken, lhsPortalToken, lhsEventMode) == (rhsToken, rhsPortalToken, rhsEventMode)
+			case let (.didLogin(lhsToken, lhspapToken, lhsEventMode), .didLogin(rhsToken, rhspapToken, rhsEventMode)):
+				return (lhsToken, lhspapToken, lhsEventMode) == (rhsToken, rhspapToken, rhsEventMode)
 				
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
@@ -208,24 +208,24 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToLogin(eventMode: EventMode, issuerMode: IssuerMode = .tvs) {
+	private func navigateToAuthentication(eventMode: EventMode, authenticationMode: AuthenticationMode = .max) {
 
-		let viewController = LoginTVSViewController(
-			viewModel: LoginTVSViewModel(
+		let viewController = AuthenticationViewController(
+			viewModel: AuthenticationViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				issuerMode: issuerMode
+				authenticationMode: authenticationMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(tvsToken: String?, portalToken: String?, eventMode: EventMode) {
+	private func navigateToFetchEvents(maxToken: String?, papToken: String?, eventMode: EventMode) {
 		let viewController = FetchRemoteEventsViewController(
 			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
-				tvsToken: tvsToken,
-				portalToken: portalToken,
+				maxToken: maxToken,
+				papToken: papToken,
 				eventMode: eventMode
 			)
 		)
@@ -364,7 +364,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .back(eventMode): handleBackAction(eventMode: eventMode)
 			case .stop: delegate?.eventFlowDidCancel()
 			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
-			case let .continue(eventMode): navigateToLogin(eventMode: eventMode)
+			case let .continue(eventMode): navigateToAuthentication(eventMode: eventMode)
 			default: break
 		}
 	}
@@ -378,8 +378,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 
-			case let .didLogin(tvsToken, portalToken, eventMode):
-				navigateToFetchEvents(tvsToken: tvsToken, portalToken: portalToken, eventMode: eventMode)
+			case let .didLogin(maxToken, papToken, eventMode):
+				navigateToFetchEvents(maxToken: maxToken, papToken: papToken, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)
@@ -530,11 +530,11 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		delegate?.eventFlowDidComplete()
 	}
 	
-	func continueToGGDPortal(eventMode: EventMode) {
+	func continueToPap(eventMode: EventMode) {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
-		navigateToLogin(eventMode: eventMode, issuerMode: .ggdGhorPortal)
+		navigateToAuthentication(eventMode: eventMode, authenticationMode: .pap)
 	}
 }
 
