@@ -294,7 +294,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, issuerMode: .tvs))
 		]
 		
 		// When
@@ -311,7 +311,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, issuerMode: .tvs))
 		]
 		
 		// When
@@ -345,7 +345,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment, issuerMode: .tvs))
 		]
 		
 		// When
@@ -362,7 +362,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationassessment, issuerMode: .tvs))
 		]
 		
 		// When
@@ -378,7 +378,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, issuerMode: .tvs))
 		]
 		
 		// When
@@ -394,7 +394,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, issuerMode: .tvs))
 		]
 		
 		// When
@@ -411,7 +411,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .test, issuerMode: .tvs))
 		]
 		
 		// When
@@ -428,7 +428,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, issuerMode: .tvs))
 		]
 		
 		// When
@@ -456,7 +456,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest, issuerMode: .tvs))
 		]
 		
 		// When
@@ -472,7 +472,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .recovery)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .recovery, loginMode: .tvs))
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .recovery, issuerMode: .tvs))
 		]
 		
 		// When
@@ -567,7 +567,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, loginMode: .tvs)),
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, issuerMode: .tvs)),
 			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", portalToken: nil, eventMode: .vaccination ))
 		]
 		
@@ -630,7 +630,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, loginMode: .tvs)),
+			LoginTVSViewController(viewModel: LoginTVSViewModel(coordinator: sut, eventMode: .vaccination, issuerMode: .tvs)),
 			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, tvsToken: "test", portalToken: nil,  eventMode: .vaccination )),
 			ListRemoteEventsViewController(
 				viewModel: ListRemoteEventsViewModel(

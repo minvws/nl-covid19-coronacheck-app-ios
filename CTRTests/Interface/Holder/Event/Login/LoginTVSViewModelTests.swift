@@ -35,7 +35,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		// Then
@@ -55,7 +55,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		// Then
@@ -75,7 +75,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		// Then
@@ -95,7 +95,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		// Then
@@ -113,7 +113,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		// When
@@ -130,7 +130,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs,
+			issuerMode: .tvs,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
@@ -148,7 +148,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs,
+			issuerMode: .tvs,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
@@ -167,7 +167,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 
@@ -192,7 +192,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
@@ -221,7 +221,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
@@ -250,7 +250,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
@@ -269,7 +269,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
@@ -287,7 +287,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -335,7 +335,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -379,7 +379,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -422,7 +422,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		// When
@@ -451,7 +451,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [

@@ -208,19 +208,19 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToLogin(eventMode: EventMode, loginMode: LoginMode = .tvs) {
+	private func navigateToLogin(eventMode: EventMode, issuerMode: IssuerMode = .tvs) {
 
 		let viewController = LoginTVSViewController(
 			viewModel: LoginTVSViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				loginMode: loginMode
+				issuerMode: issuerMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(tvsToken: String?, portalToken: String?,  eventMode: EventMode) {
+	private func navigateToFetchEvents(tvsToken: String?, portalToken: String?, eventMode: EventMode) {
 		let viewController = FetchRemoteEventsViewController(
 			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
@@ -530,12 +530,11 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		delegate?.eventFlowDidComplete()
 	}
 	
-	func startPortalFlow(eventMode: EventMode) {
+	func continueToGGDPortal(eventMode: EventMode) {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
-		
-		navigateToLogin(eventMode: eventMode, loginMode: .ggdGhorPortal)
+		navigateToLogin(eventMode: eventMode, issuerMode: .ggdGhorPortal)
 	}
 }
 

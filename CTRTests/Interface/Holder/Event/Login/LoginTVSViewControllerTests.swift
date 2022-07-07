@@ -31,7 +31,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		viewModel = LoginTVSViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			loginMode: .tvs
+			issuerMode: .tvs
 		)
 		window = UIWindow()
 	}

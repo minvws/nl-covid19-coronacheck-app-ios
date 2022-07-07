@@ -8,9 +8,27 @@
 import UIKit
 import AppAuth
 
-enum LoginMode {
+enum IssuerMode {
 	case tvs // TVS - Digid
 	case ggdGhorPortal // GGD GHOR Portal
+	
+	var configuration: IssuerConfiguration {
+		switch self {
+			case .tvs:
+				return TVSConfig()
+			case .ggdGhorPortal:
+				return GGDGHORConfig()
+		}
+	}
+	
+	var step: ErrorCode.Step {
+		switch self {
+			case .tvs:
+				return .tvs
+			case .ggdGhorPortal:
+				return .ggdGhorPortal
+		}
+	}
 }
 
 class LoginTVSViewModel {
@@ -20,9 +38,7 @@ class LoginTVSViewModel {
 
 	private var appAuthState: AppAuthState?
 	private var eventMode: EventMode
-	private let loginMode: LoginMode
-	private let step: ErrorCode.Step
-	private let issuerConfiguration: IssuerConfiguration
+	private let issuerMode: IssuerMode
 	
 	@Bindable internal var content: Content
 
@@ -31,21 +47,14 @@ class LoginTVSViewModel {
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
-		loginMode: LoginMode,
+		issuerMode: IssuerMode,
 		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
-		self.loginMode = loginMode
-		switch loginMode {
-			case .tvs:
-				self.step = .tvs
-				self.issuerConfiguration = TVSConfig()
-			case .ggdGhorPortal:
-				self.step = .ggdGhorPortal
-				self.issuerConfiguration = GGDGHORConfig()
-		}
+		self.issuerMode = issuerMode
+
 		content = Content(title: L.holder_fetchRemoteEvents_title())
 	}
 
@@ -70,10 +79,10 @@ class LoginTVSViewModel {
 		)
 		
 		openIdManager?.requestAccessToken(
-			issuerConfiguration: issuerConfiguration,
+			issuerConfiguration: issuerMode.configuration,
 			// use the internal browser for GGD,
 			// use the external browser for Didid (because the Digid app redirects to external browser)
-			presentingViewController: loginMode == .ggdGhorPortal ? presentingViewController : nil,
+			presentingViewController: issuerMode == .ggdGhorPortal ? presentingViewController : nil,
 			onCompletion: { token in
 				
 				self.shouldShowProgress = false
@@ -88,7 +97,7 @@ class LoginTVSViewModel {
 	
 	func handleToken(_ token: OpenIdManagerToken) {
 		
-		switch loginMode {
+		switch issuerMode {
 			case .tvs:
 				
 				guard let idToken = token.idToken else {
@@ -125,7 +134,7 @@ extension LoginTVSViewModel {
 				displayServerBusy(
 					errorCode: ErrorCode(
 						flow: eventMode.flow,
-						step: step,
+						step: issuerMode.step,
 						errorCode: "429"
 					)
 				)
@@ -140,7 +149,7 @@ extension LoginTVSViewModel {
 
 						let errorCode = ErrorCode(
 							flow: eventMode.flow,
-							step: step,
+							step: issuerMode.step,
 							clientCode: networkError.getClientErrorCode() ?? .unhandled
 						)
 						self.displayUnreachable(errorCode: errorCode)
@@ -153,7 +162,7 @@ extension LoginTVSViewModel {
 
 		let errorCode = ErrorCode(
 			flow: eventMode.flow,
-			step: step,
+			step: issuerMode.step,
 			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
 		)
 		self.displayErrorCode(errorCode: errorCode)
