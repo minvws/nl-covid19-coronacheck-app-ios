@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -11,7 +12,8 @@ final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var tvsToken: String
+	private var tvsToken: String?
+	private var portalToken: String?
 	private var eventMode: EventMode
 	private let networkManager: NetworkManaging = Current.networkManager
 	private let mappingManager: MappingManaging = Current.mappingManager
@@ -35,14 +37,20 @@ final class FetchRemoteEventsViewModel {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		tvsToken: String,
+		tvsToken: String?,
+		portalToken: String?,
 		eventMode: EventMode) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
+		self.portalToken = portalToken
 		self.eventMode = eventMode
 
 		viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
+		fetchEventProvidersWithAccessTokens(
+			tvsToken: tvsToken,
+			portalToken: portalToken,
+			completion: handleFetchEventProvidersWithAccessTokensResponse
+		)
 	}
 
 	func handleFetchEventProvidersWithAccessTokensResponse(
@@ -204,13 +212,23 @@ final class FetchRemoteEventsViewModel {
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(
+		tvsToken: String?,
+		portalToken: String?,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
+			
+		guard tvsToken != nil || portalToken != nil else {
+			
+			return
+		}
 
 		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
-		prefetchingGroup.enter()
-		fetchEventAccessTokens { result in
-			accessTokenResult = result
-			self.prefetchingGroup.leave()
+			// Skip fetching tokens if we have a portalToken
+		if let tvsToken = tvsToken {
+			prefetchingGroup.enter()
+			fetchEventAccessTokens(token: tvsToken) { result in
+				accessTokenResult = result
+				self.prefetchingGroup.leave()
+			}
 		}
 
 		var remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?
@@ -223,6 +241,7 @@ final class FetchRemoteEventsViewModel {
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
 			self.processEventProvidersWithAccessTokens(
+				portalToken: portalToken,
 				accessTokenResult: accessTokenResult,
 				remoteEventProvidersResult: remoteEventProvidersResult,
 				completion: completion
@@ -231,6 +250,7 @@ final class FetchRemoteEventsViewModel {
 	}
 
 	private func processEventProvidersWithAccessTokens(
+		portalToken: String?,
 		accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?,
 		remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
@@ -250,19 +270,27 @@ final class FetchRemoteEventsViewModel {
 			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
-
-		if let accessTokens = accessTokenResult?.successValue, let eventProviders = remoteEventProvidersResult?.successValue {
+		
+		if let eventProviders = remoteEventProvidersResult?.successValue {
 			providers = self.filterEventProvidersForEventMode(eventProviders)
-			for index in 0 ..< providers.count {
-				for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
-					providers[index].accessToken = accessToken
-				}
-			}
 			if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
 				errorCodes.append(errorCode)
 			}
+			
+			if let portalToken = portalToken {
+				// Use the GGD GHOR Portal Token for both Unomi and Event
+				for index in 0 ..< providers.count {
+					providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: portalToken, eventAccessToken: portalToken)
+				}
+			} else if let accessTokens = accessTokenResult?.successValue {
+				for index in 0 ..< providers.count {
+					for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
+						providers[index].accessToken = accessToken
+					}
+				}
+			}
 		}
-
+		
 		completion(providers, errorCodes, serverErrors)
 	}
 
@@ -327,10 +355,10 @@ final class FetchRemoteEventsViewModel {
 		}
 	}
 
-	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
+	private func fetchEventAccessTokens(token: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventAccessTokens(tvsToken: tvsToken) { [weak self] result in
+		networkManager.fetchEventAccessTokens(tvsToken: token) { [weak self] result in
 			completion(result)
 			self?.progressIndicationCounter.decrement()
 		}
@@ -730,7 +758,11 @@ private extension FetchRemoteEventsViewModel {
 				title: L.generalRetry(),
 				action: { [weak self] _ in
 					guard let self = self else { return }
-					self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+					self.fetchEventProvidersWithAccessTokens(
+						tvsToken: self.tvsToken,
+						portalToken: self.portalToken,
+						completion: self.handleFetchEventProvidersWithAccessTokensResponse
+					)
 				},
 				isPreferred: true
 			),

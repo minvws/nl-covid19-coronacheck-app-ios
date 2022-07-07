@@ -11,7 +11,9 @@ protocol AlternativeRouteFlowDelegate: AnyObject {
 
 	func canceledAlternativeRoute()
 	
-	func completedAlternativeRoute()
+	func backToMyOverview()
+	
+	func startPortalFlow(eventMode: EventMode)
 }
 
 protocol AlternativeRouteCoordinatorDelegate: AnyObject {
@@ -141,7 +143,8 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	}
 	
 	func userWishedToGoToGGDPortal() {
-		Current.logHandler.logInfo("Go to GGD GHOR Portal")
+		
+		delegate?.startPortalFlow(eventMode: eventMode)
 	}
 	
 	private func displayContent(title: String, message: String) {
@@ -152,7 +155,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 				body: message,
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
-					self?.delegate?.completedAlternativeRoute()
+					self?.delegate?.backToMyOverview()
 				}
 			),
 			backAction: { [weak navigationController] in

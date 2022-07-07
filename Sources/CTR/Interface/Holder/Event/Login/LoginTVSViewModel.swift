@@ -8,17 +8,22 @@
 import UIKit
 import AppAuth
 
+enum LoginMode {
+	case tvs // TVS - Digid
+	case ggdGhorPortal // GGD GHOR Portal
+}
+
 class LoginTVSViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
 
-	private var eventMode: EventMode
-
-	private var title: String
-	
 	private var appAuthState: AppAuthState?
-
+	private var eventMode: EventMode
+	private let loginMode: LoginMode
+	private let step: ErrorCode.Step
+	private let issuerConfiguration: IssuerConfiguration
+	
 	@Bindable internal var content: Content
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
@@ -26,13 +31,21 @@ class LoginTVSViewModel {
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
+		loginMode: LoginMode,
 		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
-
-		self.title = L.holder_fetchRemoteEvents_title()
+		self.loginMode = loginMode
+		switch loginMode {
+			case .tvs:
+				self.step = .tvs
+				self.issuerConfiguration = TVSConfig()
+			case .ggdGhorPortal:
+				self.step = .ggdGhorPortal
+				self.issuerConfiguration = GGDGHORConfig()
+		}
 		content = Content(title: L.holder_fetchRemoteEvents_title())
 	}
 
@@ -40,27 +53,13 @@ class LoginTVSViewModel {
 
 		self.coordinator?.loginTVSScreenDidFinish(.back(eventMode: eventMode))
 	}
-	
-	private class TVSConfig: IssuerConfiguration {
-		func getIssuerURL() -> URL {
-			return Configuration().getTVSURL()
-		}
-		
-		func getClientId() -> String {
-			return Configuration().getConsumerId()
-		}
-		
-		func getRedirectUri() -> URL {
-			return Configuration().getRedirectUri()
-		}
-	}
 
-	/// Login at the GGD
-	func login() {
+	/// Login
+	func login(presentingViewController: UIViewController) {
 
 		shouldShowProgress = true
 		content = Content(
-			title: title,
+			title: L.holder_fetchRemoteEvents_title(),
 			body: nil,
 			primaryActionTitle: L.generalClose(),
 			primaryAction: { [weak self] in
@@ -69,20 +68,44 @@ class LoginTVSViewModel {
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-
-		openIdManager?.requestAccessToken(issuerConfiguration: TVSConfig(), presentingViewController: nil) { tvsToken in
-
-			self.shouldShowProgress = false
-			
-			guard let idToken = tvsToken.idToken else {
-				self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
-				return
+		
+		openIdManager?.requestAccessToken(
+			issuerConfiguration: issuerConfiguration,
+			// use the internal browser for GGD,
+			// use the external browser for Didid (because the Digid app redirects to external browser)
+			presentingViewController: loginMode == .ggdGhorPortal ? presentingViewController : nil,
+			onCompletion: { token in
+				
+				self.shouldShowProgress = false
+				self.handleToken(token)
+			},
+			onError: { error in
+				self.shouldShowProgress = false
+				self.handleError(error)
 			}
-
-			self.coordinator?.loginTVSScreenDidFinish(.didLogin(token: idToken, eventMode: self.eventMode))
-		} onError: { error in
-			self.shouldShowProgress = false
-			self.handleError(error)
+		)
+	}
+	
+	func handleToken(_ token: OpenIdManagerToken) {
+		
+		switch loginMode {
+			case .tvs:
+				
+				guard let idToken = token.idToken else {
+					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
+					return
+				}
+				
+				self.coordinator?.loginTVSScreenDidFinish(.didLogin(tvsToken: idToken, portalToken: nil, eventMode: self.eventMode))
+				
+			case .ggdGhorPortal:
+				
+				guard let accessToken = token.accessToken else {
+					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
+					return
+				}
+				
+				self.coordinator?.loginTVSScreenDidFinish(.didLogin(tvsToken: nil, portalToken: accessToken, eventMode: self.eventMode))
 		}
 	}
 }
@@ -93,7 +116,7 @@ extension LoginTVSViewModel {
 
 	func handleError(_ error: Error?) {
 
-		Current.logHandler.logError("TVS error: \(error?.localizedDescription ?? "Unknown error")")
+		Current.logHandler.logError("Login error: \(error?.localizedDescription ?? "Unknown error")")
 		let clientCode = OpenIdErrorMapper().mapError(error)
 
 		if let error = error {
@@ -102,7 +125,7 @@ extension LoginTVSViewModel {
 				displayServerBusy(
 					errorCode: ErrorCode(
 						flow: eventMode.flow,
-						step: .tvs,
+						step: step,
 						errorCode: "429"
 					)
 				)
@@ -117,7 +140,7 @@ extension LoginTVSViewModel {
 
 						let errorCode = ErrorCode(
 							flow: eventMode.flow,
-							step: .tvs,
+							step: step,
 							clientCode: networkError.getClientErrorCode() ?? .unhandled
 						)
 						self.displayUnreachable(errorCode: errorCode)
@@ -130,7 +153,7 @@ extension LoginTVSViewModel {
 
 		let errorCode = ErrorCode(
 			flow: eventMode.flow,
-			step: .tvs,
+			step: step,
 			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
 		)
 		self.displayErrorCode(errorCode: errorCode)

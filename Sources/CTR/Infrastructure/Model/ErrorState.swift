@@ -105,6 +105,7 @@ extension ErrorCode.Step {
 extension ErrorCode.Step {
 
 	static let tvs = ErrorCode.Step(value: "10")
+	static let ggdGhorPortal = ErrorCode.Step(value: "15")
 	static let accessTokens = ErrorCode.Step(value: "30")
 	static let unomi = ErrorCode.Step(value: "40")
 	static let event = ErrorCode.Step(value: "50")

@@ -28,8 +28,8 @@ enum EventScreenResult: Equatable {
 	/// Continue with the next step in the flow
 	case `continue`(eventMode: EventMode)
 
-	// LoginTVS happy path:
-	case didLogin(token: String, eventMode: EventMode)
+	// Login happy path:
+	case didLogin(tvsToken: String?, portalToken: String?, eventMode: EventMode)
 	
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
@@ -53,10 +53,12 @@ enum EventScreenResult: Equatable {
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
 				return lhsEventMode == rhsEventMode
 				
-			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
-				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
+			case let (.didLogin(lhsToken, lhsPortalToken, lhsEventMode), .didLogin(rhsToken, rhsPortalToken, rhsEventMode)):
+				return (lhsToken, lhsPortalToken, lhsEventMode) == (rhsToken, rhsPortalToken, rhsEventMode)
+				
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
+				
 			case (let .showEvents(lhsEvents, lhsMode, lhsComplete), let .showEvents(rhsEvents, rhsMode, rhsComplete)):
 
 				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
@@ -206,22 +208,24 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToLogin(eventMode: EventMode) {
+	private func navigateToLogin(eventMode: EventMode, loginMode: LoginMode = .tvs) {
 
 		let viewController = LoginTVSViewController(
 			viewModel: LoginTVSViewModel(
 				coordinator: self,
-				eventMode: eventMode
+				eventMode: eventMode,
+				loginMode: loginMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
+	private func navigateToFetchEvents(tvsToken: String?, portalToken: String?,  eventMode: EventMode) {
 		let viewController = FetchRemoteEventsViewController(
 			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
-				tvsToken: token,
+				tvsToken: tvsToken,
+				portalToken: portalToken,
 				eventMode: eventMode
 			)
 		)
@@ -374,8 +378,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 
-			case let .didLogin(token, eventMode):
-				navigateToFetchEvents(token: token, eventMode: eventMode)
+			case let .didLogin(tvsToken, portalToken, eventMode):
+				navigateToFetchEvents(tvsToken: tvsToken, portalToken: portalToken, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)
@@ -519,11 +523,19 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		removeChildCoordinator(coordinator)
 	}
 	
-	func completedAlternativeRoute() {
+	func backToMyOverview() {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
 		delegate?.eventFlowDidComplete()
+	}
+	
+	func startPortalFlow(eventMode: EventMode) {
+		
+		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
+		removeChildCoordinator(coordinator)
+		
+		navigateToLogin(eventMode: eventMode, loginMode: .ggdGhorPortal)
 	}
 }
 
