@@ -60,7 +60,7 @@ class AuthenticationViewModel {
 
 	func cancel() {
 
-		self.coordinator?.loginTVSScreenDidFinish(.back(eventMode: eventMode))
+		self.coordinator?.authenticationScreenDidFinish(.back(eventMode: eventMode))
 	}
 
 	/// Login
@@ -105,7 +105,7 @@ class AuthenticationViewModel {
 					return
 				}
 				
-				self.coordinator?.loginTVSScreenDidFinish(.didLogin(maxToken: idToken, papToken: nil, eventMode: self.eventMode))
+				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: idToken, authenticationMode: .max, eventMode: self.eventMode))
 				
 			case .pap:
 				
@@ -114,7 +114,7 @@ class AuthenticationViewModel {
 					return
 				}
 				
-				self.coordinator?.loginTVSScreenDidFinish(.didLogin(maxToken: nil, papToken: accessToken, eventMode: self.eventMode))
+				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: accessToken, authenticationMode: .pap, eventMode: self.eventMode))
 		}
 	}
 }
@@ -170,14 +170,14 @@ extension AuthenticationViewModel {
 
 	func userCancelled() {
 
-		self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+		self.coordinator?.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
 	
 	func cancelAuthorization() {
 		
 		guard appAuthState?.currentAuthorizationFlow != nil else { return }
 		
-		coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+		coordinator?.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
 
 	func displayErrorCode(errorCode: ErrorCode) {
@@ -196,12 +196,12 @@ extension AuthenticationViewModel {
 			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
-				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+				self?.coordinator?.authenticationScreenDidFinish(.stop)
 			},
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
+		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
 	func displayUnreachable(errorCode: ErrorCode) {
@@ -220,7 +220,7 @@ extension AuthenticationViewModel {
 			body: subTitle,
 			primaryActionTitle: primaryActionTitle,
 			primaryAction: { [weak self] in
-				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+				self?.coordinator?.authenticationScreenDidFinish(.stop)
 			},
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
@@ -231,6 +231,6 @@ extension AuthenticationViewModel {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
+		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 }

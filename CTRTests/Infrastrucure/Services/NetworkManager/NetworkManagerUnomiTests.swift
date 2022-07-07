@@ -28,7 +28,8 @@ class NetworkManagerUnomiTests: XCTestCase {
 			eventAccessToken: "eventToken"
 		),
 		eventInformationAvailable: nil,
-		usages: [.vaccination]
+		usages: [.vaccination],
+		providerAuthentication: [.max]
 	)
 	
 	override func setUp() {
@@ -57,7 +58,8 @@ class NetworkManagerUnomiTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.max]
 		)
 		
 		// When
@@ -84,7 +86,8 @@ class NetworkManagerUnomiTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.max]
 		)
 		
 		// When

@@ -29,7 +29,7 @@ enum EventScreenResult: Equatable {
 	case `continue`(eventMode: EventMode)
 
 	// Login happy path:
-	case didLogin(maxToken: String?, papToken: String?, eventMode: EventMode)
+	case didLogin(token: String, authenticationMode: AuthenticationMode, eventMode: EventMode)
 	
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
@@ -53,8 +53,8 @@ enum EventScreenResult: Equatable {
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
 				return lhsEventMode == rhsEventMode
 				
-			case let (.didLogin(lhsToken, lhspapToken, lhsEventMode), .didLogin(rhsToken, rhspapToken, rhsEventMode)):
-				return (lhsToken, lhspapToken, lhsEventMode) == (rhsToken, rhspapToken, rhsEventMode)
+			case let (.didLogin(lhsToken, lhsAuthenticationMode, lhsEventMode), .didLogin(rhsToken, rhsAuthenticationMode, rhsEventMode)):
+				return (lhsToken, lhsAuthenticationMode, lhsEventMode) == (rhsToken, rhsAuthenticationMode, rhsEventMode)
 				
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
@@ -98,7 +98,7 @@ protocol EventCoordinatorDelegate: AnyObject {
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult)
 
-	func loginTVSScreenDidFinish(_ result: EventScreenResult)
+	func authenticationScreenDidFinish(_ result: EventScreenResult)
 
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
@@ -220,12 +220,12 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(maxToken: String?, papToken: String?, eventMode: EventMode) {
+	private func navigateToFetchEvents(token: String, authenticationMode: AuthenticationMode, eventMode: EventMode) {
 		let viewController = FetchRemoteEventsViewController(
 			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
-				maxToken: maxToken,
-				papToken: papToken,
+				token: token,
+				authenticationMode: authenticationMode,
 				eventMode: eventMode
 			)
 		)
@@ -374,12 +374,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		delegate?.eventFlowDidCancel()
 	}
 
-	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
+	func authenticationScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 
-			case let .didLogin(maxToken, papToken, eventMode):
-				navigateToFetchEvents(maxToken: maxToken, papToken: papToken, eventMode: eventMode)
+			case let .didLogin(token, authenticationMode, eventMode):
+				navigateToFetchEvents(token: token, authenticationMode: authenticationMode, eventMode: eventMode)
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)

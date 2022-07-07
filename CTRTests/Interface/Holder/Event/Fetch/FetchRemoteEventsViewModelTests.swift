@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
@@ -23,7 +24,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 
-		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, maxToken: "test", papToken: nil, eventMode: .vaccination)
+		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, token: "test", authenticationMode: .max, eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -82,8 +83,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -107,8 +108,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -133,8 +134,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -158,8 +159,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -181,8 +182,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -205,8 +206,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -228,8 +229,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -254,8 +255,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -279,8 +280,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -304,8 +305,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -329,8 +330,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -354,8 +355,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -379,8 +380,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -402,8 +403,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -427,8 +428,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -452,8 +453,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -477,8 +478,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -502,8 +503,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -528,8 +529,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -555,8 +556,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -581,8 +582,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -607,8 +608,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .recovery
 		)
 
@@ -633,8 +634,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .test
 		)
 
@@ -660,8 +661,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -688,8 +689,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -709,8 +710,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -734,8 +735,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 
@@ -759,8 +760,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			maxToken: "test",
-			papToken: nil,
+			token: "test",
+			authenticationMode: .max,
 			eventMode: .vaccination
 		)
 		

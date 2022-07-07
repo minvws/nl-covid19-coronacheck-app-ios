@@ -275,21 +275,21 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 	}
 	
-	// MARK: - loginTVSScreenDidFinish
+	// MARK: - authenticationScreenDidFinish
 	
-	func test_loginTVSScreenDidFinish_didLogin() {
+	func test_authenticationScreenDidFinish_didLogin() {
 		
 		// Given
 		
 		// When
-		sut.loginTVSScreenDidFinish(.didLogin(maxToken: "test", papToken: nil, eventMode: .vaccination))
+		sut.authenticationScreenDidFinish(.didLogin(token: "test", authenticationMode: .max, eventMode: .vaccination))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is FetchRemoteEventsViewController) == true
 	}
 	
-	func test_loginTVSScreenDidFinish_errorRequiringRestart() {
+	func test_authenticationScreenDidFinish_errorRequiringRestart() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -298,7 +298,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: .test))
+		sut.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: .test))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -306,7 +306,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.invokedPresent).toEventually(beTrue())
 	}
 	
-	func test_loginTVSScreenDidFinish_errorRequiringRestart_chooseTestLocation() {
+	func test_authenticationScreenDidFinish_errorRequiringRestart_chooseTestLocation() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -315,7 +315,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: .test))
+		sut.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: .test))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -324,14 +324,14 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.invokedPresent).toEventually(beTrue())
 	}
 	
-	func test_loginTVSScreenDidFinish_error() throws {
+	func test_authenticationScreenDidFinish_error() throws {
 		// Given
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
 		)
 		
 		// When
-		sut.loginTVSScreenDidFinish(.error(content: content, backAction: {}))
+		sut.authenticationScreenDidFinish(.error(content: content, backAction: {}))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -340,7 +340,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
 	
-	func test_loginTVSScreenDidFinish_back_vaccinationAssessment() {
+	func test_authenticationScreenDidFinish_back_vaccinationAssessment() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -349,7 +349,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .vaccinationassessment))
+		sut.authenticationScreenDidFinish(.back(eventMode: .vaccinationassessment))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -357,7 +357,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 	}
 	
-	func test_loginTVSScreenDidFinish_back_vaccinationAssessment_visitorpass() {
+	func test_authenticationScreenDidFinish_back_vaccinationAssessment_visitorpass() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -366,14 +366,14 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .vaccinationassessment))
+		sut.authenticationScreenDidFinish(.back(eventMode: .vaccinationassessment))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers.last is VisitorPassStartViewController) == true
 	}
 
-	func test_loginTVSScreenDidFinish_back_test() {
+	func test_authenticationScreenDidFinish_back_test() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -382,14 +382,14 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .test))
+		sut.authenticationScreenDidFinish(.back(eventMode: .test))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 
-	func test_loginTVSScreenDidFinish_back_test_chooseTestLocation() {
+	func test_authenticationScreenDidFinish_back_test_chooseTestLocation() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -398,7 +398,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .test))
+		sut.authenticationScreenDidFinish(.back(eventMode: .test))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -406,7 +406,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 	}
 	
-	func test_loginTVSScreenDidFinish_back_test_ChooseProofType() {
+	func test_authenticationScreenDidFinish_back_test_ChooseProofType() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -415,7 +415,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .test))
+		sut.authenticationScreenDidFinish(.back(eventMode: .test))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -423,7 +423,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 	
-	func test_loginTVSScreenDidFinish_back_vaccination() {
+	func test_authenticationScreenDidFinish_back_vaccination() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -432,26 +432,26 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .vaccination))
+		sut.authenticationScreenDidFinish(.back(eventMode: .vaccination))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
-	func test_loginTVSScreenDidFinish_back_vaccination_noViewcontrollerStack() {
+	func test_authenticationScreenDidFinish_back_vaccination_noViewcontrollerStack() {
 		
 		// Given
 		navigationSpy.viewControllers = []
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .vaccination))
+		sut.authenticationScreenDidFinish(.back(eventMode: .vaccination))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == false
 	}
 
-	func test_loginTVSScreenDidFinish_back_vaccinationAndPositiveTest() {
+	func test_authenticationScreenDidFinish_back_vaccinationAndPositiveTest() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -460,14 +460,14 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .vaccinationAndPositiveTest))
+		sut.authenticationScreenDidFinish(.back(eventMode: .vaccinationAndPositiveTest))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
-	func test_loginTVSScreenDidFinish_back_recovery() {
+	func test_authenticationScreenDidFinish_back_recovery() {
 		
 		// Given
 		navigationSpy.viewControllers = [
@@ -476,54 +476,54 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .recovery))
+		sut.authenticationScreenDidFinish(.back(eventMode: .recovery))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
-	func test_loginTVSScreenDidFinish_back_vaccination_noViewControllerStack() {
+	func test_authenticationScreenDidFinish_back_vaccination_noViewControllerStack() {
 		
 		// Given
 		navigationSpy.viewControllers = []
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .paperflow))
+		sut.authenticationScreenDidFinish(.back(eventMode: .paperflow))
 		
 		// Then
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
 		expect(self.navigationSpy.invokedPopToViewController) == false
 	}
 	
-	func test_loginTVSScreenDidFinish_back_paperflow() {
+	func test_authenticationScreenDidFinish_back_paperflow() {
 		
 		// Given
 		
 		// When
-		sut.loginTVSScreenDidFinish(.back(eventMode: .paperflow))
+		sut.authenticationScreenDidFinish(.back(eventMode: .paperflow))
 		
 		// Then
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
 	}
 	
-	func test_loginTVSScreenDidFinish_stop() {
+	func test_authenticationScreenDidFinish_stop() {
 		
 		// Given
 		
 		// When
-		sut.loginTVSScreenDidFinish(.stop)
+		sut.authenticationScreenDidFinish(.stop)
 		
 		// Then
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
-	func test_loginTVSScreenDidFinish_default() {
+	func test_authenticationScreenDidFinish_default() {
 		
 		// Given
 		
 		// When
-		sut.loginTVSScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		sut.authenticationScreenDidFinish(.shouldCompleteVaccinationAssessment)
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
@@ -567,8 +567,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .tvs)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, maxToken: "test", papToken: nil, eventMode: .vaccination ))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .max)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, token: "test", authenticationMode: .max, eventMode: .vaccination ))
 		]
 		
 		// When
@@ -630,8 +630,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .tvs)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, maxToken: "test", papToken: nil,  eventMode: .vaccination )),
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .max)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, token: "test", authenticationMode: .max, eventMode: .vaccination )),
 			ListRemoteEventsViewController(
 				viewModel: ListRemoteEventsViewModel(
 					coordinator: sut,

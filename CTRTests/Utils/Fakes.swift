@@ -36,7 +36,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.max, .pap]
 		)
 	}
 
@@ -50,7 +51,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.positiveTest]
+			usages: [.positiveTest],
+			providerAuthentication: [.max, .pap]
 		)
 	}
 
@@ -64,7 +66,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.recovery]
+			usages: [.recovery],
+			providerAuthentication: [.max, .pap]
 		)
 	}
 
@@ -78,7 +81,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.negativeTest]
+			usages: [.negativeTest],
+			providerAuthentication: [.max, .pap]
 		)
 	}
 }

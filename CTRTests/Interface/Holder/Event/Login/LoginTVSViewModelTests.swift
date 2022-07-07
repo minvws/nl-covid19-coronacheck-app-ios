@@ -120,8 +120,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.cancel()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
 	}
 	
 	func test_cancelAuthorization_whenRequestedAuthorizationIsFalse_shouldNotInvokeCoordinator() {
@@ -139,7 +139,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.cancelAuthorization()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == false
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == false
 	}
 	
 	func test_abortAuthorization_whenRequestedAuthorization_shouldInvokeCoordinator() {
@@ -157,8 +157,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.cancelAuthorization()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
 	func test_openID_success_accessToken_ok() {
@@ -182,8 +182,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryAction).to(beNil())
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(maxToken: "test", papToken: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .max, eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {
@@ -201,8 +201,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login(presentingViewController: UIViewController())
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
@@ -230,8 +230,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login(presentingViewController: UIViewController())
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
 			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
@@ -259,8 +259,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login(presentingViewController: UIViewController())
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
 	func test_openID_error_userCancelled_OIDErrorCode() {
@@ -277,8 +277,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login(presentingViewController: UIViewController())
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
 	func test_openID_error_generalError() throws {
@@ -314,8 +314,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login(presentingViewController: UIViewController())
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
@@ -358,8 +358,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login(presentingViewController: UIViewController())
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
@@ -401,8 +401,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login(presentingViewController: UIViewController())
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
@@ -431,8 +431,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login(presentingViewController: UIViewController())
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
@@ -470,8 +470,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login(presentingViewController: UIViewController())
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")

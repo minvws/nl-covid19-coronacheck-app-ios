@@ -69,8 +69,8 @@ class LoginTVSViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
 	}
 	
 	func test_login_success() {
@@ -83,8 +83,8 @@ class LoginTVSViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(maxToken: "test", papToken: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .max, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
@@ -98,8 +98,8 @@ class LoginTVSViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedauthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
@@ -125,8 +125,8 @@ class LoginTVSViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 }
 

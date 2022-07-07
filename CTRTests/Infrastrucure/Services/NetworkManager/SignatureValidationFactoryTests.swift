@@ -114,7 +114,8 @@ class SignatureValidationFactoryTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.max]
 		)
 
 		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
@@ -139,7 +140,8 @@ class SignatureValidationFactoryTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.max]
 		)
 
 		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
@@ -164,7 +166,8 @@ class SignatureValidationFactoryTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.max]
 		)
 
 		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))

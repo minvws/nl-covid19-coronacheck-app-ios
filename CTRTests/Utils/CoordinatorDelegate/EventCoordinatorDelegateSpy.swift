@@ -22,16 +22,16 @@ class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol, Di
 		invokedEventStartScreenDidFinishParametersList.append((result, ()))
 	}
 
-	var invokedLoginTVSScreenDidFinish = false
-	var invokedLoginTVSScreenDidFinishCount = 0
-	var invokedLoginTVSScreenDidFinishParameters: (result: EventScreenResult, Void)?
-	var invokedLoginTVSScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
+	var invokedauthenticationScreenDidFinish = false
+	var invokedauthenticationScreenDidFinishCount = 0
+	var invokedauthenticationScreenDidFinishParameters: (result: EventScreenResult, Void)?
+	var invokedauthenticationScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
 
-	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
-		invokedLoginTVSScreenDidFinish = true
-		invokedLoginTVSScreenDidFinishCount += 1
-		invokedLoginTVSScreenDidFinishParameters = (result, ())
-		invokedLoginTVSScreenDidFinishParametersList.append((result, ()))
+	func authenticationScreenDidFinish(_ result: EventScreenResult) {
+		invokedauthenticationScreenDidFinish = true
+		invokedauthenticationScreenDidFinishCount += 1
+		invokedauthenticationScreenDidFinishParameters = (result, ())
+		invokedauthenticationScreenDidFinishParametersList.append((result, ()))
 	}
 
 	var invokedFetchEventsScreenDidFinish = false

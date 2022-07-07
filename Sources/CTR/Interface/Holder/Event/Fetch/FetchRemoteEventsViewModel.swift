@@ -13,8 +13,8 @@ final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var maxToken: String?
-	private var papToken: String?
+	private var token: String
+	private var authenticationMode: AuthenticationMode
 	private var eventMode: EventMode
 	private let networkManager: NetworkManaging = Current.networkManager
 	private let mappingManager: MappingManaging = Current.mappingManager
@@ -38,18 +38,18 @@ final class FetchRemoteEventsViewModel {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		maxToken: String?,
-		papToken: String?,
+		token: String,
+		authenticationMode: AuthenticationMode,
 		eventMode: EventMode) {
 		self.coordinator = coordinator
-		self.maxToken = maxToken
-		self.papToken = papToken
+		self.token = token
+		self.authenticationMode = authenticationMode
 		self.eventMode = eventMode
 
 		viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
 		fetchEventProvidersWithAccessTokens(
-			maxToken: maxToken,
-			papToken: papToken,
+			token: token,
+			authenticationMode: authenticationMode,
 			completion: handleFetchEventProvidersWithAccessTokensResponse
 		)
 	}
@@ -213,20 +213,16 @@ final class FetchRemoteEventsViewModel {
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(
-		maxToken: String?,
-		papToken: String?,
+		token: String,
+		authenticationMode: AuthenticationMode,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
-			
-		guard maxToken != nil || papToken != nil else {
-			
-			return
-		}
 
 		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
-			// Skip fetching tokens if we have a papToken
-		if let maxToken = maxToken {
+		// Skip fetching tokens if we have a papToken
+		if authenticationMode == .max {
+			
 			prefetchingGroup.enter()
-			fetchEventAccessTokens(token: maxToken) { result in
+			fetchEventAccessTokens(token: token) { result in
 				accessTokenResult = result
 				self.prefetchingGroup.leave()
 			}
@@ -242,7 +238,8 @@ final class FetchRemoteEventsViewModel {
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
 			self.processEventProvidersWithAccessTokens(
-				papToken: papToken,
+				token: token,
+				authenticationMode: authenticationMode,
 				accessTokenResult: accessTokenResult,
 				remoteEventProvidersResult: remoteEventProvidersResult,
 				completion: completion
@@ -251,7 +248,8 @@ final class FetchRemoteEventsViewModel {
 	}
 
 	private func processEventProvidersWithAccessTokens(
-		papToken: String?,
+		token: String,
+		authenticationMode: AuthenticationMode,
 		accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?,
 		remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
@@ -274,15 +272,12 @@ final class FetchRemoteEventsViewModel {
 		
 		if let eventProviders = remoteEventProvidersResult?.successValue {
 			providers = self.filterEventProvidersForEventMode(eventProviders)
-			if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
-				errorCodes.append(errorCode)
-			}
 			
-			if let papToken = papToken {
+			if authenticationMode == .pap {
 				// Use the pap Token for both Unomi and Event
 				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.pap) }
 				for index in 0 ..< providers.count {
-					providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: papToken, eventAccessToken: papToken)
+					providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: token, eventAccessToken: token)
 				}
 			} else if let accessTokens = accessTokenResult?.successValue {
 				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.max) }
@@ -291,6 +286,9 @@ final class FetchRemoteEventsViewModel {
 						providers[index].accessToken = accessToken
 					}
 				}
+			}
+			if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
+				errorCodes.append(errorCode)
 			}
 		}
 		
@@ -762,8 +760,8 @@ private extension FetchRemoteEventsViewModel {
 				action: { [weak self] _ in
 					guard let self = self else { return }
 					self.fetchEventProvidersWithAccessTokens(
-						maxToken: self.maxToken,
-						papToken: self.papToken,
+						token: self.token,
+						authenticationMode: self.authenticationMode,
 						completion: self.handleFetchEventProvidersWithAccessTokensResponse
 					)
 				},
