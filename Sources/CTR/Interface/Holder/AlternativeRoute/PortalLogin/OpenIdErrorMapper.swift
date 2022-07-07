@@ -227,4 +227,3 @@ extension ErrorCode.ClientCode {
 	static let openIOAuthRegistrationClientError = ErrorCode.ClientCode(value: "074-4003")
 	static let openIOAuthRegistrationUnknownError = ErrorCode.ClientCode(value: "074-4004")
 }
-
