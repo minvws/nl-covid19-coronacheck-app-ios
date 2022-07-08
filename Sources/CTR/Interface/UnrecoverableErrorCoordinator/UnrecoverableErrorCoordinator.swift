@@ -37,7 +37,7 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 		window.makeKeyAndVisible()
 		
 		guard MFMailComposeViewController.canSendMail() else { // Simulator can't send mail.
-			self.presentSecondDialog()
+			self.presentRestartTheAppDialog()
 			return
 		}
 		
@@ -46,20 +46,25 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 			message: L.general_unrecoverableError_sendCrashReport_message(),
 			preferredStyle: .alert
 		)
-		alertController.addAction(UIAlertAction(
+		let openEmailAction = UIAlertAction(
 			title: L.general_unrecoverableError_sendCrashReport_action(),
 			style: .default) { [weak self] _ in
 			self?.openEmailDialog()
-		})
-		alertController.addAction(UIAlertAction(
+		}
+		let closeAction = UIAlertAction(
 			title: L.generalClose(),
 			style: .cancel) { [weak self] _ in
-			self?.presentSecondDialog()
-		})
+			self?.presentRestartTheAppDialog()
+		}
+		
+		alertController.addAction(openEmailAction)
+		alertController.addAction(closeAction)
+		alertController.preferredAction = openEmailAction
+		
 		navigationController.present(alertController, animated: false)
 	}
 	
-	private func presentSecondDialog() {
+	private func presentRestartTheAppDialog() {
 		let alertController = UIAlertController(
 			title: L.general_unrecoverableError_restartTheApp_title(),
 			message: L.general_unrecoverableError_restartTheApp_message(),
@@ -107,7 +112,7 @@ extension UnrecoverableErrorCoordinator: MFMailComposeViewControllerDelegate {
 	
 	func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
 		controller.dismiss(animated: true) {
-			self.presentSecondDialog()
+			self.presentRestartTheAppDialog()
 		}
 	}
 }
