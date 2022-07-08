@@ -22,7 +22,7 @@ class WalletManagerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		
-		dataStoreManager = DataStoreManager(.inMemory)
+		dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
 
