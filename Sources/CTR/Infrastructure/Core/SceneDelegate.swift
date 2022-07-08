@@ -73,6 +73,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 					}
 					
 				case let .failure(error):
+					self.unrecoverableErrorCoordinator = UnrecoverableErrorCoordinator(scene: windowScene, error: error)
+					self.unrecoverableErrorCoordinator?.start()
 			}
 		}
 	}
