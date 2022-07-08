@@ -282,7 +282,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.authenticationScreenDidFinish(.didLogin(token: "test", authenticationMode: .max, eventMode: .vaccination))
+		sut.authenticationScreenDidFinish(.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -294,7 +294,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -311,7 +311,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -345,7 +345,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationassessment, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationassessment, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -362,7 +362,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationassessment, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationassessment, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -378,7 +378,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -394,7 +394,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -411,7 +411,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -428,7 +428,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -456,7 +456,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -472,7 +472,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .recovery)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .recovery, authenticationMode: .max))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .recovery, authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -567,8 +567,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .max)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, token: "test", authenticationMode: .max, eventMode: .vaccination ))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination ))
 		]
 		
 		// When
@@ -630,8 +630,8 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .max)),
-			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, token: "test", authenticationMode: .max, eventMode: .vaccination )),
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange)),
+			FetchRemoteEventsViewController(viewModel: FetchRemoteEventsViewModel(coordinator: sut, token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination )),
 			ListRemoteEventsViewController(
 				viewModel: ListRemoteEventsViewModel(
 					coordinator: sut,

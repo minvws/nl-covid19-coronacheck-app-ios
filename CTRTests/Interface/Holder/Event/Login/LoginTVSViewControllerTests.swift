@@ -31,7 +31,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		viewModel = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 		window = UIWindow()
 	}
@@ -84,7 +84,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .max, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {

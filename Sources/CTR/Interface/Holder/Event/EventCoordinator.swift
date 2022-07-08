@@ -208,7 +208,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToAuthentication(eventMode: EventMode, authenticationMode: AuthenticationMode = .max) {
+	private func navigateToAuthentication(eventMode: EventMode, authenticationMode: AuthenticationMode = .manyAuthenticationExchange) {
 
 		let viewController = AuthenticationViewController(
 			viewModel: AuthenticationViewModel(
@@ -534,7 +534,7 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
-		navigateToAuthentication(eventMode: eventMode, authenticationMode: .pap)
+		navigateToAuthentication(eventMode: eventMode, authenticationMode: .patientAuthenticationProvider)
 	}
 }
 

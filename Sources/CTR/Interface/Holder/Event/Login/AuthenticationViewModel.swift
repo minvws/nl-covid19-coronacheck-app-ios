@@ -9,23 +9,23 @@ import UIKit
 import AppAuth
 
 enum AuthenticationMode {
-	case max // TVS - Digid (many authentication exchange)
-	case pap // GGD GHOR Portal (patient authentication provider)
+	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)
+	case patientAuthenticationProvider // GGD GHOR Portal (patient authentication provider)
 	
 	var configuration: IssuerConfiguration {
 		switch self {
-			case .max:
+			case .manyAuthenticationExchange:
 				return MaxConfig()
-			case .pap:
+			case .patientAuthenticationProvider:
 				return PapConfig()
 		}
 	}
 	
 	var step: ErrorCode.Step {
 		switch self {
-			case .max:
+			case .manyAuthenticationExchange:
 				return .max
-			case .pap:
+			case .patientAuthenticationProvider:
 				return .pap
 		}
 	}
@@ -82,7 +82,7 @@ class AuthenticationViewModel {
 			issuerConfiguration: authenticationMode.configuration,
 			// use the internal browser for pap,
 			// use the external browser for tvs (because the Digid app redirects to external browser)
-			presentingViewController: authenticationMode == .pap ? presentingViewController : nil,
+			presentingViewController: authenticationMode == .patientAuthenticationProvider ? presentingViewController : nil,
 			onCompletion: { token in
 				
 				self.shouldShowProgress = false
@@ -98,23 +98,23 @@ class AuthenticationViewModel {
 	func handleToken(_ token: OpenIdManagerToken) {
 		
 		switch authenticationMode {
-			case .max:
+			case .manyAuthenticationExchange:
 				
 				guard let idToken = token.idToken else {
 					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
 					return
 				}
 				
-				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: idToken, authenticationMode: .max, eventMode: self.eventMode))
+				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: idToken, authenticationMode: .manyAuthenticationExchange, eventMode: self.eventMode))
 				
-			case .pap:
+			case .patientAuthenticationProvider:
 				
 				guard let accessToken = token.accessToken else {
 					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
 					return
 				}
 				
-				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: accessToken, authenticationMode: .pap, eventMode: self.eventMode))
+				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: accessToken, authenticationMode: .patientAuthenticationProvider, eventMode: self.eventMode))
 		}
 	}
 }

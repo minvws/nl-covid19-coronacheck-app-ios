@@ -35,7 +35,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		// Then
@@ -55,7 +55,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		// Then
@@ -75,7 +75,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		// Then
@@ -95,7 +95,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		// Then
@@ -113,7 +113,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		// When
@@ -130,7 +130,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max,
+			authenticationMode: .manyAuthenticationExchange,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
@@ -148,7 +148,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max,
+			authenticationMode: .manyAuthenticationExchange,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
@@ -167,7 +167,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 
@@ -183,7 +183,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .max, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedauthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {
@@ -192,7 +192,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
@@ -221,7 +221,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
@@ -250,7 +250,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
@@ -269,7 +269,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
@@ -287,7 +287,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -335,7 +335,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -379,7 +379,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -422,7 +422,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		// When
@@ -451,7 +451,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .max
+			authenticationMode: .manyAuthenticationExchange
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
