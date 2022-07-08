@@ -49,7 +49,7 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	var dataStoreManager = DataStoreManager(.inMemory)
+	var dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
 	
 	var deviceAuthenticationDetectorSpy: DeviceAuthenticationSpy = {
 		let spy = DeviceAuthenticationSpy()
@@ -188,7 +188,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		couplingManager: spies.couplingManagerSpy,
 		cryptoLibUtility: spies.cryptoLibUtilitySpy,
 		cryptoManager: spies.cryptoManagerSpy,
-		dataStoreManager: DataStoreManager(.inMemory),
+		dataStoreManager: DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in }),
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
