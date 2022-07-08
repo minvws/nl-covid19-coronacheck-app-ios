@@ -115,7 +115,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.vaccination],
-			providerAuthentication: [.max]
+			providerAuthentication: [.manyAuthenticationExchange]
 		)
 
 		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
@@ -141,7 +141,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.vaccination],
-			providerAuthentication: [.max]
+			providerAuthentication: [.manyAuthenticationExchange]
 		)
 
 		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))
@@ -167,7 +167,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.vaccination],
-			providerAuthentication: [.max]
+			providerAuthentication: [.manyAuthenticationExchange]
 		)
 
 		let sut = SignatureValidationFactory().getSignatureValidator(.provider(provider))

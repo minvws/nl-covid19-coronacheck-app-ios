@@ -376,8 +376,8 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 				expect(result.successValue?.first?.eventUrl) == URL(string: "https://coronacheck.nl/api/event")
 				expect(result.successValue?.first?.cmsCertificates.first) == "test"
 				expect(result.successValue?.first?.tlsCertificates.first) == "test"
-				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.pap)) == true
-				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.max)) == true
+				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider)) == true
+				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange)) == true
 				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.positiveTest)) == true
 				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.negativeTest)) == true
 				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.recovery)) == true

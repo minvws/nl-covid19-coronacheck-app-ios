@@ -48,8 +48,8 @@ struct EventFlow {
 	
 	/// The type of token a provider can handle
 	enum ProviderAuthenticationType: String, Codable {
-		case max
-		case pap
+		case manyAuthenticationExchange = "max"
+		case patientAuthenticationProvider = "pap"
 	}
 
 	// A Vaccination Event Provider (VEP)

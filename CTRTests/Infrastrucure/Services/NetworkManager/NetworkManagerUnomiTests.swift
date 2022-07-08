@@ -29,7 +29,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 		),
 		eventInformationAvailable: nil,
 		usages: [.vaccination],
-		providerAuthentication: [.max]
+		providerAuthentication: [.manyAuthenticationExchange]
 	)
 	
 	override func setUp() {
@@ -59,7 +59,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.vaccination],
-			providerAuthentication: [.max]
+			providerAuthentication: [.manyAuthenticationExchange]
 		)
 		
 		// When
@@ -87,7 +87,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.vaccination],
-			providerAuthentication: [.max]
+			providerAuthentication: [.manyAuthenticationExchange]
 		)
 		
 		// When

@@ -37,7 +37,7 @@ extension EventFlow.EventProvider {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.vaccination],
-			providerAuthentication: [.max, .pap]
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 
@@ -52,7 +52,7 @@ extension EventFlow.EventProvider {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.positiveTest],
-			providerAuthentication: [.max, .pap]
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 
@@ -67,7 +67,7 @@ extension EventFlow.EventProvider {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.recovery],
-			providerAuthentication: [.max, .pap]
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 
@@ -82,7 +82,7 @@ extension EventFlow.EventProvider {
 			accessToken: nil,
 			eventInformationAvailable: nil,
 			usages: [.negativeTest],
-			providerAuthentication: [.max, .pap]
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 }

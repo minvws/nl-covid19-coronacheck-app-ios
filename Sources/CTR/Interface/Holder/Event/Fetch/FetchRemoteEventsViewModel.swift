@@ -275,12 +275,12 @@ final class FetchRemoteEventsViewModel {
 			
 			if authenticationMode == .patientAuthenticationProvider {
 				// Use the pap Token for both Unomi and Event
-				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.pap) }
+				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider) }
 				for index in 0 ..< providers.count {
 					providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: token, eventAccessToken: token)
 				}
 			} else if let accessTokens = accessTokenResult?.successValue {
-				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.max) }
+				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange) }
 				for index in 0 ..< providers.count {
 					for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
 						providers[index].accessToken = accessToken
