@@ -52,6 +52,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 		return remoteConfigManager.storedConfiguration.isGGDEnabled ?? false
 	}
 	
+	func isGGDPortalEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isPAPEnabled ?? false
+	}
+	
 	///  Should we use the luhn check for tokens?
 	/// - Returns: True if we can
 	func isLuhnCheckEnabled() -> Bool {
@@ -142,9 +147,5 @@ class FeatureFlagManager: FeatureFlagManaging {
 		let disclosurePolicies = Current.disclosurePolicyManager.getDisclosurePolicies()
 		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
 		disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
-	}
-	
-	func isGGDPortalEnabled() -> Bool {
-		return true
 	}
 }
