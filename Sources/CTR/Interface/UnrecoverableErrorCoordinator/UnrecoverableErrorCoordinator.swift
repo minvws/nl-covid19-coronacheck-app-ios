@@ -10,7 +10,6 @@ import MessageUI
 
 // Note: Do NOT use `Current` in this context, as it's not available
 
-@available(iOS 13.0, *)
 class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 	
 	let window: UIWindow
@@ -21,8 +20,17 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 
 	let error: Error
 
+	/// For use with iOS 13 and higher
+	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, error: Error) {
 		self.window = UIWindow(windowScene: scene)
+		self.error = error
+	}
+	
+	/// For use with iOS 12.
+	init(error: Error) {
+		
+		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.error = error
 	}
 	
@@ -100,14 +108,12 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 	}
 }
 
-@available(iOS 13.0, *)
 extension UnrecoverableErrorCoordinator {
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
 	}
 }
 
-@available(iOS 13.0, *)
 extension UnrecoverableErrorCoordinator: MFMailComposeViewControllerDelegate {
 	
 	func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {

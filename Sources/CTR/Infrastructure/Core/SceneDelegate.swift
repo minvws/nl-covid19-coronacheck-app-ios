@@ -4,35 +4,8 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable identifier_name
 
 import UIKit
-
-var Current: Environment!
-
-private func setupCurrentEnvironment(completion: @escaping (Result<Environment, Error>) -> Void) {
-	
-	// Initializing the DataStoreManager is a prerequisite to initializing the Current environment.
-	// We need to ensure that the internal setup of DataStoreManager does not fail (e.g. due to a failed DB migration)
-	// before we continue booting the application. Otherwise it's non-recoverable.
-	
-	#if DEBUG
-		guard !ProcessInfo().isUnitTesting else { return } // never callback
-	#endif
-	
-	_ = DataStoreManager(.persistent, flavor: .flavor) { result in
-		switch result {
-			case .success(let dataStoreManager):
-				
-				// Initialize the global Environment:
-				let currentEnvironment = environment(dataStoreManager)
-				completion(.success(currentEnvironment))
-				
-			case .failure(let error):
-				completion(.failure(error))
-		}
-	}
-}
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -43,8 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// Used for presenting last-ditch error messages before the app quits:
 	var unrecoverableErrorCoordinator: UnrecoverableErrorCoordinator?
 	
-    /// If your app is __not__ running, the system delivers
-    /// the Universal Link to this delegate method after launch:
+	/// If your app is __not__ running, the system delivers
+	/// the Universal Link to this delegate method after launch:
 	func scene(
 		_ scene: UIScene,
 		willConnectTo session: UISceneSession,
@@ -56,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		guard !ProcessInfo().isUnitTesting else { return }
 		
-		setupCurrentEnvironment { (result: Result<Environment, Error>) in
+			Environment.setupCurrentEnvironment { (result: Result<Environment, Error>) in
 			switch result {
 				case let .success(environment):
 
@@ -79,12 +52,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 	}
 
-    /// If your app was __already running__ (or suspended in memory), this delegate
-    /// callback will receive the UserActivity when a universal link is tapped:
-    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return }
-        appCoordinator?.receive(universalLink: activity)
-    }
+	/// If your app was __already running__ (or suspended in memory), this delegate
+	/// callback will receive the UserActivity when a universal link is tapped:
+	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+		guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return }
+		appCoordinator?.receive(universalLink: activity)
+	}
 
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 

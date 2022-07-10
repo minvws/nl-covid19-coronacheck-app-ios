@@ -99,6 +99,30 @@ struct Environment {
 		self.walletManager = walletManager
 		self.verificationPolicyEnabler = verificationPolicyEnabler
 	}
+	
+	static func setupCurrentEnvironment(completion: @escaping (Result<Environment, Error>) -> Void) {
+		
+		// Initializing the DataStoreManager is a prerequisite to initializing the Current environment.
+		// We need to ensure that the internal setup of DataStoreManager does not fail (e.g. due to a failed DB migration)
+		// before we continue booting the application. Otherwise it's non-recoverable.
+		
+		#if DEBUG
+			guard !ProcessInfo().isUnitTesting else { return } // never callback
+		#endif
+		
+		_ = DataStoreManager(.persistent, flavor: .flavor) { result in
+			switch result {
+				case .success(let dataStoreManager):
+					
+					// Initialize the global Environment:
+					let currentEnvironment = environment(dataStoreManager)
+					completion(.success(currentEnvironment))
+					
+				case .failure(let error):
+					completion(.failure(error))
+			}
+		}
+	}
 }
 
 // MARK: - 2: Instantiate Private Dependencies
@@ -241,3 +265,7 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		verificationPolicyEnabler: verificationPolicyEnabler
 	)
 }
+
+// swiftlint:disable identifier_name
+
+var Current: Environment!
