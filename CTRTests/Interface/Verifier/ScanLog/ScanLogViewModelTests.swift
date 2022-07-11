@@ -20,7 +20,7 @@ class ScanLogViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier)
+		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, loadPersistentStoreCompletion: { _ in })
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 

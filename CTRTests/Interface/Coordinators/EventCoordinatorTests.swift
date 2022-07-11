@@ -5,6 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 import XCTest
 @testable import CTR
@@ -723,5 +724,92 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+	}
+	
+	func test_alternativeRoute() {
+		
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.alternativeRoute(eventMode: .vaccination))
+		
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first).to(beAKindOf(AlternativeRouteCoordinator.self))
+		expect(self.navigationSpy.viewControllers.last is CheckForDigidViewController) == true
+	}
+	
+	func test_canceledAlternativeRoute() {
+		
+		// Given
+		let alternativeCoordinator = AlternativeRouteCoordinator(
+			navigationController: sut.navigationController,
+			delegate: sut,
+			eventMode: .vaccination
+		)
+		sut.childCoordinators = [alternativeCoordinator]
+		
+		// When
+		sut.canceledAlternativeRoute()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+	}
+	
+	func test_canceledAlternativeRoute_otherChildCoordinatorActive_shouldNotCancel() {
+		
+		// Given
+		let alternativeCoordinator = AlternativeRouteCoordinator(
+			navigationController: sut.navigationController,
+			delegate: sut,
+			eventMode: .vaccination
+		)
+		let paperProofCoordinator = PaperProofCoordinator(
+			navigationController: sut.navigationController,
+			delegate: PaperProofFlowDelegateSpy()
+		)
+		
+		sut.childCoordinators = [alternativeCoordinator, paperProofCoordinator]
+		
+		// When
+		sut.canceledAlternativeRoute()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(2))
+		expect(self.sut.childCoordinators.first).to(beAKindOf(AlternativeRouteCoordinator.self))
+		expect(self.sut.childCoordinators.last).to(beAKindOf(PaperProofCoordinator.self))
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+	}
+	
+	func test_ccompletedAlternativeRoute() {
+		
+		// Given
+		let alternativeCoordinator = AlternativeRouteCoordinator(
+			navigationController: sut.navigationController,
+			delegate: sut,
+			eventMode: .vaccination
+		)
+		sut.childCoordinators = [alternativeCoordinator]
+		
+		// When
+		sut.completedAlternativeRoute()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_ccompletedAlternativeRoute_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
+		
+		// Given
+		sut.childCoordinators = []
+		
+		// When
+		sut.completedAlternativeRoute()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 	}
 }

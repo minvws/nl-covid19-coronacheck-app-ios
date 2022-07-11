@@ -13,8 +13,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
 
-    /// If your app is __not__ running, the system delivers
-    /// the Universal Link to this delegate method after launch:
+	/// Used for presenting last-ditch error messages before the app quits:
+	var unrecoverableErrorCoordinator: UnrecoverableErrorCoordinator?
+	
+	/// If your app is __not__ running, the system delivers
+	/// the Universal Link to this delegate method after launch:
 	func scene(
 		_ scene: UIScene,
 		willConnectTo session: UISceneSession,
@@ -25,23 +28,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// are new (see `application:configurationForConnectingSceneSession` instead).
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		guard !ProcessInfo().isUnitTesting else { return }
-			
-		appCoordinator = AppCoordinator(scene: windowScene, navigationController: NavigationController())
-		appCoordinator?.start()
+		
+			Environment.setupCurrentEnvironment { (result: Result<Environment, Error>) in
+			switch result {
+				case let .success(environment):
 
-        // Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:
-        if let userActivity = connectionOptions.userActivities.first,
-           let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) {
-            appCoordinator?.receive(universalLink: activity)
-        }
+					// https://www.pointfree.co/episodes/ep16-dependency-injection-made-easy
+					Current = environment
+
+					self.appCoordinator = AppCoordinator(scene: windowScene, navigationController: NavigationController())
+					self.appCoordinator?.start()
+					
+					// Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:
+					if let userActivity = connectionOptions.userActivities.first,
+					   let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: environment.featureFlagManager.isLuhnCheckEnabled()) {
+						self.appCoordinator?.receive(universalLink: activity)
+					}
+					
+				case let .failure(error):
+					self.unrecoverableErrorCoordinator = UnrecoverableErrorCoordinator(scene: windowScene, error: error)
+					self.unrecoverableErrorCoordinator?.start()
+			}
+		}
 	}
 
-    /// If your app was __already running__ (or suspended in memory), this delegate
-    /// callback will receive the UserActivity when a universal link is tapped:
-    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return }
-        appCoordinator?.receive(universalLink: activity)
-    }
+	/// If your app was __already running__ (or suspended in memory), this delegate
+	/// callback will receive the UserActivity when a universal link is tapped:
+	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+		guard let activity = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return }
+		appCoordinator?.receive(universalLink: activity)
+	}
 
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 

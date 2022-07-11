@@ -87,9 +87,10 @@ final class HolderDashboardView: BaseView {
 		footerButtonView.isHidden = true
 		
 		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.updateStackViewInsets()
+			DispatchQueue.main.async { // because otherwise `UIApplication.shared.keyWindow?.bounds.width` has the wrong value 🙄
+				self?.updateStackViewInsets()
+			}
 		}
-		
 		updateStackViewInsets()
 	}
 	

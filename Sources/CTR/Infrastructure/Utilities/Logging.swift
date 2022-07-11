@@ -43,6 +43,12 @@ protocol Logging {
 final class LogHandler: Logging {
 
 	private var isSetup = false
+	
+	init() {
+		if !ProcessInfo.processInfo.isTesting {
+			setup()
+		}
+	}
 
 	/// Can be called multiple times, will only setup once
 	func setup() {

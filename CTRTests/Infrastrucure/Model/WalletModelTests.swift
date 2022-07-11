@@ -16,7 +16,7 @@ class WalletModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory)
+		dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
 	}
 	
 	// MARK: Tests
