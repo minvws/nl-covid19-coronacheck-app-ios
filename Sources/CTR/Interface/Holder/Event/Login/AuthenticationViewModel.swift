@@ -125,7 +125,8 @@ extension AuthenticationViewModel {
 
 	func handleError(_ error: Error?) {
 
-		Current.logHandler.logError("Login error: \(error?.localizedDescription ?? "Unknown error")")
+		Current.logHandler.logError("Authentication error: \(error?.localizedDescription ?? "Unknown error")")
+		
 		let clientCode = OpenIdErrorMapper().mapError(error)
 
 		if let error = error {

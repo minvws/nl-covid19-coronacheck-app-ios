@@ -4,7 +4,6 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
-// swiftlint:disable identifier_name
 
 import Foundation
 import Reachability
@@ -100,6 +99,30 @@ struct Environment {
 		self.walletManager = walletManager
 		self.verificationPolicyEnabler = verificationPolicyEnabler
 	}
+	
+	static func setupCurrentEnvironment(completion: @escaping (Result<Environment, Error>) -> Void) {
+		
+		// Initializing the DataStoreManager is a prerequisite to initializing the Current environment.
+		// We need to ensure that the internal setup of DataStoreManager does not fail (e.g. due to a failed DB migration)
+		// before we continue booting the application. Otherwise it's non-recoverable.
+		
+		#if DEBUG
+			guard !ProcessInfo().isUnitTesting else { return } // never callback
+		#endif
+		
+		_ = DataStoreManager(.persistent, flavor: .flavor) { result in
+			switch result {
+				case .success(let dataStoreManager):
+					
+					// Initialize the global Environment:
+					let currentEnvironment = environment(dataStoreManager)
+					completion(.success(currentEnvironment))
+					
+				case .failure(let error):
+					completion(.failure(error))
+			}
+		}
+	}
 }
 
 // MARK: - 2: Instantiate Private Dependencies
@@ -127,14 +150,7 @@ private let cryptoManager = CryptoManager(
 	featureFlagManager: featureFlagManager,
 	logHandler: logHandler
 )
-private let datastoreManager: DataStoreManager = {
-	let manager = DataStoreManager(
-		StorageType.persistent,
-		flavor: AppFlavor.flavor,
-		logHandler: logHandler
-	)
-	return manager
-}()
+
 private let deviceAuthenticationDetector = DeviceAuthenticationDetector(logHandler: logHandler)
 private let disclosurePolicyManager = DisclosurePolicyManager(
 	remoteConfigManager: remoteConfigManager,
@@ -146,16 +162,6 @@ private let featureFlagManager = FeatureFlagManager(
 	remoteConfigManager: remoteConfigManager
 )
 private let fileStorage = FileStorage(logHandler: logHandler)
-private let greenCardLoader = GreenCardLoader(
-	now: now,
-	networkManager: networkManager,
-	cryptoManager: cryptoManager,
-	walletManager: walletManager,
-	remoteConfigManager: remoteConfigManager,
-	userSettings: userSettings,
-	secureUserSettings: secureUserSettings,
-	logHandler: logHandler
-)
 private let identityChecker = IdentityChecker(logHandler: logHandler)
 private let jailBreakDetector = JailBreakDetector()
 private let logHandler = LogHandler()
@@ -196,25 +202,37 @@ private let remoteConfigManager = RemoteConfigManager(
 )
 private let verificationPolicyManager = VerificationPolicyManager(secureUserSettings: secureUserSettings)
 private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secureUserSettings)
-private let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
 private let secureUserSettings = SecureUserSettings()
 private let userSettings = UserSettings()
-private let walletManager = WalletManager(dataStoreManager: datastoreManager, logHandler: logHandler)
-private let verificationPolicyEnabler = VerificationPolicyEnabler(
-	remoteConfigManager: remoteConfigManager,
-	userSettings: userSettings,
-	verificationPolicyManager: verificationPolicyManager,
-	scanLockManager: scanLockManager,
-	scanLogManager: scanLogManager
-)
 
 // MARK: - 3: Instantiate the Environment using private dependencies:
 
-private let environment: () -> Environment = {
+let environment: (DataStoreManager) -> Environment = { datastoreManager in
 	
 	guard !ProcessInfo().isUnitTesting else {
 		fatalError("During unit testing, real services should not be instantiated during Environment setup.")
 	}
+	
+	// Dependencies that depend on `DataStoreManager`: 
+	let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
+	let walletManager = WalletManager(dataStoreManager: datastoreManager, logHandler: logHandler)
+	let verificationPolicyEnabler = VerificationPolicyEnabler(
+		remoteConfigManager: remoteConfigManager,
+		userSettings: userSettings,
+		verificationPolicyManager: verificationPolicyManager,
+		scanLockManager: scanLockManager,
+		scanLogManager: scanLogManager
+	)
+	let greenCardLoader = GreenCardLoader(
+		now: now,
+		networkManager: networkManager,
+		cryptoManager: cryptoManager,
+		walletManager: walletManager,
+		remoteConfigManager: remoteConfigManager,
+		userSettings: userSettings,
+		secureUserSettings: secureUserSettings,
+		logHandler: logHandler
+	)
 	
 	return Environment(
 		now: now,
@@ -248,19 +266,6 @@ private let environment: () -> Environment = {
 	)
 }
 
-// MARK: - 4: Set `Current` global value to Environment
+// swiftlint:disable identifier_name
 
-// For debug builds (i.e. development, unit tests, etc) the Current Environment
-// can be mutated at runtime. For Release builds, this is not allowed.
-//
-// Global vars are always instantiated lazily, so during unit tests the
-// above definition of Environment containing the real services will not actually be created.
-
-#if DEBUG
-var Current: Environment! = {
-	guard !ProcessInfo().isUnitTesting else { return nil }
-	return environment()
-}()
-#else
-let Current: Environment! = environment()
-#endif
+var Current: Environment!

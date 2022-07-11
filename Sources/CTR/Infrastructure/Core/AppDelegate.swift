@@ -14,6 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
 	
+	/// Used for presenting last-ditch error messages before the app quits:
+	var unrecoverableErrorCoordinator: UnrecoverableErrorCoordinator?
+	
 	// login flow
 	var currentAuthorizationFlow: OIDExternalUserAgentSession?
 	
@@ -29,16 +32,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 				UIView.setAnimationsEnabled(false)
 			}
 			
-			if !ProcessInfo.processInfo.isTesting {
-				// Setup Logging
-				Current.logHandler.setup()
-			}
-			
 			styleUI()
 			
 			if #unavailable(iOS 13.0) {
-				appCoordinator = AppCoordinator(navigationController: NavigationController())
-				appCoordinator?.start()
+				
+				Environment.setupCurrentEnvironment { (result: Result<Environment, Error>) in
+					switch result {
+						case let .success(environment):
+							
+							// https://www.pointfree.co/episodes/ep16-dependency-injection-made-easy
+							Current = environment
+							
+							self.appCoordinator = AppCoordinator(navigationController: NavigationController())
+							self.appCoordinator?.start()
+							
+						case let .failure(error):
+							self.unrecoverableErrorCoordinator = UnrecoverableErrorCoordinator(error: error)
+							self.unrecoverableErrorCoordinator?.start()
+					}
+				}
 			}
 			return true
 		}

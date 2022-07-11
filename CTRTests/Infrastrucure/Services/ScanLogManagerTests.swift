@@ -17,7 +17,7 @@ class ScanLogManagerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier)
+		dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, loadPersistentStoreCompletion: { _ in })
 		sut = ScanLogManager(dataStoreManager: dataStoreManager)
 	}
 
