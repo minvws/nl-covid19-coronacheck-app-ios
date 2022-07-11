@@ -8,7 +8,7 @@
 import UIKit
 import AppAuth
 
-class LoginTVSViewModel {
+class AuthenticationViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
@@ -70,7 +70,7 @@ class LoginTVSViewModel {
 
 // MARK: Error States
 
-extension LoginTVSViewModel {
+extension AuthenticationViewModel {
 
 	func handleError(_ error: Error?) {
 
@@ -186,7 +186,7 @@ extension LoginTVSViewModel {
 
 // MARK: Mapping Errors
 
-extension LoginTVSViewModel {
+extension AuthenticationViewModel {
 
 	func mapError(_ error: Error?) -> ErrorCode.ClientCode? {
 

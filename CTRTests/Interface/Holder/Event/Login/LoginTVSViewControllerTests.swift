@@ -10,14 +10,14 @@ import XCTest
 import Nimble
 import SnapshotTesting
 
-class LoginTVSViewControllerTests: XCTestCase {
+class AuthenticationViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
-	private var sut: LoginTVSViewController!
+	private var sut: AuthenticationViewController!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var appAuthStateSpy: AppAuthStateSpy!
 	private var environmentSpies: EnvironmentSpies!
-	private var viewModel: LoginTVSViewModel!
+	private var viewModel: AuthenticationViewModel!
 	
 	var window = UIWindow()
 	
@@ -28,7 +28,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		appAuthStateSpy = AppAuthStateSpy()
-		viewModel = LoginTVSViewModel(
+		viewModel = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -46,7 +46,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 	func test_content() {
 		
 		// Given
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -61,7 +61,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 	func test_close() {
 		
 		// Given
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
@@ -76,7 +76,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -91,7 +91,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 		(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -118,7 +118,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 		(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()

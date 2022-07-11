@@ -208,8 +208,8 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 	private func navigateToLogin(eventMode: EventMode) {
 
-		let viewController = LoginTVSViewController(
-			viewModel: LoginTVSViewModel(
+		let viewController = AuthenticationViewController(
+			viewModel: AuthenticationViewModel(
 				coordinator: self,
 				eventMode: eventMode
 			)
