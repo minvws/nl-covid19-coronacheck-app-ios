@@ -84,7 +84,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
