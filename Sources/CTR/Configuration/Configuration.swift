@@ -11,6 +11,9 @@ class Configuration {
 
 	/// Dictionary with DigiD configs
 	var digid: NSDictionary = [:]
+	
+	/// Dictionary with GGD Portal configs
+	var ggdPortal: NSDictionary = [:]
 
 	/// Dictionary with General configs
 	var general: NSDictionary = [:]
@@ -37,6 +40,10 @@ class Configuration {
 
 			if let apiDict = dictionary["general"] as? NSDictionary {
 				general = apiDict
+			}
+			
+			if let apiDict = dictionary["ggdPortal"] as? NSDictionary {
+				ggdPortal = apiDict
 			}
 		}
 	}

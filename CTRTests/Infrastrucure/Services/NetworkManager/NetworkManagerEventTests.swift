@@ -28,7 +28,8 @@ class NetworkManagerEventTests: XCTestCase {
 			eventAccessToken: "eventToken"
 		),
 		eventInformationAvailable: nil,
-		usages: [.vaccination]
+		usages: [.vaccination],
+		providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 	)
 	
 	override func setUp() {
@@ -57,7 +58,8 @@ class NetworkManagerEventTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 
 		// When
@@ -84,7 +86,8 @@ class NetworkManagerEventTests: XCTestCase {
 			tlsCertificates: [OpenSSLData.providerCertificate],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 		
 		// When

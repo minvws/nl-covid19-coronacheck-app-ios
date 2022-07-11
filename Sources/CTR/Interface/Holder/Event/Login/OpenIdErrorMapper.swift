@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 import AppAuth
@@ -11,170 +11,170 @@ import AppAuth
 // MARK: Mapping Errors
 
 struct OpenIdErrorMapper {
-
+	
 	func mapError(_ error: Error?) -> ErrorCode.ClientCode? {
-
+		
 		guard let error = error else {
 			return nil
 		}
 		let nsError = error as NSError
-
+		
 		switch nsError.domain {
 			case OIDGeneralErrorDomain:
 				return mapGeneralError(nsError)
-
+				
 			case OIDOAuthAuthorizationErrorDomain:
 				return mapAuthAutorizationError(nsError)
-
+				
 			case OIDOAuthTokenErrorDomain:
 				return mapAuthTokenError(nsError)
-
+				
 			case OIDResourceServerAuthorizationErrorDomain:
 				return ErrorCode.ClientCode.openIDResourceError
-
+				
 			case OIDOAuthRegistrationErrorDomain:
 				return mapAuthRegistrationError(nsError)
-
+				
 			default:
 				return nil
 		}
 	}
-
+	
 	private func mapGeneralError(_ error: NSError) -> ErrorCode.ClientCode? {
-
+		
 		switch error.code {
 			case OIDErrorCode.invalidDiscoveryDocument.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralInvalidDiscoveryDocument
-
+				
 			case OIDErrorCode.userCanceledAuthorizationFlow.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralUserCancelledFlow
-
+				
 			case OIDErrorCode.programCanceledAuthorizationFlow.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralFlowCancelledProgrammatically
-
+				
 			case OIDErrorCode.networkError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralNetworkError
-
+				
 			case OIDErrorCode.serverError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralServerError
-
+				
 			case OIDErrorCode.jsonDeserializationError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralJSONDeserializationError
-
+				
 			case OIDErrorCode.tokenResponseConstructionError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralTokenResponseConstructionError
-
+				
 			case OIDErrorCode.safariOpenError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralSafariOpenError
-
+				
 			case OIDErrorCode.browserOpenError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralBrowserOpenError
-
+				
 			case OIDErrorCode.tokenRefreshError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralTokenRefreshError
-
+				
 			case OIDErrorCode.registrationResponseConstructionError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralInvalidRegistrationResponse
-
+				
 			case OIDErrorCode.jsonSerializationError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralJSONSerializationError
-
+				
 			case OIDErrorCode.idTokenParsingError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralUnableToParseIDToken
-
+				
 			case OIDErrorCode.idTokenFailedValidationError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralInvalidIDToken
-
+				
 			default:
 				return nil
 		}
 	}
-
+	
 	private func mapAuthAutorizationError(_ error: NSError) -> ErrorCode.ClientCode? {
-
+		
 		switch error.code {
 			case OIDErrorCodeOAuthAuthorization.invalidRequest.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationInvalidRequest
-
+				
 			case OIDErrorCodeOAuthAuthorization.unauthorizedClient.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationUnauthorizedClient
-
+				
 			case OIDErrorCodeOAuthAuthorization.accessDenied.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationAccessDenied
-
+				
 			case OIDErrorCodeOAuthAuthorization.unsupportedResponseType.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationUnsupportedResponseType
-
+				
 			case OIDErrorCodeOAuthAuthorization.authorizationInvalidScope.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationInvalidScope
-
+				
 			case OIDErrorCodeOAuthAuthorization.serverError.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationServerError
-
+				
 			case OIDErrorCodeOAuthAuthorization.temporarilyUnavailable.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationTemporarilyUnavailable
-
+				
 			case OIDErrorCodeOAuthAuthorization.clientError.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationClientError
-
+				
 			case OIDErrorCodeOAuthAuthorization.other.rawValue:
 				return ErrorCode.ClientCode.openIDAuthorizationUnknownError
-
+				
 			default:
 				return nil
 		}
 	}
-
+	
 	private func mapAuthTokenError(_ error: NSError) -> ErrorCode.ClientCode? {
-
+		
 		switch error.code {
 			case OIDErrorCodeOAuthToken.invalidRequest.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenInvalidRequest
-
+				
 			case OIDErrorCodeOAuthToken.invalidClient.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenInvalidClient
-
+				
 			case OIDErrorCodeOAuthToken.invalidGrant.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenInvalidGrant
-
+				
 			case OIDErrorCodeOAuthToken.unauthorizedClient.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenUnauthorizedClient
-
+				
 			case OIDErrorCodeOAuthToken.unsupportedGrantType.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenUnsupportedGrantType
-
+				
 			case OIDErrorCodeOAuthToken.invalidScope.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenInvalidScope
-
+				
 			case OIDErrorCodeOAuthToken.clientError.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenInvalidClient
-
+				
 			case OIDErrorCodeOAuthToken.other.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenUnknownError
-
+				
 			default:
 				return nil
 		}
 	}
-
+	
 	private func mapAuthRegistrationError(_ error: NSError) -> ErrorCode.ClientCode? {
-
+		
 		switch error.code {
 			case OIDErrorCodeOAuthRegistration.invalidRequest.rawValue:
 				return ErrorCode.ClientCode.openIOAuthRegistrationInvalidRequest
-
+				
 			case OIDErrorCodeOAuthRegistration.invalidRedirectURI.rawValue:
 				return ErrorCode.ClientCode.openIOAuthRegistrationInvalidRedirectUri
-
+				
 			case OIDErrorCodeOAuthRegistration.invalidClientMetadata.rawValue:
 				return ErrorCode.ClientCode.openIOAuthRegistrationInvalidClientMetaData
-
+				
 			case OIDErrorCodeOAuthRegistration.clientError.rawValue:
 				return ErrorCode.ClientCode.openIOAuthRegistrationClientError
-
+				
 			case OIDErrorCodeOAuthRegistration.other.rawValue:
 				return ErrorCode.ClientCode.openIOAuthRegistrationUnknownError
-
+				
 			default:
 				return nil
 		}

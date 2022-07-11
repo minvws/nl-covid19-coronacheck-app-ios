@@ -30,7 +30,8 @@ class AuthenticationViewControllerTests: XCTestCase {
 		appAuthStateSpy = AppAuthStateSpy()
 		viewModel = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .vaccination
+			eventMode: .vaccination,
+			authenticationMode: .manyAuthenticationExchange
 		)
 		window = UIWindow()
 	}
@@ -75,7 +76,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 	func test_login_success() {
 		
 		// Given
-		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
+		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
@@ -83,7 +84,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
@@ -127,4 +128,9 @@ class AuthenticationViewControllerTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
+}
+
+struct OpenIdManagerIdToken: OpenIdManagerToken {
+	var idToken: String? = "test"
+	var accessToken: String?
 }

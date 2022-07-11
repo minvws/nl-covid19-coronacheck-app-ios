@@ -22,15 +22,15 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEventAccessTokens = false
 	var invokedFetchEventAccessTokensCount = 0
-	var invokedFetchEventAccessTokensParameters: (tvsToken: String, Void)?
-	var invokedFetchEventAccessTokensParametersList = [(tvsToken: String, Void)]()
+	var invokedFetchEventAccessTokensParameters: (maxToken: String, Void)?
+	var invokedFetchEventAccessTokensParametersList = [(maxToken: String, Void)]()
 	var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], ServerError>, Void)?
 
-	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
+	func fetchEventAccessTokens(maxToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 		invokedFetchEventAccessTokens = true
 		invokedFetchEventAccessTokensCount += 1
-		invokedFetchEventAccessTokensParameters = (tvsToken, ())
-		invokedFetchEventAccessTokensParametersList.append((tvsToken, ()))
+		invokedFetchEventAccessTokensParameters = (maxToken, ())
+		invokedFetchEventAccessTokensParametersList.append((maxToken, ()))
 		if let result = stubbedFetchEventAccessTokensCompletionResult {
 			completion(result.0)
 		}

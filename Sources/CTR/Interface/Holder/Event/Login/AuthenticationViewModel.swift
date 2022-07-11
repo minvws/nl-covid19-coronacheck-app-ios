@@ -8,17 +8,38 @@
 import UIKit
 import AppAuth
 
+enum AuthenticationMode {
+	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)
+	case patientAuthenticationProvider // GGD GHOR Portal (patient authentication provider)
+	
+	var configuration: IssuerConfiguration {
+		switch self {
+			case .manyAuthenticationExchange:
+				return MaxConfig()
+			case .patientAuthenticationProvider:
+				return PapConfig()
+		}
+	}
+	
+	var step: ErrorCode.Step {
+		switch self {
+			case .manyAuthenticationExchange:
+				return .max
+			case .patientAuthenticationProvider:
+				return .pap
+		}
+	}
+}
+
 class AuthenticationViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
 
-	private var eventMode: EventMode
-
-	private var title: String
-	
 	private var appAuthState: AppAuthState?
-
+	private var eventMode: EventMode
+	private let authenticationMode: AuthenticationMode
+	
 	@Bindable internal var content: Content
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
@@ -26,13 +47,14 @@ class AuthenticationViewModel {
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
+		authenticationMode: AuthenticationMode,
 		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 		self.appAuthState = appAuthState
+		self.authenticationMode = authenticationMode
 
-		self.title = L.holder_fetchRemoteEvents_title()
 		content = Content(title: L.holder_fetchRemoteEvents_title())
 	}
 
@@ -41,12 +63,12 @@ class AuthenticationViewModel {
 		self.coordinator?.authenticationScreenDidFinish(.back(eventMode: eventMode))
 	}
 
-	/// Login at the GGD
-	func login() {
+	/// Login
+	func login(presentingViewController: UIViewController) {
 
 		shouldShowProgress = true
 		content = Content(
-			title: title,
+			title: L.holder_fetchRemoteEvents_title(),
 			body: nil,
 			primaryActionTitle: L.generalClose(),
 			primaryAction: { [weak self] in
@@ -55,15 +77,44 @@ class AuthenticationViewModel {
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-
-		openIdManager?.requestAccessToken { tvsToken in
-
-			self.shouldShowProgress = false
-
-			self.coordinator?.authenticationScreenDidFinish(.didLogin(token: tvsToken, eventMode: self.eventMode))
-		} onError: { error in
-			self.shouldShowProgress = false
-			self.handleError(error)
+		
+		openIdManager?.requestAccessToken(
+			issuerConfiguration: authenticationMode.configuration,
+			// use the internal browser for pap,
+			// use the external browser for tvs (because the Digid app redirects to external browser)
+			presentingViewController: authenticationMode == .patientAuthenticationProvider ? presentingViewController : nil,
+			onCompletion: { token in
+				
+				self.shouldShowProgress = false
+				self.handleToken(token)
+			},
+			onError: { error in
+				self.shouldShowProgress = false
+				self.handleError(error)
+			}
+		)
+	}
+	
+	func handleToken(_ token: OpenIdManagerToken) {
+		
+		switch authenticationMode {
+			case .manyAuthenticationExchange:
+				
+				guard let idToken = token.idToken else {
+					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
+					return
+				}
+				
+				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: idToken, authenticationMode: .manyAuthenticationExchange, eventMode: self.eventMode))
+				
+			case .patientAuthenticationProvider:
+				
+				guard let accessToken = token.accessToken else {
+					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
+					return
+				}
+				
+				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: accessToken, authenticationMode: .patientAuthenticationProvider, eventMode: self.eventMode))
 		}
 	}
 }
@@ -75,6 +126,7 @@ extension AuthenticationViewModel {
 	func handleError(_ error: Error?) {
 
 		Current.logHandler.logError("Authentication error: \(error?.localizedDescription ?? "Unknown error")")
+		
 		let clientCode = OpenIdErrorMapper().mapError(error)
 
 		if let error = error {
@@ -83,7 +135,7 @@ extension AuthenticationViewModel {
 				displayServerBusy(
 					errorCode: ErrorCode(
 						flow: eventMode.flow,
-						step: .tvs,
+						step: authenticationMode.step,
 						errorCode: "429"
 					)
 				)
@@ -98,7 +150,7 @@ extension AuthenticationViewModel {
 
 						let errorCode = ErrorCode(
 							flow: eventMode.flow,
-							step: .tvs,
+							step: authenticationMode.step,
 							clientCode: networkError.getClientErrorCode() ?? .unhandled
 						)
 						self.displayUnreachable(errorCode: errorCode)
@@ -111,7 +163,7 @@ extension AuthenticationViewModel {
 
 		let errorCode = ErrorCode(
 			flow: eventMode.flow,
-			step: .tvs,
+			step: authenticationMode.step,
 			clientCode: clientCode ?? ErrorCode.ClientCode(value: "000")
 		)
 		self.displayErrorCode(errorCode: errorCode)

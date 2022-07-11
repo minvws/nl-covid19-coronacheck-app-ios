@@ -24,7 +24,7 @@ class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 		invokedBackToMyOverview = true
 		invokedBackToMyOverviewCount += 1
 	}
-	
+
 	var invokedContinueToPap = false
 	var invokedContinueToPapCount = 0
 	var invokedContinueToPapParameters: (eventMode: EventMode, Void)?

@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ggdPortal</key>
+	<dict>
+		<key>host</key>
+		<string>https://pap.bananenhalen.nl/</string>
+		<key>clientId</key>
+		<string>cc_app</string>
+		<key>redirectUri</key>
+		<string>https://web.test.coronacheck.nl/app/auth2</string>
+	</dict>
 	<key>general</key>
 	<dict>
 		<key>autoCloseTime</key>

@@ -167,7 +167,7 @@ private let jailBreakDetector = JailBreakDetector()
 private let logHandler = LogHandler()
 private let mappingManager = MappingManager(remoteConfigManager: remoteConfigManager)
 private let onboardingManager = OnboardingManager(secureUserSettings: secureUserSettings)
-private let openIdManager = OpenIdManager(configuration: Configuration(), logHandler: logHandler)
+private let openIdManager = OpenIdManager(logHandler: logHandler)
 private let networkManager: NetworkManager = {
 	let networkConfiguration: NetworkConfiguration
 	   
