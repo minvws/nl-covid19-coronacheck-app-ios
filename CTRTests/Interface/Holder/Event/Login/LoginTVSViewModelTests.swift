@@ -10,10 +10,10 @@ import XCTest
 import Nimble
 import AppAuth
 
-class LoginTVSViewModelTests: XCTestCase {
+class AuthenticationViewModelTests: XCTestCase {
 
 	/// Subject under test
-	private var sut: LoginTVSViewModel!
+	private var sut: AuthenticationViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var appAuthStateSpy: AppAuthStateSpy!
@@ -32,7 +32,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -51,7 +51,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery
 		)
@@ -70,7 +70,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test
 		)
@@ -89,7 +89,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow
 		)
@@ -106,7 +106,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_cancel() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -115,14 +115,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.cancel()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
 	}
 	
 	func test_cancelAuthorization_whenRequestedAuthorizationIsFalse_shouldNotInvokeCoordinator() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			appAuthState: appAuthStateSpy
@@ -133,13 +133,13 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.cancelAuthorization()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == false
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == false
 	}
 	
 	func test_abortAuthorization_whenRequestedAuthorization_shouldInvokeCoordinator() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			appAuthState: appAuthStateSpy
@@ -150,14 +150,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.cancelAuthorization()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
 	func test_openID_success_accessToken_ok() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -174,14 +174,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryAction).to(beNil())
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
 	}
 
 	func test_openID_error_serverUnreachable() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -192,8 +192,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
@@ -209,7 +209,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_serverbusy() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -220,8 +220,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
 			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
@@ -237,7 +237,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_userCancelled() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -248,14 +248,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
 	func test_openID_error_userCancelled_OIDErrorCode() {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -265,14 +265,14 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
 	func test_openID_error_generalError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -301,8 +301,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
@@ -319,7 +319,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_AuthAuthorizationError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -344,8 +344,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
@@ -362,7 +362,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_AuthTokenError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -386,8 +386,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
@@ -404,7 +404,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_ResourceServerAuthorizationError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -415,8 +415,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
@@ -432,7 +432,7 @@ class LoginTVSViewModelTests: XCTestCase {
 	func test_openID_error_AuthRegistrationError() throws {
 
 		// Given
-		sut = LoginTVSViewModel(
+		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -453,8 +453,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")

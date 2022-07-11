@@ -10,14 +10,14 @@ import XCTest
 import Nimble
 import SnapshotTesting
 
-class LoginTVSViewControllerTests: XCTestCase {
+class AuthenticationViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
-	private var sut: LoginTVSViewController!
+	private var sut: AuthenticationViewController!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var appAuthStateSpy: AppAuthStateSpy!
 	private var environmentSpies: EnvironmentSpies!
-	private var viewModel: LoginTVSViewModel!
+	private var viewModel: AuthenticationViewModel!
 	
 	var window = UIWindow()
 	
@@ -28,7 +28,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		appAuthStateSpy = AppAuthStateSpy()
-		viewModel = LoginTVSViewModel(
+		viewModel = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
@@ -46,7 +46,7 @@ class LoginTVSViewControllerTests: XCTestCase {
 	func test_content() {
 		
 		// Given
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
@@ -61,29 +61,29 @@ class LoginTVSViewControllerTests: XCTestCase {
 	func test_close() {
 		
 		// Given
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		loadView()
 		
 		// When
 		sut.sceneView.primaryButtonTapped()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .vaccination)
 	}
 	
 	func test_login_success() {
 		
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (.test, ())
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: .test, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
@@ -91,14 +91,14 @@ class LoginTVSViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 		(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
@@ -118,13 +118,13 @@ class LoginTVSViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 		(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
-		sut = LoginTVSViewController(viewModel: viewModel)
+		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
 		loadView()
 		
 		// Then
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 }

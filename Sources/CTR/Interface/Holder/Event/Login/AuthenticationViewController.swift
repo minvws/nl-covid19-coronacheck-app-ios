@@ -7,14 +7,14 @@
 
 import UIKit
 
-class LoginTVSViewController: BaseViewController {
+class AuthenticationViewController: BaseViewController {
 
-	private let viewModel: LoginTVSViewModel
+	private let viewModel: AuthenticationViewModel
 	let sceneView = FetchRemoteEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: LoginTVSViewModel) {
+	init(viewModel: AuthenticationViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

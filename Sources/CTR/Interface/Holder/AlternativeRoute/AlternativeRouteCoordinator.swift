@@ -11,7 +11,7 @@ protocol AlternativeRouteFlowDelegate: AnyObject {
 
 	func canceledAlternativeRoute()
 	
-	func completedAlternativeRoute()
+	func backToMyOverview()
 }
 
 protocol AlternativeRouteCoordinatorDelegate: AnyObject {
@@ -121,7 +121,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 				body: message,
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
-					self?.delegate?.completedAlternativeRoute()
+					self?.delegate?.backToMyOverview()
 				}
 			),
 			backAction: { [weak navigationController] in
