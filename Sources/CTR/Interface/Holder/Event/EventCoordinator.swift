@@ -96,7 +96,7 @@ protocol EventCoordinatorDelegate: AnyObject {
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult)
 
-	func loginTVSScreenDidFinish(_ result: EventScreenResult)
+	func authenticationScreenDidFinish(_ result: EventScreenResult)
 
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
@@ -370,7 +370,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		delegate?.eventFlowDidCancel()
 	}
 
-	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
+	func authenticationScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 

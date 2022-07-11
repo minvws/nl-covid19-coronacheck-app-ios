@@ -38,7 +38,7 @@ class LoginTVSViewModel {
 
 	func cancel() {
 
-		self.coordinator?.loginTVSScreenDidFinish(.back(eventMode: eventMode))
+		self.coordinator?.authenticationScreenDidFinish(.back(eventMode: eventMode))
 	}
 
 	/// Login at the GGD
@@ -60,7 +60,7 @@ class LoginTVSViewModel {
 
 			self.shouldShowProgress = false
 
-			self.coordinator?.loginTVSScreenDidFinish(.didLogin(token: tvsToken, eventMode: self.eventMode))
+			self.coordinator?.authenticationScreenDidFinish(.didLogin(token: tvsToken, eventMode: self.eventMode))
 		} onError: { error in
 			self.shouldShowProgress = false
 			self.handleError(error)
@@ -119,14 +119,14 @@ extension LoginTVSViewModel {
 
 	func userCancelled() {
 
-		self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+		self.coordinator?.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
 	
 	func cancelAuthorization() {
 		
 		guard appAuthState?.currentAuthorizationFlow != nil else { return }
 		
-		coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+		coordinator?.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
 
 	func displayErrorCode(errorCode: ErrorCode) {
@@ -145,12 +145,12 @@ extension LoginTVSViewModel {
 			body: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
-				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+				self?.coordinator?.authenticationScreenDidFinish(.stop)
 			},
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
+		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
 	func displayUnreachable(errorCode: ErrorCode) {
@@ -169,7 +169,7 @@ extension LoginTVSViewModel {
 			body: subTitle,
 			primaryActionTitle: primaryActionTitle,
 			primaryAction: { [weak self] in
-				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+				self?.coordinator?.authenticationScreenDidFinish(.stop)
 			},
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
@@ -180,7 +180,7 @@ extension LoginTVSViewModel {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
+		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 }
 
