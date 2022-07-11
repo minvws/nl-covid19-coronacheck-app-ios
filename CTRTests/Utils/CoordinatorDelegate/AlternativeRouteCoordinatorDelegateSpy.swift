@@ -60,4 +60,20 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 		invokedUserWishesToContactHelpDeksWithoutBSN = true
 		invokedUserWishesToContactHelpDeksWithoutBSNCount += 1
 	}
+
+	var invokedUserHasNoBSN = false
+	var invokedUserHasNoBSNCount = 0
+
+	func userHasNoBSN() {
+		invokedUserHasNoBSN = true
+		invokedUserHasNoBSNCount += 1
+	}
+
+	var invokedUserWishedToGoToGGDPortal = false
+	var invokedUserWishedToGoToGGDPortalCount = 0
+
+	func userWishedToGoToGGDPortal() {
+		invokedUserWishedToGoToGGDPortal = true
+		invokedUserWishedToGoToGGDPortalCount += 1
+	}
 }

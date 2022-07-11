@@ -109,4 +109,14 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedShouldShowCoronaMelderRecommendationCount += 1
 		return stubbedShouldShowCoronaMelderRecommendationResult
 	}
+
+	var invokedIsGGDPortalEnabled = false
+	var invokedIsGGDPortalEnabledCount = 0
+	var stubbedIsGGDPortalEnabledResult: Bool! = false
+
+	func isGGDPortalEnabled() -> Bool {
+		invokedIsGGDPortalEnabled = true
+		invokedIsGGDPortalEnabledCount += 1
+		return stubbedIsGGDPortalEnabledResult
+	}
 }

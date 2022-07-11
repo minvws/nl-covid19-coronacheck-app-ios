@@ -180,9 +180,10 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
 	
-	func test_secondaryButtonTapped() {
+	func test_secondaryButtonTappedcheckBoxToggled_false() {
 
 		// Given
+		sut.checkboxToggled(value: false)
 
 		// When
 		sut.secondaryButtonTapped()
@@ -190,6 +191,19 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccination)
+	}
+	
+	func test_secondaryButtonTappedcheckBoxToggled_true() {
+
+		// Given
+		sut.checkboxToggled(value: true)
+
+		// When
+		sut.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccinationAndPositiveTest)
 	}
 	
 }

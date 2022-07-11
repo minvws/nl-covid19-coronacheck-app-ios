@@ -93,6 +93,9 @@ struct RemoteConfiguration: Codable, Equatable {
 
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
+	
+	/// Restricts access to PAP provider login
+	var isPAPEnabled: Bool?
 
 	var credentialRenewalDays: Int?
 
@@ -145,6 +148,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		case euTestNames = "euTestNames"
 		case euTestManufacturers = "euTestManufacturers"
 		case isGGDEnabled = "ggdEnabled"
+		case isPAPEnabled = "papEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
 		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
 		case universalLinkPermittedDomains = "universalLinkDomains"
@@ -181,6 +185,7 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.configAlmostOutOfDateWarningSeconds = 300
 		config.recoveryExpirationDays = 180
 		config.isGGDEnabled = true
+		config.isPAPEnabled = true
 		config.credentialRenewalDays = 5
 		config.domesticQRRefreshSeconds = 60
 		config.universalLinkPermittedDomains = nil

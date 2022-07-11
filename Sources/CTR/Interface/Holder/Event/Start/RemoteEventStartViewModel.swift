@@ -95,6 +95,6 @@ class RemoteEventStartViewModel {
 	
 	func secondaryButtonTapped() {
 		
-		coordinator?.eventStartScreenDidFinish(.alternativeRoute(eventMode: eventMode))
+		coordinator?.eventStartScreenDidFinish(.alternativeRoute(eventMode: didCheckCheckbox ? .vaccinationAndPositiveTest : eventMode))
 	}
 }

@@ -10,7 +10,7 @@ import UIKit
 protocol ListOptionsProtocol: AnyObject {
 
 	var title: Observable<String> { get }
-	var message: Observable<String> { get }
+	var message: Observable<String?> { get }
 	var optionModels: Observable<[ListOptionsViewController.OptionModel]> { get }
 	var bottomButton: Observable<ListOptionsViewController.OptionModel?> { get }
 }

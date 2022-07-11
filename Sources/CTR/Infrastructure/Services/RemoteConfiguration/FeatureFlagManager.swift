@@ -28,6 +28,7 @@ protocol FeatureFlagManaging {
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
 	func shouldShowCoronaMelderRecommendation() -> Bool
+	func isGGDPortalEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging {
@@ -49,6 +50,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	func isGGDEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.isGGDEnabled ?? false
+	}
+	
+	func isGGDPortalEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isPAPEnabled ?? false
 	}
 	
 	///  Should we use the luhn check for tokens?
