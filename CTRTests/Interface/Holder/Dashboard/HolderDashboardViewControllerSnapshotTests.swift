@@ -19,7 +19,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		
 		_ = setupEnvironmentSpies()
 		viewModelSpy = HolderDashboardViewModelSpy()
 		viewModelSpy.stubbedTitle = Observable(value: L.holderDashboardTitle())
@@ -37,7 +36,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 	func testInitial() {
 		
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_headerMessage() {
@@ -51,7 +50,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_headerMessage_withButtonTitle() {
@@ -65,7 +64,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_emptyStateDescription() {
@@ -79,7 +78,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_emptyStateDescription_withButtonTitle() {
@@ -93,7 +92,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_emptyStatePlaceholdImage_domestic() {
@@ -107,7 +106,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_emptyStatePlaceholdImage_international() {
@@ -121,7 +120,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_addCertificate() {
@@ -135,7 +134,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.95))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_expiredQR() {
@@ -149,7 +148,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_expiredVaccinationQR() {
@@ -163,7 +162,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_originNotValidInThisRegion() {
@@ -177,7 +176,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_deviceHasClockDeviation() {
@@ -191,7 +190,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_configAlmostOutOfDate() {
@@ -205,7 +204,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_errorMessage_short() {
@@ -229,7 +228,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_errorMessage_long() {
@@ -253,7 +252,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_newValidityInfoForVaccinationAndRecoveries() {
@@ -267,7 +266,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_completeYourVaccinationAssessment() {
@@ -281,7 +280,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_vaccinationAssessmentInvalidOutsideNL() {
@@ -295,7 +294,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_recommendCoronaMelder() {
@@ -309,7 +308,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_recommendedUpdate() {
@@ -323,7 +322,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_disclosurePolicyInformation() {
@@ -337,7 +336,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.96))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	// MARK: - Domestic QR -
@@ -363,7 +362,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_buttonEnabled() {
@@ -387,7 +386,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_buttonEnabled_butDisabledByDisclosurePolicy() {
@@ -411,7 +410,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_buttonDisabled_loading() {
@@ -435,7 +434,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_buttonEnabled_loading() {
@@ -459,7 +458,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_expiryCountdown() {
@@ -483,7 +482,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_validityText_past() {
@@ -512,7 +511,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_validityText_current_longline() {
@@ -541,7 +540,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_validityText_current_longlines() {
@@ -574,7 +573,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_validityText_future() {
@@ -603,7 +602,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_validityText_future_desiresToShowAutomaticallyBecomesValidFooter_buttonDisabled() {
@@ -632,7 +631,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_domesticQR_validityText_future_desiresToShowAutomaticallyBecomesValidFooter_buttonEnabled() {
@@ -661,7 +660,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	// MARK: - International QR -
@@ -686,7 +685,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_static_stackSize2() {
@@ -709,7 +708,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 
 	func test_internationalQR_static_stackSize3() {
@@ -732,7 +731,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_static_stackSize4() {
@@ -755,7 +754,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_loading_buttonEnabled() {
@@ -778,7 +777,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_loading_buttonDisabled() {
@@ -801,7 +800,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_expiryCountdown() {
@@ -824,7 +823,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_validityTexts_past() {
@@ -849,7 +848,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_validityTexts_current() {
@@ -874,7 +873,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_validityTexts_future() {
@@ -901,7 +900,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 	
 	func test_internationalQR_validityTexts_future_desiresToShowAutomaticallyBecomesValidFooter() {
@@ -928,6 +927,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		]
 		
 		// Assert
-		assertSnapshot(matching: sut, as: .image(precision: 0.98))
+		assertSnapshot(matching: sut, as: .image)
 	}
 }
