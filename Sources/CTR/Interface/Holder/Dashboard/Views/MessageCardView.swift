@@ -119,7 +119,7 @@ class MessageCardView: BaseView {
 	
 	/// Create the shadow around the view
 	func createShadow() {
-		
+		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
 		// Shadow
 		layer.shadowColor = C.shadow()?.cgColor
 		layer.shadowOpacity = ViewTraits.Shadow.opacity
