@@ -6,33 +6,34 @@
 */
 
 import UIKit
+import CryptoKit
 
 final class MaxConfig: IssuerConfiguration {
 	
-	func getIssuerURL() -> URL {
+	var issuerUrl: URL {
 		return Configuration().getTVSURL()
 	}
 	
-	func getClientId() -> String {
+	var clientId: String {
 		return Configuration().getTVSClientId()
 	}
 	
-	func getRedirectUri() -> URL {
+	var redirectUri: URL {
 		return Configuration().getTVSRedirectUri()
 	}
 }
 
 final class PapConfig: IssuerConfiguration {
 	
-	func getIssuerURL() -> URL {
+	var issuerUrl: URL {
 		return Configuration().getPortalURL()
 	}
 	
-	func getClientId() -> String {
+	var clientId: String {
 		return Configuration().getPortalClientId()
 	}
 	
-	func getRedirectUri() -> URL {
+	var redirectUri: URL {
 		return Configuration().getPortalRedirectUri()
 	}
 }

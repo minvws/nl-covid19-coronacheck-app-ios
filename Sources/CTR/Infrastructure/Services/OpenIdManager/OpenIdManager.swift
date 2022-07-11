@@ -23,18 +23,12 @@ protocol OpenIdManaging: AnyObject {
 }
 
 protocol IssuerConfiguration: AnyObject {
+	
+	var issuerUrl: URL { get }
 
-	/// Get the  url
-	/// - Returns: the url
-	func getIssuerURL() -> URL
+	var clientId: String { get }
 
-	/// Get the client ID
-	/// - Returns: the client ID
-	func getClientId() -> String
-
-	/// Get the redirect uri
-	/// - Returns: the redirect uri
-	func getRedirectUri() -> URL
+	var redirectUri: URL { get }
 }
 
 protocol OpenIdManagerToken {
@@ -143,8 +137,7 @@ class OpenIdManager: OpenIdManaging {
 	///   - onCompletion: Service Configuration or error
 	private func discoverServiceConfiguration(issuerConfiguration: IssuerConfiguration, onCompletion: @escaping (Result<OIDServiceConfiguration, Error>) -> Void) {
 		
-		let issuer = issuerConfiguration.getIssuerURL()
-		OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { serviceConfiguration, error in
+		OIDAuthorizationService.discoverConfiguration(forIssuer: issuerConfiguration.issuerUrl) { serviceConfiguration, error in
 			DispatchQueue.main.async {
 				if let service = serviceConfiguration {
 					onCompletion(.success(service))
@@ -165,9 +158,9 @@ class OpenIdManager: OpenIdManaging {
 		// builds authentication request
 		let request = OIDAuthorizationRequest(
 			configuration: serviceConfiguration,
-			clientId: issuerConfiguration.getClientId(),
+			clientId: issuerConfiguration.clientId,
 			scopes: [OIDScopeOpenID],
-			redirectURL: issuerConfiguration.getRedirectUri(),
+			redirectURL: issuerConfiguration.redirectUri,
 			responseType: OIDResponseTypeCode,
 			additionalParameters: nil
 		)
