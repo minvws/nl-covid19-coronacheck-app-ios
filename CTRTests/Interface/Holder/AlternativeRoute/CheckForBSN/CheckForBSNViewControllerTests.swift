@@ -22,7 +22,8 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
 		sut = ListOptionsViewController(
 			viewModel: CheckForBSNViewModel(
-				coordinator: coordinatorDelegateSpy
+				coordinator: coordinatorDelegateSpy,
+				eventMode: .vaccination
 			)
 		)
 		window = UIWindow()

@@ -72,7 +72,8 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		
 		let destination = ListOptionsViewController(
 			viewModel: CheckForBSNViewModel(
-				coordinator: self
+				coordinator: self,
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)

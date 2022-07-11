@@ -18,7 +18,7 @@ class CheckForBSNViewModelTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
-		sut = CheckForBSNViewModel(coordinator: coordinatorDelegateSpy)
+		sut = CheckForBSNViewModel(coordinator: coordinatorDelegateSpy, eventMode: .vaccination)
 	}
 	
 	func test_loadedState() {

@@ -139,7 +139,6 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible you've only had one injection. Add your second vaccination to get a valid Dutch certificate. <a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">Read all about the possible causes.</a></p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost</a>.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
@@ -536,12 +535,12 @@
 "holder.vaccination.nolist.title" = "No vaccinations available";
 "holder.vaccination.start.action" = "Log in with DigiD";
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
-"holder_addVaccination_alsoCollectPositiveTestResults_message" = "<p><b>Had coronavirus before your first vaccination?</b><br />Then you often need a vaccination less to be considered fully vaccinated. Retrieve your positive test result to record it into your vaccination certificate.</p>";
+"holder_addVaccination_alsoCollectPositiveTestResults_message" = "<p><b>Did you have coronavirus?</b><br />In some cases, you need one less vaccination to be fully vaccinated. Retrieve your oldest positive test result as well to possibly have it count for your vaccination certificate.</p>";
 "holder_addVaccination_message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p>";
 "holder_addVaccination_title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Get your certificate from the CoronaCheck helpdesk";
-"holder_checkForBSN_buttonSubTitle_doesNotHaveBSN" = "Get your certificate from your test or vaccination location";
+"holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_otherFlow" = "Get your certificate from your test or vaccination location";
 "holder_checkForBSN_buttonTitle_doesHaveBSN" = "Yes, I have a BSN";
 "holder_checkForBSN_buttonTitle_doesNotHaveBSN" = "No, I don’t have a BSN";
 "holder_checkForBSN_message" = "With your BSN, you can request your certificate at the CoronaCheck helpdesk. Don’t have a BSN? The you can get a certificate from your test or vaccination location.";
@@ -640,7 +639,9 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Data retrieved from: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Test date: %@";
 "holder_listRemoteEvents_listElement_title_vaccination" = "Vaccination";
-"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date: %@";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date %@";
+/* To be removed */
+"holder_listRemoteEvents_listElement_vaccination_title" = "Vaccination %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Your details: %@";
 "holder_listRemoteEvents_negativeTest_message" = "This test result is retrieved from the test location. If the details are correct, you can create a certificate.";
 "holder_listRemoteEvents_originMismatch_paperProof_body" = "<p>At this moment, we can't create a certificate from your scanned QR code. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
