@@ -264,4 +264,15 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel is ChooseEventLocationViewModel) == true
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
 	}
+	
+	func test_userWishedToGoToGGDPortal() {
+		
+		// Given
+		
+		// When
+		sut.userWishedToGoToGGDPortal()
+		
+		// Then
+		expect(self.alternativeRouteFlowDelegateSpy.invokedContinueToPap) == true
+	}
 }
