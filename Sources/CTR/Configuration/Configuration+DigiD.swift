@@ -15,11 +15,11 @@ protocol ConfigurationDigidProtocol: AnyObject {
 
 	/// Get the consumer ID for DigiD
 	/// - Returns: the consumer ID for DigiD
-	func getConsumerId() -> String
+	func getTVSClientId() -> String
 
 	/// Get the redirect uri for Digid
 	/// - Returns: the redirect uri for Digid
-	func getRedirectUri() -> URL
+	func getTVSRedirectUri() -> URL
 }
 
 // MARK: - ConfigurationDigidProtocol
@@ -38,7 +38,7 @@ extension Configuration: ConfigurationDigidProtocol {
 
 	/// Get the consumer ID for DigiD
 	/// - Returns: the consumer ID for DigiD
-	func getConsumerId() -> String {
+	func getTVSClientId() -> String {
 
 		guard let value = digid["consumerId"] as? String else {
 			fatalError("Configuration: No DigiD Consumer Id provided")
@@ -48,7 +48,7 @@ extension Configuration: ConfigurationDigidProtocol {
 
 	/// Get the redirect uri for Digid
 	/// - Returns: the redirect uri for Digid
-	func getRedirectUri() -> URL {
+	func getTVSRedirectUri() -> URL {
 
 		guard let value = digid["redirectUri"] as? String,
 			  let url = URL(string: value) else {

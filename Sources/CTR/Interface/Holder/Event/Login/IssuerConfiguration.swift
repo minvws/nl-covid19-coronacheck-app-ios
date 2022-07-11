@@ -7,22 +7,22 @@
 
 import UIKit
 
-class MaxConfig: IssuerConfiguration {
+final class MaxConfig: IssuerConfiguration {
 	
 	func getIssuerURL() -> URL {
 		return Configuration().getTVSURL()
 	}
 	
 	func getClientId() -> String {
-		return Configuration().getConsumerId()
+		return Configuration().getTVSClientId()
 	}
 	
 	func getRedirectUri() -> URL {
-		return Configuration().getRedirectUri()
+		return Configuration().getTVSRedirectUri()
 	}
 }
 
-class PapConfig: IssuerConfiguration {
+final class PapConfig: IssuerConfiguration {
 	
 	func getIssuerURL() -> URL {
 		return Configuration().getPortalURL()
