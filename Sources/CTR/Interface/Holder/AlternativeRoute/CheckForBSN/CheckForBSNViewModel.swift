@@ -35,7 +35,7 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_checkForBSN_buttonTitle_doesNotHaveBSN(),
-				subTitle: (eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest) ? L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow() : L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_otherFlow(),
+				subTitle: (eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest) ? L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow() : L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow(),
 				action: { [weak self] in self?.coordinator?.userHasNoBSN() }
 			)
 		]

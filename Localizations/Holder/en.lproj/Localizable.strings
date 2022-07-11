@@ -540,7 +540,7 @@
 "holder_addVaccination_title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Get your certificate from the CoronaCheck helpdesk";
-"holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_otherFlow" = "Get your certificate from your test or vaccination location";
+"holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow" = "Get your certificate from your test or vaccination location";
 "holder_checkForBSN_buttonTitle_doesHaveBSN" = "Yes, I have a BSN";
 "holder_checkForBSN_buttonTitle_doesNotHaveBSN" = "No, I don’t have a BSN";
 "holder_checkForBSN_message" = "With your BSN, you can request your certificate at the CoronaCheck helpdesk. Don’t have a BSN? The you can get a certificate from your test or vaccination location.";

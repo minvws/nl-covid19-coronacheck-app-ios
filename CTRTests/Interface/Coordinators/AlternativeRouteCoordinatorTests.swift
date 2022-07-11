@@ -250,7 +250,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message(L.holder_contactProviderHelpdesk_vaccinated())
 	}
 	
-	func test_userWishesToChooseEventLocation_ggdPortalEnabled() throws {
+	func test_userWishesToChooseEventLocation_ggdPortalEnabled_vaccinationFlow() throws {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
@@ -263,6 +263,23 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel is ChooseEventLocationViewModel) == true
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
+	}
+	
+	func test_userWishesToChooseEventLocation_ggdPortalEnabled_testFlow() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
+		sut = AlternativeRouteCoordinator(
+			navigationController: navigationSpy,
+			delegate: alternativeRouteFlowDelegateSpy,
+			eventMode: .test
+		)
+		
+		// When
+		sut.userHasNoBSN()
+		
+		// Then
+		expect(self.alternativeRouteFlowDelegateSpy.invokedContinueToPap) == true
 	}
 	
 	func test_userWishedToGoToGGDPortal() {
