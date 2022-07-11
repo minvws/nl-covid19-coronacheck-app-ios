@@ -72,7 +72,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel is CheckForBSNViewModel) == true
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
-		expect(self.alternativeRouteFlowDelegateSpy.invokedCompletedAlternativeRoute) == false
+		expect(self.alternativeRouteFlowDelegateSpy.invokedBackToMyOverview) == false
 	}
 	
 	func test_userWishesToCheckForDigid() {
@@ -87,7 +87,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is CheckForDigidViewController) == true
 		expect((self.navigationSpy.viewControllers.last as? CheckForDigidViewController)?.viewModel is CheckForDigidViewModel) == true
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
-		expect(self.alternativeRouteFlowDelegateSpy.invokedCompletedAlternativeRoute) == false
+		expect(self.alternativeRouteFlowDelegateSpy.invokedBackToMyOverview) == false
 	}
 	
 	func test_userWishesToRequestADigiD() {
@@ -182,7 +182,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
-		expect(self.alternativeRouteFlowDelegateSpy.invokedCompletedAlternativeRoute) == true
+		expect(self.alternativeRouteFlowDelegateSpy.invokedBackToMyOverview) == true
 	}
 	
 	func test_test_userWishesToContactHelpDeksWithBSN_primaryAction() throws {
@@ -196,6 +196,6 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
-		expect(self.alternativeRouteFlowDelegateSpy.invokedCompletedAlternativeRoute) == true
+		expect(self.alternativeRouteFlowDelegateSpy.invokedBackToMyOverview) == true
 	}
 }

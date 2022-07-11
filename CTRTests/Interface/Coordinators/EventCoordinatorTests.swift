@@ -782,7 +782,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 	}
 	
-	func test_ccompletedAlternativeRoute() {
+	func test_cbackToMyOverview() {
 		
 		// Given
 		let alternativeCoordinator = AlternativeRouteCoordinator(
@@ -793,20 +793,20 @@ class EventCoordinatorTests: XCTestCase {
 		sut.childCoordinators = [alternativeCoordinator]
 		
 		// When
-		sut.completedAlternativeRoute()
+		sut.backToMyOverview()
 		
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
-	func test_ccompletedAlternativeRoute_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
+	func test_cbackToMyOverview_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
 		
 		// Given
 		sut.childCoordinators = []
 		
 		// When
-		sut.completedAlternativeRoute()
+		sut.backToMyOverview()
 		
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())

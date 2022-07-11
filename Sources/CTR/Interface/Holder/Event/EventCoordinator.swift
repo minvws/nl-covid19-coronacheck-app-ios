@@ -519,7 +519,7 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		removeChildCoordinator(coordinator)
 	}
 	
-	func completedAlternativeRoute() {
+	func backToMyOverview() {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)

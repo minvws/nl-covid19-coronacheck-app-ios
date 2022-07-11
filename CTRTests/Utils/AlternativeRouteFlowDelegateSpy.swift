@@ -17,11 +17,11 @@ class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 		invokedCanceledAlternativeRouteCount += 1
 	}
 
-	var invokedCompletedAlternativeRoute = false
-	var invokedCompletedAlternativeRouteCount = 0
+	var invokedBackToMyOverview = false
+	var invokedBackToMyOverviewCount = 0
 
-	func completedAlternativeRoute() {
-		invokedCompletedAlternativeRoute = true
-		invokedCompletedAlternativeRouteCount += 1
+	func backToMyOverview() {
+		invokedBackToMyOverview = true
+		invokedBackToMyOverviewCount += 1
 	}
 }
