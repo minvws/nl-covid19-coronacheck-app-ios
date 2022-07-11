@@ -72,7 +72,8 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		
 		let destination = ListOptionsViewController(
 			viewModel: CheckForBSNViewModel(
-				coordinator: self
+				coordinator: self,
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
@@ -113,7 +114,13 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	func userHasNoBSN() {
 		
 		if Current.featureFlagManager.isGGDPortalEnabled() {
-			userWishesToChooseEventLocation()
+			if eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest {
+				// Choose event location for vaccination flows
+				userWishesToChooseEventLocation()
+			} else {
+				// Direct to PAP for the other flows
+				userWishedToGoToGGDPortal()
+			}
 		} else {
 			userWishesToContactHelpDeksWithoutBSN()
 		}

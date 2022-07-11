@@ -18,7 +18,7 @@ class CheckForBSNViewModelTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
-		sut = CheckForBSNViewModel(coordinator: coordinatorDelegateSpy)
+		sut = CheckForBSNViewModel(coordinator: coordinatorDelegateSpy, eventMode: .vaccination)
 	}
 	
 	func test_loadedState() {
@@ -31,6 +31,28 @@ class CheckForBSNViewModelTests: XCTestCase {
 		expect(self.sut.title.value) == L.holder_checkForBSN_title()
 		expect(self.sut.message.value) == L.holder_checkForBSN_message()
 		expect(self.sut.optionModels.value).to(haveCount(2))
+		expect(self.sut.optionModels.value.first?.title) == L.holder_checkForBSN_buttonTitle_doesHaveBSN()
+		expect(self.sut.optionModels.value.first?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesHaveBSN()
+		expect(self.sut.optionModels.value.last?.title) == L.holder_checkForBSN_buttonTitle_doesNotHaveBSN()
+		expect(self.sut.optionModels.value.last?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow()
+		expect(self.sut.bottomButton.value).to(beNil())
+	}
+	
+	func test_loadedState_recovery() {
+		
+		// Arrange
+		sut = CheckForBSNViewModel(coordinator: coordinatorDelegateSpy, eventMode: .recovery)
+		
+		// Act
+		
+		// Assert
+		expect(self.sut.title.value) == L.holder_checkForBSN_title()
+		expect(self.sut.message.value) == L.holder_checkForBSN_message()
+		expect(self.sut.optionModels.value).to(haveCount(2))
+		expect(self.sut.optionModels.value.first?.title) == L.holder_checkForBSN_buttonTitle_doesHaveBSN()
+		expect(self.sut.optionModels.value.first?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesHaveBSN()
+		expect(self.sut.optionModels.value.last?.title) == L.holder_checkForBSN_buttonTitle_doesNotHaveBSN()
+		expect(self.sut.optionModels.value.last?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow()
 		expect(self.sut.bottomButton.value).to(beNil())
 	}
 	

@@ -23,7 +23,7 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: AlternativeRouteCoordinatorDelegate) {
+	init(coordinator: AlternativeRouteCoordinatorDelegate, eventMode: EventMode) {
 		
 		self.coordinator = coordinator
 		
@@ -35,7 +35,7 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_checkForBSN_buttonTitle_doesNotHaveBSN(),
-				subTitle: L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN(),
+				subTitle: (eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest) ? L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow() : L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow(),
 				action: { [weak self] in self?.coordinator?.userHasNoBSN() }
 			)
 		]
