@@ -35,6 +35,7 @@ class ShowQRItemView: BaseView {
 		
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .scaleAspectFit
 		return view
 	}()
 	
@@ -78,7 +79,6 @@ class ShowQRItemView: BaseView {
 			
 			// QR View
 			largeQRimageView.topAnchor.constraint(equalTo: topAnchor),
-			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
 			largeQRimageView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
@@ -88,7 +88,7 @@ class ShowQRItemView: BaseView {
 				constant: -ViewTraits.margin
 			),
 			largeQRimageView.bottomAnchor.constraint(
-				lessThanOrEqualTo: bottomAnchor,
+				equalTo: bottomAnchor,
 				constant: -ViewTraits.margin
 			),
 			
@@ -97,8 +97,8 @@ class ShowQRItemView: BaseView {
 			screenshotBlockingView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
 			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 			
-			overlayView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
-			overlayView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+			overlayView.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
+			overlayView.widthAnchor.constraint(equalTo: overlayView.heightAnchor),
 			overlayView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
 			overlayView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 			

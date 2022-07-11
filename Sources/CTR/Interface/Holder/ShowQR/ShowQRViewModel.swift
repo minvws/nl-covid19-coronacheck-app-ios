@@ -91,6 +91,22 @@ class ShowQRViewModel {
 			displayQRInformation()
 		}
 	}
+	
+	/// Show default animation from 21 March - 20 December
+	/// Show winter animation from 21 December - 20 March
+	private var isWithinWinterPeriod: Bool {
+		let calendar = Calendar.autoupdatingCurrent
+		let components = calendar.dateComponents([.day, .month], from: Current.now())
+
+		switch (components.month, components.day) {
+			case ((1...2)?, _), // all of Jan & Feb
+				 (3, (0...20)?), // <= March 20th
+				 (12, (21...31)?): // >= December 21
+				return true
+			default:
+				return false
+		}
+	}
 
 	// MARK: - Bindable
 
@@ -100,7 +116,7 @@ class ShowQRViewModel {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var showInternationalAnimation: Bool = false
+	@Bindable private(set) var animationStyle: ShowQRView.AnimationStyle = .domestic(isWithinWinterPeriod: false)
 
 	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
 
@@ -120,7 +136,7 @@ class ShowQRViewModel {
 		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
-
+		
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
 		self.dataSource = ShowQRDatasource(greenCards: greenCards, disclosurePolicy: disclosurePolicy)
@@ -146,12 +162,12 @@ class ShowQRViewModel {
 			if greenCard.getType() == GreenCardType.domestic {
 				title = L.holderShowqrDomesticTitle()
 				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
-				showInternationalAnimation = false
+				animationStyle = .domestic(isWithinWinterPeriod: isWithinWinterPeriod)
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 			} else if greenCard.getType() == GreenCardType.eu {
 				title = L.holderShowqrEuTitle()
 				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
-				showInternationalAnimation = true
+				animationStyle = .international(isWithinWinterPeriod: isWithinWinterPeriod)
 			}
 		}
 		
@@ -279,7 +295,7 @@ class ShowQRViewModel {
 		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
 			description: L.holderShowqrEuAboutTestDescription(),
-			details: NegativeTestQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, test: test),
+			details: NegativeTestQRDetailsGenerator.getDetails(euCredentialAttributes: euCredentialAttributes, test: test, timeZone: TimeZone.autoupdatingCurrent),
 			dateInformation: L.holderShowqrEuAboutTestDateinformation()
 		)
 	}

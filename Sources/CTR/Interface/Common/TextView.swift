@@ -135,6 +135,7 @@ class TextView: UIStackView {
 	/// Set vertical alignment
 	private func setup() {
 		axis = .vertical
+		translatesAutoresizingMaskIntoConstraints = false
 	}
 	
 	/// Sets the content to the supplied html string.

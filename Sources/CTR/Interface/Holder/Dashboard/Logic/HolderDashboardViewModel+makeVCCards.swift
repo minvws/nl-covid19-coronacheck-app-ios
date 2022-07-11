@@ -416,12 +416,6 @@ extension HolderDashboardViewModel.QRCard {
 			case .europeanUnion:
 				cards = internationalQRCard(state: state, localDisclosurePolicy: localDisclosurePolicy, actionHandler: actionHandler)
 		}
-
-		if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-			cards += [HolderDashboardViewController.Card.errorMessage(message: error, didTapTryAgain: { [weak actionHandler] in
-				actionHandler?.didTapRetryLoadQRCards()
-			})]
-		}
 		
 		return cards
 	}
@@ -505,7 +499,8 @@ extension HolderDashboardViewModel.QRCard {
 			buttonEnabledEvaluator: { buttonIsEnabled(now: $0) },
 			expiryCountdownEvaluator: { now in
 				domesticCountdownText(now: now, origins: origins, localDisclosurePolicy: localDisclosurePolicy)
-			}
+			},
+			error: qrCardError(state: state, actionHandler: actionHandler)
 		)]
 	}
 	
@@ -540,10 +535,23 @@ extension HolderDashboardViewModel.QRCard {
 			buttonEnabledEvaluator: evaluateEnabledState,
 			expiryCountdownEvaluator: { now in
 				internationalCountdownText(now: now, origins: origins)
-			}
+			},
+			error: qrCardError(state: state, actionHandler: actionHandler)
 		)]
 	}
 
+	/// Returns `HolderDashboardViewController.Card.Error`, if appropriate, which configures the display of an error on the QRCardView.
+	private func qrCardError(state: HolderDashboardViewModel.State, actionHandler: HolderDashboardCardUserActionHandling) -> HolderDashboardViewController.Card.Error? {
+		guard let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard else { return nil }
+		return HolderDashboardViewController.Card.Error(message: error, didTapURL: { [weak actionHandler] url in
+			if url.absoluteString == AppAction.tryAgain {
+				actionHandler?.didTapRetryLoadQRCards()
+			} else {
+				actionHandler?.openUrl(url)
+			}
+		})
+	}
+	
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
 	private func validityTextsGenerator(
 		greencards: [HolderDashboardViewModel.QRCard.GreenCard],
@@ -555,6 +563,7 @@ extension HolderDashboardViewModel.QRCard {
 			return greencards
 				// Make a list of all origins paired with their greencard
 				.flatMap { greencard in
+					
 					greencard.origins.map { (greencard, $0) }
 				}
 				// Sort by the customSortIndex, and then by origin eventDate (desc)
@@ -587,6 +596,25 @@ extension HolderDashboardViewModel.QRCard {
 						// allow everything else by default
 						default: return true
 					}
+				}
+				// for NL certificate multiple tests are combined: longest validity is shown.
+				.filter { greenCard, origin in
+					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
+					guard origin.type == .test else { return true } // We can skip visitorpass, recovery and vaccination
+
+					// Test origins sorted by longest validity
+					let sortedTestOrigins = greenCard.origins
+						.sorted { lhs, rhs in
+							return lhs.customSortIndex < rhs.customSortIndex
+						}
+						.filter { $0.isValid(duringDate: Current.now()) }
+						.filter { $0.type == .test }
+
+					guard sortedTestOrigins.count > 1 else { return true } // We can skip greencards with just one test origin
+
+					// So if we have multiple valid test origins, we only thow the one with the longest validity
+					// By only returning the longest validty, we only get one ValidityText line for the test.
+					return origin == sortedTestOrigins.first
 				}
 				// Map to the ValidityText
 				.map { greencard, origin -> HolderDashboardViewController.ValidityText in
@@ -627,8 +655,6 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 	// Map it to user messages:
 	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String)? in
 		switch (originType, thisRegion) {
-			case (.vaccination, .domestic):
-				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEUVaccination())
 			case (.test, .domestic):
 				let containsDomesticVaccinationAssessment = qrCards.contains(where: { $0.origins.contains { $0.type == .vaccinationassessment } })
 				guard !containsDomesticVaccinationAssessment else { return nil }

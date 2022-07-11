@@ -10,17 +10,16 @@ import Nimble
 @testable import CTR
 import SnapshotTesting
 
-class ChooseTestLocationViewTests: XCTestCase {
-
-	var sut: ChooseTestLocationView!
+class ListOptionsViewTests: XCTestCase {
+	var sut: ListOptionsView!
 
 	override func setUp() {
 		super.setUp()
 
-		sut = ChooseTestLocationView(frame: UIScreen.main.bounds)
+		sut = ListOptionsView(frame: UIScreen.main.bounds)
 	}
 
-	func test_() {
+	func test_snapshot() {
 		// Arrange
 		sut.title = "Here is the title"
 		sut.message = "Here is a message"
@@ -30,4 +29,5 @@ class ChooseTestLocationViewTests: XCTestCase {
 		// Assert
 		assertSnapshot(matching: sut, as: .image)
 	}
+
 }

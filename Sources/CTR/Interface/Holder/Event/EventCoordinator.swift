@@ -9,6 +9,9 @@ import UIKit
 
 enum EventScreenResult: Equatable {
 
+	/// The user want to start an alternavite (no digid) route
+	case alternativeRoute(eventMode: EventMode)
+	
 	/// The user wants to go back a scene
 	case back(eventMode: EventMode)
 	
@@ -39,15 +42,22 @@ enum EventScreenResult: Equatable {
 	
 	case shouldCompleteVaccinationAssessment
 	
+	case showHints([String])
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.continue, .continue), (.backSwipe, .backSwipe), (.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe),
+				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
+				
+			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
+				return lhsEventMode == rhsEventMode
+				
 			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
 				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
-			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
+			case (let .showEvents(lhsEvents, lhsMode, lhsComplete), let .showEvents(rhsEvents, rhsMode, rhsComplete)):
 
 				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
 					return false
@@ -61,15 +71,21 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
-			case (let showEventDetails(lhsTitle, lhsDetails, lhsFooter), let showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
+			case (let .showEventDetails(lhsTitle, lhsDetails, lhsFooter), let .showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
 				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
-			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
+			case (let .errorRequiringRestart(lhsMode), let .errorRequiringRestart(rhsMode)):
 				return lhsMode == rhsMode
 
-			case (let error(lhsContent, _), let error(rhsContent, _)):
+			case (let .error(lhsContent, _), let .error(rhsContent, _)):
 				return lhsContent == rhsContent
-
+				
+			case (let .continue(lhsEventMode), let .continue(rhsEventMode)):
+				return lhsEventMode == rhsEventMode
+			
+			case let (.showHints(lhsHints), .showHints(rhsHints)):
+				return lhsHints == rhsHints
+			
 			default:
 				return false
 		}
@@ -85,6 +101,8 @@ protocol EventCoordinatorDelegate: AnyObject {
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
 	func listEventsScreenDidFinish(_ result: EventScreenResult)
+	
+	func showHintsScreenDidFinish(_ result: EventScreenResult)
 }
 
 protocol EventFlowDelegate: AnyObject {
@@ -249,6 +267,11 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
+	private func navigateToShowHints(hints: [String]) {
+		let viewController = ShowHintsViewController(viewModel: ShowHintsViewModel(hints: hints, coordinator: self))
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
 	private func navigateToEventDetails(_ title: String, details: [EventDetails], footer: String?) {
 		
 		let viewController = RemoteEventDetailsViewController(
@@ -261,11 +284,6 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 			)
 		)
 		presentAsBottomSheet(viewController)
-	}
-
-	private func presentAsBottomSheet(_ viewController: UIViewController) {
-
-		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 
 	@discardableResult private func navigateBackToEventStart() -> Bool {
@@ -287,10 +305,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		let popBackToViewController = navigationController.viewControllers.first {
 			
 			switch $0 {
-				case is ChooseTestLocationViewController:
-					return true
-					// Fallback when GGD is not available
-				case is ChooseProofTypeViewController:
+				case is ListOptionsViewController:
 					return true
 				default:
 					return false
@@ -333,10 +348,15 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
+	
+	func showHintsScreenDidFinish(_ result: EventScreenResult) {
+		delegate?.eventFlowDidComplete()
+	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
+			case let .alternativeRoute(eventMode: eventMode): startAlternativeRoute(eventMode)
 			case let .back(eventMode): handleBackAction(eventMode: eventMode)
 			case .stop: delegate?.eventFlowDidCancel()
 			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
@@ -429,6 +449,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToEventDetails(title, details: details, footer: footer)
 			case .shouldCompleteVaccinationAssessment:
 				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+			case let .showHints(hints):
+				navigateToShowHints(hints: hints)
 			default:
 				break
 		}
@@ -440,7 +462,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			switch $0 {
 				case is RemoteEventStartViewController:
 					return true
-				case is ChooseTestLocationViewController:
+				case is ListOptionsViewController:
 					return true
 				default:
 					return false
@@ -475,6 +497,33 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		} else {
 			navigationController.popToRootViewController(animated: true, completion: presentError)
 		}
+	}
+	
+	private func startAlternativeRoute(_ eventMode: EventMode) {
+		
+		startChildCoordinator(
+			AlternativeRouteCoordinator(
+				navigationController: navigationController,
+				delegate: self,
+				eventMode: eventMode
+			)
+		)
+	}
+}
+
+extension EventCoordinator: AlternativeRouteFlowDelegate {
+	
+	func canceledAlternativeRoute() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+	}
+	
+	func completedAlternativeRoute() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+		delegate?.eventFlowDidComplete()
 	}
 }
 

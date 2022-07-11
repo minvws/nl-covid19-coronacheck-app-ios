@@ -289,13 +289,13 @@ class ListRemoteEventsViewModel {
 		guard eventMode != .paperflow else {
 			// 2701: No special end states for the paperflow
 			Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-			completeFlow()
+			completeFlow(hints: nil)
 			return
 		}
 
 		switch expandedEventMode {
 			case .paperflow:
-				completeFlow()
+				completeFlow(hints: nil)
 			case .test:
 				handleSuccessForNegativeTest(greencardResponse)
 			case .vaccinationAndPositiveTest:
@@ -309,9 +309,12 @@ class ListRemoteEventsViewModel {
 		}
 	}
 
-	private func completeFlow() {
-
-		self.coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
+	private func completeFlow(hints: [String]?) {
+		if let hints = hints, hints.isNotEmpty {
+			coordinator?.listEventsScreenDidFinish(.showHints(hints))
+		} else {
+			coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
+		}
 	}
 	
 	// MARK: - Negative Test Flow
@@ -322,12 +325,12 @@ class ListRemoteEventsViewModel {
 			greencardResponse,
 			onBothNegativeTestAndVaccinactionAssessmentOrigins: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.completeFlow()
+				self.completeFlow(hints: nil)
 			},
 			onNegativeTestOriginOnly: {
 				self.negativeTestFlowNegativeTestOriginOnly()
 			},
-			onVaccinactionAssessmentOriginOnly: {
+			onVaccinationAssessmentOriginOnly: {
 				self.shouldPrimaryButtonBeEnabled = true
 				self.viewState = self.originMismatchState(flow: self.determineErrorCodeFlow())
 			},
@@ -347,7 +350,7 @@ class ListRemoteEventsViewModel {
 			self.shouldPrimaryButtonBeEnabled = true
 			self.viewState = self.negativeTestInVaccinationAssessmentFlow()
 		} else {
-			self.completeFlow()
+			self.completeFlow(hints: nil)
 		}
 	}
 	
@@ -362,14 +365,14 @@ class ListRemoteEventsViewModel {
 
 			guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
 				// In 0G, this is expected behaviour. Go to dashboard
-				self.completeFlow()
+				self.completeFlow(hints: greencardResponse.hints)
 				return
 			}
 
 			// End state 2
 			viewState = internationalQROnly()
 		} else {
-			completeFlow()
+			completeFlow(hints: greencardResponse.hints)
 		}
 	}
 	
@@ -414,7 +417,7 @@ class ListRemoteEventsViewModel {
 				case (true, false):
 					self.viewState = self.positiveTestFlowRecoveryOnlyCreated()
 				case (false, true):
-					self.completeFlow()
+					self.completeFlow(hints: greencardResponse.hints)
 				case (false, false):
 					self.viewState = self.originMismatchState(flow: .vaccinationAndPositiveTest)
 			}
@@ -436,15 +439,15 @@ class ListRemoteEventsViewModel {
 
 		guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
 			// In 0G, this is expected behaviour. Go to dashboard
-			self.completeFlow()
+			self.completeFlow(hints: greencardResponse.hints)
 			return
 		}
 
 		let hasDomesticVaccinationOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccination.rawValue)
 		if hasDomesticVaccinationOrigins {
-			self.completeFlow()
+			self.completeFlow(hints: greencardResponse.hints)
 		} else {
-			let hasPositiveTestRemoteEvent = self.remoteEvents.contains { wrapper, _ in wrapper.events?.first?.hasPositiveTest ?? false }
+			let hasPositiveTestRemoteEvent = self.remoteEvents.contains { $0.wrapper.events?.first?.hasPositiveTest ?? false }
 			if hasPositiveTestRemoteEvent {
 				// End state 9
 				self.viewState = self.positiveTestFlowInternationalVaccinationCreated()
@@ -470,7 +473,7 @@ class ListRemoteEventsViewModel {
 			},
 			onRecoveryOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.completeFlow()
+				self.completeFlow(hints: greencardResponse.hints)
 			},
 			onNoOrigins: {
 				self.recoveryFlowNoOrigins(greencardResponse)
@@ -496,7 +499,7 @@ class ListRemoteEventsViewModel {
 		guard let firstRecoveryOrigin = firstRecoveryOrigin, let firstVaccinationOrigin = firstVaccinationOrigin else {
 			// Should not happen, part of the if let flow.
 			Current.logHandler.logWarning("handleSuccessForRecovery - onBothVaccinationAndRecoveryOrigins, some origins are missing")
-			self.completeFlow()
+			self.completeFlow(hints: greencardResponse.hints)
 			return
 		}
 		if firstRecoveryOrigin.eventTime < firstVaccinationOrigin.eventTime {
@@ -504,7 +507,7 @@ class ListRemoteEventsViewModel {
 			self.viewState = self.recoveryFlowRecoveryAndVaccinationCreated()
 		} else {
 			// End State 4
-			self.completeFlow()
+			self.completeFlow(hints: greencardResponse.hints)
 		}
 	}
 	
@@ -543,15 +546,15 @@ class ListRemoteEventsViewModel {
 			greencardResponse,
 			onBothNegativeTestAndVaccinactionAssessmentOrigins: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.completeFlow()
+				self.completeFlow(hints: nil)
 			},
 			onNegativeTestOriginOnly: {
 				self.shouldPrimaryButtonBeEnabled = true
 				self.viewState = self.originMismatchState(flow: .visitorPass)
 			},
-			onVaccinactionAssessmentOriginOnly: {
+			onVaccinationAssessmentOriginOnly: {
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-				self.completeFlow()
+				self.completeFlow(hints: nil)
 			},
 			onNoOrigins: {
 				self.vaccinationAssessmentFlowNoOrigins()
@@ -564,7 +567,7 @@ class ListRemoteEventsViewModel {
 		if Current.walletManager.listEventGroups().filter({ $0.type == OriginType.test.rawValue }).isEmpty {
 			// No negative test event send
 			Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
-			self.completeFlow()
+			self.completeFlow(hints: nil)
 		} else {
 			// Negative test event send, no origin returned
 			self.shouldPrimaryButtonBeEnabled = true
@@ -597,7 +600,7 @@ class ListRemoteEventsViewModel {
 		_ greencardResponse: RemoteGreenCards.Response,
 		onBothNegativeTestAndVaccinactionAssessmentOrigins: (() -> Void)?,
 		onNegativeTestOriginOnly: (() -> Void)?,
-		onVaccinactionAssessmentOriginOnly: (() -> Void)?,
+		onVaccinationAssessmentOriginOnly: (() -> Void)?,
 		onNoOrigins: (() -> Void)?) {
 
 		let hasDomesticVaccinationAssessmentOrigins = greencardResponse.hasDomesticOrigins(ofType: OriginType.vaccinationassessment.rawValue)
@@ -608,7 +611,7 @@ class ListRemoteEventsViewModel {
 		switch (hasDomesticVaccinationAssessmentOrigins, hasNegativeTestOrigins ) {
 
 			case (true, true): onBothNegativeTestAndVaccinactionAssessmentOrigins?()
-			case (true, false): onVaccinactionAssessmentOriginOnly?()
+			case (true, false): onVaccinationAssessmentOriginOnly?()
 			case (false, true): onNegativeTestOriginOnly?()
 			case (false, false): onNoOrigins?()
 		}
@@ -627,41 +630,24 @@ class ListRemoteEventsViewModel {
 			walletManager.removeExistingEventGroups()
 		}
 
-		let storableEvents = remoteEvents.filter { (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) in
-			// We can not store empty remoteEvents without an v2 result or a v3 event.
-			// ZZZ sometimes returns an empty array of events in the combined flow.
-			(wrapper.events ?? []).isNotEmpty
-		}
+		// We can not store empty remoteEvents without an event. (happens with .pending)
+		// ZZZ sometimes returns an empty array of events in the combined flow.
+		let storableEvents = remoteEvents.filter { ($0.wrapper.events ?? []).isNotEmpty }
 
 		for storableEvent in storableEvents where storableEvent.wrapper.status == .complete {
-
-			var data: Data?
-
-			if let signedResponse = storableEvent.signedResponse,
-			   let jsonData = try? JSONEncoder().encode(signedResponse) {
-				data = jsonData
-			} else if let dccEvent = storableEvent.wrapper.events?.first?.dccEvent,
-					  let jsonData = try? JSONEncoder().encode(dccEvent) {
-				data = jsonData
-			}
-
-			guard let jsonData = data,
+			
+			guard let jsonData = storableEvent.getEventsAsJSON(),
 				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
 				return
 			}
 
+			// We must allow multiple events, but do not want duplicates.
+			// So we append the unique of the event to the provider identifier.
+			// For GGD, RIVM and ZKVI events, we can not rely on the unique of the event,
+			// for those we do want to overwrite the existing ones (so we do not append the unqiue)
 			var uniqueIdentifier = storableEvent.wrapper.providerIdentifier
-			if (storageMode == .test || eventMode == .paperflow) &&
-				!(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
-				// We must allow multiple test and scanned event, but do not want duplicates.
-				// So we append the unique of the event to the provider identifier.
-				// For vaccinations and recoveries do not want multiple events,
-				// for those we do want to overwrite the existing ones (so we do not append the unqiue)
-				for event in storableEvent.wrapper.events ?? [] {
-					if let unique = event.unique {
-						uniqueIdentifier += "-\(unique)"
-					}
-				}
+			if !(storableEvent.wrapper.isGGD || storableEvent.wrapper.isRIVM || storableEvent.wrapper.isZKVI) {
+				uniqueIdentifier += "-" + storableEvent.uniqueIdentifier
 			}
 			
 			// Remove any existing events for the uniqueIdentifier -> so we do not have duplicates

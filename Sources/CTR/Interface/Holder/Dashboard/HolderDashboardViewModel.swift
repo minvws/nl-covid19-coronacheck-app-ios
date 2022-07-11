@@ -31,6 +31,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapDisclosurePolicyInformation3GBannerClose()
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
 	func didTapDisclosurePolicyInformation0GBannerClose()
+	func openUrl(_ url: URL)
 }
 
 protocol HolderDashboardViewModelType: AnyObject {
@@ -720,17 +721,10 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	}
 	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
-		switch (originType, validityRegion) {
-			// special case, has it's own screen:
-			case (.vaccination, .domestic):
-				coordinator?.userWishesMoreInfoAboutIncompleteDutchVaccination()
-				
-			default:
-				coordinator?.userWishesMoreInfoAboutUnavailableQR(
-					originType: originType,
-					currentRegion: validityRegion,
-					availableRegion: validityRegion.opposite)
-		}
+		coordinator?.userWishesMoreInfoAboutUnavailableQR(
+			originType: originType,
+			currentRegion: validityRegion,
+			availableRegion: validityRegion.opposite)
 	}
 	
 	func didTapDeviceHasClockDeviationMoreInfo() {

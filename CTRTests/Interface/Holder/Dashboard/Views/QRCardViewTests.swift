@@ -14,6 +14,7 @@ class QRCardViewTests: XCTestCase {
 
 	override func setUp() {
 		super.setUp()
+		_ = setupEnvironmentSpies()
 	}
 
 	func testThreeRowSampleContent() {

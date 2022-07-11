@@ -9,7 +9,7 @@ class NegativeSupervisedTest: BaseTest {
 	
 	func test_negPcrSupervisedSelftest() {
 		let person = TestData.negPcrSupervisedSelftest
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreated()
 		
@@ -18,7 +18,7 @@ class NegativeSupervisedTest: BaseTest {
 	
 	func test_negRatSupervisedSelftest() {
 		let person = TestData.negRatSupervisedSelftest
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreated()
 		

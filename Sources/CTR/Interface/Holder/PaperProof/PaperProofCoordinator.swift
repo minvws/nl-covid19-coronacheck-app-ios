@@ -80,6 +80,8 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
+	// MARK: - Universal Link handling
+	
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
 	}
@@ -137,10 +139,26 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
-
-//		userDidScanDCC(CouplingManager.vaccinationDCC)
-//		userWishesToEnterToken()
-
+		
+		// userDidScanDCC(CouplingManager.vaccinationDCC)
+		// userWishesToEnterToken()
+		
+		if let scannedDCC = LaunchArgumentsHandler.getScannedDCC() {
+			userDidScanDCC(scannedDCC)
+			switch PaperProofIdentifier().identify(scannedDCC) {
+				case .dutchDCC:
+					userWishesToEnterToken()
+				case .foreignDCC:
+					if let wrapper = Current.couplingManager.convert(scannedDCC, couplingCode: nil) {
+						let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
+						userWishesToSeeScannedEvent(remoteEvent)
+					}
+				default:
+					return
+			}
+			return
+		}
+		
 		let destination = PaperProofScanViewController(
 			viewModel: PaperProofScanViewModel(
 				coordinator: self
@@ -150,14 +168,20 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	}
 	
 	func userWishesToEnterToken() {
-
-//		userDidSubmitPaperProofToken(token: "ZKGBKH")
-//		userWishesToCreateACertificate()
-
+		
+		// userDidSubmitPaperProofToken(token: "ZKGBKH")
+		// userWishesToCreateACertificate()
+		
+		if let couplingCode = LaunchArgumentsHandler.getCouplingCode() {
+			userDidSubmitPaperProofToken(token: couplingCode)
+			userWishesToCreateACertificate()
+			return
+		}
+		
 		let destination = PaperProofInputCouplingCodeViewController(
 			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
 		)
-
+		
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
@@ -238,11 +262,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		displayError(content: content) { [weak self] in
 			self?.userWantsToGoBackToEnterToken()
 		}
-	}
-
-	private func presentAsBottomSheet(_ viewController: UIViewController) {
-
-		navigationController.visibleViewController?.presentBottomSheet(viewController)
 	}
 }
 

@@ -8,37 +8,20 @@
 import Foundation
 import Clcore
 
-struct NonceEnvelope: Codable {
-	
-	let nonce: String
-	let stoken: String
-}
-
-struct PrepareIssueEnvelope: Codable {
-
-	let prepareIssueMessage: String
-	let stoken: String
-}
-
 protocol CryptoManaging: AnyObject {
 	
 	// MARK: Encryption
 	
-	/// Set the nonce
-	/// - Parameter nonce: the nonce
-	func setNonce(_ nonce: String)
-	
-	/// set the stoken
-	/// - Parameter stoken: the stoken
-	func setStoken(_ stoken: String)
-	
-	/// Get the stoken
-	/// - Returns: the stoken
-	func getStoken() -> String?
+	/// Generate a secret key
+	/// - Returns: optional secret key
+	func generateSecretKey() -> Data?
 	
 	/// Generate the commitment message
+	/// - Parameters:
+	///   - nonce: The nonce
+	///   - holderSecretKey: the holder secret key
 	/// - Returns: commitment message
-	func generateCommitmentMessage() -> String?
+	func generateCommitmentMessage(nonce: String, holderSecretKey: Data) -> String?
 	
 	// MARK: Public Keys
 	
@@ -47,7 +30,7 @@ protocol CryptoManaging: AnyObject {
 	func hasPublicKeys() -> Bool
 	
 	// MARK: Credential
-
+	
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
@@ -67,28 +50,31 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter data: the data
 	/// - Returns: True if the data looks like a domestic credential
 	func hasDomesticPrefix(_ data: Data) -> Bool
-
+	
+	/// Get the domestic credential attributes
+	/// - Parameter data: the incoming domestic ctb
+	/// - Returns: optional domstic credential attributes
+	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
+	
+	/// Get the eu credential attributes
+	/// - Parameter data: the incoming eu dcc
+	/// - Returns: optional eu credential attributes
+	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
+	
 	// MARK: QR
-
-	///  Disclose the credential
+	
+	/// Disclose the credential
 	/// - Parameters:
 	///   - credential: the (domestic) credential to generate the QR from
-	///   - disclosurePolicy: the disclosure policy (1G / 3G) to genearte the QR with
+	///   - forPolicy: the disclosure policy (1G / 3G) to genearte the QR with
+	///   - withKey: the holder secret key
 	/// - Returns: the QR message
-	func discloseCredential(_ credential: Data, disclosurePolicy: DisclosurePolicy) -> Data?
+	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data?
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Verification result if the QR is valid or error if not
 	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError>
-
-	// MARK: Migration
-
-	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
-
-	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
-	
-	func generateSecretKey()
 }
 
 /// The errors returned by the crypto library

@@ -12,14 +12,14 @@ import SnapshotTesting
 
 class ChooseProofTypeViewControllerTests: XCTestCase {
 
-	var sut: ChooseProofTypeViewController!
+	var sut: ListOptionsViewController!
 	var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = ChooseProofTypeViewController(
+		sut = ListOptionsViewController(
 			viewModel: ChooseProofTypeViewModel(
 				coordinator: coordinatorDelegateSpy
 			)
@@ -34,7 +34,7 @@ class ChooseProofTypeViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
-        sut.assertImage()
+		sut.assertImage()
 	}
 
 	func test_vaccination_tapped() {
@@ -43,7 +43,7 @@ class ChooseProofTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.optionStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateAVaccinationQR) == true
@@ -55,7 +55,7 @@ class ChooseProofTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews[1] as? DisclosureSubtitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.optionStackView.arrangedSubviews[1] as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateARecoveryQR) == true
@@ -67,7 +67,7 @@ class ChooseProofTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews[2] as? DisclosureSubtitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.optionStackView.arrangedSubviews[2] as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseTestLocation) == true

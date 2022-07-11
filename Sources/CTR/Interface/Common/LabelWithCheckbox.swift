@@ -46,15 +46,15 @@ final class LabelWithCheckbox: UIControl {
 		didSet { applyState() }
 	}
 
-    override var accessibilityTraits: UIAccessibilityTraits {
-        get { return UISwitch().accessibilityTraits }
-        set { super.accessibilityTraits = newValue }
-    }
-
-    override var accessibilityValue: String? {
-        get { return isSelected ? "1" : "0" }
-        set { super.accessibilityValue = newValue }
-    }
+	override var accessibilityTraits: UIAccessibilityTraits {
+		get { return UISwitch().accessibilityTraits }
+		set { super.accessibilityTraits = newValue }
+	}
+	
+	override var accessibilityValue: String? {
+		get { return isSelected ? "1" : "0" }
+		set { super.accessibilityValue = newValue }
+	}
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -176,7 +176,7 @@ final class LabelWithCheckbox: UIControl {
 	private func applyState() {
 		iconImageView.isHighlighted = isSelected
 		iconImageView.image = hasError ? Images.Icon.error : Images.Icon.normal
-		backgroundColor = hasError ? C.error5() : C.primaryBlue5()
+		backgroundColor = hasError ? C.error5() : defaultBackgroundColor
 	}
 
 	@objc private func toggle() {
@@ -211,10 +211,18 @@ final class LabelWithCheckbox: UIControl {
 	
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Dimension.lineHeight,
-															 textColor: C.black()!)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Dimension.lineHeight,
+				textColor: C.black()!
+			)
 			accessibilityLabel = title
 			setupLargeContentViewer(title: title)
+		}
+	}
+	
+	var defaultBackgroundColor: UIColor? = C.primaryBlue5() {
+		didSet {
+			applyState()
 		}
 	}
 }

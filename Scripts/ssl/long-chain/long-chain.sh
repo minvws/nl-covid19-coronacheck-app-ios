@@ -7,7 +7,7 @@
 TMPDIR=${TMPDIR:-/tmp}
 set -e
 
-OPENSSL=${OPENSSL:-/usr/local/Cellar/openssl\@1.1/1.1.1l_1/bin/openssl}
+OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1o/bin/openssl}
 JSON=${1:-example.json}
 
 S=0

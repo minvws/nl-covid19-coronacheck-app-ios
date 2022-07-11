@@ -357,7 +357,8 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -499,7 +500,8 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseTestLocationViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -584,7 +586,8 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -621,7 +624,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Over je vaccinatiebewijs"
+		expect(viewModel.content.title) == "Geen Nederlands vaccinatiebewijs"
 	}
 	
 	func test_userWishesMoreInfoAboutCompletingVaccinationAssessment() {
@@ -686,19 +689,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Maak verbinding met het internet"
-	}
-	
-	func test_userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		
-		// Given
-		
-		// When
-		sut.userWishesMoreInfoAboutIncompleteDutchVaccination()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is IncompleteDutchVaccinationViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesMoreInfoAboutExpiredDomesticVaccination() throws {
@@ -982,6 +972,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ChooseProofTypeViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 }

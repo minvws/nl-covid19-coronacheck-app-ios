@@ -9,7 +9,7 @@ class WalletTest: BaseTest {
 	
 	func test_vacP3() {
 		let person = TestData.vacP3
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		
 		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
 		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
@@ -24,7 +24,7 @@ class WalletTest: BaseTest {
 	
 	func test_posPcrBeforeP1() {
 		let person = TestData.posPcrBeforeP1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		
 		let vac = storeRetrievedCertificateDetails(atIndex: 0)
 		let pos = storeRetrievedCertificateDetails(atIndex: 1)
@@ -38,14 +38,14 @@ class WalletTest: BaseTest {
 	
 	func test_encodingChinese() {
 		let person = TestData.encodingChinese
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
 		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
 		let pos = storeRetrievedCertificateDetails(atIndex: 2)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		let neg = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
 		
@@ -58,11 +58,11 @@ class WalletTest: BaseTest {
 	
 	func test_negPcrP1() {
 		let person = TestData.negPcrP1
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		let neg = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
@@ -74,13 +74,13 @@ class WalletTest: BaseTest {
 	
 	func test_keepSetup() {
 		let setup = TestData.vacP2DifferentSetupSituation
-		addVaccinationCertificate(for: setup)
+		addVaccinationCertificate(for: setup.bsn)
 		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
 		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
 		addRetrievedCertificateToApp()
 		
 		let person = TestData.vacJ1DifferentEverythingReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)
 		
@@ -92,7 +92,7 @@ class WalletTest: BaseTest {
 	
 	func test_removePositiveTest() {
 		let person = TestData.posPcr
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		viewWallet()
@@ -105,7 +105,7 @@ class WalletTest: BaseTest {
 	
 	func test_removeNegativeTest() {
 		let person = TestData.negPcr
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		viewWallet()
@@ -118,7 +118,7 @@ class WalletTest: BaseTest {
 	
 	func test_removeSeparateEvents() {
 		let person = TestData.posPcrP1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		

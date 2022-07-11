@@ -22,18 +22,20 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 	}
 	
-	func test_negativeTest() {
+	func test_negativeTest() throws {
 		
 		// Given
 		environmentSpies.mappingManagerSpy.stubbedGetBilingualDisplayCountryResult = "Nederland / The Netherlands"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Test"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayFacilityResult = "Test Centrum XXL"
 		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "CoronaCheck Manufacturer"
+		let timeZone = try XCTUnwrap(TimeZone(abbreviation: "CET"))
 		let details = NegativeTestQRDetailsGenerator.getDetails(
 			euCredentialAttributes: EuCredentialAttributes.fake(
 				dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithTest()
 			),
-			test: EuCredentialAttributes.TestEntry.negativeTest
+			test: EuCredentialAttributes.TestEntry.negativeTest,
+			timeZone: timeZone
 		)
 		
 		// When
@@ -61,7 +63,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[4].field) == "Testnaam / Test name:"
 		expect(self.sut.details[4].value) == "fake negativeTest"
 		expect(self.sut.details[5].field) == "Testdatum / Test date:"
-		expect(self.sut.details[5].value) == "woensdag 17 november 16:00"
+		expect(self.sut.details[5].value).to(beginWith("woensdag 17 november 16:00"))
 		expect(self.sut.details[6].field) == "Testuitslag / Test result:"
 		expect(self.sut.details[6].value) == "negatief (geen corona) / negative (no coronavirus)"
 		expect(self.sut.details[7].field) == "Testlocatie / Testing centre:"

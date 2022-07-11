@@ -10,6 +10,12 @@ import UIKit
 class HolderDashboardViewController: BaseViewController {
 
     enum Card {
+		
+		struct Error {
+			let message: String
+			let didTapURL: (URL) -> Void
+		}
+		
         case headerMessage(message: String, buttonTitle: String?)
         case emptyStateDescription(message: String, buttonTitle: String?)
         case emptyStatePlaceholderImage(image: UIImage, title: String)
@@ -22,9 +28,6 @@ class HolderDashboardViewController: BaseViewController {
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         
-        // Errors:
-        case errorMessage(message: String, didTapTryAgain: () -> Void)
-        
 		// Vaccination & Recovery Validity
 		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
@@ -33,8 +36,8 @@ class HolderDashboardViewController: BaseViewController {
 		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
         // QR Cards:
-		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
-        case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
+        case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
 		// Recommendations
 		case recommendCoronaMelder
@@ -206,21 +209,7 @@ class HolderDashboardViewController: BaseViewController {
 		cardViews.forEach {
 			stackView.addArrangedSubview($0)
 		}
-		
-		// Custom spacing for error message
-		for (index, view) in cardViews.enumerated() {
-			guard view is ErrorDashboardCardView else { continue }
-			
-			// Try to get previous view, which would be an QR card:
-			let previousIndex = index - 1
-			
-			guard previousIndex >= 0 else { continue }
-			
-			// Check that previous view is a QRCardView:
-			guard let previousCardView = cardViews[previousIndex] as? QRCardView else { continue }
-			
-			stackView.setCustomSpacing(22, after: previousCardView)
-		}
+
 		UIAccessibility.post(notification: .layoutChanged, argument: view)
 	}
 }
@@ -291,7 +280,7 @@ private extension HolderDashboardViewController.Card {
 				view.image = image
 				return view
 				
-			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
 				let qrCard = QRCardView(stackSize: 1)
 				qrCard.shouldStyleForEU = false
 				qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
@@ -304,9 +293,12 @@ private extension HolderDashboardViewController.Card {
 				qrCard.isDisabledByDisclosurePolicy = isDisabledByDisclosurePolicy
 				qrCard.disclosurePolicyLabel = disclosurePolicyLabel
 				qrCard.accessibilityIdentifier = "\(disclosurePolicyLabel)QRCard"
+				qrCard.errorMessage = cardError?.message
+				qrCard.errorMessageTapHandler = cardError?.didTapURL
 				return qrCard
 			
-			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
+			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
+			
 				let qrCard = QRCardView(stackSize: stackSize)
 				qrCard.shouldStyleForEU = true
 				qrCard.viewQRButtonTitle = stackSize == 1 ? L.holderDashboardQrButtonViewQR() : L.holderDashboardQrButtonViewQRs()
@@ -317,10 +309,9 @@ private extension HolderDashboardViewController.Card {
 				qrCard.expiryEvaluator = expiryCountdownEvaluator
 				qrCard.isLoading = isLoading
 				qrCard.accessibilityIdentifier = "QRCard"
+				qrCard.errorMessage = cardError?.message
+				qrCard.errorMessageTapHandler = cardError?.didTapURL
 				return qrCard
-				
-			case let .errorMessage(message, didTapTryAgain):
-				return ErrorDashboardCardView.make(message: message, didTapTryAgain: didTapTryAgain, openURLHandler: openURLHandler)
 			
 			case .recommendCoronaMelder:
 				let view = RecommendCoronaMelderCardView()
@@ -329,22 +320,6 @@ private extension HolderDashboardViewController.Card {
 				return view
 		}
 		
-	}
-}
-
-private extension ErrorDashboardCardView {
-	
-	static func make(message: String, didTapTryAgain: @escaping () -> Void, openURLHandler: @escaping (URL) -> Void) -> ErrorDashboardCardView {
-		let view = ErrorDashboardCardView()
-		view.message = message
-		view.messageTextView.linkTouchedHandler = { url in
-			if url.absoluteString == AppAction.tryAgain {
-				didTapTryAgain()
-			} else {
-				openURLHandler(url)
-			}
-		}
-		return view
 	}
 }
 

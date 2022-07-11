@@ -65,9 +65,10 @@ extension HolderDashboardViewModelTests {
 		)
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
+		
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
 
 		// Act
@@ -111,9 +112,9 @@ extension HolderDashboardViewModelTests {
 		)
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
-		expect(self.sut.internationalCards.value[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
 
 		// Act
@@ -162,18 +163,16 @@ extension HolderDashboardViewModelTests {
 			errorOccurenceCount: 1
 		)
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard())
-		expect(self.sut.internationalCards.value[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
 
 		// Act
@@ -249,16 +248,14 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
 
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
 	}
 
@@ -364,17 +361,15 @@ extension HolderDashboardViewModelTests {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 		strippenRefresherSpy.invokedDidUpdate?(nil, newStrippenState)
 
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
 
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 		}))
 	}
 
@@ -405,16 +400,13 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 
@@ -451,8 +443,8 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
@@ -463,14 +455,12 @@ extension HolderDashboardViewModelTests {
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
 
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard())
-
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 		}))
-		expect(self.sut.internationalCards.value[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+		
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 		}))
 	}
 
@@ -501,16 +491,13 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle).to(beNil())
 		}))
-
-		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard())
-
-		expect(self.sut.domesticCards.value[3]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
+		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 
@@ -541,16 +528,13 @@ extension HolderDashboardViewModelTests {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
-
-		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard())
-
-		expect(self.sut.internationalCards.value[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
-			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
+		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { _, _, _, _, _, _, error in
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 		}))
 	}
 

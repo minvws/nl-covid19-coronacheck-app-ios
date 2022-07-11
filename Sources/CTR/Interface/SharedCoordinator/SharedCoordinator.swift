@@ -80,17 +80,12 @@ class SharedCoordinator: Coordinator {
 		presentAsBottomSheet(viewController)
 	}
 
-	func presentAsBottomSheet(_ viewController: UIViewController) {
-
-		navigationController.visibleViewController?.presentBottomSheet(viewController)
+	// MARK: - Universal Link handling
+	
+	/// Override point for coordinators which wish to deal with universal links.
+	func consume(universalLink: UniversalLink) -> Bool {
+		return false
 	}
-
-    // MARK: - Universal Link handling
-
-    /// Override point for coordinators which wish to deal with universal links.
-    func consume(universalLink: UniversalLink) -> Bool {
-        return false
-    }
 }
 
 // MARK: - Shared

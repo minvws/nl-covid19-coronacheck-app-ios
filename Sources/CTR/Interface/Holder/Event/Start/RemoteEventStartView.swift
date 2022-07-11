@@ -12,14 +12,31 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let titleLineHeight: CGFloat = 26
-		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
-		static let buttonHeight: CGFloat = 52
-
-		// Margins
 		static let margin: CGFloat = 20.0
+
+		enum SecondaryButton {
+			static let height: CGFloat = 52
+		}
+		enum Title {
+			static let lineHeight: CGFloat = 26
+			static let kerning: CGFloat = -0.26
+		}
+		enum InfoCard {
+			static let radius: CGFloat = 8.0
+			static let borderWidth: CGFloat = 1.0
+		}
+		enum InfoText {
+			static let margin: CGFloat = 20.0
+			static let bottomMargin: CGFloat = 16.0
+		}
+		enum LabelWithCheckbox {
+			static let margin: CGFloat = 20.0
+			static let leadingMargin: CGFloat = 4.0
+			static let trailingMargin: CGFloat = 4.0
+		}
+		enum Icon {
+			static let size: CGSize = CGSize(width: 22.0, height: 22.0)
+		}
 	}
 
 	/// The title label
@@ -30,11 +47,25 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 
 	let contentTextView: TextView = {
 
+		return TextView()
+	}()
+	
+	let infoCard: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.layer.cornerRadius = ViewTraits.InfoCard.radius
+		view.layer.borderWidth = ViewTraits.InfoCard.borderWidth
+		view.layer.borderColor = C.grey4()?.cgColor
+		return view
+	}()
+
+	let infoTextView: TextView = {
+
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-
+	
 	private let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
@@ -47,7 +78,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	private let labelWithCheckbox: LabelWithCheckbox = {
 		let labelWithCheckbox = LabelWithCheckbox()
 		labelWithCheckbox.translatesAutoresizingMaskIntoConstraints = false
-		labelWithCheckbox.title = "This is a kind of test message"
+		labelWithCheckbox.defaultBackgroundColor = C.white()
 		return labelWithCheckbox
 	}()
 
@@ -65,10 +96,13 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		
+		infoCard.addSubview(infoTextView)
+		infoCard.addSubview(labelWithCheckbox)
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
-		stackView.addArrangedSubview(labelWithCheckbox)
+		stackView.addArrangedSubview(infoCard)
 		footerButtonView.buttonStackView.addArrangedSubview(secondaryButton)
 	}
 
@@ -80,7 +114,45 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 		NSLayoutConstraint.activate([
 
 			// Secondary button
-			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight)
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.SecondaryButton.height)
+		])
+		
+		setupInfoCardViewConstraints()
+	}
+	
+	func setupInfoCardViewConstraints() {
+		NSLayoutConstraint.activate([
+
+			infoTextView.topAnchor.constraint(
+				equalTo: infoCard.topAnchor,
+				constant: ViewTraits.InfoText.margin
+			),
+			infoTextView.leadingAnchor.constraint(
+				equalTo: infoCard.leadingAnchor,
+				constant: ViewTraits.InfoText.margin
+			),
+			infoTextView.trailingAnchor.constraint(
+				equalTo: infoCard.trailingAnchor,
+				constant: -ViewTraits.InfoText.margin
+			),
+			infoTextView.bottomAnchor.constraint(
+				equalTo: labelWithCheckbox.topAnchor,
+				constant: -ViewTraits.InfoText.bottomMargin
+			),
+			
+			labelWithCheckbox.leadingAnchor.constraint(
+				equalTo: infoCard.leadingAnchor,
+				constant: ViewTraits.LabelWithCheckbox.leadingMargin
+			),
+
+			labelWithCheckbox.trailingAnchor.constraint(
+				equalTo: infoCard.trailingAnchor,
+				constant: -ViewTraits.LabelWithCheckbox.trailingMargin
+			),
+			labelWithCheckbox.bottomAnchor.constraint(
+				equalTo: infoCard.bottomAnchor,
+				constant: -ViewTraits.LabelWithCheckbox.margin
+			)
 		])
 	}
 
@@ -99,8 +171,8 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
 		}
 	}
@@ -111,9 +183,16 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 		}
 	}
 	
+	var info: String? {
+		didSet {
+			infoTextView.applyHTML(info)
+		}
+	}
+	
 	var primaryButtonIcon: UIImage? {
 		didSet {
-			primaryButton.setImage(primaryButtonIcon, for: .normal)
+			let resizedIcon = primaryButtonIcon?.resizedImage(toSize: ViewTraits.Icon.size)
+			primaryButton.setImage(resizedIcon, for: .normal)
 		}
 	}
 
@@ -128,7 +207,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 	var checkboxTitle: String? {
 		didSet {
 			labelWithCheckbox.title = checkboxTitle
-			labelWithCheckbox.isHidden = checkboxTitle == nil
+			infoCard.isHidden = checkboxTitle == nil
 		}
 	}
 	

@@ -33,7 +33,7 @@ extension String {
   static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
 	  switch (originType, currentRegion) {
 		  case (.vaccination, .domestic):
-			  return L.holderDashboardNotValidInThisRegionScreenDomesticVaccinationTitle()
+			  return L.holderIncompletedutchvaccinationTitle()
 		  case (.vaccination, .europeanUnion):
 			  return L.holderDashboardNotValidInThisRegionScreenEuVaccinationTitle()
 		  case (.test, .domestic):
@@ -54,7 +54,7 @@ extension String {
   static func holderDashboardNotValidInThisRegionScreenMessage(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
 	  switch (originType, currentRegion) {
 		  case (.vaccination, .domestic):
-			  return L.holderDashboardNotValidInThisRegionScreenDomesticVaccinationMessage()
+			  return L.holder_incompletedutchvaccination_paragraph_secondvaccine()
 		  case (.vaccination, .europeanUnion):
 			  return L.holderDashboardNotValidInThisRegionScreenEuVaccinationMessage()
 		  case (.test, .domestic):

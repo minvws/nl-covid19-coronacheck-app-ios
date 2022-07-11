@@ -122,7 +122,6 @@ private let clockDeviationManager = ClockDeviationManager(
 )
 private let couplingManager = CouplingManager(cryptoManager: cryptoManager, networkManager: networkManager)
 private let cryptoManager = CryptoManager(
-	secureUserSettings: secureUserSettings,
 	cryptoLibUtility: cryptoLibUtility,
 	verificationPolicyManager: verificationPolicyManager,
 	featureFlagManager: featureFlagManager,
@@ -154,6 +153,7 @@ private let greenCardLoader = GreenCardLoader(
 	walletManager: walletManager,
 	remoteConfigManager: remoteConfigManager,
 	userSettings: userSettings,
+	secureUserSettings: secureUserSettings,
 	logHandler: logHandler
 )
 private let identityChecker = IdentityChecker(logHandler: logHandler)

@@ -195,24 +195,7 @@ extension GreenCard {
 			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 40 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 		vaccineGreencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * ago, expirationTime: 0 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 0 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * fromNow, expirationTime: 2 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * fromNow, expirationTime: 3 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * fromNow, expirationTime: 4 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * fromNow, expirationTime: 5 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * fromNow, expirationTime: 6 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * fromNow, expirationTime: 7 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * fromNow, expirationTime: 8 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 8 * days * fromNow, expirationTime: 9 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 9 * days * fromNow, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
+			Credential.sample(validFrom: 8 * days * ago, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 
 		let testGreencard = GreenCard(context: dataStoreManager.managedObjectContext())
@@ -465,6 +448,16 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 		)
 	}
 
+	static func validOneDayAgo_test_expires1HourFromNow() -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
+		.init(
+			type: QRCodeOriginType.test,
+			eventDate: now.addingTimeInterval(1 * day * ago),
+			expirationTime: now.addingTimeInterval(1 * hour * fromNow),
+			validFromDate: now.addingTimeInterval(1 * day * ago),
+			doseNumber: nil
+		)
+	}
+	
 	static func validOneDayAgo_test_expires5MinutesFromNow() -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
 		.init(
 			type: QRCodeOriginType.test,

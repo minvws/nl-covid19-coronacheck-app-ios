@@ -141,7 +141,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	/// (Greencards with multiple origin types are returned ungrouped)
 	fileprivate static func groupDBGreenCards(dbGreencards: [(DBGreenCard, [DBOrigin])]) -> [[(DBGreenCard, [DBOrigin])]] {
 
-		// Group using a temporal String key
+		// Group using a transient String key
 		// (which is immediately thrown away when we return just the .values of the dictionary)
 
 		let grouped = Dictionary(
@@ -170,8 +170,13 @@ extension QRCard {
 			
 			if dbGreencard.getType() == GreenCardType.eu {
 				
-				// The button is enabled for expired dccs, not for future dccs.
-				return origins.contains(where: { $0.validFromDate <= date }) && dbGreencard.getLatestInternationalCredential() != nil
+				let hasValidOrigin = origins.contains(where: { $0.isValid(duringDate: date) })
+				let credential = dbGreencard.getLatestInternationalCredential()
+				let hasValidCredential = date.isWithinTimeWindow(
+					from: credential?.validFrom ?? Date.distantFuture,
+					to: credential?.expirationTime ?? Date.distantPast
+				)
+				return hasValidOrigin && hasValidCredential
 			} else {
 				
 				let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
@@ -284,7 +289,7 @@ extension QRCard.GreenCard.Origin {
 
 	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [QRCard.GreenCard.Origin] {
 
-		dbOrigins
+		let structOrigins = dbOrigins
 			.compactMap { origin -> QRCard.GreenCard.Origin? in
 				guard let typeRawValue = origin.type,
 					  let type = QRCodeOriginType(rawValue: typeRawValue),
@@ -307,5 +312,8 @@ extension QRCard.GreenCard.Origin {
 				now < $0.expirationTime
 			}
 			.sorted { $0.customSortIndex < $1.customSortIndex }
+		
+		// Deduplicate: `QRCard.GreenCard.Origin` is hashable, so passing through a `Set` removes exact-duplicates
+		return Array(Set(structOrigins))
 	}
 }

@@ -185,18 +185,18 @@ extension PagedAnnouncementViewController: PageViewControllerDelegate {
 // MARK: - OnboardingPageViewControllerDelegate
 
 extension PagedAnnouncementViewController: PagedAnnouncementItemViewControllerDelegate {
-    
-    /// Enables swipe to navigate behaviour for assistive technologies
-    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        if direction == .right {
-            backbuttonTapped()
-            return true
-        } else if direction == .left {
-            primaryButtonTapped()
-            return true
-        }
-        return false
-    }
+	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		if direction == .right {
+			backbuttonTapped()
+			return true
+		} else if direction == .left {
+			primaryButtonTapped()
+			return true
+		}
+		return false
+	}
 }
 
 // MARK: - PageControlDelegate

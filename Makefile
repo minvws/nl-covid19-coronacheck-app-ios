@@ -12,9 +12,13 @@ bundler:
 ifeq (, $(shell which bundle))
 $(error "You must install bundler on your system before setup can continue. You could try running 'gem install bundler'.")
 endif
+	bundle config set --local path 'vendor/bundle'
 	bundle install
 
 homebrew_dev:
+ifeq (, $(shell which brew))
+$(error "You must install homebrew on your system before setup can continue. Visit: https://brew.sh to get started with that.")
+endif
 	@brew bundle --file Brewfile
 
 homebrew_ci:

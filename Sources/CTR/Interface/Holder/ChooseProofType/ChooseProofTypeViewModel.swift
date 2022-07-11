@@ -7,44 +7,45 @@
 
 import UIKit
 
-class ChooseProofTypeViewModel {
-
-	// MARK: - Bindable Strings
-
-	@Bindable private(set) var title: String = L.holderChooseqrcodetypeTitle()
-	@Bindable private(set) var message: String = L.holderChooseqrcodetypeMessage()
-	@Bindable private(set) var buttonModels: [ChooseProofTypeViewController.ButtonModel] = []
-
-	// MARK: - Private State:
-	private weak var coordinator: HolderCoordinatorDelegate?
-
+class ChooseProofTypeViewModel: ListOptionsProtocol {
+	
+	let title = Observable(value: L.holderChooseqrcodetypeTitle())
+	
+	let message = Observable(value: L.holderChooseqrcodetypeMessage())
+	
+	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
+	
+	let bottomButton: Observable<ListOptionsViewController.OptionModel?> = Observable(value: nil)
+	
+	weak var coordinator: HolderCoordinatorDelegate?
+	
 	// MARK: - Initializer
-
+	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	init(coordinator: HolderCoordinatorDelegate) {
-
+		
 		self.coordinator = coordinator
-
-		buttonModels = [
-			ChooseProofTypeViewController.ButtonModel(
+		
+		optionModels.value = [
+			ListOptionsViewController.OptionModel(
 				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
-				subtitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
-
-				self?.coordinator?.userWishesToCreateAVaccinationQR()
-			},
-			ChooseProofTypeViewController.ButtonModel(
+				subTitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
+					
+					self?.coordinator?.userWishesToCreateAVaccinationQR()
+				},
+			ListOptionsViewController.OptionModel(
 				title: L.holderChooseqrcodetypeOptionRecoveryTitle(),
-				subtitle: L.holderChooseqrcodetypeOptionRecoverySubtitle()) { [weak self] in
-
-				self?.coordinator?.userWishesToCreateARecoveryQR()
-			},
-			ChooseProofTypeViewController.ButtonModel(
+				subTitle: L.holderChooseqrcodetypeOptionRecoverySubtitle()) { [weak self] in
+					
+					self?.coordinator?.userWishesToCreateARecoveryQR()
+				},
+			ListOptionsViewController.OptionModel(
 				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
-				subtitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
-
-				self?.coordinator?.userWishesToChooseTestLocation()
-			}
+				subTitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
+					
+					self?.coordinator?.userWishesToChooseTestLocation()
+				}
 		]
 	}
 }

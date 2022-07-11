@@ -70,12 +70,12 @@ class NewFeaturesCoordinator: Coordinator {
 		}
 	}
 
-    // MARK: - Universal Link handling
-
-    /// Override point for coordinators which wish to deal with universal links.
-    func consume(universalLink: UniversalLink) -> Bool {
-        return false
-    }
+	// MARK: - Universal Link handling
+	
+	/// Override point for coordinators which wish to deal with universal links.
+	func consume(universalLink: UniversalLink) -> Bool {
+		return false
+	}
 }
 
 // MARK: - PagedAnnouncementDelegate

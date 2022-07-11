@@ -23,7 +23,7 @@ class SecurityFeaturesView: BaseView {
 	}()
 
 	/// The current animation
-	var currentAnimation: SecurityAnimation = .domesticAnimation
+	var currentAnimation: SecurityAnimation = .domesticSummerAnimation
 
 	/// Setup all the views
 	override func setupViews() {
@@ -95,10 +95,5 @@ class SecurityFeaturesView: BaseView {
 		if !animationView.isAnimationPlaying {
 			playCurrentAnimation()
 		}
-	}
-
-	func setupForInternational() {
-
-		currentAnimation = .internationalAnimation
 	}
 }

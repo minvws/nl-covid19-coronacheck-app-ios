@@ -15,6 +15,9 @@ packages:
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.4
+  Inject: 
+    github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
+    branch: main
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.9.4
@@ -26,7 +29,7 @@ packages:
     majorVersion: 9.2.1
   OpenSSL:
     github: krzyzanowskim/OpenSSL
-    exactVersion: 1.1.1300
+    exactVersion: 1.1.1501
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -95,6 +98,7 @@ targetTemplates:
       - package: IOSSecuritySuite
       - package: Lottie
       - package: OpenSSL
+      - package: Inject
       - package: Reachability
         product: Reachability
       - package: RSwiftLibrary
@@ -114,6 +118,7 @@ targetTemplates:
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: iPhone Distribution
         DEVELOPMENT_TEAM: C2H38GV99H
+        ENABLE_BITCODE: false # because it's deprecated
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR
@@ -121,18 +126,24 @@ targetTemplates:
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
           LOG_LEVEL: debug
+          OTHER_LDFLAGS: -Xlinker -interposable # for Inject
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
         FirebaseTest:
           NETWORK_CONFIGURATION: TEST
           LOG_LEVEL: debug
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
+          OTHER_LDFLAGS: -Xlinker -interposable # for Inject
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
         AppStore:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
     info:
       properties:
         # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
@@ -203,7 +214,7 @@ targetTemplates:
           #Run script:
           $TEMP_DIR/strings_checker Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings && $TEMP_DIR/strings_checker Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
       - name: Run R.Swift
-        basedOnDependencyAnalysis: true
+        basedOnDependencyAnalysis: false
         script: |
           # Determine path of Rswift. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
           if [ -f "/opt/homebrew/bin/rswift" ]; then
@@ -222,8 +233,6 @@ targetTemplates:
           else
             echo $OUTPUT
           fi
-        inputFiles:
-          - $TEMP_DIR/rswift-lastrun
         outputFiles:
           - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
@@ -282,7 +291,7 @@ targets:
       base:
         APP_FLAVOR: holder
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 4.4.0 # holder
+        MARKETING_VERSION: 4.5.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
         TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad

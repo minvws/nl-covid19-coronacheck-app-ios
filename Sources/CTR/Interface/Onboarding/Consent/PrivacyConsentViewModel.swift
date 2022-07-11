@@ -10,7 +10,7 @@ import UIKit
 final class PrivacyConsentViewModel {
 
 	/// Coordination Delegate
-	weak var coordinator: OnboardingCoordinatorDelegate?
+	weak var coordinator: (OnboardingCoordinatorDelegate & OpenUrlProtocol)?
 
 	/// The onboarding factory for all content.
 	var factory: OnboardingFactoryProtocol
@@ -32,13 +32,12 @@ final class PrivacyConsentViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - factory: The factory for onboarding content
-	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol, shouldHideBackButton: Bool) {
+	init(coordinator: OnboardingCoordinatorDelegate & OpenUrlProtocol, factory: OnboardingFactoryProtocol, shouldHideBackButton: Bool) {
 
 		self.coordinator = coordinator
 		self.factory = factory
 		self.title = factory.getConsentTitle()
 		self.message = factory.getConsentMessage()
-		self.underlinedText = factory.getConsentLink()
 		self.summary = factory.getConsentItems()
 		self.consentText = factory.getConsentButtonTitle()
 		self.shouldHideBackButton = shouldHideBackButton
@@ -54,11 +53,10 @@ final class PrivacyConsentViewModel {
 
 		shouldDisplayConsentError = !given
 	}
-
-	/// The user tapped on the privacy link
-	func linkTapped() {
-
-		coordinator?.showPrivacyPage()
+	
+	func openUrl(_ url: URL) {
+		
+		coordinator?.openUrl(url, inApp: true)
 	}
 
 	/// The user tapped on the primary button

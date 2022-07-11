@@ -68,13 +68,14 @@ final class PrivacyConsentView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-        return Label(title1: nil, montserrat: true).multiline().header()
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
+	
+	let contentTextView: TextView = {
 
-	/// The message label
-	let messageLabel: Label = {
-
-		return Label(body: nil).multiline()
+		let view = TextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 	
 	/// the update button
@@ -86,6 +87,7 @@ final class PrivacyConsentView: BaseView {
 
 		let button = LabelWithCheckbox()
 		button.translatesAutoresizingMaskIntoConstraints = false
+		button.defaultBackgroundColor = C.primaryBlue5()
 		return button
 	}()
 	
@@ -117,7 +119,7 @@ final class PrivacyConsentView: BaseView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(contentTextView)
 		stackView.addArrangedSubview(itemStackView)
 		scrollView.contentView.addSubview(stackView)
 
@@ -156,7 +158,10 @@ final class PrivacyConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
-			stackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.margin),
+			stackView.bottomAnchor.constraint(
+				lessThanOrEqualTo: scrollView.contentView.bottomAnchor,
+				constant: -ViewTraits.margin
+			),
 
 			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
@@ -177,22 +182,13 @@ final class PrivacyConsentView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			NSAttributedString.makeFromHtml(
+				text: message,
+				style: .bodyDark
+			) {
+				self.contentTextView.attributedText = $0
+			}
 		}
-	}
-
-	/// Underline part ot the message
-	/// - Parameter text: the text to underline
-	func underline(_ text: String?) {
-
-		guard let underlinedText = text,
-			  let messageText = message else {
-			return
-		}
-
-		let attributedUnderlined = messageText.underlineAsLink(underlined: underlinedText)
-		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
-		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
 	var consent: String? {

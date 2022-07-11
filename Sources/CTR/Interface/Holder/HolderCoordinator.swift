@@ -34,7 +34,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
-	func userWishesMoreInfoAboutIncompleteDutchVaccination()
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
@@ -181,70 +180,65 @@ class HolderCoordinator: SharedCoordinator {
 	override func consume(universalLink: UniversalLink) -> Bool {
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
-				
-				// Need to handle two situations:
-				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
-				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
-				//      that after the user has completed these screens.
-				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
-				
-				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || newFeaturesManager.needsUpdating {
-					self.unhandledUniversalLink = universalLink
-				} else {
-					// Do it on the next runloop, to standardise all the entry points to this function:
-					DispatchQueue.main.async { [self] in
-						navigateToTokenEntry(requestToken)
-					}
-				}
-				return true
-				
+				return consumeToken(requestToken, retrievalMode: .negativeTest, universalLink: universalLink)
 			case .redeemVaccinationAssessment(let requestToken):
-				
-				// Need to handle two situations:
-				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
-				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
-				//      that after the user has completed these screens.
-				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
-				
-				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || newFeaturesManager.needsUpdating {
-					self.unhandledUniversalLink = universalLink
-				} else {
-					// Do it on the next runloop, to standardise all the entry points to this function:
-					DispatchQueue.main.async { [self] in
-						navigateToTokenEntry(requestToken, retrievalMode: .visitorPass)
-					}
-				}
-				return true
-				
+				return consumeToken(requestToken, retrievalMode: .visitorPass, universalLink: universalLink)
 			case .thirdPartyTicketApp(let returnURL):
-				guard let returnURL = returnURL,
-					  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
-						  permittedDomain.url == returnURL.host
-					  })
-				else {
-					return true
-				}
-				
-				thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
-				
-				// Reset the dashboard back to the domestic tab:
-				if let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
-					dashboardViewController.viewModel.selectTab(newTab: .domestic)
-				}
-				return true
-				
+				return consumeThirdPartyTicket(returnURL)
 			case .tvsAuth(let returnURL):
-				
-				if let url = returnURL,
-				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
-				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
-				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-					appAuthState.currentAuthorizationFlow = nil
-				}
-				return true
+				return consumeTvsAuthLink(returnURL)
 			default:
 				return false
 		}
+	}
+	
+	private func consumeToken(_ requestToken: RequestToken, retrievalMode: InputRetrievalCodeMode, universalLink: UniversalLink) -> Bool {
+		
+		// Need to handle two situations:
+		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+		//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+		//      that after the user has completed these screens.
+		// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+		
+		if onboardingManager.needsOnboarding || onboardingManager.needsConsent || newFeaturesManager.needsUpdating {
+			self.unhandledUniversalLink = universalLink
+		} else {
+			// Do it on the next runloop, to standardise all the entry points to this function:
+			DispatchQueue.main.async { [self] in
+				navigateToTokenEntry(requestToken, retrievalMode: retrievalMode)
+			}
+		}
+		return true
+	}
+	
+	private func consumeThirdPartyTicket(_ returnURL: URL?) -> Bool {
+		
+		guard let returnURL = returnURL,
+			  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
+				  permittedDomain.url == returnURL.host
+			  })
+		else {
+			return true
+		}
+		
+		thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
+		
+		// Reset the dashboard back to the domestic tab:
+		if let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
+			dashboardViewController.viewModel.selectTab(newTab: .domestic)
+		}
+		return true
+	}
+	
+	private func consumeTvsAuthLink(_ returnURL: URL?) -> Bool {
+		
+		if let url = returnURL,
+		   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
+		   let authorizationFlow = appAuthState.currentAuthorizationFlow,
+		   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+			appAuthState.currentAuthorizationFlow = nil
+		}
+		return true
 	}
 	
 	// MARK: - Navigate to..
@@ -290,7 +284,7 @@ class HolderCoordinator: SharedCoordinator {
 	// "Waar wil je een QR-code van maken?"
 	func navigateToChooseQRCodeType() {
 		
-		let destination = ChooseProofTypeViewController(
+		let destination = ListOptionsViewController(
 			viewModel: ChooseProofTypeViewModel(
 				coordinator: self
 			)
@@ -346,7 +340,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func navigateToChooseTestLocation() {
 		
-		let destination = ChooseTestLocationViewController(
+		let destination = ListOptionsViewController(
 			viewModel: ChooseTestLocationViewModel(
 				coordinator: self
 			)
@@ -521,12 +515,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		presentAsBottomSheet(viewController)
-	}
-	
-	func userWishesMoreInfoAboutIncompleteDutchVaccination() {
-		let viewModel = IncompleteDutchVaccinationViewModel(coordinatorDelegate: self)
-		let viewController = IncompleteDutchVaccinationViewController(viewModel: viewModel)
-		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	func userWishesMoreInfoAboutNoTestToken() {

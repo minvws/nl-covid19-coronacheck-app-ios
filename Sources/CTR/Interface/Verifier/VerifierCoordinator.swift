@@ -68,32 +68,39 @@ class VerifierCoordinator: SharedCoordinator {
 		}
 	}
 	
+	// MARK: - Universal Links
+	
 	override func consume(universalLink: UniversalLink) -> Bool {
 		switch universalLink {
 			case .thirdPartyScannerApp(let returnURL):
-				guard let returnURL = returnURL,
-					  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
-						  permittedDomain.url == returnURL.host
-					  })
-				else {
-					return true
-				}
-				
-				// Is the user currently permitted to scan?
-				guard Current.scanLockManager.state == .unlocked && Current.verificationPolicyManager.state != nil
-				else { return true } // handled (but ignored)
-				
-				thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
-				
-				// On next runloop to show navigation animation and to open camera right after app launch
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-					self.navigateToScan()
-				}
-				
-				return true
+				return consumeThirdPartyScanner(returnURL)
 			default:
 				return false
 		}
+	}
+	
+	private func consumeThirdPartyScanner(_ returnURL: URL?) -> Bool {
+		
+		guard let returnURL = returnURL,
+			  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
+				  permittedDomain.url == returnURL.host
+			  })
+		else {
+			return true
+		}
+		
+		// Is the user currently permitted to scan?
+		guard Current.scanLockManager.state == .unlocked && Current.verificationPolicyManager.state != nil
+		else { return true } // handled (but ignored)
+		
+		thirdPartyScannerApp = (name: matchingMetadata.name, returnURL: returnURL)
+		
+		// On next runloop to show navigation animation and to open camera right after app launch
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+			self.navigateToScan()
+		}
+		
+		return true
 	}
 	
 	deinit {
@@ -322,7 +329,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = DeniedQRScanMoreInfoViewController(
 			viewModel: DeniedQRScanMoreInfoViewModel(coordinator: self)
 		)
-		navigationController.presentBottomSheet(viewController)
+		presentAsBottomSheet(viewController)
 	}
 }
 

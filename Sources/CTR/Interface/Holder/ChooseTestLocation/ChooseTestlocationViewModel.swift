@@ -7,18 +7,17 @@
 
 import UIKit
 
-class ChooseTestLocationViewModel {
-
-	// MARK: - Bindable Strings
-
-	@Bindable private(set) var title: String = L.holderLocationTitle()
-	@Bindable private(set) var message: String = L.holderLocationMessage()
-	@Bindable private(set) var buttonModels: [ChooseTestLocationViewController.ButtonModel] = []
-	@Bindable private(set) var bottomButton: ChooseTestLocationViewController.ButtonModel?
+class ChooseTestLocationViewModel: ListOptionsProtocol {
 	
-	// MARK: - Private:
+	let title = Observable(value: L.holderLocationTitle())
 	
-	private weak var coordinator: HolderCoordinatorDelegate?
+	let message = Observable(value: L.holderLocationMessage())
+	
+	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
+	
+	let bottomButton: Observable<ListOptionsViewController.OptionModel?> = Observable(value: nil)
+	
+	weak var coordinator: HolderCoordinatorDelegate?
 	
 	// MARK: - Initializer
 	
@@ -28,20 +27,20 @@ class ChooseTestLocationViewModel {
 		
 		self.coordinator = coordinator
 		
-		bottomButton = ChooseTestLocationViewController.ButtonModel(
-			title: L.holderLocationNotest()) { [weak self] in
-				self?.coordinator?.userWishesMoreInfoAboutGettingTested()
-			}
-		
-		buttonModels = [
-			ChooseTestLocationViewController.ButtonModel(
+		optionModels.value = [
+			ListOptionsViewController.OptionModel(
 				title: L.holderLocationGgdTitle()) { [weak self] in
 					self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
 				},
-			ChooseTestLocationViewController.ButtonModel(
+			ListOptionsViewController.OptionModel(
 				title: L.holderLocationOtherTitle()) { [weak self] in
 					self?.coordinator?.userWishesToCreateANegativeTestQR()
 				}
 		]
+		
+		bottomButton.value = ListOptionsViewController.OptionModel(
+			title: L.holderLocationNotest()) { [weak self] in
+				self?.coordinator?.userWishesMoreInfoAboutGettingTested()
+			}
 	}
 }

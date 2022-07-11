@@ -9,7 +9,7 @@ class VaccinationEncodingSmoke: BaseTest {
 	
 	func test_encodingLatinDiacritic() {
 		let person = TestData.encodingLatinDiacritic
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		assertRetrievedCertificate(for: person)
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()

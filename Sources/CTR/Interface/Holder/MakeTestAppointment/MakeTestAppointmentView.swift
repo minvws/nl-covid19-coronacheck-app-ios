@@ -127,9 +127,7 @@ final class MakeTestAppointmentView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			NSAttributedString.makeFromHtml(text: message, style: .bodyDark) {
-				self.messageTextView.attributedText = $0
-			}
+			self.messageTextView.attributedText = NSAttributedString.makeFromHtml(text: message, style: .bodyDark)
 		}
 	}
 	

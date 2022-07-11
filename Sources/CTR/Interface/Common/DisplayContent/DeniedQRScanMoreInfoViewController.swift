@@ -51,8 +51,13 @@ class DeniedQRScanMoreInfoViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$content.binding = { [weak self] in
 
-			for (view, spacing) in $0 {
-				self?.sceneView.addToStackView(subview: view, followedByCustomSpacing: spacing)
+			for (text, spacing) in $0 {
+				let textView = TextView()
+				textView.attributedText = NSAttributedString.makeFromHtml(
+					text: text,
+					style: .bodyDark
+				)
+				self?.sceneView.addToStackView(subview: textView, followedByCustomSpacing: spacing)
 			}
 		}
 

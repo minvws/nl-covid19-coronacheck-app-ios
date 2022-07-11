@@ -9,7 +9,7 @@ class PositivePcrTest: BaseTest {
 	
 	func test_posPcrJ2() {
 		let person = TestData.posPcrJ2
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -22,7 +22,7 @@ class PositivePcrTest: BaseTest {
 	
 	func test_posPcrJ3() {
 		let person = TestData.posPcrJ3
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -35,7 +35,7 @@ class PositivePcrTest: BaseTest {
 	
 	func test_posPcrP1J1() {
 		let person = TestData.posPcrP1J1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		
@@ -48,7 +48,7 @@ class PositivePcrTest: BaseTest {
 	
 	func test_posPcrP2J1() {
 		let person = TestData.posPcrP2J1
-		addVaccinationCertificate(for: person, combinedWithPositiveTest: true)
+		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertCombinedVaccinationAndRecoveryRetrieval()
 		

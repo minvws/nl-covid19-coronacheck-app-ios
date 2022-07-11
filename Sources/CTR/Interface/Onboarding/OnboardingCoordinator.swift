@@ -9,8 +9,6 @@ import UIKit
 import SafariServices
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
-
-	func showPrivacyPage()
 	
 	/// Dismiss the presented viewController
 	func dismiss()
@@ -86,12 +84,12 @@ class OnboardingCoordinator: Coordinator {
 		navigationController.view.window?.replaceRootViewController(with: navigationController)
 	}
 
-    // MARK: - Universal Link handling
-
-    /// Override point for coordinators which wish to deal with universal links.
-    func consume(universalLink: UniversalLink) -> Bool {
-        return false
-    }
+	// MARK: - Universal Link handling
+	
+	/// Override point for coordinators which wish to deal with universal links.
+	func consume(universalLink: UniversalLink) -> Bool {
+		return false
+	}
 }
 
 // MARK: - OpenUrlProtocol
@@ -138,23 +136,6 @@ extension OnboardingCoordinator: PagedAnnouncementDelegate {
 // MARK: - OnboardingCoordinatorDelegate
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
-	
-	func showPrivacyPage() {
-
-		let urlString: String
-
-		if appFlavor == .holder {
-			urlString = L.holderUrlPrivacy()
-		} else {
-			urlString = L.verifierUrlPrivacy()
-		}
-
-		guard let privacyUrl = URL(string: urlString) else {
-			Current.logHandler.logError("No privacy url for \(urlString)")
-			return
-		}
-		openUrl(privacyUrl, inApp: true)
-	}
 
 	/// Dismiss the presented viewController
 	func dismiss() {

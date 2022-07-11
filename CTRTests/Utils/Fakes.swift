@@ -446,7 +446,8 @@ extension RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
 			domesticGreenCard: nil,
 			euGreenCards: [],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 
@@ -466,7 +467,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -486,7 +488,8 @@ extension RemoteGreenCards.Response {
 					identifier: "12345",
 					expirationDate: Formatter.getDateFrom(dateString8601: "2024-07-06:12:00:00+00:00")!
 				)
-			]
+			],
+			hints: nil
 		)
 	}
 
@@ -512,7 +515,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential2"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 
@@ -528,7 +532,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 
@@ -555,7 +560,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -582,7 +588,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -608,7 +615,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -629,7 +637,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -644,7 +653,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -657,7 +667,8 @@ extension RemoteGreenCards.Response {
 				createCredentialMessages: "test"
 			),
 			euGreenCards: [],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -670,7 +681,8 @@ extension RemoteGreenCards.Response {
 				createCredentialMessages: "test"
 			),
 			euGreenCards: [],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -691,7 +703,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 
@@ -711,7 +724,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 	
@@ -731,7 +745,8 @@ extension RemoteGreenCards.Response {
 					credential: "test credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 
@@ -770,7 +785,8 @@ extension RemoteGreenCards.Response {
 					credential: "recovery credential"
 				)
 			],
-			blobExpireDates: []
+			blobExpireDates: [],
+			hints: nil
 		)
 	}
 }

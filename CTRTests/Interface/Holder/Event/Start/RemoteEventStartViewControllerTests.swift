@@ -45,9 +45,9 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == L.holderVaccinationStartTitle()
-		expect(self.sut.sceneView.message) == L.holderVaccinationStartMessage()
-
+		expect(self.sut.sceneView.title) == L.holder_addVaccination_title()
+		expect(self.sut.sceneView.message) == L.holder_addVaccination_message()
+		
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
@@ -121,8 +121,8 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		sut.sceneView.secondaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: L.holderVaccinationStartNodigidUrl())
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccination)
 	}
 	
 	func test_checkBoxTapped() {

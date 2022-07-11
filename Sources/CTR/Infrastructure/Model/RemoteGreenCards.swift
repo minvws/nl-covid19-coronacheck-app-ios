@@ -11,15 +11,17 @@ struct RemoteGreenCards: Codable {
 
 	struct Response: Codable {
 
-		let domesticGreenCard: DomesticGreenCard?
-		let euGreenCards: [EuGreenCard]?
-		let blobExpireDates: [BlobExpiry]?
-
+		var domesticGreenCard: DomesticGreenCard?
+		var euGreenCards: [EuGreenCard]?
+		var blobExpireDates: [BlobExpiry]?
+		var hints: [String]?
+		
 		enum CodingKeys: String, CodingKey {
 
 			case domesticGreenCard = "domesticGreencard"
 			case euGreenCards = "euGreencards"
 			case blobExpireDates
+			case hints
 		}
 
 		func getOrigins(ofType: String) -> [RemoteGreenCards.Origin] {

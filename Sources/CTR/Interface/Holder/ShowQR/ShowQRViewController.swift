@@ -50,10 +50,8 @@ class ShowQRViewController: BaseViewController {
 		viewModel.$infoButtonAccessibility.binding = { [weak self] in
 			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
 		}
-		viewModel.$showInternationalAnimation.binding = { [weak self] in
-			if $0 {
-				self?.sceneView.setupForInternational()
-			}
+		viewModel.$animationStyle.binding = { [weak self] in
+			self?.sceneView.animationStyle = $0
 		}
 		viewModel.$dosage.binding = { [weak self] in self?.sceneView.dosage = $0 }
 		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in self?.sceneView.returnToThirdPartyAppButtonTitle = $0 }

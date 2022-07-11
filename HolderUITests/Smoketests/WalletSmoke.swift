@@ -15,7 +15,7 @@ class WalletSmoke: BaseTest {
 	
 	func test_vacP1() {
 		let person = TestData.vacP1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
@@ -26,7 +26,7 @@ class WalletSmoke: BaseTest {
 	
 	func test_posPcr() {
 		let person = TestData.posPcrBeforeP1
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		let pos = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
 		
@@ -36,7 +36,7 @@ class WalletSmoke: BaseTest {
 	
 	func test_negPcr() {
 		let person = TestData.negPcr
-		addTestCertificateFromGGD(for: person)
+		addTestCertificateFromGGD(for: person.bsn)
 		let neg = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
 		
@@ -46,11 +46,11 @@ class WalletSmoke: BaseTest {
 	
 	func test_replaceSetup() {
 		let setup = TestData.vacP2DifferentSetupSituation
-		addVaccinationCertificate(for: setup)
+		addVaccinationCertificate(for: setup.bsn)
 		addRetrievedCertificateToApp()
 		
 		let person = TestData.vacJ1DifferentEverythingReplaces
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(true)
@@ -62,7 +62,7 @@ class WalletSmoke: BaseTest {
 	
 	func test_removeVaccination() {
 		let person = TestData.vacP1
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		viewWallet()

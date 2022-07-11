@@ -10,7 +10,7 @@ class PositiveOthersSmoke: BaseTest {
 	// MARK: Positive tests - breathalyzer
 	
 	func test_posBreathalyzer() {
-		addRecoveryCertificate(for: TestData.posBreathalyzer)
+		addRecoveryCertificate(for: TestData.posBreathalyzer.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreated()
 	}
@@ -19,7 +19,7 @@ class PositiveOthersSmoke: BaseTest {
 	
 	func test_posAgob() {
 		let person = TestData.posAgob
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
@@ -29,11 +29,11 @@ class PositiveOthersSmoke: BaseTest {
 	
 	func test_posAgobP1() {
 		let person = TestData.posAgobP1
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
@@ -46,11 +46,11 @@ class PositiveOthersSmoke: BaseTest {
 	
 	func test_posAgobP2() {
 		let person = TestData.posAgobP2
-		addRecoveryCertificate(for: person)
+		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertNoCertificateCouldBeCreatedIn0G()
 		
-		addVaccinationCertificate(for: person)
+		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
@@ -63,13 +63,13 @@ class PositiveOthersSmoke: BaseTest {
 	// MARK: Positive tests - older than a year
 	
 	func test_posOldPcr() {
-		addRecoveryCertificate(for: TestData.posOldPcr)
+		addRecoveryCertificate(for: TestData.posOldPcr.bsn)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
 	}
 	
 	func test_posOldRat() {
-		addRecoveryCertificate(for: TestData.posOldRat)
+		addRecoveryCertificate(for: TestData.posOldRat.bsn)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
 	}
