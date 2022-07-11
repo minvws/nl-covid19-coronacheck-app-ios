@@ -140,9 +140,10 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(viewModel.content.body) == L.holder_contactCoronaCheckHelpdesk_message()
 	}
 	
-	func test_userWishesToContactHelpDeksWithoutBSN() throws {
+	func test_userWishesToContactHelpDeksWithoutBSN_ggdPortalDisabled() throws {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = false
 		
 		// When
 		sut.userWishesToContactHelpDeksWithoutBSN()
@@ -151,13 +152,30 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title(L.holder_contactProviderHelpdesk_vaccinationLocation())
+		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title()
 		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message(L.holder_contactProviderHelpdesk_vaccinated())
 	}
-	
-	func test_userWishesToContactHelpDeksWithoutBSN_eventModeTest() throws {
+
+	func test_userWishesToContactHelpDeksWithoutBSN_ggdPortalEnabled() throws {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
+		
+		// When
+		sut.userWishesToContactHelpDeksWithoutBSN()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title()
+		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message_ggdPortalEnabled(L.holder_contactProviderHelpdesk_vaccinated())
+	}
+	
+	func test_userWishesToContactHelpDeksWithoutBSN_eventModeTest_ggdPortalDisabled() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = false
 		sut.eventMode = .test
 		
 		// When
@@ -167,8 +185,25 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title(L.holder_contactProviderHelpdesk_testLocation())
+		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title()
 		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message(L.holder_contactProviderHelpdesk_tested())
+	}
+	
+	func test_userWishesToContactHelpDeksWithoutBSN_eventModeTest_ggdPortalEnabled() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
+		sut.eventMode = .test
+		
+		// When
+		sut.userWishesToContactHelpDeksWithoutBSN()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title()
+		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message_ggdPortalEnabled(L.holder_contactProviderHelpdesk_tested())
 	}
 	
 	func test_test_userWishesToContactHelpDeksWithoutBSN_primaryAction() throws {
@@ -197,5 +232,47 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
 		expect(self.alternativeRouteFlowDelegateSpy.invokedBackToMyOverview) == true
+	}
+	
+	func test_userWishesToChooseEventLocation_ggdPortalDisabled() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = false
+		
+		// When
+		sut.userHasNoBSN()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_title()
+		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message(L.holder_contactProviderHelpdesk_vaccinated())
+	}
+	
+	func test_userWishesToChooseEventLocation_ggdPortalEnabled() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
+		
+		// When
+		sut.userHasNoBSN()
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel is ChooseEventLocationViewModel) == true
+		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == false
+	}
+	
+	func test_userWishedToGoToGGDPortal() {
+		
+		// Given
+		
+		// When
+		sut.userWishedToGoToGGDPortal()
+		
+		// Then
+		expect(self.alternativeRouteFlowDelegateSpy.invokedContinueToPap) == true
 	}
 }

@@ -11,7 +11,7 @@ class ChooseTestLocationViewModel: ListOptionsProtocol {
 	
 	let title = Observable(value: L.holderLocationTitle())
 	
-	let message = Observable(value: L.holderLocationMessage())
+	let message = Observable<String?>(value: L.holderLocationMessage())
 	
 	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
 	

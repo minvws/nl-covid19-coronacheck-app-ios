@@ -10,7 +10,7 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-class CheckForBSNViewControllerTests: XCTestCase {
+class ChooseEventLocationControllerTests: XCTestCase {
 
 	var sut: ListOptionsViewController!
 	var coordinatorDelegateSpy: AlternativeRouteCoordinatorDelegateSpy!
@@ -21,8 +21,9 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
 		sut = ListOptionsViewController(
-			viewModel: CheckForBSNViewModel(
-				coordinator: coordinatorDelegateSpy
+			viewModel: ChooseEventLocationViewModel(
+				coordinator: coordinatorDelegateSpy,
+				eventMode: .vaccination
 			)
 		)
 		window = UIWindow()
@@ -39,7 +40,7 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 
-	func test_withBSN_tapped() {
+	func test_GGD_tapped() {
 
 		// Given
 		loadView()
@@ -48,10 +49,10 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishedToGoToGGDPortal) == true
 	}
 
-	func test_withoutBSN_tapped() {
+	func test_other_tapped() {
 
 		// Given
 		loadView()
@@ -60,6 +61,6 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserHasNoBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
 	}
 }

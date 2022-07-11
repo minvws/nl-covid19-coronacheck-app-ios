@@ -525,6 +525,10 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		removeChildCoordinator(coordinator)
 		delegate?.eventFlowDidComplete()
 	}
+	
+	func continueToPap(eventMode: EventMode) {
+		Current.logHandler.logError("Should open GGD GHOR Portal")
+	}
 }
 
 extension EventCoordinator: Dismissable {

@@ -24,4 +24,16 @@ class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 		invokedBackToMyOverview = true
 		invokedBackToMyOverviewCount += 1
 	}
+	
+	var invokedContinueToPap = false
+	var invokedContinueToPapCount = 0
+	var invokedContinueToPapParameters: (eventMode: EventMode, Void)?
+	var invokedContinueToPapParametersList = [(eventMode: EventMode, Void)]()
+
+	func continueToPap(eventMode: EventMode) {
+		invokedContinueToPap = true
+		invokedContinueToPapCount += 1
+		invokedContinueToPapParameters = (eventMode, ())
+		invokedContinueToPapParametersList.append((eventMode, ()))
+	}
 }

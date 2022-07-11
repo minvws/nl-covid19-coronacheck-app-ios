@@ -11,7 +11,7 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 	
 	let title = Observable(value: L.holder_noDigiD_title())
 	
-	let message = Observable(value: L.holder_noDigiD_message())
+	let message = Observable<String?>(value: L.holder_noDigiD_message())
 	
 	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
 	
