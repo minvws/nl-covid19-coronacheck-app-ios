@@ -63,27 +63,31 @@
 "general_testcertificate" = "testbewijs";
 "general_testcertificate_0G" = "Internationaal testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
+"general_unrecoverableError_email_body" = "Deze email is automatisch gegenereerd met alle gegevens die wij nodig hebben. Wij vragen u geen extra informatie toe te voegen. Wij ontvangen bij verzending uw e-mail adres tezamen met informatie over het technische probleem. Deze informatie zal zo spoedig mogelijk worden verwijderd.\n\nDit bericht is bedoeld voor het CoronaCheck ontwikkelteam. Het probleem zal zo snel mogelijk opgelost worden.\n\nEen onoplosbaar probleem heeft plaats gevonden in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nError details:\n	Bericht: %@\n	Meer informatie: %@\n-----------";
+"general_unrecoverableError_email_subject" = "CoronaCheck problem report (%@ %@)";
+"general_unrecoverableError_restartTheApp_message" = "Start CoronaCheck opnieuw op. Nog steeds een probleem? Verwijder de app en installeer deze opnieuw.";
+"general_unrecoverableError_restartTheApp_title" = "Start de app opnieuw op";
+"general_unrecoverableError_sendCrashReport_action" = "Probleem rapporteren";
+"general_unrecoverableError_sendCrashReport_message" = "Er is een technisch probleem opgetreden.\nRapporteer dit probleem zodat we het zo snel mogelijk kunnen oplossen.";
+"general_unrecoverableError_sendCrashReport_title" = "Probleem met de app";
 "general_vaccination" = "vaccinatie";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
 "general_vaccinationcertificate" = "vaccinatiebewijs";
 "general_vaccinationcertificate_0G" = "Internationaal vaccinatiebewijs";
 "general_visitorPass" = "bezoekersbewijs";
-"holder.about.link" = "Lees hier de privacyverklaring";
-/* Koptekst in de over de app pagina */
+"holder.about.link" = "Lees hier de privacyverklaring";/* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Meer:";
 "holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje veilig te openen in tijden van corona.</p><p>Met de app kun je een coronabewijs maken van je vaccinatie, negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Laat deze scannen voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>";
-"holder.aboutmakingaqr.header" = "Een QR-code maken";
-/* MARK: - About Making a QR */
+"holder.aboutmakingaqr.header" = "Een QR-code maken";/* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "QR-code maken";
 /* MARK: - Holder Appointment */
 "holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.</p>";
 "holder.appointment.button.title" = "Maak een afspraak";
 "holder.appointment.header" = "Testafspraak maken";
-"holder.appointment.title" = "Testafspraak maken";
-"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
+"holder.appointment.title" = "Testafspraak maken";"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
 "holder.checkdcc.blocked.message" = "<p>Voor de veiligheid kun je deze QR-code tijdelijk niet meer in de app zetten.</p><p>Je kunt het over 24 uur weer proberen.</p>";
