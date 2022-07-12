@@ -28,11 +28,11 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToContactHelpDeksWithBSN()
 	
-	func userWishesToContactHelpDeksWithoutBSN()
-	
 	func userHasNoBSN()
 	
 	func userWishedToGoToGGDPortal()
+	
+	func userWishesToContactProviderHelpDeskWhilePortalEnabled()
 }
 
 class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
@@ -122,31 +122,41 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 				userWishedToGoToGGDPortal()
 			}
 		} else {
-			userWishesToContactHelpDeksWithoutBSN()
+			userWishesToContactProviderHelpDeskWhilePortalDisabled()
 		}
 	}
-
+	
+	private func userWishesToContactProviderHelpDeskWhilePortalDisabled() {
+		
+		if eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest {
+			displayContent(
+				title: L.holder_contactProviderHelpdesk_vaccinationFlow_title(),
+				message: L.holder_contactProviderHelpdesk_vaccinationFlow_message()
+			)
+		} else {
+			displayContent(
+				title: L.holder_contactProviderHelpdesk_testFlow_title(),
+				message: L.holder_contactProviderHelpdesk_testFlow_message()
+			)
+		}
+	}
+	
 	private func userWishesToChooseEventLocation() {
 		
 		let destination = ListOptionsViewController(
 			viewModel: ChooseEventLocationViewModel(
-				coordinator: self,
-				eventMode: eventMode
+				coordinator: self
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
-	func userWishesToContactHelpDeksWithoutBSN() {
+	func userWishesToContactProviderHelpDeskWhilePortalEnabled() {
 		
-		let message: String
-		
-		if Current.featureFlagManager.isGGDPortalEnabled() {
-			message = L.holder_contactProviderHelpdesk_message_ggdPortalEnabled(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
-		} else {
-			message = L.holder_contactProviderHelpdesk_message(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
-		}
-		displayContent(title: L.holder_contactProviderHelpdesk_title(), message: message)
+		displayContent(
+			title: L.holder_contactProviderHelpdesk_vaccinationFlow_title(),
+			message: L.holder_contactProviderHelpdesk_message_ggdPortalEnabled()
+		)
 	}
 	
 	func userWishedToGoToGGDPortal() {

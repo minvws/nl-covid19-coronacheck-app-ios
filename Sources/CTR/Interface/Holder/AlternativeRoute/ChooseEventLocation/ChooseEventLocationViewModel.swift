@@ -23,11 +23,11 @@ class ChooseEventLocationViewModel: ListOptionsProtocol {
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: AlternativeRouteCoordinatorDelegate, eventMode: EventMode) {
+	init(coordinator: AlternativeRouteCoordinatorDelegate) {
 		
 		self.coordinator = coordinator
 		
-		title.value = L.holder_chooseEventLocation_title(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+		title.value = L.holder_chooseEventLocation_title()
 		
 		optionModels.value = [
 			ListOptionsViewController.OptionModel(
@@ -38,7 +38,7 @@ class ChooseEventLocationViewModel: ListOptionsProtocol {
 			ListOptionsViewController.OptionModel(
 				title: L.holder_chooseEventLocation_buttonTitle_other(),
 				subTitle: L.holder_chooseEventLocation_buttonSubTitle_other(),
-				action: { [weak self] in self?.coordinator?.userWishesToContactHelpDeksWithoutBSN() }
+				action: { [weak self] in self?.coordinator?.userWishesToContactProviderHelpDeskWhilePortalEnabled() }
 			)
 		]
 	}
