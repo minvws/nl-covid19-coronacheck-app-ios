@@ -739,6 +739,11 @@
 "holder_showQR_euAboutVaccination_daysSince" = "Days since vaccination:";
 "holder_showQR_label_expiredQR" = "This QR code is no longer valid";
 "holder_showQR_label_newerQRAvailable" = "You probably won't need this QR code because you have a more recent dose.";
+"holder_showqr_animation_summerctb_voiceover_label" = "Animation of people on a bicycle and skateboard";
+"holder_showqr_animation_summerdcc_voiceover_label" = "Animation of travelers on a moving walkway";
+"holder_showqr_animation_voiceover_hint" = "Reverses the movement";
+"holder_showqr_animation_winterctb_voiceover_label" = "Animation of people on a sledge and ice skates";
+"holder_showqr_animation_winterdcc_voiceover_label" = "Animation of travelers on a moving walkway";
 /* Voice Over Details Button Domestic QR */
 "holder_showqr_domestic_accessibility_button_details" = "Details Dutch QR code";
 "holder_showqr_eu_about_vaccination_dosage_message" = "<a href=\"https://coronacheck.nl/en/dose\">Read more about the dose</a>";
