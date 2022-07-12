@@ -18,7 +18,7 @@ class ChooseEventLocationViewModelTests: XCTestCase {
 		super.setUp()
 		
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
-		sut = ChooseEventLocationViewModel(coordinator: coordinatorDelegateSpy, eventMode: .vaccination)
+		sut = ChooseEventLocationViewModel(coordinator: coordinatorDelegateSpy)
 	}
 	
 	func test_loadedState() {
@@ -28,21 +28,7 @@ class ChooseEventLocationViewModelTests: XCTestCase {
 		// Act
 		
 		// Assert
-		expect(self.sut.title.value) == L.holder_chooseEventLocation_title(L.holder_contactProviderHelpdesk_vaccinated())
-		expect(self.sut.message.value).to(beNil())
-		expect(self.sut.optionModels.value).to(haveCount(2))
-		expect(self.sut.bottomButton.value).to(beNil())
-	}
-	
-	func test_loadedState_negativeTest() {
-		
-		// Arrange
-		sut = ChooseEventLocationViewModel(coordinator: coordinatorDelegateSpy, eventMode: .test)
-		
-		// Act
-		
-		// Assert
-		expect(self.sut.title.value) == L.holder_chooseEventLocation_title(L.holder_contactProviderHelpdesk_tested())
+		expect(self.sut.title.value) == L.holder_chooseEventLocation_title()
 		expect(self.sut.message.value).to(beNil())
 		expect(self.sut.optionModels.value).to(haveCount(2))
 		expect(self.sut.bottomButton.value).to(beNil())
@@ -57,9 +43,9 @@ class ChooseEventLocationViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.coordinatorDelegateSpy.invokedUserWishedToGoToGGDPortal) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled) == false
 	}
-
+	
 	func test_contactHelpdesk() {
 
 		// Arrange
@@ -69,6 +55,6 @@ class ChooseEventLocationViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.coordinatorDelegateSpy.invokedUserWishedToGoToGGDPortal) == false
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled) == true
 	}
 }

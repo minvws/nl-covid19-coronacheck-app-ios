@@ -53,14 +53,6 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 		invokedUserWishesToContactHelpDeksWithBSNCount += 1
 	}
 
-	var invokedUserWishesToContactHelpDeksWithoutBSN = false
-	var invokedUserWishesToContactHelpDeksWithoutBSNCount = 0
-
-	func userWishesToContactHelpDeksWithoutBSN() {
-		invokedUserWishesToContactHelpDeksWithoutBSN = true
-		invokedUserWishesToContactHelpDeksWithoutBSNCount += 1
-	}
-
 	var invokedUserHasNoBSN = false
 	var invokedUserHasNoBSNCount = 0
 
@@ -75,5 +67,13 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 	func userWishedToGoToGGDPortal() {
 		invokedUserWishedToGoToGGDPortal = true
 		invokedUserWishedToGoToGGDPortalCount += 1
+	}
+
+	var invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled = false
+	var invokedUserWishesToContactProviderHelpDeskWhilePortalEnabledCount = 0
+
+	func userWishesToContactProviderHelpDeskWhilePortalEnabled() {
+		invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled = true
+		invokedUserWishesToContactProviderHelpDeskWhilePortalEnabledCount += 1
 	}
 }

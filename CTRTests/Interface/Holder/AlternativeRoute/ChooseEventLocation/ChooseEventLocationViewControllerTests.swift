@@ -22,8 +22,7 @@ class ChooseEventLocationControllerTests: XCTestCase {
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
 		sut = ListOptionsViewController(
 			viewModel: ChooseEventLocationViewModel(
-				coordinator: coordinatorDelegateSpy,
-				eventMode: .vaccination
+				coordinator: coordinatorDelegateSpy
 			)
 		)
 		window = UIWindow()
@@ -61,6 +60,6 @@ class ChooseEventLocationControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled) == true
 	}
 }
