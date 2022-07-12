@@ -50,6 +50,17 @@ class SecurityFeaturesView: BaseView {
 		animationView.embed(in: self)
 	}
 
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		isAccessibilityElement = true
+		updateAccessibility()
+	}
+	
+	private func updateAccessibility() {
+		accessibilityLabel = currentAnimation.localizedLabel
+		accessibilityHint = currentAnimation.localizedHint
+	}
+	
 	/// User tapped to flip security view animation
 	@objc func tapFlipAnimation() {
 
@@ -60,6 +71,8 @@ class SecurityFeaturesView: BaseView {
 		} else {
 			animationView.transform = CGAffineTransform(scaleX: -1, y: 1)
 		}
+		
+		updateAccessibility()
 	}
 
 	/// Play the animation
@@ -95,5 +108,22 @@ class SecurityFeaturesView: BaseView {
 		if !animationView.isAnimationPlaying {
 			playCurrentAnimation()
 		}
+	}
+}
+
+private extension SecurityAnimation {
+	
+	var localizedLabel: String? {
+		switch self {
+			case .domesticSummerAnimation: return L.holder_showqr_animation_summerctb_voiceover_label()
+			case .domesticWinterAnimation: return L.holder_showqr_animation_winterctb_voiceover_label()
+			case .internationalSummerAnimation: return L.holder_showqr_animation_summerdcc_voiceover_label()
+			case .internationalWinterAnimation: return L.holder_showqr_animation_winterdcc_voiceover_label()
+			default: return nil
+		}
+	}
+	
+	var localizedHint: String? {
+		return L.holder_showqr_animation_voiceover_hint()
 	}
 }
