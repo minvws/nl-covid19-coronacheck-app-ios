@@ -242,8 +242,6 @@
 "holder.errorstate.client.message" = "<p>Something is going wrong while creating your certificate. Could you please try again later?</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.fetch.message" = "<p>Something is going wrong while retrieving your details. Could you please try again later?</p><p><b>Error code: </b><br />%@</p>";
 "holder.errorstate.fetch.messages" = "<p>Something is going wrong while retrieving your details. Could you please try again later?</p><p><b>Error codes: </b><br />%@</p>";
-"holder.errorstate.login.cancel.message" = "Want to retrieve your vaccination details? Login again with DigiD.";
-"holder.errorstate.login.cancel.title" = "Login was cancelled";
 "holder.errorstate.login.message.recovery" = "Want to retrieve your recovery details? Login again with DigiD.";
 "holder.errorstate.login.message.test" = "Want to retrieve your test details? Login again with DigiD.";
 "holder.errorstate.login.message.vaccination" = "Want to retrieve your vaccination details? Login again with DigiD.";
