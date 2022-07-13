@@ -242,10 +242,6 @@
 "holder.errorstate.client.message" = "<p>Something is going wrong while creating your certificate. Could you please try again later?</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.fetch.message" = "<p>Something is going wrong while retrieving your details. Could you please try again later?</p><p><b>Error code: </b><br />%@</p>";
 "holder.errorstate.fetch.messages" = "<p>Something is going wrong while retrieving your details. Could you please try again later?</p><p><b>Error codes: </b><br />%@</p>";
-"holder.errorstate.login.message.recovery" = "Want to retrieve your recovery details? Login again with DigiD.";
-"holder.errorstate.login.message.test" = "Want to retrieve your test details? Login again with DigiD.";
-"holder.errorstate.login.message.vaccination" = "Want to retrieve your vaccination details? Login again with DigiD.";
-"holder.errorstate.login.title" = "Login was cancelled";
 "holder.errorstate.malfunctions.title" = "Check the latest outages";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
 "holder.errorstate.nobsn.message" = "The healthcare provider who vaccinated or tested you can help you further. Contact them and let them know the CoronaCheck app couldn’t find a social security number.";
@@ -537,6 +533,13 @@
 "holder_addVaccination_message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p>";
 "holder_addVaccination_title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
+"holder_authentication_popup_recoveryFlowDigid_message" = "Want to retrieve your recovery details? Login again with DigiD.";
+"holder_authentication_popup_recoveryFlowPortal_message" = "Want to retrieve your recovery details? Login again with DigiD.";
+"holder_authentication_popup_testFlowDigid_message" = "Want to retrieve your test details? Login again with DigiD.";
+"holder_authentication_popup_testFlowPortal_message" = "Want to retrieve your test details? Login again with DigiD.";
+"holder_authentication_popup_title" = "Login was cancelled";
+"holder_authentication_popup_vaccinationFlowDigid_message" = "Want to retrieve your vaccination details? Login again with DigiD.";
+"holder_authentication_popup_vaccinationFlowPortal_message" = "Want to retrieve your vaccination details? Login again with DigiD.";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Get your certificate from the CoronaCheck helpdesk";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow" = "Get your certificate from your test or vaccination location";
 "holder_checkForBSN_buttonTitle_doesHaveBSN" = "Yes, I have a BSN";

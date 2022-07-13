@@ -477,17 +477,17 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		let presentError = {
 			let alertController = UIAlertController(
-				title: L.holderErrorstateLoginTitle(),
+				title: L.holder_authentication_popup_title(),
 				message: {
 					switch eventMode {
 						case .vaccinationassessment, .paperflow:
 							return "" // PaperProof is not a part of this flow
 						case .recovery:
-							return L.holderErrorstateLoginMessageRecovery()
+							return authenticationMode == .manyAuthenticationExchange ? L.holder_authentication_popup_recoveryFlowDigid_message() : L.holder_authentication_popup_recoveryFlowPortal_message()
 						case .test:
-							return L.holderErrorstateLoginMessageTest()
+							return authenticationMode == .manyAuthenticationExchange ? L.holder_authentication_popup_testFlowDigid_message() : L.holder_authentication_popup_testFlowPortal_message()
 						case .vaccination, .vaccinationAndPositiveTest:
-							return L.holderErrorstateLoginMessageVaccination()
+							return authenticationMode == .manyAuthenticationExchange ? L.holder_authentication_popup_vaccinationFlowDigid_message() : L.holder_authentication_popup_vaccinationFlowPortal_message()
 					}
 				}(),
 				preferredStyle: .alert
