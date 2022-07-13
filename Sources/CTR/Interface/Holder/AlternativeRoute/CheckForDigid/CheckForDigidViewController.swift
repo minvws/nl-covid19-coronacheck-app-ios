@@ -34,6 +34,9 @@ extension CheckForDigidViewController: UINavigationControllerDelegate {
 		if let coordinator = navigationController.topViewController?.transitionCoordinator {
 			coordinator.notifyWhenInteractionChanges { [weak self] context in
 				guard !context.isCancelled else { return }
+				// We are the navigationController Delegate, we get all the swipes, even from scenes further in the flow.
+				// Only propagate swipeback if we are the viewcontroller being swiped.
+				guard context.viewController(forKey: .from) == self else { return }
 				// Clean up coordinator when swiping back
 				(self?.viewModel as? CheckForDigidViewModel)?.swipeBack()
 			}
