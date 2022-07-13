@@ -11,7 +11,7 @@ import XCTest
 import Nimble
 import AppAuth
 
-class AuthenticationViewModelTests: XCTestCase {
+class AuthenticationViewModelPAPTests: XCTestCase {
 
 	/// Subject under test
 	private var sut: AuthenticationViewModel!
@@ -36,7 +36,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		// Then
@@ -56,7 +56,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		// Then
@@ -76,7 +76,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .test,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		// Then
@@ -96,7 +96,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		// Then
@@ -114,7 +114,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		// When
@@ -131,7 +131,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange,
+			authenticationMode: .patientAuthenticationProvider,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
@@ -149,7 +149,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange,
+			authenticationMode: .patientAuthenticationProvider,
 			appAuthState: appAuthStateSpy
 		)
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
@@ -168,7 +168,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (OpenIdManagerIdToken(), ())
 
@@ -184,16 +184,16 @@ class AuthenticationViewModelTests: XCTestCase {
 		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "idToken", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "accessToken", authenticationMode: .patientAuthenticationProvider, eventMode: .vaccination)
 	}
-
+	
 	func test_openID_success_accessToken_invalidToken() throws {
 
 		// Given
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 		let invalidToken = OpenIdManagerIdToken(idToken: nil, accessToken: nil)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = (invalidToken, ())
@@ -206,7 +206,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 070-8")
+			expect(content.body) == L.holderErrorstateClientMessage("i 215 000 070-8")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
@@ -215,14 +215,14 @@ class AuthenticationViewModelTests: XCTestCase {
 			fail("Invalid state")
 		}
 	}
-	
+
 	func test_openID_error_serverUnreachable() throws {
 
 		// Given
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
@@ -235,7 +235,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
+			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 215 000 004")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
@@ -251,7 +251,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "Authentication", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
@@ -264,7 +264,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
+			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 215 000 429")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).to(beNil())
@@ -280,7 +280,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
 			(NSError(domain: "Authentication", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
@@ -299,7 +299,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.userCanceledAuthorizationFlow.rawValue, userInfo: nil), ())
 
@@ -317,7 +317,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -348,7 +348,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 215 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
@@ -365,7 +365,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -392,7 +392,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 215 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
@@ -409,7 +409,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -435,7 +435,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 215 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())
@@ -452,7 +452,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		// When
@@ -465,7 +465,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
+			expect(content.body) == L.holderErrorstateClientMessage("i 215 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
 			expect(content.secondaryAction).toNot(beNil())
@@ -481,7 +481,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			authenticationMode: .manyAuthenticationExchange
+			authenticationMode: .patientAuthenticationProvider
 		)
 
 		let cases: [Int: ErrorCode.ClientCode] = [
@@ -504,7 +504,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			let params = try XCTUnwrap(coordinatorSpy.invokedAuthenticationScreenDidFinishParameters)
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
-				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
+				expect(content.body) == L.holderErrorstateClientMessage("i 215 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
 				expect(content.secondaryAction).toNot(beNil())

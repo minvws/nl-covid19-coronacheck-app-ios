@@ -101,7 +101,7 @@ class AuthenticationViewModel {
 			case .manyAuthenticationExchange:
 				
 				guard let idToken = token.idToken else {
-					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
+					self.handleError(NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
 					return
 				}
 				
@@ -110,7 +110,7 @@ class AuthenticationViewModel {
 			case .patientAuthenticationProvider:
 				
 				guard let accessToken = token.accessToken else {
-					self.handleError(NSError(domain: OIDOAuthTokenErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
+					self.handleError(NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
 					return
 				}
 				
