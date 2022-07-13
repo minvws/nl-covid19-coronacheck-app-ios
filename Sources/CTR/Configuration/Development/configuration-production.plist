@@ -5,7 +5,7 @@
 	<key>ggdPortal</key>
 	<dict>
 		<key>host</key>
-		<string>https://pap.bananenhalen.nl/</string>
+		<string>https://qrcodezonderdigid.ggdghor.nl</string>
 		<key>clientId</key>
 		<string>cc_app</string>
 		<key>redirectUri</key>

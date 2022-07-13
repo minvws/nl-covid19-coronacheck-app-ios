@@ -23,7 +23,11 @@ class SecurityFeaturesView: BaseView {
 	}()
 
 	/// The current animation
-	var currentAnimation: SecurityAnimation = .domesticSummerAnimation
+	var currentAnimation: SecurityAnimation = .domesticSummerAnimation {
+		didSet {
+			updateAccessibility()
+		}
+	}
 
 	/// Setup all the views
 	override func setupViews() {
@@ -53,6 +57,8 @@ class SecurityFeaturesView: BaseView {
 	override func setupAccessibility() {
 		super.setupAccessibility()
 		isAccessibilityElement = true
+		accessibilityTraits = [.button]
+		
 		updateAccessibility()
 	}
 	
