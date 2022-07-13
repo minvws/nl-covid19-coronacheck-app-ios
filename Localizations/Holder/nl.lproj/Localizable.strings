@@ -533,13 +533,10 @@
 "holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
 "holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
-"holder_authentication_popup_recoveryFlowDigid_message" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
-"holder_authentication_popup_recoveryFlowPortal_message" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
-"holder_authentication_popup_testFlowDigid_message" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
-"holder_authentication_popup_testFlowPortal_message" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
-"holder_authentication_popup_title" = "Inloggen afgebroken";
-"holder_authentication_popup_vaccinationFlowDigid_message" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
-"holder_authentication_popup_vaccinationFlowPortal_message" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder_authentication_popup_digid_message" = "Wil je jouw gegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder_authentication_popup_digid_title" = "Inloggen afgebroken";
+"holder_authentication_popup_portal_message" = "Wil je jouw gegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder_authentication_popup_portal_title" = "Inloggen afgebroken";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Krijg je bewijs via de CoronaCheck helpdesk";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow" = "Krijg je bewijs via de GGD";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow" = "Krijg je bewijs via je zorgverlener";
