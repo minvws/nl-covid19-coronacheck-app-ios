@@ -24,8 +24,6 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToRequestADigiD()
 	
-	func userWishesToEndAlternativeRoute(popViewController: Bool)
-	
 	func userWishesToContactHelpDeksWithBSN()
 	
 	func userHasNoBSN()
@@ -35,7 +33,7 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	func userWishesToContactProviderHelpDeskWhilePortalEnabled()
 }
 
-class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
+class AlternativeRouteCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -49,10 +47,12 @@ class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	init(navigationController: UINavigationController, delegate: AlternativeRouteFlowDelegate, eventMode: EventMode) {
-
+		
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.eventMode = eventMode
+		super.init()
+		self.navigationController.delegate = self
 	}
 
 	func start() {
@@ -93,14 +93,6 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		if let url = URL(string: L.holder_noDigiD_url()) {
 			openUrl(url, inApp: true)
 		}
-	}
-	
-	func userWishesToEndAlternativeRoute(popViewController: Bool) {
-		
-		if popViewController {
-			navigationController.popViewController(animated: true)
-		}
-		delegate?.canceledAlternativeRoute()
 	}
 
 	func userWishesToContactHelpDeksWithBSN() {
@@ -186,5 +178,17 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		
 		let destination = ContentViewController(viewModel: viewModel)
 		navigationController.pushViewController(destination, animated: true)
+	}
+}
+
+extension AlternativeRouteCoordinator: UINavigationControllerDelegate {
+
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+		
+		if !navigationController.viewControllers.contains(where: { $0.isKind(of: CheckForDigidViewController.self) }) {
+			// If there is no more CheckForDigidViewController in the stack, we are done here.
+			// Works for both back swipe and back button
+			delegate?.canceledAlternativeRoute()
+		}
 	}
 }

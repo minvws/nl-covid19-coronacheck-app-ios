@@ -62,15 +62,4 @@ class CheckForDigidViewControllerTests: XCTestCase {
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCheckForBSN) == true
 	}
-	
-	func test_backButtonTapped() {
-		
-		// Given
-		
-		// When
-		sut.backButtonTapped()
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRoute) == true
-	}
 }

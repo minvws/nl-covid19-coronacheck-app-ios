@@ -33,18 +33,6 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 		invokedUserWishesToRequestADigiDCount += 1
 	}
 
-	var invokedUserWishesToEndAlternativeRoute = false
-	var invokedUserWishesToEndAlternativeRouteCount = 0
-	var invokedUserWishesToEndAlternativeRouteParameters: (popViewController: Bool, Void)?
-	var invokedUserWishesToEndAlternativeRouteParametersList = [(popViewController: Bool, Void)]()
-
-	func userWishesToEndAlternativeRoute(popViewController: Bool) {
-		invokedUserWishesToEndAlternativeRoute = true
-		invokedUserWishesToEndAlternativeRouteCount += 1
-		invokedUserWishesToEndAlternativeRouteParameters = (popViewController, ())
-		invokedUserWishesToEndAlternativeRouteParametersList.append((popViewController, ()))
-	}
-
 	var invokedUserWishesToContactHelpDeksWithBSN = false
 	var invokedUserWishesToContactHelpDeksWithBSNCount = 0
 

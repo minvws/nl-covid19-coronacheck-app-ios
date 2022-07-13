@@ -55,28 +55,4 @@ class CheckForDigidViewModelTests: XCTestCase {
 		// Assert
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCheckForBSN) == true
 	}
-	
-	func test_backbutton() {
-		
-		// Arrange
-		
-		// Act
-		sut.backbuttonTapped()
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRoute) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRouteParameters?.0) == true
-	}
-	
-	func test_swipeback() {
-		
-		// Arrange
-		
-		// Act
-		sut.swipeBack()
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRoute) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRouteParameters?.0) == false
-	}
 }
