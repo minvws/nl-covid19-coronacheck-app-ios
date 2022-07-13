@@ -84,7 +84,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "idToken", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
 	}
 	
 	func test_login_error() throws {
@@ -118,7 +118,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 		
 		// Given
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
-		(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
+		(NSError(domain: "Authentication", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
 		sut = AuthenticationViewController(viewModel: viewModel)
 		
 		// When
@@ -131,6 +131,6 @@ class AuthenticationViewControllerTests: XCTestCase {
 }
 
 struct OpenIdManagerIdToken: OpenIdManagerToken {
-	var idToken: String? = "test"
-	var accessToken: String?
+	var idToken: String? = "idToken"
+	var accessToken: String? = "accessToken"
 }
