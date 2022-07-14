@@ -21,7 +21,7 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Skip back to the beginning of the flow
-	case errorRequiringRestart(eventMode: EventMode)
+	case errorRequiringRestart(authenticationMode: AuthenticationMode)
 
 	case error(content: Content, backAction: () -> Void)
 
@@ -76,8 +76,8 @@ enum EventScreenResult: Equatable {
 			case (let .showEventDetails(lhsTitle, lhsDetails, lhsFooter), let .showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
 				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
-			case (let .errorRequiringRestart(lhsMode), let .errorRequiringRestart(rhsMode)):
-				return lhsMode == rhsMode
+			case (let .errorRequiringRestart(lhsAuthenticationMode), let .errorRequiringRestart(rhsAuthenticationMode)):
+				return  lhsAuthenticationMode == rhsAuthenticationMode
 
 			case (let .error(lhsContent, _), let .error(rhsContent, _)):
 				return lhsContent == rhsContent
@@ -375,14 +375,16 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	}
 
 	func authenticationScreenDidFinish(_ result: EventScreenResult) {
+		
+		Current.logHandler.logInfo("result: \(result)")
 
 		switch result {
 
 			case let .didLogin(token, authenticationMode, eventMode):
 				navigateToFetchEvents(token: token, authenticationMode: authenticationMode, eventMode: eventMode)
 
-			case .errorRequiringRestart(let eventMode):
-				handleErrorRequiringRestart(eventMode: eventMode)
+			case .errorRequiringRestart(let authenticationMode):
+				handleErrorRequiringRestart(authenticationMode: authenticationMode)
 
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
@@ -460,7 +462,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 	}
 
-	private func handleErrorRequiringRestart(eventMode: EventMode) {
+	private func handleErrorRequiringRestart(authenticationMode: AuthenticationMode) {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
@@ -475,18 +477,20 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		let presentError = {
 			let alertController = UIAlertController(
-				title: L.holderErrorstateLoginTitle(),
+				title: {
+					switch authenticationMode {
+						case .manyAuthenticationExchange:
+							return L.holder_authentication_popup_digid_title()
+						case .patientAuthenticationProvider:
+							return L.holder_authentication_popup_portal_title()
+					}
+				}(),
 				message: {
-					switch eventMode {
-						case .vaccinationassessment: return "** TODO **"
-						case .recovery:
-							return L.holderErrorstateLoginMessageRecovery()
-						case .paperflow:
-							return "" // PaperProof is not a part of this flow
-						case .test:
-							return L.holderErrorstateLoginMessageTest()
-						case .vaccination, .vaccinationAndPositiveTest:
-							return L.holderErrorstateLoginMessageVaccination()
+					switch authenticationMode {
+						case .manyAuthenticationExchange:
+							return L.holder_authentication_popup_digid_message()
+						case .patientAuthenticationProvider:
+							return L.holder_authentication_popup_portal_message()
 					}
 				}(),
 				preferredStyle: .alert

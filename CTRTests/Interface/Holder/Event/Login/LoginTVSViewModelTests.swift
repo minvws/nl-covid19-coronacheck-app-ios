@@ -159,7 +159,7 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(authenticationMode: .manyAuthenticationExchange)
 	}
 
 	func test_openID_success_accessToken_ok() {
@@ -290,7 +290,7 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(authenticationMode: .manyAuthenticationExchange)
 	}
 
 	func test_openID_error_userCancelled_OIDErrorCode() {
@@ -308,7 +308,7 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(authenticationMode: .manyAuthenticationExchange)
 	}
 
 	func test_openID_error_generalError() throws {

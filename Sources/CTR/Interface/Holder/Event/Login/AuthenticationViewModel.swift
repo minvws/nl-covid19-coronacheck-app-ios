@@ -171,14 +171,17 @@ extension AuthenticationViewModel {
 
 	func userCancelled() {
 
-		self.coordinator?.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+		self.coordinator?.authenticationScreenDidFinish(
+			.errorRequiringRestart(
+				authenticationMode: self.authenticationMode
+			)
+		)
 	}
 	
 	func cancelAuthorization() {
 		
 		guard appAuthState?.currentAuthorizationFlow != nil else { return }
-		
-		coordinator?.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
+		userCancelled()
 	}
 
 	func displayErrorCode(errorCode: ErrorCode) {
