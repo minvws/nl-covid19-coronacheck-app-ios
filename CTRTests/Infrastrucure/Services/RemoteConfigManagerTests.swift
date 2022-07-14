@@ -178,11 +178,9 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-		switch receivedResult {
-			case .success((true, newConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (true, newConfig)
+		})
 		
 		expect(self.secureUserSettingsSpy.invokedStoredConfigurationList.last) == newConfig
 		expect(self.sut.isLoading) == false
@@ -217,12 +215,9 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-
-		switch receivedResult {
-			case .success((false, existingStoredConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (false, existingStoredConfig)
+		})
 
 		expect(self.secureUserSettingsSpy.invokedStoredConfigurationSetter) == false
 		expect(self.sut.isLoading) == false
@@ -267,12 +262,10 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-
-		switch receivedResult {
-			case .success((true, newConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (true, newConfig)
+		})
 
 		expect(self.secureUserSettingsSpy.invokedStoredConfiguration) == newConfig
 		expect(self.sut.isLoading) == false
@@ -440,14 +433,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			receivedResult = result
 		})
-
-		switch receivedResult {
-			case .success((true, let receivedConfiguration)) where receivedConfiguration == newConfiguration:
-				break
-			default:
-				assertionFailure("results didn't match")
-		}
-
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (true, newConfiguration)
+		})
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(newConfiguration))
 		expect(updateObserverReceivedConfiguration).toEventually(equal(newConfiguration))
 		expect(self.sut.isLoading) == false

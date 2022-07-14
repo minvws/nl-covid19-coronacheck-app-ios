@@ -178,11 +178,7 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-		switch receivedResult {
-			case .success: break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		expect(receivedResult).to(beSuccess())
 
 		expect(self.sut.isLoading) == false
 	}
@@ -232,6 +228,8 @@ class CryptoLibUtilityTests: XCTestCase {
 			default:
 				assertionFailure("Didn't receive expected result")
 		}
+		
+		expect(receivedResult).to(beSuccess())
 		expect(self.sut.isLoading) == false
 	}
 
