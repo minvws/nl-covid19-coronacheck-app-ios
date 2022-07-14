@@ -298,7 +298,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.authenticationScreenDidFinish(.errorRequiringRestart(authenticationMode: .manyAuthenticationExchange))
+		sut.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -315,7 +315,7 @@ class EventCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.authenticationScreenDidFinish(.errorRequiringRestart(authenticationMode: .manyAuthenticationExchange))
+		sut.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true

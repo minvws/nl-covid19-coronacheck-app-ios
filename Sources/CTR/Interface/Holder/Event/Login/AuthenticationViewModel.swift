@@ -173,6 +173,7 @@ extension AuthenticationViewModel {
 
 		self.coordinator?.authenticationScreenDidFinish(
 			.errorRequiringRestart(
+				eventMode: eventMode,
 				authenticationMode: self.authenticationMode
 			)
 		)

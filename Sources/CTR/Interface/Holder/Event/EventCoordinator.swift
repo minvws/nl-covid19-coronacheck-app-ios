@@ -21,7 +21,7 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Skip back to the beginning of the flow
-	case errorRequiringRestart(authenticationMode: AuthenticationMode)
+	case errorRequiringRestart(eventMode: EventMode, authenticationMode: AuthenticationMode)
 
 	case error(content: Content, backAction: () -> Void)
 
@@ -76,8 +76,8 @@ enum EventScreenResult: Equatable {
 			case (let .showEventDetails(lhsTitle, lhsDetails, lhsFooter), let .showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
 				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
-			case (let .errorRequiringRestart(lhsAuthenticationMode), let .errorRequiringRestart(rhsAuthenticationMode)):
-				return  lhsAuthenticationMode == rhsAuthenticationMode
+			case (let .errorRequiringRestart(lhsEventMode, lhsAuthenticationMode), let .errorRequiringRestart(rhsEventMode, rhsAuthenticationMode)):
+				return (lhsEventMode, lhsAuthenticationMode) == (rhsEventMode, rhsAuthenticationMode)
 
 			case (let .error(lhsContent, _), let .error(rhsContent, _)):
 				return lhsContent == rhsContent
@@ -381,8 +381,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .didLogin(token, authenticationMode, eventMode):
 				navigateToFetchEvents(token: token, authenticationMode: authenticationMode, eventMode: eventMode)
 
-			case .errorRequiringRestart(let authenticationMode):
-				handleErrorRequiringRestart(authenticationMode: authenticationMode)
+			case let .errorRequiringRestart(eventMode, authenticationMode):
+				handleErrorRequiringRestart(eventMode: eventMode, authenticationMode: authenticationMode)
 
 			case let .error(content: content, backAction: backAction):
 				displayError(content: content, backAction: backAction)
@@ -460,7 +460,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 	}
 
-	private func handleErrorRequiringRestart(authenticationMode: AuthenticationMode) {
+	private func handleErrorRequiringRestart(eventMode: EventMode, authenticationMode: AuthenticationMode) {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
@@ -484,11 +484,15 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					}
 				}(),
 				message: {
-					switch authenticationMode {
-						case .manyAuthenticationExchange:
-							return L.holder_authentication_popup_digid_message()
-						case .patientAuthenticationProvider:
-							return L.holder_authentication_popup_portal_message()
+					switch (eventMode, authenticationMode) {
+						case (.vaccination, .manyAuthenticationExchange), (.vaccinationAndPositiveTest, .manyAuthenticationExchange):
+							return L.holder_authentication_popup_digid_message_vaccinationFlow()
+						case (_, .manyAuthenticationExchange):
+							return L.holder_authentication_popup_digid_message_testFlow()
+						case (.vaccination, .patientAuthenticationProvider), (.vaccinationAndPositiveTest, .patientAuthenticationProvider):
+							return L.holder_authentication_popup_portal_message_vaccinationFlow()
+						case (_, .patientAuthenticationProvider):
+							return L.holder_authentication_popup_portal_message_testFlow()
 					}
 				}(),
 				preferredStyle: .alert

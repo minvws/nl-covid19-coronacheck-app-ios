@@ -126,7 +126,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(authenticationMode: .manyAuthenticationExchange)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange)
 	}
 }
 
