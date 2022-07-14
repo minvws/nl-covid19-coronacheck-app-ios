@@ -486,16 +486,14 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					}
 				}(),
 				message: {
-					switch authenticationMode {
-						case .manyAuthenticationExchange:
-							if eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest {
-								return L.holder_authentication_popup_digid_message_vaccinationFlow()
-							}
+					switch (eventMode, authenticationMode) {
+						case (.vaccination, .manyAuthenticationExchange), (.vaccinationAndPositiveTest, .manyAuthenticationExchange):
+							return L.holder_authentication_popup_digid_message_vaccinationFlow()
+						case (_, .manyAuthenticationExchange):
 							return L.holder_authentication_popup_digid_message_testFlow()
-						case .patientAuthenticationProvider:
-							if eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest {
-								return L.holder_authentication_popup_portal_message_vaccinationFlow()
-							}
+						case (.vaccination, .patientAuthenticationProvider), (.vaccinationAndPositiveTest, .patientAuthenticationProvider):
+							return L.holder_authentication_popup_portal_message_vaccinationFlow()
+						case (_, .patientAuthenticationProvider):
 							return L.holder_authentication_popup_portal_message_testFlow()
 					}
 				}(),
