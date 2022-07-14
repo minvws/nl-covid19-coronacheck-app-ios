@@ -119,11 +119,12 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
-		let values = [NSManagedObjectID()]
-		sut.didTapShowQR(greenCardObjectIDs: values, disclosurePolicy: DisclosurePolicy.policy3G)
+		let value = NSManagedObjectID()
+		sut.didTapShowQR(greenCardObjectIDs: [value], disclosurePolicy: DisclosurePolicy.policy3G)
 		
 		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs) === values
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.count) == 1
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === value
 	}
 	
 	func test_actionhandling_didTapRetryLoadQRCards() {
