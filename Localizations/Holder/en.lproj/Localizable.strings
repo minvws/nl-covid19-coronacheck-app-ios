@@ -536,9 +536,9 @@
 "holder_authentication_popup_digid_message_testFlow" = "Want to retrieve your test result? Log in again with DigiD.";
 "holder_authentication_popup_digid_message_vaccinationFlow" = "Want to retrieve your vaccination details? Log in again with DigiD.";
 "holder_authentication_popup_digid_title" = "Login was cancelled";
-"holder_authentication_popup_portal_message_testFlow" = "Couldn’t retrieve your test result. Please try again to get your certificate via the GGD.";
+"holder_authentication_popup_portal_message_testFlow" = "Couldn’t retrieve your test result. Please try again to receive your certificate via the GGD.";
 "holder_authentication_popup_portal_message_vaccinationFlow" = "Couldn’t retrieve your vaccination details. Please try again to arrange your certificate via the GGD.";
-"holder_authentication_popup_portal_title" = "Retrieving was cancelled";
+"holder_authentication_popup_portal_title" = "Retrieval cancelled";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Get your certificate from the CoronaCheck helpdesk";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow" = "Get your certificate from the GGD";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow" = "Get your certificate from your healthcare provider";
