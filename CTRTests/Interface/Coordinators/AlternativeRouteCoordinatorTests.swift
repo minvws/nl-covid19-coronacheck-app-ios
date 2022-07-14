@@ -101,30 +101,6 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.invokedPresent) == true
 	}
 	
-	func test_userWishesToEndAlternativeRoute_withPopViewController() {
-		
-		// Given
-		
-		// When
-		sut.userWishesToEndAlternativeRoute(popViewController: true)
-		
-		// Then
-		expect(self.navigationSpy.invokedPopViewController) == true
-		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == true
-	}
-	
-	func test_userWishesToEndAlternativeRoute_withoutPopViewController() {
-		
-		// Given
-		
-		// When
-		sut.userWishesToEndAlternativeRoute(popViewController: false)
-		
-		// Then
-		expect(self.navigationSpy.invokedPopViewController) == false
-		expect(self.alternativeRouteFlowDelegateSpy.invokedCanceledAlternativeRoute) == true
-	}
-	
 	func test_userWishesToContactHelpDeksWithBSN() throws {
 
 		// Given

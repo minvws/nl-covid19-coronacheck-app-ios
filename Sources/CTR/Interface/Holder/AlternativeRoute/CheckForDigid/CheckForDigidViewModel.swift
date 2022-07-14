@@ -40,12 +40,4 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 			)
 		]
 	}
-	
-	func backbuttonTapped() {
-		coordinator?.userWishesToEndAlternativeRoute(popViewController: true)
-	}
-	
-	func swipeBack() {
-		coordinator?.userWishesToEndAlternativeRoute(popViewController: false)
-	}
 }
