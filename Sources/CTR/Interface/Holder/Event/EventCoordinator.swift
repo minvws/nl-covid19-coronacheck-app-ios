@@ -375,8 +375,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	}
 
 	func authenticationScreenDidFinish(_ result: EventScreenResult) {
-		
-		Current.logHandler.logInfo("result: \(result)")
 
 		switch result {
 

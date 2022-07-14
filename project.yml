@@ -20,16 +20,16 @@ packages:
     branch: main
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
-    majorVersion: 1.9.4
+    majorVersion: 1.9.5
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.3.0
+    majorVersion: 3.4.0
   Nimble:
     github: Quick/Nimble
-    majorVersion: 9.2.1
+    majorVersion: 10.0.0
   OpenSSL:
     github: krzyzanowskim/OpenSSL
-    exactVersion: 1.1.1501
+    exactVersion: 1.1.1700
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -47,7 +47,7 @@ packages:
 # - Attributes:
 
 attributes:
-  LastUpgradeCheck: "1330"
+  LastUpgradeCheck: "1340"
 
 # - Configurations:
 
