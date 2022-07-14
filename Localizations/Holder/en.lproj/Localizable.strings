@@ -533,9 +533,11 @@
 "holder_addVaccination_message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p>";
 "holder_addVaccination_title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
-"holder_authentication_popup_digid_message" = "Want to retrieve your details? Log in again with DigiD.";
+"holder_authentication_popup_digid_message_testFlow" = "Want to retrieve your test result? Log in again with DigiD.";
+"holder_authentication_popup_digid_message_vaccinationFlow" = "Want to retrieve your vaccination details? Log in again with DigiD.";
 "holder_authentication_popup_digid_title" = "Login was cancelled";
-"holder_authentication_popup_portal_message" = "You're redirected to the CoronaCheck app. Want to retrieve your details? That's only possible via the GGD.";
+"holder_authentication_popup_portal_message_testFlow" = "You're redirected to the CoronaCheck app. Want to retrieve your details? That's only possible via the GGD.";
+"holder_authentication_popup_portal_message_vaccinationFlow" = "You're redirected to the CoronaCheck app. Want to retrieve your details? That's only possible via the GGD.";
 "holder_authentication_popup_portal_title" = "Retrieving was cancelled";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Get your certificate from the CoronaCheck helpdesk";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow" = "Get your certificate from the GGD";

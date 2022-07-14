@@ -533,9 +533,11 @@
 "holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
 "holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
-"holder_authentication_popup_digid_message" = "Wil je jouw gegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder_authentication_popup_digid_message_testFlow" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
+"holder_authentication_popup_digid_message_vaccinationFlow" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder_authentication_popup_digid_title" = "Inloggen afgebroken";
-"holder_authentication_popup_portal_message" = "Je gaat weer terug naar de CoronaCheck app. Wil je jouw gegevens ophalen? Dat kan alleen via de GGD.";
+"holder_authentication_popup_portal_message_testFlow" = "Het is niet gelukt om je testuitslag op te halen. Probeer opnieuw je bewijs te krijgen via de GGD.";
+"holder_authentication_popup_portal_message_vaccinationFlow" = "Het is niet gelukt om je vaccinatiegegevens op te halen. Probeer opnieuw je bewijs te regelen via de GGD.";
 "holder_authentication_popup_portal_title" = "Ophalen geannuleerd";
 "holder_checkForBSN_buttonSubTitle_doesHaveBSN" = "Krijg je bewijs via de CoronaCheck helpdesk";
 "holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow" = "Krijg je bewijs via de GGD";
