@@ -10,7 +10,7 @@ import UIKit
 /// A generic viewcontroller
 /// V: The view to use for the scene, must be a (subclass of) baseview
 /// M: The class to use as viewModel
-class GenericViewController<V: BaseView, M: Any>: UIViewController, UIGestureRecognizerDelegate {
+class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecognizerDelegate {
 	
 	internal let sceneView: V
 	internal let viewModel: M
@@ -146,7 +146,7 @@ class GenericViewController<V: BaseView, M: Any>: UIViewController, UIGestureRec
 /// A generic viewcontroller,which on iPad automagically applies side insets.
 /// V: The view to use for the scene, must be a (subclass of) baseview
 /// M: The class to use as viewModel
-class TraitWrappedGenericViewController<V: BaseView, M: Any>: GenericViewController<V, M> {
+class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V, M> {
 	
 	override func loadView() {
 		
