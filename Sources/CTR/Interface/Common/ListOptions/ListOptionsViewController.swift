@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ListOptionsViewController: BaseViewController {
+class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsView, ListOptionsProtocol> {
 
 	struct OptionModel {
 		init(title: String, subTitle: String? = nil, image: UIImage? = nil, action: @escaping () -> Void) {
@@ -21,30 +21,6 @@ class ListOptionsViewController: BaseViewController {
 		let subTitle: String?
 		let image: UIImage?
 		let action: () -> Void
-	}
-
-	internal let viewModel: ListOptionsProtocol
-	
-	internal let sceneView = ListOptionsView()
-	
-	override var enableSwipeBack: Bool { true }
-
-	init(viewModel: ListOptionsProtocol) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = TraitWrapper(sceneView)
 	}
 
 	override func viewDidLoad() {

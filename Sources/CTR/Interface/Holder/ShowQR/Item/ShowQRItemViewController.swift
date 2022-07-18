@@ -7,34 +7,9 @@
 
 import UIKit
 
-class ShowQRItemViewController: BaseViewController {
-	
-	private let viewModel: ShowQRItemViewModel
-	
-	let sceneView = ShowQRItemView()
+class ShowQRItemViewController: TraitWrappedGenericViewController<ShowQRItemView, ShowQRItemViewModel> {
 	
 	var previousOrientation: UIInterfaceOrientation?
-	
-	// MARK: Initializers
-	
-	init(viewModel: ShowQRItemViewModel) {
-		
-		self.viewModel = viewModel
-		
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder: NSCoder) {
-		
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	
-	override func loadView() {
-
-		view = TraitWrapper(sceneView)
-	}
 	
 	override func viewDidLoad() {
 		

@@ -8,30 +8,9 @@
 import UIKit
 
 // swiftlint:disable:next type_name
-class PaperProofInputCouplingCodeViewController: BaseViewController {
+class PaperProofInputCouplingCodeViewController: TraitWrappedGenericViewController<PaperProofInputCouplingCodeView, PaperProofInputCouplingCodeViewModel> {
 	
-	private let viewModel: PaperProofInputCouplingCodeViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
-	
-	let sceneView = PaperProofInputCouplingCodeView()
-	
-	init(viewModel: PaperProofInputCouplingCodeViewModel) {
-		
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	override func loadView() {
-		
-		view = sceneView
-	}
 	
 	override func viewDidLoad() {
 		

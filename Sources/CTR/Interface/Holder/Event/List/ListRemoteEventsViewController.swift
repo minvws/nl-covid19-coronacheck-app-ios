@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ListRemoteEventsViewController: BaseViewController {
+class ListRemoteEventsViewController: TraitWrappedGenericViewController<ListRemoteEventsView, ListRemoteEventsViewModel> {
 
 	enum State {
 		case loading(content: Content)
@@ -19,29 +19,6 @@ class ListRemoteEventsViewController: BaseViewController {
 		let title: String
 		let details: [String]
 		let action: (() -> Void)?
-	}
-
-	internal let viewModel: ListRemoteEventsViewModel
-	internal let sceneView = ListRemoteEventsView()
-
-	/// Initializer
-	/// - Parameter viewModel: view model
-	init(viewModel: ListRemoteEventsViewModel) {
-
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = TraitWrapper(sceneView)
 	}
 
 	override func viewDidLoad() {

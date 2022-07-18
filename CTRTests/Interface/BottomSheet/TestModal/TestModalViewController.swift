@@ -8,31 +8,8 @@
 import UIKit
 @testable import CTR
 
-final class TestModalViewController: BaseViewController {
-	
-	private let viewModel: TestModalViewModel
-
-	let sceneView = TestModalView()
-	
-	init(viewModel: TestModalViewModel) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	
-	override func loadView() {
-
-		view = sceneView
-	}
-	
+final class TestModalViewController: GenericViewController<TestModalView, TestModalViewModel> {
+		
 	override func viewDidLoad() {
 
 		super.viewDidLoad()

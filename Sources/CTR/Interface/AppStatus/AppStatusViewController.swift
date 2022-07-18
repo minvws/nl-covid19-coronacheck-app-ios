@@ -7,48 +7,23 @@
 
 import UIKit
 
-class AppStatusViewController: BaseViewController {
-
-	/// The model
-	let viewModel: AppStatusViewModel
-
-	/// The view
-	let sceneView = AppStatusView()
+class AppStatusViewController: GenericViewController<AppStatusView, AppStatusViewModel> {
 
 	/// The error Message
 	var errorMessage: String?
 
-	/// Initializer
-	/// - Parameter viewModel: view model
-    init(viewModel: AppStatusViewModel) {
-
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
-    }
-
-	/// Required initialzer
-	/// - Parameter coder: the code
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
-
-    override func viewDidLoad() {
-
-        super.viewDidLoad()
-
+	override func viewDidLoad() {
+		
+		super.viewDidLoad()
+		
+		modalPresentationStyle = .overFullScreen
+		
 		// Do the binding
 		setupBinding()
-
+		
 		// Actions
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-    }
+	}
 
 	private func setupBinding() {
 

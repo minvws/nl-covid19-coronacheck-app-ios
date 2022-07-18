@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HolderDashboardViewController: BaseViewController {
+class HolderDashboardViewController: GenericViewController<HolderDashboardView, HolderDashboardViewModelType> {
 
     enum Card {
 		
@@ -61,32 +61,7 @@ class HolderDashboardViewController: BaseViewController {
 		let kind: Kind
 	}
 
-	let viewModel: HolderDashboardViewModelType
-
-	let sceneView = HolderDashboardView()
-
 	private var didSetInitialStartingTabOnSceneView = false
-
-	// MARK: Initializers
-
-	init(viewModel: HolderDashboardViewModelType) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-
-	override func loadView() {
-
-		view = sceneView
-	}
 
 	override func viewDidLoad() {
 
