@@ -15,11 +15,13 @@ final class DCCQRDetailsViewControllerTests: XCTestCase {
 	private var sut: DCCQRDetailsViewController!
 	private var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	private var viewModel: DCCQRDetailsViewModel!
+	private var environmentalSpies: EnvironmentSpies!
 	
 	var window = UIWindow()
 	
 	override func setUp() {
 		super.setUp()
+		environmentalSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		
 		viewModel = DCCQRDetailsViewModel(
