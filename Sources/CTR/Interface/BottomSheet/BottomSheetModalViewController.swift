@@ -13,7 +13,7 @@ protocol BottomSheetScrollable: AnyObject {
 	var scrollView: UIScrollView { get }
 }
 
-final class BottomSheetModalViewController: BaseViewController, BottomSheetScrollable {
+final class BottomSheetModalViewController: UIViewController, BottomSheetScrollable {
 	
 	private enum ViewTraits {
 		
