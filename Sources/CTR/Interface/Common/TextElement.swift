@@ -34,10 +34,7 @@ class TextElement: UITextView, UITextViewDelegate {
 	
 	///  Initializes the TextView with the given attributed string
 	init(
-		attributedText: NSAttributedString,
-		font: UIFont = Fonts.body,
-		textColor: UIColor = C.black()!,
-		boldTextColor: UIColor = C.black()!
+		attributedText: NSAttributedString
 	) {
 		super.init(frame: .zero, textContainer: nil)
 		setup()

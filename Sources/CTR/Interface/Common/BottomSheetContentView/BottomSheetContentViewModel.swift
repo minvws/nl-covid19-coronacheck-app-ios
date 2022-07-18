@@ -9,9 +9,6 @@ import Foundation
 
 class BottomSheetContentViewModel {
 
-	/// Dismissable Delegate
-	weak var coordinator: Dismissable?
-
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String
@@ -21,7 +18,6 @@ class BottomSheetContentViewModel {
 	@Bindable private(set) var hideForCapture: Bool = false
 
 	// MARK: - Private
-	private let hideBodyForScreenCapture: Bool
 	private let linkTapHander: ((URL) -> Void)?
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	internal let content: Content
@@ -30,22 +26,18 @@ class BottomSheetContentViewModel {
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the coordinator delegate
 	///   - title: The title of the page
 	///   - message: The message of the page
 	init(
-		coordinator: Dismissable,
 		content: Content,
 		linkTapHander: ((URL) -> Void)? = nil, // todo: merge this into Content?
 		hideBodyForScreenCapture: Bool = false) {
 
 		self.content = content
-		self.coordinator = coordinator
 		self.title = content.title
 		self.body = content.body ?? ""
 		self.secondaryButtonTitle = content.secondaryActionTitle
 		self.linkTapHander = linkTapHander
-		self.hideBodyForScreenCapture = hideBodyForScreenCapture
 
 		if hideBodyForScreenCapture {
 			screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
@@ -55,13 +47,6 @@ class BottomSheetContentViewModel {
 	}
 
 	// MARK: - Methods
-
-	/// The user tapped on the next button
-	func dismiss() {
-
-		// Notify the coordinator
-		coordinator?.dismiss()
-	}
 
 	func userDidTapURL(url: URL) {
 		linkTapHander?(url)

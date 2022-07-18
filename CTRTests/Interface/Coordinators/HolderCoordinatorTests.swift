@@ -591,25 +591,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	func test_userDidScanRequestToken() {
-		
-		// Given
-		
-		// When
-		sut.userDidScanRequestToken(
-			requestToken: RequestToken(
-				token: "STXT2VF3389TJ2",
-				protocolVersion: "3.0",
-				providerIdentifier: "XXX"
-			)
-		)
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
 	func test_userWishesMoreInfoAboutUnavailableQR() throws {
 		
 		// Given

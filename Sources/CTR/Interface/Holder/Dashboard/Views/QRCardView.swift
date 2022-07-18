@@ -20,7 +20,6 @@ class QRCardView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 10
 		static let shadowOpacity: Float = 0.15
-		static let shadowOpacityBottomSquashedView: Float = 0.1
 		static let imageDimension: CGFloat = 40
 		static let titleLineHeight: CGFloat = 28
 		static let expiryLabelLineHeight: CGFloat = 22
@@ -38,7 +37,6 @@ class QRCardView: BaseView {
 		// Spacing
 		static let topVerticalLabelSpacing: CGFloat = 18
 		static let interSquashedCardSpacing: CGFloat = 10
-		static let squashedCardHeight: CGFloat = 40
 	}
 
 	// MARK: - Private properties
@@ -726,7 +724,6 @@ private final class ErrorRowView: BaseView {
 			static let tint: UIColor = C.error()!
 		}
 		enum Font {
-			static let font: UIFont = Fonts.subhead
 			static let lineHeight: CGFloat = 20
 			static let kern: CGFloat = 0.25
 			static let paragraphSpacing: CGFloat = -3

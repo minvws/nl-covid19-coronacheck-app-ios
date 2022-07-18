@@ -14,12 +14,10 @@ final class PrivacyConsentView: BaseView {
 
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
-		static let messageLineHeight: CGFloat = 22
 		static let maxButtonHeightMultiplier: CGFloat = 0.3
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let bottomConsentMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 		static let iconToLabelSpacing: CGFloat = 16.0
 		static let consentButtonToErrorSpacing: CGFloat = 5.0

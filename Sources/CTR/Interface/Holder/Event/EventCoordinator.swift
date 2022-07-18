@@ -256,7 +256,6 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 		let viewController = BottomSheetContentViewController(
 			viewModel: BottomSheetContentViewModel(
-				coordinator: self,
 				content: Content(
 					title: title,
 					body: body

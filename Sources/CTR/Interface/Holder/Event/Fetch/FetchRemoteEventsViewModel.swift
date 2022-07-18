@@ -17,7 +17,6 @@ final class FetchRemoteEventsViewModel {
 	private var authenticationMode: AuthenticationMode
 	private var eventMode: EventMode
 	private let networkManager: NetworkManaging = Current.networkManager
-	private let mappingManager: MappingManaging = Current.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
