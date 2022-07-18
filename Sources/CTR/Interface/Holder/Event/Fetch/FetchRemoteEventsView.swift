@@ -15,7 +15,6 @@ class FetchRemoteEventsView: ScrolledStackWithButtonView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
 	}
 
 	/// The title label

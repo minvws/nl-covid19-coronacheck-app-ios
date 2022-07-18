@@ -18,7 +18,6 @@ class ShowQRView: BaseView {
 
 		enum Margin {
 			static let edge: CGFloat = 10
-			static let infoEdge: CGFloat = 20
 			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		
@@ -72,8 +71,6 @@ class ShowQRView: BaseView {
 			}
 		}
 	}
-
-	private var securityViewBottomConstraint: NSLayoutConstraint?
 
 	/// The container for the the QR view controllers
 	let containerView: UIView = {
@@ -232,11 +229,7 @@ class ShowQRView: BaseView {
 			// Security
 			securityAnimationView.widthAnchor.constraint(equalTo: widthAnchor),
 			securityAnimationView.centerXAnchor.constraint(equalTo: securityAnimationView.centerXAnchor),
-			{
-				let constraint = securityAnimationView.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor)
-				securityViewBottomConstraint = constraint
-				return constraint
-			}()
+			securityAnimationView.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor)
 		])
 
 		// the animation is not quite square.. and each animation is unsquare in its own way.

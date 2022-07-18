@@ -30,7 +30,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
 		greenCardLoader = GreenCardLoader(
-			now: { now },
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,

@@ -4,7 +4,6 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -27,7 +26,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
-	func userDidScanRequestToken(requestToken: RequestToken)
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
@@ -388,10 +386,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
-	func userDidScanRequestToken(requestToken: RequestToken) {
-		navigateToTokenEntry(requestToken)
-	}
-	
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
@@ -427,7 +421,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
 		
 		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
 			content: Content(
 				title: L.holder_expiredDomesticVaccinationModal_title(),
 				body: L.holder_expiredDomesticVaccinationModal_body(),
@@ -455,7 +448,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutExpiredQR() {
 	
 		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
 			content: Content(
 				title: L.holder_qr_code_expired_explanation_title(),
 				body: L.holder_qr_code_expired_explanation_description(),
@@ -481,7 +473,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutHiddenQR() {
 		
 		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
 			content: Content(
 				title: L.holder_qr_code_hidden_explanation_title(),
 				body: L.holder_qr_code_hidden_explanation_description(),

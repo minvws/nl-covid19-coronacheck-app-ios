@@ -9,8 +9,6 @@ import UIKit
 
 class ShowQRItemViewController: TraitWrappedGenericViewController<ShowQRItemView, ShowQRItemViewModel> {
 	
-	var previousOrientation: UIInterfaceOrientation?
-	
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
