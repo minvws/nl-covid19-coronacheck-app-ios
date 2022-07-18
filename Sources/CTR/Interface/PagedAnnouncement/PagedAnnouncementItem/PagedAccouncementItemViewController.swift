@@ -8,21 +8,15 @@
 import UIKit
 
 protocol PagedAnnouncementItemViewControllerDelegate: AnyObject {
-    
-    /// Delegates the onAccessibilityScroll event
-    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
+	
+	/// Delegates the onAccessibilityScroll event
+	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
 }
 
-class PagedAnnouncementItemViewController: BaseViewController {
+class PagedAnnouncementItemViewController: TraitWrappedGenericViewController<PagedAnnouncementItemView, PagedAnnouncementItemViewModel> {
 	
-	/// The model
-	private let viewModel: PagedAnnouncementItemViewModel
-	
-	/// The view
-	let sceneView: PagedAnnouncementItemView
-    
-    /// The delegate
-    weak var delegate: PagedAnnouncementItemViewControllerDelegate?
+	/// The delegate
+	weak var delegate: PagedAnnouncementItemViewControllerDelegate?
 	
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
@@ -31,27 +25,16 @@ class PagedAnnouncementItemViewController: BaseViewController {
 	/// - Parameter viewModel: view model
 	init(viewModel: PagedAnnouncementItemViewModel, shouldShowWithFullWidthHeaderImage: Bool) {
 		
-		self.viewModel = viewModel
-		self.sceneView = PagedAnnouncementItemView(shouldShowWithFullWidthHeaderImage: shouldShowWithFullWidthHeaderImage)
-		super.init(nibName: nil, bundle: nil)
+		super.init(
+			sceneView: PagedAnnouncementItemView(shouldShowWithFullWidthHeaderImage: shouldShowWithFullWidthHeaderImage),
+			viewModel: viewModel
+		)
 	}
 	
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
+	/// Use accessibility scroll event to navigate.
+	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		return delegate?.onAccessibilityScroll(direction) ?? false
 	}
-	
-	// MARK: View lifecycle
-	override func loadView() {
-		
-		view = TraitWrapper(sceneView)
-	}
-    
-    /// Use accessibility scroll event to navigate.
-    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        return delegate?.onAccessibilityScroll(direction) ?? false
-    }
 	
 	override func viewDidLoad() {
 		
