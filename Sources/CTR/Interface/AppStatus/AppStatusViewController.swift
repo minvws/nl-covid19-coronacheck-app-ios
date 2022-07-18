@@ -9,7 +9,6 @@ import UIKit
 
 class AppStatusViewController: GenericViewController<AppStatusView, AppStatusViewModel> {
 
-
 	/// The error Message
 	var errorMessage: String?
 
