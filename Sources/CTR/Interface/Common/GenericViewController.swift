@@ -28,6 +28,7 @@ class GenericViewController<V: BaseView, M: Any>: UIViewController, UIGestureRec
 	
 	/// Required initialzer
 	/// - Parameter coder: the coder
+	@available(*, unavailable)
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
