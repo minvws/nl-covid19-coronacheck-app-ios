@@ -65,7 +65,6 @@ class SharedCoordinator: Coordinator {
 
 		let viewController = BottomSheetContentViewController(
 			viewModel: BottomSheetContentViewModel(
-				coordinator: self,
 				content: Content(
 					title: title,
 					body: body

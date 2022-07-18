@@ -19,7 +19,6 @@ class SimpleDisclosureButton: BaseView {
 		static let kerning: CGFloat = -0.41
 
 		// Margins
-		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 12.0
 		static let bottomMargin: CGFloat = 16.0
 	}

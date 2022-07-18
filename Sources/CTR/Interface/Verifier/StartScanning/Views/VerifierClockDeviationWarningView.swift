@@ -19,18 +19,8 @@ class VerifierClockDeviationWarningView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 10
 		static let shadowOpacity: Float = 0.15
-		static let shadowOpacityBottomSquashedView: Float = 0.1
-		static let imageDimension: CGFloat = 40
 		static let messageLineHeight: CGFloat = 22
 		static let messageKerning: CGFloat = -0.41
-
-		// Margins
-		static let imageMargin: CGFloat = 32
-
-		// Spacing
-		static let topVerticalLabelSpacing: CGFloat = 18
-		static let interSquashedCardSpacing: CGFloat = 10
-		static let squashedCardHeight: CGFloat = 40
 	}
 
 	// MARK: - Private properties

@@ -1,0 +1,7 @@
+project: CTR.xcodeproj
+schemes:
+- Holder Dev
+- Verifier Dev
+targets:
+- Holder
+- Verifier

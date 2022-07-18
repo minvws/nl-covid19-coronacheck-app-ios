@@ -15,9 +15,7 @@ final class ScanView: BaseView {
 	
 	private struct ViewTraits {
 		static let cornerRadius: CGFloat = 15
-		static let margin: CGFloat = 20.0
-		static let maskOffset: CGFloat = 100.0
-		
+
 		static let viewfinderBottomMargin: CGFloat = 170
 		static let viewfinderMinimumHorizontalMargin: CGFloat = 20
 		static let viewFinderMaximumSquareLength: CGFloat = 650
