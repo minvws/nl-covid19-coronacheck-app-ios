@@ -104,24 +104,18 @@ extension Coordinator {
 	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
 	func openUrl(_ url: URL, inApp: Bool) {
 		
-		var shouldOpenInApp = inApp
-		if url.scheme == "tel" || url.scheme == "mailto" {
-			// Do not open phone numbers or mailto links in app, doesn't work & will crash.
-			shouldOpenInApp = false
+		guard inApp && url.scheme != "tel" && url.scheme != "mailto" else {
+			UIApplication.shared.open(url)
+			return
 		}
 		
-		if shouldOpenInApp {
-			let safariController = SFSafariViewController(url: url)
-			
-			if let presentedViewController = navigationController.presentedViewController {
-				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-					self.navigationController.present(safariController, animated: true)
-				})
-			} else {
-				navigationController.present(safariController, animated: true)
-			}
+		let safariController = SFSafariViewController(url: url)
+		if let presentedViewController = navigationController.presentedViewController {
+			presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+				self.navigationController.present(safariController, animated: true)
+			})
 		} else {
-			UIApplication.shared.open(url)
+			navigationController.present(safariController, animated: true)
 		}
 	}
 }
