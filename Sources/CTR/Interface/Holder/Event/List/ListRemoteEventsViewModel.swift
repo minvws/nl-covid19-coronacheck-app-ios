@@ -149,18 +149,19 @@ class ListRemoteEventsViewModel {
 				return
 			}
 
-			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
-				
-				return self?.areTheOriginsAsExpected(
-					remoteResponse: remoteResponse,
-					expandedEventMode: expandedEventMode) ?? true
-				
-			}, completion: { result in
-				self.progressIndicationCounter.decrement()
-				self.handleGreenCardResult(
-					result
-				)
-			})
+			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: self.eventMode,
+				responseEvaluator: { [weak self] remoteResponse in
+					self?.areTheOriginsAsExpected(
+						remoteResponse: remoteResponse,
+						expandedEventMode: expandedEventMode) ?? true
+					
+				}, completion: { result in
+					self.progressIndicationCounter.decrement()
+					self.handleGreenCardResult(
+						result
+					)
+				})
 		}
 	}
 	
