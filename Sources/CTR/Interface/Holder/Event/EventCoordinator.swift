@@ -340,14 +340,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 	private func displayError(content: Content, backAction: @escaping () -> Void) {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: backAction,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		presentContent(content: content, backAction: backAction)
 	}
 }
 

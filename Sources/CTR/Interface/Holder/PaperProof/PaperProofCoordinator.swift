@@ -97,7 +97,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func userWishesMoreInformationOnNoInputToken() {
 
-		let viewModel = ContentViewModel(
+		presentContent(
 			content: Content(
 				title: L.holderPaperproofNotokenTitle(),
 				body: L.holderPaperproofNotokenMessage(),
@@ -112,10 +112,9 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 			backAction: { [weak navigationController] in
 				navigationController?.popViewController(animated: true, completion: {})
 			},
-			allowsSwipeBack: true
+			allowsSwipeBack: true,
+			animated: true
 		)
-		let destination = ContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesMoreInformationOnWhichProofsCanBeUsed() {
@@ -243,14 +242,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 	func displayError(content: Content, backAction: @escaping () -> Void) {
 		
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: backAction,
-				allowsSwipeBack: true
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		presentContent(content: content, backAction: backAction, allowsSwipeBack: true)
 	}
 	
 	func displayErrorForPaperProofCheck(content: Content) {

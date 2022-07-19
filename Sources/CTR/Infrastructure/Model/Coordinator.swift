@@ -125,3 +125,25 @@ extension Coordinator {
 		}
 	}
 }
+
+extension Coordinator {
+	
+	func presentContent(
+		content: Content,
+		backAction: (() -> Void)? = nil,
+		allowsSwipeBack: Bool = false,
+		animated: Bool = false) {
+			
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
+				content: content,
+				backAction: backAction,
+				allowsSwipeBack: allowsSwipeBack,
+				linkTapHander: { [weak self] url in
+					self?.openUrl(url, inApp: true)
+				}
+			)
+		)
+		navigationController.pushViewController(viewController, animated: animated)
+	}
+}
