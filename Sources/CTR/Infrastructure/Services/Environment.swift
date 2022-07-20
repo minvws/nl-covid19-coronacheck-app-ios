@@ -224,7 +224,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		scanLogManager: scanLogManager
 	)
 	let greenCardLoader = GreenCardLoader(
-		now: now,
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
 		walletManager: walletManager,

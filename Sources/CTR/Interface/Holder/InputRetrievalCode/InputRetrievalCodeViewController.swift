@@ -7,7 +7,7 @@
 
 import UIKit
 
-class InputRetrievalCodeViewController: BaseViewController {
+class InputRetrievalCodeViewController: TraitWrappedGenericViewController<InputRetrievalCodeView, InputRetrievalCodeViewModel> {
 	
 	/// Used for identifying textFields via the UITextField.tag value
 	private enum TextFieldTag: Int {
@@ -15,28 +15,7 @@ class InputRetrievalCodeViewController: BaseViewController {
 		case verificationEntry = 1
 	}
 	
-	private let viewModel: InputRetrievalCodeViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
-	
-	let sceneView = InputRetrievalCodeView()
-	
-	init(viewModel: InputRetrievalCodeViewModel) {
-		
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	@available(*, unavailable)
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	override func loadView() {
-		
-		view = TraitWrapper(sceneView)
-	}
 	
 	override func viewDidLoad() {
 		

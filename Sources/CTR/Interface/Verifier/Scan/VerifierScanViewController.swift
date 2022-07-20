@@ -106,4 +106,23 @@ class VerifierScanViewController: ScanViewController {
 			)
 		)
 	}
+	
+	/// Add a close button to the navigation bar.
+	/// - Parameters:
+	///   - action: The action when the users taps the close button
+	///   - tintColor: The button tint color
+	func addCloseButton(
+		action: Selector,
+		tintColor: UIColor = C.black()!) {
+			
+			let config = UIBarButtonItem.Configuration(
+				target: self,
+				action: action,
+				content: .image(I.cross()),
+				tintColor: tintColor,
+				accessibilityIdentifier: "CloseButton",
+				accessibilityLabel: L.generalClose()
+			)
+			navigationItem.leftBarButtonItem = .create(config)
+		}
 }

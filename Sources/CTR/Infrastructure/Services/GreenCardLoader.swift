@@ -52,7 +52,6 @@ class GreenCardLoader: GreenCardLoading {
 		}
 	}
 
-	private let now: () -> Date
 	private let networkManager: NetworkManaging
 	private let cryptoManager: CryptoManaging
 	private let walletManager: WalletManaging
@@ -62,7 +61,6 @@ class GreenCardLoader: GreenCardLoading {
 	private let logHandler: Logging?
 	
 	required init(
-		now: @escaping () -> Date,
 		networkManager: NetworkManaging,
 		cryptoManager: CryptoManaging,
 		walletManager: WalletManaging,
@@ -72,7 +70,6 @@ class GreenCardLoader: GreenCardLoading {
 		logHandler: Logging? = nil
 	) {
 
-		self.now = now
 		self.networkManager = networkManager
 		self.cryptoManager = cryptoManager
 		self.walletManager = walletManager

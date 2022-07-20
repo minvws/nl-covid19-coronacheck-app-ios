@@ -121,7 +121,6 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 
 		let viewController = BottomSheetContentViewController(
 			viewModel: BottomSheetContentViewModel(
-				coordinator: self,
 				content: Content(
 					title: L.holder_paperproof_whichProofsCanBeUsed_title(),
 					body: L.holder_paperproof_whichProofsCanBeUsed_body()

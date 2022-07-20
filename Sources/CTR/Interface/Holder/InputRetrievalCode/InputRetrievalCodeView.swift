@@ -16,17 +16,11 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
-		static let gradientHeight: CGFloat = 30.0
 		static let textLineHeight: CGFloat = 18
 		static let textKerning: CGFloat = -0.24
 		
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 54.0
-		static let titleTopMargin: CGFloat = 24.0
-		static let messageTopMargin: CGFloat = 24.0
-		static let entryMargin: CGFloat = 16.0
-		static let errorMargin: CGFloat = 8.0
 	}
 	
 	/// The title label

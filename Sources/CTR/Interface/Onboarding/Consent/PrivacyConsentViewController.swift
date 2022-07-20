@@ -7,36 +7,10 @@
 
 import UIKit
 
-final class PrivacyConsentViewController: BaseViewController {
-
-	/// The model
-	let viewModel: PrivacyConsentViewModel
-
-	/// The view
-	let sceneView = PrivacyConsentView()
+final class PrivacyConsentViewController: TraitWrappedGenericViewController<PrivacyConsentView, PrivacyConsentViewModel> {
 	
 	override var enableSwipeBack: Bool { !viewModel.shouldHideBackButton }
-
-	/// Initializer
-	/// - Parameter viewModel: view model
-	init(viewModel: PrivacyConsentViewModel) {
-
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = TraitWrapper(sceneView)
-	}
-
+	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()

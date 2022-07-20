@@ -8,14 +8,16 @@
 import AVFoundation
 import UIKit
 
-class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDelegate {
+class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
 	private var captureSession: AVCaptureSession!
 	private var previewLayer: AVCaptureVideoPreviewLayer!
 
-    private var torchButton: UIBarButtonItem?
-    private var torchEnableLabel: String?
-    private var torchDisableLabel: String?
+	private var enableSwipeBack: Bool { true }
+
+	private var torchButton: UIBarButtonItem?
+	private var torchEnableLabel: String?
+	private var torchDisableLabel: String?
 
 	// Actions to perform on the navigationController at the moment that we are removing this screen.
 	// 	Background:
@@ -139,11 +141,15 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
+		
 		super.viewDidAppear(animated)
 		
 		if let cameraView = (self.view as? HasScanView)?.scanView.cameraView {
 			attachCameraViewAndStartRunning(cameraView)
 		}
+		
+		navigationController?.interactivePopGestureRecognizer?.delegate = enableSwipeBack ? self : nil
+		navigationController?.interactivePopGestureRecognizer?.isEnabled = enableSwipeBack
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -175,6 +181,24 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		if !ScanView.shouldAllowCameraRotationForCurrentDevice {
 			OrientationUtility.unlockOrientation()
 		}
+	}
+	
+	// MARK: - Accessibility
+	
+	// If the user is has VoiceOver enabled, they can
+	// draw a "Z" shape with two fingers to trigger a navigation pop.
+	// http://ronnqvi.st/adding-accessible-behavior
+	@objc override func accessibilityPerformEscape() -> Bool {
+		if enableSwipeBack {
+			onBack()
+			return true
+		} else if let leftButtonTarget = navigationItem.leftBarButtonItem?.target,
+				  let leftButtonAction = navigationItem.leftBarButtonItem?.action {
+			UIApplication.shared.sendAction(leftButtonAction, to: leftButtonTarget, from: nil, for: nil)
+			return true
+		}
+		
+		return false
 	}
 
 	func failed() {
@@ -285,5 +309,19 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			self.view.layoutIfNeeded()
 			self.updateCameraPreviewFrame()
 		}
+	}
+}
+
+extension ScanViewController {
+	
+	@objc func onBack() {
+		navigationController?.popViewController(animated: true)
+	}
+}
+
+extension ScanViewController: UIGestureRecognizerDelegate {
+
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+		return true
 	}
 }

@@ -41,41 +41,6 @@ struct ArrayEnvelope<Item: Envelopable & Decodable>: Decodable {
     }
 }
 
-struct Envelope<Item: Envelopable & Codable>: Codable {
-    let item: Item
-    
-    struct CodingKeys: CodingKey {
-        var stringValue: String
-        var intValue: Int?
-
-        init?(intValue: Int) {
-            return nil
-        }
-
-        init?(stringValue: String) {
-            if stringValue == Item.envelopeName {
-                self.stringValue = stringValue
-                self.intValue = nil
-            } else {
-                return nil
-            }
-        }
-        
-        static var item: Self {
-            return CodingKeys(stringValue: Item.envelopeName)!
-        }
-    }
-    
-    init(from decoder: Decoder) throws {
-        item = try decoder.container(keyedBy: CodingKeys.self).decode(Item.self, forKey: .item)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(item, forKey: .item)
-    }
-}
-
 extension EventFlow.AccessToken: Envelopable { static let envelopeName = "tokens" }
 
 extension EventFlow.EventProvider: Envelopable { static let envelopeName = "eventProviders" }
