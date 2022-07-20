@@ -142,7 +142,10 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey)?.data(using: .utf8)?.base64EncodedString() else {
+		guard let issueCommitmentMessageString = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey),
+			  issueCommitmentMessageString.isNotEmpty,
+			  let issueCommitmentMessage = issueCommitmentMessageString.data(using: .utf8)?.base64EncodedString() else {
+			
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
