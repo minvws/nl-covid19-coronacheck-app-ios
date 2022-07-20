@@ -10,7 +10,7 @@ import Foundation
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading {
@@ -81,7 +81,7 @@ class GreenCardLoader: GreenCardLoading {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		
 		guard let newSecretKey = self.cryptoManager.generateSecretKey() else {
 			self.logHandler?.logError("GreenCardLoader - can't create new secret key")
@@ -133,7 +133,7 @@ class GreenCardLoader: GreenCardLoading {
 		secretKey: Data,
 		nonce: String,
 		stoken: String,
-		onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
