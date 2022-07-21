@@ -38,6 +38,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -57,6 +58,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -74,6 +76,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -92,6 +95,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -111,6 +115,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -132,6 +137,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -152,6 +158,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: { _ in false },
 			completion: { result = $0 }
 		)
@@ -172,6 +179,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { _ in }
 		)
@@ -193,6 +201,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { _ in }
 		)
@@ -216,6 +225,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -243,6 +253,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -271,6 +282,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -300,6 +312,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
@@ -329,6 +342,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
 			responseEvaluator: nil,
 			completion: { result = $0 }
 		)

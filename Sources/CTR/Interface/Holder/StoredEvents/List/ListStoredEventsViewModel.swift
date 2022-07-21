@@ -320,7 +320,10 @@ class ListStoredEventsViewModel {
 	
 	private func sendEventsToTheSigner() {
 		
-		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { [weak self] result in
+		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(
+			eventMode: nil,
+			responseEvaluator: nil
+		) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
 			
 			guard let self = self else { return }

@@ -9,6 +9,7 @@ import Foundation
 
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(
+		eventMode: EventMode?,
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void)
 }
@@ -80,6 +81,7 @@ class GreenCardLoader: GreenCardLoading {
 	}
 
 	func signTheEventsIntoGreenCardsAndCredentials(
+		eventMode: EventMode?,
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		
@@ -102,6 +104,7 @@ class GreenCardLoader: GreenCardLoading {
 						return
 					}
 					self?.fetchGreenCards(
+						eventMode: eventMode,
 						secretKey: newSecretKey,
 						nonce: nonce,
 						stoken: prepareIssueEnvelope.stoken) { response in
@@ -130,6 +133,7 @@ class GreenCardLoader: GreenCardLoading {
 	}
 
 	private func fetchGreenCards(
+		eventMode: EventMode?,
 		secretKey: Data,
 		nonce: String,
 		stoken: String,
@@ -153,7 +157,8 @@ class GreenCardLoader: GreenCardLoading {
 		let dictionary: [String: AnyObject] = [
 			"stoken": stoken as AnyObject,
 			"events": signedEvents as AnyObject,
-			"issueCommitmentMessage": issueCommitmentMessage as AnyObject
+			"issueCommitmentMessage": issueCommitmentMessage as AnyObject,
+			"flows": (eventMode?.asList ?? []) as AnyObject
 		]
 		
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
