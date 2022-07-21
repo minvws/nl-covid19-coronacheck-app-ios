@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct RemoteGreenCards: Codable {
+struct RemoteGreenCards: Codable, Equatable {
 
-	struct Response: Codable {
+	struct Response: Codable, Equatable {
 
 		var domesticGreenCard: DomesticGreenCard?
 		var euGreenCards: [EuGreenCard]?
@@ -53,19 +53,19 @@ struct RemoteGreenCards: Codable {
 		}
 	}
 
-	struct DomesticGreenCard: Codable {
+	struct DomesticGreenCard: Codable, Equatable {
 
 		let origins: [RemoteGreenCards.Origin]
 		let createCredentialMessages: String?
 	}
 
-	struct EuGreenCard: Codable {
+	struct EuGreenCard: Codable, Equatable {
 
 		let origins: [RemoteGreenCards.Origin]
 		let credential: String
 	}
 
-	struct Origin: Codable {
+	struct Origin: Codable, Equatable {
 
 		let type: String
 		let eventTime: Date
@@ -74,7 +74,7 @@ struct RemoteGreenCards: Codable {
 		let doseNumber: Int?
 	}
 	
-	struct BlobExpiry: Codable {
+	struct BlobExpiry: Codable, Equatable {
 		
 		let identifier: String
 		let expirationDate: Date

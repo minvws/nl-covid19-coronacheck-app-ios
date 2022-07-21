@@ -253,7 +253,7 @@ class ListRemoteEventsViewModel {
 		return storageEventMode
 	}
 
-	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, Error>) {
+	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>) {
 		
 		switch result {
 			case let .success(response):
