@@ -209,7 +209,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		expect(result?.failureError) == .failedToSaveGreenCards
 	}
-	func test_signTheEvents_storeGreenCards_withDomestic_success() {
+	func test_signTheEvents_storeGreenCards_withDomestic_success() throws {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
@@ -223,7 +223,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
+			eventMode: .vaccination,
 			completion: { result = $0 }
 		)
 		
@@ -234,10 +234,17 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).toNot(beNil())
 		
+		let sentRequestParameters = try XCTUnwrap(self.environmentSpies.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
+		expect(sentRequestParameters).to(haveCount(4))
+		expect(sentRequestParameters["events"] as? [String]) == ["test"]
+		expect(sentRequestParameters["issueCommitmentMessage"] as? String) == "d29ya3M="
+		expect(sentRequestParameters["flows"] as? [String]) == ["vaccination"]
+		expect(sentRequestParameters["stoken"] as? String) == "test"
+		
 		expect(result?.successValue) == response
 	}
 
-	func test_signTheEvents_storeGreenCards_withInternational_success() {
+	func test_signTheEvents_storeGreenCards_withInternational_success() throws {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
@@ -251,7 +258,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
+			eventMode: .recovery,
 			completion: { result = $0 }
 		)
 		
@@ -262,10 +269,17 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).to(beNil())
 		
+		let sentRequestParameters = try XCTUnwrap(self.environmentSpies.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
+		expect(sentRequestParameters).to(haveCount(4))
+		expect(sentRequestParameters["events"] as? [String]) == ["test"]
+		expect(sentRequestParameters["issueCommitmentMessage"] as? String) == "d29ya3M="
+		expect(sentRequestParameters["flows"] as? [String]) == ["positivetest"]
+		expect(sentRequestParameters["stoken"] as? String) == "test"
+		
 		expect(result?.successValue) == response
 	}
 
-	func test_signTheEvents_storeGreenCards_withDomesticAndInternational_success() {
+	func test_signTheEvents_storeGreenCards_withDomesticAndInternational_success() throws {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
@@ -280,7 +294,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
+			eventMode: .test,
 			completion: { result = $0 }
 		)
 		
@@ -290,6 +304,13 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCardCount) == 1
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).toNot(beNil())
+		
+		let sentRequestParameters = try XCTUnwrap(self.environmentSpies.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
+		expect(sentRequestParameters).to(haveCount(4))
+		expect(sentRequestParameters["events"] as? [String]) == ["test"]
+		expect(sentRequestParameters["issueCommitmentMessage"] as? String) == "d29ya3M="
+		expect(sentRequestParameters["flows"] as? [String]) == ["negativetest"]
+		expect(sentRequestParameters["stoken"] as? String) == "test"
 		
 		expect(result?.successValue) == response
 	}
