@@ -40,14 +40,11 @@ enum EventScreenResult: Equatable {
 	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 	
-	case shouldCompleteVaccinationAssessment
-	
 	case showHints([String])
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe),
-				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe):
 				return true
 				
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
@@ -112,9 +109,6 @@ protocol EventFlowDelegate: AnyObject {
 	/// The event flow is finished
 	func eventFlowDidComplete()
 	
-	/// The event flow is finished, but go to the vaccination assessment entry
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
-
 	func eventFlowDidCancel()
 	
 	func eventFlowDidCancelFromBackSwipe()
@@ -443,8 +437,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details, footer):
 				navigateToEventDetails(title, details: details, footer: footer)
-			case .shouldCompleteVaccinationAssessment:
-				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			case let .showHints(hints):
 				navigateToShowHints(hints: hints)
 			default:

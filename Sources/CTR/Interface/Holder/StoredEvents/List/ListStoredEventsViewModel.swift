@@ -320,10 +320,7 @@ class ListStoredEventsViewModel {
 	
 	private func sendEventsToTheSigner() {
 		
-		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			responseEvaluator: nil
-		) { [weak self] result in
+		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
 			
 			guard let self = self else { return }
@@ -337,12 +334,7 @@ class ListStoredEventsViewModel {
 						case .noInternet:
 							self.displayNoInternet()
 							
-						case .didNotEvaluate:
-							// Can not occur as we are not passing a response evaluator in this flow
-							self.viewState = self.getEventGroupListViewState()
-							
 						case .noSignedEvents:
-							
 							// No more stored events. Remove existing greencards.
 							Current.walletManager.removeExistingGreenCards()
 							self.viewState = self.getEventGroupListViewState()

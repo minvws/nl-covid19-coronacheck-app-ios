@@ -49,21 +49,6 @@ extension ListRemoteEventsViewModel {
 		}
 	}
 
-	internal func originMismatchState(flow: ErrorCode.Flow) -> ListRemoteEventsViewController.State {
-		
-		let errorCode = ErrorCode(
-			flow: flow,
-			step: .signer,
-			clientCode: .originMismatch
-		)
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderEventOriginmismatchTitle(),
-			subTitle: Strings.originsMismatchBody(errorCode: errorCode, forEventMode: eventMode),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
 	// MARK: Vaccination End State
 
 	internal func emptyVaccinationState() -> ListRemoteEventsViewController.State {
@@ -83,22 +68,6 @@ extension ListRemoteEventsViewModel {
 			title: L.holderTestNolistTitle(),
 			subTitle: L.holderTestNolistMessage(),
 			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-	
-	internal func negativeTestInVaccinationAssessmentFlow() -> ListRemoteEventsViewController.State {
-
-		return .feedback(
-			content: Content(
-				title: L.holder_event_negativeTestEndstate_addVaccinationAssessment_title(),
-				body: L.holder_event_negativeTestEndstate_addVaccinationAssessment_body(),
-				primaryActionTitle: L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
 		)
 	}
 	
@@ -124,55 +93,6 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
-	// MARK: international QR Only
-
-	internal func internationalQROnly() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
-			subTitle: L.holder_listRemoteEvents_endStateInternationalQROnly_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	// MARK: Positive test end states
-
-	internal func positiveTestFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateVaccinationsAndRecovery_title(),
-			subTitle: L.holder_listRemoteEvents_endStateVaccinationsAndRecovery_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func positiveTestFlowRecoveryAndInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title(),
-			subTitle: L.holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-	
-	internal func positiveTestFlowInternationalVaccinationCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateInternationalQROnly_title(),
-			subTitle: L.holder_listRemoteEvents_endStateCombinedFlowInternationalQROnly_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func positiveTestFlowRecoveryOnlyCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateRecoveryOnly_title(),
-			subTitle: L.holder_listRemoteEvents_endStateRecoveryOnly_message(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
 	// MARK: Recovery end states
 
 	internal func emptyRecoveryState() -> ListRemoteEventsViewController.State {
@@ -180,33 +100,6 @@ extension ListRemoteEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryNolistTitle(),
 			subTitle: L.holderRecoveryNolistMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func recoveryFlowRecoveryAndVaccinationCreated() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryRecoveryAndVaccinationTitle(),
-			subTitle: L.holderRecoveryRecoveryAndVaccinationMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func recoveryFlowVaccinationOnly() -> ListRemoteEventsViewController.State {
-
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holderRecoveryVaccinationOnlyTitle(),
-			subTitle: L.holderRecoveryVaccinationOnlyMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-
-	internal func recoveryFlowPositiveTestTooOld() -> ListRemoteEventsViewController.State {
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_listRemoteEvents_endStateRecoveryTooOld_title(),
-			subTitle: L.holder_listRemoteEvents_endStateRecoveryTooOld_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
