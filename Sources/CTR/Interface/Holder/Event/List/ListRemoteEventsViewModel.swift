@@ -12,7 +12,6 @@ class ListRemoteEventsViewModel {
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private let walletManager: WalletManaging = Current.walletManager
-	let remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging? = Current.cryptoManager
 	let mappingManager: MappingManaging = Current.mappingManager
@@ -40,8 +39,6 @@ class ListRemoteEventsViewModel {
 
 	private let screenCaptureDetector = ScreenCaptureDetector()
 
-	private let hasExistingDomesticVaccination: Bool
-
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
@@ -58,7 +55,6 @@ class ListRemoteEventsViewModel {
 		self.remoteEvents = remoteEvents
 		
 		viewState = .loading(content: Content(title: Strings.title(forEventMode: eventMode)))
-		hasExistingDomesticVaccination = walletManager.hasDomesticGreenCard(originType: OriginType.vaccination.rawValue)
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -281,7 +277,6 @@ extension ErrorCode.ClientCode {
 	static let failedToParsePrepareIssue = ErrorCode.ClientCode(value: "053")
 	static let failedToGenerateCommitmentMessage = ErrorCode.ClientCode(value: "054")
 	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
-	static let storingEvents = ErrorCode.ClientCode(value: "056")
-	static let originMismatch = ErrorCode.ClientCode(value: "058")
+	static let storingEvents = ErrorCode.ClientCode(value: "056") 
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }
