@@ -44,9 +44,8 @@ enum EventMode: String {
 			case .test: return ["negativetest"]
 			case .vaccination: return ["vaccination"]
 			case .recovery: return ["positivetest"]
-			case .paperflow,
-				.vaccinationassessment:
-				return nil
+			case .vaccinationassessment: return ["vaccinationassessment"]
+			case .paperflow: return nil
 		}
 	}
 }
