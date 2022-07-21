@@ -360,14 +360,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func presentError(content: Content, backAction: (() -> Void)?) {
 		
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: backAction,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		presentContent(content: content, backAction: backAction)
 	}
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
@@ -394,7 +387,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		let viewModel = ContentViewModel(
+		presentContent(
 			content: Content(
 				title: L.holder_completecertificate_title(),
 				body: L.holder_completecertificate_body(),
@@ -409,13 +402,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				navigationController?.popViewController(animated: true, completion: {})
 			},
 			allowsSwipeBack: true,
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			}
+			animated: true
 		)
-		
-		let destination = ContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {

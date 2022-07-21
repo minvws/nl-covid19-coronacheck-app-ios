@@ -49,6 +49,11 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 			return
 		}
 		
+		presentSendCrashReportDialog()
+	}
+	
+	private func presentSendCrashReportDialog() {
+		
 		let alertController = UIAlertController(
 			title: L.general_unrecoverableError_sendCrashReport_title(),
 			message: L.general_unrecoverableError_sendCrashReport_message(),

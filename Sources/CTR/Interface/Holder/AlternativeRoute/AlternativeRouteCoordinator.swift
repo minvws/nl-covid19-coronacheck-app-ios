@@ -158,7 +158,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	private func displayContent(title: String, message: String) {
 		
-		let viewModel = ContentViewModel(
+		presentContent(
 			content: Content(
 				title: title,
 				body: message,
@@ -171,13 +171,8 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 				navigationController?.popViewController(animated: true, completion: {})
 			},
 			allowsSwipeBack: true,
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			}
+			animated: true
 		)
-		
-		let destination = ContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
 	}
 }
 
