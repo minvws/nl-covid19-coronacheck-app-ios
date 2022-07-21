@@ -475,6 +475,27 @@ extension RemoteGreenCards.Response {
 			hints: nil
 		)
 	}
+
+	static var domesticAndInternationalVaccinationWithHint: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationOrigin
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOrigin
+					],
+					credential: "test credential"
+				)
+			],
+			blobExpireDates: [],
+			hints: ["some_test_hint_key"]
+		)
+	}
 	
 	static var internationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
