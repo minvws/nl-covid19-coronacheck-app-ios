@@ -11,7 +11,6 @@ enum GreenCardResponseError: Error {
 
 	case noInternet
 	case noSignedEvents
-	case didNotEvaluate
 	case customError(title: String, message: String)
 }
 
@@ -26,9 +25,6 @@ class GreenCardResponseErrorParser {
 	func parse(_ error: Error) -> GreenCardResponseError {
 		
 		switch error {
-			case GreenCardLoader.Error.didNotEvaluate:
-				return .didNotEvaluate
-				
 			case GreenCardLoader.Error.noSignedEvents:
 				return .noSignedEvents
 				

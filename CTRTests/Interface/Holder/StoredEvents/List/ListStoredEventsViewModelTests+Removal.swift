@@ -401,28 +401,6 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 	}
 	
-	func test_removalVaccination_didNotEvaluate() throws {
-		
-		// Given
-		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
-		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
-		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.didNotEvaluate), ())
-		setupSut()
-		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
-			fail("wrong state")
-			return
-		}
-		
-		// When
-		let group = try XCTUnwrap(groups.first)
-		group.action?()
-		sut.alert?.okAction.action?(UIAlertAction())
-		
-		// Then
-		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
-	}
-	
 	func test_removalVaccination_noEvents() throws {
 		
 		// Given

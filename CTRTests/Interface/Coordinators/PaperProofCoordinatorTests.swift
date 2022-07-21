@@ -255,23 +255,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
 	
-	func test_eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// Given
-		sut.token = "test"
-		sut.scannedDCC = "test"
-		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-		
-		// Then
-		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
-		expect(self.sut.childCoordinators).to((haveCount(0)))
-	}
-	
 	func test_userWishesMoreInformationOnNoInputToken() throws {
 
 		// Given

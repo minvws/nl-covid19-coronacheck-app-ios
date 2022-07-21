@@ -14,20 +14,15 @@ class GreenCardLoaderSpy: GreenCardLoading {
 	var invokedSignTheEventsIntoGreenCardsAndCredentialsCount = 0
 	var invokedSignTheEventsIntoGreenCardsAndCredentialsParameters: (eventMode: EventMode?, Void)?
 	var invokedSignTheEventsIntoGreenCardsAndCredentialsParametersList = [(eventMode: EventMode?, Void)]()
-	var stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult: (RemoteGreenCards.Response, Void)?
 	var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<RemoteGreenCards.Response, GreenCardLoader.Error>, Void)?
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		eventMode: EventMode?,
-		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		invokedSignTheEventsIntoGreenCardsAndCredentials = true
 		invokedSignTheEventsIntoGreenCardsAndCredentialsCount += 1
 		invokedSignTheEventsIntoGreenCardsAndCredentialsParameters = (eventMode, ())
 		invokedSignTheEventsIntoGreenCardsAndCredentialsParametersList.append((eventMode, ()))
-		if let result = stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult {
-			_ = responseEvaluator?(result.0)
-		}
 		if let result = stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult {
 			completion(result.0)
 		}

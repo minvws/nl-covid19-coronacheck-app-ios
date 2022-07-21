@@ -39,7 +39,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -59,7 +58,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -77,7 +75,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -96,7 +93,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -116,7 +112,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -138,34 +133,12 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
 		expect(result?.failureError) == GreenCardLoader.Error.credentials(serverError)
-	}
-	
-	func test_signTheEvents_fetchGreenCards_failsWhenResponseDoesNotEvaluate() {
-		// Arrange
-		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
-		environmentSpies.cryptoManagerSpy.stubbedGenerateSecretKeyResult = .some(Data())
-		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ()))
-		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "works"
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.emptyResponse), ())
-		
-		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			responseEvaluator: { _ in false },
-			completion: { result = $0 }
-		)
-		
-		// Assert
-		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
-		expect(result?.failureError) == GreenCardLoader.Error.didNotEvaluate
 	}
 	
 	func test_signTheEvents_storeGreenCards_withEmptyResponse_clearsHolderSecretKey() {
@@ -180,7 +153,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { _ in }
 		)
 		
@@ -202,7 +174,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { _ in }
 		)
 		
@@ -226,7 +197,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -254,7 +224,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -283,7 +252,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -313,7 +281,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		
@@ -343,7 +310,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
 			eventMode: nil,
-			responseEvaluator: nil,
 			completion: { result = $0 }
 		)
 		

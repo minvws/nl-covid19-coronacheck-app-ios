@@ -876,20 +876,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 	}
 	
-	func test_eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// Given
-		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-
 	func test_eventFlowDidCancel() {
 		
 		// Given

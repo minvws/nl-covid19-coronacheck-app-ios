@@ -10,7 +10,6 @@ import Foundation
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(
 		eventMode: EventMode?,
-		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void)
 }
 
@@ -18,7 +17,6 @@ class GreenCardLoader: GreenCardLoading {
 
 	enum Error: Swift.Error, Equatable, LocalizedError {
 		case noSignedEvents
-		case didNotEvaluate
 
 		case preparingIssue(ServerError)
 		case failedToParsePrepareIssue
@@ -39,8 +37,6 @@ class GreenCardLoader: GreenCardLoading {
 					return "preparingIssue/provider/" + networkError.rawValue
 				case .noSignedEvents:
 					return "noSignedEvents"
-				case .didNotEvaluate:
-					return "didNotEvaluate"
 				case .failedToParsePrepareIssue:
 					return "failedToParsePrepareIssue"
 				case .failedToGenerateCommitmentMessage:
@@ -82,7 +78,6 @@ class GreenCardLoader: GreenCardLoading {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		eventMode: EventMode?,
-		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		
 		guard let newSecretKey = self.cryptoManager.generateSecretKey() else {
@@ -113,11 +108,6 @@ class GreenCardLoader: GreenCardLoading {
 								completion(.failure(error))
 								
 							case .success(let greenCardResponse):
-								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
-									completion(.failure(Error.didNotEvaluate))
-									return
-								}
-								
 								self?.storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self?.logHandler?.logError("GreenCardLoader - failed to save greenCards")
