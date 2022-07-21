@@ -150,7 +150,7 @@ class ListRemoteEventsViewModel {
 			}
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(
-				eventMode: self.eventMode,
+				eventMode: expandedEventMode,
 				responseEvaluator: { [weak self] remoteResponse in
 					self?.areTheOriginsAsExpected(
 						remoteResponse: remoteResponse,
