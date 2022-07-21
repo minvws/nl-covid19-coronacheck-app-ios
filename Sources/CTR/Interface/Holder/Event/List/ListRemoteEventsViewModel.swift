@@ -277,6 +277,6 @@ extension ErrorCode.ClientCode {
 	static let failedToParsePrepareIssue = ErrorCode.ClientCode(value: "053")
 	static let failedToGenerateCommitmentMessage = ErrorCode.ClientCode(value: "054")
 	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
-	static let storingEvents = ErrorCode.ClientCode(value: "056") 
+	static let storingEvents = ErrorCode.ClientCode(value: "056")
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }
