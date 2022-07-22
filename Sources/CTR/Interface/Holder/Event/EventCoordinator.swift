@@ -537,7 +537,7 @@ extension EventCoordinator: Dismissable {
 }
 
 extension EventCoordinator: UINavigationControllerDelegate {
-
+	
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
 		
 		// Call the delegate if we are backing out of the flow
