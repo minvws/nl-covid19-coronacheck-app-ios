@@ -11,6 +11,13 @@ final class ShowHintsViewModel {
 	
 	weak var coordinator: (OpenUrlProtocol & EventCoordinatorDelegate)?
 
+    enum Mode {
+        case standard
+        case shouldCompleteVaccinationAssessment
+    }
+
+    private let mode: Mode
+    
 	// MARK: - Bindable
 
 	@Bindable private(set) var title: String = L.holder_eventHints_title()
@@ -25,6 +32,20 @@ final class ShowHintsViewModel {
 		self.message = hints
 			.map { "<p>\($0)</p>" }
 			.joined(separator: "\n")
+        
+        // Special case..
+        if hints.contains(where: { $0 == "negativetest_without_vaccinationasssesment" }) {
+            mode = .shouldCompleteVaccinationAssessment
+        } else {
+            mode = .standard
+        }
+        
+        switch mode {
+            case .standard:
+                buttonTitle = L.general_toMyOverview()
+            case .shouldCompleteVaccinationAssessment:
+                buttonTitle = L.general_toMyOverview()
+        }
 	}
 
 	// MARK: - Methods
@@ -35,7 +56,11 @@ final class ShowHintsViewModel {
 	}
 	
 	func navigateToDashboard() {
-		
-		coordinator?.showHintsScreenDidFinish(.stop)
+        switch mode {
+            case .standard:
+                coordinator?.showHintsScreenDidFinish(.stop)
+            case .shouldCompleteVaccinationAssessment:
+                fatalError()
+        }
 	}
 }
