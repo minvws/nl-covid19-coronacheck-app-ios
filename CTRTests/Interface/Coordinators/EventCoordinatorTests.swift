@@ -5,6 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 import XCTest
 @testable import CTR
@@ -263,6 +264,17 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController) == true
 	}
 	
+	func test_eventStartScreenDidFinish_default() {
+		
+		// Given
+		
+		// When
+		sut.eventStartScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+	}
+	
 	// MARK: - authenticationScreenDidFinish
 	
 	func test_authenticationScreenDidFinish_didLogin() {
@@ -506,6 +518,17 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
+	func test_authenticationScreenDidFinish_default() {
+		
+		// Given
+		
+		// When
+		sut.authenticationScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+	}
+	
 	// MARK: - fetchEventsScreenDidFinish
 	
 	func test_fetchEventsScreenDidFinish_showEvents() throws {
@@ -565,6 +588,17 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_fetchEventsScreenDidFinish_default() {
+		
+		// Given
+		
+		// When
+		sut.fetchEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 	}
 	
 	// MARK: - listEventsScreenDidFinish
@@ -670,6 +704,17 @@ class EventCoordinatorTests: XCTestCase {
 		expect(viewModel.footer) == "test footer"
 	}
 
+	func test_listEventsScreenDidFinish_shouldCompleteVaccinationAssessment() {
+		
+		// Given
+		
+		// When
+		sut.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
+	}
+	
 	func test_listEventsScreenDidFinish_default() {
 		
 		// Given
