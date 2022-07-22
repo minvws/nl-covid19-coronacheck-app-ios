@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 // swiftlint:disable type_body_length
-// swiftlint:disable file_length
 
 import XCTest
 @testable import CTR
@@ -217,40 +216,6 @@ class EventCoordinatorTests: XCTestCase {
 	}
 	
 	// MARK: - eventStartScreenDidFinish
-	
-	func test_eventStartScreenDidFinish_back() {
-		
-		// Given
-		
-		// When
-		sut.eventStartScreenDidFinish(.back(eventMode: .test))
-		
-		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
-	}
-	
-	func test_eventStartScreenDidFinish_stop() {
-		
-		// Given
-		
-		// When
-		sut.eventStartScreenDidFinish(.stop)
-		
-		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
-	}
-	
-	func test_eventStartScreenDidFinish_backswipe() {
-		
-		// Given
-		
-		// When
-		sut.eventStartScreenDidFinish(.backSwipe)
-		
-		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancelFromBackSwipe) == true
-	}
 	
 	func test_eventStartScreenDidFinish_continue() {
 		
@@ -713,17 +678,6 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
-	}
-	
-	func test_listEventsScreenDidFinish_default() {
-		
-		// Given
-		
-		// When
-		sut.listEventsScreenDidFinish(.backSwipe)
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 	}
 	
 	func test_alternativeRoute() {

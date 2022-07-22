@@ -14,8 +14,6 @@ enum EventScreenResult: Equatable {
 	
 	/// The user wants to go back a scene
 	case back(eventMode: EventMode)
-	
-	case backSwipe
 
 	/// Stop with vaccination flow,
 	case stop
@@ -46,7 +44,7 @@ enum EventScreenResult: Equatable {
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe),
+			case (.back, .back), (.stop, .stop),
 				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 				
@@ -116,11 +114,9 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
 
 	func eventFlowDidCancel()
-	
-	func eventFlowDidCancelFromBackSwipe()
 }
 
-class EventCoordinator: Coordinator, OpenUrlProtocol {
+class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -138,6 +134,8 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
+		super.init()
+		self.navigationController.delegate = self
 	}
 
 	func start() {
@@ -337,9 +335,9 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		return false
 	}
 
-	private func displayError(content: Content, backAction: @escaping () -> Void) {
+	private func displayError(content: Content, allowsSwipeBack: Bool = false, backAction: @escaping () -> Void) {
 
-		presentContent(content: content, backAction: backAction)
+		presentContent(content: content, backAction: backAction, allowsSwipeBack: allowsSwipeBack)
 	}
 }
 
@@ -353,17 +351,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 			case let .alternativeRoute(eventMode: eventMode): startAlternativeRoute(eventMode)
-			case let .back(eventMode): handleBackAction(eventMode: eventMode)
-			case .stop: delegate?.eventFlowDidCancel()
-			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
 			case let .continue(eventMode): navigateToAuthentication(eventMode: eventMode)
 			default: break
 		}
-	}
-
-	private func handleBackAction(eventMode: EventMode) {
-
-		delegate?.eventFlowDidCancel()
 	}
 
 	func authenticationScreenDidFinish(_ result: EventScreenResult) {
@@ -377,7 +367,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				handleErrorRequiringRestart(eventMode: eventMode, authenticationMode: authenticationMode)
 
 			case let .error(content: content, backAction: backAction):
-				displayError(content: content, backAction: backAction)
+				displayError(content: content, allowsSwipeBack: true, backAction: backAction)
 
 			case .back(let eventMode):
 				goBack(eventMode)
@@ -519,6 +509,7 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
+		navigationController.delegate = self
 	}
 	
 	func backToMyOverview() {
@@ -532,6 +523,7 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
+		navigationController.delegate = self
 		navigateToAuthentication(eventMode: eventMode, authenticationMode: .patientAuthenticationProvider)
 	}
 }
@@ -541,5 +533,17 @@ extension EventCoordinator: Dismissable {
 	func dismiss() {
 
 		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+	}
+}
+
+extension EventCoordinator: UINavigationControllerDelegate {
+
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+		
+		Current.logHandler.logInfo("EventCoordinator navigationController willShow")
+		
+		if !navigationController.viewControllers.contains(where: { $0.isKind(of: RemoteEventStartViewController.self) }) {
+			delegate?.eventFlowDidCancel()
+		}
 	}
 }

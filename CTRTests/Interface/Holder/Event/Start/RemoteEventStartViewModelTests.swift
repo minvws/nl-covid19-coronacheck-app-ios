@@ -98,26 +98,6 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 
-	func test_backButtonTapped() {
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
-	}
-
-	func test_backSwipe() {
-
-		// When
-		sut.backSwipe()
-
-		// Then
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .backSwipe
-	}
-
 	func test_primaryButtonTapped_vaccinationMode() {
 
 		// When
