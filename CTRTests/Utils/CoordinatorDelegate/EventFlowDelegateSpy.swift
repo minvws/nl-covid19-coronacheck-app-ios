@@ -33,12 +33,4 @@ class EventFlowDelegateSpy: EventFlowDelegate {
 		invokedEventFlowDidCancel = true
 		invokedEventFlowDidCancelCount += 1
 	}
-
-	var invokedEventFlowDidCancelFromBackSwipe = false
-	var invokedEventFlowDidCancelFromBackSwipeCount = 0
-
-	func eventFlowDidCancelFromBackSwipe() {
-		invokedEventFlowDidCancelFromBackSwipe = true
-		invokedEventFlowDidCancelFromBackSwipeCount += 1
-	}
 }

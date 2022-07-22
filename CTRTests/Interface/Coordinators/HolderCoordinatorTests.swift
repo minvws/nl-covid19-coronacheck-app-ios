@@ -900,19 +900,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopViewController) == true
-	}
-	
-	func test_eventFlowDidCancelFromBackSwipe() {
-		
-		// Given
-		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCancelFromBackSwipe()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == false
 	}
 	
 	// MARK: - PaperProofFlowDelegate -
