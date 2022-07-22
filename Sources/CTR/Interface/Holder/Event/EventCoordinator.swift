@@ -540,10 +540,20 @@ extension EventCoordinator: UINavigationControllerDelegate {
 
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
 		
-		Current.logHandler.logInfo("EventCoordinator navigationController willShow")
-		
+		// Call the delegate if we are backing out of the flow
 		if !navigationController.viewControllers.contains(where: { $0.isKind(of: RemoteEventStartViewController.self) }) {
 			delegate?.eventFlowDidCancel()
+			return
+		}
+		
+		// Skip the AuthenticationViewController when back swipping
+		if let coordinator = navigationController.topViewController?.transitionCoordinator {
+			coordinator.notifyWhenInteractionChanges { context in
+				guard !context.isCancelled else { return }
+				if viewController.isKind(of: AuthenticationViewController.self) {
+					navigationController.popViewController(animated: true)
+				}
+			}
 		}
 	}
 }
