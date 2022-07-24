@@ -58,10 +58,10 @@ final class ShowHintsViewModel {
 	
 	func navigateToDashboard() {
 		switch mode {
-		case .standard:
-			coordinator?.showHintsScreenDidFinish(.stop)
-		case .shouldCompleteVaccinationAssessment:
-			coordinator?.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+			case .standard:
+				coordinator?.showHintsScreenDidFinish(.stop)
+			case .shouldCompleteVaccinationAssessment:
+				coordinator?.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
 		}
 	}
 }
