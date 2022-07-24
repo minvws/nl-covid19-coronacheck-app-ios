@@ -42,7 +42,7 @@ enum EventScreenResult: Equatable {
 	
 	case shouldCompleteVaccinationAssessment
 	
-	case showHints([String])
+	case showHints(NonemptyArray<String>)
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
@@ -270,7 +270,7 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
-	private func navigateToShowHints(hints: [String]) {
+	private func navigateToShowHints(hints: NonemptyArray<String>) {
 		let viewController = ShowHintsViewController(viewModel: ShowHintsViewModel(hints: hints, coordinator: self))
 		navigationController.pushViewController(viewController, animated: true)
 	}

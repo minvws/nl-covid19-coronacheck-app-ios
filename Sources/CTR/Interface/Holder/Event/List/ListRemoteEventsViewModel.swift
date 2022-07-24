@@ -195,8 +195,8 @@ class ListRemoteEventsViewModel {
 			case let .success(response):
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
-				if let hints = response.hints, hints.isNotEmpty {
-					coordinator?.listEventsScreenDidFinish(.showHints(hints))
+				if let hints = response.hints, let nonEmptyHints = NonemptyArray(hints) {
+					coordinator?.listEventsScreenDidFinish(.showHints(nonEmptyHints))
 				} else {
 					coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
 				}

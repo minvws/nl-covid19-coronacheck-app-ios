@@ -26,26 +26,26 @@ final class ShowHintsViewModel {
 	
 	// MARK: - Initializer
 	
-	init(hints: [String], coordinator: OpenUrlProtocol & EventCoordinatorDelegate) {
+	init(hints: NonemptyArray<String>, coordinator: OpenUrlProtocol & EventCoordinatorDelegate) {
 		
-		let hints = ["negativetest_without_vaccinationasssesment"]
 		self.coordinator = coordinator
 		self.message = hints
+			.contents
 			.map { "<p>\($0)</p>" }
 			.joined(separator: "\n")
 		
 		// Special case..
-		if hints.contains(where: { $0 == "negativetest_without_vaccinationasssesment" }) {
+		if hints.contents.contains(where: { $0 == "negativetest_without_vaccinationasssesment" }) {
 			mode = .shouldCompleteVaccinationAssessment
 		} else {
 			mode = .standard
 		}
 		
 		switch mode {
-		case .standard:
-			buttonTitle = L.general_toMyOverview()
-		case .shouldCompleteVaccinationAssessment:
-			buttonTitle = L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
+			case .standard:
+				buttonTitle = L.general_toMyOverview()
+			case .shouldCompleteVaccinationAssessment:
+				buttonTitle = L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
 		}
 	}
 	
