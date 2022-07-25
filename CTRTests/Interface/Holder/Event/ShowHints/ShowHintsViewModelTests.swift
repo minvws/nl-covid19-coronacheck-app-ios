@@ -72,7 +72,7 @@ class ShowHintsViewModelTests: XCTestCase {
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
-		sut.navigateToDashboard()
+		sut.userTappedCallToActionButton()
 		
 		// Assert
 		expect(self.sut.title) == L.holder_eventHints_title()
@@ -92,7 +92,7 @@ class ShowHintsViewModelTests: XCTestCase {
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
-		sut.navigateToDashboard()
+		sut.userTappedCallToActionButton()
 		
 		// Assert
 		expect(self.sut.title) == L.holder_eventHints_title()

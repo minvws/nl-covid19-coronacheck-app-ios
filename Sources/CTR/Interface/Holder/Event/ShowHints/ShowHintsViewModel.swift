@@ -56,7 +56,7 @@ final class ShowHintsViewModel {
 		coordinator?.openUrl(url, inApp: true)
 	}
 	
-	func navigateToDashboard() {
+	func userTappedCallToActionButton() {
 		switch mode {
 			case .standard:
 				coordinator?.showHintsScreenDidFinish(.stop)
