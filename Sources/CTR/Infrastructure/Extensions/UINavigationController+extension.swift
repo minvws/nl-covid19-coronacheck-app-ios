@@ -94,4 +94,32 @@ extension UINavigationController {
 		view.layer.add(transition, forKey: nil)
 		pushViewController(viewController, animated: false)
 	}
+	
+	func popbackTo(instanceOf viewControllerType: UIViewController.Type, animated: Bool, completion: @escaping () -> Void) {
+
+		guard let popbackVC = viewControllers.first(where: { $0.isKind(of: viewControllerType) })
+		else {
+			completion()
+			return
+		}
+		
+		popToViewController(popbackVC, animated: animated, completion: completion)
+	}
+	
+	/// `oneOfInstanceOf` is in descending priority order
+	func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
+
+		let viewControllersMatchingTypes = viewControllerTypes.flatMap { viewControllerType in
+			self.viewControllers.last(where: {
+				viewController in viewController.isKind(of: viewControllerType)
+			})
+		}
+		
+		guard let popbackVC = viewControllersMatchingTypes.first else {
+			completion()
+			return
+		}
+		
+		popToViewController(popbackVC, animated: animated, completion: completion)
+	}
 }
