@@ -18,7 +18,7 @@ final class ShowHintsViewController: TraitWrappedGenericViewController<ShowHints
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
-		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.navigateToDashboard() }
+		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.userTappedCallToActionButton() }
 		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in self?.viewModel.openUrl(url) }
 	}
 }
