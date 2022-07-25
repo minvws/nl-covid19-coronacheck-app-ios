@@ -93,12 +93,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	// Holder
 	
 	func areZeroDisclosurePoliciesEnabled() -> Bool {
-		
-		if CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
 			return false
 		}
 		
@@ -108,11 +107,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
-		if CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return false
 		}
 		
@@ -122,11 +121,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
-		if CommandLine.arguments.contains("-disclosurePolicyMode1G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return false
 		}
 		
@@ -136,11 +135,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	
 	func areBothDisclosurePoliciesEnabled() -> Bool {
 		
-		if CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return false
 		}
 		

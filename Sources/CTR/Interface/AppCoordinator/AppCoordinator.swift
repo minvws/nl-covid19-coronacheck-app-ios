@@ -67,7 +67,7 @@ class AppCoordinator: Coordinator {
 	/// Designated starter method
 	func start() {
 		
-		if CommandLine.arguments.contains("-resetOnStart") {
+		if LaunchArgumentsHandler.shouldResetOnStart() {
 			Current.wipePersistedData(flavor: AppFlavor.holder)
 		}
 		
