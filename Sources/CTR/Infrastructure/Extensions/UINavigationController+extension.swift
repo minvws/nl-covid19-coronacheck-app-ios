@@ -109,10 +109,8 @@ extension UINavigationController {
 	/// `oneOfInstanceOf` is in descending priority order
 	func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
 
-		let viewControllersMatchingTypes = viewControllerTypes.flatMap { viewControllerType in
-			self.viewControllers.last(where: {
-				viewController in viewController.isKind(of: viewControllerType)
-			})
+		let viewControllersMatchingTypes = viewControllerTypes.compactMap { viewControllerType in
+			self.viewControllers.last(where: { $0.isKind(of: viewControllerType) })
 		}
 		
 		guard let popbackVC = viewControllersMatchingTypes.first else {
