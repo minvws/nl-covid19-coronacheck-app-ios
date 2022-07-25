@@ -56,7 +56,7 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	func handleLaunchState(_ state: LaunchState) {
 		
-		if CommandLine.arguments.contains("-skipOnboarding") {
+		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			startApplication()
 			return
 		}

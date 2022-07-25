@@ -96,7 +96,7 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 		
-		if CommandLine.arguments.contains("-skipOnboarding") {
+		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			navigateToDashboard(replacingWindowRootViewController: true)
 			return
 		}

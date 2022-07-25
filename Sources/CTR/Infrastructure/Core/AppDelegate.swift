@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 			
-			if CommandLine.arguments.contains("-disableTransitions") {
+			if LaunchArgumentsHandler.shouldDisableTransitions() {
 				// Disable UIView animations for UI testing
 				UIView.setAnimationsEnabled(false)
 			}
