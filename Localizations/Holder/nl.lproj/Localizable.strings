@@ -604,6 +604,7 @@
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
 "holder_eventHints_title" = "Je bewijzen zijn gemaakt";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_vaccination_assessment_about_country" = "Gevaccineerd in (land):";
 "holder_event_vaccination_assessment_about_date" = "Beoordelingsdatum:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Geboortedatum:";

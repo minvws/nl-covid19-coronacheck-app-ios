@@ -18,6 +18,14 @@ class EventFlowDelegateSpy: EventFlowDelegate {
 		invokedEventFlowDidCompleteCount += 1
 	}
 
+	var invokedEventFlowDidCompleteButVisitorPassNeedsCompletion = false
+	var invokedEventFlowDidCompleteButVisitorPassNeedsCompletionCount = 0
+
+	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
+		invokedEventFlowDidCompleteButVisitorPassNeedsCompletion = true
+		invokedEventFlowDidCompleteButVisitorPassNeedsCompletionCount += 1
+	}
+
 	var invokedEventFlowDidCancel = false
 	var invokedEventFlowDidCancelCount = 0
 

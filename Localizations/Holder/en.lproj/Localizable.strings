@@ -602,6 +602,7 @@
 "holder_endOfLife_description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
 "holder_endOfLife_errorMessage" = "Can't open website.";
 "holder_endOfLife_title" = "App not in use";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_vaccination_assessment_about_country" = "Vaccinated in (country):";
 "holder_event_vaccination_assessment_about_date" = "Review date:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Date of birth:";
