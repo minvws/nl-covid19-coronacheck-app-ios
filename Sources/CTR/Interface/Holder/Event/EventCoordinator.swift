@@ -367,8 +367,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				handleErrorRequiringRestart(eventMode: eventMode, authenticationMode: authenticationMode)
 
 			case let .error(content: content, backAction: backAction):
-				displayError(content: content, allowsSwipeBack: true, backAction: backAction)
-
+				navigationController.popbackTo(instanceOf: RemoteEventStartViewController.self, animated: false) {
+					self.displayError(content: content, allowsSwipeBack: true, backAction: backAction)
+				}
+			
 			case .back(let eventMode):
 				goBack(eventMode)
 	
@@ -524,7 +526,10 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
 		navigationController.delegate = self
-		navigateToAuthentication(eventMode: eventMode, authenticationMode: .patientAuthenticationProvider)
+		
+		navigationController.popbackTo(instanceOf: RemoteEventStartViewController.self, animated: false) {
+			self.navigateToAuthentication(eventMode: eventMode, authenticationMode: .patientAuthenticationProvider)
+		}
 	}
 }
 
@@ -544,16 +549,6 @@ extension EventCoordinator: UINavigationControllerDelegate {
 		if !navigationController.viewControllers.contains(where: { $0.isKind(of: RemoteEventStartViewController.self) }) {
 			delegate?.eventFlowDidCancel()
 			return
-		}
-		
-		// Skip the AuthenticationViewController when back swipping
-		if let coordinator = navigationController.topViewController?.transitionCoordinator {
-			coordinator.notifyWhenInteractionChanges { context in
-				guard !context.isCancelled else { return }
-				if viewController.isKind(of: AuthenticationViewController.self) {
-					navigationController.popViewController(animated: true)
-				}
-			}
 		}
 	}
 }
