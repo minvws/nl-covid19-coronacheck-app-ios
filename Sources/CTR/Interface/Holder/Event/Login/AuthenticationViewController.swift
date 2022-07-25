@@ -23,11 +23,11 @@ class AuthenticationViewController: TraitWrappedGenericViewController<FetchRemot
 		
 		addBackButton()
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(displayCancelAuthorization), name: UIApplication.didBecomeActiveNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
 	}
 	
-	@objc func displayCancelAuthorization() {
+	@objc func didBecomeActive() {
 		
-		viewModel.cancelAuthorization()
+		viewModel.didBecomeActive()
 	}
 }
