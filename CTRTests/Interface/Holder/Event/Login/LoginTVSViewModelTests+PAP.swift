@@ -137,7 +137,7 @@ class AuthenticationViewModelPAPTests: XCTestCase {
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
 
 		// When
-		sut.cancelAuthorization()
+		sut.didBecomeActive()
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == false
@@ -155,11 +155,10 @@ class AuthenticationViewModelPAPTests: XCTestCase {
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
 
 		// When
-		sut.cancelAuthorization()
+		sut.didBecomeActive()
 
 		// Then
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination, authenticationMode: .patientAuthenticationProvider)
+		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == false
 	}
 
 	func test_openID_success_accessToken_ok() {

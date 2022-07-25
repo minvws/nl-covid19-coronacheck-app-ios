@@ -179,9 +179,16 @@ extension AuthenticationViewModel {
 		)
 	}
 	
-	func cancelAuthorization() {
+	func didBecomeActive() {
 		
 		guard appAuthState?.currentAuthorizationFlow != nil else { return }
+		guard authenticationMode == .manyAuthenticationExchange else {
+			// When we receive the didBecomeActive notification:
+			// - For manyAuthenticationExchange that means the user returned to the app, canceling the login
+			// - For patientAuthenticationProvider that means the user accepted the popup to login to the GGD.
+			//   That should not lead to a cancel action.
+			return
+		}
 		userCancelled()
 	}
 
