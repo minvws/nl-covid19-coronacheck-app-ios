@@ -177,12 +177,19 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 		return NO;
 	}
 	
-	const unsigned char *bytes = subjectKeyIdentifier.bytes;
-	if (NULL == (expectedSubjectKeyIdentifier = d2i_ASN1_OCTET_STRING(NULL, &bytes, (int)subjectKeyIdentifier.length)))
-		EXITOUT("Cannot extract expectedSubjectKeyIdentifier");
-	
-	if (NULL == (certificateSubjectKeyIdentifier = X509_get0_subject_key_id(certificate)))
+	@try {
+		const unsigned char *bytes = subjectKeyIdentifier.bytes;
+		if (NULL == (expectedSubjectKeyIdentifier = d2i_ASN1_OCTET_STRING(NULL, &bytes, (int)subjectKeyIdentifier.length))) {
+			EXITOUT("Cannot extract expectedSubjectKeyIdentifier");
+		}
+		if (NULL == (certificateSubjectKeyIdentifier = X509_get0_subject_key_id(certificate))) {
+			EXITOUT("Cannot extract certificateSubjectKeyIdentifier");
+		}
+	} @catch (NSException *exception) {
 		EXITOUT("Cannot extract certificateSubjectKeyIdentifier");
+	} @finally {
+		
+	}
 	
 	isMatch = ASN1_OCTET_STRING_cmp(expectedSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
 	
@@ -334,6 +341,8 @@ errit:
 		}
 	} @catch (NSException *exception) {
 		EXITOUT("CMS_verify crashed");
+	} @finally {
+		
 	}
 
 #ifdef __DEBUG
