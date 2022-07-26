@@ -6,24 +6,48 @@
  */
 
 import UIKit
+import Inject
 
 /// A generic viewcontroller
 /// V: The view to use for the scene, must be a (subclass of) baseview
 /// M: The class to use as viewModel
 class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecognizerDelegate {
 	
-	internal let sceneView: V
+	internal var sceneView: V {
+		return _sceneView.instance
+	}
+	fileprivate let _sceneView: _InjectableViewHost<V>
+	
 	internal let viewModel: M
 	
 	/// The initializer of the Generic ViewController
 	/// - Parameters:
 	///   - sceneView: the class to use as the sceneView. Must derive from BaseView
 	///   - viewModel: the class to use as the viewModel
-	init(sceneView: V = V(), viewModel: M) {
+	init(sceneView: @autoclosure @escaping () -> V = { V() }(), viewModel: M) {
 		
-		self.sceneView = sceneView
+		self._sceneView = Inject.ViewHost(sceneView())
 		self.viewModel = viewModel
+		
 		super.init(nibName: nil, bundle: nil)
+		
+		#if DEBUG
+		if LaunchArgumentsHandler.shouldInjectView() {
+			onInjection { [weak self] instance in
+				guard let self = self else { return }
+				// **For iterative UI development only **
+				// The previous instance of self.sceneView is never released, so on each
+				// successive injection (due to strong bindings from the ViewModel) a new
+				// sceneView instance will be created, without releasing the old one.
+				// Therefore there is an an obvious memory leak during development.
+				//
+				// Other bugs related to having registered multiple observers can also be expected.
+				
+				Current.logHandler.logDebug("♻️ ♻️ ♻️ Re-Injected View at \(type(of: self)) ♻️ ♻️ ♻️ ")
+				self.viewDidLoad()
+			}
+		}
+		#endif
 	}
 	
 	/// Required initialzer
@@ -36,7 +60,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	// MARK: View lifecycle
 	override func loadView() {
 		
-		view = sceneView
+		view = _sceneView
 	}
 	
 	/// Enable/disable navigation back swiping. Default is true.
@@ -150,6 +174,6 @@ class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V
 	
 	override func loadView() {
 		
-		view = TraitWrapper(sceneView)
+		view = TraitWrapper(self._sceneView)
 	}
 }
