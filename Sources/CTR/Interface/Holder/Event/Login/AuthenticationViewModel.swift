@@ -140,7 +140,9 @@ extension AuthenticationViewModel {
 					)
 				)
 				return
-			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
+			} else if error.localizedDescription.contains("saml_authn_failed") ||
+						error.localizedDescription.contains("cancelled:") ||
+						clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
 				Current.logHandler.logDebug("User cancelled")
 				userCancelled()
 				return
