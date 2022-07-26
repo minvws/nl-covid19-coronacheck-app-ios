@@ -24,6 +24,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 		window = UIWindow()
+		isRecording = true
 	}
 
 	var window = UIWindow()
