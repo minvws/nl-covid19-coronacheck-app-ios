@@ -11,7 +11,6 @@ class FetchRemoteEventsViewController: TraitWrappedGenericViewController<FetchRe
 
 	enum State {
 		case loading(content: Content)
-		case feedback(content: Content)
 	}
 
 	override func viewDidLoad() {
@@ -28,19 +27,13 @@ class FetchRemoteEventsViewController: TraitWrappedGenericViewController<FetchRe
 
 			switch $0 {
 				case let .loading(content):
-					self?.setForLoadingState(content)
-				case let .feedback(content):
-					self?.setForFeedback(content)
+					self?.sceneView.shouldShowLoadingSpinner = true
+					self?.sceneView.applyContent(content)
 			}
 		}
 
 		viewModel.$alert.binding = { [weak self] in
 			self?.showAlert($0)
-		}
-
-		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in
-
-			self?.viewModel.openUrl(url)
 		}
 	}
 	
@@ -49,17 +42,5 @@ class FetchRemoteEventsViewController: TraitWrappedGenericViewController<FetchRe
 	@objc func backButtonTapped() {
 
 		viewModel.backButtonTapped()
-	}
-
-	private func setForLoadingState(_ content: Content) {
-
-		sceneView.shouldShowLoadingSpinner = true
-		sceneView.applyContent(content)
-	}
-
-	private func setForFeedback(_ content: Content) {
-
-		sceneView.shouldShowLoadingSpinner = false
-		sceneView.applyContent(content)
 	}
 }
