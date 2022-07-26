@@ -282,7 +282,7 @@ class AuthenticationViewModelPAPTests: XCTestCase {
 			authenticationMode: .patientAuthenticationProvider
 		)
 		environmentSpies.openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult =
-			(NSError(domain: "Authentication", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
+			(NSError(domain: "Authentication", code: 200, userInfo: [NSLocalizedDescriptionKey: "cancelled:"]), ())
 
 		// When
 		sut.login(presentingViewController: UIViewController())
