@@ -108,7 +108,6 @@ class ShowHintsViewModelTests: XCTestCase {
 		
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
 	}
-
 	
 	// Disabled until the `negativetest_without_vaccinationasssesment` copy key is added
 //	func test_mode_shouldCompleteVaccinationAssessment() {
