@@ -1,3 +1,7 @@
+"domestic_recovery_created" = "Your positive test result was suitable for creating a Dutch recovery certificate.";
+"domestic_recovery_rejected" = "With your positive test result it was not possible to create a Dutch recovery certificate.";
+"domestic_vaccination_created" = "From your vaccinations a Dutch vaccination certificate has been created.";
+"domestic_vaccination_rejected" = "Your vaccination(s) unfortunately don't entitle you to a Dutch vaccination certificate.";
 "general.add" = "Add";
 "general.back" = "Back";
 /* MARK: - General */
@@ -542,7 +546,7 @@
 "holder_checkForBSN_message" = "With your BSN, you can request your certificate at the CoronaCheck helpdesk. Don’t have a BSN? Then you can get a certificate from your test or vaccination location.";
 "holder_checkForBSN_title" = "Do you have a Dutch citizen service number (BSN)?";
 "holder_chooseEventLocation_buttonSubTitle_GGD" = "Arrange your certificate via the GGD";
-"holder_chooseEventLocation_buttonSubTitle_other" = "Arrange certificate via, for example, your GP or care facility";
+"holder_chooseEventLocation_buttonSubTitle_other" = "Arrange your certificate via, for example, your GP or care facility";
 "holder_chooseEventLocation_buttonTitle_GGD" = "GGD";
 "holder_chooseEventLocation_buttonTitle_other" = "Another healthcare provider";
 "holder_chooseEventLocation_title" = "Where were you vaccinated?";
@@ -629,7 +633,7 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Data retrieved from: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Test date: %@";
 "holder_listRemoteEvents_listElement_title_vaccination" = "Vaccination";
-"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date %@";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date: %@";
 /* To be removed */
 "holder_listRemoteEvents_listElement_vaccination_title" = "Vaccination %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Your details: %@";
@@ -756,6 +760,10 @@
 "holder_wasUserTestedAtGGD_yes_buttonTitle" = "Yes, tested before or on %@";
 "holder_whereUserTested_body" = "Indicate where you were tested to create a certificate from your positive or negative test result.";
 "holder_whereUserTested_title" = "Where were you tested?";
+"international_recovery_created" = "Your positive test result was suitable for creating an intenational recovery certificate.";
+"international_recovery_rejected" = "With your positive test result it was not possible to create in international recovery certificate.";
+"international_vaccination_created" = "From your vaccination(s) an International vaccination certificate was created.";
+"international_vaccination_rejected" = "No international vaccination certificate could be created for your retrieved details.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
@@ -778,6 +786,10 @@
 "recommended.updateApp.title" = "Update your app in advance";
 "recommended_update_card_action" = "Update now";
 "recommended_update_card_description" = "You can update your app to a newer version now";
+"vaccination_completed_by_previous_recovery" = "Your positve testresult was added in your vaccination certificate.";
+"vaccination_completed_by_under_12_recovery" = "Your positive test result was added to your vaccination certificate until your 18th birthday.";
+"vaccination_dose_correction_applied" = "Your positve testresult was added in your vaccination certificate.";
+"vaccination_dose_correction_not_applied" = "Your positive test result could not be added to your vaccinations.";
 "visitorpass_code_description" = "Enter your approval code. You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";
