@@ -9,53 +9,20 @@ import UIKit
 
 class AppStatusViewController: GenericViewController<AppStatusView, AppStatusViewModel> {
 
-	/// The error Message
-	var errorMessage: String?
-
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
-		
-		modalPresentationStyle = .overFullScreen
-		
-		// Do the binding
 		setupBinding()
-		
-		// Actions
-		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
 	private func setupBinding() {
 
-		// Binding
-		viewModel.$showCannotOpenAlert.binding = { [weak self] in
-			if $0 {
-				self?.showCannotOpenUrl()
-			}
-		}
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
-		viewModel.$errorMessage.binding = { [weak self] in self?.errorMessage = $0 }
-		viewModel.$actionTitle.binding = { [weak self] in self?.sceneView.primaryButton.setTitle($0, for: .normal) }
-	}
-
-	/// User tapped on the button
-    @objc private func primaryButtonTapped() {
-
-		viewModel.actionButtonTapped()
-    }
-
-	/// Show alert that we can't open the url
-	private func showCannotOpenUrl() {
-		
-		showAlert(
-			AlertContent(
-				title: L.generalErrorTitle(),
-				subTitle: errorMessage ?? "",
-				okAction: AlertContent.Action.okay
-			)
-		)
+		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
+		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
+		viewModel.image.observe { [weak self] in self?.sceneView.image = $0 }
+		viewModel.actionTitle.observe { [weak self] in self?.sceneView.primaryTitle = $0 }
+		viewModel.alert.observe { [weak self] in self?.showAlert($0) }
+		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.actionButtonTapped() }
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
