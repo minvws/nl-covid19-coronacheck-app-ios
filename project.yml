@@ -510,6 +510,8 @@ schemes:
       configEnvironment: Development
     run:
       language: nl
+      commandLineArguments:
+        "-shouldInjectView": true
 
   Holder UI Tests:
     templates:
