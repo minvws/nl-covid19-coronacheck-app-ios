@@ -44,7 +44,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_holder_alert() {
 
 		// Given
-		let viewModel = AppStatusViewModel(
+		let viewModel = UpdateRequiredViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil,
 			flavor: .holder
@@ -72,7 +72,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_verifier_alert() {
 
 		// Given
-		let viewModel = AppStatusViewModel(
+		let viewModel = UpdateRequiredViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil,
 			flavor: .verifier
@@ -99,7 +99,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_holder_updateRequired() {
 
 		// Given
-		let viewModel = AppStatusViewModel(
+		let viewModel = UpdateRequiredViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil,
 			flavor: .holder
@@ -121,7 +121,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_verifier_updateRequired() {
 
 		// Given
-		let viewModel = AppStatusViewModel(
+		let viewModel = UpdateRequiredViewModel(
 			coordinator: appCoordinatorSpy,
 			appStoreUrl: nil,
 			flavor: .verifier
@@ -145,7 +145,7 @@ class AppStatusViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppDeactivatedViewModel(
 			coordinator: appCoordinatorSpy,
-			appStoreUrl: nil,
+			informationUrl: nil,
 			flavor: .holder
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
@@ -167,7 +167,7 @@ class AppStatusViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppDeactivatedViewModel(
 			coordinator: appCoordinatorSpy,
-			appStoreUrl: nil,
+			informationUrl: nil,
 			flavor: .verifier
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
@@ -187,7 +187,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_noInternet() {
 
 		// Given
-		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy, flavor: .holder)
+		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
 		sut = AppStatusViewController(viewModel: viewModel)
 
 		// When
