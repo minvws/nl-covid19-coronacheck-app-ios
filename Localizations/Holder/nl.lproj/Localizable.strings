@@ -1,3 +1,7 @@
+"domestic_recovery_created" = "Van je positieve testuitslag is een Nederlands herstelbewijs gemaakt.";
+"domestic_recovery_rejected" = "Van jouw positieve testuitslag kon geen Nederlands herstelbewijs worden gemaakt.";
+"domestic_vaccination_created" = "Van je vaccinaties is een Nederlands vaccinatiebewijs gemaakt.";
+"domestic_vaccination_rejected" = "Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -589,7 +593,6 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Je bezoekersbewijs is verlopen";
-"holder_dashboard_recoveryAlmostExpiredBanner_title" = "Je herstelbewijs verloopt bijna";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
@@ -709,8 +712,6 @@
 "holder_qr_code_hidden_explanation_title" = "Verborgen QR-code";
 "holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/nl/faq/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
-"holder_recoveryAlmostExpiredModal_message" = "Je herstelbewijs verloopt op %@. Daarna heb je geen coronabewijs meer. Heb je een nieuw coronabewijs nodig? Dan zijn er verschillende mogelijkheden. Lees meer op <a href=\"https://www.rijksoverheid.nl/onderwerpen/coronavirus-coronabewijs-en-coronatoegangsbewijs\">Rijksoverheid.nl</a>";
-"holder_recoveryAlmostExpiredModal_title" = "Herstelbewijs verloopt bijna";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_scanner_error_action" = "Opnieuw scannen";
 "holder_scanner_error_message_ctb" = "Je hoeft je Nederlandse QR-code niet te scannen. Scan de QR-code op het internationale bewijs dat je van je zorgverlener of de overheid hebt gekregen. Hierin staan de gegevens die nodig zijn om je bewijs in de app te zetten. Je herkent dit bewijs aan de Europese vlag.";
@@ -760,6 +761,10 @@
 "holder_wasUserTestedAtGGD_yes_buttonTitle" = "Ja, getest voor of op %@";
 "holder_whereUserTested_body" = "Geef aan waar je bent getest om een bewijs te maken van je positieve of negatieve testuitslag.";
 "holder_whereUserTested_title" = "Waar ben je getest?";
+"international_recovery_created" = "Van je positieve testuitslag is een internationaal herstelbewijs gemaakt.";
+"international_recovery_rejected" = "Van jouw positieve testuitslag kon geen internationaal herstelbewijs worden gemaakt.";
+"international_vaccination_created" = "Van je vaccinatie(s) is een internationaal vaccinatiebewijs gemaakt.";
+"international_vaccination_rejected" = "Van de opgehaalde gegevens kon geen internationaal vaccinatiebewijs worden gemaakt.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";
@@ -782,6 +787,10 @@
 "recommended.updateApp.title" = "Update alvast je app";
 "recommended_update_card_action" = "Nu updaten";
 "recommended_update_card_description" = "Je kunt de app al naar een nieuwere versie updaten";
+"vaccination_completed_by_previous_recovery" = "Je positieve testuitslag is meegerekend in je vaccinatiebewijs.";
+"vaccination_completed_by_under_12_recovery" = "Je positieve testuitslag is tot je 18e verjaardag meegerekend in je vaccinatiebewijs.";
+"vaccination_dose_correction_applied" = "Je positieve testuitslag is meegerekend in je vaccinatiebewijs.";
+"vaccination_dose_correction_not_applied" = "Je positieve testuitslag had geen effect op je vaccinaties.";
 "visitorpass_code_description" = "Vul je beoordelingscode in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";
