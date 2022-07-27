@@ -38,19 +38,6 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 		expect(self.sut.alert).toNot(beNil())
 	}
 
-	func test_backButtonTapped_feedbackState() {
-
-		// Given
-		sut.viewState = .feedback(content: Content(title: "Test"))
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back(eventMode: .vaccination)
-	}
-
 	func test_warnBeforeGoBack() {
 
 		// When

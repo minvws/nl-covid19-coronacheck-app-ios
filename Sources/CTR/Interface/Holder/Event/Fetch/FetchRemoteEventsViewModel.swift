@@ -4,8 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
-// swiftlint:disable file_length
 
 import Foundation
 
@@ -172,13 +170,8 @@ final class FetchRemoteEventsViewModel {
 	}
 
 	func backButtonTapped() {
-
-		switch viewState {
-			case .loading:
-				warnBeforeGoBack()
-			case .feedback:
-				goBack()
-		}
+		
+		warnBeforeGoBack()
 	}
 
 	func warnBeforeGoBack() {

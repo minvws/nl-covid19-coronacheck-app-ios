@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TraitWrapper<View: BaseView>: BaseView {
+class TraitWrapper: BaseView {
 	
-	let wrappedView: View
+	let wrappedView: UIView
 	
 	private lazy var constrainedWidthConstraint: NSLayoutConstraint = wrappedView.widthAnchor.constraint(equalTo: widthAnchor)
 	private lazy var regularWidthConstraint: NSLayoutConstraint = {
@@ -18,7 +18,7 @@ class TraitWrapper<View: BaseView>: BaseView {
 	
 	private var backgroundColorObserverToken: NSKeyValueObservation?
 
-	init(_ sceneView: View) {
+	init(_ sceneView: UIView) {
 		self.wrappedView = sceneView
 		super.init(frame: .zero)
 	}
@@ -65,6 +65,8 @@ class TraitWrapper<View: BaseView>: BaseView {
 	}
 	
 	private func setupBackgroundColorObserver() {
+		guard let wrappedView = self.wrappedView as? BaseView else { return }
+		
 		// Observe the sceneView background color for changes and apply to self:
 		backgroundColorObserverToken = wrappedView.observe(\.observableBackgroundColor, options: [.new]) { [weak self] _, change in
 			self?.backgroundColor = change.newValue!
