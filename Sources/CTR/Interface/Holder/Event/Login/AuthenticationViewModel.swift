@@ -140,7 +140,9 @@ extension AuthenticationViewModel {
 					)
 				)
 				return
-			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
+			} else if error.localizedDescription.contains("saml_authn_failed") ||
+						error.localizedDescription.contains("cancelled:") ||
+						clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
 				Current.logHandler.logDebug("User cancelled")
 				userCancelled()
 				return
@@ -179,9 +181,16 @@ extension AuthenticationViewModel {
 		)
 	}
 	
-	func cancelAuthorization() {
+	func didBecomeActive() {
 		
 		guard appAuthState?.currentAuthorizationFlow != nil else { return }
+		guard authenticationMode == .manyAuthenticationExchange else {
+			// When we receive the didBecomeActive notification:
+			// - For manyAuthenticationExchange that means the user returned to the app, canceling the login
+			// - For patientAuthenticationProvider that means the user accepted the popup to login to the GGD.
+			//   That should not lead to a cancel action.
+			return
+		}
 		userCancelled()
 	}
 
