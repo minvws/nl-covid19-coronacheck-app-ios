@@ -70,3 +70,6 @@ custom_rules:
     name: "dump usage"
     regex: "((\\bdump)|(Swift\\.dump))\\s*\\("
     message: "Prefer logDebug over dump"
+  snapshot_recording_turned_on:
+    included: "CTRTests/.*\\.swift"
+    regex: "^\\s*isRecording = true"
