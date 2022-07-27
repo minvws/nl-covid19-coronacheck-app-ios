@@ -26,26 +26,35 @@ final class ShowHintsViewModel {
 	
 	// MARK: - Initializer
 	
-	init(hints: NonemptyArray<String>, coordinator: OpenUrlProtocol & EventCoordinatorDelegate) {
+	init?(hints: NonemptyArray<String>, coordinator: OpenUrlProtocol & EventCoordinatorDelegate) {
+		
+		let hintsMappedToMessages = hints.contents
+			.compactMap(Self.sanitizeHintKey)
+			.compactMap { safeHintKey -> String? in
+				let localized = NSLocalizedString(safeHintKey, comment: "")
+				guard localized != safeHintKey else { return nil } // we don't want to show the key if there's no translation
+				return localized
+			}
+		
+		guard hintsMappedToMessages.isNotEmpty else { return nil }
 		
 		self.coordinator = coordinator
-		self.message = hints
-			.contents
+		self.message = hintsMappedToMessages
 			.map { "<p>\($0)</p>" }
 			.joined(separator: "\n")
 		
 		// Special case..
 		if hints.contents.contains(where: { $0 == "negativetest_without_vaccinationasssesment" }) {
-			mode = .shouldCompleteVaccinationAssessment
+			self.mode = .shouldCompleteVaccinationAssessment
 		} else {
-			mode = .standard
+			self.mode = .standard
 		}
 		
 		switch mode {
 			case .standard:
-				buttonTitle = L.general_toMyOverview()
+				self.buttonTitle = L.general_toMyOverview()
 			case .shouldCompleteVaccinationAssessment:
-				buttonTitle = L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
+				self.buttonTitle = L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
 		}
 	}
 	
@@ -63,5 +72,16 @@ final class ShowHintsViewModel {
 			case .shouldCompleteVaccinationAssessment:
 				coordinator?.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
 		}
+	}
+	
+	/// Performs a basic sanity/safety check that the key consists of only alphanumeric and "_":
+	private static func sanitizeHintKey(_ rawHintKey: String) -> String? {
+		var allowedCharacters = CharacterSet.alphanumerics
+		allowedCharacters.insert(charactersIn: "_")
+
+		let hintKeyCharacters = CharacterSet(charactersIn: rawHintKey)
+		
+		guard hintKeyCharacters.isSubset(of: allowedCharacters) else { return nil }
+		return rawHintKey
 	}
 }
