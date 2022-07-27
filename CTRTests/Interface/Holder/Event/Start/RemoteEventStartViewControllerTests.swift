@@ -83,20 +83,6 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 
-	func test_backButtonTapped() {
-
-		// Given
-		sut = RemoteEventStartViewController(viewModel: viewModel)
-		loadView()
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
-	}
-
 	func test_primaryButtonTapped() {
 
 		// Given

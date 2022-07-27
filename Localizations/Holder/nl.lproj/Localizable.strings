@@ -631,7 +631,7 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Gegevens opgehaald bij: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Testdatum: %@";
 "holder_listRemoteEvents_listElement_title_vaccination" = "Vaccinatie";
-"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccinatiedatum %@";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccinatiedatum: %@";
 /* To be removed */
 "holder_listRemoteEvents_listElement_vaccination_title" = "Vaccinatie %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Jouw gegevens: %@";

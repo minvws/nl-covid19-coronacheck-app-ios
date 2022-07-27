@@ -629,7 +629,7 @@
 "holder_listRemoteEvents_listElement_retrievedFrom_single" = "Data retrieved from: %@";
 "holder_listRemoteEvents_listElement_testDate" = "Test date: %@";
 "holder_listRemoteEvents_listElement_title_vaccination" = "Vaccination";
-"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date %@";
+"holder_listRemoteEvents_listElement_vaccinationDate" = "Vaccination date: %@";
 /* To be removed */
 "holder_listRemoteEvents_listElement_vaccination_title" = "Vaccination %@";
 "holder_listRemoteEvents_listElement_yourDetails" = "Your details: %@";

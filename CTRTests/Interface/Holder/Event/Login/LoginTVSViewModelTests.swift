@@ -137,7 +137,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
 
 		// When
-		sut.cancelAuthorization()
+		sut.didBecomeActive()
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == false
@@ -155,7 +155,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
 
 		// When
-		sut.cancelAuthorization()
+		sut.didBecomeActive()
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true

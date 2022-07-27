@@ -703,15 +703,9 @@ extension HolderCoordinator: EventFlowDelegate {
 	
 	func eventFlowDidCancel() {
 		
-		/// The user cancelled the flow. Go back one page.
+		/// The user cancelled the event flow.
 		removeChildCoordinator()
-		navigationController.popViewController(animated: true)
-	}
-	
-	func eventFlowDidCancelFromBackSwipe() {
-		
-		/// The user cancelled the flow from back swipe.
-		removeChildCoordinator()
+		Current.logHandler.logInfo("HolderCoordinator: eventFlowDidCancel")
 	}
 }
 
