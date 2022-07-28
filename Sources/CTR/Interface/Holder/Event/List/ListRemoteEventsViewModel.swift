@@ -310,11 +310,11 @@ class ListRemoteEventsViewModel {
 	}
 
 	private func completeFlow(hints: [String]?) {
-		if let hints = hints, hints.isNotEmpty {
-			coordinator?.listEventsScreenDidFinish(.showHints(hints))
-		} else {
+//		if let hints = hints, hints.isNotEmpty {
+//			coordinator?.listEventsScreenDidFinish(.showHints(hints))
+//		} else {
 			coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
-		}
+//		}
 	}
 	
 	// MARK: - Negative Test Flow
@@ -365,16 +365,14 @@ class ListRemoteEventsViewModel {
 
 			guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
 				// In 0G, this is expected behaviour. Go to dashboard
-//				self.completeFlow(hints: greencardResponse.hints)
-				self.completeFlow(hints: nil)
+				self.completeFlow(hints: greencardResponse.hints)
 				return
 			}
 
 			// End state 2
 			viewState = internationalQROnly()
 		} else {
-//			completeFlow(hints: greencardResponse.hints)
-			completeFlow(hints: nil)
+			completeFlow(hints: greencardResponse.hints)
 		}
 	}
 	
