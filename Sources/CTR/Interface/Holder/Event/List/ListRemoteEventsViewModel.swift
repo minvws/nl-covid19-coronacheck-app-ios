@@ -365,14 +365,16 @@ class ListRemoteEventsViewModel {
 
 			guard !Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() else {
 				// In 0G, this is expected behaviour. Go to dashboard
-				self.completeFlow(hints: greencardResponse.hints)
+//				self.completeFlow(hints: greencardResponse.hints)
+				self.completeFlow(hints: nil)
 				return
 			}
 
 			// End state 2
 			viewState = internationalQROnly()
 		} else {
-			completeFlow(hints: greencardResponse.hints)
+//			completeFlow(hints: greencardResponse.hints)
+			completeFlow(hints: nil)
 		}
 	}
 	
