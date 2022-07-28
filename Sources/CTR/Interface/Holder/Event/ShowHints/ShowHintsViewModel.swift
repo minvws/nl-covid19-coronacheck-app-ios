@@ -13,7 +13,7 @@ final class ShowHintsViewModel {
 
 	// MARK: - Bindable
 
-	@Bindable private(set) var title: String = L.holder_eventHints_title()
+	@Bindable private(set) var title: String = "" // L.holder_eventHints_title()
 	@Bindable private(set) var message: String
 	@Bindable private(set) var buttonTitle: String = L.general_toMyOverview()
 

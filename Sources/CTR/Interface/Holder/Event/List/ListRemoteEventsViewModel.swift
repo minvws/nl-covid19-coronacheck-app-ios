@@ -310,11 +310,11 @@ class ListRemoteEventsViewModel {
 	}
 
 	private func completeFlow(hints: [String]?) {
-		if let hints = hints, hints.isNotEmpty {
-			coordinator?.listEventsScreenDidFinish(.showHints(hints))
-		} else {
+//		if let hints = hints, hints.isNotEmpty {
+//			coordinator?.listEventsScreenDidFinish(.showHints(hints))
+//		} else {
 			coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
-		}
+//		}
 	}
 	
 	// MARK: - Negative Test Flow
