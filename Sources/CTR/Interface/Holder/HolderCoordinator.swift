@@ -354,7 +354,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart() {
 		
-		//		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 		navigationController.popToRootViewController(animated: true)
 	}
 	
