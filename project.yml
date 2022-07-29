@@ -135,7 +135,6 @@ targetTemplates:
           NETWORK_CONFIGURATION: TEST
           LOG_LEVEL: debug
           SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
-          OTHER_LDFLAGS: -Xlinker -interposable # for Inject
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
