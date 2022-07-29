@@ -81,7 +81,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_unknown_withCompletionReason() {
@@ -120,7 +120,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withMedicalStatement() {
@@ -159,7 +159,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withPersonalStatement() {
@@ -194,7 +194,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_noReason() {

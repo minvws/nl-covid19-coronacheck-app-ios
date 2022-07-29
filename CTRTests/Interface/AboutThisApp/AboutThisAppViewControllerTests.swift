@@ -62,7 +62,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			.to(haveCount(7))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(6))
-		expect(self.sut.sceneView.appVersion).toNot(beNil())
+		expect(self.sut.sceneView.appVersion) != nil
 
 		sut.assertImage()
 	}
@@ -92,7 +92,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			.to(haveCount(5))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(2))
-		expect(self.sut.sceneView.appVersion).toNot(beNil())
+		expect(self.sut.sceneView.appVersion) != nil
 		
 		sut.assertImage()
 	}
@@ -119,7 +119,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			.to(haveCount(1))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(5))
-		expect(self.sut.sceneView.appVersion).toNot(beNil())
+		expect(self.sut.sceneView.appVersion) != nil
 		
 		sut.assertImage()
 	}

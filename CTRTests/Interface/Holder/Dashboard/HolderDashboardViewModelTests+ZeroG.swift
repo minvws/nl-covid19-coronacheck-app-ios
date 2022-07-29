@@ -178,7 +178,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "14 juli 2021"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
@@ -191,7 +191,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines.count) == 1
 			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value[4]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
@@ -205,7 +205,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot donderdag 15 juli 16:02"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		expect(self.sut.internationalCards.value[5]).toEventually(beAddCertificateCard())
 		expect(self.sut.internationalCards.value[6]).toEventually(beRecommendCoronaMelderCard())

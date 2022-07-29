@@ -35,7 +35,7 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 	}
 
 	func test_warnBeforeGoBack() {
@@ -45,7 +45,7 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 	}
 
 	func test_goBack() {
@@ -126,7 +126,7 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 220 000 429")
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 

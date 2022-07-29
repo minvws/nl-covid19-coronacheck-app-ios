@@ -85,6 +85,6 @@ class UpdateRequiredViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.appCoordinatorSpy.invokedOpenUrl) == false
-		expect(self.sut.alert.value).toNot(beNil())
+		expect(self.sut.alert.value) != nil
 	}
 }

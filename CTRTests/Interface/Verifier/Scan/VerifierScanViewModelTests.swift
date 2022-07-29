@@ -115,7 +115,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		sut.parseQRMessage("test_verificationFailed_nlDCC")
 
 		// Then
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.verifierResultAlertDccTitle()
 		expect(self.sut.alert?.subTitle) == L.verifierResultAlertDccMessage()
 	}
@@ -131,7 +131,7 @@ class VerifierScanViewModelTests: XCTestCase {
 		sut.parseQRMessage("test_verificationFailed_unknownDCC")
 
 		// Then
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.verifierResultAlertUnknownTitle()
 		expect(self.sut.alert?.subTitle) == L.verifierResultAlertUnknownMessage()
 	}

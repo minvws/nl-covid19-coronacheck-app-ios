@@ -159,7 +159,7 @@ class GreenCardLoaderTests: XCTestCase {
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).to(beNil())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last) == nil
 	}
 	
 	func test_signTheEvents_storeGreenCards_withOnlyInternationalGreenCard_clearsHolderSecretKey() {
@@ -180,7 +180,7 @@ class GreenCardLoaderTests: XCTestCase {
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).to(beNil())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last) == nil
 	}
 	
 	func test_signTheEvents_storeGreenCards_withDomestic_failToSave() {
@@ -205,7 +205,7 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 1
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCardCount) == 0
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).toNot(beNil())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last) != nil
 		
 		expect(result?.failureError) == .failedToSaveGreenCards
 	}
@@ -232,7 +232,7 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 1
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCardCount) == 0
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).toNot(beNil())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last) != nil
 		
 		let sentRequestParameters = try XCTUnwrap(self.environmentSpies.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
 		expect(sentRequestParameters).to(haveCount(4))
@@ -267,7 +267,7 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 0
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCardCount) == 1
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).to(beNil())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last) == nil
 		
 		let sentRequestParameters = try XCTUnwrap(self.environmentSpies.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
 		expect(sentRequestParameters).to(haveCount(4))
@@ -303,7 +303,7 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 1
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCardCount) == 1
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last).toNot(beNil())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeyList.last) != nil
 		
 		let sentRequestParameters = try XCTUnwrap(self.environmentSpies.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
 		expect(sentRequestParameters).to(haveCount(4))

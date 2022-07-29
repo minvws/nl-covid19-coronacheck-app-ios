@@ -98,7 +98,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
@@ -127,7 +127,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.disclosurePolicy) == DisclosurePolicy.policy3G
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard { title, didTapAdd in
@@ -179,7 +179,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
@@ -220,7 +220,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.disclosurePolicy) == DisclosurePolicy.policy3G
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
@@ -250,7 +250,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -275,7 +275,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
@@ -325,7 +325,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 	}
@@ -350,7 +350,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -374,7 +374,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(24 * hours * ago))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(24 * hours * ago))) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22 * hours * ago))) == "Verloopt over 22 uur en 1 minuut"
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut en 1 seconde"
 		}))
@@ -405,7 +405,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -433,10 +433,10 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))) == nil
 		}))
 	}
 	
@@ -463,7 +463,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -485,10 +485,10 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))) == nil
 		}))
 	}
 	
@@ -515,7 +515,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -536,10 +536,10 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.disclosurePolicy) == .policy3G
 			
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))) == nil
 		}))
 		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -566,10 +566,10 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.disclosurePolicy) == .policy1G
 			
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))) == nil
 		}))
 		expect(self.sut.domesticCards.value[4]).toEventually(beAddCertificateCard())
 	}
@@ -606,7 +606,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -634,10 +634,10 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(17 * hours * fromNow))) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(19 * hours * fromNow))) == "Verloopt over 4 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
-			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))).to(beNil())
+			expect(expiryCountdownEvaluator?(now.addingTimeInterval(25 * hours * fromNow))) == nil
 		}))
 	}
 	
@@ -664,7 +664,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			expect(title) == L.holder_dashboard_domesticQRCard_3G_title()
@@ -690,7 +690,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
@@ -717,7 +717,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
 			expect(title) == L.holder_dashboard_only1GaccessBanner_title()
@@ -738,7 +738,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
@@ -765,7 +765,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			expect(isDisabledByDisclosurePolicy) == false
@@ -784,7 +784,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(23 * hours))) == "Verloopt over 1 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow).addingTimeInterval(1 * hours))) == "Verloopt over 23 uur"
 		}))
@@ -841,7 +841,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		expect(self.sut.internationalCards.value[2]).toEventually(beAddCertificateCard())
 	}
@@ -894,7 +894,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1024,7 +1024,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1074,7 +1074,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1127,7 +1127,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1172,7 +1172,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(299 * days * fromNow))) == "Verloopt over 24 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval((299 * days) - (6 * hours) * fromNow))) == "Verloopt over 1 dag en 6 uur"
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval((299 * days) + (12 * hours) * fromNow))) == "Verloopt over 12 uur"
@@ -1205,7 +1205,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -1237,7 +1237,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
 	}
@@ -1265,7 +1265,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
@@ -1291,7 +1291,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
 	}
@@ -1322,7 +1322,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(
@@ -1337,7 +1337,7 @@ extension HolderDashboardViewModelTests {
 				expect(nowValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 				expect(nowValidityTexts[2].lines[0]) == L.general_testcertificate().capitalized + ":"
 				
-				expect(expiryCountdownEvaluator?(now)).to(beNil())
+				expect(expiryCountdownEvaluator?(now)) == nil
 			}
 		))
 		
@@ -1367,7 +1367,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(
@@ -1386,7 +1386,7 @@ extension HolderDashboardViewModelTests {
 				didTapViewQR()
 				expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 				
-				expect(expiryCountdownEvaluator?(now)).to(beNil())
+				expect(expiryCountdownEvaluator?(now)) == nil
 			}
 		))
 		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(
@@ -1406,7 +1406,7 @@ extension HolderDashboardViewModelTests {
 				didTapViewQR()
 				expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 				
-				expect(expiryCountdownEvaluator?(now)).to(beNil())
+				expect(expiryCountdownEvaluator?(now)) == nil
 			}
 		))
 		
@@ -1437,7 +1437,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(
@@ -1457,7 +1457,7 @@ extension HolderDashboardViewModelTests {
 				didTapViewQR()
 				expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 				
-				expect(expiryCountdownEvaluator?(now)).to(beNil())
+				expect(expiryCountdownEvaluator?(now)) == nil
 			}
 		))
 		expect(self.sut.domesticCards.value[3]).toEventually(beDomesticQRCard(
@@ -1476,7 +1476,7 @@ extension HolderDashboardViewModelTests {
 				didTapViewQR()
 				expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 				
-				expect(expiryCountdownEvaluator?(now)).to(beNil())
+				expect(expiryCountdownEvaluator?(now)) == nil
 			}
 		))
 		
@@ -1507,7 +1507,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -1519,7 +1519,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[1].lines[0]) == L.general_recoverycertificate().capitalized + ":"
 			expect(nowValidityTexts[2].lines[0]) == L.general_testcertificate().capitalized + ":"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1547,7 +1547,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -1616,7 +1616,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "14 juli 2021"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
@@ -1629,7 +1629,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines.count) == 1
 			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
@@ -1643,7 +1643,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot donderdag 15 juli 16:02"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1727,7 +1727,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		
 		expect(self.sut.domesticCards.value[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _, _ in
@@ -1836,7 +1836,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot maandag 26 juli 17:02"
 			expect(nowValidityTexts[1].kind) == .past // the expired test (hidden in UI)
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -1857,7 +1857,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot dinsdag 13 juli 05:02"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -1927,7 +1927,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -1948,7 +1948,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot dinsdag 13 juli 05:02"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2018,7 +2018,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -2039,7 +2039,7 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
 			expect(nowValidityTexts[0].lines[1]) == "geldig tot dinsdag 13 juli 05:02"
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2065,7 +2065,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -2090,7 +2090,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2114,7 +2114,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -2139,7 +2139,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2163,7 +2163,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -2188,7 +2188,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2213,7 +2213,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
@@ -2235,7 +2235,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2260,7 +2260,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
@@ -2280,7 +2280,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2328,7 +2328,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2373,7 +2373,7 @@ extension HolderDashboardViewModelTests {
 			didTapViewQR()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	 
@@ -2399,7 +2399,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holder_dashboard_originExpiredBanner_domesticRecovery_title()
@@ -2571,7 +2571,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[0]) === oneOfTwoGreencardObjectID
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[1]) === twoOfTwoGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 	
@@ -2657,7 +2657,7 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[2]) === threeOfTwoGreencardObjectID
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs[3]) === threeOfThreeGreencardObjectID
 			
-			expect(expiryCountdownEvaluator?(now)).to(beNil())
+			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 	}
 }

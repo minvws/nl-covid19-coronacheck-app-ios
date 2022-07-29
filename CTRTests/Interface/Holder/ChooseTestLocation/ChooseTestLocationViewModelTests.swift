@@ -30,7 +30,7 @@ class ChooseTestLocationViewModelTests: XCTestCase {
 		expect(self.sut.title.value) == L.holderLocationTitle()
 		expect(self.sut.message.value) == L.holderLocationMessage()
 		expect(self.sut.optionModels.value).to(haveCount(2))
-		expect(self.sut.bottomButton.value).toNot(beNil())
+		expect(self.sut.bottomButton.value) != nil
 	}
 	
 	func test_createNegativeTestFromGGD() {

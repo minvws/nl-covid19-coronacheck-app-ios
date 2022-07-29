@@ -49,7 +49,7 @@ final class RiskSettingUnselectedViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonTitle) == L.verifier_risksetting_confirmation_button()
 		expect(self.sut.errorMessage) == L.verification_policy_selection_error_message()
 		expect(self.sut.shouldDisplayNotSetError) == false
-		expect(self.sut.selectVerificationPolicy).to(beNil())
+		expect(self.sut.selectVerificationPolicy) == nil
 	}
 	
 	func test_confirmSetting_whenUnselected_shouldDisplayError() {

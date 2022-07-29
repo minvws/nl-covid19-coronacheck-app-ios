@@ -54,7 +54,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.holder_fetchRemoteEvents_title()
-		expect(self.sut.sceneView.message).to(beNil())
+		expect(self.sut.sceneView.message) == nil
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -103,9 +103,9 @@ class AuthenticationViewControllerTests: XCTestCase {
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
-			expect(content.primaryAction).toNot(beNil())
+			expect(content.primaryAction) != nil
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
-			expect(content.secondaryAction).toNot(beNil())
+			expect(content.secondaryAction) != nil
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")

@@ -32,8 +32,8 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].title) == L.holder_newintheapp_content_onlyInternationalCertificates_0G_title()
 		expect(result[0].content) == L.holder_newintheapp_content_onlyInternationalCertificates_0G_body()
 		expect(result[0].image) == I.onboarding.validity()
-		expect(result[0].imageBackgroundColor).to(beNil())
-		expect(result[0].nextButtonTitle).to(beNil())
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
 	}
 	
 	func test_content_1G() {
@@ -50,8 +50,8 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].title) == L.holder_newintheapp_content_only1G_title()
 		expect(result[0].content) == L.holder_newintheapp_content_only1G_body()
 		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
-		expect(result[0].imageBackgroundColor).to(beNil())
-		expect(result[0].nextButtonTitle).to(beNil())
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
 	}
 
 	func test_content_3G() {
@@ -69,8 +69,8 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].title) == L.holder_newintheapp_content_only3G_title()
 		expect(result[0].content) == L.holder_newintheapp_content_only3G_body()
 		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
-		expect(result[0].imageBackgroundColor).to(beNil())
-		expect(result[0].nextButtonTitle).to(beNil())
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
 	}
 
 	func test_content_3G_from_0g() {
@@ -88,15 +88,15 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].title) == L.holder_newintheapp_content_only3G_title()
 		expect(result[0].content) == L.holder_newintheapp_content_only3G_body()
 		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
-		expect(result[0].imageBackgroundColor).to(beNil())
-		expect(result[0].nextButtonTitle).to(beNil())
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
 		
 		expect(result[1].tagline) == L.general_newintheapp()
 		expect(result[1].title) == L.holder_newintheapp_content_dutchAndInternationalCertificates_title()
 		expect(result[1].content) == L.holder_newintheapp_content_dutchAndInternationalCertificates_body()
 		expect(result[1].image) == I.disclosurePolicy.dutchAndInternationalQRCards()
 		expect(result[1].nextButtonTitle) == L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
-		expect(result[1].imageBackgroundColor).to(beNil())
+		expect(result[1].imageBackgroundColor) == nil
 	}
 
 	func test_content_1GWith3G() {
@@ -113,8 +113,8 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].title) == L.holder_newintheapp_content_3Gand1G_title()
 		expect(result[0].content) == L.holder_newintheapp_content_3Gand1G_body()
 		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
-		expect(result[0].imageBackgroundColor).to(beNil())
-		expect(result[0].nextButtonTitle).to(beNil())
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
 	}
 
 	func test_content_noPolicy() {

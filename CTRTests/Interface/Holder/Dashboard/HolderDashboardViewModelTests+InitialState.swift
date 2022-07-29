@@ -19,7 +19,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.title.value) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle.value) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter.value) == true
-		expect(self.sut.currentlyPresentedAlert.value).to(beNil())
+		expect(self.sut.currentlyPresentedAlert.value) == nil
 
 		expect(self.sut.internationalCards.value).toEventually(haveCount(2))
 		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
@@ -37,12 +37,12 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.title.value) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle.value) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter.value) == true
-		expect(self.sut.currentlyPresentedAlert.value).to(beNil())
+		expect(self.sut.currentlyPresentedAlert.value) == nil
 
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
 		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_empty_domestic_only3Gaccess_message()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
 			expect(title) == L.holder_dashboard_only3GaccessBanner_title()
@@ -58,12 +58,12 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.title.value) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle.value) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter.value) == true
-		expect(self.sut.currentlyPresentedAlert.value).to(beNil())
+		expect(self.sut.currentlyPresentedAlert.value) == nil
 
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
 		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_empty_domestic_only1Gaccess_message()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
 			expect(title) == L.holder_dashboard_only1GaccessBanner_title()
@@ -80,12 +80,12 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.title.value) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle.value) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter.value) == true
-		expect(self.sut.currentlyPresentedAlert.value).to(beNil())
+		expect(self.sut.currentlyPresentedAlert.value) == nil
 
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
 		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
-			expect(buttonTitle).to(beNil())
+			expect(buttonTitle) == nil
 		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
 			expect(title) == L.holder_dashboard_3Gand1GaccessBanner_title()
@@ -107,7 +107,7 @@ extension HolderDashboardViewModelTests {
 		// Assert
 		expect(self.sut.title.value) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle.value) == L.holderMenuProof()
-		expect(self.sut.currentlyPresentedAlert.value).to(beNil())
+		expect(self.sut.currentlyPresentedAlert.value) == nil
 
 		expect(self.sut.shouldShowAddCertificateFooter.value).toEventually(beTrue())
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))

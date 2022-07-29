@@ -72,7 +72,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		expect(self.verificationPolicyManagerSpy.invokedWipeScanMode) == false
 		expect(self.scanLockManagerSpy.invokedWipeScanMode) == false
 		expect(self.scanLogManagerSpy.invokedWipePersistedData) == false
-		expect(self.userSettingsSpy.invokedPolicyInformationShown).to(beNil())
+		expect(self.userSettingsSpy.invokedPolicyInformationShown) == nil
 	}
 	
 	func test_enableVerificationPolicies_shouldStoreKnownPolicies() {
@@ -91,7 +91,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G]
 		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
-		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy) == nil
 	}
 	
 	func test_enableVerificationPolicies_shouldEnable1GPolicy() {
@@ -111,7 +111,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G]
 		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
-		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy) == nil
 	}
 	
 	func test_wipePersistedData_shouldEnableDefaultPolicy() {
@@ -121,6 +121,6 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 		// Then
 		expect(self.userSettingsSpy.invokedConfigVerificationPolicies) == [VerificationPolicy.policy3G]
 		expect(self.verificationPolicyManagerSpy.invokedUpdateCount) == 1
-		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy).to(beNil())
+		expect(self.verificationPolicyManagerSpy.invokedUpdateParameters?.verificationPolicy) == nil
 	}
 }

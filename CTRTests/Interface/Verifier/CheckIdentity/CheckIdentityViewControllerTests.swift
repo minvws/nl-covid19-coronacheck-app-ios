@@ -57,15 +57,15 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.sceneView.checkIdentity) == L.verifierResultAccessCheckidentity()
-		expect(self.sut.sceneView.dccScanned).to(beNil())
-		expect(self.sut.sceneView.dccFlag).to(beNil())
+		expect(self.sut.sceneView.dccScanned) == nil
+		expect(self.sut.sceneView.dccFlag) == nil
 		expect(self.sut.navigationItem.accessibilityLabel) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 		expect(self.sut.title) == L.verifierResultIdentityTitle()
 		expect(self.sut.sceneView.dayOfBirth) == "10"
 		expect(self.sut.sceneView.monthOfBirth) == "J"
 		expect(self.sut.sceneView.firstName) == "B"
 		expect(self.sut.sceneView.lastName) == "C"
-		expect(self.sut.sceneView.primaryButtonIcon).toNot(beNil())
+		expect(self.sut.sceneView.primaryButtonIcon) != nil
 		
 		// Snapshot
 		sut.assertImage(containedInNavigationController: true)
@@ -94,15 +94,15 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryTitle) == L.verifierResultAccessIdentityverified()
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.sceneView.checkIdentity) == L.verifierResultAccessCheckidentity()
-		expect(self.sut.sceneView.dccScanned).to(beNil())
-		expect(self.sut.sceneView.dccFlag).to(beNil())
+		expect(self.sut.sceneView.dccScanned) == nil
+		expect(self.sut.sceneView.dccFlag) == nil
 		expect(self.sut.navigationItem.accessibilityLabel) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 		expect(self.sut.title) == L.verifierResultIdentityTitle()
 		expect(self.sut.sceneView.dayOfBirth) == "10"
 		expect(self.sut.sceneView.monthOfBirth) == "J"
 		expect(self.sut.sceneView.firstName) == "B"
 		expect(self.sut.sceneView.lastName) == "C"
-		expect(self.sut.sceneView.primaryButtonIcon).to(beNil())
+		expect(self.sut.sceneView.primaryButtonIcon) == nil
 		
 		// Snapshot
 		sut.assertImage(containedInNavigationController: true)
@@ -168,7 +168,7 @@ final class CheckIdentityViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.sceneView.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.sceneView.dccScanned) == L.verifierResultAccessDcc()
-		expect(self.sut.sceneView.dccFlag).to(beNil())
+		expect(self.sut.sceneView.dccFlag) == nil
 		expect(self.sut.navigationItem.accessibilityLabel) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 		expect(self.sut.title) == L.verifierResultIdentityTitle()
 		expect(self.sut.sceneView.dayOfBirth) == "10"

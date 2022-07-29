@@ -48,7 +48,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		group.action?()
 		
 		// Then
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.holder_storedEvent_alert_removeEvents_title()
 		expect(self.sut.alert?.subTitle) == L.holder_storedEvent_alert_removeEvents_message()
 	}

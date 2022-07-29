@@ -57,7 +57,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
+		expect(self.sut.sceneView.footer) == nil
 
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -111,7 +111,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
+		expect(self.sut.sceneView.footer) == nil
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -135,7 +135,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
+		expect(self.sut.sceneView.footer) == nil
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -189,7 +189,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
+		expect(self.sut.sceneView.footer) == nil
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -219,7 +219,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
+		expect(self.sut.sceneView.footer) == nil
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
@@ -273,7 +273,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.holderEventAboutTitle()
-		expect(self.sut.sceneView.footer).to(beNil())
+		expect(self.sut.sceneView.footer) == nil
 		
 		sut.assertImage(containedInNavigationController: true)
 	}

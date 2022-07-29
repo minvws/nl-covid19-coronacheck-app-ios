@@ -20,7 +20,7 @@ class ProgressIndicationCounterTests: XCTestCase {
 		let sut = ProgressIndicationCounter { isActive = $0 }
 
 		// Assert
-		expect(isActive).to(beNil())
+		expect(isActive) == nil
 		expect(sut.isActive) == false
 	}
 
@@ -46,7 +46,7 @@ class ProgressIndicationCounterTests: XCTestCase {
 		sut.decrement()
 
 		// Assert
-		expect(isActive).to(beNil())
+		expect(isActive) == nil
 		expect(sut.isActive) == false
 	}
 

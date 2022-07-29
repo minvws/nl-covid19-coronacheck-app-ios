@@ -39,7 +39,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title) == L.verifier_risksetting_active_title()
-		expect(self.sut.header).to(beNil())
+		expect(self.sut.header) == nil
 		expect(self.sut.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
 		expect(self.sut.lowRiskSubtitle) == L.verifier_risksetting_subtitle_3G()
 		expect(self.sut.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)), \(L.verifier_risksetting_subtitle_3G())"
@@ -75,7 +75,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		// When
 
 		// Then
-		expect(self.sut.header).to(beNil())
+		expect(self.sut.header) == nil
 	}
 	
 	func test_confirmSetting_shouldSetHighRisk() {
@@ -107,7 +107,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Assert
@@ -128,7 +128,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		sut.confirmSetting()
 		
 		// Fish in Alert for OK action & trigger it:
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		expect(self.environmentSpies.scanLockManagerSpy.invokedLock) == false
 	}
 }

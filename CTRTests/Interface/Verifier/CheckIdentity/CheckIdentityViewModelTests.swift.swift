@@ -40,7 +40,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
 		expect(self.sut.checkIdentity) == L.verifierResultAccessCheckidentity()
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
-		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccFlag) == nil
 		expect(self.sut.verifiedAccessibility) == "\(L.verifierResultAccessAccessibilityVerified()), \(L.verifierResultIdentityTitle())"
 		expect(self.sut.title) == L.verifierResultIdentityTitle()
 	}
@@ -161,8 +161,8 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.dccFlag).to(beNil())
-		expect(self.sut.dccScanned).to(beNil())
+		expect(self.sut.dccFlag) == nil
+		expect(self.sut.dccScanned) == nil
 	}
 	
 	func test_showDccInfo_whenDCCIsScannedWithFlag_shouldDisplayVerified() {
@@ -193,7 +193,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccFlag) == nil
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 	
@@ -209,7 +209,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccFlag) == nil
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 	
@@ -225,7 +225,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccFlag) == nil
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 	
@@ -241,7 +241,7 @@ final class CheckIdentityViewModelTests: XCTestCase {
 		)
 		
 		// Then
-		expect(self.sut.dccFlag).to(beNil())
+		expect(self.sut.dccFlag) == nil
 		expect(self.sut.dccScanned) == L.verifierResultAccessDcc()
 	}
 	

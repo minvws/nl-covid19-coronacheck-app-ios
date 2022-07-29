@@ -51,7 +51,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrDomesticTitle()
-		expect(self.sut.dosage).to(beNil())
+		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
 	}
@@ -77,7 +77,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrDomesticTitle()
-		expect(self.sut.dosage).to(beNil())
+		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(3))
 	}
@@ -104,7 +104,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderShowqrEuTitle()
-		expect(self.sut.dosage).to(beNil())
+		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_international_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
 	}
@@ -409,7 +409,7 @@ class ShowQRViewModelTests: XCTestCase {
 		let (name, _, _, _) = notificationCenterSpy.invokedAddObserverForNameParameters!
 		expect(name) == UIApplication.didEnterBackgroundNotification
 
-		expect(self.sut.thirdPartyTicketAppButtonTitle).to(beNil())
+		expect(self.sut.thirdPartyTicketAppButtonTitle) == nil
 	}
 
 	func test_selectedanimation_domesticsummer() throws {

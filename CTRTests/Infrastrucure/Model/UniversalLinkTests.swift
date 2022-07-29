@@ -60,7 +60,7 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 
     func test_validHolderURL_inVerifierApp_doesNotCreateLink() {
@@ -84,7 +84,7 @@ class UniversalLinkTests: XCTestCase {
         let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-		expect(link).to(beNil())
+		expect(link) == nil
     }
 
     func test_validHolderURL_withInvalidFragment2_doesNotCreateLink() {
@@ -97,7 +97,7 @@ class UniversalLinkTests: XCTestCase {
         let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-		expect(link).to(beNil())
+		expect(link) == nil
     }
 
     func test_rejectsUserActivity_ifNotOfType_NSUserActivityTypeBrowsingWeb() {
@@ -110,7 +110,7 @@ class UniversalLinkTests: XCTestCase {
         let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 
         // Assert
-		expect(link).to(beNil())
+		expect(link) == nil
     }
 	
 	func test_validHAssessmentURL_withValidFragment_inHolderApp_createsLink() {
@@ -161,7 +161,7 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 		
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 	
 	func test_validAssessmentURL_inVerifierApp_doesNotCreateLink() {
@@ -185,7 +185,7 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 		
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 	
 	func test_validAssessmentURL_withInvalidFragment2_doesNotCreateLink() {
@@ -198,7 +198,7 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 		
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 	
 	func test_validAssessmentURL_alternativeSpelling_withValidFragment_inHolderApp_createsLink() {
@@ -249,7 +249,7 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 		
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 	
 	func test_validAssessmentURL_alternativeSpelling_inVerifierApp_doesNotCreateLink() {
@@ -273,7 +273,7 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 		
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 	
 	func test_validAssessmentURL_alternativeSpelling_withInvalidFragment2_doesNotCreateLink() {
@@ -286,6 +286,6 @@ class UniversalLinkTests: XCTestCase {
 		let link = UniversalLink(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
 		
 		// Assert
-		expect(link).to(beNil())
+		expect(link) == nil
 	}
 }

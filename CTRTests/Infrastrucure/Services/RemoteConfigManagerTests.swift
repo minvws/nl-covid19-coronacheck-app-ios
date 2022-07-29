@@ -319,7 +319,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 
 		expect(reloadObserverReceivedConfiguration) == existingStoredConfig
-		expect(updateObserverReceivedConfiguration).to(beNil()) // no update so no callback expected here.
+		expect(updateObserverReceivedConfiguration) == nil // no update so no callback expected here.
 	}
 
 	func test_doesNotLoadWhenAlreadyLoading() {

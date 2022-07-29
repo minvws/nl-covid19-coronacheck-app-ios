@@ -38,7 +38,7 @@ class ClockDeviationManagerTests: XCTestCase {
 		// Act
 
 		// Assert
-		expect(self.sut.hasSignificantDeviation).to(beNil())
+		expect(self.sut.hasSignificantDeviation) == nil
 	}
 
 	func test_updateWithServerDateString_withSignificantDeviation() {
