@@ -126,7 +126,7 @@ targetTemplates:
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
           LOG_LEVEL: debug
-          OTHER_LDFLAGS: -Xlinker -interposable # for Inject
+          OTHER_LDFLAGS: -Xlinker -interposable -weak_framework SwiftUI # all for Inject
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
