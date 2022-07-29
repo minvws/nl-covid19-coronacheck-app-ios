@@ -20,7 +20,7 @@ packages:
     majorVersion: 1.9.5
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.3.0
+    majorVersion: 3.4.0
   Nimble:
     github: Quick/Nimble
     majorVersion: 10.0.0
