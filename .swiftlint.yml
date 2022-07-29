@@ -4,7 +4,7 @@ disabled_rules:
   - unused_closure_parameter
   - large_tuple
   - cyclomatic_complexity
-  - for_where # Temporarily until swiftlint on Github Macos-12 is updated to 0.4.8
+#  - for_where # Temporarily until swiftlint on Github Macos-12 is updated to 0.4.8
 opt_in_rules:
   - empty_count
   - closure_spacing
