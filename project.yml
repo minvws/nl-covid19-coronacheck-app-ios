@@ -15,9 +15,6 @@ packages:
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.4
-  Inject: 
-    github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
-    branch: main
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.9.5
@@ -98,7 +95,6 @@ targetTemplates:
       - package: IOSSecuritySuite
       - package: Lottie
       - package: OpenSSL
-      - package: Inject
       - package: Reachability
         product: Reachability
       - package: RSwiftLibrary
