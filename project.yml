@@ -53,8 +53,8 @@ attributes:
 
 configs:
   Development: debug
-  FirebaseAcceptance: debug
-  FirebaseTest: debug
+  FirebaseAcceptance: release
+  FirebaseTest: release
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
@@ -126,7 +126,7 @@ targetTemplates:
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
           LOG_LEVEL: debug
-          OTHER_LDFLAGS: -Xlinker -interposable # for Inject
+          OTHER_LDFLAGS: -Xlinker -interposable -weak_framework SwiftUI # all for Inject
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
@@ -135,7 +135,6 @@ targetTemplates:
           NETWORK_CONFIGURATION: TEST
           LOG_LEVEL: debug
           SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
-          OTHER_LDFLAGS: -Xlinker -interposable # for Inject
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
