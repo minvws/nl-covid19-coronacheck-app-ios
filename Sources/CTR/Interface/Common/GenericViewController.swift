@@ -59,14 +59,14 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 				onInjection { [weak self] instance in
 					guard let self = self else { return }
 					// **For iterative UI development only **
-					// The previous instance of self.sceneView is never released, so on each
-					// successive injection (due to strong bindings from the ViewModel) a new
-					// sceneView instance will be created, without releasing the old one.
+					// The previous instance of self.sceneView is never released (due to
+					// strong bindings from the ViewModel), so on each successive injection
+					// a new sceneView instance will be created, without releasing the old one.
 					// Therefore there is an an obvious memory leak during development.
 					//
 					// Other bugs related to having registered multiple observers can also be expected.
 					
-					// Updated `host.instance` value only available after `onInjection`
+					// The updated `host.instance` value is only available after `onInjection`
 					// completes, so need to jump to next runloop:
 					DispatchQueue.main.async {
 						self.viewDidLoad()
