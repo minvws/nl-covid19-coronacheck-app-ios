@@ -53,8 +53,8 @@ attributes:
 
 configs:
   Development: debug
-  FirebaseAcceptance: debug
-  FirebaseTest: debug
+  FirebaseAcceptance: release
+  FirebaseTest: release
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
