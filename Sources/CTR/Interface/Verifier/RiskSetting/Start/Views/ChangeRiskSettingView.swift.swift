@@ -51,7 +51,7 @@ final class ChangeRiskSettingView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 	
-	private let changeButton: Button =  {
+	private let changeButton: Button = {
 		return Button(style: .textLabelBlue)
 	}()
 	
