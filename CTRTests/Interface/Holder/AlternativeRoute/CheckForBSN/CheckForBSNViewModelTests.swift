@@ -35,7 +35,7 @@ class CheckForBSNViewModelTests: XCTestCase {
 		expect(self.sut.optionModels.value.first?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesHaveBSN()
 		expect(self.sut.optionModels.value.last?.title) == L.holder_checkForBSN_buttonTitle_doesNotHaveBSN()
 		expect(self.sut.optionModels.value.last?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow()
-		expect(self.sut.bottomButton.value).to(beNil())
+		expect(self.sut.bottomButton.value) == nil
 	}
 	
 	func test_loadedState_recovery() {
@@ -53,7 +53,7 @@ class CheckForBSNViewModelTests: XCTestCase {
 		expect(self.sut.optionModels.value.first?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesHaveBSN()
 		expect(self.sut.optionModels.value.last?.title) == L.holder_checkForBSN_buttonTitle_doesNotHaveBSN()
 		expect(self.sut.optionModels.value.last?.subTitle) == L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow()
-		expect(self.sut.bottomButton.value).to(beNil())
+		expect(self.sut.bottomButton.value) == nil
 	}
 	
 	func test_doesHaveBSN() {

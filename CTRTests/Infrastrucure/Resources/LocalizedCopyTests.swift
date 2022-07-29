@@ -20,7 +20,7 @@ final class LocalizedCopyTests: XCTestCase {
 
 	func testAllLocalizationsCanBeAccessed() {
 		AvailableLocale.allCases.forEach { locale in
-			expect(self.copyValue(key: "general.add", forLocaleIdentifier: locale)).toNot(beNil())
+			expect(self.copyValue(key: "general.add", forLocaleIdentifier: locale)) != nil
 		}
 	}
 

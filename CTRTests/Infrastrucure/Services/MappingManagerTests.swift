@@ -50,7 +50,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getProviderIdentifierMapping("wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	func test_providerIdentifierMapping_emptyMapping() {
@@ -63,7 +63,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getProviderIdentifierMapping("Test")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	// MARK: getDisplayIssuer
@@ -355,7 +355,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getTestType("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	// MARK: - getTestName
@@ -387,7 +387,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getTestName("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	// MARK: - getTestManufacturer
@@ -419,7 +419,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getTestManufacturer("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	// MARK: isRatTest
@@ -493,7 +493,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getHpkData("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 
 	// MARK: - getVaccinationBrand
@@ -525,7 +525,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getVaccinationBrand("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	// MARK: - getVaccinationType
@@ -557,7 +557,7 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getVaccinationType("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 	
 	// MARK: - getVaccinationManufacturer
@@ -589,6 +589,6 @@ class MappingManagerTests: XCTestCase {
 		let mapped = sut.getVaccinationManufacturer("Wrong")
 		
 		// Then
-		expect(mapped).to(beNil())
+		expect(mapped) == nil
 	}
 }

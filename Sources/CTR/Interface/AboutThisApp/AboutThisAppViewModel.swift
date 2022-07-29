@@ -94,7 +94,11 @@ class AboutThisAppViewModel {
 			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
 		}()
 
-		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
+		if flavor == .holder {
+			setupMenuHolder()
+		} else {
+			setupMenuVerifier()
+		}
 	}
 	
 	private func setupMenuHolder() {

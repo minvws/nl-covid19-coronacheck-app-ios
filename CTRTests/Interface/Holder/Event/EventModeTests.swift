@@ -14,7 +14,7 @@ class EventModeTests: XCTestCase {
 	
 	func test_asList() {
 		
-		expect(EventMode.paperflow.asList).to(beNil())
+		expect(EventMode.paperflow.asList) == nil
 		expect(EventMode.vaccinationassessment.asList) == ["vaccinationassessment"]
 		expect(EventMode.vaccinationAndPositiveTest.asList) == ["vaccination", "positivetest"]
 		expect(EventMode.recovery.asList) == ["positivetest"]

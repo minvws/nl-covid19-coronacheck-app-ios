@@ -31,7 +31,7 @@ class CheckForDigidViewModelTests: XCTestCase {
 		expect(self.sut.title.value) == L.holder_noDigiD_title()
 		expect(self.sut.message.value) == L.holder_noDigiD_message()
 		expect(self.sut.optionModels.value).to(haveCount(2))
-		expect(self.sut.bottomButton.value).to(beNil())
+		expect(self.sut.bottomButton.value) == nil
 	}
 	
 	func test_requestDigid() {

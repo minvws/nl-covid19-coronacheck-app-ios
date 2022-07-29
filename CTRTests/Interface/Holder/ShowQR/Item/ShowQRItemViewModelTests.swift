@@ -277,10 +277,10 @@ class ShowQRItemViewModelTests: XCTestCase {
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
-		expect(self.sut.overlayIcon).to(beNil())
-		expect(self.sut.overlayTitle).to(beNil())
-		expect(self.sut.overlayInfoTitle).to(beNil())
-		expect(self.sut.overlayRevealTitle).to(beNil())
+		expect(self.sut.overlayIcon) == nil
+		expect(self.sut.overlayTitle) == nil
+		expect(self.sut.overlayInfoTitle) == nil
+		expect(self.sut.overlayRevealTitle) == nil
 	}
 
 	func test_validity_withEuGreenCard_withValidCredential_expired() throws {

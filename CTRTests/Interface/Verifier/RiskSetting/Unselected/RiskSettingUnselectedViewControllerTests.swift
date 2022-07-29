@@ -58,7 +58,7 @@ final class RiskSettingUnselectedViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskSubtitle) == L.verifier_risksetting_subtitle_1G()
 		expect(self.sut.sceneView.riskSettingControlsView.highRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy1G.localization)), \(L.verifier_risksetting_subtitle_1G())"
-		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy).to(beNil())
+		expect(self.sut.sceneView.riskSettingControlsView.verificationPolicy) == nil
 		
 		expect(self.sut.sceneView.footerButtonView.primaryTitle) == L.verifier_risksetting_confirmation_button()
 		expect(self.sut.sceneView.errorMessage) == L.verification_policy_selection_error_message()

@@ -41,11 +41,11 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
-		expect(self.sut.content.body).to(beNil())
-		expect(self.sut.content.primaryAction).to(beNil())
-		expect(self.sut.content.primaryActionTitle).to(beNil())
-		expect(self.sut.content.secondaryAction).to(beNil())
-		expect(self.sut.content.secondaryActionTitle).to(beNil())
+		expect(self.sut.content.body) == nil
+		expect(self.sut.content.primaryAction) == nil
+		expect(self.sut.content.primaryActionTitle) == nil
+		expect(self.sut.content.secondaryAction) == nil
+		expect(self.sut.content.secondaryActionTitle) == nil
 	}
 
 	func test_loadingState_recoveryMode() {
@@ -61,11 +61,11 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
-		expect(self.sut.content.body).to(beNil())
-		expect(self.sut.content.primaryAction).to(beNil())
-		expect(self.sut.content.primaryActionTitle).to(beNil())
-		expect(self.sut.content.secondaryAction).to(beNil())
-		expect(self.sut.content.secondaryActionTitle).to(beNil())
+		expect(self.sut.content.body) == nil
+		expect(self.sut.content.primaryAction) == nil
+		expect(self.sut.content.primaryActionTitle) == nil
+		expect(self.sut.content.secondaryAction) == nil
+		expect(self.sut.content.secondaryActionTitle) == nil
 	}
 
 	func test_loadingState_testMode() {
@@ -81,11 +81,11 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
-		expect(self.sut.content.body).to(beNil())
-		expect(self.sut.content.primaryAction).to(beNil())
-		expect(self.sut.content.primaryActionTitle).to(beNil())
-		expect(self.sut.content.secondaryAction).to(beNil())
-		expect(self.sut.content.secondaryActionTitle).to(beNil())
+		expect(self.sut.content.body) == nil
+		expect(self.sut.content.primaryAction) == nil
+		expect(self.sut.content.primaryActionTitle) == nil
+		expect(self.sut.content.secondaryAction) == nil
+		expect(self.sut.content.secondaryActionTitle) == nil
 	}
 
 	func test_loadingState_paperproofMode() {
@@ -101,11 +101,11 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
-		expect(self.sut.content.body).to(beNil())
-		expect(self.sut.content.primaryAction).to(beNil())
-		expect(self.sut.content.primaryActionTitle).to(beNil())
-		expect(self.sut.content.secondaryAction).to(beNil())
-		expect(self.sut.content.secondaryActionTitle).to(beNil())
+		expect(self.sut.content.body) == nil
+		expect(self.sut.content.primaryAction) == nil
+		expect(self.sut.content.primaryActionTitle) == nil
+		expect(self.sut.content.secondaryAction) == nil
+		expect(self.sut.content.secondaryActionTitle) == nil
 	}
 
 	func test_cancel() {
@@ -177,11 +177,11 @@ class AuthenticationViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.content.title) == L.holder_fetchRemoteEvents_title()
-		expect(self.sut.content.body).to(beNil())
-		expect(self.sut.content.primaryAction).toNot(beNil())
+		expect(self.sut.content.body) == nil
+		expect(self.sut.content.primaryAction) != nil
 		expect(self.sut.content.primaryActionTitle) == L.generalClose()
-		expect(self.sut.content.secondaryAction).to(beNil())
-		expect(self.sut.content.secondaryActionTitle).to(beNil())
+		expect(self.sut.content.secondaryAction) == nil
+		expect(self.sut.content.secondaryActionTitle) == nil
 
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinishParameters?.0) == EventScreenResult.didLogin(token: "idToken", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
@@ -207,9 +207,9 @@ class AuthenticationViewModelTests: XCTestCase {
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 070-8")
-			expect(content.primaryAction).toNot(beNil())
+			expect(content.primaryAction) != nil
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
-			expect(content.secondaryAction).toNot(beNil())
+			expect(content.secondaryAction) != nil
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -236,9 +236,9 @@ class AuthenticationViewModelTests: XCTestCase {
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
-			expect(content.primaryAction).toNot(beNil())
+			expect(content.primaryAction) != nil
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
-			expect(content.secondaryAction).toNot(beNil())
+			expect(content.secondaryAction) != nil
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -265,10 +265,10 @@ class AuthenticationViewModelTests: XCTestCase {
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
 			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
-			expect(content.primaryAction).toNot(beNil())
+			expect(content.primaryAction) != nil
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
+			expect(content.secondaryAction) == nil
+			expect(content.secondaryActionTitle) == nil
 		} else {
 			fail("Invalid state")
 		}
@@ -349,9 +349,9 @@ class AuthenticationViewModelTests: XCTestCase {
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
-				expect(content.primaryAction).toNot(beNil())
+				expect(content.primaryAction) != nil
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
-				expect(content.secondaryAction).toNot(beNil())
+				expect(content.secondaryAction) != nil
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
 				fail("Invalid state")
@@ -393,9 +393,9 @@ class AuthenticationViewModelTests: XCTestCase {
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
-				expect(content.primaryAction).toNot(beNil())
+				expect(content.primaryAction) != nil
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
-				expect(content.secondaryAction).toNot(beNil())
+				expect(content.secondaryAction) != nil
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
 				fail("Invalid state")
@@ -436,9 +436,9 @@ class AuthenticationViewModelTests: XCTestCase {
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
-				expect(content.primaryAction).toNot(beNil())
+				expect(content.primaryAction) != nil
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
-				expect(content.secondaryAction).toNot(beNil())
+				expect(content.secondaryAction) != nil
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
 				fail("Invalid state")
@@ -466,9 +466,9 @@ class AuthenticationViewModelTests: XCTestCase {
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
-			expect(content.primaryAction).toNot(beNil())
+			expect(content.primaryAction) != nil
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
-			expect(content.secondaryAction).toNot(beNil())
+			expect(content.secondaryAction) != nil
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -505,9 +505,9 @@ class AuthenticationViewModelTests: XCTestCase {
 			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.body) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
-				expect(content.primaryAction).toNot(beNil())
+				expect(content.primaryAction) != nil
 				expect(content.primaryActionTitle) == L.general_toMyOverview()
-				expect(content.secondaryAction).toNot(beNil())
+				expect(content.secondaryAction) != nil
 				expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 			} else {
 				fail("Invalid state")

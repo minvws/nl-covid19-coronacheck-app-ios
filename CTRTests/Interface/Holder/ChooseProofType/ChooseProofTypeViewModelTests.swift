@@ -30,7 +30,7 @@ class ChooseProofTypeViewModelTests: XCTestCase {
 		expect(self.sut.title.value) == L.holderChooseqrcodetypeTitle()
 		expect(self.sut.message.value) == L.holderChooseqrcodetypeMessage()
 		expect(self.sut.optionModels.value).to(haveCount(3))
-		expect(self.sut.bottomButton.value).to(beNil())
+		expect(self.sut.bottomButton.value) == nil
 	}
 	
 	func test_createVaccinationQR() {

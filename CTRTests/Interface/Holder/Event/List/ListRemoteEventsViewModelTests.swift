@@ -65,7 +65,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 	}
 
 	func test_backButtonTapped_emptyState() {
@@ -98,7 +98,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 	}
 
 	func test_warnBeforeGoBack() {
@@ -111,7 +111,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 	}
 	
 	// MARK: - Other actions -
@@ -300,8 +300,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 
 		// Then
-		expect(content.secondaryAction).to(beNil())
-		expect(content.secondaryActionTitle).to(beNil())
+		expect(content.secondaryAction) == nil
+		expect(content.secondaryActionTitle) == nil
 	}
 	
 	func test_somethingIsWrong_foreignDccVaccination() {
@@ -323,8 +323,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// When
 
 		// Then
-		expect(content.secondaryAction).to(beNil())
-		expect(content.secondaryActionTitle).to(beNil())
+		expect(content.secondaryAction) == nil
+		expect(content.secondaryActionTitle) == nil
 	}
 
 	// MARK: - Event Rows -
@@ -565,7 +565,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.holderVaccinationNolistTitle()
 		expect(feedback.body) == L.holderVaccinationNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == nil
 	}
 
 	func test_makeQR_saveEventGroupError_eventModeVaccination() throws {
@@ -593,7 +593,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
@@ -631,7 +631,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
@@ -669,7 +669,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
@@ -706,7 +706,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
@@ -878,7 +878,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
 		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalRetry()))
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidSignature() throws {
@@ -997,7 +997,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beFalse())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
@@ -1041,7 +1041,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
@@ -1084,7 +1084,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
@@ -1128,14 +1128,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
 		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalRetry()))
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() throws {
@@ -1169,7 +1169,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
@@ -1214,7 +1214,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
@@ -1259,7 +1259,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
@@ -1304,7 +1304,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
@@ -1347,7 +1347,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beFalse())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
 
 		expect(self.sut.alert).toEventuallyNot(beNil())
@@ -1391,9 +1391,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beFalse())
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beFalse())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
@@ -1439,9 +1439,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
@@ -1723,9 +1723,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateSomeresultTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderErrorstateSomeresultMessage()))
-		expect(self.sut.alert?.cancelAction?.title).to(beNil())
+		expect(self.sut.alert?.cancelAction?.title) == nil
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalOk()))
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 	
 	func test_identityMismatched() {
@@ -1753,7 +1753,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderEventIdentityAlertMessage()))
 		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.holderEventIdentityAlertCancel()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderEventIdentityAlertOk()))
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate).to(beNil())
+		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 	
 	// MARK: - Open URL -
@@ -1839,7 +1839,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.holderTestNolistTitle()
 		expect(feedback.body) == L.holderTestNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == nil
 	}
 	
 	func test_emptyState_vaccinationAndPositiveTest() throws {
@@ -1860,7 +1860,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.holderVaccinationNolistTitle()
 		expect(feedback.body) == L.holderVaccinationNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == nil
 	}
 	
 	func test_emptyState_paperflow() throws {
@@ -1881,7 +1881,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.holderCheckdccExpiredTitle()
 		expect(feedback.body) == L.holderCheckdccExpiredMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == nil
 	}
 	
 	func test_emptyState_recovery() throws {
@@ -1902,7 +1902,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.holderRecoveryNolistTitle()
 		expect(feedback.body) == L.holderRecoveryNolistMessage()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == nil
 	}
 	
 	func test_emptyState_vaccinationAssessement() throws {
@@ -1923,7 +1923,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.title) == L.holder_event_vaccination_assessment_nolist_title()
 		expect(feedback.body) == L.holder_event_vaccination_assessment_nolist_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle).to(beNil())
+		expect(feedback.secondaryActionTitle) == nil
 	}
 	
 	// MARK: Helper

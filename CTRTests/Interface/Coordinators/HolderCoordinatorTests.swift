@@ -141,7 +141,7 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
-		expect(self.sut.unhandledUniversalLink).to(beNil())
+		expect(self.sut.unhandledUniversalLink) == nil
 	}
 	
 	func test_consume_redeemHolder_needsOnboarding() {
@@ -227,7 +227,7 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
-		expect(self.sut.unhandledUniversalLink).to(beNil())
+		expect(self.sut.unhandledUniversalLink) == nil
 	}
 	
 	func test_consume_redeemVaccinationAssessment_needsOnboarding() {
@@ -319,7 +319,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdpartyTicketApp).to(beNil())
+		expect(self.sut.thirdpartyTicketApp) == nil
 	}
 	
 	func test_consume_tvsAuth() {

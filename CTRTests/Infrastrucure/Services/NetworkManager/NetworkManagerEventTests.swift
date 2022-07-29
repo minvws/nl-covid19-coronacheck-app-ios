@@ -498,8 +498,8 @@ class NetworkManagerEventTests: XCTestCase {
 				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
 				expect(result.successValue?.0.protocolVersion) == "3.0"
 				expect(result.successValue?.0.status) == .verificationRequired
-				expect(result.successValue?.0.identity).to(beNil())
-				expect(result.successValue?.0.events).to(beNil())
+				expect(result.successValue?.0.identity) == nil
+				expect(result.successValue?.0.events) == nil
 				done()
 			}
 		}

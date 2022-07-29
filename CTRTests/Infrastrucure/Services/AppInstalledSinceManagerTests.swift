@@ -76,7 +76,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.wipePersistedData()
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate).to(beNil())
+		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == nil
 	}
 
 	func test_canOnlyBeSetOnce_serverUpdates() {

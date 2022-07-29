@@ -30,7 +30,7 @@ class ShowHintsViewModelTests: XCTestCase {
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
 		
 		// Assert
-		expect(self.sut).to(beNil())
+		expect(self.sut) == nil
 	}
 	
 	func test_multipleHints_withANonalphanumericCharacterHint_failsToInitViewModel() {

@@ -162,7 +162,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[5].value) == "Test"
 		expect(self.sut.details[6].field) == "Dosis / Number in series of doses:"
 		expect(self.sut.details[6].value) == "2 / 2"
-		expect(self.sut.details[6].dosageMessage).to(beNil())
+		expect(self.sut.details[6].dosageMessage) == nil
 		expect(self.sut.details[7].field) == "Vaccinatiedatum / Date of vaccination*:"
 		expect(self.sut.details[7].value) == "01-06-2021"
 		expect(self.sut.details[8].field) == "Dagen sinds vaccinatie / Days since vaccination:"

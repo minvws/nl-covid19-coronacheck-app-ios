@@ -296,7 +296,7 @@ class GreenCardModelTests: XCTestCase {
 		// Then
 		expect(greenCard?.activeCredentialsNowOrInFuture(forDate: now)).to(beEmpty())
 		expect(greenCard?.hasActiveCredentialNowOrInFuture(forDate: now)) == false
-		expect(greenCard?.currentOrNextActiveCredential(forDate: now)).to(beNil())
+		expect(greenCard?.currentOrNextActiveCredential(forDate: now)) == nil
 	}
 	
 	func test_activeCredentialsNowOrInFuture_singleActiveCredential() throws {
@@ -335,7 +335,7 @@ class GreenCardModelTests: XCTestCase {
 		expect(greenCard?.activeCredentialsNowOrInFuture(forDate: now)).to(haveCount(1))
 		expect(greenCard?.hasActiveCredentialNowOrInFuture(forDate: now)) == true
 		expect(greenCard?.currentOrNextActiveCredential(forDate: now)) == credential
-		expect(greenCard?.getLatestInternationalCredential()).to(beNil())
+		expect(greenCard?.getLatestInternationalCredential()) == nil
 	}
 	
 	func test_activeCredentialsNowOrInFuture_singleExpiredCredential() throws {
@@ -373,7 +373,7 @@ class GreenCardModelTests: XCTestCase {
 		// Then
 		expect(greenCard?.activeCredentialsNowOrInFuture(forDate: now)).to(beEmpty())
 		expect(greenCard?.hasActiveCredentialNowOrInFuture(forDate: now)) == false
-		expect(greenCard?.currentOrNextActiveCredential(forDate: now)).to(beNil())
+		expect(greenCard?.currentOrNextActiveCredential(forDate: now)) == nil
 		expect(greenCard?.getLatestInternationalCredential()) == credential
 	}
 	

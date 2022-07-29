@@ -29,9 +29,9 @@ class ChooseEventLocationViewModelTests: XCTestCase {
 		
 		// Assert
 		expect(self.sut.title.value) == L.holder_chooseEventLocation_title()
-		expect(self.sut.message.value).to(beNil())
+		expect(self.sut.message.value) == nil
 		expect(self.sut.optionModels.value).to(haveCount(2))
-		expect(self.sut.bottomButton.value).to(beNil())
+		expect(self.sut.bottomButton.value) == nil
 	}
 	
 	func test_goToGGDPortal() {

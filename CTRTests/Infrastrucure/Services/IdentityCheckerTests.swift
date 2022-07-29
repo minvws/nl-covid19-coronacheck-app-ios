@@ -256,7 +256,7 @@ class IdentityCheckerTests: XCTestCase {
 			// When
 			let tuple = identity.asIdentityTuple()
 
-			expect(tuple.firstNameInitial).to(beNil())
+			expect(tuple.firstNameInitial) == nil
 		}
 	}
 }

@@ -881,6 +881,6 @@ class WalletManagerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
-		expect(self.sut.listEventGroups().first?.expiryDate).to(beNil())
+		expect(self.sut.listEventGroups().first?.expiryDate) == nil
 	}
 }

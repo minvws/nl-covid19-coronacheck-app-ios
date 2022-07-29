@@ -263,7 +263,7 @@ class OpenSSLTests: XCTestCase {
 		let key = sut.getAuthorityKeyIdentifier(forCertificate: certificateData)
 		
 		// Then
-		expect(key).to(beNil())
+		expect(key) == nil
 	}
 
 	func test_getAuthorityKeyIdentifier_emptyData_shouldBeNil() {
@@ -275,7 +275,7 @@ class OpenSSLTests: XCTestCase {
 		let key = sut.getAuthorityKeyIdentifier(forCertificate: certificateData)
 		
 		// Then
-		expect(key).to(beNil())
+		expect(key) == nil
 	}
 	
 	func test_getAuthorityKeyIdentifier_certRealLeaf_shouldMatch() throws {
@@ -302,7 +302,7 @@ class OpenSSLTests: XCTestCase {
 		let name = sut.getCommonName(forCertificate: certificateData)
 		
 		// Then
-		expect(name).to(beNil())
+		expect(name) == nil
 	}
 	
 	func test_getCommonName_noCommonName() throws {
@@ -315,7 +315,7 @@ class OpenSSLTests: XCTestCase {
 		let name = sut.getCommonName(forCertificate: certificateData)
 		
 		// Then
-		expect(name).to(beNil())
+		expect(name) == nil
 	}
 	
 	func test_getCommonName_PrivateRootCA_G1() {

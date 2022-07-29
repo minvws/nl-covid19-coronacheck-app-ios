@@ -148,7 +148,7 @@ extension PagedAnnouncementViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.update(for: index)
-		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
+		navigationItem.leftBarButtonItem = index > 0 ? backButton : nil
 		updateFooterView(for: index)
 		
 		// Announce ribbon view when going back to the first page

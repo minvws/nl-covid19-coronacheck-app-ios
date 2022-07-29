@@ -31,7 +31,7 @@ class VerificationPolicyManagerTests: XCTestCase {
 		
 		// Act
 		// Assert
-		expect(self.sut.state).to(beNil())
+		expect(self.sut.state) == nil
 		expect(self.observerVCR.values).to(beEmpty())
 	}
 	
@@ -76,10 +76,10 @@ class VerificationPolicyManagerTests: XCTestCase {
 				
 		// Assert
 		// Should reset keychain
-		expect(self.secureUserSettingsSpy.invokedVerificationPolicy).to(beNil())
+		expect(self.secureUserSettingsSpy.invokedVerificationPolicy) == nil
 		
 		// State should be nil
-		expect(self.sut.state).to(beNil())
+		expect(self.sut.state) == nil
 		
 		// Update should not alert the observer:
 		sut.update(verificationPolicy: .policy1G)

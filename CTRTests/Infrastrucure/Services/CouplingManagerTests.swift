@@ -49,7 +49,7 @@ class CouplingManagerTests: XCTestCase {
 		let wrapper = sut.convert("test", couplingCode: "test")
 		
 		// Then
-		expect(wrapper).to(beNil())
+		expect(wrapper) == nil
 		
 	}
 	
@@ -68,7 +68,7 @@ class CouplingManagerTests: XCTestCase {
 		expect(wrapper?.identity?.lastName) == "Corona"
 		expect(wrapper?.events?.first?.type) == "paperFlow"
 		expect(wrapper?.events?.first?.unique) == "test_convert"
-		expect(wrapper?.events?.first?.vaccination).to(beNil())
+		expect(wrapper?.events?.first?.vaccination) == nil
 		expect(wrapper?.events?.first?.dccEvent?.credential) == "test_convert"
 		expect(wrapper?.events?.first?.dccEvent?.couplingCode) == "test_couplingCode"
 	}
