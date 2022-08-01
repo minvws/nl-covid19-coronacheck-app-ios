@@ -63,3 +63,8 @@ download_translations:
 	@lokalise2 file download --token ${LOKALISE_API_KEY} --project-id "5229025261717f4fcb81c1.73606773" --format strings --unzip-to Localizations/Holder --export-empty-as skip --original-filenames false
 # Verifier: 
 	@lokalise2 file download --token ${LOKALISE_API_KEY} --project-id "243601816196631318a279.00348152" --format strings --unzip-to Localizations/Verifier --export-empty-as skip --original-filenames false
+
+# -- periphery --
+
+scan_unused_code:
+	periphery scan --index-exclude "Sources/CTR/Infrastructure/Resources/R.generated.swift"
