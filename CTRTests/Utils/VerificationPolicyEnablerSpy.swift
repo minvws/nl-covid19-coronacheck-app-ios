@@ -20,18 +20,6 @@ final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 		return stubbedObservatory
 	}
 
-	var invokedEnable = false
-	var invokedEnableCount = 0
-	var invokedEnableParameters: (verificationPolicies: [String], Void)?
-	var invokedEnableParametersList = [(verificationPolicies: [String], Void)]()
-
-	func enable(verificationPolicies: [String]) {
-		invokedEnable = true
-		invokedEnableCount += 1
-		invokedEnableParameters = (verificationPolicies, ())
-		invokedEnableParametersList.append((verificationPolicies, ()))
-	}
-
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 

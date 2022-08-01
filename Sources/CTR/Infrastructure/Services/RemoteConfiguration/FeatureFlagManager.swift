@@ -34,14 +34,11 @@ protocol FeatureFlagManaging {
 class FeatureFlagManager: FeatureFlagManaging {
 	
 	private var remoteConfigManager: RemoteConfigManaging
-	private var versionSupplier: AppVersionSupplierProtocol?
 	
 	required init(
-		versionSupplier: AppVersionSupplierProtocol?,
 		remoteConfigManager: RemoteConfigManaging
 	) {
 		
-		self.versionSupplier = versionSupplier
 		self.remoteConfigManager = remoteConfigManager
 	}
 	

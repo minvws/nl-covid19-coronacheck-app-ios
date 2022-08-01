@@ -24,7 +24,6 @@ class GreenCardLoaderTests: XCTestCase {
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,
-			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
 	}

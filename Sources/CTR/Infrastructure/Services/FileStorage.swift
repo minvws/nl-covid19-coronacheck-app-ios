@@ -10,7 +10,6 @@ import Foundation
 protocol FileStorageProtocol: AnyObject {
 	func store(_ data: Data, as fileName: String) throws
 	func read(fileName: String) -> Data?
-	func debugLogItems()
 	func fileExists(_ fileName: String) -> Bool
 	func remove(_ fileName: String)
 
@@ -65,21 +64,6 @@ final class FileStorage: FileStorageProtocol {
 			return data
 		} catch {
 			return nil
-		}
-	}
-
-	/// Log items on disk for debug mode
-	func debugLogItems() {
-		guard let path = documentsURL?.path else { return }
-
-		do {
-			let items = try fileManager.contentsOfDirectory(atPath: path)
-
-			for item in items {
-				logHandler?.logDebug("Found \(item)")
-			}
-		} catch {
-			logHandler?.logError("Failed to read directory \(error)")
 		}
 	}
 
