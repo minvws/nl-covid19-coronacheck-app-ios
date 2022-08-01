@@ -534,9 +534,9 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 }
 
 extension EventCoordinator: Dismissable {
-
+	
 	func dismiss() {
-
+		
 		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
 	}
 }
