@@ -72,18 +72,3 @@ extension String {
 			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
 	}
 }
-
-extension String {
-
-	/// Add line breaks at each column.
-	/// Assumes the string is currently a single line.
-	func breakingAtColumn(column: Int) -> String {
-		enumerated().reduce("") { result, tuple in
-			if (tuple.offset % column) == 0 && tuple.offset != 0 {
-				return "\(result)\n\(tuple.element)"
-			} else {
-				return "\(result)\(tuple.element)"
-			}
-		}
-	}
-}

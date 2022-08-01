@@ -8,29 +8,29 @@
 import UIKit
 
 extension UIStackView {
-    
-    convenience init(vertical arrangedSubviews: [UIView], spacing: CGFloat = 0) {
-        self.init(arrangedSubviews: arrangedSubviews)
-        self.axis = .vertical
-        self.spacing = spacing
-    }
-    
-    convenience init(horizontal arrangedSubviews: [UIView], spacing: CGFloat = 0) {
-        self.init(arrangedSubviews: arrangedSubviews)
-        self.axis = .horizontal
-        self.spacing = spacing
-    }
-    
-    func distribution(_ value: UIStackView.Distribution) -> Self {
-        distribution = value
-        return self
-    }
-    
-    func alignment(_ value: UIStackView.Alignment) -> Self {
-        alignment = value
-        return self
-    }
- 
+	
+	convenience init(vertical arrangedSubviews: [UIView], spacing: CGFloat = 0) {
+		self.init(arrangedSubviews: arrangedSubviews)
+		self.axis = .vertical
+		self.spacing = spacing
+	}
+	
+	convenience init(horizontal arrangedSubviews: [UIView], spacing: CGFloat = 0) {
+		self.init(arrangedSubviews: arrangedSubviews)
+		self.axis = .horizontal
+		self.spacing = spacing
+	}
+	
+	func distribution(_ value: UIStackView.Distribution) -> Self {
+		distribution = value
+		return self
+	}
+	
+	func alignment(_ value: UIStackView.Alignment) -> Self {
+		alignment = value
+		return self
+	}
+	
 	func insets(_ insets: NSDirectionalEdgeInsets?) {
 		directionalLayoutMargins = insets ?? NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
 		isLayoutMarginsRelativeArrangement = insets != nil
@@ -45,17 +45,17 @@ extension UIStackView {
 }
 
 func VStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
-    return UIStackView(vertical: views, spacing: spacing)
+	return UIStackView(vertical: views, spacing: spacing)
 }
 
 func VStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
-    return UIStackView(vertical: views, spacing: spacing)
+	return UIStackView(vertical: views, spacing: spacing)
 }
 
 func HStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
-    return UIStackView(horizontal: views, spacing: spacing)
+	return UIStackView(horizontal: views, spacing: spacing)
 }
 
 func HStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
-    return UIStackView(horizontal: views, spacing: spacing)
+	return UIStackView(horizontal: views, spacing: spacing)
 }
