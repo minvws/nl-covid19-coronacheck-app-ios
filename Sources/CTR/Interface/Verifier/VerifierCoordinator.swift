@@ -48,8 +48,6 @@ class VerifierCoordinator: SharedCoordinator {
 	
 	internal var thirdPartyScannerApp: (name: String, returnURL: URL)?
 	
-	private var userSettings: UserSettingsProtocol = UserSettings()
-	
 	private var verificationPolicyEnablerObserverToken: Observatory.ObserverToken?
 	
 	// Designated starter method
