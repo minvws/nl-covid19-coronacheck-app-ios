@@ -548,7 +548,7 @@ extension EventCoordinator: UINavigationControllerDelegate {
 		// Call the delegate if we are backing out of the flow
 		if !navigationController.viewControllers.contains(where: { viewController in
 			viewController.isKind(of: RemoteEventStartViewController.self) ||
-			viewController.isKind(of: InputRetrievalCodeViewController.self) }) {
+			viewController.isKind(of: ListRemoteEventsViewController.self) }) {
 			delegate?.eventFlowDidCancel()
 			return
 		}
