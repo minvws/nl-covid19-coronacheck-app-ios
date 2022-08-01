@@ -228,7 +228,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		cryptoManager: cryptoManager,
 		walletManager: walletManager,
 		remoteConfigManager: remoteConfigManager,
-		userSettings: userSettings,
 		secureUserSettings: secureUserSettings,
 		logHandler: logHandler
 	)

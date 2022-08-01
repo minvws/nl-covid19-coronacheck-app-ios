@@ -31,7 +31,6 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,
 			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
-			userSettings: environmentSpies.userSettingsSpy,
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
 	}
