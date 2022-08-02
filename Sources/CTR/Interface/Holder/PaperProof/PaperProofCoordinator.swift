@@ -35,8 +35,6 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	func userWishesToCreateACertificate()
 	
 	func userWantsToGoBackToDashboard()
-
-	func userWantsToGoBackToEnterToken()
 	
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 

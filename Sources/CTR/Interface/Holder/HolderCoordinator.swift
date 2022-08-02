@@ -637,7 +637,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		
 		let viewController = StoredEventDetailsViewController(
 			viewModel: RemoteEventDetailsViewModel(
-				coordinator: self,
 				title: title,
 				details: details,
 				footer: nil,

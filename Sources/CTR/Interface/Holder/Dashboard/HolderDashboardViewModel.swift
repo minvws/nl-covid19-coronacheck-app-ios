@@ -563,10 +563,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -596,17 +595,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -636,17 +633,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -683,10 +678,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
