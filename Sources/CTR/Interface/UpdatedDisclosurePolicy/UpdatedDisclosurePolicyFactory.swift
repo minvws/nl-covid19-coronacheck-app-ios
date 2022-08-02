@@ -7,13 +7,7 @@
 
 import Foundation
 
-protocol UpdatedDisclosurePolicyFactoryProtocol {
-
-	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
-	func create() -> [PagedAnnoucementItem]
-}
-
-struct UpdatedDisclosurePolicyFactory: UpdatedDisclosurePolicyFactoryProtocol {
+struct UpdatedDisclosurePolicyFactory {
 
 	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
 	func create() -> [PagedAnnoucementItem] {
