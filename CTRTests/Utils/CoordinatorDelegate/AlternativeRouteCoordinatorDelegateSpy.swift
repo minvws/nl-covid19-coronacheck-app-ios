@@ -17,14 +17,6 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 		invokedUserWishesToCheckForBSNCount += 1
 	}
 
-	var invokedUserWishesToCheckForDigiD = false
-	var invokedUserWishesToCheckForDigiDCount = 0
-
-	func userWishesToCheckForDigiD() {
-		invokedUserWishesToCheckForDigiD = true
-		invokedUserWishesToCheckForDigiDCount += 1
-	}
-
 	var invokedUserWishesToRequestADigiD = false
 	var invokedUserWishesToRequestADigiDCount = 0
 

@@ -84,9 +84,7 @@ extension QRCard {
 					return validityText_hasNotYetBegun_netherlands_vaccination(
 						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
 						doseNumber: origin.doseNumber,
-						qrCard: qrCard,
 						validFrom: origin.validFromDate,
-						now: now,
 						expirationTime: origin.expirationTime
 					)
 				
@@ -225,7 +223,7 @@ private func validityText_hasBegun_domestic_vaccination(
 	)
 }
 
-private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, qrCard: QRCard, validFrom: Date, now: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: validFrom)
 	

@@ -9,7 +9,7 @@ import UIKit
 
 protocol DashboardTabBarDelegate: AnyObject {
 	
-	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab)
+	func dashboardTabBar(didSelect tab: DashboardTab)
 }
 
 final class DashboardTabBar: BaseView {
@@ -132,7 +132,7 @@ final class DashboardTabBar: BaseView {
 	private func tapTabButton(_ tab: DashboardTab) {
 		guard !isAnimating else { return }
 		
-		delegate?.dashboardTabBar(self, didSelect: tab)
+		delegate?.dashboardTabBar(didSelect: tab)
 		select(tab: tab, animated: true)
 	}
 	

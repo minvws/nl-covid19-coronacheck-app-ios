@@ -35,7 +35,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)
 	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	func userWishesToChooseTestLocation()
 	func userWishesToCreateANegativeTestQR()
@@ -521,10 +521,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 	
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) {
 		
-		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
-		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion)
+		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 	

@@ -191,7 +191,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 
 extension HolderDashboardViewController: HolderDashboardViewDelegate {
 	
-	func holderDashboardView(_ view: HolderDashboardView, didDisplay tab: DashboardTab) {
+	func holderDashboardView(didDisplay tab: DashboardTab) {
 		let changedRegion: QRCodeValidityRegion = tab.isDomestic ? .domestic : .europeanUnion
 		viewModel.dashboardRegionToggleValue = changedRegion
 	}

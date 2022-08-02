@@ -200,7 +200,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
-	private var remoteConfigManagerUpdateObserverToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
@@ -720,10 +719,7 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	}
 	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
-		coordinator?.userWishesMoreInfoAboutUnavailableQR(
-			originType: originType,
-			currentRegion: validityRegion,
-			availableRegion: validityRegion.opposite)
+		coordinator?.userWishesMoreInfoAboutUnavailableQR( originType: originType, currentRegion: validityRegion)
 	}
 	
 	func didTapDeviceHasClockDeviationMoreInfo() {
