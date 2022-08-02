@@ -127,12 +127,6 @@ extension HolderDashboardViewModel {
 		var origins: [GreenCard.Origin] {
 			greencards.flatMap { $0.origins }
 		}
-
-		/// If at least one origin('s date range) is valid:
-		func isCurrentlyValid(now: Date) -> Bool {
-			origins
-				.contains(where: { $0.isCurrentlyValid(now: now) })
-		}
 		
 		/// Note: may _not yet_ be valid!
 		func hasUnexpiredTest(now: Date) -> Bool {
