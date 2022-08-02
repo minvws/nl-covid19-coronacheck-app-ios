@@ -21,7 +21,6 @@ class ScanLogView: ScrolledStackView {
 		enum Footer {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
-			static let spacing: CGFloat = 24
 		}
 
 		enum StackView {

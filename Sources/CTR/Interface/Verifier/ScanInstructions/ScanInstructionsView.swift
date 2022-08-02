@@ -12,11 +12,7 @@ class ScanInstructionsView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 		
-		// Dimensions
-		static let buttonHeight: CGFloat = 52
-		
-		// Margins
-		static let margin: CGFloat = 20.0
+		// Spacing
 		static let pageControlSpacing: CGFloat = 16.0
 		static let pageControlSpacingSmallScreen: CGFloat = 8.0
 	}

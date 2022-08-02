@@ -28,10 +28,6 @@ struct HolderNewFeaturesFactory: NewFeaturesFactory {
 			version: 5
 		)
 	}
-	
-	private static var isNL: Bool {
-		return "nl" == Locale.current.languageCode
-	}
 }
 
 struct VerifierNewFeaturesFactory: NewFeaturesFactory {

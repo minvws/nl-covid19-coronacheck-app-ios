@@ -24,10 +24,6 @@ final class RiskSettingSelectedView: BaseView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
-		enum Header {
-			static let lineHeight: CGFloat = 22
-			static let kerning: CGFloat = -0.41
-		}
 	}
 	
 	private let scrollView: UIScrollView = {

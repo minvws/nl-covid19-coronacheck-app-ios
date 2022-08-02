@@ -39,8 +39,6 @@ class AppCoordinator: Coordinator {
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingCryptoLibError = false
 	
-	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
-	
 	var flavor = AppFlavor.flavor
 	
 	var launchStateManager: LaunchStateManaging
@@ -329,7 +327,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
-		
+		Current.logHandler.logError("Showing Internet required, while we got: \(errors)")
 		showInternetRequired()
 	}
 	

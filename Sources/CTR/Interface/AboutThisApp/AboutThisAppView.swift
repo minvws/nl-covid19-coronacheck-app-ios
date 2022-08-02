@@ -15,7 +15,6 @@ class AboutThisAppView: ScrolledStackView {
 		// Dimensions
 		enum ListHeader {
 			static let lineHeight: CGFloat = 16
-			static let height: CGFloat = 38
 			static let spacing: CGFloat = 8
 		}
 

@@ -7,24 +7,7 @@
 
 import Foundation
 
-protocol ConfigurationGGDPortalProtocol: AnyObject {
-
-	/// Get the Portal url
-	/// - Returns: the tvs url
-	func getPortalURL() -> URL
-
-	/// Get the consumer ID for GGD Portal
-	/// - Returns: the client ID for GGD Portal
-	func getPortalClientId() -> String
-
-	/// Get the redirect uri for GGD Portal
-	/// - Returns: the redirect uri for GGD Portal
-	func getPortalRedirectUri() -> URL
-}
-
-// MARK: - ConfigurationDigidProtocol
-
-extension Configuration: ConfigurationGGDPortalProtocol {
+extension Configuration {
 
 	/// Get the Portal url
 	/// - Returns: the tvs url

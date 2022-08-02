@@ -10,28 +10,6 @@ import XCTest
 
 class LaunchStateManagerSpy: LaunchStateManaging {
 
-	var invokedVersionSupplierSetter = false
-	var invokedVersionSupplierSetterCount = 0
-	var invokedVersionSupplier: AppVersionSupplierProtocol?
-	var invokedVersionSupplierList = [AppVersionSupplierProtocol]()
-	var invokedVersionSupplierGetter = false
-	var invokedVersionSupplierGetterCount = 0
-	var stubbedVersionSupplier: AppVersionSupplierProtocol!
-
-	var versionSupplier: AppVersionSupplierProtocol {
-		set {
-			invokedVersionSupplierSetter = true
-			invokedVersionSupplierSetterCount += 1
-			invokedVersionSupplier = newValue
-			invokedVersionSupplierList.append(newValue)
-		}
-		get {
-			invokedVersionSupplierGetter = true
-			invokedVersionSupplierGetterCount += 1
-			return stubbedVersionSupplier
-		}
-	}
-
 	var invokedDelegateSetter = false
 	var invokedDelegateSetterCount = 0
 	var invokedDelegate: LaunchStateManagerDelegate?

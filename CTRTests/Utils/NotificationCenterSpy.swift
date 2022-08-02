@@ -51,34 +51,6 @@ class NotificationCenterSpy: NotificationCenterProtocol {
 		return stubbedAddObserverForNameResult
 	}
 
-	var invokedPost = false
-	var invokedPostCount = 0
-	var invokedPostParameters: (aName: NSNotification.Name, anObject: Any?)?
-	var invokedPostParametersList = [(aName: NSNotification.Name, anObject: Any?)]()
-
-	func post(name aName: NSNotification.Name, object anObject: Any?) {
-		invokedPost = true
-		invokedPostCount += 1
-		invokedPostParameters = (aName, anObject)
-		invokedPostParametersList.append((aName, anObject))
-	}
-
-	var invokedPostName = false
-	var invokedPostNameCount = 0
-	var invokedPostNameParameters: (aName: NSNotification.Name, anObject: Any?, aUserInfo: [AnyHashable: Any]?)?
-	var invokedPostNameParametersList = [(aName: NSNotification.Name, anObject: Any?, aUserInfo: [AnyHashable: Any]?)]()
-
-	func post(
-		name aName: NSNotification.Name,
-		object anObject: Any?,
-		userInfo aUserInfo: [AnyHashable: Any]?
-	) {
-		invokedPostName = true
-		invokedPostNameCount += 1
-		invokedPostNameParameters = (aName, anObject, aUserInfo)
-		invokedPostNameParametersList.append((aName, anObject, aUserInfo))
-	}
-
 	var invokedRemoveObserver = false
 	var invokedRemoveObserverCount = 0
 	var invokedRemoveObserverParameters: (observer: Any, Void)?

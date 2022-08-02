@@ -23,11 +23,6 @@ protocol OpenUrlProtocol: AnyObject {
 	func openUrl(_ url: URL, inApp: Bool)
 }
 
-protocol Restartable: AnyObject {
-
-	func restart()
-}
-
 /// The shared base class for the holder and verifier coordinator.
 class SharedCoordinator: Coordinator {
 
@@ -35,7 +30,6 @@ class SharedCoordinator: Coordinator {
 
 	var onboardingManager: OnboardingManaging = Current.onboardingManager
 	var newFeaturesManager: NewFeaturesManaging = Current.newFeaturesManager
-	var cryptoManager: CryptoManaging = Current.cryptoManager
 	var remoteConfigManager: RemoteConfigManaging = Current.remoteConfigManager
 	var versionSupplier = AppVersionSupplier()
 	var childCoordinators: [Coordinator] = []
@@ -230,9 +224,7 @@ extension SharedCoordinator: NewFeaturesDelegate {
 	}
 }
 
-// MARK: - Restartable
-
-extension SharedCoordinator: Restartable {
+extension SharedCoordinator {
 
 	/// Restart the app
 	func restart() {

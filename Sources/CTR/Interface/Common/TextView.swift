@@ -236,13 +236,6 @@ extension NSAttributedString {
 	}
 	
 	/// Determines whether the attributed string contains a link
-	var containsLink: Bool {
-		return attributes { key, value, range in
-			return key == NSAttributedString.Key.link
-		}
-	}
-	
-	/// Determines whether the attributed string contains a link
 	var rangeOfFirstLink: NSRange? {
 		var foundRange: NSRange?
 		

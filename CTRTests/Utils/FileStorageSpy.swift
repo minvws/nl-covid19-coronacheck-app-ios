@@ -50,14 +50,6 @@ class FileStorageSpy: FileStorageProtocol {
 		return stubbedReadResult
 	}
 
-	var invokedDebugLogItems = false
-	var invokedDebugLogItemsCount = 0
-
-	func debugLogItems() {
-		invokedDebugLogItems = true
-		invokedDebugLogItemsCount += 1
-	}
-
 	var invokedFileExists = false
 	var invokedFileExistsCount = 0
 	var invokedFileExistsParameters: (fileName: String, Void)?
