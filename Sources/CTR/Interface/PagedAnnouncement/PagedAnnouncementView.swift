@@ -13,7 +13,6 @@ class PagedAnnouncementView: BaseView {
 	private struct ViewTraits {
 		
 		// Margins
-		static let margin: CGFloat = 20.0
 		static let ribbonOffset: CGFloat = 15.0
 		static let pageControlSpacing: CGFloat = 16.0
 		static let pageControlSpacingSmallScreen: CGFloat = 8.0
