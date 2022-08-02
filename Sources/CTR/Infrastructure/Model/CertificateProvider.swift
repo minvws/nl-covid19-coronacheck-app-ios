@@ -15,8 +15,6 @@ protocol CertificateProvider {
 	
 	/// The ssl certificate of the provider
 	var tlsCertificates: [String] { get }
-
-	func getHostNames() -> [String]
 	
 	func getTLSCertificates() -> [Data]
 	

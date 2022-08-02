@@ -455,11 +455,3 @@ extension EventFlow.Event {
 		return nil
 	}
 }
-
-extension EventFlow.EventProvider {
-
-	func getHostNames() -> [String] {
-		
-		[unomiUrl?.host, eventUrl?.host].compactMap { $0 }
-	}
-}

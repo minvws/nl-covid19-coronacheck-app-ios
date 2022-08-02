@@ -10,7 +10,6 @@ import Foundation
 protocol VerificationPolicyEnableable: AnyObject {
 	var observatory: Observatory<[VerificationPolicy]> { get }
 	
-	func enable(verificationPolicies: [String])
 	func wipePersistedData()
 }
 

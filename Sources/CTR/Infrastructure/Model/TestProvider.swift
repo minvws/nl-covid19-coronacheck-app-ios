@@ -43,9 +43,4 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 
 		return URL(string: resultURLString)
 	}
-
-	func getHostNames() -> [String] {
-
-		[resultURL?.host].compactMap { $0 }
-	}
 }

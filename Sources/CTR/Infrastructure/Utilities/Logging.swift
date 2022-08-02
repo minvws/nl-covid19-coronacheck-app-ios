@@ -35,9 +35,6 @@ protocol Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	func logError(_ message: String)
-	
-	// Setup
-	func setup()
 }
 
 final class LogHandler: Logging {
@@ -94,17 +91,6 @@ final class LogHandler: Logging {
 		DDLog.add(fileLogger)
 
 		DDLogDebug("🐞 Logging has been setup", file: #file, function: #function, line: #line, tag: "default")
-	}
-
-	func logFiles() -> [URL] {
-
-		guard let fileLogger = DDLog.allLoggers.first(where: { $0 is DDFileLogger }) as? DDFileLogger else {
-			#if DEBUG
-			assertionFailure("File Logger Not Found")
-			#endif
-			return []
-		}
-		return fileLogger.logFileManager.sortedLogFilePaths.compactMap { URL(fileURLWithPath: $0) }
 	}
 	
 	// MARK: Logging

@@ -27,11 +27,6 @@ protocol DataStoreManaging {
 
 class DataStoreManager: DataStoreManaging {
 
-	private var storageType: StorageType
-	// private let logHandler: Logging?
-
-	private let flavor: AppFlavor
-
 	/// The persistent container holding our data model
 	private let persistentContainer: NSPersistentContainer
 
@@ -39,8 +34,6 @@ class DataStoreManager: DataStoreManaging {
 	/// - Parameter storageType: store the data in memory or on disk.
 	required init(_ storageType: StorageType, flavor: AppFlavor = AppFlavor.flavor /*, logHandler: Logging? = nil*/, loadPersistentStoreCompletion: @escaping (Result<DataStoreManager, Error>) -> Void) {
 
-		self.storageType = storageType
-		self.flavor = flavor
 		// self.logHandler = logHandler
 		
 		let persistentContainer = NSPersistentContainer(name: flavor == .holder ? "CoronaCheck" : "Verifier")
