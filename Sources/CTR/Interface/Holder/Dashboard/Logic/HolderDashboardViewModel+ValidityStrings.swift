@@ -92,8 +92,7 @@ extension QRCard {
 					
 				case (.validityHasBegun, .netherlands, .test):
 					return validityText_hasBegun_domestic_test(
-						expirationTime: origin.expirationTime,
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
+						expirationTime: origin.expirationTime
 					)
 					
 				case (.validityHasNotYetBegun, .netherlands, .test):
@@ -249,7 +248,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	)
 }
 
-private func validityText_hasBegun_domestic_test(expirationTime: Date, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_test(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 	let formatter = DateFormatter.Format.dayNameDayNumericMonthWithTime
 	let dateString = formatter.string(from: expirationTime)

@@ -263,14 +263,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
 	}
 
-	var invokedUserWishesToSeeStoredEvents = false
-	var invokedUserWishesToSeeStoredEventsCount = 0
-
-	func userWishesToSeeStoredEvents() {
-		invokedUserWishesToSeeStoredEvents = true
-		invokedUserWishesToSeeStoredEventsCount += 1
-	}
-
 	var invokedUserWishesToViewQRs = false
 	var invokedUserWishesToViewQRsCount = 0
 	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)?

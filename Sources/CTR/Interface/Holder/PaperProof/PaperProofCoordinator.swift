@@ -295,11 +295,6 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		}
 	}
 
-	func eventFlowDidCancelFromBackSwipe() {
-
-		cleanup()
-	}
-
 	private func removeChildCoordinator() {
 
 		guard let coordinator = childCoordinators.last else { return }

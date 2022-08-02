@@ -10,9 +10,6 @@ import SafariServices
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
 
-	/// Navigate to the consent page
-	func navigateToConsent()
-
 	/// Consent was given
 	func consentGiven()
 }

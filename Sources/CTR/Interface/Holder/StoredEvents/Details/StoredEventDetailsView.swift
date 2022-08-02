@@ -12,7 +12,6 @@ final class StoredEventDetailsView: ScrolledStackView, EventDetailsViewable {
 	/// The display constants
 	private enum ViewTraits {
 		
-		static let margin: CGFloat = 20.0
 		static let spacing: CGFloat = 24
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26

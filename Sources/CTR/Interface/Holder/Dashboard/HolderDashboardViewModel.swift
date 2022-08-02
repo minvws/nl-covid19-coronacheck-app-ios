@@ -353,7 +353,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
@@ -362,7 +361,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		} else if state.shouldShowOnlyInternationalPane {
@@ -374,7 +372,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		}
@@ -383,7 +380,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
-			remoteConfigManager: Current.remoteConfigManager,
 			now: Current.now()
 		)
 
@@ -542,7 +538,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -574,7 +569,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -612,7 +606,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -650,7 +643,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		

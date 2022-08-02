@@ -48,7 +48,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToOpenTheMenu()
 	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
-	func userWishesToSeeStoredEvents()
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 }
 
