@@ -1,10 +1,9 @@
-"domestic_recovery_created" = "Van je positieve testuitslag is een Nederlands herstelbewijs gemaakt.";
-"appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol zit kan je CoronaChek niet openen. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
+"appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol zit kun je CoronaCheck niet openen. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag zit vol";
-"domestic_recovery_rejected" = "Van jouw positieve testuitslag kon geen Nederlands herstelbewijs worden gemaakt.";
-"domestic_vaccination_created" = "Van je vaccinaties is een Nederlands vaccinatiebewijs gemaakt.";
-"domestic_vaccination_rejected" = "Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs";
+"domestic_recovery_created" = "Er is een herstelbewijs gemaakt.";
+"domestic_vaccination_created" = "Er is een Nederlands vaccinatiebewijs gemaakt.";
+"domestic_vaccination_rejected" = "Van je vaccinatie(s) kan geen Nederlands vaccinatiebewijs gemaakt worden.";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -56,7 +55,7 @@
 /* MARK: - General */
 "general_cancel" = "Annuleer";
 "general_delete" = "Verwijderen";
-"general_diskFull_body" = "Het is niet gelukt omdat de opslag van je telefoon vol zit. Maak ruimte vrij op je telefoon en probeer opnieuw. Kijk voor meer informatie op de Wegwijzer.";
+"general_diskFull_body" = "Het is niet gelukt omdat de opslag van je telefoon vol zit. Maak ruimte vrij op je telefoon en probeer het opnieuw.";
 "general_diskFull_title" = "Je opslag zit vol";
 "general_menu" = "Menu";
 "general_negativeTest" = "Negatieve testuitslag";
@@ -611,10 +610,9 @@
 "holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
-"holder_eventHints_title" = "Je bewijzen zijn gemaakt";
-"holder_event_diskfull_body" = "<p>Omdat de opslag van je telefoon vol zit, kan CoronaCheck geen bewijs op jouw telefoon zetten.</p><p>Maak ruimte vrij op je telefoon en probeer opnieuw jouw bewijs te maken. Kijk voor meer informatie op de Wegwijzer.</p>";
-"holder_event_diskfull_title" = "We kunnen geen bewijs maken";
+"holder_eventHints_title" = "Bewijs maken gelukt";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
 "holder_event_vaccination_assessment_about_country" = "Gevaccineerd in (land):";
 "holder_event_vaccination_assessment_about_date" = "Beoordelingsdatum:";
 "holder_event_vaccination_assessment_about_date_of_birth" = "Geboortedatum:";
@@ -768,10 +766,8 @@
 "holder_wasUserTestedAtGGD_yes_buttonTitle" = "Ja, getest voor of op %@";
 "holder_whereUserTested_body" = "Geef aan waar je bent getest om een bewijs te maken van je positieve of negatieve testuitslag.";
 "holder_whereUserTested_title" = "Waar ben je getest?";
-"international_recovery_created" = "Van je positieve testuitslag is een internationaal herstelbewijs gemaakt.";
-"international_recovery_rejected" = "Van jouw positieve testuitslag kon geen internationaal herstelbewijs worden gemaakt.";
-"international_vaccination_created" = "Van je vaccinatie(s) is een internationaal vaccinatiebewijs gemaakt.";
-"international_vaccination_rejected" = "Van de opgehaalde gegevens kon geen internationaal vaccinatiebewijs worden gemaakt.";
+"international_vaccination_created" = "Er is een internationaal vaccinatiebewijs gemaakt.";
+"international_vaccination_rejected" = "Van je vaccinatie(s) kan geen internationaal vaccinatiebewijs gemaakt worden.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";
@@ -794,10 +790,8 @@
 "recommended.updateApp.title" = "Update alvast je app";
 "recommended_update_card_action" = "Nu updaten";
 "recommended_update_card_description" = "Je kunt de app al naar een nieuwere versie updaten";
-"vaccination_completed_by_previous_recovery" = "Je positieve testuitslag is meegerekend in je vaccinatiebewijs.";
-"vaccination_completed_by_under_12_recovery" = "Je positieve testuitslag is tot je 18e verjaardag meegerekend in je vaccinatiebewijs.";
-"vaccination_dose_correction_applied" = "Je positieve testuitslag is meegerekend in je vaccinatiebewijs.";
-"vaccination_dose_correction_not_applied" = "Je positieve testuitslag had geen effect op je vaccinaties.";
+"vaccination_dose_correction_applied" = "Je positieve testuitslag is meegeteld in je vaccinatiebewijs.";
+"vaccination_dose_correction_not_applied" = "Je positieve testuitslag is niet geschikt om mee te tellen in je vaccinatiebewijs.";
 "visitorpass_code_description" = "Vul je beoordelingscode in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";
