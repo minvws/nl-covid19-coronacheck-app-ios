@@ -72,7 +72,7 @@
 "general_unrecoverableError_restartTheApp_message" = "Please restart CoronaCheck. Does the problem still occur? Delete and reinstall the app.";
 "general_unrecoverableError_restartTheApp_title" = "Restart the app";
 "general_unrecoverableError_sendCrashReport_action" = "Report error";
-"general_unrecoverableError_sendCrashReport_message" = "A technical error has occurred. Please report the error. We will try to fix it as soon as possible.";
+"general_unrecoverableError_sendCrashReport_message" = "A technical error occured in the last CoronaCheck app update. Please report the error. We will try to fix it as soon as possible.";
 "general_unrecoverableError_sendCrashReport_title" = "App error";
 "general_vaccination" = "vaccination";
 "general_vaccinationAssessment" = "vaccination approval";
