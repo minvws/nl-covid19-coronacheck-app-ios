@@ -496,6 +496,17 @@ extension AppCoordinator {
 		shouldUsePrivacySnapShot = false
 	}
 	
+	@objc private func onDiskFullNotification() {
+		popPresentedViewController {
+			let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
+			if #available(iOS 13.0, *) {
+				// prevent pulldown-to-dismiss (not needed before iOS 13)
+				viewController.isModalInPresentation = true
+			}
+			self.navigationController.present(viewController, animated: true)
+		}
+	}
+	
 	private func addObservers() {
 		
 		NotificationCenter.default.addObserver(
@@ -520,6 +531,12 @@ extension AppCoordinator {
 			self,
 			selector: #selector(enablePrivacySnapShot),
 			name: Notification.Name.enablePrivacySnapShot,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(onDiskFullNotification),
+			name: Notification.Name.diskFull,
 			object: nil
 		)
 	}

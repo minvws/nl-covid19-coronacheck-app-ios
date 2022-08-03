@@ -264,7 +264,7 @@ class NetworkManager {
 			return .success(object)
 		} catch {
 			if logError {
-				logHandler?.logError("Error Deserializing \(Object.self):\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
+				logHandler?.logError("Error Deserializing `\(Object.self)`:\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
 			}
 			return .failure(.cannotDeserialize)
 		}
