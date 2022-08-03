@@ -11,16 +11,16 @@ import UIKit
 
 extension UINavigationController {
 	
-	func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
-		pushViewController(viewController, animated: animated)
-
-		guard animated, let coordinator = transitionCoordinator else {
-			DispatchQueue.main.async { completion() }
-			return
-		}
-
-		coordinator.animate(alongsideTransition: nil) { _ in completion() }
-	}
+//	func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
+//		pushViewController(viewController, animated: animated)
+//
+//		guard animated, let coordinator = transitionCoordinator else {
+//			DispatchQueue.main.async { completion() }
+//			return
+//		}
+//
+//		coordinator.animate(alongsideTransition: nil) { _ in completion() }
+//	}
 
 	func popViewController( animated: Bool, completion: @escaping () -> Void) {
 
@@ -107,18 +107,18 @@ extension UINavigationController {
 		popToViewController(popbackVC, animated: animated, completion: completion)
 	}
 	
-	/// `oneOfInstanceOf` is in descending priority order
-	func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
-
-		let viewControllersMatchingTypes = viewControllerTypes.compactMap { viewControllerType in
-			self.viewControllers.last(where: { $0.isKind(of: viewControllerType) })
-		}
-		
-		guard let popbackVC = viewControllersMatchingTypes.first else {
-			completion()
-			return
-		}
-		
-		popToViewController(popbackVC, animated: animated, completion: completion)
-	}
+//	/// `oneOfInstanceOf` is in descending priority order
+//	func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
+//
+//		let viewControllersMatchingTypes = viewControllerTypes.compactMap { viewControllerType in
+//			self.viewControllers.last(where: { $0.isKind(of: viewControllerType) })
+//		}
+//		
+//		guard let popbackVC = viewControllersMatchingTypes.first else {
+//			completion()
+//			return
+//		}
+//		
+//		popToViewController(popbackVC, animated: animated, completion: completion)
+//	}
 }

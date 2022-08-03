@@ -19,10 +19,10 @@ class Fonts {
 		case heavyBold
 	}
 	
-	/// Size 34 points
-	static var largeTitle: UIFont {
-		font(textStyle: .largeTitle, weight: .bold)
-	}
+//	/// Size 34 points
+//	static var largeTitle: UIFont {
+//		font(textStyle: .largeTitle, weight: .bold)
+//	}
 	
 	/// Size 28 points
 	static var title1: UIFont {
@@ -49,15 +49,15 @@ class Fonts {
 		font(textStyle: .title3, weight: .bold, customFont: "Montserrat-Bold")
 	}
 	
-	/// Size 20 points
-	static var title3Medium: UIFont {
-		font(textStyle: .title3, weight: .medium)
-	}
+//	/// Size 20 points
+//	static var title3Medium: UIFont {
+//		font(textStyle: .title3, weight: .medium)
+//	}
 	
-	/// Size 17 points
-	static var headline: UIFont {
-		font(textStyle: .headline)
-	}
+//	/// Size 17 points
+//	static var headline: UIFont {
+//		font(textStyle: .headline)
+//	}
 	
 	/// Size 17 points
 	static var headlineBold: UIFont {
@@ -74,10 +74,10 @@ class Fonts {
 		font(textStyle: .body)
 	}
 	
-	/// Size 17 points
-	static var bodyMontserrat: UIFont {
-		font(textStyle: .body, customFont: "Montserrat-Bold")
-	}
+//	/// Size 17 points
+//	static var bodyMontserrat: UIFont {
+//		font(textStyle: .body, customFont: "Montserrat-Bold")
+//	}
 	
 	/// Size 17 points
 	static var bodyMontserratFixed: UIFont {
@@ -108,10 +108,10 @@ class Fonts {
 		font(textStyle: .body, weight: .medium)
 	}
 	
-	/// Size 16 points
-	static var callout: UIFont {
-		font(textStyle: .callout)
-	}
+//	/// Size 16 points
+//	static var callout: UIFont {
+//		font(textStyle: .callout)
+//	}
 	
 	/// Size 16 points
 	static var calloutSemiBold: UIFont {
@@ -123,20 +123,20 @@ class Fonts {
 		font(textStyle: .subheadline)
 	}
 	
-	/// Size 15 points
-	static var subheadMontserrat: UIFont {
-		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
-	}
+//	/// Size 15 points
+//	static var subheadMontserrat: UIFont {
+//		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
+//	}
 	
 	/// Size 15 points
 	static var subheadHeavyBold: UIFont {
 		font(textStyle: .subheadline, weight: .heavyBold)
 	}
 	
-	/// Size 15 points
-	static var subheadBold: UIFont {
-		font(textStyle: .subheadline, weight: .bold)
-	}
+//	/// Size 15 points
+//	static var subheadBold: UIFont {
+//		font(textStyle: .subheadline, weight: .bold)
+//	}
 	
 	/// Size 15 points
 	static var subheadMedium: UIFont {
@@ -148,10 +148,10 @@ class Fonts {
 		font(textStyle: .footnote)
 	}
 	
-	/// Size 13 points
-	static var footnoteMontserrat: UIFont {
-		font(textStyle: .footnote, customFont: "Montserrat-SemiBold")
-	}
+//	/// Size 13 points
+//	static var footnoteMontserrat: UIFont {
+//		font(textStyle: .footnote, customFont: "Montserrat-SemiBold")
+//	}
 	
 	/// size 12 points
 	static var caption1: UIFont {

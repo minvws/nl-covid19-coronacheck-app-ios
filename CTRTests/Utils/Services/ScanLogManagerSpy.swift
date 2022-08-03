@@ -50,18 +50,6 @@ class ScanLogManagingSpy: ScanLogManaging {
 		invokedAddScanEntryParametersList.append((verificationPolicy, date))
 	}
 
-	var invokedDeleteExpiredScanLogEntries = false
-	var invokedDeleteExpiredScanLogEntriesCount = 0
-	var invokedDeleteExpiredScanLogEntriesParameters: (seconds: Int, now: Date)?
-	var invokedDeleteExpiredScanLogEntriesParametersList = [(seconds: Int, now: Date)]()
-
-	func deleteExpiredScanLogEntries(seconds: Int, now: Date) {
-		invokedDeleteExpiredScanLogEntries = true
-		invokedDeleteExpiredScanLogEntriesCount += 1
-		invokedDeleteExpiredScanLogEntriesParameters = (seconds, now)
-		invokedDeleteExpiredScanLogEntriesParametersList.append((seconds, now))
-	}
-
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 
