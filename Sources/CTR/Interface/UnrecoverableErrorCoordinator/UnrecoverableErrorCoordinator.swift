@@ -36,6 +36,21 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 	
 	// Designated starter method
 	func start() {
+		
+		if case .diskFull = (error as? DataStoreManager.Error) {
+			startForDiskFull()
+		} else {
+			startForSendCrashReport()
+		}
+	}
+	
+	private func startForDiskFull() {
+		let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
+		window.rootViewController = viewController
+		window.makeKeyAndVisible()
+	}
+	
+	private func startForSendCrashReport() {
 		let backingViewController = UIViewController()
 		backingViewController.view.backgroundColor = .white
 		

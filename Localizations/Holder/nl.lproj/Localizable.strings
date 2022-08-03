@@ -1,4 +1,7 @@
 "domestic_recovery_created" = "Van je positieve testuitslag is een Nederlands herstelbewijs gemaakt.";
+"appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol zit kan je CoronaChek niet openen. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
+"appstatus_diskfull_button" = "Sluit CoronaCheck";
+"appstatus_diskfull_title" = "Je opslag zit vol";
 "domestic_recovery_rejected" = "Van jouw positieve testuitslag kon geen Nederlands herstelbewijs worden gemaakt.";
 "domestic_vaccination_created" = "Van je vaccinaties is een Nederlands vaccinatiebewijs gemaakt.";
 "domestic_vaccination_rejected" = "Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs";
@@ -53,6 +56,8 @@
 /* MARK: - General */
 "general_cancel" = "Annuleer";
 "general_delete" = "Verwijderen";
+"general_diskFull_body" = "Het is niet gelukt omdat de opslag van je telefoon vol zit. Maak ruimte vrij op je telefoon en probeer opnieuw. Kijk voor meer informatie op de Wegwijzer.";
+"general_diskFull_title" = "Je opslag zit vol";
 "general_menu" = "Menu";
 "general_negativeTest" = "Negatieve testuitslag";
 "general_newintheapp" = "Nieuw in de app";
@@ -72,7 +77,7 @@
 "general_unrecoverableError_restartTheApp_message" = "Start CoronaCheck opnieuw op. Nog steeds een probleem? Verwijder de app en installeer deze opnieuw.";
 "general_unrecoverableError_restartTheApp_title" = "Start de app opnieuw op";
 "general_unrecoverableError_sendCrashReport_action" = "Probleem rapporteren";
-"general_unrecoverableError_sendCrashReport_message" = "Er is een technisch probleem opgetreden.\nRapporteer dit probleem zodat we het zo snel mogelijk kunnen oplossen.";
+"general_unrecoverableError_sendCrashReport_message" = "Er is een technisch probleem met de laatste update van CoronaCheck. Rapporteer dit probleem zodat we het zo snel mogelijk kunnen oplossen.";
 "general_unrecoverableError_sendCrashReport_title" = "Probleem met de app";
 "general_vaccination" = "vaccinatie";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
@@ -607,6 +612,8 @@
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
 "holder_eventHints_title" = "Je bewijzen zijn gemaakt";
+"holder_event_diskfull_body" = "<p>Omdat de opslag van je telefoon vol zit, kan CoronaCheck geen bewijs op jouw telefoon zetten.</p><p>Maak ruimte vrij op je telefoon en probeer opnieuw jouw bewijs te maken. Kijk voor meer informatie op de Wegwijzer.</p>";
+"holder_event_diskfull_title" = "We kunnen geen bewijs maken";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_vaccination_assessment_about_country" = "Gevaccineerd in (land):";
 "holder_event_vaccination_assessment_about_date" = "Beoordelingsdatum:";
