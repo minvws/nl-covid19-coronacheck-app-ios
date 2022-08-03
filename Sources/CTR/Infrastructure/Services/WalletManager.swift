@@ -46,8 +46,6 @@ protocol WalletManaging: AnyObject {
 
 	func listGreenCards() -> [GreenCard]
 
-	func listOrigins(type: OriginType) -> [Origin]
-
 	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)]
 
 	/// Expire event groups that are no longer valid
@@ -58,10 +56,6 @@ protocol WalletManaging: AnyObject {
 
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
-
-	func hasDomesticGreenCard(originType: String) -> Bool
-
-	func hasEventGroup(type: String, providerIdentifier: String) -> Bool
 	
 	func updateEventGroup(identifier: String, expiryDate: Date)
 }
@@ -436,46 +430,6 @@ class WalletManager: WalletManaging {
 		return result
 	}
 
-	func hasEventGroup(type: String, providerIdentifier: String) -> Bool {
-
-		var result = false
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-			
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
-			
-			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type {
-				result = true
-			}
-		}
-		return result
-	}
-
-	/// List all the origins for a type (across greenCards)
-	/// - Parameter type: the type or origin ( vaccination, test, recovery)
-	/// - Returns: array of origins. (no specific order)
-	func listOrigins(type: OriginType) -> [Origin] {
-
-		var result = [Origin]()
-
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				guard let greenCards = wallet.castGreenCards() else {
-					return
-				}
-				for greenCard in greenCards {
-
-					if let origins = greenCard.origins?.allObjects as? [Origin] {
-						result.append(contentsOf: origins.filter { $0.type == type.rawValue })
-					}
-				}
-			}
-		}
-		return result
-	}
-
 	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType originType: OriginType? = nil) -> [GreenCard] {
 		var result = [GreenCard]()
@@ -510,18 +464,6 @@ class WalletManager: WalletManaging {
 		}
 
 		return result
-	}
-
-	func hasDomesticGreenCard(originType: String) -> Bool {
-
-		let allDomesticGreencards = listGreenCards()
-			.filter { $0.getType() == GreenCardType.domestic }
-			.filter { greencard in
-				guard let origins = greencard.castOrigins() else { return false }
-				return !origins.filter({ $0.type == originType }).isEmpty
-			}
-
-		return !allDomesticGreencards.isEmpty
 	}
 	
 	func updateEventGroup(identifier: String, expiryDate: Date) {

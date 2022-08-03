@@ -56,7 +56,7 @@ struct ErrorCode: CustomStringConvertible {
 }
 
 // The values are documented in the coordination repo:
-// https://github.com/minvws/nl-covid19-coronacheck-app-coordination/blob/main/docs/error-handling.md
+// https://github.com/minvws/nl-covid19-coronacheck-app-coordination/blob/main/docs/Error%20Handling.md
 
 // MARK: ErrorCode.Flow
 

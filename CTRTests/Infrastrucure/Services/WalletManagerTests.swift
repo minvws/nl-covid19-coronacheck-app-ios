@@ -268,40 +268,6 @@ class WalletManagerTests: XCTestCase {
 		expect(signedEvents.first).to(contain("test"))
 		expect(signedEvents.last).to(contain("vaccination"))
 	}
-
-	func test_hasEventGroup_vaccination() {
-
-		// Given
-		sut.storeEventGroup(
-			.vaccination,
-			providerIdentifier: "GGD",
-			jsonData: Data(),
-			expiryDate: nil
-		)
-
-		// When
-		let hasEventGroup = sut.hasEventGroup(type: "vaccination", providerIdentifier: "GGD")
-
-		// Then
-		expect(hasEventGroup) == true
-	}
-
-	func test_hasEventGroup_recovery() {
-
-		// Given
-		sut.storeEventGroup(
-			.recovery,
-			providerIdentifier: "DCC",
-			jsonData: Data(),
-			expiryDate: nil
-		)
-
-		// When
-		let hasEventGroup = sut.hasEventGroup(type: "recovery", providerIdentifier: EventFlow.paperproofIdentier)
-
-		// Then
-		expect(hasEventGroup) == true
-	}
 	
 	func test_expireEventGroups_noEvents() {
 		
@@ -672,16 +638,9 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be now for a CTB
 		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) != Date(timeIntervalSince1970: 0)
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == true
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 	
 	func test_storeDomesticGreenCard_recovery() throws {
@@ -707,14 +666,7 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == true
-		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 	
 	func test_storeDomesticGreenCard_vaccinationAssessment() throws {
@@ -740,14 +692,7 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(haveCount(1))
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccinationassessment")) == true
 	}
 	
 	func test_storeInternationalGreenCard_vaccination() throws {
@@ -767,16 +712,9 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be epoch for a DCC (immediately valid)
 		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) == Date(timeIntervalSince1970: 0)
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 
 	func test_storeInternationalGreenCard_vaccination_failedCredential() throws {
@@ -794,10 +732,6 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == false
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(beEmpty())
 	}
 	
@@ -818,9 +752,6 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 	
@@ -841,9 +772,6 @@ class WalletManagerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(haveCount(2))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(2))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 	
