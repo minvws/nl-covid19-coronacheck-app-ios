@@ -94,6 +94,12 @@ extension HolderDashboardViewModel {
 				}
 			}
 			
+			func hasValidOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+				return origins
+					.filter { $0.isCurrentlyValid(now: now) }
+					.contains(where: { $0.type == type })
+			}
+			
 			/// Note: may _not yet_ be valid!
 			func hasUnexpiredOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
 				return origins
@@ -126,6 +132,19 @@ extension HolderDashboardViewModel {
 
 		var origins: [GreenCard.Origin] {
 			greencards.flatMap { $0.origins }
+		}
+		
+		/// If at least one origin('s date range) is valid:
+		func isCurrentlyValid(now: Date) -> Bool {
+			origins
+				.contains(where: { $0.isCurrentlyValid(now: now) })
+		}
+		
+		var effectiveExpiratedAt: Date {
+			origins
+				.compactMap { $0.expirationTime }
+				.sorted()
+				.last ?? .distantPast
 		}
 		
 		/// Note: may _not yet_ be valid!
