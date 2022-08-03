@@ -26,8 +26,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func userWishesToOpenTheMenu()
 	
-	func userWishesToOpenScanLog()
-	
 	func userWishesToLaunchThirdPartyScannerApp()
 	
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)

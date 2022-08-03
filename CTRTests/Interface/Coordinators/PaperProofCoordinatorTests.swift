@@ -189,30 +189,6 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 	}
-
-	func test_eventFlowDidCancelFromBackSwipe() {
-
-		// Given
-		sut.token = "test"
-		sut.scannedDCC = "test"
-		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		navigationSpy.viewControllers = [
-			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
-			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
-			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
-		]
-
-		// When
-		sut.eventFlowDidCancelFromBackSwipe()
-
-		// Then
-		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token) == nil
-		expect(self.sut.scannedDCC) == nil
-		expect(self.sut.childCoordinators).to((haveCount(0)))
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.viewControllers).to(haveCount(3))
-	}
 	
 	func test_eventFlowDidCancel() {
 

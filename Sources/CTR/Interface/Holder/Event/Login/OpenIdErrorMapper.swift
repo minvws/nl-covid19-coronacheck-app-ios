@@ -147,7 +147,7 @@ struct OpenIdErrorMapper {
 				return ErrorCode.ClientCode.openIDOAuthTokenInvalidScope
 				
 			case OIDErrorCodeOAuthToken.clientError.rawValue:
-				return ErrorCode.ClientCode.openIDOAuthTokenInvalidClient
+				return ErrorCode.ClientCode.openIDOAuthTokenClientError
 				
 			case OIDErrorCodeOAuthToken.other.rawValue:
 				return ErrorCode.ClientCode.openIDOAuthTokenUnknownError

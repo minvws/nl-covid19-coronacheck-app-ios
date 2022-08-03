@@ -10,12 +10,6 @@ import Foundation
 /// Shared protocol between `DCCQRLabelViews` to support accessibility
 protocol DCCQRLabelViewable: AnyObject {
 	
-	/// The dcc field
-	var field: String? { get set }
-	
-	/// The dcc value
-	var value: String? { get set }
-	
 	/// Set up labels to support SwitchControl accessibility
 	func updateAccessibilityStatus()
 }

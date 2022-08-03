@@ -8,9 +8,6 @@
 import UIKit
 
 class PaperProofScanViewModel: ScanPermissionViewModel {
-	
-	/// The crypto manager
-	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
@@ -31,7 +28,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
+	///   - scanner: the paper proof scanner
 	init(
 		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
 		scanner: PaperProofIdentifierProtocol = PaperProofIdentifier()

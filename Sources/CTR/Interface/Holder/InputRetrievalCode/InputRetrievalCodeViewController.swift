@@ -194,7 +194,7 @@ class InputRetrievalCodeViewController: TraitWrappedGenericViewController<InputR
 		
 		tapGestureRecognizer = UITapGestureRecognizer(
 			target: self,
-			action: #selector(handleSingleTap(sender:))
+			action: #selector(handleSingleTap)
 		)
 		if let gesture = tapGestureRecognizer {
 			gesture.isEnabled = false
@@ -202,7 +202,7 @@ class InputRetrievalCodeViewController: TraitWrappedGenericViewController<InputR
 		}
 	}
 	
-	@objc func handleSingleTap(sender: UITapGestureRecognizer) {
+	@objc func handleSingleTap() {
 		
 		if view != nil {
 			view.endEditing(true)

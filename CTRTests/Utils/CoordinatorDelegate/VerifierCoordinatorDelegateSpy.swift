@@ -75,14 +75,6 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedUserWishesToOpenTheMenuCount += 1
 	}
 
-	var invokedUserWishesToOpenScanLog = false
-	var invokedUserWishesToOpenScanLogCount = 0
-
-	func userWishesToOpenScanLog() {
-		invokedUserWishesToOpenScanLog = true
-		invokedUserWishesToOpenScanLogCount += 1
-	}
-
 	var invokedUserWishesToLaunchThirdPartyScannerApp = false
 	var invokedUserWishesToLaunchThirdPartyScannerAppCount = 0
 

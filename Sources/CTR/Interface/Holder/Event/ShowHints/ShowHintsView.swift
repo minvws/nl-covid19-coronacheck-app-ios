@@ -16,10 +16,6 @@ final class ShowHintsView: ScrolledStackWithButtonView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
-		enum Message {
-			static let lineHeight: CGFloat = 22
-			static let kerning: CGFloat = -0.41
-		}
 	}
 	
 	/// The title label

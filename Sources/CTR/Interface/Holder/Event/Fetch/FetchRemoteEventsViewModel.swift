@@ -197,11 +197,6 @@ final class FetchRemoteEventsViewModel {
 		coordinator?.fetchEventsScreenDidFinish(.back(eventMode: eventMode))
 	}
 
-	func openUrl(_ url: URL) {
-
-		coordinator?.openUrl(url, inApp: true)
-	}
-
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(

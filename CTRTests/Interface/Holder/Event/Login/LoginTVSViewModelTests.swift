@@ -419,7 +419,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			OIDErrorCodeOAuthToken.unauthorizedClient.rawValue: ErrorCode.ClientCode.openIDOAuthTokenUnauthorizedClient,
 			OIDErrorCodeOAuthToken.unsupportedGrantType.rawValue: ErrorCode.ClientCode.openIDOAuthTokenUnsupportedGrantType,
 			OIDErrorCodeOAuthToken.invalidScope.rawValue: ErrorCode.ClientCode.openIDOAuthTokenInvalidScope,
-			OIDErrorCodeOAuthToken.clientError.rawValue: ErrorCode.ClientCode.openIDOAuthTokenInvalidClient,
+			OIDErrorCodeOAuthToken.clientError.rawValue: ErrorCode.ClientCode.openIDOAuthTokenClientError,
 			OIDErrorCodeOAuthToken.other.rawValue: ErrorCode.ClientCode.openIDOAuthTokenUnknownError
 		]
 
