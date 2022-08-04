@@ -286,9 +286,13 @@ errit:
 	if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
 		EXITOUT("Could not create cms Blob");
 
-	cms = d2i_CMS_bio(cmsBlob, NULL);
-	if (NULL == cms)
-		EXITOUT("Could not create CMS structure from PKCS#7");
+	@try {
+		cms = d2i_CMS_bio(cmsBlob, NULL);
+		if (NULL == cms)
+			EXITOUT("Could not create CMS structure from PKCS#7");
+	} @catch (NSException *exception) {
+		EXITOUT("d2i_CMS_bio crashed");
+	} @finally {}
 
 	if ((NULL == (store = X509_STORE_new())))
 		EXITOUT("store");
