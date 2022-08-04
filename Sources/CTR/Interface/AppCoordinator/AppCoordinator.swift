@@ -499,10 +499,7 @@ extension AppCoordinator {
 	@objc private func onDiskFullNotification() {
 		popPresentedViewController {
 			let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
-			if #available(iOS 13.0, *) {
-				// prevent pulldown-to-dismiss (not needed before iOS 13)
-				viewController.isModalInPresentation = true
-			}
+			viewController.modalPresentationStyle = .fullScreen
 			self.navigationController.present(viewController, animated: true)
 		}
 	}

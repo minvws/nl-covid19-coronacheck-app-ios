@@ -783,11 +783,7 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.navigationController.viewControllers.first).toEventually(beAnInstanceOf(LaunchViewController.self))
 		expect(self.sut.navigationController.presentedViewController).toEventually(Predicate<UIViewController>({ expression in
 			let viewController = try XCTUnwrap(expression.evaluate() as? AppStatusViewController)
-			if #available(iOS 13.0, *) {
-				expect(viewController.isModalInPresentation) == true
-			} else {
-				fail("Expected an >=iOS13 environment")
-			}
+			expect(viewController.modalPresentationStyle) == .fullScreen
 			expect(viewController.viewModel).to(beAnInstanceOf(DiskFullViewModel.self))
 			return PredicateResult(status: .matches, message: ExpectationMessage.expectedTo("Use `DiskFullViewModel` viewmodel"))
 		}))
