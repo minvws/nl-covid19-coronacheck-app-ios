@@ -10,7 +10,7 @@ import Reachability
 
 protocol ReachabilityProtocol: AnyObject {
 	var whenReachable: ((Reachability) -> Void)? { get set }
-//	var whenUnreachable: ((Reachability) -> Void)? { get set }
+	var whenUnreachable: ((Reachability) -> Void)? { get set }
 
 	func startNotifier() throws
 }

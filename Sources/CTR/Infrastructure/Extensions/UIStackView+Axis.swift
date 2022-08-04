@@ -9,11 +9,11 @@ import UIKit
 
 extension UIStackView {
 	
-//	convenience init(vertical arrangedSubviews: [UIView], spacing: CGFloat = 0) {
-//		self.init(arrangedSubviews: arrangedSubviews)
-//		self.axis = .vertical
-//		self.spacing = spacing
-//	}
+	convenience init(vertical arrangedSubviews: [UIView], spacing: CGFloat = 0) {
+		self.init(arrangedSubviews: arrangedSubviews)
+		self.axis = .vertical
+		self.spacing = spacing
+	}
 	
 	convenience init(horizontal arrangedSubviews: [UIView], spacing: CGFloat = 0) {
 		self.init(arrangedSubviews: arrangedSubviews)
@@ -21,10 +21,10 @@ extension UIStackView {
 		self.spacing = spacing
 	}
 	
-//	func distribution(_ value: UIStackView.Distribution) -> Self {
-//		distribution = value
-//		return self
-//	}
+	func distribution(_ value: UIStackView.Distribution) -> Self {
+		distribution = value
+		return self
+	}
 	
 	func alignment(_ value: UIStackView.Alignment) -> Self {
 		alignment = value
@@ -44,18 +44,18 @@ extension UIStackView {
 	}
 }
 
-// func VStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
-// 	return UIStackView(vertical: views, spacing: spacing)
-// }
-//
-// func VStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
-// 	return UIStackView(vertical: views, spacing: spacing)
-// }
+ func VStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
+ 	return UIStackView(vertical: views, spacing: spacing)
+ }
+
+ func VStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
+ 	return UIStackView(vertical: views, spacing: spacing)
+ }
 
 func HStack(spacing: CGFloat = 0, _ views: UIView ...) -> UIStackView {
 	return UIStackView(horizontal: views, spacing: spacing)
 }
 
-// func HStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
-// 	return UIStackView(horizontal: views, spacing: spacing)
-// }
+ func HStack(spacing: CGFloat = 0, _ views: [UIView]) -> UIStackView {
+ 	return UIStackView(horizontal: views, spacing: spacing)
+ }

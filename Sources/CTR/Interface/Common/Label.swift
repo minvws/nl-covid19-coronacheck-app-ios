@@ -24,9 +24,9 @@ class Label: UILabel {
 		super.init(coder: coder)
 	}
 	
-//	convenience init(largeTitle: String?, textColor: UIColor = .darkText) {
-//		self.init(largeTitle, font: Fonts.largeTitle, textColor: textColor)
-//	}
+	convenience init(largeTitle: String?, textColor: UIColor = .darkText) {
+		self.init(largeTitle, font: Fonts.largeTitle, textColor: textColor)
+	}
 	
 	convenience init(title1: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
 		if montserrat {
@@ -36,9 +36,9 @@ class Label: UILabel {
 		}
 	}
 	
-//	convenience init(title2: String?, textColor: UIColor = .darkText) {
-//		self.init(title2, font: Fonts.title2, textColor: textColor)
-//	}
+	convenience init(title2: String?, textColor: UIColor = .darkText) {
+		self.init(title2, font: Fonts.title2, textColor: textColor)
+	}
 	
 	convenience init(title3: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
 		if montserrat {
@@ -48,13 +48,13 @@ class Label: UILabel {
 		}
 	}
 	
-//	convenience init(title3Medium: String?, textColor: UIColor = .darkText) {
-//		self.init(title3Medium, font: Fonts.title3Medium, textColor: textColor)
-//	}
-//
-//	convenience init(headline: String?, textColor: UIColor = .darkText) {
-//		self.init(headline, font: Fonts.headline, textColor: textColor)
-//	}
+	convenience init(title3Medium: String?, textColor: UIColor = .darkText) {
+		self.init(title3Medium, font: Fonts.title3Medium, textColor: textColor)
+	}
+
+	convenience init(headline: String?, textColor: UIColor = .darkText) {
+		self.init(headline, font: Fonts.headline, textColor: textColor)
+	}
 	
 	convenience init(headlineBold: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
 		if montserrat {
@@ -80,9 +80,9 @@ class Label: UILabel {
 		self.init(bodyMedium, font: Fonts.bodyMedium, textColor: textColor)
 	}
 	
-//	convenience init(callout: String?, textColor: UIColor = .darkText) {
-//		self.init(callout, font: Fonts.callout, textColor: textColor)
-//	}
+	convenience init(callout: String?, textColor: UIColor = .darkText) {
+		self.init(callout, font: Fonts.callout, textColor: textColor)
+	}
 	
 	convenience init(calloutSemiBold: String?, textColor: UIColor = .darkText) {
 		self.init(calloutSemiBold, font: Fonts.calloutSemiBold, textColor: textColor)
@@ -92,9 +92,9 @@ class Label: UILabel {
 		self.init(subhead, font: Fonts.subhead, textColor: textColor)
 	}
 	
-//	convenience init(subheadBold: String?, textColor: UIColor = .darkText) {
-//		self.init(subheadBold, font: Fonts.subheadBold, textColor: textColor)
-//	}
+	convenience init(subheadBold: String?, textColor: UIColor = .darkText) {
+		self.init(subheadBold, font: Fonts.subheadBold, textColor: textColor)
+	}
 	
 	convenience init(subheadHeavyBold: String?, textColor: UIColor = .darkText) {
 		self.init(subheadHeavyBold, font: Fonts.subheadHeavyBold, textColor: textColor)
@@ -108,9 +108,9 @@ class Label: UILabel {
 		self.init(footnote, font: Fonts.footnote, textColor: textColor)
 	}
 	
-//	convenience init(caption1: String?, textColor: UIColor = .darkText) {
-//		self.init(caption1, font: Fonts.caption1, textColor: textColor)
-//	}
+	convenience init(caption1: String?, textColor: UIColor = .darkText) {
+		self.init(caption1, font: Fonts.caption1, textColor: textColor)
+	}
 	
 	convenience init(caption1SemiBold: String?, textColor: UIColor = .darkText) {
 		self.init(caption1SemiBold, font: Fonts.caption1SemiBold, textColor: textColor)

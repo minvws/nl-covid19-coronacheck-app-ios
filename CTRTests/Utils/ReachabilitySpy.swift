@@ -33,6 +33,28 @@ class ReachabilitySpy: ReachabilityProtocol {
 		}
 	}
 
+	var invokedWhenUnreachableSetter = false
+	var invokedWhenUnreachableSetterCount = 0
+	var invokedWhenUnreachable: ((Reachability) -> Void)?
+	var invokedWhenUnreachableList = [((Reachability) -> Void)?]()
+	var invokedWhenUnreachableGetter = false
+	var invokedWhenUnreachableGetterCount = 0
+	var stubbedWhenUnreachable: ((Reachability) -> Void)!
+
+	var whenUnreachable: ((Reachability) -> Void)? {
+		set {
+			invokedWhenUnreachableSetter = true
+			invokedWhenUnreachableSetterCount += 1
+			invokedWhenUnreachable = newValue
+			invokedWhenUnreachableList.append(newValue)
+		}
+		get {
+			invokedWhenUnreachableGetter = true
+			invokedWhenUnreachableGetterCount += 1
+			return stubbedWhenUnreachable
+		}
+	}
+
 	var invokedStartNotifier = false
 	var invokedStartNotifierCount = 0
 	var stubbedStartNotifierError: Error?
