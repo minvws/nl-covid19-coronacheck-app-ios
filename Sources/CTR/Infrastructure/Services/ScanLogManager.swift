@@ -16,8 +16,6 @@ protocol ScanLogManaging: AnyObject {
 
 	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date)
 
-	func deleteExpiredScanLogEntries(seconds: Int, now: Date)
-
 	func wipePersistedData()
 }
 
