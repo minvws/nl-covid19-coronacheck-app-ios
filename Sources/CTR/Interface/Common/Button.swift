@@ -63,7 +63,7 @@ class Button: TappableButton {
 			switch self {
 				case .textLabelBlue: return .zero
 				case .roundedBlueImage: return .topBottom(15) + .left(60) + .right(50)
-				default: return .topBottom(15) + .leftRight(56)
+				default: return .topBottom(10) + .leftRight(32)
 			}
 		}
 		
