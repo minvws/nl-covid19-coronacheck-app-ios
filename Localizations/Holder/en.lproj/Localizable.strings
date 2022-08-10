@@ -1,9 +1,8 @@
 "appstatus_diskfull_body" = "Because your phone’s storage is full, you can’t open CoronaCheck. Please free up space on your phone and reopen CoronaCheck.";
 "appstatus_diskfull_button" = "Close CoronaCheck";
 "appstatus_diskfull_title" = "Your storage is full";
-"domestic_recovery_created" = "A recovery certificate is created.";
-"domestic_vaccination_created" = "A Dutch vaccination certificate is created.";
-"domestic_vaccination_rejected" = "No Dutch vaccination certificate can be created from your vaccination(s).";
+"domestic_vaccination_created" = "A Dutch vaccination certificate has been created.";
+"domestic_vaccination_rejected" = "Your vaccination(s) cannot be turned into a Dutch vaccination certificate.";
 "general.add" = "Add";
 "general.back" = "Back";
 /* MARK: - General */
@@ -766,8 +765,9 @@
 "holder_wasUserTestedAtGGD_yes_buttonTitle" = "Yes, tested before or on %@";
 "holder_whereUserTested_body" = "Indicate where you were tested to create a certificate from your positive or negative test result.";
 "holder_whereUserTested_title" = "Where were you tested?";
-"international_vaccination_created" = "An international vaccination certificate is created.";
-"international_vaccination_rejected" = "No international vaccination certificate can be created from your vaccination(s).";
+"international_recovery_created" = "A recovery certificate has been created.";
+"international_vaccination_created" = "An international vaccination certificate has been created.";
+"international_vaccination_rejected" = "Your vaccination(s) cannot be turned into an international vaccination certificate.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Try again";
 "internet.required.text" = "To start the app, you need to be connected to the internet.";
@@ -790,8 +790,8 @@
 "recommended.updateApp.title" = "Update your app in advance";
 "recommended_update_card_action" = "Update now";
 "recommended_update_card_description" = "You can update your app to a newer version now";
-"vaccination_dose_correction_applied" = "Your positive test result is recorded into your vaccination certificate.";
-"vaccination_dose_correction_not_applied" = "Your positive test result is not suited to have it count for your vaccination certificate.";
+"vaccination_dose_correction_applied" = "Your positive test result counts for your vaccination certificate.";
+"vaccination_dose_correction_not_applied" = "Your positive test result cannot be counted for your vaccination certificate.";
 "visitorpass_code_description" = "Enter your approval code. You received this code from the desk that reviewed your vaccination.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Enter your verification code. You will receive this via text or email.";
