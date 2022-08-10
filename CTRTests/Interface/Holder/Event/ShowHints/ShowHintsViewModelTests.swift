@@ -36,25 +36,25 @@ class ShowHintsViewModelTests: XCTestCase {
 	func test_multipleHints_withANonalphanumericCharacterHint_failsToInitViewModel() {
 		
 		// Arrange
-		let hints = NonemptyArray(["🍕", "domestic_recovery_created"])!
+		let hints = NonemptyArray(["🍕", "domestic_vaccination_created"])!
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
 		
 		// Assert
-		expect(self.sut.message) == "<p>\(L.domestic_recovery_created())</p>"
+		expect(self.sut.message) == "<p>\(L.domestic_vaccination_created())</p>"
 	}
 	
 	func test_singlehint_isConvertedToHTMLMessage() {
 		
 		// Arrange
-		let hints = NonemptyArray(["domestic_recovery_created"])!
+		let hints = NonemptyArray(["domestic_vaccination_created"])!
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
 		
 		// Assert
-		expect(self.sut.message) == "<p>\(L.domestic_recovery_created())</p>"
+		expect(self.sut.message) == "<p>\(L.domestic_vaccination_created())</p>"
 		
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
 	}
@@ -62,13 +62,13 @@ class ShowHintsViewModelTests: XCTestCase {
 	func test_multiplehints_areConvertedToHTMLMessage() {
 		
 		// Arrange
-		let hints = NonemptyArray(["domestic_recovery_created", "domestic_vaccination_created"])!
+		let hints = NonemptyArray(["domestic_vaccination_created", "international_vaccination_created"])!
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
 
 		// Assert
-		expect(self.sut.message) == "<p>\(L.domestic_recovery_created())</p>\n<p>\(L.domestic_vaccination_created())</p>"
+		expect(self.sut.message) == "<p>\(L.domestic_vaccination_created())</p>\n<p>\(L.international_vaccination_created())</p>"
 		
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
 	}
@@ -76,14 +76,14 @@ class ShowHintsViewModelTests: XCTestCase {
 	func test_standardMode() {
 		
 		// Arrange
-		let hints = NonemptyArray(["domestic_recovery_created"])!
+		let hints = NonemptyArray(["domestic_vaccination_created"])!
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
 
 		// Assert
 		expect(self.sut.title) == L.holder_eventHints_title()
-		expect(self.sut.message) == "<p>\(L.domestic_recovery_created())</p>"
+		expect(self.sut.message) == "<p>\(L.domestic_vaccination_created())</p>"
 		expect(self.sut.buttonTitle) == L.general_toMyOverview()
 		
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
@@ -92,7 +92,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	func test_mode_standard() {
 		
 		// Arrange
-		let hints = NonemptyArray(["domestic_recovery_created"])!
+		let hints = NonemptyArray(["domestic_vaccination_created"])!
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
@@ -100,7 +100,7 @@ class ShowHintsViewModelTests: XCTestCase {
 		
 		// Assert
 		expect(self.sut.title) == L.holder_eventHints_title()
-		expect(self.sut.message) == "<p>\(L.domestic_recovery_created())</p>"
+		expect(self.sut.message) == "<p>\(L.domestic_vaccination_created())</p>"
 		expect(self.sut.buttonTitle) == L.general_toMyOverview()
 		
 		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1
@@ -132,7 +132,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func test_openURL() {
 		// Arrange
-		sut = ShowHintsViewModel(hints: NonemptyArray(["domestic_recovery_created"])!, coordinator: coordinatorStub)
+		sut = ShowHintsViewModel(hints: NonemptyArray(["domestic_vaccination_created"])!, coordinator: coordinatorStub)
 		let url = URL(fileURLWithPath: "/")
 		
 		// Act
