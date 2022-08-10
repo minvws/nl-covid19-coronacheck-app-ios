@@ -1,7 +1,6 @@
 "appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol zit kun je CoronaCheck niet openen. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag zit vol";
-"domestic_recovery_created" = "Er is een herstelbewijs gemaakt.";
 "domestic_vaccination_created" = "Er is een Nederlands vaccinatiebewijs gemaakt.";
 "domestic_vaccination_rejected" = "Van je vaccinatie(s) kan geen Nederlands vaccinatiebewijs gemaakt worden.";
 "general.add" = "Toevoegen";
@@ -766,6 +765,7 @@
 "holder_wasUserTestedAtGGD_yes_buttonTitle" = "Ja, getest voor of op %@";
 "holder_whereUserTested_body" = "Geef aan waar je bent getest om een bewijs te maken van je positieve of negatieve testuitslag.";
 "holder_whereUserTested_title" = "Waar ben je getest?";
+"international_recovery_created" = "Er is een herstelbewijs gemaakt.";
 "international_vaccination_created" = "Er is een internationaal vaccinatiebewijs gemaakt.";
 "international_vaccination_rejected" = "Van je vaccinatie(s) kan geen internationaal vaccinatiebewijs gemaakt worden.";
 /* MARK: - Internet Required */
