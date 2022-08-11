@@ -134,9 +134,11 @@ class ListRemoteEventsViewModel {
 		var eventModeToUse: EventMode {
 			if let expandedEventMode = expandEventMode() {
 				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
+				Current.logHandler.logVerbose("Setting eventModeToUse to \(expandedEventMode.rawValue)")
 				return expandedEventMode
 			} else if let originalEventMode = originalEventMode {
 				// Original Event Mode is e.g. when using the negative test flow for vaccineassessment (where original mode would be vaccineassessment)
+				Current.logHandler.logVerbose("Setting eventModeToUse to \(originalEventMode.rawValue)")
 				return originalEventMode
 			} else {
 				return eventMode
@@ -170,7 +172,6 @@ class ListRemoteEventsViewModel {
 		   let dccEventType = euCredentialAttributes.eventMode
 		else { return nil }
 		
-		Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
 		return dccEventType
 	}
 
