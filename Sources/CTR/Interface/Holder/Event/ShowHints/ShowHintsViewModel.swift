@@ -20,7 +20,7 @@ final class ShowHintsViewModel {
 	
 	// MARK: - Bindable
 	
-	@Bindable private(set) var title: String = L.holder_eventHints_title()
+	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var buttonTitle: String = L.general_toMyOverview()
 	
@@ -44,7 +44,7 @@ final class ShowHintsViewModel {
 			.joined(separator: "\n")
 		
 		// Special case..
-		if hints.contents.contains(where: { $0 == "negativetest_without_vaccinationasssesment" }) {
+		if hints.contents.contains(where: { $0 == "negativetest_without_vaccinationassessment" }) {
 			self.mode = .shouldCompleteVaccinationAssessment
 		} else {
 			self.mode = .standard
@@ -52,8 +52,10 @@ final class ShowHintsViewModel {
 		
 		switch mode {
 			case .standard:
+				self.title = L.holder_eventHints_title()
 				self.buttonTitle = L.general_toMyOverview()
 			case .shouldCompleteVaccinationAssessment:
+				self.title = L.holder_event_negativeTestEndstate_addVaccinationAssessment_title()
 				self.buttonTitle = L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
 		}
 	}
