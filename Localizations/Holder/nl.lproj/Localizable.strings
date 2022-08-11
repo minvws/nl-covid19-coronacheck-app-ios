@@ -776,6 +776,7 @@
 "jailbroken.message" = "Let op: je apparaat is gejailbreakt. Je gegevens zijn mogelijk niet veilig.";
 /* Alert titel voor rooted device */
 "jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
+"negativetest_without_vaccinationassessment" = "Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.<br /><br />Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.";
 "new.terms.agree" = "Akkoord";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/privacy-in-app\">hier</a> de volledige privacyverklaring.";
 "new.terms.disagree" = "Niet akkoord";

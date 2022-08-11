@@ -109,26 +109,25 @@ class ShowHintsViewModelTests: XCTestCase {
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
 	}
 	
-	// Disabled until the `negativetest_without_vaccinationasssesment` copy key is added
-//	func test_mode_shouldCompleteVaccinationAssessment() {
-//
-//		// Arrange
-//		let hints = NonemptyArray(["negativetest_without_vaccinationasssesment"])!
-//
-//		// Act
-//		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
-//		sut.userTappedCallToActionButton()
-//
-//		// Assert
-//		expect(self.sut.title) == L.holder_eventHints_title()
-//		expect(self.sut.message) == "<p>negativetest_without_vaccinationasssesment</p>"
-//		expect(self.sut.buttonTitle) == L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
-//
-//		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1
-//		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishParameters?.result) == .shouldCompleteVaccinationAssessment
-//
-//		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
-//	}
+	func test_mode_shouldCompleteVaccinationAssessment() {
+
+		// Arrange
+		let hints = NonemptyArray(["negativetest_without_vaccinationassessment"])!
+
+		// Act
+		sut = ShowHintsViewModel(hints: hints, coordinator: coordinatorStub)
+		sut.userTappedCallToActionButton()
+
+		// Assert
+		expect(self.sut.title) == L.holder_event_negativeTestEndstate_addVaccinationAssessment_title()
+		expect(self.sut.message) == "<p>\(L.negativetest_without_vaccinationassessment())</p>"
+		expect(self.sut.buttonTitle) == L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
+
+		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1
+		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishParameters?.result) == .shouldCompleteVaccinationAssessment
+
+		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
+	}
 	
 	func test_openURL() {
 		// Arrange

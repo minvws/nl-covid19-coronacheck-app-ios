@@ -131,8 +131,17 @@ class ListRemoteEventsViewModel {
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
-		let expandedEventMode = expandEventMode()
+		var eventModeToUse: EventMode {
+			if let expandedEventMode = expandEventMode() {
+				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
+				return expandedEventMode
+			} else if let originalEventMode = originalEventMode {
+				// Original Event Mode is e.g. when using the negative test flow for vaccineassessment (where original mode would be vaccineassessment)
+				return originalEventMode
+			} else {
+				return eventMode
+			}
+		}
 		
 		storeEvent(
 			replaceExistingEventGroups: replaceExistingEventGroups) { saved in
@@ -144,7 +153,7 @@ class ListRemoteEventsViewModel {
 				return
 			}
 
-			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: expandedEventMode) { result in
+			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: eventModeToUse) { result in
 				self.progressIndicationCounter.decrement()
 				self.handleGreenCardResult(
 					result
@@ -153,16 +162,16 @@ class ListRemoteEventsViewModel {
 		}
 	}
 	
-	private func expandEventMode() -> EventMode {
+	private func expandEventMode() -> EventMode? {
 
-		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
+		guard let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
 		   let credentialData = dccEvent.credential.data(using: .utf8),
 		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
-		   let dccEventType = euCredentialAttributes.eventMode {
-			Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
-			return dccEventType
-		}
-		return eventMode
+		   let dccEventType = euCredentialAttributes.eventMode
+		else { return nil }
+		
+		Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
+		return dccEventType
 	}
 
 	private func getStorageMode(remoteEvent: RemoteEvent) -> EventMode? {
