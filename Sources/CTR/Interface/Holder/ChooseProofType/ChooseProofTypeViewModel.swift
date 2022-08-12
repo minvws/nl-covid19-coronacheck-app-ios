@@ -11,7 +11,7 @@ class ChooseProofTypeViewModel: ListOptionsProtocol {
 	
 	let title = Observable(value: L.holderChooseqrcodetypeTitle())
 	
-	let message = Observable(value: L.holderChooseqrcodetypeMessage())
+	let message = Observable<String?>(value: L.holderChooseqrcodetypeMessage())
 	
 	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
 	

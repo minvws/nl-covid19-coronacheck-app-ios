@@ -106,7 +106,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// Arrange `expiring` starting state
 		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
-		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.serverBusy), ())
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.failedToParsePrepareIssue), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -117,7 +117,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
-		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy, timestamp: now))
+		expect(self.sut.state.loadingState) == .failed(error: .greencardLoaderError(error: .failedToParsePrepareIssue))
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 1
 
@@ -139,8 +139,9 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_noInternet() {
 
 		// Arrange `expiring` starting state
+		let greencardLoaderError = GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection))
 		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
-		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.noInternetConnection), ())
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(greencardLoaderError), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,

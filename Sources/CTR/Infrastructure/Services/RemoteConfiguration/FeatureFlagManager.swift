@@ -28,19 +28,17 @@ protocol FeatureFlagManaging {
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
 	func shouldShowCoronaMelderRecommendation() -> Bool
+	func isGGDPortalEnabled() -> Bool
 }
 
 class FeatureFlagManager: FeatureFlagManaging {
 	
 	private var remoteConfigManager: RemoteConfigManaging
-	private var versionSupplier: AppVersionSupplierProtocol?
 	
 	required init(
-		versionSupplier: AppVersionSupplierProtocol?,
 		remoteConfigManager: RemoteConfigManaging
 	) {
 		
-		self.versionSupplier = versionSupplier
 		self.remoteConfigManager = remoteConfigManager
 	}
 	
@@ -49,6 +47,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	func isGGDEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.isGGDEnabled ?? false
+	}
+	
+	func isGGDPortalEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.isPAPEnabled ?? false
 	}
 	
 	///  Should we use the luhn check for tokens?
@@ -87,12 +90,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	// Holder
 	
 	func areZeroDisclosurePoliciesEnabled() -> Bool {
-		
-		if CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
 			return false
 		}
 		
@@ -102,11 +104,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
-		if CommandLine.arguments.contains("-disclosurePolicyMode3G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return false
 		}
 		
@@ -116,11 +118,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
 		
-		if CommandLine.arguments.contains("-disclosurePolicyMode1G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return false
 		}
 		
@@ -130,11 +132,11 @@ class FeatureFlagManager: FeatureFlagManaging {
 	
 	func areBothDisclosurePoliciesEnabled() -> Bool {
 		
-		if CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G") {
+		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() {
 			return true
-		} else if CommandLine.arguments.contains("-disclosurePolicyMode1G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode3G") ||
-			CommandLine.arguments.contains("-disclosurePolicyMode0G") {
+		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
+			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
 			return false
 		}
 		

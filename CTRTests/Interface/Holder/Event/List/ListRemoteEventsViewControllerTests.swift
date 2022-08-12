@@ -30,12 +30,9 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 
 		greenCardLoader = GreenCardLoader(
-			now: { now },
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,
-			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
-			userSettings: environmentSpies.userSettingsSpy,
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
 		

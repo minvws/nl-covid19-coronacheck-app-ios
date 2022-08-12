@@ -12,14 +12,10 @@ final class PrivacyConsentViewModel {
 	/// Coordination Delegate
 	weak var coordinator: (OnboardingCoordinatorDelegate & OpenUrlProtocol)?
 
-	/// The onboarding factory for all content.
-	var factory: OnboardingFactoryProtocol
-
 	// MARK: - Bindable variables
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var consentText: String?
 	@Bindable private(set) var consentNotGivenError: String?
 	@Bindable private(set) var actionTitle: String?
@@ -35,7 +31,6 @@ final class PrivacyConsentViewModel {
 	init(coordinator: OnboardingCoordinatorDelegate & OpenUrlProtocol, factory: OnboardingFactoryProtocol, shouldHideBackButton: Bool) {
 
 		self.coordinator = coordinator
-		self.factory = factory
 		self.title = factory.getConsentTitle()
 		self.message = factory.getConsentMessage()
 		self.summary = factory.getConsentItems()

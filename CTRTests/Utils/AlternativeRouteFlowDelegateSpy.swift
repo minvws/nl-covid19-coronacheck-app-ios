@@ -17,11 +17,23 @@ class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 		invokedCanceledAlternativeRouteCount += 1
 	}
 
-	var invokedCompletedAlternativeRoute = false
-	var invokedCompletedAlternativeRouteCount = 0
+	var invokedBackToMyOverview = false
+	var invokedBackToMyOverviewCount = 0
 
-	func completedAlternativeRoute() {
-		invokedCompletedAlternativeRoute = true
-		invokedCompletedAlternativeRouteCount += 1
+	func backToMyOverview() {
+		invokedBackToMyOverview = true
+		invokedBackToMyOverviewCount += 1
+	}
+
+	var invokedContinueToPap = false
+	var invokedContinueToPapCount = 0
+	var invokedContinueToPapParameters: (eventMode: EventMode, Void)?
+	var invokedContinueToPapParametersList = [(eventMode: EventMode, Void)]()
+
+	func continueToPap(eventMode: EventMode) {
+		invokedContinueToPap = true
+		invokedContinueToPapCount += 1
+		invokedContinueToPapParameters = (eventMode, ())
+		invokedContinueToPapParametersList.append((eventMode, ()))
 	}
 }

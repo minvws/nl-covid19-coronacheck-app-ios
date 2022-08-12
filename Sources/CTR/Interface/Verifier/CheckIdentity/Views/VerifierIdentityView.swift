@@ -14,8 +14,6 @@ class VerifierIdentityView: BaseView {
 
 		// Dimensions
 		static let spacing: CGFloat = 24.0
-		static let borderHeight: CGFloat = 61.0
-		static let borderWidth: CGFloat = 1.0
 	}
 
 	private let stackView: UIStackView = {

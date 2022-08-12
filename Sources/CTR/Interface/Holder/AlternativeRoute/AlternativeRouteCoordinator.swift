@@ -11,7 +11,9 @@ protocol AlternativeRouteFlowDelegate: AnyObject {
 
 	func canceledAlternativeRoute()
 	
-	func completedAlternativeRoute()
+	func backToMyOverview()
+	
+	func continueToPap(eventMode: EventMode)
 }
 
 protocol AlternativeRouteCoordinatorDelegate: AnyObject {
@@ -22,15 +24,16 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToRequestADigiD()
 	
-	func userWishesToEndAlternativeRoute(popViewController: Bool)
-	
 	func userWishesToContactHelpDeksWithBSN()
-
-	func userWishesToContactHelpDeksWithoutBSN()
-
+	
+	func userHasNoBSN()
+	
+	func userWishedToGoToGGDPortal()
+	
+	func userWishesToContactProviderHelpDeskWhilePortalEnabled()
 }
 
-class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
+class AlternativeRouteCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -44,10 +47,12 @@ class AlternativeRouteCoordinator: Coordinator, OpenUrlProtocol {
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	init(navigationController: UINavigationController, delegate: AlternativeRouteFlowDelegate, eventMode: EventMode) {
-
+		
 		self.navigationController = navigationController
 		self.delegate = delegate
 		self.eventMode = eventMode
+		super.init()
+		self.navigationController.delegate = self
 	}
 
 	func start() {
@@ -67,7 +72,8 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		
 		let destination = ListOptionsViewController(
 			viewModel: CheckForBSNViewModel(
-				coordinator: self
+				coordinator: self,
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
@@ -88,14 +94,6 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 			openUrl(url, inApp: true)
 		}
 	}
-	
-	func userWishesToEndAlternativeRoute(popViewController: Bool) {
-		
-		if popViewController {
-			navigationController.popViewController(animated: true)
-		}
-		delegate?.canceledAlternativeRoute()
-	}
 
 	func userWishesToContactHelpDeksWithBSN() {
 		
@@ -105,35 +103,87 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		)
 	}
 	
-	func userWishesToContactHelpDeksWithoutBSN() {
+	func userHasNoBSN() {
 		
-		let title = L.holder_contactProviderHelpdesk_title(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinationLocation() : L.holder_contactProviderHelpdesk_testLocation())
-		let message = L.holder_contactProviderHelpdesk_message(eventMode == .vaccination ? L.holder_contactProviderHelpdesk_vaccinated() : L.holder_contactProviderHelpdesk_tested())
+		if Current.featureFlagManager.isGGDPortalEnabled() {
+			if eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest {
+				// Choose event location for vaccination flows
+				userWishesToChooseEventLocation()
+			} else {
+				// Direct to PAP for the other flows
+				userWishedToGoToGGDPortal()
+			}
+		} else {
+			userWishesToContactProviderHelpDeskWhilePortalDisabled()
+		}
+	}
+	
+	private func userWishesToContactProviderHelpDeskWhilePortalDisabled() {
 		
-		displayContent(title: title, message: message)
+		if eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest {
+			displayContent(
+				title: L.holder_contactProviderHelpdesk_vaccinationFlow_title(),
+				message: L.holder_contactProviderHelpdesk_vaccinationFlow_message()
+			)
+		} else {
+			displayContent(
+				title: L.holder_contactProviderHelpdesk_testFlow_title(),
+				message: L.holder_contactProviderHelpdesk_testFlow_message()
+			)
+		}
+	}
+	
+	private func userWishesToChooseEventLocation() {
+		
+		let destination = ListOptionsViewController(
+			viewModel: ChooseEventLocationViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesToContactProviderHelpDeskWhilePortalEnabled() {
+		
+		displayContent(
+			title: L.holder_contactProviderHelpdesk_vaccinationFlow_title(),
+			message: L.holder_contactProviderHelpdesk_message_ggdPortalEnabled()
+		)
+	}
+	
+	func userWishedToGoToGGDPortal() {
+		
+		delegate?.continueToPap(eventMode: eventMode)
 	}
 	
 	private func displayContent(title: String, message: String) {
 		
-		let viewModel = ContentViewModel(
+		presentContent(
 			content: Content(
 				title: title,
 				body: message,
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
-					self?.delegate?.completedAlternativeRoute()
+					self?.delegate?.backToMyOverview()
 				}
 			),
 			backAction: { [weak navigationController] in
 				navigationController?.popViewController(animated: true, completion: {})
 			},
 			allowsSwipeBack: true,
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			}
+			animated: true
 		)
+	}
+}
+
+extension AlternativeRouteCoordinator: UINavigationControllerDelegate {
+
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
 		
-		let destination = ContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
+		if !navigationController.viewControllers.contains(where: { $0.isKind(of: CheckForDigidViewController.self) }) {
+			// If there is no more CheckForDigidViewController in the stack, we are done here.
+			// Works for both back swipe and back button
+			delegate?.canceledAlternativeRoute()
+		}
 	}
 }

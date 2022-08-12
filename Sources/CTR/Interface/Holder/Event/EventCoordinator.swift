@@ -14,22 +14,20 @@ enum EventScreenResult: Equatable {
 	
 	/// The user wants to go back a scene
 	case back(eventMode: EventMode)
-	
-	case backSwipe
 
 	/// Stop with vaccination flow,
 	case stop
 
 	/// Skip back to the beginning of the flow
-	case errorRequiringRestart(eventMode: EventMode)
+	case errorRequiringRestart(eventMode: EventMode, authenticationMode: AuthenticationMode)
 
 	case error(content: Content, backAction: () -> Void)
 
 	/// Continue with the next step in the flow
 	case `continue`(eventMode: EventMode)
 
-	// LoginTVS happy path:
-	case didLogin(token: TVSAuthorizationToken, eventMode: EventMode)
+	// Login happy path:
+	case didLogin(token: String, authenticationMode: AuthenticationMode, eventMode: EventMode)
 	
 	/// Show the vaccination events
 	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
@@ -42,21 +40,23 @@ enum EventScreenResult: Equatable {
 	
 	case shouldCompleteVaccinationAssessment
 	
-	case showHints([String])
+	case showHints(NonemptyArray<String>)
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop), (.backSwipe, .backSwipe),
+			case (.back, .back), (.stop, .stop),
 				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
 				return true
 				
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
 				return lhsEventMode == rhsEventMode
 				
-			case let (.didLogin(lhsToken, lhsEventMode), .didLogin(rhsToken, rhsEventMode)):
-				return (lhsToken, lhsEventMode) == (rhsToken, rhsEventMode)
+			case let (.didLogin(lhsToken, lhsAuthenticationMode, lhsEventMode), .didLogin(rhsToken, rhsAuthenticationMode, rhsEventMode)):
+				return (lhsToken, lhsAuthenticationMode, lhsEventMode) == (rhsToken, rhsAuthenticationMode, rhsEventMode)
+				
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
+				
 			case (let .showEvents(lhsEvents, lhsMode, lhsComplete), let .showEvents(rhsEvents, rhsMode, rhsComplete)):
 
 				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
@@ -74,8 +74,8 @@ enum EventScreenResult: Equatable {
 			case (let .showEventDetails(lhsTitle, lhsDetails, lhsFooter), let .showEventDetails(rhsTitle, rhsDetails, rhsFooter)):
 				return (lhsTitle, lhsDetails, lhsFooter) == (rhsTitle, rhsDetails, rhsFooter)
 
-			case (let .errorRequiringRestart(lhsMode), let .errorRequiringRestart(rhsMode)):
-				return lhsMode == rhsMode
+			case (let .errorRequiringRestart(lhsEventMode, lhsAuthenticationMode), let .errorRequiringRestart(rhsEventMode, rhsAuthenticationMode)):
+				return (lhsEventMode, lhsAuthenticationMode) == (rhsEventMode, rhsAuthenticationMode)
 
 			case (let .error(lhsContent, _), let .error(rhsContent, _)):
 				return lhsContent == rhsContent
@@ -96,7 +96,7 @@ protocol EventCoordinatorDelegate: AnyObject {
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult)
 
-	func loginTVSScreenDidFinish(_ result: EventScreenResult)
+	func authenticationScreenDidFinish(_ result: EventScreenResult)
 
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
@@ -114,11 +114,9 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
 
 	func eventFlowDidCancel()
-	
-	func eventFlowDidCancelFromBackSwipe()
 }
 
-class EventCoordinator: Coordinator, OpenUrlProtocol {
+class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -136,6 +134,8 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
+		super.init()
+		self.navigationController.delegate = self
 	}
 
 	func start() {
@@ -206,22 +206,24 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToLogin(eventMode: EventMode) {
+	private func navigateToAuthentication(eventMode: EventMode, authenticationMode: AuthenticationMode = .manyAuthenticationExchange) {
 
-		let viewController = LoginTVSViewController(
-			viewModel: LoginTVSViewModel(
+		let viewController = AuthenticationViewController(
+			viewModel: AuthenticationViewModel(
 				coordinator: self,
-				eventMode: eventMode
+				eventMode: eventMode,
+				authenticationMode: authenticationMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToFetchEvents(token: TVSAuthorizationToken, eventMode: EventMode) {
+	private func navigateToFetchEvents(token: String, authenticationMode: AuthenticationMode, eventMode: EventMode) {
 		let viewController = FetchRemoteEventsViewController(
 			viewModel: FetchRemoteEventsViewModel(
 				coordinator: self,
-				tvsToken: token,
+				token: token,
+				authenticationMode: authenticationMode,
 				eventMode: eventMode
 			)
 		)
@@ -252,7 +254,6 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 
 		let viewController = BottomSheetContentViewController(
 			viewModel: BottomSheetContentViewModel(
-				coordinator: self,
 				content: Content(
 					title: title,
 					body: body
@@ -267,8 +268,12 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
-	private func navigateToShowHints(hints: [String]) {
-		let viewController = ShowHintsViewController(viewModel: ShowHintsViewModel(hints: hints, coordinator: self))
+	private func navigateToShowHints(hints: NonemptyArray<String>) {
+		guard let viewModel = ShowHintsViewModel(hints: hints, coordinator: self) else {
+			showHintsScreenDidFinish(.stop)
+			return
+		}
+		let viewController = ShowHintsViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
@@ -334,55 +339,47 @@ class EventCoordinator: Coordinator, OpenUrlProtocol {
 		return false
 	}
 
-	private func displayError(content: Content, backAction: @escaping () -> Void) {
+	private func displayError(content: Content, allowsSwipeBack: Bool = false, backAction: @escaping () -> Void) {
 
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: backAction,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		presentContent(content: content, backAction: backAction, allowsSwipeBack: allowsSwipeBack)
 	}
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
 	
 	func showHintsScreenDidFinish(_ result: EventScreenResult) {
-		delegate?.eventFlowDidComplete()
+        switch result {
+            case .shouldCompleteVaccinationAssessment:
+                delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+            default:
+                delegate?.eventFlowDidComplete()
+        }
 	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case let .alternativeRoute(eventMode: eventMode): startAlternativeRoute(eventMode)
-			case let .back(eventMode): handleBackAction(eventMode: eventMode)
-			case .stop: delegate?.eventFlowDidCancel()
-			case .backSwipe: delegate?.eventFlowDidCancelFromBackSwipe()
-			case let .continue(eventMode): navigateToLogin(eventMode: eventMode)
+			case let .continue(eventMode): navigateToAuthentication(eventMode: eventMode)
 			default: break
 		}
 	}
 
-	private func handleBackAction(eventMode: EventMode) {
-
-		delegate?.eventFlowDidCancel()
-	}
-
-	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
+	func authenticationScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 
-			case let .didLogin(token, eventMode):
-				navigateToFetchEvents(token: token, eventMode: eventMode)
+			case let .didLogin(token, authenticationMode, eventMode):
+				navigateToFetchEvents(token: token, authenticationMode: authenticationMode, eventMode: eventMode)
 
-			case .errorRequiringRestart(let eventMode):
-				handleErrorRequiringRestart(eventMode: eventMode)
+			case let .errorRequiringRestart(eventMode, authenticationMode):
+				handleErrorRequiringRestart(eventMode: eventMode, authenticationMode: authenticationMode)
 
 			case let .error(content: content, backAction: backAction):
-				displayError(content: content, backAction: backAction)
-
+				navigationController.popbackTo(instanceOf: RemoteEventStartViewController.self, animated: false) {
+					self.displayError(content: content, allowsSwipeBack: true, backAction: backAction)
+				}
+			
 			case .back(let eventMode):
 				goBack(eventMode)
 	
@@ -456,7 +453,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 	}
 
-	private func handleErrorRequiringRestart(eventMode: EventMode) {
+	private func handleErrorRequiringRestart(eventMode: EventMode, authenticationMode: AuthenticationMode) {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
@@ -471,18 +468,24 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		let presentError = {
 			let alertController = UIAlertController(
-				title: L.holderErrorstateLoginTitle(),
+				title: {
+					switch authenticationMode {
+						case .manyAuthenticationExchange:
+							return L.holder_authentication_popup_digid_title()
+						case .patientAuthenticationProvider:
+							return L.holder_authentication_popup_portal_title()
+					}
+				}(),
 				message: {
-					switch eventMode {
-						case .vaccinationassessment: return "** TODO **"
-						case .recovery:
-							return L.holderErrorstateLoginMessageRecovery()
-						case .paperflow:
-							return "" // PaperProof is not a part of this flow
-						case .test:
-							return L.holderErrorstateLoginMessageTest()
-						case .vaccination, .vaccinationAndPositiveTest:
-							return L.holderErrorstateLoginMessageVaccination()
+					switch (eventMode, authenticationMode) {
+						case (.vaccination, .manyAuthenticationExchange), (.vaccinationAndPositiveTest, .manyAuthenticationExchange):
+							return L.holder_authentication_popup_digid_message_vaccinationFlow()
+						case (_, .manyAuthenticationExchange):
+							return L.holder_authentication_popup_digid_message_testFlow()
+						case (.vaccination, .patientAuthenticationProvider), (.vaccinationAndPositiveTest, .patientAuthenticationProvider):
+							return L.holder_authentication_popup_portal_message_vaccinationFlow()
+						case (_, .patientAuthenticationProvider):
+							return L.holder_authentication_popup_portal_message_testFlow()
 					}
 				}(),
 				preferredStyle: .alert
@@ -517,13 +520,25 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
+		navigationController.delegate = self
 	}
 	
-	func completedAlternativeRoute() {
+	func backToMyOverview() {
 		
 		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
 		removeChildCoordinator(coordinator)
 		delegate?.eventFlowDidComplete()
+	}
+	
+	func continueToPap(eventMode: EventMode) {
+		
+		guard let coordinator = childCoordinators.last, coordinator is AlternativeRouteCoordinator else { return }
+		removeChildCoordinator(coordinator)
+		navigationController.delegate = self
+		
+		navigationController.popbackTo(instanceOf: RemoteEventStartViewController.self, animated: false) {
+			self.navigateToAuthentication(eventMode: eventMode, authenticationMode: .patientAuthenticationProvider)
+		}
 	}
 }
 
@@ -532,5 +547,19 @@ extension EventCoordinator: Dismissable {
 	func dismiss() {
 
 		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+	}
+}
+
+extension EventCoordinator: UINavigationControllerDelegate {
+	
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+		
+		// Call the delegate if we are backing out of the flow
+		if !navigationController.viewControllers.contains(where: { viewController in
+			viewController.isKind(of: RemoteEventStartViewController.self) ||
+			viewController.isKind(of: ListRemoteEventsViewController.self) }) {
+			delegate?.eventFlowDidCancel()
+			return
+		}
 	}
 }

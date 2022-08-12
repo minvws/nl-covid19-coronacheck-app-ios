@@ -20,7 +20,6 @@ final class CheckIdentityView: BaseView {
 		}
 		enum Spacing {
 			static let identityToCheckIdentityLabel: CGFloat = 24
-			static let secondaryToPrimaryButton: CGFloat = 16
 		}
 		enum Button {
 			static let height: CGFloat = 52

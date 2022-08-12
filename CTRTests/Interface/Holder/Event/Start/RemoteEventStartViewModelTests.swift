@@ -46,7 +46,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderRecoveryStartTitle()
 		expect(self.sut.message) == L.holderRecoveryStartMessage()
-		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
+		expect(self.sut.combineVaccinationAndPositiveTest) == nil
 		expect(self.sut.primaryButtonIcon) == I.digid()
 	}
 	
@@ -56,10 +56,10 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationAndPositiveTest)
 		
 		// Then
-		expect(self.sut.title).to(beNil())
-		expect(self.sut.message).to(beNil())
-		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
-		expect(self.sut.primaryButtonIcon).to(beNil())
+		expect(self.sut.title) == nil
+		expect(self.sut.message) == nil
+		expect(self.sut.combineVaccinationAndPositiveTest) == nil
+		expect(self.sut.primaryButtonIcon) == nil
 	}
 	
 	func test_content_paperflowMode() {
@@ -68,10 +68,10 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .paperflow)
 		
 		// Then
-		expect(self.sut.title).to(beNil())
-		expect(self.sut.message).to(beNil())
-		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
-		expect(self.sut.primaryButtonIcon).to(beNil())
+		expect(self.sut.title) == nil
+		expect(self.sut.message) == nil
+		expect(self.sut.combineVaccinationAndPositiveTest) == nil
+		expect(self.sut.primaryButtonIcon) == nil
 	}
 	
 	func test_content_vaccinationAssessment() {
@@ -80,10 +80,10 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationassessment)
 		
 		// Then
-		expect(self.sut.title).to(beNil())
-		expect(self.sut.message).to(beNil())
-		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
-		expect(self.sut.primaryButtonIcon).to(beNil())
+		expect(self.sut.title) == nil
+		expect(self.sut.message) == nil
+		expect(self.sut.combineVaccinationAndPositiveTest) == nil
+		expect(self.sut.primaryButtonIcon) == nil
 	}
 	
 	func test_content_negativeTestMode() {
@@ -94,28 +94,8 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holder_negativetest_ggd_title()
 		expect(self.sut.message) == L.holder_negativetest_ggd_message()
-		expect(self.sut.combineVaccinationAndPositiveTest).to(beNil())
+		expect(self.sut.combineVaccinationAndPositiveTest) == nil
 		expect(self.sut.primaryButtonIcon) == I.digid()
-	}
-
-	func test_backButtonTapped() {
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
-	}
-
-	func test_backSwipe() {
-
-		// When
-		sut.backSwipe()
-
-		// Then
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .backSwipe
 	}
 
 	func test_primaryButtonTapped_vaccinationMode() {
@@ -180,9 +160,10 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
 	
-	func test_secondaryButtonTapped() {
+	func test_secondaryButtonTappedcheckBoxToggled_false() {
 
 		// Given
+		sut.checkboxToggled(value: false)
 
 		// When
 		sut.secondaryButtonTapped()
@@ -190,6 +171,19 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccination)
+	}
+	
+	func test_secondaryButtonTappedcheckBoxToggled_true() {
+
+		// Given
+		sut.checkboxToggled(value: true)
+
+		// When
+		sut.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .alternativeRoute(eventMode: .vaccinationAndPositiveTest)
 	}
 	
 }

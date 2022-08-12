@@ -28,24 +28,6 @@ extension ListRemoteEventsViewModel {
 			}
 		}
 		
-		static func originsMismatchBody(errorCode: ErrorCode, forEventMode mode: EventMode) -> String {
-			
-			switch mode {
-				case .paperflow:
-					return L.holder_listRemoteEvents_originMismatch_paperProof_body("\(errorCode)")
-				case .vaccinationAndPositiveTest:
-					return L.holder_listRemoteEvents_originMismatch_vaccinationAndPositiveTest_body("\(errorCode)")
-				case .recovery:
-					return L.holder_listRemoteEvents_originMismatch_recovery_body("\(errorCode)")
-				case .test:
-					return L.holder_listRemoteEvents_originMismatch_test_body("\(errorCode)")
-				case .vaccination:
-					return L.holder_listRemoteEvents_originMismatch_vaccination_body("\(errorCode)")
-				case .vaccinationassessment:
-					return L.holder_listRemoteEvents_originMismatch_vaccinationAssessment_body("\(errorCode)")
-			}
-		}
-		
 		static func listMessage(forEventMode mode: EventMode) -> String {
 			
 			switch mode {

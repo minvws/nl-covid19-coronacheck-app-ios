@@ -10,8 +10,6 @@ import UIKit
 // See https://stackoverflow.com/a/41811798/443270
 struct OrientationUtility {
 
-	/// Lock the orientation
-	/// - Parameter orientation: the orientation mask to lock to
 	static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
 
 		(UIApplication.shared.delegate as? AppDelegate)?.orientationLock = orientation

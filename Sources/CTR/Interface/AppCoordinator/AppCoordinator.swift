@@ -39,8 +39,6 @@ class AppCoordinator: Coordinator {
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingCryptoLibError = false
 	
-	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
-	
 	var flavor = AppFlavor.flavor
 	
 	var launchStateManager: LaunchStateManaging
@@ -67,7 +65,7 @@ class AppCoordinator: Coordinator {
 	/// Designated starter method
 	func start() {
 		
-		if CommandLine.arguments.contains("-resetOnStart") {
+		if LaunchArgumentsHandler.shouldResetOnStart() {
 			Current.wipePersistedData(flavor: AppFlavor.holder)
 		}
 		
@@ -152,8 +150,8 @@ class AppCoordinator: Coordinator {
 	/// Show the Internet Required View
 	private func showInternetRequired() {
 		
-		let viewModel = InternetRequiredViewModel(coordinator: self, flavor: flavor)
-		navigateToAppUpdate(with: viewModel)
+		let viewModel = InternetRequiredViewModel(coordinator: self)
+		displayAppStatus(with: viewModel)
 	}
 	
 	/// Show the error alert when crypto library is not initialized
@@ -243,7 +241,7 @@ class AppCoordinator: Coordinator {
 	
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
-	private func navigateToAppUpdate(with viewModel: AppStatusViewModel) {
+	private func displayAppStatus(with viewModel: AppStatusViewModel) {
 		
 		guard var topController = window.rootViewController else { return }
 		
@@ -251,16 +249,17 @@ class AppCoordinator: Coordinator {
 			topController = newTopController
 		}
 		let updateController = AppStatusViewController(viewModel: viewModel)
-		
-		if topController is AppStatusViewController {
-			// The presented VC is a AppStatusViewController. Compare the viewModels.
-			if viewModel != (topController as? AppStatusViewController)?.viewModel {
+		updateController.modalPresentationStyle = .fullScreen
+				
+		if let castedTopController = topController as? AppStatusViewController {
+			
+			if type(of: castedTopController.viewModel) != type(of: viewModel) {
 				// incoming viewModel does not equals presented ViewModel. Dismis modally presented VC, reload.
-				topController.dismiss(animated: false) {
-					self.navigateToAppUpdate(with: viewModel)
+				castedTopController.dismiss(animated: false) {
+					self.displayAppStatus(with: viewModel)
 				}
 			}
-			// Do nothing.
+			// Do nothing
 			return
 		}
 		
@@ -303,11 +302,11 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		
 		registerTriggers()
 		let urlString: String = flavor == .holder ? L.holder_deactivation_url() : L.verifier_deactivation_url()
-		
-		navigateToAppUpdate(
+
+		displayAppStatus(
 			with: AppDeactivatedViewModel(
 				coordinator: self,
-				appStoreUrl: URL(string: urlString),
+				informationUrl: URL(string: urlString),
 				flavor: flavor
 			)
 		)
@@ -328,20 +327,14 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
-		
+		Current.logHandler.logError("Showing Internet required, while we got: \(errors)")
 		showInternetRequired()
 	}
 	
 	func updateIsRequired(appStoreUrl: URL) {
 		
 		registerTriggers()
-		navigateToAppUpdate(
-			with: AppStatusViewModel(
-				coordinator: self,
-				appStoreUrl: appStoreUrl,
-				flavor: flavor
-			)
-		)
+		displayAppStatus(with: UpdateRequiredViewModel(coordinator: self, appStoreUrl: appStoreUrl, flavor: flavor))
 	}
 	
 	func updateIsRecommended(version: String, appStoreUrl: URL) {

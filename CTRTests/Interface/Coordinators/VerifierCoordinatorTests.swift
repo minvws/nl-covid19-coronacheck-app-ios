@@ -122,7 +122,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp).to(beNil())
+		expect(self.sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_consume_thirdPartyScannerApp_invalidRiskLevel() {
@@ -138,7 +138,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp).to(beNil())
+		expect(self.sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_consume_thirdPartyScannerApp_domainNotAllowed() {
@@ -152,7 +152,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp).to(beNil())
+		expect(self.sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_consume_redeemHolder() {
@@ -172,7 +172,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == false
-		expect(self.sut.thirdPartyScannerApp).to(beNil())
+		expect(self.sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_navigateToVerifierWelcome() {

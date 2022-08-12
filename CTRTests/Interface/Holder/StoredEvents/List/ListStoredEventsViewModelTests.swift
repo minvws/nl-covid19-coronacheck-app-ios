@@ -47,10 +47,10 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).to(beEmpty())
 	}
 	
@@ -70,16 +70,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_negativeTest().capitalizingFirstLetter()
@@ -110,16 +110,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Ingescand bewijs"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_negativeTest().capitalizingFirstLetter()
@@ -149,16 +149,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_positiveTest().capitalizingFirstLetter()
@@ -188,16 +188,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_recoverycertificate().capitalizingFirstLetter()
@@ -228,16 +228,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Ingescand bewijs"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_recoverycertificate().capitalizingFirstLetter()
@@ -267,16 +267,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_vaccination().capitalizingFirstLetter()
@@ -306,16 +306,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(2))
 		let row1 = try XCTUnwrap(group.rows.first)
 		expect(row1.title) == L.general_vaccination().capitalizingFirstLetter()
@@ -342,16 +342,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Ingescand bewijs"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_vaccination().capitalizingFirstLetter()
@@ -381,16 +381,16 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		}
 		expect(content.title) == L.holder_storedEvents_title()
 		expect(content.body) == L.holder_storedEvents_message()
-		expect(content.primaryActionTitle).to(beNil())
-		expect(content.primaryAction).to(beNil())
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
 		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		expect(groups).toNot(beEmpty())
 		expect(groups).to(haveCount(1))
 		let group = try XCTUnwrap(groups.first)
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
-		expect(group.action).toNot(beNil())
+		expect(group.action) != nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_vaccinationAssessment().capitalizingFirstLetter()
@@ -428,7 +428,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 			fail("wrong state")
 			return
 		}
-		expect(content.secondaryAction).toNot(beNil())
+		expect(content.secondaryAction) != nil
 		
 		// When
 		content.secondaryAction?()

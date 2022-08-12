@@ -36,7 +36,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.vaccination]
+			usages: [.vaccination],
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 
@@ -50,7 +51,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.positiveTest]
+			usages: [.positiveTest],
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 
@@ -64,7 +66,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.recovery]
+			usages: [.recovery],
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 
@@ -78,7 +81,8 @@ extension EventFlow.EventProvider {
 			tlsCertificates: [],
 			accessToken: nil,
 			eventInformationAvailable: nil,
-			usages: [.negativeTest]
+			usages: [.negativeTest],
+			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
 }
@@ -469,6 +473,27 @@ extension RemoteGreenCards.Response {
 			],
 			blobExpireDates: [],
 			hints: nil
+		)
+	}
+
+	static var domesticAndInternationalVaccinationWithHint: RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+				origins: [
+					RemoteGreenCards.Origin.fakeVaccinationOrigin
+				],
+				createCredentialMessages: "test"
+			),
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOrigin
+					],
+					credential: "test credential"
+				)
+			],
+			blobExpireDates: [],
+			hints: ["some_test_hint_key"]
 		)
 	}
 	
@@ -1104,11 +1129,6 @@ extension UIImage {
 		}
 		return image
 	}
-}
-
-extension TVSAuthorizationToken {
-	
-	static var test: TVSAuthorizationToken = .init(idTokenString: "test", expiration: now.addingTimeInterval(5 * minutes * fromNow))
 }
 
 extension EventFlow.EventInformationAvailable {

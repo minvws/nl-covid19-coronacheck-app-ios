@@ -33,18 +33,6 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 		invokedUserWishesToRequestADigiDCount += 1
 	}
 
-	var invokedUserWishesToEndAlternativeRoute = false
-	var invokedUserWishesToEndAlternativeRouteCount = 0
-	var invokedUserWishesToEndAlternativeRouteParameters: (popViewController: Bool, Void)?
-	var invokedUserWishesToEndAlternativeRouteParametersList = [(popViewController: Bool, Void)]()
-
-	func userWishesToEndAlternativeRoute(popViewController: Bool) {
-		invokedUserWishesToEndAlternativeRoute = true
-		invokedUserWishesToEndAlternativeRouteCount += 1
-		invokedUserWishesToEndAlternativeRouteParameters = (popViewController, ())
-		invokedUserWishesToEndAlternativeRouteParametersList.append((popViewController, ()))
-	}
-
 	var invokedUserWishesToContactHelpDeksWithBSN = false
 	var invokedUserWishesToContactHelpDeksWithBSNCount = 0
 
@@ -53,11 +41,27 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 		invokedUserWishesToContactHelpDeksWithBSNCount += 1
 	}
 
-	var invokedUserWishesToContactHelpDeksWithoutBSN = false
-	var invokedUserWishesToContactHelpDeksWithoutBSNCount = 0
+	var invokedUserHasNoBSN = false
+	var invokedUserHasNoBSNCount = 0
 
-	func userWishesToContactHelpDeksWithoutBSN() {
-		invokedUserWishesToContactHelpDeksWithoutBSN = true
-		invokedUserWishesToContactHelpDeksWithoutBSNCount += 1
+	func userHasNoBSN() {
+		invokedUserHasNoBSN = true
+		invokedUserHasNoBSNCount += 1
+	}
+
+	var invokedUserWishedToGoToGGDPortal = false
+	var invokedUserWishedToGoToGGDPortalCount = 0
+
+	func userWishedToGoToGGDPortal() {
+		invokedUserWishedToGoToGGDPortal = true
+		invokedUserWishedToGoToGGDPortalCount += 1
+	}
+
+	var invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled = false
+	var invokedUserWishesToContactProviderHelpDeskWhilePortalEnabledCount = 0
+
+	func userWishesToContactProviderHelpDeskWhilePortalEnabled() {
+		invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled = true
+		invokedUserWishesToContactProviderHelpDeskWhilePortalEnabledCount += 1
 	}
 }

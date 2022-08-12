@@ -75,7 +75,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.finished
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 	}
 
 	func test_launchState_withinTTL() {
@@ -99,7 +99,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.withinTTL
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 	}
 
 	/// Test internet required for the remote config
@@ -126,7 +126,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
 			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
 		)
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 	}
 
 	/// Test internet required for the issuer public keys
@@ -152,7 +152,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
 			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
 		)
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
@@ -180,7 +180,7 @@ class LaunchViewModelTests: XCTestCase {
 			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection),
 			 ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
 		)
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 	}
 
 	func test_checkForJailBreak_broken_shouldWarn() {
@@ -200,8 +200,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == false
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.jailbrokenTitle()
 		expect(self.sut.alert?.subTitle) == L.jailbrokenMessage()
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == true
@@ -224,8 +224,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).to(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) == nil
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == false
 	}
 
@@ -246,8 +246,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).to(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) == nil
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == false
 		expect(self.environmentSpies.deviceAuthenticationDetectorSpy.invokedHasAuthenticationPolicy) == false
 	}
@@ -289,8 +289,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == false
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.holderDeviceAuthenticationWarningTitle()
 		expect(self.sut.alert?.subTitle) == L.holderDeviceAuthenticationWarningMessage()
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == true
@@ -315,8 +315,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == false
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.jailbrokenTitle()
 		expect(self.sut.alert?.subTitle) == L.jailbrokenMessage()
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == true
@@ -341,8 +341,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).to(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) == nil
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == false
 		expect(self.environmentSpies.deviceAuthenticationDetectorSpy.invokedHasAuthenticationPolicy) == false
 		expect(self.environmentSpies.deviceAuthenticationDetectorSpy.invokedHasAuthenticationPolicy) == false
@@ -366,8 +366,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedUpdate) == true
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
-		expect(self.sut.alert).to(beNil())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == nil
+		expect(self.sut.alert) == nil
 		expect(self.environmentSpies.jailBreakDetectorSpy.invokedIsJailBroken) == false
 		expect(self.environmentSpies.deviceAuthenticationDetectorSpy.invokedHasAuthenticationPolicy) == false
 	}

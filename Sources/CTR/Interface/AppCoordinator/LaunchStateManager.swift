@@ -12,8 +12,6 @@ protocol LaunchStateManaging {
 	func handleLaunchState(_ state: LaunchState)
 	
 	func enableRestart()
-	
-	var versionSupplier: AppVersionSupplierProtocol { get set }
 		
 	var delegate: LaunchStateManagerDelegate? { get set }
 }
@@ -56,7 +54,7 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	func handleLaunchState(_ state: LaunchState) {
 		
-		if CommandLine.arguments.contains("-skipOnboarding") {
+		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			startApplication()
 			return
 		}

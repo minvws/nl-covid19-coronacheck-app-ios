@@ -29,7 +29,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		expect(self.sut.tokenEntryFieldTitle) == L.holderDcctokenentryTokenFieldTitle()
 		expect(self.sut.tokenEntryFieldPlaceholder) == L.holderDcctokenentryTokenFieldPlaceholder()
 		expect(self.sut.nextButtonTitle) == L.holderDcctokenentryNext()
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.userNeedsATokenButtonTitle) == L.holderDcctokenentryButtonNotoken()
 	}
 
@@ -40,7 +40,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.userDidUpdateTokenField(rawTokenInput: "a")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 	}
 
 	func test_inputtingValidValue_doesNothing() {
@@ -50,7 +50,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.userDidUpdateTokenField(rawTokenInput: "abcdef")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 	}
 
 	func test_inputtingLongValue_doesNothing() {
@@ -60,7 +60,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.userDidUpdateTokenField(rawTokenInput: "abcdefg")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 	}
 
 	func test_tappingSubmit_withShortValue_showsError() {
@@ -105,7 +105,7 @@ class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
 		sut.userDidUpdateTokenField(rawTokenInput: "abc")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 	}
 
 	func test_validationOfToken() {

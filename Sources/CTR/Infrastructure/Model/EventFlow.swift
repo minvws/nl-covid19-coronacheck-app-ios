@@ -45,6 +45,12 @@ struct EventFlow {
 			self = try ProviderUsage(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
 		}
 	}
+	
+	/// The type of token a provider can handle
+	enum ProviderAuthenticationType: String, Codable {
+		case manyAuthenticationExchange = "max"
+		case patientAuthenticationProvider = "pap"
+	}
 
 	// A Vaccination Event Provider (VEP)
 	struct EventProvider: Codable, Equatable, CertificateProvider {
@@ -75,6 +81,9 @@ struct EventFlow {
 
 		/// Where can we use this provider for?
 		var usages: [ProviderUsage]
+		
+		/// The type of tokens the provider can handle
+		var providerAuthentication: [ProviderAuthenticationType]
 
 		/// The query filter to pass along to the provider
 		var queryFilter: [String: String?] = [:]
@@ -89,6 +98,7 @@ struct EventFlow {
 			case cmsCertificates = "cms"
 			case tlsCertificates = "tls"
 			case usages = "usage"
+			case providerAuthentication = "auth"
 		}
 	}
 
@@ -443,13 +453,5 @@ extension EventFlow.Event {
 			return .paperflow
 		}
 		return nil
-	}
-}
-
-extension EventFlow.EventProvider {
-
-	func getHostNames() -> [String] {
-		
-		[unomiUrl?.host, eventUrl?.host].compactMap { $0 }
 	}
 }

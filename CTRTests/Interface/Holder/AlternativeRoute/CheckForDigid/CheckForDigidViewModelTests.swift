@@ -31,7 +31,7 @@ class CheckForDigidViewModelTests: XCTestCase {
 		expect(self.sut.title.value) == L.holder_noDigiD_title()
 		expect(self.sut.message.value) == L.holder_noDigiD_message()
 		expect(self.sut.optionModels.value).to(haveCount(2))
-		expect(self.sut.bottomButton.value).to(beNil())
+		expect(self.sut.bottomButton.value) == nil
 	}
 	
 	func test_requestDigid() {
@@ -54,29 +54,5 @@ class CheckForDigidViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCheckForBSN) == true
-	}
-	
-	func test_backbutton() {
-		
-		// Arrange
-		
-		// Act
-		sut.backbuttonTapped()
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRoute) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRouteParameters?.0) == true
-	}
-	
-	func test_swipeback() {
-		
-		// Arrange
-		
-		// Act
-		sut.swipeBack()
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRoute) == true
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToEndAlternativeRouteParameters?.0) == false
 	}
 }

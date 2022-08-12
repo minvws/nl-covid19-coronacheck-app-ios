@@ -4,7 +4,6 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -27,7 +26,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
-	func userDidScanRequestToken(requestToken: RequestToken)
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
@@ -98,7 +96,7 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 		
-		if CommandLine.arguments.contains("-skipOnboarding") {
+		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			navigateToDashboard(replacingWindowRootViewController: true)
 			return
 		}
@@ -356,20 +354,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart() {
 		
-		//		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 		navigationController.popToRootViewController(animated: true)
 	}
 	
 	func presentError(content: Content, backAction: (() -> Void)?) {
 		
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: backAction,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		presentContent(content: content, backAction: backAction)
 	}
 	
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
@@ -388,10 +378,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
-	func userDidScanRequestToken(requestToken: RequestToken) {
-		navigateToTokenEntry(requestToken)
-	}
-	
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
@@ -400,7 +386,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		let viewModel = ContentViewModel(
+		presentContent(
 			content: Content(
 				title: L.holder_completecertificate_title(),
 				body: L.holder_completecertificate_body(),
@@ -415,19 +401,13 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				navigationController?.popViewController(animated: true, completion: {})
 			},
 			allowsSwipeBack: true,
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			}
+			animated: true
 		)
-		
-		let destination = ContentViewController(viewModel: viewModel)
-		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
 		
 		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
 			content: Content(
 				title: L.holder_expiredDomesticVaccinationModal_title(),
 				body: L.holder_expiredDomesticVaccinationModal_body(),
@@ -455,7 +435,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutExpiredQR() {
 	
 		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
 			content: Content(
 				title: L.holder_qr_code_expired_explanation_title(),
 				body: L.holder_qr_code_expired_explanation_description(),
@@ -481,7 +460,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutHiddenQR() {
 		
 		let viewModel = BottomSheetContentViewModel(
-			coordinator: self,
 			content: Content(
 				title: L.holder_qr_code_hidden_explanation_title(),
 				body: L.holder_qr_code_hidden_explanation_description(),
@@ -724,15 +702,9 @@ extension HolderCoordinator: EventFlowDelegate {
 	
 	func eventFlowDidCancel() {
 		
-		/// The user cancelled the flow. Go back one page.
+		/// The user cancelled the event flow.
 		removeChildCoordinator()
-		navigationController.popViewController(animated: true)
-	}
-	
-	func eventFlowDidCancelFromBackSwipe() {
-		
-		/// The user cancelled the flow from back swipe.
-		removeChildCoordinator()
+		Current.logHandler.logInfo("HolderCoordinator: eventFlowDidCancel")
 	}
 }
 

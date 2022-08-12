@@ -307,7 +307,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		sut.menuOptionSelected(.reset)
 
 		// Then
-		expect(sut.alert).toNot(beNil())
+		expect(sut.alert) != nil
 		expect(sut.alert?.title) == L.holderCleardataAlertTitle()
 		expect(sut.alert?.subTitle) == L.holderCleardataAlertSubtitle()
 		expect(outcomes).to(beEmpty())

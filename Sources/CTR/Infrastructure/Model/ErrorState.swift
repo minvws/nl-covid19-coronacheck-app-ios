@@ -69,7 +69,6 @@ extension ErrorCode.Flow {
 	static let ggdTest = ErrorCode.Flow(value: "4")
 	static let paperproof = ErrorCode.Flow(value: "5")
 	static let qr = ErrorCode.Flow(value: "6")
-	static let upgradeEUVaccination = ErrorCode.Flow(value: "7")
 	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
 	static let visitorPass = ErrorCode.Flow(value: "9")
 }
@@ -104,7 +103,8 @@ extension ErrorCode.Step {
 
 extension ErrorCode.Step {
 
-	static let tvs = ErrorCode.Step(value: "10")
+	static let max = ErrorCode.Step(value: "10")
+	static let pap = ErrorCode.Step(value: "15")
 	static let accessTokens = ErrorCode.Step(value: "30")
 	static let unomi = ErrorCode.Step(value: "40")
 	static let event = ErrorCode.Step(value: "50")

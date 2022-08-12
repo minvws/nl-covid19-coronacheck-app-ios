@@ -67,7 +67,7 @@ class NormalizationTests: XCTestCase {
 
 			// Then
 			if expected == nil {
-				expect(normalized).to(beNil())
+				expect(normalized) == nil
 			} else {
 			expect(normalized) == expected
 			}

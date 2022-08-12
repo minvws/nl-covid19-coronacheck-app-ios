@@ -22,7 +22,8 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		coordinatorDelegateSpy = AlternativeRouteCoordinatorDelegateSpy()
 		sut = ListOptionsViewController(
 			viewModel: CheckForBSNViewModel(
-				coordinator: coordinatorDelegateSpy
+				coordinator: coordinatorDelegateSpy,
+				eventMode: .vaccination
 			)
 		)
 		window = UIWindow()
@@ -35,10 +36,49 @@ class CheckForBSNViewControllerTests: XCTestCase {
 	}
 
 	func test_snapshot() {
+		
+		// Given
+		
+		// When
 		loadView()
+		
+		// Then
 		sut.assertImage(containedInNavigationController: true)
 	}
 
+	func test_snapshot_recoveryFlow() {
+		
+		// Given
+		sut = ListOptionsViewController(
+			viewModel: CheckForBSNViewModel(
+				coordinator: coordinatorDelegateSpy,
+				eventMode: .recovery
+			)
+		)
+		// When
+		loadView()
+		
+		// Then
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_snapshot_testFlow() {
+		
+		// Given
+		sut = ListOptionsViewController(
+			viewModel: CheckForBSNViewModel(
+				coordinator: coordinatorDelegateSpy,
+				eventMode: .test
+			)
+		)
+		
+		// When
+		loadView()
+		
+		// Then
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
 	func test_withBSN_tapped() {
 
 		// Given
@@ -60,6 +100,6 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToContactHelpDeksWithoutBSN) == true
+		expect(self.coordinatorDelegateSpy.invokedUserHasNoBSN) == true
 	}
 }

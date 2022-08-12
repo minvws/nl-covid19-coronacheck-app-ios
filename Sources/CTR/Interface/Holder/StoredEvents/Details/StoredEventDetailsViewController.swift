@@ -7,33 +7,7 @@
 
 import UIKit
 
-final class StoredEventDetailsViewController: BaseViewController {
-	
-	/// The model
-	internal let viewModel: RemoteEventDetailsViewModel
-
-	/// The view
-	let sceneView = StoredEventDetailsView()
-
-	/// Initializer
-	/// - Parameter viewModel: view model
-	init(viewModel: RemoteEventDetailsViewModel) {
-
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
+final class StoredEventDetailsViewController: GenericViewController<StoredEventDetailsView, RemoteEventDetailsViewModel> {
 
 	override func viewDidLoad() {
 

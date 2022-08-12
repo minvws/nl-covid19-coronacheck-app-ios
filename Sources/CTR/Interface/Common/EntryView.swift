@@ -14,12 +14,8 @@ class EntryView: BaseView {
 		
 		// Dimensions
 		static let headerHeight: CGFloat = 38.0
-		static let infoHeight: CGFloat = 27.0
 		static let inputHeight: CGFloat = 52.0
 		static let lineHeight: CGFloat = 1.0
-		
-		// Margins
-		static let margin: CGFloat = 20.0
 	}
 	
 	/// The header label
@@ -54,7 +50,7 @@ class EntryView: BaseView {
 		super.setupViews()
 		let tapGestureRecognizer = UITapGestureRecognizer(
 			target: self,
-			action: #selector(handleSingleTap(sender:))
+			action: #selector(handleSingleTap)
 		)
 		self.addGestureRecognizer(tapGestureRecognizer)
 	}
@@ -69,7 +65,7 @@ class EntryView: BaseView {
 	
 	/// User tapped on the view
 	/// - Parameter sender: the tapgesture
-	@objc func handleSingleTap(sender: UITapGestureRecognizer) {
+	@objc func handleSingleTap() {
 		
 		inputField.becomeFirstResponder()
 	}

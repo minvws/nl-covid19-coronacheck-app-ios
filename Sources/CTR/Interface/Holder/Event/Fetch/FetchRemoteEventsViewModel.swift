@@ -11,10 +11,10 @@ final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var tvsToken: TVSAuthorizationToken
+	private var token: String
+	private var authenticationMode: AuthenticationMode
 	private var eventMode: EventMode
 	private let networkManager: NetworkManaging = Current.networkManager
-	private let mappingManager: MappingManaging = Current.mappingManager
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -35,14 +35,20 @@ final class FetchRemoteEventsViewModel {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		tvsToken: TVSAuthorizationToken,
+		token: String,
+		authenticationMode: AuthenticationMode,
 		eventMode: EventMode) {
 		self.coordinator = coordinator
-		self.tvsToken = tvsToken
+		self.token = token
+		self.authenticationMode = authenticationMode
 		self.eventMode = eventMode
 
 		viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
+		fetchEventProvidersWithAccessTokens(
+			token: token,
+			authenticationMode: authenticationMode,
+			completion: handleFetchEventProvidersWithAccessTokensResponse
+		)
 	}
 
 	func handleFetchEventProvidersWithAccessTokensResponse(
@@ -164,13 +170,8 @@ final class FetchRemoteEventsViewModel {
 	}
 
 	func backButtonTapped() {
-
-		switch viewState {
-			case .loading:
-				warnBeforeGoBack()
-			case .feedback:
-				goBack()
-		}
+		
+		warnBeforeGoBack()
 	}
 
 	func warnBeforeGoBack() {
@@ -204,13 +205,19 @@ final class FetchRemoteEventsViewModel {
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(
+		token: String,
+		authenticationMode: AuthenticationMode,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
 
 		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
-		prefetchingGroup.enter()
-		fetchEventAccessTokens { result in
-			accessTokenResult = result
-			self.prefetchingGroup.leave()
+		// Skip fetching tokens if we have a papToken
+		if authenticationMode == .manyAuthenticationExchange {
+			
+			prefetchingGroup.enter()
+			fetchEventAccessTokens(token: token) { result in
+				accessTokenResult = result
+				self.prefetchingGroup.leave()
+			}
 		}
 
 		var remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?
@@ -223,6 +230,8 @@ final class FetchRemoteEventsViewModel {
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
 			self.processEventProvidersWithAccessTokens(
+				token: token,
+				authenticationMode: authenticationMode,
 				accessTokenResult: accessTokenResult,
 				remoteEventProvidersResult: remoteEventProvidersResult,
 				completion: completion
@@ -231,6 +240,8 @@ final class FetchRemoteEventsViewModel {
 	}
 
 	private func processEventProvidersWithAccessTokens(
+		token: String,
+		authenticationMode: AuthenticationMode,
 		accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?,
 		remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
@@ -250,19 +261,29 @@ final class FetchRemoteEventsViewModel {
 			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
-
-		if let accessTokens = accessTokenResult?.successValue, let eventProviders = remoteEventProvidersResult?.successValue {
+		
+		if let eventProviders = remoteEventProvidersResult?.successValue {
 			providers = self.filterEventProvidersForEventMode(eventProviders)
-			for index in 0 ..< providers.count {
-				for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
-					providers[index].accessToken = accessToken
+			
+			if authenticationMode == .patientAuthenticationProvider {
+				// Use the pap Token for both Unomi and Event
+				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider) }
+				for index in 0 ..< providers.count {
+					providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: token, eventAccessToken: token)
+				}
+			} else if let accessTokens = accessTokenResult?.successValue {
+				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange) }
+				for index in 0 ..< providers.count {
+					for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
+						providers[index].accessToken = accessToken
+					}
 				}
 			}
 			if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
 				errorCodes.append(errorCode)
 			}
 		}
-
+		
 		completion(providers, errorCodes, serverErrors)
 	}
 
@@ -327,10 +348,10 @@ final class FetchRemoteEventsViewModel {
 		}
 	}
 
-	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
+	private func fetchEventAccessTokens(token: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventAccessTokens(tvsToken: tvsToken.idTokenString) { [weak self] result in
+		networkManager.fetchEventAccessTokens(maxToken: token) { [weak self] result in
 			completion(result)
 			self?.progressIndicationCounter.decrement()
 		}
@@ -730,7 +751,11 @@ private extension FetchRemoteEventsViewModel {
 				title: L.generalRetry(),
 				action: { [weak self] _ in
 					guard let self = self else { return }
-					self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+					self.fetchEventProvidersWithAccessTokens(
+						token: self.token,
+						authenticationMode: self.authenticationMode,
+						completion: self.handleFetchEventProvidersWithAccessTokensResponse
+					)
 				},
 				isPreferred: true
 			),

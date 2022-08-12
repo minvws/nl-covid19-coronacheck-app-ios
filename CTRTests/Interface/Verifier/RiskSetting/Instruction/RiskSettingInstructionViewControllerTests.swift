@@ -47,7 +47,7 @@ final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint
 		// When
 		
 		// Then
-		expect(self.sut.title).to(beNil())
+		expect(self.sut.title) == nil
 		expect(self.sut.sceneView.title) == L.verifier_risksetting_firsttimeuse_title()
 		expect(self.sut.sceneView.header) == L.verifier_risksetting_firsttimeuse_header()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)

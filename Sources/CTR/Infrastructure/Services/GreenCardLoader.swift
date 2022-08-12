@@ -9,15 +9,14 @@ import Foundation
 
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(
-		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void)
+		eventMode: EventMode?,
+		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading {
 
 	enum Error: Swift.Error, Equatable, LocalizedError {
 		case noSignedEvents
-		case didNotEvaluate
 
 		case preparingIssue(ServerError)
 		case failedToParsePrepareIssue
@@ -38,8 +37,6 @@ class GreenCardLoader: GreenCardLoading {
 					return "preparingIssue/provider/" + networkError.rawValue
 				case .noSignedEvents:
 					return "noSignedEvents"
-				case .didNotEvaluate:
-					return "didNotEvaluate"
 				case .failedToParsePrepareIssue:
 					return "failedToParsePrepareIssue"
 				case .failedToGenerateCommitmentMessage:
@@ -52,39 +49,30 @@ class GreenCardLoader: GreenCardLoading {
 		}
 	}
 
-	private let now: () -> Date
 	private let networkManager: NetworkManaging
 	private let cryptoManager: CryptoManaging
 	private let walletManager: WalletManaging
-	private let remoteConfigManager: RemoteConfigManaging
-	private let userSettings: UserSettingsProtocol
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let logHandler: Logging?
 	
 	required init(
-		now: @escaping () -> Date,
 		networkManager: NetworkManaging,
 		cryptoManager: CryptoManaging,
 		walletManager: WalletManaging,
-		remoteConfigManager: RemoteConfigManaging,
-		userSettings: UserSettingsProtocol,
 		secureUserSettings: SecureUserSettingsProtocol,
 		logHandler: Logging? = nil
 	) {
 
-		self.now = now
 		self.networkManager = networkManager
 		self.cryptoManager = cryptoManager
 		self.walletManager = walletManager
-		self.remoteConfigManager = remoteConfigManager
-		self.userSettings = userSettings
 		self.secureUserSettings = secureUserSettings
 		self.logHandler = logHandler
 	}
 
 	func signTheEventsIntoGreenCardsAndCredentials(
-		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+		eventMode: EventMode?,
+		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		
 		guard let newSecretKey = self.cryptoManager.generateSecretKey() else {
 			self.logHandler?.logError("GreenCardLoader - can't create new secret key")
@@ -105,6 +93,7 @@ class GreenCardLoader: GreenCardLoading {
 						return
 					}
 					self?.fetchGreenCards(
+						eventMode: eventMode,
 						secretKey: newSecretKey,
 						nonce: nonce,
 						stoken: prepareIssueEnvelope.stoken) { response in
@@ -113,11 +102,6 @@ class GreenCardLoader: GreenCardLoading {
 								completion(.failure(error))
 								
 							case .success(let greenCardResponse):
-								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
-									completion(.failure(Error.didNotEvaluate))
-									return
-								}
-								
 								self?.storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self?.logHandler?.logError("GreenCardLoader - failed to save greenCards")
@@ -133,10 +117,11 @@ class GreenCardLoader: GreenCardLoading {
 	}
 
 	private func fetchGreenCards(
+		eventMode: EventMode?,
 		secretKey: Data,
 		nonce: String,
 		stoken: String,
-		onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
@@ -145,7 +130,10 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey)?.data(using: .utf8)?.base64EncodedString() else {
+		guard let issueCommitmentMessageString = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey),
+			  issueCommitmentMessageString.isNotEmpty,
+			  let issueCommitmentMessage = issueCommitmentMessageString.data(using: .utf8)?.base64EncodedString() else {
+			
 			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
@@ -153,7 +141,8 @@ class GreenCardLoader: GreenCardLoading {
 		let dictionary: [String: AnyObject] = [
 			"stoken": stoken as AnyObject,
 			"events": signedEvents as AnyObject,
-			"issueCommitmentMessage": issueCommitmentMessage as AnyObject
+			"issueCommitmentMessage": issueCommitmentMessage as AnyObject,
+			"flows": (eventMode?.asList ?? []) as AnyObject
 		]
 		
 		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in

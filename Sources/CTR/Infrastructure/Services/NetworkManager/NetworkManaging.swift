@@ -112,9 +112,9 @@ protocol NetworkManaging: AnyObject {
 	
 	/// Get the access tokens
 	/// - Parameters:
-	///   - tvsToken: the tvs token
+	///   - maxToken: the tvs token
 	///   - completion: completion handler
-	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void)
+	func fetchEventAccessTokens(maxToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler

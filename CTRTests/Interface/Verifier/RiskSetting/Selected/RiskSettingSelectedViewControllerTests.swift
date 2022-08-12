@@ -49,7 +49,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.sceneView.title) == L.verifier_risksetting_active_title()
-		expect(self.sut.sceneView.header).to(beNil())
+		expect(self.sut.sceneView.header) == nil
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskTitle) == L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskSubtitle) == L.verifier_risksetting_subtitle_3G()
 		expect(self.sut.sceneView.riskSettingControlsView.lowRiskAccessibilityLabel) == "\(L.verifier_risksetting_title(VerificationPolicy.policy3G.localization)), \(L.verifier_risksetting_subtitle_3G())"
@@ -120,7 +120,7 @@ final class RiskSettingSelectedViewControllerTests: XCTestCase {
 		// When
 
 		// Then
-		expect(self.sut.sceneView.header).to(beNil())
+		expect(self.sut.sceneView.header) == nil
 
 		// Snapshot
 		sut.assertImage()

@@ -39,9 +39,9 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.shouldEnableNextButton) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
-		expect(self.sut.networkErrorAlert).to(beNil())
+		expect(self.sut.networkErrorAlert) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description()
 		expect(self.sut.confirmResendVerificationAlertTitle) == L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
@@ -64,11 +64,11 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == false
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
-		expect(self.sut.networkErrorAlert).to(beNil())
+		expect(self.sut.networkErrorAlert) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 		expect(self.sut.confirmResendVerificationAlertTitle) == L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
 		expect(self.sut.confirmResendVerificationAlertMessage) == L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
 		expect(self.sut.confirmResendVerificationAlertOkayButton) == L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
@@ -98,7 +98,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description()
 
@@ -119,7 +119,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description()
 
@@ -140,7 +140,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description()
 
@@ -166,7 +166,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
 		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 
@@ -228,18 +228,18 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
-		expect(self.sut.networkErrorAlert).to(beNil())
+		expect(self.sut.networkErrorAlert) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
@@ -256,7 +256,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
@@ -280,7 +280,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
 			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
@@ -305,9 +305,9 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert) != nil
 		expect(self.sut.networkErrorAlert?.title) == L.generalErrorNointernetTitle()
 		expect(self.sut.networkErrorAlert?.subTitle) == L.generalErrorNointernetText()
 		expect(self.sut.shouldShowTokenEntryField) == true
@@ -334,7 +334,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
@@ -358,7 +358,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
@@ -383,7 +383,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
@@ -427,12 +427,12 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 
@@ -453,7 +453,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 
@@ -474,7 +474,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
@@ -494,7 +494,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
@@ -535,7 +535,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
@@ -656,7 +656,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
@@ -688,7 +688,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
@@ -697,7 +697,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.networkErrorAlert).to(beNil())
+		expect(self.sut.networkErrorAlert) == nil
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
@@ -755,7 +755,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
@@ -785,7 +785,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: "1234")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
@@ -1080,7 +1080,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validLowercaseToken.uppercased()
 		expect(self.sut.shouldShowProgress) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
@@ -1102,7 +1102,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == "XXX-yyyyyyyyyyyy-z2".uppercased()
 		expect(self.sut.shouldShowProgress) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
@@ -1122,7 +1122,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.visitorpass_code_title()
@@ -1145,7 +1145,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.holderCoordinatorSpy.invokedPresentError).toEventually(beTrue())
 		if let content = holderCoordinatorSpy.invokedPresentErrorParameters?.0 {
@@ -1192,7 +1192,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
@@ -1216,7 +1216,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code) == nil
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
@@ -1447,12 +1447,12 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
-		expect(self.sut.message).to(beNil())
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.message) == nil
+		expect(self.sut.fieldErrorMessage) == nil
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
-		expect(self.sut.networkErrorAlert).to(beNil())
+		expect(self.sut.networkErrorAlert) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.message).to(beNil())
+		expect(self.sut.message) == nil
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromRemoteEvent) == true
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
@@ -1494,8 +1494,8 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		// clear error message
 		// should not present an error message  Strings.holderTokenEntryErrorInvalidCode
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code) == nil
+		expect(self.sut.fieldErrorMessage) == nil
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
@@ -1526,12 +1526,12 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.message) == L.visitorpass_code_description_deeplink()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
-		expect(self.sut.networkErrorAlert).to(beNil())
+		expect(self.sut.networkErrorAlert) == nil
 		expect(self.sut.title) == L.visitorpass_code_title()
-		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.fieldErrorMessage) == nil
 
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.token) == .fake
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code) == nil
 
 		InputRetrievalCodeViewController(viewModel: sut).assertImage()
 	}
@@ -1590,7 +1590,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		// The VM should ignore the verification input because it should be still in `inputToken` mode
 		// So it should submit to fetchTestResult with a nil Verification Code:
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == nextValidToken
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchTestResultParameters?.code) == nil
 	}
 	
 	// MARK: - Sugar

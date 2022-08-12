@@ -355,7 +355,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"payload": "eyJldmVudFByb3ZpZGVycyI6W3sibmFtZSI6IkNDIFRlc3QgUHJvdmlkZXIiLCJpZGVudGlmaWVyIjoiQ1RQIiwidW5vbWlVcmwiOiJodHRwczovL2Nvcm9uYWNoZWNrLm5sL2FwaS91bm9taSIsImV2ZW50VXJsIjoiaHR0cHM6Ly9jb3JvbmFjaGVjay5ubC9hcGkvZXZlbnQiLCJjbXMiOlsidGVzdCJdLCJ0bHMiOlsidGVzdCJdLCJ1c2FnZSI6WyJwdCIsIm50IiwiciIsInYiXX1dfQ==",
+					"payload": "eyJldmVudFByb3ZpZGVycyI6W3sibmFtZSI6IkNDIFRlc3QgUHJvdmlkZXIiLCJpZGVudGlmaWVyIjoiQ1RQIiwidW5vbWlVcmwiOiJodHRwczovL2Nvcm9uYWNoZWNrLm5sL2FwaS91bm9taSIsImV2ZW50VXJsIjoiaHR0cHM6Ly9jb3JvbmFjaGVjay5ubC9hcGkvZXZlbnQiLCJjbXMiOlsidGVzdCJdLCJ0bHMiOlsidGVzdCJdLCJ1c2FnZSI6WyJwdCIsIm50IiwiciIsInYiXSwgImF1dGgiOlsibWF4IiwgInBhcCJdfV19",
 					"signature": "test"
 				],
 				statusCode: 200,
@@ -376,6 +376,13 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 				expect(result.successValue?.first?.eventUrl) == URL(string: "https://coronacheck.nl/api/event")
 				expect(result.successValue?.first?.cmsCertificates.first) == "test"
 				expect(result.successValue?.first?.tlsCertificates.first) == "test"
+				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider)) == true
+				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.positiveTest)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.negativeTest)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.recovery)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.vaccination)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.none)) == false
 				done()
 			}
 		}

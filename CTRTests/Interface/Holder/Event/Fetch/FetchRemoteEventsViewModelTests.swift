@@ -23,7 +23,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 
-		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, tvsToken: .test, eventMode: .vaccination)
+		sut = FetchRemoteEventsViewModel(coordinator: coordinatorSpy, token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -36,20 +36,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
-	}
-
-	func test_backButtonTapped_feedbackState() {
-
-		// Given
-		sut.viewState = .feedback(content: Content(title: "Test"))
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back(eventMode: .vaccination)
+		expect(self.sut.alert) != nil
 	}
 
 	func test_warnBeforeGoBack() {
@@ -59,7 +46,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 	}
 
 	func test_goBack() {
@@ -82,7 +69,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -106,7 +94,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -131,7 +120,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -155,7 +145,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -177,7 +168,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -200,7 +192,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -222,7 +215,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -232,7 +226,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 220 000 429")
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -247,7 +241,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -257,7 +252,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 220 000 429<br />i 230 000 429")
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -271,7 +266,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -281,7 +277,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
 			expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 230 000 429")
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -295,7 +291,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -319,7 +316,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -343,7 +341,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -367,7 +366,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -389,7 +389,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -399,7 +400,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.holderErrorstateNobsnTitle()
 			expect(feedback.body) == L.holderErrorstateNobsnMessage()
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -413,7 +414,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -423,7 +425,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.body) == L.holderErrorstateNosessionMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -437,7 +439,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -447,7 +450,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.body) == L.holderErrorstateNosessionMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -461,7 +464,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -471,7 +475,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.body) == L.holderErrorstateNosessionMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
-			expect(feedback.secondaryActionTitle).to(beNil())
+			expect(feedback.secondaryActionTitle) == nil
 		}))
 	}
 
@@ -485,7 +489,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -510,7 +515,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -536,7 +542,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -561,7 +568,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccinationAndPositiveTest
 		)
 
@@ -586,7 +594,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .recovery
 		)
 
@@ -611,7 +620,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .test
 		)
 
@@ -637,7 +647,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -664,7 +675,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -684,7 +696,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -708,7 +721,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 
@@ -732,7 +746,8 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		// When
 		sut = FetchRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			tvsToken: .test,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
 			eventMode: .vaccination
 		)
 		

@@ -68,16 +68,6 @@ class RemoteEventStartViewModel {
 		self.primaryButtonIcon = I.digid()
 	}
 
-	func backButtonTapped() {
-		
-		coordinator?.eventStartScreenDidFinish(.back(eventMode: eventMode))
-	}
-	
-	func backSwipe() {
-		
-		coordinator?.eventStartScreenDidFinish(.backSwipe)
-	}
-
 	func primaryButtonTapped() {
 
 		coordinator?.eventStartScreenDidFinish(.continue(eventMode: didCheckCheckbox ? .vaccinationAndPositiveTest : eventMode))
@@ -95,6 +85,6 @@ class RemoteEventStartViewModel {
 	
 	func secondaryButtonTapped() {
 		
-		coordinator?.eventStartScreenDidFinish(.alternativeRoute(eventMode: eventMode))
+		coordinator?.eventStartScreenDidFinish(.alternativeRoute(eventMode: didCheckCheckbox ? .vaccinationAndPositiveTest : eventMode))
 	}
 }

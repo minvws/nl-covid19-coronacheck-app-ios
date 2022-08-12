@@ -52,7 +52,7 @@ class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.tokenEntryFieldPlaceholder) == L.holderDcctokenentryTokenFieldPlaceholder()
 		expect(self.sut.sceneView.primaryTitle) == L.holderDcctokenentryNext()
 		expect(self.sut.sceneView.primaryButton.isEnabled) == true
-		expect(self.sut.sceneView.fieldErrorMessage).to(beNil())
+		expect(self.sut.sceneView.fieldErrorMessage) == nil
 		expect(self.sut.sceneView.userNeedsATokenButtonTitle) == L.holderDcctokenentryButtonNotoken()
 		expect(self.sut.sceneView.userNeedsATokenButton.isEnabled) == true
 
@@ -101,7 +101,7 @@ class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.sut.sceneView.fieldErrorMessage).to(beNil())
+		expect(self.sut.sceneView.fieldErrorMessage) == nil
 		expect(self.coordinatorSpy.invokedUserDidSubmitPaperProofToken) == true
 		expect(self.coordinatorSpy.invokedUserDidSubmitPaperProofTokenParameters?.token) == "ABCDEF"
 	}

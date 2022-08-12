@@ -56,7 +56,6 @@ protocol HolderDashboardViewModelType: AnyObject {
 
 // swiftlint:disable:next type_body_length
 final class HolderDashboardViewModel: HolderDashboardViewModelType {
-	typealias Datasource = HolderDashboardQRCardDatasource
 
 	// MARK: - Public properties
 
@@ -183,7 +182,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	private var state: State {
 		didSet {
-			didUpdate(oldState: oldValue, newState: state)
+			didUpdateState(fromOldState: oldValue)
 		}
 	}
 	
@@ -260,7 +259,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		recalculateDisclosureBannerState()
 		setupObservers()
 
-		didUpdate(oldState: nil, newState: state)
+		didUpdateState(fromOldState: nil)
 	}
 	
 	private func setupObservers() {
@@ -345,7 +344,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - Receive Updates
 
 	/// Don't call directly, apart from within `init` and from within `var state: State { didSet { ... } }`
-	fileprivate func didUpdate(oldState: State?, newState: State) {
+	fileprivate func didUpdateState(fromOldState oldState: State?) {
 		guard state != oldState // save recomputation effort if `==`
 		else { return }
 		
@@ -757,10 +756,6 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		coordinator?.userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	}
 		
-	func didTapExpiredVaccinationQRMoreInfo() {
-		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
-	}
-	
 	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
 
 		guard let url = URL(string: L.holder_dashboard_only1GaccessBanner_link()) else { return }

@@ -12,17 +12,17 @@ class GreenCardLoaderSpy: GreenCardLoading {
 
 	var invokedSignTheEventsIntoGreenCardsAndCredentials = false
 	var invokedSignTheEventsIntoGreenCardsAndCredentialsCount = 0
-	var stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult: (RemoteGreenCards.Response, Void)?
-	var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<RemoteGreenCards.Response, Swift.Error>, Void)?
+	var invokedSignTheEventsIntoGreenCardsAndCredentialsParameters: (eventMode: EventMode?, Void)?
+	var invokedSignTheEventsIntoGreenCardsAndCredentialsParametersList = [(eventMode: EventMode?, Void)]()
+	var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<RemoteGreenCards.Response, GreenCardLoader.Error>, Void)?
 
 	func signTheEventsIntoGreenCardsAndCredentials(
-		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
+		eventMode: EventMode?,
+		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		invokedSignTheEventsIntoGreenCardsAndCredentials = true
 		invokedSignTheEventsIntoGreenCardsAndCredentialsCount += 1
-		if let result = stubbedSignTheEventsIntoGreenCardsAndCredentialsResponseEvaluatorResult {
-			_ = responseEvaluator?(result.0)
-		}
+		invokedSignTheEventsIntoGreenCardsAndCredentialsParameters = (eventMode, ())
+		invokedSignTheEventsIntoGreenCardsAndCredentialsParametersList.append((eventMode, ()))
 		if let result = stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult {
 			completion(result.0)
 		}

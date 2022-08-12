@@ -27,12 +27,9 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
 		greenCardLoader = GreenCardLoader(
-			now: { now },
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,
-			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
-			userSettings: environmentSpies.userSettingsSpy,
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
 	}
@@ -82,7 +79,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_unknown_withCompletionReason() {
@@ -121,7 +118,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withMedicalStatement() {
@@ -160,7 +157,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withPersonalStatement() {
@@ -195,7 +192,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(completionReason.value).to(beNil())
+		expect(completionReason.value) == nil
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_noReason() {

@@ -108,7 +108,10 @@ class AppStatusView: ScrolledStackWithButtonView {
 			// Spacer
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor),
 
-			topSpacer.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: ViewTraits.topSpacerHeightMultiplier)
+			topSpacer.heightAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.heightAnchor,
+				multiplier: ViewTraits.topSpacerHeightMultiplier
+			)
 		])
 	}
 
@@ -117,18 +120,22 @@ class AppStatusView: ScrolledStackWithButtonView {
 	/// The onboarding title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 alignment: .center,
-															 kerning: ViewTraits.Title.kerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Title.kerning
+			)
 		}
 	}
-
+	
 	/// The onboarding message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.Message.lineHeight,
-																 alignment: .center,
-																 kerning: ViewTraits.Message.kerning)
+			messageLabel.attributedText = message?.setLineHeight(
+				ViewTraits.Message.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Message.kerning
+			)
 		}
 	}
 

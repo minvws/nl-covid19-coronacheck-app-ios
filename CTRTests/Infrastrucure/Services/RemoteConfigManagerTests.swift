@@ -178,11 +178,9 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-		switch receivedResult {
-			case .success((true, newConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (true, newConfig)
+		})
 		
 		expect(self.secureUserSettingsSpy.invokedStoredConfigurationList.last) == newConfig
 		expect(self.sut.isLoading) == false
@@ -217,12 +215,9 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-
-		switch receivedResult {
-			case .success((false, existingStoredConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (false, existingStoredConfig)
+		})
 
 		expect(self.secureUserSettingsSpy.invokedStoredConfigurationSetter) == false
 		expect(self.sut.isLoading) == false
@@ -267,12 +262,10 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didCallTTLCallback) == true
-
-		switch receivedResult {
-			case .success((true, newConfig)): break
-			default:
-				assertionFailure("Didn't receive expected result")
-		}
+		
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (true, newConfig)
+		})
 
 		expect(self.secureUserSettingsSpy.invokedStoredConfiguration) == newConfig
 		expect(self.sut.isLoading) == false
@@ -326,7 +319,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 
 		expect(reloadObserverReceivedConfiguration) == existingStoredConfig
-		expect(updateObserverReceivedConfiguration).to(beNil()) // no update so no callback expected here.
+		expect(updateObserverReceivedConfiguration) == nil // no update so no callback expected here.
 	}
 
 	func test_doesNotLoadWhenAlreadyLoading() {
@@ -383,7 +376,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		
 		let configuration = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
-		userSettingsSpy.stubbedConfigFetchedHash = configuration.hash!  + appVersionSupplierSpy.getCurrentBuild() + appVersionSupplierSpy.getCurrentVersion()
+		userSettingsSpy.stubbedConfigFetchedHash = configuration.hash! + appVersionSupplierSpy.getCurrentBuild() + appVersionSupplierSpy.getCurrentVersion()
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((configuration, configuration.data, URLResponse())), ())
 
 		var reloadObserverReceivedConfiguration: RemoteConfiguration?
@@ -440,14 +433,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { result in
 			receivedResult = result
 		})
-
-		switch receivedResult {
-			case .success((true, let receivedConfiguration)) where receivedConfiguration == newConfiguration:
-				break
-			default:
-				assertionFailure("results didn't match")
-		}
-
+		expect(receivedResult).to(beSuccess {
+			expect($0) == (true, newConfiguration)
+		})
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(newConfiguration))
 		expect(updateObserverReceivedConfiguration).toEventually(equal(newConfiguration))
 		expect(self.sut.isLoading) == false

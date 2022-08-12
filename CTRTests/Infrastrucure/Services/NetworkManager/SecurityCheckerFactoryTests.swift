@@ -33,7 +33,7 @@ class SecurityCheckerFactoryTests: XCTestCase {
 		securityChecker.checkSSL()
 
 		// Then
-		expect(credential).to(beNil())
+		expect(credential) == nil
 		expect(dispostion).toEventually(equal(.performDefaultHandling))
 	}
 }

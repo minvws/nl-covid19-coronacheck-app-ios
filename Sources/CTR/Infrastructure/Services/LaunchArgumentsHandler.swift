@@ -27,4 +27,49 @@ class LaunchArgumentsHandler {
 		}
 		return nil
 	}
+	
+	static func shouldDisableTransitions() -> Bool {
+		
+		return CommandLine.arguments.contains("-disableTransitions")
+	}
+	
+	static func shouldShowAccessibilityLabels() -> Bool {
+		
+		return CommandLine.arguments.contains("-showAccessibilityLabels")
+	}
+	
+	static func shouldResetOnStart() -> Bool {
+		
+		return CommandLine.arguments.contains("-resetOnStart")
+	}
+
+	static func shouldSkipOnboarding() -> Bool {
+		
+		return CommandLine.arguments.contains("-skipOnboarding")
+	}
+	
+	static func shouldUseDisclosurePolicyMode0G() -> Bool {
+		
+		return CommandLine.arguments.contains("-disclosurePolicyMode0G")
+	}
+	
+	static func shouldUseDisclosurePolicyMode1G() -> Bool {
+		
+		return CommandLine.arguments.contains("-disclosurePolicyMode1G")
+	}
+	
+	static func shouldUseDisclosurePolicyMode1GWith3G() -> Bool {
+		
+		return CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G")
+	}
+	
+	static func shouldUseDisclosurePolicyMode3G() -> Bool {
+		
+		return CommandLine.arguments.contains("-disclosurePolicyMode3G")
+	}
+	
+	static func shouldInjectView() -> Bool {
+		
+		return CommandLine.arguments.contains("-shouldInjectView")
+	}
 }

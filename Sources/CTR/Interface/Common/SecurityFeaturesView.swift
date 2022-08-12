@@ -23,7 +23,11 @@ class SecurityFeaturesView: BaseView {
 	}()
 
 	/// The current animation
-	var currentAnimation: SecurityAnimation = .domesticSummerAnimation
+	var currentAnimation: SecurityAnimation = .domesticSummerAnimation {
+		didSet {
+			updateAccessibility()
+		}
+	}
 
 	/// Setup all the views
 	override func setupViews() {
@@ -50,6 +54,19 @@ class SecurityFeaturesView: BaseView {
 		animationView.embed(in: self)
 	}
 
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		isAccessibilityElement = true
+		accessibilityTraits = [.button]
+		
+		updateAccessibility()
+	}
+	
+	private func updateAccessibility() {
+		accessibilityLabel = currentAnimation.localizedLabel
+		accessibilityHint = currentAnimation.localizedHint
+	}
+	
 	/// User tapped to flip security view animation
 	@objc func tapFlipAnimation() {
 
@@ -60,6 +77,8 @@ class SecurityFeaturesView: BaseView {
 		} else {
 			animationView.transform = CGAffineTransform(scaleX: -1, y: 1)
 		}
+		
+		updateAccessibility()
 	}
 
 	/// Play the animation
@@ -67,18 +86,7 @@ class SecurityFeaturesView: BaseView {
 
 		animationView.animation = currentAnimation.animation
 		animationView.loopMode = currentAnimation.loopMode
-
-		if let section = currentAnimation.section {
-			// only play a section of the animation
-			animationView.play(
-				fromFrame: section.start,
-				toFrame: section.end,
-				loopMode: currentAnimation.loopMode,
-				completion: nil
-			)
-		} else {
-			animationView.play()
-		}
+		animationView.play()
 	}
 
 	// MARK: Public Access
@@ -95,5 +103,22 @@ class SecurityFeaturesView: BaseView {
 		if !animationView.isAnimationPlaying {
 			playCurrentAnimation()
 		}
+	}
+}
+
+private extension SecurityAnimation {
+	
+	var localizedLabel: String? {
+		switch self {
+			case .domesticSummerAnimation: return L.holder_showqr_animation_summerctb_voiceover_label()
+			case .domesticWinterAnimation: return L.holder_showqr_animation_winterctb_voiceover_label()
+			case .internationalSummerAnimation: return L.holder_showqr_animation_summerdcc_voiceover_label()
+			case .internationalWinterAnimation: return L.holder_showqr_animation_winterdcc_voiceover_label()
+			default: return nil
+		}
+	}
+	
+	var localizedHint: String? {
+		return L.holder_showqr_animation_voiceover_hint()
 	}
 }

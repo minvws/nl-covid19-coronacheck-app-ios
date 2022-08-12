@@ -24,7 +24,6 @@ class RemoteEventItemView: BaseView {
 		enum Message {
 			static let lineHeight: CGFloat = 18
 			static let kerning: CGFloat = -0.24
-			static let paragraphSpacing: CGFloat = 6
 		}
 		
 		enum Details {

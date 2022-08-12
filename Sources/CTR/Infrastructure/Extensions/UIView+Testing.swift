@@ -20,6 +20,6 @@ extension UIView {
 	
 	/// Check if accessibility labels should be shown for UI tests
 	var showAccessibilityLabelsForUITests: Bool {
-		return CommandLine.arguments.contains("-showAccessibilityLabels")
+		return LaunchArgumentsHandler.shouldShowAccessibilityLabels()
 	}
 }

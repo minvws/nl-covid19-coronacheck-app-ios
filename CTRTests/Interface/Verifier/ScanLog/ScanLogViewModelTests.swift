@@ -186,7 +186,7 @@ class ScanLogViewModelTests: XCTestCase {
 		sut = ScanLogViewModel(coordinator: coordinatorSpy)
 
 		// Then
-		expect(self.sut.appInUseSince).to(beNil())
+		expect(self.sut.appInUseSince) == nil
 	}
 
 	func test_firstUseDate_now() {

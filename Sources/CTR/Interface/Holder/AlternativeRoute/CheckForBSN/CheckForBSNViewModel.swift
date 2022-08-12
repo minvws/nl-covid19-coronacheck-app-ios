@@ -11,7 +11,7 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 	
 	let title = Observable(value: L.holder_checkForBSN_title())
 	
-	let message = Observable(value: L.holder_checkForBSN_message())
+	let message = Observable<String?>(value: L.holder_checkForBSN_message())
 	
 	let optionModels: Observable<[ListOptionsViewController.OptionModel]> = Observable(value: [])
 	
@@ -23,7 +23,7 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: AlternativeRouteCoordinatorDelegate) {
+	init(coordinator: AlternativeRouteCoordinatorDelegate, eventMode: EventMode) {
 		
 		self.coordinator = coordinator
 		
@@ -35,8 +35,8 @@ class CheckForBSNViewModel: ListOptionsProtocol {
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_checkForBSN_buttonTitle_doesNotHaveBSN(),
-				subTitle: L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN(),
-				action: { [weak self] in self?.coordinator?.userWishesToContactHelpDeksWithoutBSN() }
+				subTitle: (eventMode == .vaccination || eventMode == .vaccinationAndPositiveTest) ? L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_vaccinationFlow() : L.holder_checkForBSN_buttonSubTitle_doesNotHaveBSN_testFlow(),
+				action: { [weak self] in self?.coordinator?.userHasNoBSN() }
 			)
 		]
 	}

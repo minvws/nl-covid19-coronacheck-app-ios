@@ -7,13 +7,7 @@
 
 import UIKit
 
-class PagedAnnouncementViewController: BaseViewController {
-	
-	/// The model
-	private let viewModel: PagedAnnouncementViewModel
-	
-	/// The view
-	lazy var sceneView = PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon)
+class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementView, PagedAnnouncementViewModel> {
 	
 	/// The page controller
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -29,24 +23,14 @@ class PagedAnnouncementViewController: BaseViewController {
 	/// - Parameter viewModel: view model
 	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool, allowsNextButton: Bool) {
 		
-		self.viewModel = viewModel
 		self.allowsBackButton = allowsBackButton
 		self.allowsCloseButton = allowsCloseButton
 		self.allowsNextButton = allowsNextButton
 		
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	override func loadView() {
-		
-		view = sceneView
+		super.init(
+			sceneView: PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon),
+			viewModel: viewModel
+		)
 	}
 	
 	// the back button
@@ -164,7 +148,7 @@ extension PagedAnnouncementViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.update(for: index)
-		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
+		navigationItem.leftBarButtonItem = index > 0 ? backButton : nil
 		updateFooterView(for: index)
 		
 		// Announce ribbon view when going back to the first page

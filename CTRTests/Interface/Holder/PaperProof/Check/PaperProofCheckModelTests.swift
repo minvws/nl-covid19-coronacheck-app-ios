@@ -37,7 +37,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 		expect(self.coordinatorDelegateSpy.invokedDisplayErrorForPaperProofCheck).toEventually(beTrue())
 		if let content = coordinatorDelegateSpy.invokedDisplayErrorForPaperProofCheckParameters?.0 {
 			expect(content.title) == L.holderErrorstateTitle()
@@ -70,7 +70,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == true
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 	}
 
 	func test_success_blocked() {
@@ -89,7 +89,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccBlockedTitle()
@@ -115,7 +115,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccExpiredTitle()
@@ -141,7 +141,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).to(beNil())
+		expect(self.sut.alert) == nil
 
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccRejectedTitle()
@@ -171,7 +171,7 @@ class PaperProofCheckModelTests: XCTestCase {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
 			expect(content.body) == L.generalNetworkwasbusyErrorcode("i 510 000 429")
 			expect(content.primaryActionTitle) == L.general_toMyOverview()
-			expect(content.secondaryActionTitle).to(beNil())
+			expect(content.secondaryActionTitle) == nil
 		} else {
 			fail("Invalid state")
 		}
@@ -193,7 +193,7 @@ class PaperProofCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert) != nil
 		expect(self.sut.alert?.title) == L.generalErrorNointernetTitle()
 		expect(self.sut.alert?.subTitle) == L.generalErrorNointernetText()
 	}

@@ -204,11 +204,9 @@ extension NSAttributedString {
 	func attributes(find: (_ key: Key, _ value: Any, _ range: NSRange) -> (Bool)) -> Bool {
 		var result = false
 		enumerateAttributes(in: NSRange(location: 0, length: self.length)) { attributes, range, stop in
-			for (key, value) in attributes {
-				if find(key, value, range) {
-					result = true
-					break
-				}
+			for (key, value) in attributes where find(key, value, range) {
+				result = true
+				break
 			}
 		}
 		return result
@@ -234,13 +232,6 @@ extension NSAttributedString {
 			}
 			
 			return false
-		}
-	}
-	
-	/// Determines whether the attributed string contains a link
-	var containsLink: Bool {
-		return attributes { key, value, range in
-			return key == NSAttributedString.Key.link
 		}
 	}
 	

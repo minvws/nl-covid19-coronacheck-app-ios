@@ -66,8 +66,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.token) == nil
+		expect(self.sut.scannedDCC) == nil
 	}
 
 	func test_userDidScanDCC() {
@@ -80,7 +80,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token).to(beNil())
+		expect(self.sut.token) == nil
 		expect(self.sut.scannedDCC) == "test"
 	}
 	
@@ -95,7 +95,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
 		expect(self.sut.token) == "test"
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.scannedDCC) == nil
 	}
 
 	func test_userWantsToGoBackToDashboard() {
@@ -110,8 +110,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.token) == nil
+		expect(self.sut.scannedDCC) == nil
 	}
 
 	func test_userWishesToScanCertificate() {
@@ -124,8 +124,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.token) == nil
+		expect(self.sut.scannedDCC) == nil
 	}
 
 	func test_userWishesToCreateACertificate_tokenNil_scannedDCCNil() {
@@ -207,8 +207,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.token) == nil
+		expect(self.sut.scannedDCC) == nil
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 		expect(self.navigationSpy.invokedPopToViewController) == false
 		expect(self.navigationSpy.viewControllers).to(haveCount(3))
@@ -231,8 +231,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == false
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.token) == nil
+		expect(self.sut.scannedDCC) == nil
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 		expect(self.navigationSpy.invokedPopToViewController) == true
 		expect(self.navigationSpy.viewControllers).to(haveCount(1))
@@ -250,25 +250,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
-		expect(self.sut.childCoordinators).to((haveCount(0)))
-	}
-	
-	func test_eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// Given
-		sut.token = "test"
-		sut.scannedDCC = "test"
-		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-		
-		// Then
-		expect(self.flowSpy.invokedAddPaperProofFlowDidFinish) == true
-		expect(self.sut.token).to(beNil())
-		expect(self.sut.scannedDCC).to(beNil())
+		expect(self.sut.token) == nil
+		expect(self.sut.scannedDCC) == nil
 		expect(self.sut.childCoordinators).to((haveCount(0)))
 	}
 	

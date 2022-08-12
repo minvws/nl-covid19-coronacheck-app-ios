@@ -141,7 +141,7 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
-		expect(self.sut.unhandledUniversalLink).to(beNil())
+		expect(self.sut.unhandledUniversalLink) == nil
 	}
 	
 	func test_consume_redeemHolder_needsOnboarding() {
@@ -227,7 +227,7 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
-		expect(self.sut.unhandledUniversalLink).to(beNil())
+		expect(self.sut.unhandledUniversalLink) == nil
 	}
 	
 	func test_consume_redeemVaccinationAssessment_needsOnboarding() {
@@ -319,7 +319,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdpartyTicketApp).to(beNil())
+		expect(self.sut.thirdpartyTicketApp) == nil
 	}
 	
 	func test_consume_tvsAuth() {
@@ -588,25 +588,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
-	func test_userDidScanRequestToken() {
-		
-		// Given
-		
-		// When
-		sut.userDidScanRequestToken(
-			requestToken: RequestToken(
-				token: "STXT2VF3389TJ2",
-				protocolVersion: "3.0",
-				providerIdentifier: "XXX"
-			)
-		)
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -919,19 +900,7 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopViewController) == true
-	}
-	
-	func test_eventFlowDidCancelFromBackSwipe() {
-		
-		// Given
-		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCancelFromBackSwipe()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == false
 	}
 	
 	// MARK: - PaperProofFlowDelegate -
