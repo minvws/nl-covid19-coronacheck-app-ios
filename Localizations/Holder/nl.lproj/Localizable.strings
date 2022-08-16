@@ -1,8 +1,6 @@
 "appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol zit kun je CoronaCheck niet openen. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag zit vol";
-"domestic_vaccination_created" = "Er is een Nederlands vaccinatiebewijs gemaakt.";
-"domestic_vaccination_rejected" = "Van je vaccinatie(s) kan geen Nederlands vaccinatiebewijs gemaakt worden.";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -67,6 +65,8 @@
 "general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
 "general_recoverycertificate_0G" = "Internationaal herstelbewijs";
+"general_retrievedDetails" = "opgehaalde gegevens";
+"general_scannedQRCode" = "gescande QR-code";
 "general_testcertificate" = "testbewijs";
 "general_testcertificate_0G" = "Internationaal testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
@@ -143,16 +143,16 @@
 "holder.dashboard.intro.international.button" = "Welk bewijs is nodig op mijn bestemming?";
 "holder.dashboard.intro.international.url" = "https://www.nederlandwereldwijd.nl/reizen/reisadviezen";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "<p>Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p>";
-"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Over je herstelbewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Geen Nederlands herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.</p>";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
-"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Geen Nederlands testbewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat je type test niet voldoet, of doordat deze niet meer geldig is in het buitenland. Alleen van een PCR-test die minder dan 180 dagen oud is kan een internationaal herstelbewijs gemaakt worden. Lees meer over de mogelijke oorzaken op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer</a>.</p>";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Geen internationaal herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Geen internationaal testbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat jouw type vaccin niet geaccepteerd wordt in het buitenland.</p>";
-"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Geen internationaal vaccinatiebewijs";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je hebt geen Nederlands %@.";
 /* Voice over voor geldigheid QR code */
@@ -410,7 +410,7 @@
 "holder.showqr.eu.about.vaccination.name" = "Naam / Name:";
 "holder.showqr.eu.about.vaccination.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.vaccination.pathogenvalue" = "COVID-19";
-"holder.showqr.eu.about.vaccination.title" = "Over je dosis %@/%@";
+"holder.showqr.eu.about.vaccination.title" = "Over mijn dosis %@/%@";
 "holder.showqr.eu.about.vaccination.type" = "Type vaccin / Vaccine medicinal product:";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "holder.showqr.eu.title" = "Internationale QR";
@@ -609,7 +609,7 @@
 "holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
-"holder_eventHints_title" = "Bewijs maken gelukt";
+"holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.</p><p>Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
 "holder_event_vaccination_assessment_about_country" = "Gevaccineerd in (land):";
@@ -629,8 +629,24 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 "holder_fetchRemoteEvents_title" = "Gegevens ophalen";
-"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met jouw vaccinatie(s) heb je helaas geen recht op een Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "Je hebt te vaak geprobeerd je code in te vullen. Probeer het over 5 minuten opnieuw.";
+"holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
+"holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
+"holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message" = "<p>Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";
+"holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
+"holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Je positieve test kon wel meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We konden geen herstelbewijs maken";
+"holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>Van je opgehaalde gegevens kon een herstelbewijs worden gemaakt.</p><p>Je positieve test kon ook meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "Er is een herstelbewijs gemaakt";
+"holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Van je opgehaalde gegevens kon alleen een herstelbewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateRecoveryOnly_title" = "Er is alleen een herstelbewijs gemaakt";
+"holder_listRemoteEvents_endStateRecoveryTooOld_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positieve testuitslag niet meer geldig";
+"holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.</p>";
+"holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_listRemoteEvents_listElement_assessmentDate" = "Beoordelingsdatum: %@";
 "holder_listRemoteEvents_listElement_birthDate" = "Geboortedatum: %@";
 "holder_listRemoteEvents_listElement_name" = "Naam: %@";
@@ -664,7 +680,7 @@
 /* Menu item for short stay route */
 "holder_menu_visitorpass" = "Bezoekersbewijs toevoegen";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
-"holder_negativetest_ggd_title" = "Testuitslag ophalen";
+"holder_negativetest_ggd_title" = "Gegevens van je test ophalen";
 "holder_newintheapp_content_3Gand1G_body" = "De Nederlandse toegangsregels zijn veranderd. Op plekken waar 3G-toegang wordt gegeven kun je naar binnen met een bewijs van vaccinatie, herstel, of een negatieve test. Op plekken waar 1G-toegang wordt gegeven kun je alleen met een testbewijs naar binnen. De app maakt aparte bewijzen voor 3G-toegang en 1G-toegang.";
 "holder_newintheapp_content_3Gand1G_button_next" = "Volgende";
 "holder_newintheapp_content_3Gand1G_title" = "Bewijzen voor 3G- en 1G-toegang";
@@ -765,9 +781,6 @@
 "holder_wasUserTestedAtGGD_yes_buttonTitle" = "Ja, getest voor of op %@";
 "holder_whereUserTested_body" = "Geef aan waar je bent getest om een bewijs te maken van je positieve of negatieve testuitslag.";
 "holder_whereUserTested_title" = "Waar ben je getest?";
-"international_recovery_created" = "Er is een herstelbewijs gemaakt.";
-"international_vaccination_created" = "Er is een internationaal vaccinatiebewijs gemaakt.";
-"international_vaccination_rejected" = "Van je vaccinatie(s) kan geen internationaal vaccinatiebewijs gemaakt worden.";
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
 "internet.required.text" = "Om de app op te starten heb je internet nodig.";
@@ -776,7 +789,6 @@
 "jailbroken.message" = "Let op: je apparaat is gejailbreakt. Je gegevens zijn mogelijk niet veilig.";
 /* Alert titel voor rooted device */
 "jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
-"negativetest_without_vaccinationassessment" = "Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.<br /><br />Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.";
 "new.terms.agree" = "Akkoord";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/privacy-in-app\">hier</a> de volledige privacyverklaring.";
 "new.terms.disagree" = "Niet akkoord";
@@ -791,8 +803,6 @@
 "recommended.updateApp.title" = "Update alvast je app";
 "recommended_update_card_action" = "Nu updaten";
 "recommended_update_card_description" = "Je kunt de app al naar een nieuwere versie updaten";
-"vaccination_dose_correction_applied" = "Je positieve testuitslag is meegeteld in je vaccinatiebewijs.";
-"vaccination_dose_correction_not_applied" = "Je positieve testuitslag is niet geschikt om mee te tellen in je vaccinatiebewijs.";
 "visitorpass_code_description" = "Vul je beoordelingscode in. Deze heb je van de balie gekregen waar jouw vaccinatie werd beoordeeld.";
 /* visitorpass_deeplink_text */
 "visitorpass_code_description_deeplink" = "Vul je verificatiecode in. Deze krijg je via sms of e-mail.";

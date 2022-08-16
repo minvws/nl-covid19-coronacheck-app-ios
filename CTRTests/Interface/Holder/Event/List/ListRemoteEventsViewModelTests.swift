@@ -1533,7 +1533,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.showHints(NonemptyArray(["some_test_hint_key"])!)))
+			.toEventually(equal(EventScreenResult.showHints(NonemptyArray(["some_test_hint_key"])!, eventMode: EventMode.vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
