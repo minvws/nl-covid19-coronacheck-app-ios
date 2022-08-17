@@ -8,9 +8,12 @@
 import Foundation
 
 /// Wraps an array which it guarantees to be non-empty
-struct NonemptyArray<T> {
-	
+struct NonemptyArray<T>: CustomDebugStringConvertible {
 	let contents: [T]
+
+	var debugDescription: String {
+		return String(describing: contents)
+	}
 	
 	init?(_ value: [T]) {
 		guard value.isNotEmpty else { return nil }

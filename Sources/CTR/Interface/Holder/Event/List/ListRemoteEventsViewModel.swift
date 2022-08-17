@@ -157,9 +157,7 @@ class ListRemoteEventsViewModel {
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: eventModeToUse) { result in
 				self.progressIndicationCounter.decrement()
-				self.handleGreenCardResult(
-					result
-				)
+				self.handleGreenCardResult(result, forEventMode: eventModeToUse)
 			}
 		}
 	}
@@ -199,14 +197,14 @@ class ListRemoteEventsViewModel {
 		return storageEventMode
 	}
 
-	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>) {
+	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>, forEventMode eventMode: EventMode) {
 		
 		switch result {
 			case let .success(response):
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
 				if let hints = response.hints, let nonEmptyHints = NonemptyArray(hints) {
-					coordinator?.listEventsScreenDidFinish(.showHints(nonEmptyHints))
+					coordinator?.listEventsScreenDidFinish(.showHints(nonEmptyHints, eventMode: eventMode))
 				} else {
 					coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
 				}
