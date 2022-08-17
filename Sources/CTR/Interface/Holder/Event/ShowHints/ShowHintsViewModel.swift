@@ -45,8 +45,8 @@ final class ShowHintsViewModel {
 		case vaccinationsAndRecovery
 		case internationalVaccinationAndRecovery
 		case recoveryOnly
-		case recoveryAndDosisCorrection // 015
-		case noRecoveryButDosisCorrection // 016
+		case recoveryAndDosisCorrection
+		case noRecoveryButDosisCorrection
 		case recoveryTooOld
 		case addVaccinationAssessment
 		case cantCreateCertificate(errorCode: ErrorCode.ClientCode)
@@ -112,7 +112,6 @@ final class ShowHintsViewModel {
 	
 	private enum Error: Swift.Error {
 		case unknownHintCombination
-		case cantCreateCertificate
 	}
 	
 	private let endState: EndState
@@ -121,7 +120,7 @@ final class ShowHintsViewModel {
 	
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var buttonTitle: String = L.general_toMyOverview()
+	@Bindable private(set) var buttonTitle: String
 	
 	// MARK: - Initializer
 	
@@ -146,6 +145,7 @@ final class ShowHintsViewModel {
 	}
 	
 	func userTappedCallToActionButton() {
+		
 		switch endState {
 			case .addVaccinationAssessment:
 				coordinator?.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
@@ -172,13 +172,13 @@ final class ShowHintsViewModel {
 			guard anyVaccinationRejected || anyRecoveryCreated else { return nil }
 			
 			if anyRecoveryCreated {
-				
 				if anyVaccinationCreated {
 					if hints.contains(.internationalVaccinationCreated) {
-						
-						if hints.contains(.domesticVaccinationRejected) && hints.contains(.vaccinationDoseCorrectionNotApplied) {
+						if hints.contains(.domesticVaccinationRejected)
+							&& hints.contains(.vaccinationDoseCorrectionNotApplied) {
 							return .internationalVaccinationAndRecovery
-						} else if hints.contains(.vaccinationDoseCorrectionApplied) || hints.contains(.vaccinationDoseCorrectionNotApplied) {
+						} else if hints.contains(.vaccinationDoseCorrectionApplied)
+									|| hints.contains(.vaccinationDoseCorrectionNotApplied) {
 							return .vaccinationsAndRecovery
 						} else {
 							throw Error.unknownHintCombination
@@ -188,13 +188,14 @@ final class ShowHintsViewModel {
 					} else {
 						throw Error.unknownHintCombination
 					}
-
 				} else {
 					return .recoveryOnly
 				}
 			} else if hints.contains(.domesticVaccinationRejected) {
 				if hints.contains(.internationalVaccinationRejected) {
-					if hints.contains(.vaccinationDoseCorrectionNotApplied) && hints.contains(.domesticRecoveryRejected) && hints.contains(.internationalRecoveryRejected) {
+					if hints.contains(.vaccinationDoseCorrectionNotApplied)
+						&& hints.contains(.domesticRecoveryRejected)
+						&& hints.contains(.internationalRecoveryRejected) {
 						return .cantCreateCertificate(errorCode: .hintsError0510)
 					} else {
 						return .cantCreateCertificate(errorCode: .hintsError059)
@@ -205,12 +206,9 @@ final class ShowHintsViewModel {
 			} else {
 				throw Error.unknownHintCombination
 			}
-		} else {
-			
-			// No vaccinations mentioned
+		} else { // No vaccinations mentioned
 			
 			guard !hints.contains(.negativeTestWithoutVaccineAssessment) else { return .addVaccinationAssessment }
-			
 			guard !hints.contains(.vaccinationAssessmentMissingSupportingNegativeTest)
 					&& !hints.contains(.domesticVaccinationAssessmentCreated)
 					&& !anyNegativeTestCreated
@@ -222,11 +220,9 @@ final class ShowHintsViewModel {
 			guard !anyNegativeTestRejected else {
 				return .cantCreateCertificate(errorCode: .hintsError0512)
 			}
-			
 			guard !hints.contains(.domesticVaccinationAssessmentRejected) else {
 				return .cantCreateCertificate(errorCode: .hintsError0513)
 			}
-			
 			guard anyRecoveryRejected else { throw Error.unknownHintCombination }
 			
 			if hints.contains(.vaccinationDoseCorrectionApplied) {
@@ -255,7 +251,6 @@ private extension EventMode {
 	}
 }
 
-
 // MARK: ErrorCode.ClientCode
 
 extension ErrorCode.ClientCode {
@@ -274,5 +269,4 @@ extension ErrorCode.ClientCode {
 	
 	// 0513: couldn't create certificate because of Domestic_vaccinationassessment_rejected hint
 	static let hintsError0513 = ErrorCode.ClientCode(value: "0513")
-	
 }
