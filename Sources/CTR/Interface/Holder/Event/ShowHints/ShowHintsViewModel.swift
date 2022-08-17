@@ -172,36 +172,31 @@ final class ShowHintsViewModel {
 			guard anyVaccinationRejected || anyRecoveryCreated else { return nil }
 			
 			if anyRecoveryCreated {
-				if anyVaccinationCreated {
-					if hints.contains(.internationalVaccinationCreated) {
-						if hints.contains(.domesticVaccinationRejected)
-							&& hints.contains(.vaccinationDoseCorrectionNotApplied) {
-							return .internationalVaccinationAndRecovery
-						} else if hints.contains(.vaccinationDoseCorrectionApplied)
-									|| hints.contains(.vaccinationDoseCorrectionNotApplied) {
-							return .vaccinationsAndRecovery
-						} else {
-							throw Error.unknownHintCombination
-						}
-					} else if hints.contains(.domesticVaccinationCreated) {
-						return .recoveryAndDosisCorrection
+				guard anyVaccinationCreated else { return .recoveryOnly }
+				if hints.contains(.internationalVaccinationCreated) {
+					if hints.contains(.domesticVaccinationRejected)
+						&& hints.contains(.vaccinationDoseCorrectionNotApplied) {
+						return .internationalVaccinationAndRecovery
+					} else if hints.contains(.vaccinationDoseCorrectionApplied)
+								|| hints.contains(.vaccinationDoseCorrectionNotApplied) {
+						return .vaccinationsAndRecovery
 					} else {
 						throw Error.unknownHintCombination
 					}
+				} else if hints.contains(.domesticVaccinationCreated) {
+					return .recoveryAndDosisCorrection
 				} else {
-					return .recoveryOnly
+					throw Error.unknownHintCombination
 				}
 			} else if hints.contains(.domesticVaccinationRejected) {
-				if hints.contains(.internationalVaccinationRejected) {
-					if hints.contains(.vaccinationDoseCorrectionNotApplied)
-						&& hints.contains(.domesticRecoveryRejected)
-						&& hints.contains(.internationalRecoveryRejected) {
-						return .cantCreateCertificate(errorCode: .hintsError0510)
-					} else {
-						return .cantCreateCertificate(errorCode: .hintsError059)
-					}
+				guard hints.contains(.internationalVaccinationRejected) else { return .internationalQROnly }
+				
+				if hints.contains(.vaccinationDoseCorrectionNotApplied)
+					&& hints.contains(.domesticRecoveryRejected)
+					&& hints.contains(.internationalRecoveryRejected) {
+					return .cantCreateCertificate(errorCode: .hintsError0510)
 				} else {
-					return .internationalQROnly
+					return .cantCreateCertificate(errorCode: .hintsError059)
 				}
 			} else {
 				throw Error.unknownHintCombination
