@@ -160,6 +160,7 @@ final class ShowHintsViewModel {
 		guard hints.isNotEmpty else { return nil }
 		
 		let anyRecoveryCreated = hints.contains(.domesticRecoveryCreated) || hints.contains(.internationalRecoveryCreated)
+		let bothRecoveriesCreated = hints.contains(.domesticRecoveryCreated) && hints.contains(.internationalRecoveryCreated)
 		let anyRecoveryRejected = hints.contains(.domesticRecoveryRejected) || hints.contains(.internationalRecoveryRejected)
 		let anyVaccinationCreated = hints.contains(.domesticVaccinationCreated) || hints.contains(.internationalVaccinationCreated)
 		let anyVaccinationRejected = hints.contains(.domesticVaccinationRejected) || hints.contains(.internationalVaccinationRejected)
@@ -183,8 +184,6 @@ final class ShowHintsViewModel {
 					} else {
 						throw Error.unknownHintCombination
 					}
-				} else if hints.contains(.domesticVaccinationCreated) {
-					return .recoveryAndDosisCorrection
 				} else {
 					throw Error.unknownHintCombination
 				}
@@ -204,6 +203,11 @@ final class ShowHintsViewModel {
 		} else { // No vaccinations mentioned
 			
 			guard !hints.contains(.negativeTestWithoutVaccineAssessment) else { return .addVaccinationAssessment }
+			
+			if bothRecoveriesCreated && hints.contains(.vaccinationDoseCorrectionApplied) {
+				return .recoveryAndDosisCorrection
+			}
+			
 			guard !hints.contains(.vaccinationAssessmentMissingSupportingNegativeTest)
 					&& !hints.contains(.domesticVaccinationAssessmentCreated)
 					&& !anyNegativeTestCreated

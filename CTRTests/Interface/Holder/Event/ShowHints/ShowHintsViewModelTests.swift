@@ -303,7 +303,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate015() throws { // matches: .recoveryAndDosisCorrection
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created", "Vaccination_dose_correction_applied", "Domestic_Vaccination_Created"])!
+		let hints = NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created", "Vaccination_dose_correction_applied"])!
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub))
