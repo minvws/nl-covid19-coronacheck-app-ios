@@ -13,6 +13,8 @@ class Button: TappableButton {
 	enum ButtonType {
 		/// Rounded, blue background, white text
 		case roundedBlue
+		/// Used for the QRCardView ShowQR Button
+		case narrowRoundedBlue
 		/// Rounded, white background, dark text
 		case roundedWhite
 		/// Rounded, clear background, dark border
@@ -28,7 +30,7 @@ class Button: TappableButton {
 		
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
-				case .roundedBlue, .roundedBlueImage:
+				case .roundedBlue, .narrowRoundedBlue, .roundedBlueImage:
 					return isEnabled ? C.primaryBlue()! : C.grey5()!
 				case .roundedWhite, .roundedBlueBorder, .roundedBlackBorder:
 					return isEnabled ? C.white()! : C.grey2()!
@@ -39,7 +41,7 @@ class Button: TappableButton {
 		
 		func textColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
-				case .roundedBlue, .roundedBlueImage:
+				case .roundedBlue, .narrowRoundedBlue, .roundedBlueImage:
 					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedWhite:
 					return C.black()!
@@ -62,14 +64,16 @@ class Button: TappableButton {
 		var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
-				case .roundedBlueImage: return .topBottom(15) + .left(60) + .right(50)
+				case .roundedBlue: return .topBottom(10) + .leftRight(56)
+				case .narrowRoundedBlue: return .topBottom(10) + .leftRight(32)
+				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(66)
 				default: return .topBottom(10) + .leftRight(32)
 			}
 		}
 		
 		var imageTitlePadding: CGFloat {
 			switch self {
-				case .roundedBlueImage: return 14
+				case .roundedBlueImage: return 11
 				default: return 0
 			}
 		}
