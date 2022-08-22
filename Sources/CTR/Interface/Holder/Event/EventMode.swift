@@ -7,18 +7,19 @@
 
 import UIKit
 
-enum TestMode: Equatable {
-	case dcc
-	case ggd
-	case commercial
-}
-
 enum EventMode: Equatable {
 
+	enum TestRoute: Equatable {
+		// We scanned a
+		case dcc
+		case ggd
+		case commercial
+	}
+	
 	case paperflow
 	case vaccinationAndPositiveTest
 	case recovery
-	case test(TestMode)
+	case test(TestRoute)
 	case vaccination
 	case vaccinationassessment
 
@@ -83,8 +84,8 @@ extension EventMode {
 			case .paperflow: return .paperproof
 			case .vaccinationAndPositiveTest: return .vaccinationAndPositiveTest
 			case .recovery: return .recovery
-			case let .test(testMode):
-				switch testMode {
+			case let .test(testRoute):
+				switch testRoute {
 					case .dcc:
 						return .paperproof
 					case .ggd:
