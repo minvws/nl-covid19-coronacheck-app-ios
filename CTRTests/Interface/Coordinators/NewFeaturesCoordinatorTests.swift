@@ -26,6 +26,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 		navigationSpy = NavigationControllerSpy()
 		newFeaturesManagerSpy = NewFeaturesManagerSpy()
 		delegateSpy = NewFeaturesDelegateSpy()
+		_ = setupEnvironmentSpies()
 		sut = NewFeaturesCoordinator(
 			navigationController: navigationSpy,
 			newFeaturesManager: newFeaturesManagerSpy,
