@@ -364,7 +364,7 @@ class ShowHintsViewModelTests: XCTestCase {
 		let hints = NonemptyArray(["Domestic_negativetest_created", "International_negativetest_created"])!
 		
 		// Act
-		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.test, coordinator: coordinatorStub)
+		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.ggd), coordinator: coordinatorStub)
 		
 		// Assert
 		expect(self.sut) == nil
@@ -375,7 +375,7 @@ class ShowHintsViewModelTests: XCTestCase {
 		let hints = NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_created"])!
 		
 		// Act
-		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.test, coordinator: coordinatorStub)
+		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.ggd), coordinator: coordinatorStub)
 		
 		// Assert
 		expect(self.sut) == nil
@@ -386,12 +386,31 @@ class ShowHintsViewModelTests: XCTestCase {
 		let hints = NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_rejected"])!
 		
 		// Act
-		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.test, coordinator: coordinatorStub))
+		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.ggd), coordinator: coordinatorStub))
 		sut.userTappedCallToActionButton()
 		
 		// Assert
 		expect(self.sut.title) == L.holder_listRemoteEvents_endStateCantCreateCertificate_title()
 		expect(self.sut.message) == L.holder_listRemoteEvents_endStateCantCreateCertificate_message("negatieve testuitslag", "i 480 000 0512")
+		expect(self.sut.buttonTitle) == L.general_toMyOverview()
+		
+		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1
+		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishParameters?.result) == .stop
+
+		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
+	}
+	
+	func testEndstate021_commercialTest() throws { // matches: .weCouldntMakeACertificate
+		// Arrange
+		let hints = NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_rejected"])!
+		
+		// Act
+		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.commercial), coordinator: coordinatorStub))
+		sut.userTappedCallToActionButton()
+		
+		// Assert
+		expect(self.sut.title) == L.holder_listRemoteEvents_endStateCantCreateCertificate_title()
+		expect(self.sut.message) == L.holder_listRemoteEvents_endStateCantCreateCertificate_message("negatieve testuitslag", "i 180 000 0512")
 		expect(self.sut.buttonTitle) == L.general_toMyOverview()
 		
 		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1

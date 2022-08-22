@@ -221,7 +221,7 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			token: "test",
 			authenticationMode: .patientAuthenticationProvider,
-			eventMode: .test
+			eventMode: .test(.ggd)
 		)
 
 		// Then
