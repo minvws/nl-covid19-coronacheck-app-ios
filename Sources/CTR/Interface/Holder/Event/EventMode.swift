@@ -7,10 +7,10 @@
 
 import UIKit
 
-enum EventMode: String {
+enum EventMode {
 
 	case paperflow
-	case vaccinationAndPositiveTest = "positiveTest"  // rawValue positiveTest for backwards compatibility with CoreData
+	case vaccinationAndPositiveTest
 	case recovery
 	case test
 	case vaccination
@@ -46,6 +46,23 @@ enum EventMode: String {
 			case .recovery: return ["positivetest"]
 			case .vaccinationassessment: return ["vaccinationassessment"]
 			case .paperflow: return nil
+		}
+	}
+	
+	var rawValue: String {
+		switch self {
+			case .paperflow:
+				return "paperflow"
+			case .vaccinationAndPositiveTest:
+				return "positiveTest" // rawValue positiveTest for backwards compatibility with CoreData
+			case .recovery:
+				return "recovery"
+			case .test:
+				return "test"
+			case .vaccination:
+				return "vaccination"
+			case .vaccinationassessment:
+				return "vaccinationassessment"
 		}
 	}
 }
