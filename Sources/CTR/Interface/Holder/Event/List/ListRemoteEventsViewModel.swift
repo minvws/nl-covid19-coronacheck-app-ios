@@ -132,10 +132,10 @@ class ListRemoteEventsViewModel {
 		progressIndicationCounter.increment()
 
 		var eventModeToUse: EventMode {
-			if let expandedEventMode = expandEventMode() {
+			if let paperFlowEmbeddedEventMode = getPaperFlowEmbeddedEventMode() {
 				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
-				Current.logHandler.logVerbose("Setting eventModeToUse to \(expandedEventMode.rawValue)")
-				return expandedEventMode
+				Current.logHandler.logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
+				return paperFlowEmbeddedEventMode
 			} else if let originalEventMode = originalEventMode {
 				// Original Event Mode is e.g. when using the negative test flow for vaccineassessment (where original mode would be vaccineassessment)
 				Current.logHandler.logVerbose("Setting eventModeToUse to \(originalEventMode.rawValue)")
@@ -162,7 +162,7 @@ class ListRemoteEventsViewModel {
 		}
 	}
 	
-	private func expandEventMode() -> EventMode? {
+	private func getPaperFlowEmbeddedEventMode() -> EventMode? {
 
 		guard let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
 		   let credentialData = dccEvent.credential.data(using: .utf8),
