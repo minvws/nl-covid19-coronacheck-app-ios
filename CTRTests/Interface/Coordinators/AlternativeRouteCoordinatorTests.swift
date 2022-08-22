@@ -170,7 +170,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = false
-		sut.eventMode = .test
+		sut.eventMode = .test(.ggd)
 		
 		// When
 		sut.userHasNoBSN()
@@ -231,7 +231,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDPortalEnabledResult = true
-		sut.eventMode = .test
+		sut.eventMode = .test(.ggd)
 		
 		// When
 		sut.userHasNoBSN()

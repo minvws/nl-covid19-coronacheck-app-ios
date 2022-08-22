@@ -68,7 +68,7 @@ class CheckForBSNViewControllerTests: XCTestCase {
 		sut = ListOptionsViewController(
 			viewModel: CheckForBSNViewModel(
 				coordinator: coordinatorDelegateSpy,
-				eventMode: .test
+				eventMode: .test(.ggd)
 			)
 		)
 		

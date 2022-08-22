@@ -156,7 +156,7 @@ struct EuCredentialAttributes: Codable {
 		} else if digitalCovidCertificate.recoveries?.first != nil {
 			return .recovery
 		} else if digitalCovidCertificate.tests?.first != nil {
-			return .test
+			return .test(.dcc)
 		}
 		return nil
 	}

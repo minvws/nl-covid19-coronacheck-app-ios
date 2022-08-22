@@ -444,7 +444,7 @@ extension EventFlow.Event {
 			return .vaccinationAndPositiveTest
 		}
 		if hasNegativeTest {
-			return .test
+			return .test(.ggd)
 		}
 		if hasVaccinationAssessment {
 			return .vaccinationassessment

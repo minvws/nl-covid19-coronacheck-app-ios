@@ -65,7 +65,7 @@ class VaccinationAssessmentNotificationManagerTests: XCTestCase {
 		let eventGroup = try XCTUnwrap(
 			EventGroup.fakeEventGroup(
 				dataStoreManager: environmentSpies.dataStoreManager,
-				type: EventMode.test,
+				type: EventMode.test(.commercial),
 				expiryDate: now
 			)
 		)

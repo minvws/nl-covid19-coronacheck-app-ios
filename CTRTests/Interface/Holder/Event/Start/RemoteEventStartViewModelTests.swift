@@ -89,7 +89,7 @@ class RemoteEventStartViewModelTests: XCTestCase {
 	func test_content_negativeTestMode() {
 		
 		// When
-		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
+		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test(.ggd))
 
 		// Then
 		expect(self.sut.title) == L.holder_negativetest_ggd_title()

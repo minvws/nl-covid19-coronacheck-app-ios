@@ -124,7 +124,7 @@ class WalletManagerTests: XCTestCase {
 		// Given
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
 			expiryDate: nil
@@ -142,13 +142,13 @@ class WalletManagerTests: XCTestCase {
 		// Given
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
 			expiryDate: nil
 		)
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
 			expiryDate: nil
@@ -171,13 +171,13 @@ class WalletManagerTests: XCTestCase {
 
 		// Given
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
 			expiryDate: nil
 		)
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
 			expiryDate: nil
@@ -211,7 +211,7 @@ class WalletManagerTests: XCTestCase {
 
 		// Given
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("WRONG".utf8),
 			expiryDate: nil
@@ -228,7 +228,7 @@ class WalletManagerTests: XCTestCase {
 
 		// Given
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("{\"payload\": \"test\"}".utf8),
 			expiryDate: nil
@@ -247,7 +247,7 @@ class WalletManagerTests: XCTestCase {
 
 		// Given
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("{\"payload\": \"test\"}".utf8),
 			expiryDate: nil
@@ -390,7 +390,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
 			expiryDate: now.addingTimeInterval(10 * hours)
@@ -428,7 +428,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
 			expiryDate: now.addingTimeInterval(10 * hours)
@@ -459,7 +459,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
 			expiryDate: now.addingTimeInterval(10 * hours)
@@ -490,7 +490,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
 			expiryDate: now.addingTimeInterval(10 * hours * ago)
@@ -523,7 +523,7 @@ class WalletManagerTests: XCTestCase {
 
 				// When
 				eventGroup = EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.commercial),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
 					jsonData: json,
@@ -851,7 +851,7 @@ class WalletManagerTests: XCTestCase {
 		
 		// Given
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
 			expiryDate: nil
@@ -870,7 +870,7 @@ class WalletManagerTests: XCTestCase {
 		
 		// Given
 		sut.storeEventGroup(
-			.test,
+			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
 			expiryDate: nil

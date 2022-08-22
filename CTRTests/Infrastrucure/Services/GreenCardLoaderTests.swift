@@ -294,7 +294,7 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Act
 		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: .test,
+			eventMode: .test(.ggd),
 			completion: { result = $0 }
 		)
 		

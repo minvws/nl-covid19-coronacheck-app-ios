@@ -91,7 +91,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
-		expect(viewModel.eventMode) == EventMode.test
+		expect(viewModel.eventMode) == EventMode.test(.ggd)
 		expect(viewModel.title) == L.holder_negativetest_ggd_title()
 	}
 	
@@ -116,7 +116,7 @@ class EventCoordinatorTests: XCTestCase {
 		let event = FakeRemoteEvent.fakeRemoteEventVaccinationAssessment
 		
 		// When
-		sut.startWithListTestEvents([event], originalMode: .test)
+		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -131,7 +131,7 @@ class EventCoordinatorTests: XCTestCase {
 		let event = FakeRemoteEvent.fakeRemoteEventPaperProof
 		
 		// When
-		sut.startWithListTestEvents([event], originalMode: .test)
+		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -146,7 +146,7 @@ class EventCoordinatorTests: XCTestCase {
 		let event = FakeRemoteEvent.fakeRemoteEventPositiveTest
 		
 		// When
-		sut.startWithListTestEvents([event], originalMode: .test)
+		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -161,13 +161,13 @@ class EventCoordinatorTests: XCTestCase {
 		let event = FakeRemoteEvent.fakeRemoteEventNegativeTest
 		
 		// When
-		sut.startWithListTestEvents([event], originalMode: .test)
+		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
-		expect(viewModel.eventMode) == EventMode.test
+		expect(viewModel.eventMode) == EventMode.test(.commercial)
 	}
 	
 	func test_startWithListTestEvents_recovery() throws {
@@ -176,7 +176,7 @@ class EventCoordinatorTests: XCTestCase {
 		let event = FakeRemoteEvent.fakeRemoteEventRecovery
 		
 		// When
-		sut.startWithListTestEvents([event], originalMode: .test)
+		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -191,7 +191,7 @@ class EventCoordinatorTests: XCTestCase {
 		let event = FakeRemoteEvent.fakeRemoteEventVaccination
 		
 		// When
-		sut.startWithListTestEvents([event], originalMode: .test)
+		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
@@ -258,8 +258,8 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
+			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test(.ggd))),
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -276,7 +276,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
@@ -342,12 +342,12 @@ class EventCoordinatorTests: XCTestCase {
 		
 		// Given
 		navigationSpy.viewControllers = [
-			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test)),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
+			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test(.ggd))),
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
-		sut.authenticationScreenDidFinish(.back(eventMode: .test))
+		sut.authenticationScreenDidFinish(.back(eventMode: .test(.ggd)))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -359,11 +359,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
-		sut.authenticationScreenDidFinish(.back(eventMode: .test))
+		sut.authenticationScreenDidFinish(.back(eventMode: .test(.ggd)))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -376,11 +376,11 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test, authenticationMode: .manyAuthenticationExchange))
+			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
 		]
 		
 		// When
-		sut.authenticationScreenDidFinish(.back(eventMode: .test))
+		sut.authenticationScreenDidFinish(.back(eventMode: .test(.ggd)))
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == true
@@ -584,7 +584,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.listEventsScreenDidFinish(.continue(eventMode: .test))
+		sut.listEventsScreenDidFinish(.continue(eventMode: .test(.commercial)))
 		
 		// Then
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true

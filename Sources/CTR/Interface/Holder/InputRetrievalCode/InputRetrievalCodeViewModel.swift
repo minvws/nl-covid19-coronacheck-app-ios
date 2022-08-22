@@ -402,7 +402,7 @@ class InputRetrievalCodeViewModel {
 		switch remoteEvent.0.status {
 			case .complete, .pending:
 				self.screenHasCompleted = true
-				let originalMode: EventMode = inputRetrievalCodeMode == .negativeTest ? .test : .vaccinationassessment
+				let originalMode: EventMode = inputRetrievalCodeMode == .negativeTest ? .test(.commercial) : .vaccinationassessment
 				self.coordinator?.userWishesToMakeQRFromRemoteEvent(
 					RemoteEvent(wrapper: remoteEvent.0, signedResponse: remoteEvent.1), originalMode: originalMode)
 			case .verificationRequired:

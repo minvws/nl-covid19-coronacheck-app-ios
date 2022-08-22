@@ -144,8 +144,9 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 	}
 
 	func startWithNegativeTest() {
-		
-		startWith(.test)
+
+		// Used in GGD flow
+		startWith(.test(.ggd))
 	}
 	
 	func startWithVaccination() {
@@ -160,7 +161,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	func startWithListTestEvents(_ events: [RemoteEvent], originalMode: EventMode) {
 		
-		var mode: EventMode = .test
+		var mode: EventMode = .test(.ggd)
 		
 		if let event = events.first?.wrapper.events?.first {
 			
@@ -171,7 +172,9 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 			} else if event.hasPositiveTest {
 				mode = .recovery
 			} else if event.hasNegativeTest {
-				mode = .test
+				if let wrapper = events.first?.wrapper {
+					mode = .test( wrapper.isGGD ? .ggd : .commercial)
+				}
 			} else if event.hasRecovery {
 				mode = .recovery
 			} else if event.hasVaccination {

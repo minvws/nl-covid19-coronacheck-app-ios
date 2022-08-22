@@ -210,7 +210,7 @@ class ListRemoteEventsViewModel {
 				}
 				
 			case let .failure(greenCardError):
-				let parser = GreenCardResponseErrorParser(flow: determineErrorCodeFlow())
+				let parser = GreenCardResponseErrorParser(flow: eventMode.flow)
 				switch parser.parse(greenCardError) {
 					case .noInternet:
 						showNoInternet()

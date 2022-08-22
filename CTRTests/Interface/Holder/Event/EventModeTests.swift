@@ -18,7 +18,8 @@ class EventModeTests: XCTestCase {
 		expect(EventMode.vaccinationassessment.asList) == ["vaccinationassessment"]
 		expect(EventMode.vaccinationAndPositiveTest.asList) == ["vaccination", "positivetest"]
 		expect(EventMode.recovery.asList) == ["positivetest"]
-		expect(EventMode.test.asList) == ["negativetest"]
+		expect(EventMode.test(.ggd).asList) == ["negativetest"]
+		expect(EventMode.test(.commercial).asList) == ["negativetest"]
 		expect(EventMode.vaccination.asList) == ["vaccination"]
 	}
 }

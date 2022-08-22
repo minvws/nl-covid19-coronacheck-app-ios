@@ -7,12 +7,21 @@
 
 import UIKit
 
-enum EventMode: String {
+enum EventMode: Equatable {
 
+	enum TestRoute: Equatable {
+		// We scanned a paper proof negative test
+		case dcc
+		// We want to fetch a negative test from the GGD
+		case ggd
+		// We want to fetch a negative test with a token from a commercial provider
+		case commercial
+	}
+	
 	case paperflow
-	case vaccinationAndPositiveTest = "positiveTest"  // rawValue positiveTest for backwards compatibility with CoreData
+	case vaccinationAndPositiveTest
 	case recovery
-	case test
+	case test(TestRoute)
 	case vaccination
 	case vaccinationassessment
 
@@ -48,6 +57,23 @@ enum EventMode: String {
 			case .paperflow: return nil
 		}
 	}
+	
+	var rawValue: String {
+		switch self {
+			case .paperflow:
+				return "paperflow"
+			case .vaccinationAndPositiveTest:
+				return "positiveTest" // rawValue positiveTest for backwards compatibility with CoreData
+			case .recovery:
+				return "recovery"
+			case .test:
+				return "test"
+			case .vaccination:
+				return "vaccination"
+			case .vaccinationassessment:
+				return "vaccinationassessment"
+		}
+	}
 }
 
 // MARK: - ErrorCode Flow -
@@ -60,7 +86,15 @@ extension EventMode {
 			case .paperflow: return .paperproof
 			case .vaccinationAndPositiveTest: return .vaccinationAndPositiveTest
 			case .recovery: return .recovery
-			case .test: return .ggdTest
+			case let .test(testRoute):
+				switch testRoute {
+					case .dcc:
+						return .paperproof
+					case .ggd:
+						return .ggdTest
+					case .commercial:
+						return .commercialTest
+				}
 			case .vaccination: return .vaccination
 			case .vaccinationassessment: return .visitorPass
 		}
