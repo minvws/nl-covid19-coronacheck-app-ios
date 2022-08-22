@@ -321,7 +321,7 @@ final class FetchRemoteEventsViewModel {
 			case .test:
 				var providers = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.negativeTest) }
 				for index in 0 ..< providers.count {
-					providers[index].queryFilter = EventMode.test.queryFilter
+					providers[index].queryFilter = EventMode.test(.ggd).queryFilter
 				}
 				return providers
 

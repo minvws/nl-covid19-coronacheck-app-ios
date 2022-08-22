@@ -7,12 +7,18 @@
 
 import UIKit
 
-enum EventMode {
+enum TestMode: Equatable {
+	case dcc
+	case ggd
+	case commercial
+}
+
+enum EventMode: Equatable {
 
 	case paperflow
 	case vaccinationAndPositiveTest
 	case recovery
-	case test
+	case test(TestMode)
 	case vaccination
 	case vaccinationassessment
 
@@ -77,7 +83,15 @@ extension EventMode {
 			case .paperflow: return .paperproof
 			case .vaccinationAndPositiveTest: return .vaccinationAndPositiveTest
 			case .recovery: return .recovery
-			case .test: return .ggdTest
+			case let .test(testMode):
+				switch testMode {
+					case .dcc:
+						return .paperproof
+					case .ggd:
+						return .ggdTest
+					case .commercial:
+						return .commercialTest
+				}
 			case .vaccination: return .vaccination
 			case .vaccinationassessment: return .visitorPass
 		}
