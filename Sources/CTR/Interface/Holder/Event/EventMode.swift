@@ -10,9 +10,11 @@ import UIKit
 enum EventMode: Equatable {
 
 	enum TestRoute: Equatable {
-		// We scanned a
+		// We scanned a paper proof negative test
 		case dcc
+		// We want to fetch a negative test from the GGD
 		case ggd
+		// We want to fetch a negative test with a token from a commercial provider
 		case commercial
 	}
 	
