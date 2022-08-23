@@ -26,6 +26,7 @@ final class ShowHintsViewModel {
 		
 		case internationalRecoveryCreated = "international_recovery_created"
 		case internationalRecoveryRejected = "international_recovery_rejected"
+		case internationalRecoveryTooOld = "international_recovery_too_old"
 		
 		case domesticNegativeTestCreated = "domestic_negativetest_created"
 		case domesticNegativeTestRejected = "domestic_negativetest_rejected"
@@ -226,7 +227,7 @@ final class ShowHintsViewModel {
 			
 			if hints.contains(.vaccinationDoseCorrectionApplied) {
 				return .noRecoveryButDosisCorrection
-			} else if hints.contains(.vaccinationDoseCorrectionNotApplied) {
+			} else if hints.contains(.internationalRecoveryTooOld) {
 				return .recoveryTooOld
 			} else {
 				return .cantCreateCertificate(errorCode: .hintsError0511)
