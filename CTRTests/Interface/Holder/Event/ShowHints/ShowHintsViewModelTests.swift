@@ -341,7 +341,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate017() throws { // matches: .recoveryTooOld
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected", "Vaccination_dose_correction_not_applied"])!
+		let hints = NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected", "International_recovery_too_old"])!
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub))
