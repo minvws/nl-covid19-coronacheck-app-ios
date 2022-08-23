@@ -65,7 +65,7 @@ class ListRemoteEventsViewModel {
 				self?.displaySomeResultsMightBeMissing()
 			}
 		}
-
+		
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -136,10 +136,6 @@ class ListRemoteEventsViewModel {
 				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
 				Current.logHandler.logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
 				return paperFlowEmbeddedEventMode
-			} else if let originalEventMode = originalEventMode {
-				// Original Event Mode is e.g. when using the negative test flow for vaccineassessment (where original mode would be vaccineassessment)
-				Current.logHandler.logVerbose("Setting eventModeToUse to \(originalEventMode.rawValue)")
-				return originalEventMode
 			} else {
 				return eventMode
 			}
@@ -154,7 +150,7 @@ class ListRemoteEventsViewModel {
 				self.handleStorageError()
 				return
 			}
-
+			
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: eventModeToUse) { result in
 				self.progressIndicationCounter.decrement()
 				self.handleGreenCardResult(result, forEventMode: eventModeToUse)
@@ -192,8 +188,11 @@ class ListRemoteEventsViewModel {
 				// When in recovery flow, save as recovery to distinct from positive tests.
 				storageEventMode = .recovery
 			}
+			if eventMode == .test(.commercial) {
+				// Commercial mode is not handled correctly by the storagemode (undetectable)
+				storageEventMode = .test(.commercial)
+			}
 		}
-		Current.logHandler.logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 
