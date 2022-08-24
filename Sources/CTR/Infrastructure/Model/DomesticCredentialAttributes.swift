@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import AnyCodable
 
 struct DomesticCredentialAttributes: Codable {
 
