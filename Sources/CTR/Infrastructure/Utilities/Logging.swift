@@ -5,131 +5,83 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import CocoaLumberjack
-import CocoaLumberjackSwift
+// swiftlint:disable disable_print
+
 import Foundation
 
-protocol Logging {
-
-	/// Log for verbose purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logVerbose(_ message: String)
-
-	/// Log for debug purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logDebug(_ message: String)
-
-	/// Log for information purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logInfo(_ message: String)
-
-	/// Log for warning purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logWarning(_ message: String)
-
-	/// Log for error purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logError(_ message: String)
+private enum LoggingLevel: String, Comparable {
+	
+	static func < (lhs: LoggingLevel, rhs: LoggingLevel) -> Bool {
+		return lhs.numericLevel < rhs.numericLevel
+	}
+	
+	case verbose
+	case debug
+	case info
+	case warning
+	case error
+	case off
+	
+	var numericLevel: Int {
+		switch self {
+			case .verbose:
+				return 5
+			case .debug:
+				return 4
+			case .info:
+				return 3
+			case .warning:
+				return 2
+			case .error:
+				return 1
+			case .off:
+				return 0
+		}
+	}
 }
 
-final class LogHandler: Logging {
+private let loggingLevel: LoggingLevel = {
+	guard !ProcessInfo.processInfo.isTesting else { return .off }
+	guard let string = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String else { return .off }
+	return LoggingLevel(rawValue: string) ?? .off
+}()
 
-	private var isSetup = false
-	
-	init() {
-		if !ProcessInfo.processInfo.isTesting {
-			setup()
-		}
-	}
+/// Log for verbose purpose
+/// - Parameters:
+///   - message: the message to log
+func logVerbose(_ message: String) {
+	guard loggingLevel >= LoggingLevel.verbose else { return }
+	print("💤 \(message)")
+}
 
-	/// Can be called multiple times, will only setup once
-	func setup() {
-		
-		guard !isSetup else {
-			DDLogDebug(
-				"🐞 Logging has already been setup before",
-				file: #file,
-				function: #function,
-				line: #line,
-				tag: "default"
-			)
+/// Log for debug purpose
+/// - Parameters:
+///   - message: the message to log
+func logDebug(_ message: String) {
+	guard loggingLevel >= LoggingLevel.debug else { return }
+	print("🐞 \(message)")
+}
 
-			return
-		}
+/// Log for information purpose
+/// - Parameters:
+///   - message: the message to log
+func logInfo(_ message: String) {
+	guard loggingLevel >= LoggingLevel.info else { return }
+	print("📋 \(message)")
+}
 
-		isSetup = true
+/// Log for warning purpose
+/// - Parameters:
+///   - message: the message to log
+func logWarning(_ message: String) {
+	guard loggingLevel >= LoggingLevel.warning else { return }
+	print("❗️ \(message)")
+}
 
-		let level = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String ?? "error"
-
-		switch level {
-			case "verbose":
-				dynamicLogLevel = .verbose
-			case "debug":
-				dynamicLogLevel = .debug
-			case "info":
-				dynamicLogLevel = .info
-			case "warn":
-				dynamicLogLevel = .warning
-			case "error":
-				dynamicLogLevel = .error
-			case "none":
-				dynamicLogLevel = .off
-			default:
-				dynamicLogLevel = .off
-		}
-
-		DDLog.add(DDOSLogger.sharedInstance) // Uses os_log
-
-		let fileLogger: DDFileLogger = DDFileLogger() // File Logger
-		fileLogger.rollingFrequency = 60 * 60 * 24 // 24 hours
-		fileLogger.logFileManager.maximumNumberOfLogFiles = 7
-		DDLog.add(fileLogger)
-
-		DDLogDebug("🐞 Logging has been setup", file: #file, function: #function, line: #line, tag: "default")
-	}
-	
-	// MARK: Logging
-	
-	/// The category with which the class that conforms to the `Logging`-protocol is logging.
-	private let loggingCategory = "CoronaCheck"
-
-	/// Log for verbose purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logVerbose(_ message: String) {
-		DDLogVerbose("💤 \(message)", tag: loggingCategory)
-	}
-
-	/// Log for debug purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logDebug(_ message: String) {
-		DDLogDebug("🐞 \(message)", tag: loggingCategory)
-	}
-
-	/// Log for information purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logInfo(_ message: String) {
-		DDLogInfo("📋 \(message)", tag: loggingCategory)
-	}
-
-	/// Log for warning purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logWarning(_ message: String) {
-		DDLogWarn("❗️ \(message)", tag: loggingCategory)
-	}
-
-	/// Log for error purpose
-	/// - Parameters:
-	///   - message: the message to log
-	func logError(_ message: String) {
-		DDLogError("🔥 \(message)", tag: loggingCategory)
-	}
+/// Log for error purpose
+/// - Parameters:
+///   - message: the message to log
+func logError(_ message: String) {
+	guard loggingLevel >= LoggingLevel.error else { return }
+	print("🔥 \(message)")
 }
