@@ -49,39 +49,59 @@ private let loggingLevel: LoggingLevel = {
 /// Log for verbose purpose
 /// - Parameters:
 ///   - message: the message to log
-func logVerbose(_ message: String) {
+func logVerbose(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.verbose else { return }
-	print("💤 \(message)")
+	if values.isNotEmpty {
+		print("💤 \(message)", values)
+	} else {
+		print("💤 \(message)")
+	}
 }
 
 /// Log for debug purpose
 /// - Parameters:
 ///   - message: the message to log
-func logDebug(_ message: String) {
+func logDebug(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.debug else { return }
-	print("🐞 \(message)")
+	if values.isNotEmpty {
+		print("🐞 \(message)", values)
+	} else {
+		print("🐞 \(message)")
+	}
 }
 
 /// Log for information purpose
 /// - Parameters:
 ///   - message: the message to log
-func logInfo(_ message: String) {
+func logInfo(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.info else { return }
-	print("📋 \(message)")
+	if values.isNotEmpty {
+		print("📋 \(message)", values)
+	} else {
+		print("📋 \(message)")
+	}
 }
 
 /// Log for warning purpose
 /// - Parameters:
 ///   - message: the message to log
-func logWarning(_ message: String) {
+func logWarning(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.warning else { return }
-	print("❗️ \(message)")
+	if values.isNotEmpty {
+		print("❗️ \(message)", values)
+	} else {
+		print("❗️ \(message)")
+	}
 }
 
 /// Log for error purpose
 /// - Parameters:
 ///   - message: the message to log
-func logError(_ message: String) {
+func logError(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.error else { return }
-	print("🔥 \(message)")
+	if values.isNotEmpty {
+		print("🔥 \(message)", values)
+	} else {
+		print("🔥 \(message)")
+	}
 }
