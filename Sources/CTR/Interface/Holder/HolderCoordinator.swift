@@ -711,7 +711,7 @@ extension HolderCoordinator: EventFlowDelegate {
 		
 		/// The user cancelled the event flow.
 		removeChildCoordinator()
-		Current.logHandler.logInfo("HolderCoordinator: eventFlowDidCancel")
+		logInfo("HolderCoordinator: eventFlowDidCancel")
 	}
 }
 

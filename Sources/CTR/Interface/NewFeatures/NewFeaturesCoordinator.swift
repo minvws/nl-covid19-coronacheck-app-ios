@@ -46,7 +46,7 @@ class NewFeaturesCoordinator: Coordinator {
 	/// Start the scene
 	func start() {
 
-		Current.logHandler.logVerbose("Starting New Features Information Flow")
+		logVerbose("Starting New Features Information Flow")
 		
 		if let pagedAnnouncementItems = newFeaturesManager.pagedAnnouncementItems() {
 			

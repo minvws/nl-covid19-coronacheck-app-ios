@@ -117,7 +117,7 @@ final class FetchRemoteEventsViewModel {
 			return
 		}
 
-		Current.logHandler.logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
+		logVerbose("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
 
 		switch (hasNoResult, someServerUnreachableErrror, someNetworkDidError) {
 
@@ -153,7 +153,7 @@ final class FetchRemoteEventsViewModel {
 			step: .event,
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
-					Current.logHandler.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
+					logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
 					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
@@ -246,13 +246,13 @@ final class FetchRemoteEventsViewModel {
 		var providers = [EventFlow.EventProvider]()
 
 		if let providerError = remoteEventProvidersResult?.failureError {
-			Current.logHandler.logError("Error getting event providers: \(providerError)")
+			logError("Error getting event providers: \(providerError)")
 			errorCodes.append(self.convert(providerError, for: eventMode.flow, step: .providers))
 			serverErrors.append(providerError)
 		}
 
 		if let accessError = accessTokenResult?.failureError {
-			Current.logHandler.logError("Error getting access tokens: \(accessError)")
+			logError("Error getting access tokens: \(accessError)")
 			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
 			serverErrors.append(accessError)
 		}
@@ -418,14 +418,14 @@ final class FetchRemoteEventsViewModel {
 		from provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
-		Current.logHandler.logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
+		logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
 			// Result<EventFlow.EventInformationAvailable, ServerError>
 
 			if case let .success(info) = result {
-				Current.logHandler.logVerbose("EventInformationAvailable: \(info)")
+				logVerbose("EventInformationAvailable: \(info)")
 			}
 			completion(result)
 			self?.progressIndicationCounter.decrement()

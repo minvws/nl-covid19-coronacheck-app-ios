@@ -14,20 +14,17 @@ class CryptoManager: CryptoManaging {
 	private let cryptoLibUtility: CryptoLibUtilityProtocol
 	private let verificationPolicyManager: VerificationPolicyManaging
 	private let featureFlagManager: FeatureFlagManaging
-	private let logHandler: Logging?
 	
 	/// Initializer
 
 	required init(
 		cryptoLibUtility: CryptoLibUtilityProtocol,
 		verificationPolicyManager: VerificationPolicyManaging,
-		featureFlagManager: FeatureFlagManaging,
-		logHandler: Logging? = nil
+		featureFlagManager: FeatureFlagManaging
 	) {
 		self.cryptoLibUtility = cryptoLibUtility
 		self.verificationPolicyManager = verificationPolicyManager
 		self.featureFlagManager = featureFlagManager
-		self.logHandler = logHandler
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
@@ -57,7 +54,7 @@ class CryptoManager: CryptoManaging {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
 			} else {
-				logHandler?.logError("ICM: \(result.error)")
+				logError("ICM: \(result.error)")
 			}
 		}
 		return nil
@@ -68,14 +65,14 @@ class CryptoManager: CryptoManaging {
 	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
 
 		if hasPublicKeys() {
-			Current.logHandler.logVerbose("Disclosing with policy: \(disclosurePolicy)")
+			logVerbose("Disclosing with policy: \(disclosurePolicy)")
 			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
 			if let payload = disclosed?.value {
 				let message = String(decoding: payload, as: UTF8.self)
-				logHandler?.logVerbose("QR message: \(message)")
+				logVerbose("QR message: \(message)")
 				return payload
 			} else if let error = disclosed?.error {
-				logHandler?.logError("generateQRmessage: \(error)")
+				logError("generateQRmessage: \(error)")
 			}
 		}
 		
@@ -88,7 +85,7 @@ class CryptoManager: CryptoManaging {
 	func verifyQRMessage(_ message: String) -> Result<MobilecoreVerificationResult, CryptoError> {
 		
 		guard hasPublicKeys() else {
-			logHandler?.logError("No public keys")
+			logError("No public keys")
 			return .failure(.keyMissing)
 		}
 		
@@ -110,7 +107,7 @@ class CryptoManager: CryptoManaging {
 		}
 		
 		guard let result = MobilecoreVerify(proofQREncoded, scanPolicy) else {
-			logHandler?.logError("Could not verify QR")
+			logError("Could not verify QR")
 			return .failure(.couldNotVerify)
 		}
 
@@ -129,10 +126,10 @@ class CryptoManager: CryptoManaging {
 					let object = try JSONDecoder().decode(DomesticCredentialAttributes.self, from: value)
 					return object
 				} catch {
-					logHandler?.logError("Error Deserializing \(DomesticCredentialAttributes.self): \(error)")
+					logError("Error Deserializing \(DomesticCredentialAttributes.self): \(error)")
 				}
 			} else {
-				logHandler?.logError("Can't read credential: \(String(describing: response.error))")
+				logError("Can't read credential: \(String(describing: response.error))")
 			}
 		}
 		return nil
@@ -145,23 +142,23 @@ class CryptoManager: CryptoManaging {
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
 		
 		if let entry = euCredentialAttributesCache[data.sha256] {
-			logHandler?.logVerbose("Using cache hit for \(String(decoding: data, as: UTF8.self))")
+			logVerbose("Using cache hit for \(String(decoding: data, as: UTF8.self))")
 			return entry
 		}
 		
 		if let response = MobilecoreReadEuropeanCredential(data) {
 			if let value = response.value {
 				do {
-					logHandler?.logVerbose("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
+					logVerbose("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
 					euCredentialAttributesCache[data.sha256] = object
 					return object
 				} catch {
-					logHandler?.logError("Error: \(String(decoding: value, as: UTF8.self))")
-					logHandler?.logError("Error Deserializing \(EuCredentialAttributes.self): \(error)")
+					logError("Error: \(String(decoding: value, as: UTF8.self))")
+					logError("Error Deserializing \(EuCredentialAttributes.self): \(error)")
 				}
 			} else {
-				logHandler?.logError("Can't read credential: \(String(describing: response.error))")
+				logError("Can't read credential: \(String(describing: response.error))")
 			}
 		}
 		return nil
@@ -176,7 +173,7 @@ class CryptoManager: CryptoManaging {
 		if let credential = result?.value {
 			return .success(credential)
 		} else if let reason = result?.error {
-			logHandler?.logError("Can't create credential: \(String(describing: reason))")
+			logError("Can't create credential: \(String(describing: reason))")
 			return .failure(CryptoError.credentialCreateFail(reason: reason))
 		}
 		return .failure(CryptoError.unknown)

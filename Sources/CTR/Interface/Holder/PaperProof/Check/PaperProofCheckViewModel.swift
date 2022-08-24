@@ -131,7 +131,7 @@ class PaperProofCheckViewModel {
 	}
 
 	private func handleError(serverError: ServerError, scannedDcc: String, couplingCode: String) {
-		Current.logHandler.logError("CouplingManager handleError: \(serverError)")
+		logError("CouplingManager handleError: \(serverError)")
 		
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			switch error {

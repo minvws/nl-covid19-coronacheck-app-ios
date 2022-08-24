@@ -24,7 +24,6 @@ struct Environment {
 	var greenCardLoader: GreenCardLoading
 	var identityChecker: IdentityCheckerProtocol
 	var jailBreakDetector: JailBreakProtocol
-	var logHandler: Logging
 	var mappingManager: MappingManaging
 	var networkManager: NetworkManaging
 	var newFeaturesManager: NewFeaturesManaging
@@ -53,7 +52,6 @@ struct Environment {
 		greenCardLoader: GreenCardLoading,
 		identityChecker: IdentityCheckerProtocol,
 		jailBreakDetector: JailBreakProtocol,
-		logHandler: Logging,
 		mappingManager: MappingManaging,
 		networkManager: NetworkManaging,
 		newFeaturesManager: NewFeaturesManaging,
@@ -81,7 +79,6 @@ struct Environment {
 		self.greenCardLoader = greenCardLoader
 		self.identityChecker = identityChecker
 		self.jailBreakDetector = jailBreakDetector
-		self.logHandler = logHandler
 		self.mappingManager = mappingManager
 		self.networkManager = networkManager
 		self.newFeaturesManager = newFeaturesManager
@@ -131,12 +128,10 @@ private let cryptoLibUtility = CryptoLibUtility(
 	networkManager: networkManager,
 	remoteConfigManager: remoteConfigManager,
 	reachability: try? Reachability(),
-	fileStorage: fileStorage,
-	logHandler: logHandler
+	fileStorage: fileStorage
 )
 private let clockDeviationManager = ClockDeviationManager(
 	remoteConfigManager: remoteConfigManager,
-	logHandler: logHandler,
 	currentSystemUptime: ClockDeviationManager.currentSystemUptime,
 	now: now
 )
@@ -144,26 +139,23 @@ private let couplingManager = CouplingManager(cryptoManager: cryptoManager, netw
 private let cryptoManager = CryptoManager(
 	cryptoLibUtility: cryptoLibUtility,
 	verificationPolicyManager: verificationPolicyManager,
-	featureFlagManager: featureFlagManager,
-	logHandler: logHandler
+	featureFlagManager: featureFlagManager
 )
 
-private let deviceAuthenticationDetector = DeviceAuthenticationDetector(logHandler: logHandler)
+private let deviceAuthenticationDetector = DeviceAuthenticationDetector()
 private let disclosurePolicyManager = DisclosurePolicyManager(
 	remoteConfigManager: remoteConfigManager,
-	userSettings: userSettings,
-	logHandler: logHandler
+	userSettings: userSettings
 )
 private let featureFlagManager = FeatureFlagManager(
 	remoteConfigManager: remoteConfigManager
 )
-private let fileStorage = FileStorage(logHandler: logHandler)
-private let identityChecker = IdentityChecker(logHandler: logHandler)
+private let fileStorage = FileStorage()
+private let identityChecker = IdentityChecker()
 private let jailBreakDetector = JailBreakDetector()
-private let logHandler = LogHandler()
 private let mappingManager = MappingManager(remoteConfigManager: remoteConfigManager)
 private let onboardingManager = OnboardingManager(secureUserSettings: secureUserSettings)
-private let openIdManager = OpenIdManager(logHandler: logHandler)
+private let openIdManager = OpenIdManager()
 private let networkManager: NetworkManager = {
 	let networkConfiguration: NetworkConfiguration
 	   
@@ -182,7 +174,7 @@ private let networkManager: NetworkManager = {
 		   networkConfiguration = fallbackConfiguration
 	   }
 	   
-	   return NetworkManager(configuration: networkConfiguration, logHandler: logHandler)
+	   return NetworkManager(configuration: networkConfiguration)
 }()
 private let newFeaturesManager = NewFeaturesManager(
 	secureUserSettings: secureUserSettings
@@ -211,7 +203,7 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 	
 	// Dependencies that depend on `DataStoreManager`: 
 	let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
-	let walletManager = WalletManager(dataStoreManager: datastoreManager, logHandler: logHandler)
+	let walletManager = WalletManager(dataStoreManager: datastoreManager)
 	let verificationPolicyEnabler = VerificationPolicyEnabler(
 		remoteConfigManager: remoteConfigManager,
 		userSettings: userSettings,
@@ -223,8 +215,7 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
 		walletManager: walletManager,
-		secureUserSettings: secureUserSettings,
-		logHandler: logHandler
+		secureUserSettings: secureUserSettings
 	)
 	
 	return Environment(
@@ -241,7 +232,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		greenCardLoader: greenCardLoader,
 		identityChecker: identityChecker,
 		jailBreakDetector: jailBreakDetector,
-		logHandler: logHandler,
 		mappingManager: mappingManager,
 		networkManager: networkManager,
 		newFeaturesManager: newFeaturesManager,

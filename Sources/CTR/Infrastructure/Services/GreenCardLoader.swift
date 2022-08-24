@@ -53,21 +53,18 @@ class GreenCardLoader: GreenCardLoading {
 	private let cryptoManager: CryptoManaging
 	private let walletManager: WalletManaging
 	private let secureUserSettings: SecureUserSettingsProtocol
-	private let logHandler: Logging?
 	
 	required init(
 		networkManager: NetworkManaging,
 		cryptoManager: CryptoManaging,
 		walletManager: WalletManaging,
-		secureUserSettings: SecureUserSettingsProtocol,
-		logHandler: Logging? = nil
+		secureUserSettings: SecureUserSettingsProtocol
 	) {
 
 		self.networkManager = networkManager
 		self.cryptoManager = cryptoManager
 		self.walletManager = walletManager
 		self.secureUserSettings = secureUserSettings
-		self.logHandler = logHandler
 	}
 
 	func signTheEventsIntoGreenCardsAndCredentials(
@@ -75,7 +72,7 @@ class GreenCardLoader: GreenCardLoading {
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		
 		guard let newSecretKey = self.cryptoManager.generateSecretKey() else {
-			self.logHandler?.logError("GreenCardLoader - can't create new secret key")
+			logError("GreenCardLoader - can't create new secret key")
 			completion(.failure(Error.failedToGenerateDomesticSecretKey))
 			return
 		}
@@ -83,12 +80,12 @@ class GreenCardLoader: GreenCardLoading {
 		networkManager.prepareIssue { [weak self] (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
 				case .failure(let serverError):
-					self?.logHandler?.logError("GreenCardLoader - prepareIssue error: \(serverError)")
+					logError("GreenCardLoader - prepareIssue error: \(serverError)")
 					completion(.failure(Error.preparingIssue(serverError)))
 					
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self?.logHandler?.logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
+						logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
@@ -104,7 +101,7 @@ class GreenCardLoader: GreenCardLoading {
 							case .success(let greenCardResponse):
 								self?.storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
-										self?.logHandler?.logError("GreenCardLoader - failed to save greenCards")
+										logError("GreenCardLoader - failed to save greenCards")
 										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
@@ -145,14 +142,14 @@ class GreenCardLoader: GreenCardLoading {
 			"flows": (eventMode?.asList ?? []) as AnyObject
 		]
 		
-		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
+		self.networkManager.fetchGreencards(dictionary: dictionary) { (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
 				case .failure(let serverError):
-					self?.logHandler?.logError("error: \(serverError)")
+					logError("error: \(serverError)")
 					onCompletion(.failure(Error.credentials(serverError)))
 
 				case let .success(greencardResponse):
-					self?.logHandler?.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
+					logVerbose("GreenCardLoader - succes: \(greencardResponse)")
 					onCompletion(.success(greencardResponse))
 			}
 		}

@@ -225,13 +225,13 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 	func load() {
 
 		guard !state.loadingState.isLoading else {
-			Current.logHandler.logDebug("StrippenRefresh: Skipping call to `load()` as a load is already in progress.")
+			logDebug("StrippenRefresh: Skipping call to `load()` as a load is already in progress.")
 			return
 		}
 
 		switch state.greencardsCredentialExpiryState {
 			case .noActionNeeded:
-				Current.logHandler.logDebug("StrippenRefresh: No greencards within threshold of needing refreshing. Skipping refresh.")
+				logDebug("StrippenRefresh: No greencards within threshold of needing refreshing. Skipping refresh.")
 
 			case .expired, .expiring:
 				state.beginLoading()

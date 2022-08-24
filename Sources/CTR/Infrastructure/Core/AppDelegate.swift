@@ -86,11 +86,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
 		options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 			
 			// Incoming url
-			Current.logHandler.logVerbose("CTR: AppDelegate -> url = \(url)")
+			logVerbose("CTR: AppDelegate -> url = \(url)")
 			
 			// Determine who sent the URL.
 			let sendingAppID = options[.sourceApplication]
-			Current.logHandler.logVerbose("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
+			logVerbose("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
 			
 			// Sends the URL to the current authorization flow (if any) which will
 			// process it if it relates to an authorization response.

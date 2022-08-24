@@ -32,7 +32,7 @@ class ScanPermissionViewModel {
 
 		let avStatus = AVCaptureDevice.authorizationStatus(for: .video)
 		if avStatus == .denied {
-			Current.logHandler.logWarning("Camera permission denied.")
+			logWarning("Camera permission denied.")
 			showPermissionWarning = true
 		}
 	}

@@ -82,7 +82,7 @@ class ShowQRViewModel {
 
 	private var currentPage: Int {
 		didSet {
-			Current.logHandler.logVerbose("current page set to \(currentPage)")
+			logVerbose("current page set to \(currentPage)")
 			displayQRInformation()
 		}
 	}
@@ -243,7 +243,7 @@ class ShowQRViewModel {
 				openURLsInApp: true
 			)
 		} else {
-			Current.logHandler.logError("Can't read the domestic credentials")
+			logError("Can't read the domestic credentials")
 		}
 	}
 	

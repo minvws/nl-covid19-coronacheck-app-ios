@@ -42,7 +42,7 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator {
 	/// Start the scene
 	func start() {
 
-		Current.logHandler.logVerbose("Starting UpdatedDisclosurePolicy Flow")
+		logVerbose("Starting UpdatedDisclosurePolicy Flow")
 		
 		let multipaneMode: Bool = pagedAnnouncmentItems.count > 1
 		

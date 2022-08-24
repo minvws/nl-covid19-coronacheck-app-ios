@@ -65,12 +65,10 @@ class WalletManager: WalletManaging {
 	static let walletName = "main"
 
 	private var dataStoreManager: DataStoreManaging
-	private let logHandler: Logging?
 
-	required init( dataStoreManager: DataStoreManaging, logHandler: Logging? = nil) {
+	required init( dataStoreManager: DataStoreManaging) {
 		
 		self.dataStoreManager = dataStoreManager
-		self.logHandler = logHandler
 
 		guard AppFlavor.flavor == .holder else { return }
 		createMainWalletIfNotExists()
@@ -135,7 +133,7 @@ class WalletManager: WalletManaging {
 			
 			for eventGroup in wallet.castEventGroups() {
 				if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
-					self.logHandler?.logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
+					logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
 					context.delete(eventGroup)
 				}
 			}
@@ -177,7 +175,7 @@ class WalletManager: WalletManaging {
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 			
 			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
-				self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 				context.delete(eventGroup)
 			}
 			dataStoreManager.save(context)
@@ -194,7 +192,7 @@ class WalletManager: WalletManaging {
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 			
 			for eventGroup in wallet.castEventGroups() {
-				self.logHandler?.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 				context.delete(eventGroup)
 			}
 			dataStoreManager.save(context)
@@ -335,10 +333,10 @@ class WalletManager: WalletManaging {
 			case let .success(credentials):
 				do {
 					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
-					self.logHandler?.logVerbose("object: \(objects)")
+					logVerbose("object: \(objects)")
 					return .success(objects)
 				} catch {
-					self.logHandler?.logError("Error Deserializing: \(error)")
+					logError("Error Deserializing: \(error)")
 					return .failure(error)
 				}
 			case let .failure(error):
@@ -468,7 +466,7 @@ class WalletManager: WalletManaging {
 	
 	func updateEventGroup(identifier: String, expiryDate: Date) {
 		
-		Current.logHandler.logDebug("WalletManager: Should update eventGroup \(identifier) with expiry \(expiryDate)")
+		logDebug("WalletManager: Should update eventGroup \(identifier) with expiry \(expiryDate)")
 		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
