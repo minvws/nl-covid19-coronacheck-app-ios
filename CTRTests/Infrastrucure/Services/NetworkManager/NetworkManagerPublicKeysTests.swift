@@ -303,42 +303,6 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 		}
 	}
 
-	func test_getPublicKeys_signedResponse_invalidContent() {
-
-		// Given
-		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
-		let signatureValidationSpy = SignatureValidationSpy()
-		signatureValidationSpy.stubbedValidateResult = true
-		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
-		sut = NetworkManager(
-			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy
-		)
-
-		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"payload": "test",
-					"signature": "test"
-				],
-				statusCode: 200,
-				headers: nil
-			)
-		}
-
-		// When
-		waitUntil { done in
-			self.sut.getPublicKeys { result in
-
-				// Then
-				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
-				done()
-			}
-		}
-	}
-
 	func test_getPublicKeys_validContent() {
 
 		// Given
@@ -355,7 +319,30 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"payload": "eyJjbF9rZXlzIjpbXSwibmxfa2V5cyI6eyJWV1MtQUNDLTAiOnsicHVibGljX2tleSI6InRlc3QgMCJ9LCJWV1MtQUNDLTEiOnsicHVibGljX2tleSI6InRlc3QgMSJ9LCJWV1MtQUNDLTIiOnsicHVibGljX2tleSI6InRlc3QgMiJ9LCJWV1MtQUNDLTMiOnsicHVibGljX2tleSI6InRlc3QgMyJ9fX0=",
+					"payload":
+						/*
+						 eyJjbF9rZXlzIjpbXSwibmxfa2V5cyI6eyJWV1MtQUNDLTAiOnsicHVibGljX2tleSI6InRlc3QgMCJ9LCJWV1MtQUNDLTEiOnsicHVibGljX2tleSI6InRlc3QgMSJ9LCJWV1MtQUNDLTIiOnsicHVibGljX2tleSI6InRlc3QgMiJ9LCJWV1MtQUNDLTMiOnsicHVibGljX2tleSI6InRlc3QgMyJ9fX0=
+						 {
+						   "cl_keys":[
+							 
+						   ],
+						   "nl_keys":{
+							 "VWS-ACC-0":{
+							   "public_key":"test 0"
+							 },
+							 "VWS-ACC-1":{
+							   "public_key":"test 1"
+							 },
+							 "VWS-ACC-2":{
+							   "public_key":"test 2"
+							 },
+							 "VWS-ACC-3":{
+							   "public_key":"test 3"
+							 }
+						   }
+						 }
+						 */
+					"eyJjbF9rZXlzIjpbXSwibmxfa2V5cyI6eyJWV1MtQUNDLTAiOnsicHVibGljX2tleSI6InRlc3QgMCJ9LCJWV1MtQUNDLTEiOnsicHVibGljX2tleSI6InRlc3QgMSJ9LCJWV1MtQUNDLTIiOnsicHVibGljX2tleSI6InRlc3QgMiJ9LCJWV1MtQUNDLTMiOnsicHVibGljX2tleSI6InRlc3QgMyJ9fX0=",
 					"signature": "test"
 				],
 				statusCode: 200,

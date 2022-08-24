@@ -6,7 +6,6 @@
 */
 
 import Foundation
-import AnyCodable
 
 class NetworkManager {
 
@@ -77,6 +76,45 @@ class NetworkManager {
 		}
 	}
 	
+	private func decodeSignedData(
+		request: URLRequest,
+		strategy: SecurityStrategy = .data,
+		signatureValidator: SignatureValidation,
+		completion: @escaping (Result<Data, ServerError>) -> Void) {
+
+		let session = createSession(strategy: strategy)
+		data(request: request, session: session) { data, response, error in
+
+			switch self.handleNetworkResponse(response: response, data: data, error: error) {
+				case let .failure(serverError):
+					completion(.failure(serverError))
+				case let .success(networkResponse):
+
+					// Decode to SignedResponse
+					let signedResult: Result<SignedResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
+					switch signedResult {
+						case let .success(signedResponse):
+							self.validateSignedResponse(
+								signatureValidator: signatureValidator,
+								signedResponse: signedResponse,
+								completion: completion
+							)
+
+						case let .failure(decodeError):
+							if let networkError = NetworkError.inspect(response: networkResponse.urlResponse) {
+								// Is there a actual network error? Report that rather than the signed response decode fail.
+								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
+							} else {
+								// No signed response. Abort.
+								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: decodeError)))
+							}
+					}
+			}
+			
+			self.cleanupSession(session)
+		}
+	}
+	
 	private func validateSignedResponse<Object: Decodable>(
 		signatureValidator: SignatureValidation,
 		urlResponse: URLResponse,
@@ -104,6 +142,31 @@ class NetworkManager {
 						urlResponse: urlResponse
 					)
 				)
+			} else {
+				self.logHandler?.logError("We got an invalid signature!")
+				completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
+			}
+		}
+	}
+	
+	private func validateSignedResponse(
+		signatureValidator: SignatureValidation,
+		signedResponse: SignedResponse,
+		completion: @escaping (Result<Data, ServerError>) -> Void) {
+		
+		// Make sure we have an actual payload and signature
+		guard let decodedPayloadData = signedResponse.decodedPayload,
+			  let signatureData = signedResponse.decodedSignature else {
+			logHandler?.logError("we cannot decode the payload or signature (base64 decoding failed)")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
+			return
+		}
+
+		// Validate signature (on the base64 payload)
+		signatureValidator.validate(data: decodedPayloadData, signature: signatureData) { valid in
+			if valid {
+				completion(.success(decodedPayloadData))
+				
 			} else {
 				self.logHandler?.logError("We got an invalid signature!")
 				completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
@@ -364,14 +427,14 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
+		decodeSignedData(
 			request: urlRequest,
 			strategy: .config,
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.config),
-			completion: { (result: Result<(AnyCodable, SignedResponse, Data, URLResponse), ServerError>) in
+			completion: { (result: Result<Data, ServerError>) in
 				// Not interested in the object (anycodable), we just want the data.
 				DispatchQueue.main.async {
-					completion(result.map { _, _, data, _ in (data) })
+					completion(result)
 				}
 			}
 		)
