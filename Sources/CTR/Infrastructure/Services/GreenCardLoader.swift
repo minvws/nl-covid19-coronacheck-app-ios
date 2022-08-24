@@ -89,13 +89,8 @@ class GreenCardLoader: GreenCardLoading {
 				
 				return (nonce, prepareIssueEnvelope.stoken)
 			}
-			.then { [self] (nonce, stoken) throws -> Promise<RemoteGreenCards.Response> in
-				
-				return fetchGreenCards(eventMode: eventMode, secretKey: newSecretKey, nonce: nonce, stoken: stoken)
-					.mapError(type: ServerError.self) { serverError in
-						logError("GreenCardLoader - prepareIssue error: \(serverError)")
-						return Error.preparingIssue(serverError)
-					}
+			.then { [self] in
+				fetchGreenCards(eventMode: eventMode, secretKey: newSecretKey, nonce: $0, stoken: $1)
 			}
 			.then { [self] greenCardResponse throws in
 				
