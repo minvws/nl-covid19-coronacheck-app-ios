@@ -27,9 +27,15 @@ packages:
   Nimble:
     github: Quick/Nimble
     majorVersion: 10.0.0
+  OHHTTPStubs:
+    github: AliSoftware/OHHTTPStubs
+    majorVersion: 9.1.0
   OpenSSL:
     github: krzyzanowskim/OpenSSL
     exactVersion: 1.1.1700
+  Promise:
+    github: khanlou/Promise
+    branch: master
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -39,9 +45,6 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     majorVersion: 1.9.0
-  OHHTTPStubs:
-    github: AliSoftware/OHHTTPStubs
-    majorVersion: 9.1.0
 
 
 # - Attributes:
@@ -100,6 +103,8 @@ targetTemplates:
         product: Reachability
       - package: RSwiftLibrary
         product: Rswift
+      - package: Promise
+        product: Promise
       # Frameworks:
       - framework: clcore.xcframework
         embed: false

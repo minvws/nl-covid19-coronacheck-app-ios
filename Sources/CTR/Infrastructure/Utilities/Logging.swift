@@ -8,6 +8,7 @@
 // swiftlint:disable disable_print
 
 import Foundation
+import Promise
 
 private enum LoggingLevel: String, Comparable {
 	

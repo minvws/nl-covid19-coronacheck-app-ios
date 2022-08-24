@@ -7,6 +7,7 @@
 */
 
 import Foundation
+import Promise
 
 extension NetworkManaging {
 	
@@ -18,7 +19,7 @@ extension NetworkManaging {
 	}
 	
 	/// Shim to allow return of Promise for `fetchGreencards`
-	func fetchGreencards(dictionary: [String : AnyObject]) -> Promise<RemoteGreenCards.Response> {
+	func fetchGreencards(dictionary: [String: AnyObject]) -> Promise<RemoteGreenCards.Response> {
 		Promise(work: { [self] fulfill, reject in
 			fetchGreencards(dictionary: dictionary, completion: resultCompletionHandler(fulfil: fulfill, reject: reject))
 		})
