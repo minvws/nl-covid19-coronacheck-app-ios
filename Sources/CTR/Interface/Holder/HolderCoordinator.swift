@@ -229,13 +229,22 @@ class HolderCoordinator: SharedCoordinator {
 	
 	private func consumeTvsAuthLink(_ returnURL: URL?) -> Bool {
 		
-		if let url = returnURL,
-		   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
-		   let authorizationFlow = appAuthState.currentAuthorizationFlow,
-		   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-			appAuthState.currentAuthorizationFlow = nil
+		var result = false
+		do {
+			try ObjC.catchException {
+				if let url = returnURL,
+				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
+				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
+				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+					appAuthState.currentAuthorizationFlow = nil
+				}
+				result = true
+			}
+		} catch {
+			
+			result = false
 		}
-		return true
+		return result
 	}
 	
 	// MARK: - Navigate to..

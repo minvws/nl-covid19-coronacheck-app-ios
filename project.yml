@@ -114,7 +114,7 @@ targetTemplates:
       base:
         CURRENT_PROJECT_VERSION: 1 # needs to be present for project to build locally, but is overwritten by fastlane. No need to change.
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Core/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
         VALIDATE_PRODUCT: YES

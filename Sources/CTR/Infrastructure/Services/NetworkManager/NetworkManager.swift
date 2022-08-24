@@ -260,9 +260,12 @@ class NetworkManager {
 		decoder.dateDecodingStrategy = .iso8601
 
 		do {
-			let object = try decoder.decode(Object.self, from: json)
-			logHandler?.logVerbose("Response Object: \(object)")
-			return .success(object)
+			let decodedObject = try decoder.decode(Object.self, from: json)
+#if DEBUG
+			// Next line might crash on production:
+			logHandler?.logVerbose("Response Object: \(decodedObject)")
+#endif
+			return .success(decodedObject)
 		} catch {
 			if logError {
 				logHandler?.logError("Error Deserializing `\(Object.self)`:\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")

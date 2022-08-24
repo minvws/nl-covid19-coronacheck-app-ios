@@ -35,7 +35,7 @@ class EventGroupModelTests: XCTestCase {
 
 				// When
 				eventGroup = EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: date,
 					jsonData: unwrappedJson,
@@ -46,7 +46,7 @@ class EventGroupModelTests: XCTestCase {
 		}
 
 		// Then
-		expect(eventGroup?.type).toEventually(equal(EventMode.test.rawValue))
+		expect(eventGroup?.type).toEventually(equal(EventMode.test(.ggd).rawValue))
 		expect(eventGroup?.providerIdentifier).toEventually(equal("CoronaCheck"))
 		expect(eventGroup?.expiryDate).toEventually(equal(date))
 		expect(eventGroup?.jsonData).toEventually(equal(json))
@@ -66,7 +66,7 @@ class EventGroupModelTests: XCTestCase {
 
 				// When
 				EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
 					jsonData: json,
@@ -100,7 +100,7 @@ class EventGroupModelTests: XCTestCase {
 
 				// When
 				event1 = EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
 					jsonData: json,
@@ -140,7 +140,7 @@ class EventGroupModelTests: XCTestCase {
 
 				// When
 				event1 = EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
 					jsonData: json,
@@ -180,7 +180,7 @@ class EventGroupModelTests: XCTestCase {
 			   let json = "test_findBy".data(using: .utf8) {
 				
 				EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
 					jsonData: json,
@@ -189,7 +189,7 @@ class EventGroupModelTests: XCTestCase {
 				)
 				
 				EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.commercial),
 					providerIdentifier: "Other Provider",
 					expiryDate: nil,
 					jsonData: json,
@@ -200,7 +200,7 @@ class EventGroupModelTests: XCTestCase {
 				// When
 				eventGroup = EventGroupModel.findBy(
 					wallet: unwrappedWallet,
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					jsonData: json
 				)
@@ -223,7 +223,7 @@ class EventGroupModelTests: XCTestCase {
 			   let json = "test_findBy_nothingFound".data(using: .utf8) {
 				
 				EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
 					jsonData: json,
@@ -232,7 +232,7 @@ class EventGroupModelTests: XCTestCase {
 				)
 				
 				EventGroupModel.create(
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "Other Provider",
 					expiryDate: nil,
 					jsonData: json,
@@ -243,7 +243,7 @@ class EventGroupModelTests: XCTestCase {
 				// When
 				eventGroup = EventGroupModel.findBy(
 					wallet: unwrappedWallet,
-					type: EventMode.test,
+					type: EventMode.test(.ggd),
 					providerIdentifier: "Third Provider",
 					jsonData: json
 				)

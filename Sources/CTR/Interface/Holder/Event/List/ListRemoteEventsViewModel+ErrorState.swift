@@ -74,7 +74,7 @@ extension ListRemoteEventsViewModel {
 	
 	internal func handleStorageError() {
 		
-		let errorCode = ErrorCode(flow: determineErrorCodeFlow(), step: .storingEvents, clientCode: .storingEvents)
+		let errorCode = ErrorCode(flow: eventMode.flow, step: .storingEvents, clientCode: .storingEvents)
 		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 	
@@ -97,23 +97,6 @@ extension ListRemoteEventsViewModel {
 			}
 		)
 		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
-	}
-
-	func determineErrorCodeFlow() -> ErrorCode.Flow {
-
-		switch eventMode {
-			case .vaccinationassessment: return ErrorCode.Flow.visitorPass
-			case .vaccination: return ErrorCode.Flow.vaccination
-			case .paperflow: return ErrorCode.Flow.paperproof
-			case .vaccinationAndPositiveTest: return ErrorCode.Flow.vaccinationAndPositiveTest
-			case .recovery: return ErrorCode.Flow.recovery
-			case .test:
-
-				if let wrapper = remoteEvents.first?.wrapper {
-					return wrapper.isGGD ? .ggdTest : .commercialTest
-				}
-				return ErrorCode.Flow(value: "")
-		}
 	}
 
 	func displaySomeResultsMightBeMissing() {

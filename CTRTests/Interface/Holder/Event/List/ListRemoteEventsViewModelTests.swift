@@ -79,7 +79,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .test)
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .test(.ggd))
 	}
 
 	func test_backButtonTapped_listState() {
@@ -230,7 +230,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .test,
+			eventMode: .test(.ggd),
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
@@ -642,12 +642,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupError_eventModeTest() throws {
+	func test_makeQR_saveEventGroupError_eventModeCommercialTest() throws {
 
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .test,
+			eventMode: .test(.commercial),
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
 			greenCardLoader: greenCardLoader
 		)
@@ -675,6 +675,43 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.body) == L.holderErrorstateClientMessage("i 160 000 056")
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+	
+	func test_makeQR_saveEventGroupError_eventModeGGDTest() throws {
+
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .test(.ggd),
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
+			greenCardLoader: greenCardLoader
+		)
+
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+		expect(self.sut.alert) == nil
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.body) == L.holderErrorstateClientMessage("i 460 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -1531,7 +1568,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
-			.toEventually(equal(EventScreenResult.showHints(NonemptyArray(["some_test_hint_key"])!)))
+			.toEventually(equal(EventScreenResult.showHints(NonemptyArray(["some_test_hint_key"])!, eventMode: EventMode.vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
 
@@ -1824,7 +1861,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .test,
+			eventMode: .test(.ggd),
 			remoteEvents: [],
 			greenCardLoader: greenCardLoader
 		)

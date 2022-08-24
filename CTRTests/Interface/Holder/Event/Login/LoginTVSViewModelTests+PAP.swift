@@ -75,7 +75,7 @@ class AuthenticationViewModelPAPTests: XCTestCase {
 		// When
 		sut = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
-			eventMode: .test,
+			eventMode: .test(.ggd),
 			authenticationMode: .patientAuthenticationProvider
 		)
 

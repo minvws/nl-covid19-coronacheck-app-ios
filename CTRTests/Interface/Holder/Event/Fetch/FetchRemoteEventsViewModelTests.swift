@@ -622,7 +622,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			token: "test",
 			authenticationMode: .manyAuthenticationExchange,
-			eventMode: .test
+			eventMode: .test(.ggd)
 		)
 
 		// Then

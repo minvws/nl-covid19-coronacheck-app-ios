@@ -65,7 +65,7 @@ class ListRemoteEventsViewModel {
 				self?.displaySomeResultsMightBeMissing()
 			}
 		}
-
+		
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -131,8 +131,15 @@ class ListRemoteEventsViewModel {
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
-		let expandedEventMode = expandEventMode()
+		var eventModeToUse: EventMode {
+			if let paperFlowEmbeddedEventMode = getPaperFlowEmbeddedEventMode() {
+				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
+				Current.logHandler.logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
+				return paperFlowEmbeddedEventMode
+			} else {
+				return eventMode
+			}
+		}
 		
 		storeEvent(
 			replaceExistingEventGroups: replaceExistingEventGroups) { saved in
@@ -143,26 +150,23 @@ class ListRemoteEventsViewModel {
 				self.handleStorageError()
 				return
 			}
-
-			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: expandedEventMode) { result in
+			
+			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: eventModeToUse) { result in
 				self.progressIndicationCounter.decrement()
-				self.handleGreenCardResult(
-					result
-				)
+				self.handleGreenCardResult(result, forEventMode: eventModeToUse)
 			}
 		}
 	}
 	
-	private func expandEventMode() -> EventMode {
+	private func getPaperFlowEmbeddedEventMode() -> EventMode? {
 
-		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
+		guard let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
 		   let credentialData = dccEvent.credential.data(using: .utf8),
 		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
-		   let dccEventType = euCredentialAttributes.eventMode {
-			Current.logHandler.logVerbose("Setting expandedEventMode to \(dccEventType.rawValue)")
-			return dccEventType
-		}
-		return eventMode
+		   let dccEventType = euCredentialAttributes.eventMode
+		else { return nil }
+		
+		return dccEventType
 	}
 
 	private func getStorageMode(remoteEvent: RemoteEvent) -> EventMode? {
@@ -184,25 +188,28 @@ class ListRemoteEventsViewModel {
 				// When in recovery flow, save as recovery to distinct from positive tests.
 				storageEventMode = .recovery
 			}
+			if eventMode == .test(.commercial) {
+				// Commercial mode is not handled correctly by the storagemode (undetectable)
+				storageEventMode = .test(.commercial)
+			}
 		}
-		Current.logHandler.logVerbose("Setting storageEventMode to \(String(describing: storageEventMode))")
 		return storageEventMode
 	}
 
-	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>) {
+	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>, forEventMode eventMode: EventMode) {
 		
 		switch result {
 			case let .success(response):
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
 				if let hints = response.hints, let nonEmptyHints = NonemptyArray(hints) {
-					coordinator?.listEventsScreenDidFinish(.showHints(nonEmptyHints))
+					coordinator?.listEventsScreenDidFinish(.showHints(nonEmptyHints, eventMode: eventMode))
 				} else {
 					coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
 				}
 				
 			case let .failure(greenCardError):
-				let parser = GreenCardResponseErrorParser(flow: determineErrorCodeFlow())
+				let parser = GreenCardResponseErrorParser(flow: eventMode.flow)
 				switch parser.parse(greenCardError) {
 					case .noInternet:
 						showNoInternet()

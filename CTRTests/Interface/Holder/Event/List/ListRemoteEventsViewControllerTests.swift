@@ -92,7 +92,7 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 	func test_viewStateEvents_negativeTest() {
 		
 		// Given
-		setupSut(eventMode: .test, remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest])
+		setupSut(eventMode: .test(.ggd), remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest])
 		
 		// When
 		loadView()

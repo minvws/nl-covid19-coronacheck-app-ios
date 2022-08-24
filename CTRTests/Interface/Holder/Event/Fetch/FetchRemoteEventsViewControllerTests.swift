@@ -88,7 +88,7 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 	func test_backActionWarning_test() {
 		
 		// Given
-		setupSut(eventMode: .test, authenticationMode: .manyAuthenticationExchange)
+		setupSut(eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange)
 		viewModel.viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
 		let alertVerifier = AlertVerifier()
 		loadView()

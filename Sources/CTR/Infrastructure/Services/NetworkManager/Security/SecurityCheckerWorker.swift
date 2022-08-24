@@ -56,6 +56,10 @@ class SecurityCheckerWorker {
 					return false
 				}
 			}
+			if errSecSuccess != SecTrustSetPolicies(serverTrust, policies as CFTypeRef) {
+				Current.logHandler.logError("checkATS: SecTrustSetPolicies failed")
+				return false
+			}
 			
 			if #available(iOS 12.0, *) {
 				return evaluateServerTrust(serverTrust)
