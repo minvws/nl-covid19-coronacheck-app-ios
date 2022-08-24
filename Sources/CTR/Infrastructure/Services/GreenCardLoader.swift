@@ -77,62 +77,58 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		networkManager.prepareIssue { [weak self] (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
-			switch prepareIssueResult {
-				case .failure(let serverError):
-					logError("GreenCardLoader - prepareIssue error: \(serverError)")
-					completion(.failure(Error.preparingIssue(serverError)))
-					
-				case .success(let prepareIssueEnvelope):
-					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
-						completion(.failure(Error.failedToParsePrepareIssue))
-						return
-					}
-					self?.fetchGreenCards(
-						eventMode: eventMode,
-						secretKey: newSecretKey,
-						nonce: nonce,
-						stoken: prepareIssueEnvelope.stoken) { response in
-						switch response {
-							case .failure(let error):
-								completion(.failure(error))
-								
-							case .success(let greenCardResponse):
-								self?.storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) { greenCardsSaved in
-									guard greenCardsSaved else {
-										logError("GreenCardLoader - failed to save greenCards")
-										completion(.failure(Error.failedToSaveGreenCards))
-										return
-									}
-									completion(.success(greenCardResponse))
-								}
-						}
+		networkManager
+			.prepareIssue()
+			.mapError(type: ServerError.self) { Error.preparingIssue($0) }
+			.then { (prepareIssueEnvelope) throws -> (String, String) in
+				
+				guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
+					logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
+					throw Error.failedToParsePrepareIssue
+				}
+				
+				return (nonce, prepareIssueEnvelope.stoken)
+			}
+			.then { [self] (nonce, stoken) throws -> Promise<RemoteGreenCards.Response> in
+				
+				return fetchGreenCards(eventMode: eventMode, secretKey: newSecretKey, nonce: nonce, stoken: stoken)
+					.mapError(type: ServerError.self) { serverError in
+						logError("GreenCardLoader - prepareIssue error: \(serverError)")
+						return Error.preparingIssue(serverError)
 					}
 			}
-		}
+			.then { [self] greenCardResponse throws in
+				
+				guard storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) else {
+					logError("GreenCardLoader - failed to save greenCards")
+					throw Error.failedToSaveGreenCards
+				}
+				
+				completion(.success(greenCardResponse))
+			}
+			.catch { error in
+				guard let error = error as? GreenCardLoader.Error else { fatalError() } // not possible in POC.
+				completion(.failure(error))
+			}
 	}
 
 	private func fetchGreenCards(
 		eventMode: EventMode?,
 		secretKey: Data,
 		nonce: String,
-		stoken: String,
-		onCompletion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
+		stoken: String) -> Promise<RemoteGreenCards.Response> {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
 		guard !signedEvents.isEmpty else {
-			onCompletion(.failure(Error.noSignedEvents))
-			return
+			return Promise(error: Error.noSignedEvents)
 		}
 
 		guard let issueCommitmentMessageString = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey),
 			  issueCommitmentMessageString.isNotEmpty,
 			  let issueCommitmentMessage = issueCommitmentMessageString.data(using: .utf8)?.base64EncodedString() else {
 			
-			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
-			return
+			return Promise(error: Error.failedToGenerateCommitmentMessage)
 		}
 
 		let dictionary: [String: AnyObject] = [
@@ -142,25 +138,17 @@ class GreenCardLoader: GreenCardLoading {
 			"flows": (eventMode?.asList ?? []) as AnyObject
 		]
 		
-		self.networkManager.fetchGreencards(dictionary: dictionary) { (result: Result<RemoteGreenCards.Response, ServerError>) in
-			switch result {
-				case .failure(let serverError):
-					logError("error: \(serverError)")
-					onCompletion(.failure(Error.credentials(serverError)))
-
-				case let .success(greencardResponse):
-					logVerbose("GreenCardLoader - succes: \(greencardResponse)")
-					onCompletion(.success(greencardResponse))
+		return self.networkManager
+			.fetchGreencards(dictionary: dictionary)
+			.logVerbose("GreenCardLoader - success")
+			.mapError(type: ServerError.self) { serverError in
+				Error.credentials(serverError)
 			}
-		}
 	}
 
 	// MARK: Store green cards
 
-	private func storeGreenCards(
-		secretKey: Data?,
-		response: RemoteGreenCards.Response,
-		onCompletion: @escaping (Bool) -> Void) {
+	private func storeGreenCards(secretKey: Data?, response: RemoteGreenCards.Response) -> Bool {
 
 		var success = true
 
@@ -188,6 +176,7 @@ class GreenCardLoader: GreenCardLoading {
 				walletManager.updateEventGroup(identifier: expiry.identifier, expiryDate: expiry.expirationDate)
 			}
 		}
-		onCompletion(success)
+		
+		return success
 	}
 }
