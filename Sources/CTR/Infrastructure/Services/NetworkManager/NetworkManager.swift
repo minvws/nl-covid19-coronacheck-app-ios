@@ -33,7 +33,7 @@ class NetworkManager {
 	/// - Parameters:
 	///   - request: the network request
 	///   - completion: completion handler with object, signed response, data, urlResponse or server error
-	private func decodeSignedJSONData<Object: Decodable>(
+	private func decodeSignedResponseIntoJSON<Object: Decodable>(
 		request: URLRequest,
 		strategy: SecurityStrategy = .data,
 		signatureValidator: SignatureValidation,
@@ -53,13 +53,22 @@ class NetworkManager {
 					switch signedResult {
 						case let .success(signedResponse):
 							
-							self.validateSignedResponse(
-								signatureValidator: signatureValidator,
-								urlResponse: networkResponse.urlResponse,
-								signedResponse: signedResponse,
-								proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
-								completion: completion
-							)
+							self.validateSignedResponse(signatureValidator: signatureValidator, signedResponse: signedResponse) { validationResult in
+								// Result<Data, ServerError>
+								switch validationResult {
+									case let .failure(validationError):
+										completion(.failure(validationError))
+									case let .success(data):
+										completion(
+											self.decodeToObject(
+												data,
+												proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
+												signedResponse: signedResponse,
+												urlResponse: networkResponse.urlResponse
+											)
+										)
+								}
+							}
 
 						case let .failure(decodeError):
 							if let networkError = NetworkError.inspect(response: networkResponse.urlResponse) {
@@ -76,7 +85,13 @@ class NetworkManager {
 		}
 	}
 	
-	private func decodeSignedData(
+	/// Decode a signed response into Data
+	/// - Parameters:
+	///   - request: the network request
+	///   - strategy: the session strategy for TLS checking
+	///   - signatureValidator: the signature validator
+	///   - completion: completion handler with the data or the server error
+	private func decodeSignedResponseIntoData(
 		request: URLRequest,
 		strategy: SecurityStrategy = .data,
 		signatureValidator: SignatureValidation,
@@ -112,40 +127,6 @@ class NetworkManager {
 			}
 			
 			self.cleanupSession(session)
-		}
-	}
-	
-	private func validateSignedResponse<Object: Decodable>(
-		signatureValidator: SignatureValidation,
-		urlResponse: URLResponse,
-		signedResponse: SignedResponse,
-		proceedToSuccessIfResponseIs400: Bool = false,
-		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
-		
-		// Make sure we have an actual payload and signature
-		guard let decodedPayloadData = signedResponse.decodedPayload,
-			  let signatureData = signedResponse.decodedSignature else {
-			logHandler?.logError("we cannot decode the payload or signature (base64 decoding failed)")
-			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
-			return
-		}
-
-		// Validate signature (on the base64 payload)
-		signatureValidator.validate(data: decodedPayloadData, signature: signatureData) { valid in
-			if valid {
-				
-				completion(
-					self.decodeToObject(
-						decodedPayloadData,
-						proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
-						signedResponse: signedResponse,
-						urlResponse: urlResponse
-					)
-				)
-			} else {
-				self.logHandler?.logError("We got an invalid signature!")
-				completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
-			}
 		}
 	}
 	
@@ -178,7 +159,7 @@ class NetworkManager {
 	/// - Parameters:
 	///   - request: the network request
 	///   - completion: completion handler with object or server error
-	private func decodeUnsignedJSONData<Object: Decodable>(
+	private func decodeUnsignedResponseIntoJSON<Object: Decodable>(
 		request: URLRequest,
 		completion: @escaping (Result<Object, ServerError>) -> Void) {
 
@@ -393,7 +374,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeUnsignedJSONData(request: urlRequest) { (result: Result<ArrayEnvelope<EventFlow.AccessToken>, ServerError>) in
+		decodeUnsignedResponseIntoJSON(request: urlRequest) { (result: Result<ArrayEnvelope<EventFlow.AccessToken>, ServerError>) in
 			DispatchQueue.main.async {
 				completion(result.map { decodable in (decodable.items) })
 			}
@@ -410,7 +391,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeUnsignedJSONData(request: urlRequest) { (result: Result<PrepareIssueEnvelope, ServerError>) in
+		decodeUnsignedResponseIntoJSON(request: urlRequest) { (result: Result<PrepareIssueEnvelope, ServerError>) in
 			DispatchQueue.main.async {
 				completion(result)
 			}
@@ -427,7 +408,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedData(
+		decodeSignedResponseIntoData(
 			request: urlRequest,
 			strategy: .config,
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.config),
@@ -450,7 +431,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 		
-		decodeSignedJSONData(
+		decodeSignedResponseIntoJSON(
 			request: urlRequest,
 			strategy: .config,
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.config),
@@ -480,7 +461,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeUnsignedJSONData(request: urlRequest) { (result: Result<RemoteGreenCards.Response, ServerError>) in
+		decodeUnsignedResponseIntoJSON(request: urlRequest) { (result: Result<RemoteGreenCards.Response, ServerError>) in
 			DispatchQueue.main.async {
 				completion(result)
 			}
@@ -509,7 +490,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
+		decodeSignedResponseIntoJSON(
 			request: urlRequest,
 			strategy: .config,
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.config),
@@ -550,7 +531,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
+		decodeSignedResponseIntoJSON(
 			request: urlRequest,
 			strategy: SecurityStrategy.provider(provider),
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.provider(provider)),
@@ -590,7 +571,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
+		decodeSignedResponseIntoJSON(
 			request: urlRequest,
 			strategy: SecurityStrategy.provider(provider),
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.provider(provider)),
@@ -629,7 +610,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
+		decodeSignedResponseIntoJSON(
 			request: urlRequest,
 			strategy: SecurityStrategy.provider(provider),
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.provider(provider)),
@@ -663,7 +644,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeUnsignedJSONData(request: urlRequest) { (result: Result<DccCoupling.CouplingResponse, ServerError>) in
+		decodeUnsignedResponseIntoJSON(request: urlRequest) { (result: Result<DccCoupling.CouplingResponse, ServerError>) in
 			DispatchQueue.main.async {
 				completion(result)
 			}
