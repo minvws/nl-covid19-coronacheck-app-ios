@@ -89,6 +89,8 @@ func logError(_ message: String, _ values: Any...) {
 private func log(icon: String, message: String, _ values: Any...) {
 	if values.count == 1, let valuesDict = values[0] as? [String: Any] {
 		print("\(icon) \(message):", valuesDict)
+	} else if values.count == 1 {
+		print("\(icon) \(message): \(values[0])")
 	} else if values.isNotEmpty {
 		print("\(icon) \(message):", values)
 	} else {
