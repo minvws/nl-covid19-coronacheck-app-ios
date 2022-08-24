@@ -51,11 +51,7 @@ private let loggingLevel: LoggingLevel = {
 ///   - message: the message to log
 func logVerbose(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.verbose else { return }
-	if values.isNotEmpty {
-		print("💤 \(message)", values)
-	} else {
-		print("💤 \(message)")
-	}
+	log(icon: "💤", message: message, values)
 }
 
 /// Log for debug purpose
@@ -63,11 +59,7 @@ func logVerbose(_ message: String, _ values: Any...) {
 ///   - message: the message to log
 func logDebug(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.debug else { return }
-	if values.isNotEmpty {
-		print("🐞 \(message)", values)
-	} else {
-		print("🐞 \(message)")
-	}
+	log(icon: "🐞", message: message, values)
 }
 
 /// Log for information purpose
@@ -75,11 +67,7 @@ func logDebug(_ message: String, _ values: Any...) {
 ///   - message: the message to log
 func logInfo(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.info else { return }
-	if values.isNotEmpty {
-		print("📋 \(message)", values)
-	} else {
-		print("📋 \(message)")
-	}
+	log(icon: "📋", message: message, values)
 }
 
 /// Log for warning purpose
@@ -87,11 +75,7 @@ func logInfo(_ message: String, _ values: Any...) {
 ///   - message: the message to log
 func logWarning(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.warning else { return }
-	if values.isNotEmpty {
-		print("❗️ \(message)", values)
-	} else {
-		print("❗️ \(message)")
-	}
+	log(icon: "❗️", message: message, values)
 }
 
 /// Log for error purpose
@@ -99,9 +83,15 @@ func logWarning(_ message: String, _ values: Any...) {
 ///   - message: the message to log
 func logError(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.error else { return }
-	if values.isNotEmpty {
-		print("🔥 \(message)", values)
+	log(icon: "🔥", message: message, values)
+}
+
+private func log(icon: String, message: String, _ values: Any...) {
+	if values.count == 1, let valuesDict = values[0] as? [String: Any] {
+		print("\(icon) \(message):", valuesDict)
+	} else if values.isNotEmpty {
+		print("\(icon) \(message):", values)
 	} else {
-		print("🔥 \(message)")
+		print("\(icon) \(message)")
 	}
 }
