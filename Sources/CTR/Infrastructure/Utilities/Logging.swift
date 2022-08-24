@@ -136,4 +136,3 @@ extension Promise {
 		}
 	}
 }
-
