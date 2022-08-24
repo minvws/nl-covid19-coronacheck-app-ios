@@ -7,17 +7,17 @@
 
 import Foundation
 
-public struct AnyCodable {
-	public let value: Any
+struct AnyCodable {
+	let value: Any
 
-	public init<T>(_ value: T?) {
+	init<T>(_ value: T?) {
 		self.value = value ?? ()
 	}
 }
 
 extension AnyCodable: Codable {
 
-	public init(from decoder: Decoder) throws {
+	init(from decoder: Decoder) throws {
 		let container = try decoder.singleValueContainer()
 
 		if container.decodeNil() {
@@ -41,7 +41,7 @@ extension AnyCodable: Codable {
 		}
 	}
 
-	public func encode(to encoder: Encoder) throws {
+	func encode(to encoder: Encoder) throws {
 		var container = encoder.singleValueContainer()
 
 		switch self.value {

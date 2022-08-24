@@ -52,8 +52,6 @@ class GreenCardLoader: GreenCardLoading {
 	private let networkManager: NetworkManaging
 	private let cryptoManager: CryptoManaging
 	private let walletManager: WalletManaging
-	private let remoteConfigManager: RemoteConfigManaging
-	private let userSettings: UserSettingsProtocol
 	private let secureUserSettings: SecureUserSettingsProtocol
 	private let logHandler: Logging?
 	
@@ -61,8 +59,6 @@ class GreenCardLoader: GreenCardLoading {
 		networkManager: NetworkManaging,
 		cryptoManager: CryptoManaging,
 		walletManager: WalletManaging,
-		remoteConfigManager: RemoteConfigManaging,
-		userSettings: UserSettingsProtocol,
 		secureUserSettings: SecureUserSettingsProtocol,
 		logHandler: Logging? = nil
 	) {
@@ -70,8 +66,6 @@ class GreenCardLoader: GreenCardLoading {
 		self.networkManager = networkManager
 		self.cryptoManager = cryptoManager
 		self.walletManager = walletManager
-		self.remoteConfigManager = remoteConfigManager
-		self.userSettings = userSettings
 		self.secureUserSettings = secureUserSettings
 		self.logHandler = logHandler
 	}

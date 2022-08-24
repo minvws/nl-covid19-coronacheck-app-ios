@@ -21,7 +21,6 @@ struct Environment {
 	var deviceAuthenticationDetector: DeviceAuthenticationProtocol
 	var disclosurePolicyManager: DisclosurePolicyManaging
 	var featureFlagManager: FeatureFlagManaging
-	var fileStorage: FileStorageProtocol
 	var greenCardLoader: GreenCardLoading
 	var identityChecker: IdentityCheckerProtocol
 	var jailBreakDetector: JailBreakProtocol
@@ -51,7 +50,6 @@ struct Environment {
 		deviceAuthenticationDetector: DeviceAuthenticationProtocol,
 		disclosurePolicyManager: DisclosurePolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
-		fileStorage: FileStorageProtocol,
 		greenCardLoader: GreenCardLoading,
 		identityChecker: IdentityCheckerProtocol,
 		jailBreakDetector: JailBreakProtocol,
@@ -80,7 +78,6 @@ struct Environment {
 		self.deviceAuthenticationDetector = deviceAuthenticationDetector
 		self.disclosurePolicyManager = disclosurePolicyManager
 		self.featureFlagManager = featureFlagManager
-		self.fileStorage = fileStorage
 		self.greenCardLoader = greenCardLoader
 		self.identityChecker = identityChecker
 		self.jailBreakDetector = jailBreakDetector
@@ -158,7 +155,6 @@ private let disclosurePolicyManager = DisclosurePolicyManager(
 	logHandler: logHandler
 )
 private let featureFlagManager = FeatureFlagManager(
-	versionSupplier: AppVersionSupplier(),
 	remoteConfigManager: remoteConfigManager
 )
 private let fileStorage = FileStorage(logHandler: logHandler)
@@ -227,8 +223,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		networkManager: networkManager,
 		cryptoManager: cryptoManager,
 		walletManager: walletManager,
-		remoteConfigManager: remoteConfigManager,
-		userSettings: userSettings,
 		secureUserSettings: secureUserSettings,
 		logHandler: logHandler
 	)
@@ -244,7 +238,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		deviceAuthenticationDetector: deviceAuthenticationDetector,
 		disclosurePolicyManager: disclosurePolicyManager,
 		featureFlagManager: featureFlagManager,
-		fileStorage: fileStorage,
 		greenCardLoader: greenCardLoader,
 		identityChecker: identityChecker,
 		jailBreakDetector: jailBreakDetector,

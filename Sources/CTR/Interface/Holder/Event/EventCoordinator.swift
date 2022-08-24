@@ -284,7 +284,6 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		let viewController = RemoteEventDetailsViewController(
 			viewModel: RemoteEventDetailsViewModel(
-				coordinator: self,
 				title: title,
 				details: details,
 				footer: footer,

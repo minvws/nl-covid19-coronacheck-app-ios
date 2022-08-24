@@ -8,23 +8,7 @@
 import Foundation
 import Lottie
 
-/// Protocol to extend Lottie Animations with a name to identify while debugging
-protocol NamedAnimationProtocol {
-
-	/// The name of this animation
-	var name: String { get }
-
-	/// The loop mode for this animation (playOnce, loop, repeat, autoReverse)
-	var loopMode: LottieLoopMode { get }
-
-	/// The Lottie Animation
-	var animation: Animation? { get set }
-
-	/// The playable part to the animation. If nil, the whole animation is played.
-	var section: (start: AnimationProgressTime, end: AnimationProgressTime)? { get set }
-}
-
-struct SecurityAnimation: NamedAnimationProtocol, Equatable {
+struct SecurityAnimation: Equatable {
 
 	/// The name of this animation
 	var name: String
@@ -35,18 +19,14 @@ struct SecurityAnimation: NamedAnimationProtocol, Equatable {
 	/// The Lottie Animation
 	var animation: Animation?
 
-	/// The playable part to the animation. If nil, the whole animation is played.
-	var section: (start: AnimationFrameTime, end: AnimationFrameTime)?
-
 	/// Initializer
 	/// - Parameters:
 	///   - name: the name of the animation
 	///   - fileName: the name of the file
-	init(name: String, fileName: String, section: (start: AnimationFrameTime, end: AnimationFrameTime)? = nil) {
+	init(name: String, fileName: String) {
 
 		self.name = name
 		self.animation = Animation.named(fileName)
-		self.section = section
 	}
 
 	/// Equality

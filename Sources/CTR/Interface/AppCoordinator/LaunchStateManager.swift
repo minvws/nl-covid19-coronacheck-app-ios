@@ -12,8 +12,6 @@ protocol LaunchStateManaging {
 	func handleLaunchState(_ state: LaunchState)
 	
 	func enableRestart()
-	
-	var versionSupplier: AppVersionSupplierProtocol { get set }
 		
 	var delegate: LaunchStateManagerDelegate? { get set }
 }

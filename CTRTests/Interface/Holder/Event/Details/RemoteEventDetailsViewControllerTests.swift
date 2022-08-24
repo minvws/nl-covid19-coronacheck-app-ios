@@ -15,13 +15,11 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: RemoteEventDetailsViewController!
 	private var viewModel: RemoteEventDetailsViewModel!
-	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 		
-		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 		window = UIWindow()
 	}
@@ -45,7 +43,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
 		let details = NegativeTestDetailsGenerator.getDetails(identity: identity, event: event)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderEventAboutTitle(),
 			details: details,
 			footer: nil
@@ -73,7 +70,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderDccTestDetailsTitle(),
 			details: details,
 			footer: L.holderDccTestFooter()
@@ -99,7 +95,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
 		let details = PositiveTestDetailsGenerator.getDetails(identity: identity, event: event)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderEventAboutTitle(),
 			details: details,
 			footer: nil
@@ -123,7 +118,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		let event = EventFlow.Event.recoveryEvent
 		let details = RecoveryDetailsGenerator.getDetails(identity: identity, event: event)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderEventAboutTitle(),
 			details: details,
 			footer: nil
@@ -149,7 +143,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 		let details = DCCRecoveryDetailsGenerator.getDetails(identity: identity, recovery: dccRecovery)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderDccRecoveryDetailsTitle(),
 			details: details,
 			footer: L.holderDccRecoveryFooter()
@@ -177,7 +170,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 		let details = VaccinationDetailsGenerator.getDetails(identity: identity, event: event, providerIdentifier: "CC")
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderEventAboutTitle(),
 			details: details,
 			footer: nil
@@ -207,7 +199,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
 		details += VaccinationDetailsGenerator.getDetails(identity: identity, event: event, providerIdentifier: "CC 2")
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderEventAboutTitle(),
 			details: details,
 			footer: nil
@@ -236,7 +227,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 		let details = DCCVaccinationDetailsGenerator.getDetails(identity: identity, vaccination: dccVaccination)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderDccVaccinationDetailsTitle(),
 			details: details,
 			footer: L.holderDccVaccinationFooter()
@@ -261,7 +251,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 		let details = VaccinationAssessementDetailsGenerator.getDetails(identity: identity, event: event)
 		viewModel = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: L.holderEventAboutTitle(),
 			details: details,
 			footer: nil

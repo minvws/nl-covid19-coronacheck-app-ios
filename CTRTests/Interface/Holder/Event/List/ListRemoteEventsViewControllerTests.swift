@@ -33,8 +33,6 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
 			walletManager: environmentSpies.walletManagerSpy,
-			remoteConfigManager: environmentSpies.remoteConfigManagerSpy,
-			userSettings: environmentSpies.userSettingsSpy,
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
 		

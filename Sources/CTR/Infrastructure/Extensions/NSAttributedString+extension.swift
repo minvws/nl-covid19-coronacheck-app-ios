@@ -20,56 +20,6 @@ extension String {
 	}
 }
 
-extension NSAttributedString {
-
-	/// Set the line height
-	/// - Parameter lineHeight: the line height (defaults to 22)
-	/// - Returns: attributed string
-	func setLineHeight(_ lineHeight: CGFloat = 22.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
-
-		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byWordWrapping
-		paragraphStyle.alignment = alignment
-		paragraphStyle.minimumLineHeightAdjustedForContentSize(lineHeight)
-
-		let attrString = NSMutableAttributedString(attributedString: self)
-		attrString.addAttributes(
-			[
-				.paragraphStyle: paragraphStyle,
-				.kern: kerning
-			],
-			range: _NSRange(
-				location: 0,
-				length: self.length
-			)
-		)
-		return attrString
-	}
-	
-	static func style(text: String?, style: HTMLStyle) -> NSAttributedString {
-		
-		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byWordWrapping
-		paragraphStyle.paragraphSpacing = style.paragraphSpacing
-		paragraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
-		
-		let attrString = NSMutableAttributedString(string: text ?? "")
-		attrString.addAttributes(
-			[
-				.paragraphStyle: paragraphStyle,
-				.kern: style.kern
-			],
-			range: _NSRange(
-				location: 0,
-				length: attrString.length
-			)
-		)
-		NSAttributedString.replaceFonts(in: attrString, style: style)
-		return attrString
-		
-	}
-}
-
 public extension NSAttributedString {
 
 	struct HTMLStyle {

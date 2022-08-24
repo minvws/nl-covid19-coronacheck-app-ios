@@ -39,8 +39,6 @@ class AppCoordinator: Coordinator {
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingCryptoLibError = false
 	
-	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
-	
 	var flavor = AppFlavor.flavor
 	
 	var launchStateManager: LaunchStateManaging
@@ -329,7 +327,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
-		
+		Current.logHandler.logError("Showing Internet required, while we got: \(errors)")
 		showInternetRequired()
 	}
 	
@@ -498,6 +496,14 @@ extension AppCoordinator {
 		shouldUsePrivacySnapShot = false
 	}
 	
+	@objc private func onDiskFullNotification() {
+		popPresentedViewController {
+			let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
+			viewController.modalPresentationStyle = .fullScreen
+			self.navigationController.present(viewController, animated: true)
+		}
+	}
+	
 	private func addObservers() {
 		
 		NotificationCenter.default.addObserver(
@@ -522,6 +528,12 @@ extension AppCoordinator {
 			self,
 			selector: #selector(enablePrivacySnapShot),
 			name: Notification.Name.enablePrivacySnapShot,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(onDiskFullNotification),
+			name: Notification.Name.diskFull,
 			object: nil
 		)
 	}

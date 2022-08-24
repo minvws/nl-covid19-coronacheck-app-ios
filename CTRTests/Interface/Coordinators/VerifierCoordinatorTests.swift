@@ -75,19 +75,6 @@ class VerifierCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
-
-	func test_shouldNoLongerCall_scanManagerRemoveOldEntries() {
-
-		// Given
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
-		
-		sut.start()
-		
-		// Then
-		expect(self.environmentSpies.scanLogManagerSpy.invokedDeleteExpiredScanLogEntries) == false
-	}
 	
 	// MARK: - Universal Link -
 	

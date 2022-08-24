@@ -12,22 +12,6 @@ import XCTest
 
 class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate, OpenUrlProtocol {
 
-	var invokedDismiss = false
-	var invokedDismissCount = 0
-
-	func dismiss() {
-		invokedDismiss = true
-		invokedDismissCount += 1
-	}
-
-	var invokedNavigateToConsent = false
-	var invokedNavigateToConsentCount = 0
-
-	func navigateToConsent() {
-		invokedNavigateToConsent = true
-		invokedNavigateToConsentCount += 1
-	}
-
 	var invokedConsentGiven = false
 	var invokedConsentGivenCount = 0
 

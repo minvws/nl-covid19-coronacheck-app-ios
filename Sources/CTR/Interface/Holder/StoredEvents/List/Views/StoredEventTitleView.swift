@@ -107,9 +107,6 @@ class StoredEventTitleView: BaseView {
 	
 	// MARK: Public Access
 	
-	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
-	
 	/// The  title
 	var title: String? {
 		didSet {

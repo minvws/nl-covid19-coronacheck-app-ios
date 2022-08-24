@@ -56,7 +56,7 @@ struct ErrorCode: CustomStringConvertible {
 }
 
 // The values are documented in the coordination repo:
-// https://github.com/minvws/nl-covid19-coronacheck-app-coordination/blob/main/docs/error-handling.md
+// https://github.com/minvws/nl-covid19-coronacheck-app-coordination/blob/main/docs/Error%20Handling.md
 
 // MARK: ErrorCode.Flow
 
@@ -69,7 +69,6 @@ extension ErrorCode.Flow {
 	static let ggdTest = ErrorCode.Flow(value: "4")
 	static let paperproof = ErrorCode.Flow(value: "5")
 	static let qr = ErrorCode.Flow(value: "6")
-	static let upgradeEUVaccination = ErrorCode.Flow(value: "7")
 	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
 	static let visitorPass = ErrorCode.Flow(value: "9")
 }

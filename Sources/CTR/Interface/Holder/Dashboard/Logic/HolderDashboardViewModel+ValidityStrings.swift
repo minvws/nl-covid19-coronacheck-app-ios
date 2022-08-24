@@ -84,9 +84,7 @@ extension QRCard {
 					return validityText_hasNotYetBegun_netherlands_vaccination(
 						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
 						doseNumber: origin.doseNumber,
-						qrCard: qrCard,
 						validFrom: origin.validFromDate,
-						now: now,
 						expirationTime: origin.expirationTime
 					)
 				
@@ -94,13 +92,11 @@ extension QRCard {
 					
 				case (.validityHasBegun, .netherlands, .test):
 					return validityText_hasBegun_domestic_test(
-						expirationTime: origin.expirationTime,
-						expiryIsBeyondThreeYearsFromNow: origin.expiryIsBeyondThreeYearsFromNow(now: now),
-						isCurrentlyValid: origin.isCurrentlyValid(now: now)
+						expirationTime: origin.expirationTime
 					)
 					
 				case (.validityHasNotYetBegun, .netherlands, .test):
-					return validityText_hasNotYetBegun_netherlands_test(qrCard: qrCard, origin: origin, now: now)
+					return validityText_hasNotYetBegun_netherlands_test(origin: origin)
 					
 				// -- Domestic Recoveries --
 					
@@ -225,7 +221,7 @@ private func validityText_hasBegun_domestic_vaccination(
 	)
 }
 
-private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, qrCard: QRCard, validFrom: Date, now: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondThreeYearsFromNow: Bool, doseNumber: Int?, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: validFrom)
 	
@@ -252,7 +248,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	)
 }
 
-private func validityText_hasBegun_domestic_test(expirationTime: Date, expiryIsBeyondThreeYearsFromNow: Bool, isCurrentlyValid: Bool) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasBegun_domestic_test(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 	let formatter = DateFormatter.Format.dayNameDayNumericMonthWithTime
 	let dateString = formatter.string(from: expirationTime)
@@ -322,7 +318,7 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 }
 
 // Caveat: - "future validity" for a test probably won't happen..
-private func validityText_hasNotYetBegun_netherlands_test(qrCard: QRCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_hasNotYetBegun_netherlands_test(origin: QRCard.GreenCard.Origin) -> HolderDashboardViewController.ValidityText {
 	let prefix: String = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: origin.validFromDate)
 

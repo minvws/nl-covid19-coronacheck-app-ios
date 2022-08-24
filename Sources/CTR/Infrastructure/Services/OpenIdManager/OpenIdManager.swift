@@ -43,7 +43,6 @@ extension OIDTokenResponse: OpenIdManagerToken {
 
 class OpenIdManager: OpenIdManaging {
 	
-	var isAuthorizationInProgress: Bool = false
 	private let logHandler: Logging?
 	
 	/// Initializer
@@ -87,8 +86,6 @@ class OpenIdManager: OpenIdManaging {
 		presentingViewController: UIViewController?,
 		onCompletion: @escaping (OpenIdManagerToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
-			
-			isAuthorizationInProgress = true
 			
 			let request = generateRequest(
 				issuerConfiguration: issuerConfiguration,

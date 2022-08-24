@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -200,7 +199,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
-	private var remoteConfigManagerUpdateObserverToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
@@ -354,7 +352,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
@@ -363,7 +360,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		} else if state.shouldShowOnlyInternationalPane {
@@ -375,7 +371,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		}
@@ -384,7 +379,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
-			remoteConfigManager: Current.remoteConfigManager,
 			now: Current.now()
 		)
 
@@ -543,7 +537,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -564,10 +557,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -576,7 +568,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -597,17 +588,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -616,7 +605,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -637,17 +625,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -656,7 +642,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		
@@ -684,10 +669,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -720,10 +704,7 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	}
 	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
-		coordinator?.userWishesMoreInfoAboutUnavailableQR(
-			originType: originType,
-			currentRegion: validityRegion,
-			availableRegion: validityRegion.opposite)
+		coordinator?.userWishesMoreInfoAboutUnavailableQR( originType: originType, currentRegion: validityRegion)
 	}
 	
 	func didTapDeviceHasClockDeviationMoreInfo() {

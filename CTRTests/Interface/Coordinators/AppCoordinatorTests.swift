@@ -215,8 +215,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appDeactivated = false
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 
@@ -237,8 +236,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appDeactivated = true
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		
@@ -259,8 +257,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appDeactivated = false
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 
@@ -281,8 +278,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appDeactivated = true
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		
@@ -304,9 +300,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
@@ -336,9 +330,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
@@ -368,8 +360,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "2.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastRecommendUpdateDismissalTimestamp = nil
@@ -399,8 +390,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = "1.1.0"
@@ -421,8 +411,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
@@ -451,8 +440,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
@@ -481,8 +469,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.1"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
@@ -511,8 +498,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.1"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
@@ -541,8 +527,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.1"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.stubbedLastSeenRecommendedUpdate = nil
@@ -563,8 +548,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.1"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
@@ -585,8 +569,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.1"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.2")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.2")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
@@ -607,8 +590,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.minimumVersion = "1.0.0"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.1"
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = try XCTUnwrap(URL(string: "https://apple.com"))
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.2")
-		sut.launchStateManager.versionSupplier = sut.versionSupplier
+		(sut.launchStateManager as? LaunchStateManager)?.versionSupplier = AppVersionSupplierSpy(version: "1.0.2")
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy
 		environmentSpies.userSettingsSpy.lastRecommendUpdateDismissalTimestamp = nil
@@ -785,4 +767,26 @@ class AppCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.sut.unhandledUniversalLink) == universalLink
 	}
+	
+	func test_diskFullNotification_presentsAppStateModal() throws {
+
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		sut.flavor = .holder
+		sut.start()
+
+		// When 
+		NotificationCenter.default.post(name: Notification.Name.diskFull, object: nil)
+
+		// Then
+		expect(self.sut.navigationController.viewControllers.first).toEventually(beAnInstanceOf(LaunchViewController.self))
+		expect(self.sut.navigationController.presentedViewController).toEventually(Predicate<UIViewController>({ expression in
+			let viewController = try XCTUnwrap(expression.evaluate() as? AppStatusViewController)
+			expect(viewController.modalPresentationStyle) == .fullScreen
+			expect(viewController.viewModel).to(beAnInstanceOf(DiskFullViewModel.self))
+			return PredicateResult(status: .matches, message: ExpectationMessage.expectedTo("Use `DiskFullViewModel` viewmodel"))
+		}))
+	}
+
 }

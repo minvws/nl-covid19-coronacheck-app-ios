@@ -90,14 +90,6 @@ class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlPr
 		invokedUserWantsToGoBackToDashboardCount += 1
 	}
 
-	var invokedUserWantsToGoBackToEnterToken = false
-	var invokedUserWantsToGoBackToEnterTokenCount = 0
-
-	func userWantsToGoBackToEnterToken() {
-		invokedUserWantsToGoBackToEnterToken = true
-		invokedUserWantsToGoBackToEnterTokenCount += 1
-	}
-
 	var invokedUserWishesToSeeScannedEvent = false
 	var invokedUserWishesToSeeScannedEventCount = 0
 	var invokedUserWishesToSeeScannedEventParameters: (event: RemoteEvent, Void)?

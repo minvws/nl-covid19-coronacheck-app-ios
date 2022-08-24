@@ -115,20 +115,6 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedListGreenCardsResult
 	}
 
-	var invokedListOrigins = false
-	var invokedListOriginsCount = 0
-	var invokedListOriginsParameters: (type: OriginType, Void)?
-	var invokedListOriginsParametersList = [(type: OriginType, Void)]()
-	var stubbedListOriginsResult: [Origin]! = []
-
-	func listOrigins(type: OriginType) -> [Origin] {
-		invokedListOrigins = true
-		invokedListOriginsCount += 1
-		invokedListOriginsParameters = (type, ())
-		invokedListOriginsParametersList.append((type, ()))
-		return stubbedListOriginsResult
-	}
-
 	var invokedRemoveExpiredGreenCards = false
 	var invokedRemoveExpiredGreenCardsCount = 0
 	var invokedRemoveExpiredGreenCardsParameters: (forDate: Date, Void)?
@@ -181,34 +167,6 @@ class WalletManagerSpy: WalletManaging {
 		invokedGreencardsWithUnexpiredOriginsParameters = (now, ofOriginType)
 		invokedGreencardsWithUnexpiredOriginsParametersList.append((now, ofOriginType))
 		return stubbedGreencardsWithUnexpiredOriginsResult
-	}
-
-	var invokedHasDomesticGreenCard = false
-	var invokedHasDomesticGreenCardCount = 0
-	var invokedHasDomesticGreenCardParameters: (originType: String, Void)?
-	var invokedHasDomesticGreenCardParametersList = [(originType: String, Void)]()
-	var stubbedHasDomesticGreenCardResult: Bool! = false
-
-	func hasDomesticGreenCard(originType: String) -> Bool {
-		invokedHasDomesticGreenCard = true
-		invokedHasDomesticGreenCardCount += 1
-		invokedHasDomesticGreenCardParameters = (originType, ())
-		invokedHasDomesticGreenCardParametersList.append((originType, ()))
-		return stubbedHasDomesticGreenCardResult
-	}
-
-	var invokedHasEventGroup = false
-	var invokedHasEventGroupCount = 0
-	var invokedHasEventGroupParameters: (type: String, providerIdentifier: String)?
-	var invokedHasEventGroupParametersList = [(type: String, providerIdentifier: String)]()
-	var stubbedHasEventGroupResult: Bool! = false
-
-	func hasEventGroup(type: String, providerIdentifier: String) -> Bool {
-		invokedHasEventGroup = true
-		invokedHasEventGroupCount += 1
-		invokedHasEventGroupParameters = (type, providerIdentifier)
-		invokedHasEventGroupParametersList.append((type, providerIdentifier))
-		return stubbedHasEventGroupResult
 	}
 
 	var invokedUpdateEventGroup = false

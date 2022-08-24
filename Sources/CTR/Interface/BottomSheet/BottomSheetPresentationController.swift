@@ -10,7 +10,7 @@ import UIKit
 final class BottomSheetPresentationController: UIPresentationController {
 	
 	private lazy var overlayView: UIView = {
-		let recognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+		let recognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
 		let overlayView = UIView()
 		overlayView.addGestureRecognizer(recognizer)
 		overlayView.backgroundColor = UIColor(white: 0, alpha: 0.4)
@@ -76,7 +76,7 @@ final class BottomSheetPresentationController: UIPresentationController {
 private extension BottomSheetPresentationController {
 	
 	@objc
-	func handleTap(_ recognizer: UITapGestureRecognizer) {
+	func handleTap() {
 		presentingViewController.dismiss(animated: true)
 	}
 	

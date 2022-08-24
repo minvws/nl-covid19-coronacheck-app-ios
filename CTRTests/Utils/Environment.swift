@@ -69,11 +69,6 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	var fileStorageSpy: FileStorageSpy = {
-		let spy = FileStorageSpy()
-		return spy
-	}()
-	
 	var newFeaturesManagerSpy: NewFeaturesManagerSpy = {
 		let spy = NewFeaturesManagerSpy()
 		spy.stubbedNeedsUpdating = false
@@ -192,7 +187,6 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
-		fileStorage: spies.fileStorageSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
 		identityChecker: spies.identityCheckerSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,

@@ -98,7 +98,6 @@ extension HolderDashboardViewModelTests {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRCount) == 1
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.originType) == .vaccination
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.currentRegion) == .europeanUnion
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQRParameters?.availableRegion) == .domestic
 	}
 	
 	func test_actionhandling_didTapDeviceHasClockDeviationMoreInfo() {

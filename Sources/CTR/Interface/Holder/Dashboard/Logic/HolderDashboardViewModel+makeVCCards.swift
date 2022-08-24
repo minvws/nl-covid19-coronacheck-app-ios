@@ -46,7 +46,6 @@ extension HolderDashboardViewController.Card {
 	}
 
 	static func makeAddCertificateCard(
-		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
@@ -385,8 +384,7 @@ extension HolderDashboardViewController.Card {
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this group of cards (vs state.activeDisclosurePolicyMode)
-		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging
+		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		return state.regionFilteredQRCards(validityRegion: validityRegion)
 			.flatMap { (qrcardDataItem: HolderDashboardViewModel.QRCard) -> [HolderDashboardViewController.Card] in

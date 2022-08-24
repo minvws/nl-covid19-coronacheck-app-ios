@@ -9,7 +9,7 @@ import UIKit
 
 protocol HolderDashboardViewDelegate: AnyObject {
 	
-	func holderDashboardView(_ view: HolderDashboardView, didDisplay tab: DashboardTab)
+	func holderDashboardView(didDisplay tab: DashboardTab)
 }
 
 final class HolderDashboardView: BaseView {
@@ -195,7 +195,7 @@ final class HolderDashboardView: BaseView {
 			}
 		}() {
 			selectTab(tab: tab)
-			delegate?.holderDashboardView(self, didDisplay: tab)
+			delegate?.holderDashboardView(didDisplay: tab)
 		}
 		
 		// Scroll via swipe gesture
@@ -346,19 +346,19 @@ extension HolderDashboardView: UIScrollViewDelegate {
 		tabBar.select(tab: selectedTab, animated: true)
 		
 		updateScrollViewContentOffsetObserver(for: selectedTab)
-		delegate?.holderDashboardView(self, didDisplay: selectedTab)
+		delegate?.holderDashboardView(didDisplay: selectedTab)
 	}
 }
 
 extension HolderDashboardView: DashboardTabBarDelegate {
 	
-	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab) {
+	func dashboardTabBar(didSelect tab: DashboardTab) {
 		let scrollOffset = CGPoint(x: scrollView.bounds.width * CGFloat(tab.rawValue), y: 0)
 		scrollView.setContentOffset(scrollOffset, animated: true)
 		UIAccessibility.post(notification: .pageScrolled, argument: nil)
 				
 		updateScrollViewContentOffsetObserver(for: tab)
-		delegate?.holderDashboardView(self, didDisplay: tab)
+		delegate?.holderDashboardView(didDisplay: tab)
 	}
 }
 

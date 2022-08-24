@@ -11,7 +11,6 @@ import LocalAuthentication
 class LaunchViewModel {
 
 	private weak var coordinator: AppCoordinatorDelegate?
-	private var walletManager: WalletManaging?
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -39,7 +38,6 @@ class LaunchViewModel {
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
 		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 
-		walletManager = flavor == .holder ? Current.walletManager : nil
 		startChecks()
 	}
 

@@ -150,25 +150,31 @@ class ShowQRScreenshotBlockingView: BaseView {
 	/// Only used for testing
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 alignment: .center)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				alignment: .center
+			)
 		}
 	}
-
+	
 	/// Only used for testing
 	var subtitle: String? {
 		didSet {
-			subtitleLabel.attributedText = subtitle?.setLineHeight(ViewTraits.Subtitle.lineHeight,
-																   alignment: .center,
-																   kerning: ViewTraits.Subtitle.kerning)
+			subtitleLabel.attributedText = subtitle?.setLineHeight(
+				ViewTraits.Subtitle.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Subtitle.kerning
+			)
 		}
 	}
-
+	
 	func setCountdown(text: String?, voiceoverText: String?) {
 		countdownLabel.accessibilityValue = voiceoverText
-		countdownLabel.attributedText = text?.setLineHeight(ViewTraits.Countdown.lineHeight,
-															alignment: .center,
-															kerning: ViewTraits.Countdown.kerning,
-															textColor: C.secondaryText()!)
+		countdownLabel.attributedText = text?.setLineHeight(
+			ViewTraits.Countdown.lineHeight,
+			alignment: .center,
+			kerning: ViewTraits.Countdown.kerning,
+			textColor: C.secondaryText()!
+		)
 	}
 }

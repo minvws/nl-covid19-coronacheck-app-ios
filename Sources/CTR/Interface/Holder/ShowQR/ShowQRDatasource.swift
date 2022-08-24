@@ -12,8 +12,6 @@ protocol ShowQRDatasourceProtocol {
 
 	var items: [ShowQRItem] { get }
 
-	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?)
-
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 	
 	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
@@ -39,7 +37,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 	private var fullyVaccinatedGreenCards = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 	private var greencardsWithDosage = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 
-	required init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 
 		self.items = greenCards
 			.compactMap { greenCard in

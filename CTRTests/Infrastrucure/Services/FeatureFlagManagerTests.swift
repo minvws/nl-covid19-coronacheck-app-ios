@@ -21,12 +21,11 @@ class FeatureFlagManagerTests: XCTestCase {
 		super.setUp()
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		appVersionSupplierSpy = AppVersionSupplierSpy(version: "2.7.0", build: "1")
 		
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.userSettingsSpy.stubbedOverrideDisclosurePolicies = []
 		
-		sut = FeatureFlagManager(versionSupplier: appVersionSupplierSpy, remoteConfigManager: remoteConfigManagerSpy)
+		sut = FeatureFlagManager(remoteConfigManager: remoteConfigManagerSpy)
 	}
 
 	func test_isVerificationPolicy_1G_enabled() {
