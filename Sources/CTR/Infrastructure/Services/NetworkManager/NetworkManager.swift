@@ -413,7 +413,6 @@ extension NetworkManager: NetworkManaging {
 			strategy: .config,
 			signatureValidator: signatureValidationFactory.getSignatureValidator(.config),
 			completion: { (result: Result<Data, ServerError>) in
-				// Not interested in the object (anycodable), we just want the data.
 				DispatchQueue.main.async {
 					completion(result)
 				}
