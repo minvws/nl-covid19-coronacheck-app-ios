@@ -125,13 +125,13 @@ extension AuthenticationViewModel {
 
 	func handleError(_ error: Error?) {
 
-		Current.logHandler.logError("Authentication error: \(error?.localizedDescription ?? "Unknown error")")
+		logError("Authentication error: \(error?.localizedDescription ?? "Unknown error")")
 		
 		let clientCode = OpenIdErrorMapper().mapError(error)
 
 		if let error = error {
 			if  error.localizedDescription.contains("login_required") {
-				Current.logHandler.logDebug("Server busy")
+				logDebug("Server busy")
 				displayServerBusy(
 					errorCode: ErrorCode(
 						flow: eventMode.flow,
@@ -143,7 +143,7 @@ extension AuthenticationViewModel {
 			} else if error.localizedDescription.contains("saml_authn_failed") ||
 						error.localizedDescription.contains("cancelled:") ||
 						clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
-				Current.logHandler.logDebug("User cancelled")
+				logDebug("User cancelled")
 				userCancelled()
 				return
 			} else if case let ServerError.error(_, _, networkError) = error {

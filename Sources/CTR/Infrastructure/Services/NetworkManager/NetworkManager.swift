@@ -12,20 +12,17 @@ class NetworkManager {
 
 	internal let networkConfiguration: NetworkConfiguration
 	private let signatureValidationFactory: SignatureValidationFactoryProtocol
-	private let logHandler: Logging?
 
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
 	required init(
 		configuration: NetworkConfiguration,
-		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory(),
-		logHandler: Logging? = nil
+		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory()
 	) {
 
 		self.networkConfiguration = configuration
 		self.signatureValidationFactory = signatureValidationFactory
-		self.logHandler = logHandler
 	}
 
 	// MARK: - Decode Signed Data
@@ -87,7 +84,7 @@ class NetworkManager {
 		// Make sure we have an actual payload and signature
 		guard let decodedPayloadData = signedResponse.decodedPayload,
 			  let signatureData = signedResponse.decodedSignature else {
-			logHandler?.logError("we cannot decode the payload or signature (base64 decoding failed)")
+			logError("we cannot decode the payload or signature (base64 decoding failed)")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
 			return
 		}
@@ -105,7 +102,7 @@ class NetworkManager {
 					)
 				)
 			} else {
-				self.logHandler?.logError("We got an invalid signature!")
+				logError("We got an invalid signature!")
 				completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
 			}
 		}
@@ -133,7 +130,7 @@ class NetworkManager {
 
 					// Try to cast to ServerResponse.
 					// The Object might have all optional properties and be decodable with the ServerResponse
-					let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data, logError: false)
+					let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data, shouldLogError: false)
 					if let successValue = serverResponseResult.successValue {
 						completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: successValue, error: .serverError)))
 						return
@@ -200,10 +197,10 @@ class NetworkManager {
 		data: Data?,
 		error: Error?) -> Result<(urlResponse: URLResponse, data: Data), ServerError> {
 
-		logHandler?.logVerbose("--RESPONSE--")
+		logVerbose("--RESPONSE--")
 
 		if let error = error {
-			logHandler?.logDebug("Error with response: \(error)")
+			logDebug("Error with response: \(error)")
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .noInternetConnection))
@@ -221,7 +218,7 @@ class NetworkManager {
 		} else if let response = response as? HTTPURLResponse {
 			self.logResponse(response, object: data)
 		}
-		logHandler?.logVerbose("--END RESPONSE--")
+		logVerbose("--END RESPONSE--")
 
 		guard let response = response,
 			  let data = data else {
@@ -238,15 +235,15 @@ class NetworkManager {
 	func logResponse<Object>(_ response: HTTPURLResponse, object: Object?) {
 
 		if response.statusCode != 200 {
-			logHandler?.logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
+			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
 		}
 		let headers = response.allHeaderFields.map { header, value in
 			return String("\(header): \(value)")
 		}.joined(separator: "\n")
-		logHandler?.logVerbose("Response headers: \n\(headers)")
+		logVerbose("Response headers: \n\(headers)")
 		if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
 			if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
-				logHandler?.logVerbose("Response body: \n\(body)")
+				logVerbose("Response body: \n\(body)")
 			}
 		}
 	}
@@ -254,7 +251,7 @@ class NetworkManager {
 	/// Utility function to decode JSON
 	/// - Parameter json: the json data
 	/// - Returns: decoded json as Object, or a network error
-	private func decodeJson<Object: Decodable>(json: Data, logError: Bool = true) -> Result<Object, NetworkError> {
+	private func decodeJson<Object: Decodable>(json: Data, shouldLogError: Bool = true) -> Result<Object, NetworkError> {
 
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = .iso8601
@@ -263,12 +260,12 @@ class NetworkManager {
 			let decodedObject = try decoder.decode(Object.self, from: json)
 #if DEBUG
 			// Next line might crash on production:
-			logHandler?.logVerbose("Response Object: \(decodedObject)")
+			logVerbose("Response Object: \(decodedObject)")
 #endif
 			return .success(decodedObject)
 		} catch {
-			if logError {
-				logHandler?.logError("Error Deserializing `\(Object.self)`:\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
+			if shouldLogError {
+				logError("Error Deserializing `\(Object.self)`:\nError: \(error)\nRaw json: \(String(decoding: json, as: UTF8.self))")
 			}
 			return .failure(.cannotDeserialize)
 		}
@@ -342,7 +339,7 @@ extension NetworkManager: NetworkManaging {
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.prepareIssueUrl, let urlRequest = URLRequest(url: url) else {
-			logHandler?.logError("NetworkManager - prepareIssue: invalid request")
+			logError("NetworkManager - prepareIssue: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -359,7 +356,7 @@ extension NetworkManager: NetworkManaging {
 	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.publicKeysUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
-			logHandler?.logError("NetworkManager - getPublicKeys: invalid request")
+			logError("NetworkManager - getPublicKeys: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -382,7 +379,7 @@ extension NetworkManager: NetworkManaging {
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.remoteConfigurationUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
-			logHandler?.logError("NetworkManager - getRemoteConfiguration: invalid request")
+			logError("NetworkManager - getRemoteConfiguration: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -405,14 +402,14 @@ extension NetworkManager: NetworkManaging {
 
 		guard JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
 			  let body = try? JSONSerialization.data(withJSONObject: dictionary) else {
-			logHandler?.logError("NetworkManager - fetchGreencards: could not serialize dictionary")
+			logError("NetworkManager - fetchGreencards: could not serialize dictionary")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)))
 			return
 		}
 
 		guard let url = networkConfiguration.credentialUrl,
 			  let urlRequest = URLRequest(url: url, method: .POST, body: body) else {
-			logHandler?.logError("NetworkManager - fetchGreencards: invalid request")
+			logError("NetworkManager - fetchGreencards: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -441,7 +438,7 @@ extension NetworkManager: NetworkManaging {
 	private func fetchProviders<T: Envelopable & Codable>(completion: @escaping (Result<[T], ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.providersUrl, let urlRequest = URLRequest(url: url) else {
-			logHandler?.logError("NetworkManager - fetchProviders: invalid request")
+			logError("NetworkManager - fetchProviders: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -471,7 +468,7 @@ extension NetworkManager: NetworkManaging {
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) -> Void) {
 
 		guard let providerUrl = provider.resultURL else {
-			logHandler?.logError("No url provided for \(provider)")
+			logError("No url provided for \(provider)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -482,7 +479,7 @@ extension NetworkManager: NetworkManaging {
 		]
 
 		guard let urlRequest = URLRequest(url: providerUrl, method: .POST, body: httpBodyFromDictionary([HTTPBodyKeys.verificationCode.rawValue: code]), headers: headers) else {
-			logHandler?.logError("NetworkManager - fetchTestResult: invalid request")
+			logError("NetworkManager - fetchTestResult: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -509,20 +506,20 @@ extension NetworkManager: NetworkManaging {
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
 		guard let providerUrl = provider.unomiUrl else {
-			logHandler?.logError("No url provided for \(provider.name)")
+			logError("No url provided for \(provider.name)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
 		guard let accessToken = provider.accessToken?.unomiAccessToken else {
-			logHandler?.logError("No unomi token provided for \(provider.name)")
+			logError("No unomi token provided for \(provider.name)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
 		let body = httpBodyFromDictionary(provider.queryFilter)
 		guard let urlRequest = URLRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
-			logHandler?.logError("NetworkManager - fetchEventInformation: invalid request")
+			logError("NetworkManager - fetchEventInformation: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -548,20 +545,20 @@ extension NetworkManager: NetworkManaging {
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		guard let providerUrl = provider.eventUrl else {
-			logHandler?.logError("No url provided for \(provider.name)")
+			logError("No url provided for \(provider.name)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
 		guard let accessToken = provider.accessToken?.eventAccessToken else {
-			logHandler?.logError("No event token provided for \(provider.name)")
+			logError("No event token provided for \(provider.name)")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 		
 		let body = httpBodyFromDictionary(provider.queryFilter)
 		guard let urlRequest = URLRequest(url: providerUrl, method: .POST, body: body, headers: headersWithAuthorizationToken(accessToken)) else {
-			logHandler?.logError("NetworkManager - fetchEvents: invalid request")
+			logError("NetworkManager - fetchEvents: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -588,14 +585,14 @@ extension NetworkManager: NetworkManaging {
 
 		guard JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
 			  let body = try? JSONSerialization.data(withJSONObject: dictionary) else {
-			logHandler?.logError("NetworkManager - checkCouplingStatus: could not serialize dictionary")
+			logError("NetworkManager - checkCouplingStatus: could not serialize dictionary")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)))
 			return
 		}
 
 		guard let url = networkConfiguration.couplingUrl,
 			  let urlRequest = URLRequest(url: url, method: .POST, body: body) else {
-			logHandler?.logError("NetworkManager - checkCouplingStatus: invalid request")
+			logError("NetworkManager - checkCouplingStatus: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}

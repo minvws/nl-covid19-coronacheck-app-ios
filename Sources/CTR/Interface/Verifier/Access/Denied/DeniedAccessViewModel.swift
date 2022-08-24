@@ -90,7 +90,7 @@ private extension DeniedAccessViewModel {
 
 	@objc func autoCloseScene() {
 
-		Current.logHandler.logInfo("Auto closing the denied access view")
+		logInfo("Auto closing the denied access view")
 		stopAutoCloseTimer()
 		scanAgain()
 	}

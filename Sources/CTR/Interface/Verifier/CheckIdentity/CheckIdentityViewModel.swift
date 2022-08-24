@@ -248,7 +248,7 @@ private extension CheckIdentityViewModel {
 
 	@objc func autoCloseScene() {
 
-		Current.logHandler.logInfo("Auto closing the check identity view")
+		logInfo("Auto closing the check identity view")
 		stopAutoCloseTimer()
 		scanAgain()
 	}

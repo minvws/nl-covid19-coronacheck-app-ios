@@ -47,7 +47,7 @@ extension UIView {
 		insets: UIEdgeInsets = .zero) -> Self {
 
 		guard let view = embeddable.view else {
-			Current.logHandler.logError("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
+			logError("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
 			return self
 		}
 

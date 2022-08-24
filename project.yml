@@ -15,9 +15,6 @@ packages:
     ## Forked from: https://github.com/openid/AppAuth-iOS
     github: GlennChiu/AppAuth-iOS
     revision: c0507aaff96d95a3c39bd3ca868106185674436f
-  CocoaLumberjack:
-    github: CocoaLumberjack/CocoaLumberjack
-    majorVersion: 3.7.4
   Inject: 
     github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
     branch: main
@@ -95,10 +92,6 @@ targetTemplates:
       - package: AnyCodable
       - package: AppAuth
         product: AppAuth
-      - package: CocoaLumberjack
-        product: CocoaLumberjack
-      - package: CocoaLumberjack
-        product: CocoaLumberjackSwift
       - package: IOSSecuritySuite
       - package: Lottie
       - package: OpenSSL

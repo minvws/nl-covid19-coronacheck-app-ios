@@ -307,7 +307,7 @@ class ListStoredEventsViewModel {
 			case .success:
 				sendEventsToTheSigner()
 			case .failure(let error):
-				Current.logHandler.logError("Failed to remove event groups: \(error)")
+				logError("Failed to remove event groups: \(error)")
 				handleCoreDataError()
 		}
 	}
