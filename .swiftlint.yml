@@ -76,9 +76,9 @@ custom_rules:
     message: "Don't forget to turn off snapshot recording"
   disable_onFailure: 
     included: "Sources/.*\\.swift"
-    regex: ".onFailure"
+    regex: "\\.onFailure"
     message: "Prefer .onComplete over .onFailure and .onSuccess"
   disable_onSuccess: 
     included: "Sources/.*\\.swift"
-    regex: ".onSuccess"
+    regex: "\\.onSuccess"
     message: "Prefer .onComplete over .onFailure and .onSuccess"
