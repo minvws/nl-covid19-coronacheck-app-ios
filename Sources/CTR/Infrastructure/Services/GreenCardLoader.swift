@@ -78,15 +78,13 @@ class GreenCardLoader: GreenCardLoading {
 			return
 		}
 
-		networkManager
-			.prepareIssue()
+		Future(resolver: networkManager.prepareIssue)
 			.mapError { serverError in
 				Error.preparingIssue(serverError)
 			}
 			.flatMap { prepareIssueEnvelope -> Future<(String, String), GreenCardLoader.Error> in
 
 				guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-					logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
 					return Future(error: Error.failedToParsePrepareIssue)
 				}
 
@@ -97,13 +95,11 @@ class GreenCardLoader: GreenCardLoading {
 			}
 			.flatMap { [self] greenCardResponse in
 				storeGreenCards(secretKey: newSecretKey, response: greenCardResponse)
+					// .logOnError("GreenCardLoader - failed to save greenCards")
 					.map { _ in greenCardResponse } // `storeGreenCards` returns no value, so make the outer return value greenCardResponse again
 			}
-			.onSuccess { greenCardResponse in
-				completion(.success(greenCardResponse))
-			}
-			.onFailure { error in
-				completion(.failure(error))
+			.onComplete { (result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>) in
+				completion(result)
 			}
 	}
 
@@ -132,10 +128,10 @@ class GreenCardLoader: GreenCardLoading {
 			"issueCommitmentMessage": issueCommitmentMessage as AnyObject,
 			"flows": (eventMode?.asList ?? []) as AnyObject
 		]
-		
-		return self.networkManager
-			.fetchGreencards(dictionary: dictionary)
-			// .logVerbose("GreenCardLoader - success")
+			
+		return Future(resolver: { completion in
+				networkManager.fetchGreencards(dictionary: dictionary, completion: completion)
+			})
 			.mapError { serverError in
 				Error.credentials(serverError)
 			}
@@ -172,11 +168,6 @@ class GreenCardLoader: GreenCardLoading {
 			}
 		}
 		
-		if success {
-			return Future(value: ())
-		} else {
-			logError("GreenCardLoader - failed to save greenCards")
-			return Future(error: .failedToSaveGreenCards)
-		}
+		return success ? Future(value: ()) : Future(error: .failedToSaveGreenCards)
 	}
 }
