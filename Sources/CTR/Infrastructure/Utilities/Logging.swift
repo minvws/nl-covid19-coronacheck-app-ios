@@ -8,6 +8,7 @@
 // swiftlint:disable disable_print
 
 import Foundation
+import BrightFutures
 
 private enum LoggingLevel: String, Comparable {
 	
@@ -95,5 +96,43 @@ private func log(icon: String, message: String, _ values: Any...) {
 		print("\(icon) \(message):", values)
 	} else {
 		print("\(icon) \(message)")
+	}
+}
+
+extension Future {
+	
+	func logVerbose(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			CTR.logVerbose(message + ": \(value)")
+			return value
+		}
+	}
+	
+	func logDebug(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			CTR.logDebug(message + ": \(value)")
+			return value
+		}
+	}
+	
+	func logInfo(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			CTR.logInfo(message + ": \(value)")
+			return value
+		}
+	}
+	
+	func logWarning(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			CTR.logWarning(message + ": \(value)")
+			return value
+		}
+	}
+	
+	func logError(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			CTR.logError(message + ": \(value)")
+			return value
+		}
 	}
 }

@@ -54,10 +54,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.failure(serverError), ()))
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(result?.failureError) == GreenCardLoader.Error.preparingIssue(serverError)
@@ -71,10 +73,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "Wrong", stoken: "test")), ()))
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(result?.failureError) == GreenCardLoader.Error.failedToParsePrepareIssue
@@ -89,10 +93,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = []
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -108,10 +114,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = ""
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -129,10 +137,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (Result<RemoteGreenCards.Response, ServerError>.failure(serverError), ())
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -149,10 +159,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.emptyResponse), ())
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { _ in }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { _ in done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -170,10 +182,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalVaccination), ())
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { _ in }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { _ in done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -193,10 +207,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = false
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -220,10 +236,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: .vaccination,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: .vaccination,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -255,10 +273,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: .recovery,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: .recovery,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -291,10 +311,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: .test(.ggd),
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: .test(.ggd),
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedFetchSignedEvents) == true
@@ -327,10 +349,12 @@ class GreenCardLoaderTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		
 		// Act
-		sut.signTheEventsIntoGreenCardsAndCredentials(
-			eventMode: nil,
-			completion: { result = $0 }
-		)
+		waitUntil { done in
+			self.sut.signTheEventsIntoGreenCardsAndCredentials(
+				eventMode: nil,
+				completion: { result = $0; done() }
+			)
+		}
 		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedUpdateEventGroupCount) == 1
