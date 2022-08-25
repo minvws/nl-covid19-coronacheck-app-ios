@@ -5,7 +5,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
-// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
@@ -567,16 +566,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneValidGreenCard() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
 			cryptoManager: environmentSpies.cryptoManagerSpy
@@ -592,16 +582,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneExpiredGreenCard() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpired30DaysAgo,
 			cryptoManager: environmentSpies.cryptoManagerSpy
@@ -618,16 +599,7 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_vaccination() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
@@ -646,16 +618,7 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_recovery() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
@@ -672,16 +635,7 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_vaccinationAssessment() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
@@ -811,4 +765,6 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 		expect(self.sut.listEventGroups().first?.expiryDate) == nil
 	}
+	
+	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)
 }
