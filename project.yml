@@ -33,8 +33,8 @@ packages:
   OpenSSL:
     github: krzyzanowskim/OpenSSL
     exactVersion: 1.1.1700
-  Promise:
-    github: khanlou/Promise
+  BrightFutures:
+    github: Thomvis/BrightFutures
     branch: master
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
@@ -103,8 +103,8 @@ targetTemplates:
         product: Reachability
       - package: RSwiftLibrary
         product: Rswift
-      - package: Promise
-        product: Promise
+      - package: BrightFutures
+        product: BrightFutures
       # Frameworks:
       - framework: clcore.xcframework
         embed: false

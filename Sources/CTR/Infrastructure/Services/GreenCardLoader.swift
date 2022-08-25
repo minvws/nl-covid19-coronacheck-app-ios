@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import Promise
+import BrightFutures
 
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(
@@ -80,30 +80,29 @@ class GreenCardLoader: GreenCardLoading {
 
 		networkManager
 			.prepareIssue()
-			.mapError(type: ServerError.self) { Error.preparingIssue($0) }
-			.then { (prepareIssueEnvelope) throws -> (String, String) in
-				
+			.mapError { serverError in
+				Error.preparingIssue(serverError)
+			}
+			.flatMap { prepareIssueEnvelope -> Future<(String, String), GreenCardLoader.Error> in
+
 				guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
 					logError("GreenCardLoader - can't parse the nonce / prepareIssueMessage")
-					throw Error.failedToParsePrepareIssue
+					return Future(error: Error.failedToParsePrepareIssue)
 				}
-				
-				return (nonce, prepareIssueEnvelope.stoken)
+
+				return Future(value: (nonce, prepareIssueEnvelope.stoken))
 			}
-			.then { [self] in
+			.flatMap { [self] in
 				fetchGreenCards(eventMode: eventMode, secretKey: newSecretKey, nonce: $0, stoken: $1)
 			}
-			.then { [self] greenCardResponse throws in
-				
-				guard storeGreenCards(secretKey: newSecretKey, response: greenCardResponse) else {
-					logError("GreenCardLoader - failed to save greenCards")
-					throw Error.failedToSaveGreenCards
-				}
-				
+			.flatMap { [self] greenCardResponse in
+				storeGreenCards(secretKey: newSecretKey, response: greenCardResponse)
+					.map { _ in greenCardResponse } // `storeGreenCards` returns no value, so make the outer return value greenCardResponse again
+			}
+			.onSuccess { greenCardResponse in
 				completion(.success(greenCardResponse))
 			}
-			.catch { error in
-				guard let error = error as? GreenCardLoader.Error else { fatalError() } // not possible in POC.
+			.onFailure { error in
 				completion(.failure(error))
 			}
 	}
@@ -112,19 +111,19 @@ class GreenCardLoader: GreenCardLoading {
 		eventMode: EventMode?,
 		secretKey: Data,
 		nonce: String,
-		stoken: String) -> Promise<RemoteGreenCards.Response> {
+		stoken: String) -> Future<RemoteGreenCards.Response, GreenCardLoader.Error> {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
 		guard !signedEvents.isEmpty else {
-			return Promise(error: Error.noSignedEvents)
+			return Future(error: Error.noSignedEvents)
 		}
 
 		guard let issueCommitmentMessageString = cryptoManager.generateCommitmentMessage(nonce: nonce, holderSecretKey: secretKey),
 			  issueCommitmentMessageString.isNotEmpty,
 			  let issueCommitmentMessage = issueCommitmentMessageString.data(using: .utf8)?.base64EncodedString() else {
 			
-			return Promise(error: Error.failedToGenerateCommitmentMessage)
+			return Future(error: Error.failedToGenerateCommitmentMessage)
 		}
 
 		let dictionary: [String: AnyObject] = [
@@ -136,15 +135,15 @@ class GreenCardLoader: GreenCardLoading {
 		
 		return self.networkManager
 			.fetchGreencards(dictionary: dictionary)
-			.logVerbose("GreenCardLoader - success")
-			.mapError(type: ServerError.self) { serverError in
+			// .logVerbose("GreenCardLoader - success")
+			.mapError { serverError in
 				Error.credentials(serverError)
 			}
 	}
 
 	// MARK: Store green cards
 
-	private func storeGreenCards(secretKey: Data?, response: RemoteGreenCards.Response) -> Bool {
+	private func storeGreenCards(secretKey: Data?, response: RemoteGreenCards.Response) -> Future<Void, GreenCardLoader.Error> {
 
 		var success = true
 
@@ -173,6 +172,11 @@ class GreenCardLoader: GreenCardLoading {
 			}
 		}
 		
-		return success
+		if success {
+			return Future(value: ())
+		} else {
+			logError("GreenCardLoader - failed to save greenCards")
+			return Future(error: .failedToSaveGreenCards)
+		}
 	}
 }

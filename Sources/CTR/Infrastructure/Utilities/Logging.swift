@@ -8,7 +8,6 @@
 // swiftlint:disable disable_print
 
 import Foundation
-import Promise
 
 private enum LoggingLevel: String, Comparable {
 	
@@ -99,40 +98,40 @@ private func log(icon: String, message: String, _ values: Any...) {
 	}
 }
 
-extension Promise {
-	
-	func logVerbose(_ message: String) -> Promise<Value> {
-		return self.then { value -> Value in
-			CTR.logVerbose(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logDebug(_ message: String) -> Promise<Value> {
-		return self.then { value -> Value in
-			CTR.logDebug(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logInfo(_ message: String)  -> Promise<Value> {
-		return self.then { value -> Value in
-			CTR.logInfo(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logWarning(_ message: String)  -> Promise<Value> {
-		return self.then { value -> Value in
-			CTR.logWarning(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logError(_ message: String)  -> Promise<Value> {
-		return self.then { value -> Value in
-			CTR.logError(message + ": \(value)")
-			return value
-		}
-	}
-}
+//extension Promise {
+//	
+//	func logVerbose(_ message: String) -> Promise<Value> {
+//		return self.then { value -> Value in
+//			CTR.logVerbose(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logDebug(_ message: String) -> Promise<Value> {
+//		return self.then { value -> Value in
+//			CTR.logDebug(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logInfo(_ message: String)  -> Promise<Value> {
+//		return self.then { value -> Value in
+//			CTR.logInfo(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logWarning(_ message: String)  -> Promise<Value> {
+//		return self.then { value -> Value in
+//			CTR.logWarning(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logError(_ message: String)  -> Promise<Value> {
+//		return self.then { value -> Value in
+//			CTR.logError(message + ": \(value)")
+//			return value
+//		}
+//	}
+//}
