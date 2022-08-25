@@ -92,8 +92,8 @@ class GreenCardLoader: GreenCardLoading {
 
 				return Future(value: (nonce, prepareIssueEnvelope.stoken))
 			}
-			.flatMap { [self] in
-				fetchGreenCards(eventMode: eventMode, secretKey: newSecretKey, nonce: $0, stoken: $1)
+			.flatMap { [self] nonce, stoken in
+				fetchGreenCards(eventMode: eventMode, secretKey: newSecretKey, nonce: nonce, stoken: stoken)
 			}
 			.flatMap { [self] greenCardResponse in
 				storeGreenCards(secretKey: newSecretKey, response: greenCardResponse)
