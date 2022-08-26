@@ -34,8 +34,8 @@ final class PageControl: BaseView {
 			static let animation: TimeInterval = 0.15
 		}
 		enum Color {
-			static let selected = C.primaryBlue()!
-			static let deselected = C.grey2()
+			static let selected: UIColor = C.primaryBlue() ?? .systemBlue
+			static let deselected: UIColor = C.grey2() ?? .gray
 		}
 	}
 	
