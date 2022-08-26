@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
@@ -732,6 +733,31 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalClose()))
 		expect(self.sut.alert?.cancelAction?.title).toEventually(beNil())
+	}
+	
+	func test_unomiOK_eventNoInternet() {
+
+		// Given
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+
+		// When
+		sut = FetchRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			token: "test",
+			authenticationMode: .manyAuthenticationExchange,
+			eventMode: .vaccination
+		)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
 	}
 	
 	func test_unomiOK_eventServerError() {
