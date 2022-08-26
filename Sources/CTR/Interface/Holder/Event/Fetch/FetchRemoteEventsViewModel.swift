@@ -208,21 +208,45 @@ final class FetchRemoteEventsViewModel {
 		var errorCodes = [ErrorCode]()
 		var serverErrors = [ServerError]()
 
-		let remoteEventProvidersFuture = fetchEventProviders()
-			.map { [self] eventProviders in
-				filterEventProvidersForEventMode(eventProviders)
-			}
+		fetchEventProviders()
 			.onFailure { [self] serverError in // swiftlint:disable:this disable_onFailure
 				logError("Error getting event providers: \(serverError)")
 				errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .providers))
 				serverErrors.append(serverError)
 			}
+			.map { [self] providers in
+				filterEventProvidersForEventMode(providers)
+			}
+			.flatMap { [self] providers -> Future<[EventFlow.EventProvider], ServerError> in
+
+				let accessTokenFuture = fetchEventAccessTokens(token: token)
+					.onFailure { [self] serverError in  // swiftlint:disable:this disable_onFailure
+						logError("Error getting access tokens: \(serverError)")
+						errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .accessTokens))
+						serverErrors.append(serverError)
+					}
+
+				return processProviders(providers: providers, token: token, accessTokenFuture: accessTokenFuture)
+			}
+			.onComplete(callback: { [self] providersResult in
+				switch providersResult {
+					case .success(let providers):
+						if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
+							errorCodes.append(errorCode)
+						}
+						completion(providers, errorCodes, serverErrors)
+					case .failure:
+						completion([], errorCodes, serverErrors)
+				}
+			})
+	}
+
+	private func processProviders(providers: [EventFlow.EventProvider], token: String, accessTokenFuture: Future<[EventFlow.AccessToken], ServerError>) -> Future<[EventFlow.EventProvider], ServerError> {
 		
-		let processedProvidersFuture: Future<[EventFlow.EventProvider], ServerError>
-			
 		// Skip fetching tokens if we have a papToken
 		if authenticationMode == .patientAuthenticationProvider {
-			processedProvidersFuture = remoteEventProvidersFuture
+			
+			return Future(value: providers)
 				.map { providers in
 					// Use the pap Token for both Unomi and Event
 					return providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider) }
@@ -236,14 +260,7 @@ final class FetchRemoteEventsViewModel {
 				}
 		} else {
 			
-			let accessTokenFuture = fetchEventAccessTokens(token: token)
-				.onFailure { [self] serverError in  // swiftlint:disable:this disable_onFailure
-					logError("Error getting access tokens: \(serverError)")
-					errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .accessTokens))
-					serverErrors.append(serverError)
-				}
-			
-			processedProvidersFuture = remoteEventProvidersFuture.zip(accessTokenFuture)
+			return Future(value: providers).zip(accessTokenFuture)
 				.map { providers, accessTokens -> ([EventFlow.EventProvider], [EventFlow.AccessToken]) in
 					let providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange) }
 					return (providers, accessTokens)
@@ -258,21 +275,8 @@ final class FetchRemoteEventsViewModel {
 					return providers
 				}
 		}
-			
-		processedProvidersFuture
-			.onComplete(callback: { [self] providersResult in
-				switch providersResult {
-					case .success(let providers):
-						if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
-							errorCodes.append(errorCode)
-						}
-						completion(providers, errorCodes, serverErrors)
-					case .failure:
-						completion([], errorCodes, serverErrors)
-				}
-			})
 	}
-
+	
 	private func filterEventProvidersForEventMode(_ eventProviders: [EventFlow.EventProvider]) -> [EventFlow.EventProvider] {
 
 		switch eventMode {
