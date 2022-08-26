@@ -350,12 +350,12 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 extension EventCoordinator: EventCoordinatorDelegate {
 	
 	func showHintsScreenDidFinish(_ result: EventScreenResult) {
-        switch result {
-            case .shouldCompleteVaccinationAssessment:
-                delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-            default:
-                delegate?.eventFlowDidComplete()
-        }
+		switch result {
+			case .shouldCompleteVaccinationAssessment:
+				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+			default:
+				delegate?.eventFlowDidComplete()
+		}
 	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
