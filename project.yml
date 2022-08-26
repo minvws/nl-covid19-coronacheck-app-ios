@@ -110,6 +110,7 @@ targetTemplates:
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Core/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
+        PRODUCT_MODULE_NAME: CTR
         VALIDATE_PRODUCT: YES
         DEBUG_INFORMATION_FORMAT: dwarf-with-dsym # Firebase warns that this must be set for all targets.
         CODE_SIGN_STYLE: Manual
@@ -118,7 +119,6 @@ targetTemplates:
         ENABLE_BITCODE: false # because it's deprecated
       configs:
         Development:
-          PRODUCT_MODULE_NAME: CTR
           NETWORK_CONFIGURATION: DEV
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
