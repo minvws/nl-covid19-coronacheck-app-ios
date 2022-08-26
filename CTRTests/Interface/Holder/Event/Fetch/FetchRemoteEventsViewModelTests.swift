@@ -129,7 +129,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.holderErrorstateTitle()
-			expect(feedback.body) == L.generalErrorServerUnreachableErrorCode("i 220 000 004<br />i 230 000 004")
+			expect(feedback.body) == L.generalErrorServerUnreachableErrorCode("i 230 000 004<br />i 220 000 004")
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
@@ -250,7 +250,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0).toEventually(beEventScreenResultError(test: { feedback in
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
-			expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 220 000 429<br />i 230 000 429")
+			expect(feedback.body) == L.generalNetworkwasbusyErrorcode("i 230 000 429<br />i 220 000 429")
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == nil
 		}))
