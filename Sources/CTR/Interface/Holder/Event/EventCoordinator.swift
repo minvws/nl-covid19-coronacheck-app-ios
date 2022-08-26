@@ -40,7 +40,7 @@ enum EventScreenResult: Equatable {
 	
 	case shouldCompleteVaccinationAssessment
 	
-	case showHints(NonemptyArray<String>)
+	case showHints(NonemptyArray<String>, eventMode: EventMode)
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
@@ -83,8 +83,8 @@ enum EventScreenResult: Equatable {
 			case (let .continue(lhsEventMode), let .continue(rhsEventMode)):
 				return lhsEventMode == rhsEventMode
 			
-			case let (.showHints(lhsHints), .showHints(rhsHints)):
-				return lhsHints == rhsHints
+			case let (.showHints(lhsHints, lhsEventMode), .showHints(rhsHints, rhsEventMode)):
+				return lhsHints == rhsHints && lhsEventMode == rhsEventMode
 			
 			default:
 				return false
@@ -144,8 +144,9 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 	}
 
 	func startWithNegativeTest() {
-		
-		startWith(.test)
+
+		// Used in GGD flow
+		startWith(.test(.ggd))
 	}
 	
 	func startWithVaccination() {
@@ -160,7 +161,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	func startWithListTestEvents(_ events: [RemoteEvent], originalMode: EventMode) {
 		
-		var mode: EventMode = .test
+		var mode: EventMode = .test(.ggd)
 		
 		if let event = events.first?.wrapper.events?.first {
 			
@@ -171,7 +172,9 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 			} else if event.hasPositiveTest {
 				mode = .recovery
 			} else if event.hasNegativeTest {
-				mode = .test
+				if let wrapper = events.first?.wrapper {
+					mode = .test( wrapper.isGGD ? .ggd : .commercial)
+				}
 			} else if event.hasRecovery {
 				mode = .recovery
 			} else if event.hasVaccination {
@@ -268,8 +271,8 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		presentAsBottomSheet(viewController)
 	}
 	
-	private func navigateToShowHints(hints: NonemptyArray<String>) {
-		guard let viewModel = ShowHintsViewModel(hints: hints, coordinator: self) else {
+	private func navigateToShowHints(hints: NonemptyArray<String>, eventMode: EventMode) {
+		guard let viewModel = ShowHintsViewModel(hints: hints, eventMode: eventMode, coordinator: self) else {
 			showHintsScreenDidFinish(.stop)
 			return
 		}
@@ -281,7 +284,6 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		let viewController = RemoteEventDetailsViewController(
 			viewModel: RemoteEventDetailsViewModel(
-				coordinator: self,
 				title: title,
 				details: details,
 				footer: footer,
@@ -446,8 +448,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToEventDetails(title, details: details, footer: footer)
 			case .shouldCompleteVaccinationAssessment:
 				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-			case let .showHints(hints):
-				navigateToShowHints(hints: hints)
+			case let .showHints(hints, eventMode):
+				navigateToShowHints(hints: hints, eventMode: eventMode)
 			default:
 				break
 		}

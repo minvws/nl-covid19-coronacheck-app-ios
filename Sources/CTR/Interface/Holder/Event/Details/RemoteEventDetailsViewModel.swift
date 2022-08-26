@@ -9,9 +9,6 @@ import Foundation
 
 final class RemoteEventDetailsViewModel {
 	
-	/// Dismissable Delegate
-	weak var coordinator: Dismissable?
-	
 	// MARK: - Bindable
 	
 	/// The title of the information page
@@ -24,20 +21,16 @@ final class RemoteEventDetailsViewModel {
 	@Bindable private(set) var hideForCapture: Bool = false
 	
 	// MARK: - Private
-	private let hideBodyForScreenCapture: Bool
 	private let screenCaptureDetector = ScreenCaptureDetector()
 	
 	init(
-		coordinator: Dismissable,
 		title: String,
 		details: [EventDetails],
 		footer: String? = nil,
 		hideBodyForScreenCapture: Bool = false) {
 		
-		self.coordinator = coordinator
 		self.title = title
 		self.footer = footer
-		self.hideBodyForScreenCapture = hideBodyForScreenCapture
 		self.details = details.compactMap {
 
 			guard $0.field.isRequired || $0.value?.isEmpty == false else {

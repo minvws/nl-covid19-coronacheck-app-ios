@@ -153,7 +153,7 @@ extension ShowQRViewController: PageViewControllerDelegate {
 
 extension ShowQRViewController: PageControlDelegate {
 	
-	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+	func pageControl(didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
 		if currentPageIndex > previousPageIndex {
 			pageViewController.nextPage()
 		} else {

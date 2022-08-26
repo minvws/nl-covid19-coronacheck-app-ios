@@ -45,7 +45,7 @@ class AddCertificateCardView: BaseView {
 		
 		addCertificateButton.embed(
 			in: self,
-			insets: UIEdgeInsets(top: ViewTraits.margin, left: ViewTraits.margin, bottom: ViewTraits.margin, right: ViewTraits.margin)
+			insets: UIEdgeInsets.all(ViewTraits.margin)
 		)
 	}
 
@@ -87,10 +87,7 @@ private class LargeAddCertificateButton: UIControl {
 		
 		static let margin: CGFloat = 4
 		static let spacing: CGFloat = 16
-
-		enum Colors {
-			static let highlighted = UIColor(white: 0.98, alpha: 1)
-		}
+		
 		enum Animation {
 			static let duration: CGFloat = 0.2
 			static let transform: CGFloat = 0.98
@@ -197,10 +194,12 @@ private class LargeAddCertificateButton: UIControl {
 	
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 alignment: .center,
-															 kerning: ViewTraits.Title.kerning,
-															 textColor: C.primaryBlue()!)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				alignment: .center,
+				kerning: ViewTraits.Title.kerning,
+				textColor: C.primaryBlue()!
+			)
 			accessibilityLabel = title
 		}
 	}

@@ -86,11 +86,12 @@ final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 private extension ScreenCaptureDetector {
 	
 	var isCaptured: Bool {
-		#if DEBUG
-		Current.logHandler.logVerbose("Screen is being captured and allowed for debug mode")
-		return false
-		#else
+		
+		guard Configuration().getEnvironment() == "production" else {
+			// Screen Capture is allowed in non production.
+			return false
+		}
+		
 		return UIScreen.main.isCaptured
-		#endif
 	}
 }

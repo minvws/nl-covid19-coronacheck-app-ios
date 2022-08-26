@@ -51,7 +51,7 @@ class Label: UILabel {
 	convenience init(title3Medium: String?, textColor: UIColor = .darkText) {
 		self.init(title3Medium, font: Fonts.title3Medium, textColor: textColor)
 	}
-	
+
 	convenience init(headline: String?, textColor: UIColor = .darkText) {
 		self.init(headline, font: Fonts.headline, textColor: textColor)
 	}

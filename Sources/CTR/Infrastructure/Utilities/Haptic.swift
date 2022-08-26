@@ -17,14 +17,14 @@ final class Haptic {
 	}
 	
 	static func medium() {
-		
+
 		let ifg = UIImpactFeedbackGenerator(style: .medium)
 		ifg.prepare()
 		ifg.impactOccurred()
 	}
-	
+
 	static func heavy() {
-		
+
 		let ifg = UIImpactFeedbackGenerator(style: .heavy)
 		ifg.prepare()
 		ifg.impactOccurred()

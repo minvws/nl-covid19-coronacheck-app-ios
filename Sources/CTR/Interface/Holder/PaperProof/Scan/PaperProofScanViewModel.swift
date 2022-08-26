@@ -8,9 +8,6 @@
 import UIKit
 
 class PaperProofScanViewModel: ScanPermissionViewModel {
-	
-	/// The crypto manager
-	weak var cryptoManager: CryptoManaging? = Current.cryptoManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable)?
@@ -31,7 +28,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
+	///   - scanner: the paper proof scanner
 	init(
 		coordinator: (PaperProofCoordinatorDelegate & OpenUrlProtocol & Dismissable),
 		scanner: PaperProofIdentifierProtocol = PaperProofIdentifier()
@@ -82,7 +79,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 	private func displayConvertError() {
 		
 		let errorCode = ErrorCode(flow: .paperproof, step: .scan, clientCode: .failedToConvertDCCToV3Event)
-		Current.logHandler.logError("displayConvertError: \(errorCode)")
+		logError("displayConvertError: \(errorCode)")
 		
 		theCoordinator?.displayError(
 			content: Content(

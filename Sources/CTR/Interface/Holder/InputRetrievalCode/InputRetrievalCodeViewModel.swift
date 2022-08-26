@@ -213,7 +213,7 @@ class InputRetrievalCodeViewModel {
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
 				guard verificationCodeIsKnownToBeRequired else {
-					Current.logHandler.logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
+					logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
 					return
 				}
 
@@ -349,7 +349,7 @@ class InputRetrievalCodeViewModel {
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
-		Current.logHandler.logVerbose("fetching result with \(provider.resultURLString)")
+		logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
 			fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
@@ -402,7 +402,7 @@ class InputRetrievalCodeViewModel {
 		switch remoteEvent.0.status {
 			case .complete, .pending:
 				self.screenHasCompleted = true
-				let originalMode: EventMode = inputRetrievalCodeMode == .negativeTest ? .test : .vaccinationassessment
+				let originalMode: EventMode = inputRetrievalCodeMode == .negativeTest ? .test(.commercial) : .vaccinationassessment
 				self.coordinator?.userWishesToMakeQRFromRemoteEvent(
 					RemoteEvent(wrapper: remoteEvent.0, signedResponse: remoteEvent.1), originalMode: originalMode)
 			case .verificationRequired:
@@ -430,7 +430,7 @@ class InputRetrievalCodeViewModel {
 						))
 				} else {
 
-					Current.logHandler.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+					logDebug("Unhandled test result status: \(remoteEvent.0.status)")
 					self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
 					self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 				}

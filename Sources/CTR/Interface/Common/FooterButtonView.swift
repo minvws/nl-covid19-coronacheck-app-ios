@@ -71,7 +71,7 @@ final class FooterButtonView: BaseView {
 	}
 
 	/// Setup all the constraints
-	override  func setupViewConstraints() {
+	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([

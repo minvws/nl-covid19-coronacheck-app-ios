@@ -22,7 +22,6 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 	
 	// "vends" a timer from the closure
 	private let vendTimer: (TimeInterval, @escaping () -> Void) -> Timeable
-	private var callback: (() -> Void)?
 	private var remoteConfigManagerReloadObserverToken: UUID?
 	
 	// Mechanism for registering for external state change notifications:

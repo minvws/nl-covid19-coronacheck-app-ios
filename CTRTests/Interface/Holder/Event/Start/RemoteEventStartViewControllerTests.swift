@@ -54,7 +54,7 @@ class RemoteEventStartViewControllerTests: XCTestCase {
 	func test_content_negativeTest() {
 		
 		// Given
-		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test)
+		viewModel = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .test(.ggd))
 		sut = RemoteEventStartViewController(viewModel: viewModel)
 		
 		// When

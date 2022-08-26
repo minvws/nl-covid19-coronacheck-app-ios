@@ -18,12 +18,10 @@ protocol DeviceAuthenticationProtocol: AnyObject {
 class DeviceAuthenticationDetector: DeviceAuthenticationProtocol {
 
 	let context: LAContext!
-	private let logHandler: Logging?
 
-	required init(logHandler: Logging? = nil) {
+	required init() {
 
 		context = LAContext()
-		self.logHandler = logHandler
 	}
 
 	/// Does this device have an authentication policy set? (biometrics, touch, passcode)
@@ -33,9 +31,9 @@ class DeviceAuthenticationDetector: DeviceAuthenticationProtocol {
 		var error: NSError?
 		let deviceOwnerAuthentication = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
 		if let error = error {
-			logHandler?.logError("Error checking LocalAuthentication status: \(error)")
+			logError("Error checking LocalAuthentication status: \(error)")
 		}
-		logHandler?.logVerbose("LocalAuthentication status: \(deviceOwnerAuthentication)")
+		logVerbose("LocalAuthentication status: \(deviceOwnerAuthentication)")
 		return deviceOwnerAuthentication
 	}
 }

@@ -190,7 +190,6 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		greenCardLoader: spies.greenCardLoaderSpy,
 		identityChecker: spies.identityCheckerSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,
-		logHandler: LogHandler(),
 		mappingManager: spies.mappingManagerSpy,
 		networkManager: spies.networkManagerSpy,
 		newFeaturesManager: spies.newFeaturesManagerSpy,

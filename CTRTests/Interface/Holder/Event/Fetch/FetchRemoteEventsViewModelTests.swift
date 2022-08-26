@@ -622,7 +622,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			token: "test",
 			authenticationMode: .manyAuthenticationExchange,
-			eventMode: .test
+			eventMode: .test(.ggd)
 		)
 
 		// Then
@@ -759,19 +759,6 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
-	}
-
-	func test_openUrl() throws {
-
-		// Given
-		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
-
-		// When
-		sut.openUrl(url)
-
-		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
 
 	// MARK: Default values

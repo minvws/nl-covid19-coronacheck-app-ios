@@ -13,6 +13,8 @@ class Button: TappableButton {
 	enum ButtonType {
 		/// Rounded, blue background, white text
 		case roundedBlue
+		/// Used for the QRCardView ShowQR Button
+		case narrowRoundedBlue
 		/// Rounded, white background, dark text
 		case roundedWhite
 		/// Rounded, clear background, dark border
@@ -28,7 +30,7 @@ class Button: TappableButton {
 		
 		func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
-				case .roundedBlue, .roundedBlueImage:
+				case .roundedBlue, .narrowRoundedBlue, .roundedBlueImage:
 					return isEnabled ? C.primaryBlue()! : C.grey5()!
 				case .roundedWhite, .roundedBlueBorder, .roundedBlackBorder:
 					return isEnabled ? C.white()! : C.grey2()!
@@ -39,7 +41,7 @@ class Button: TappableButton {
 		
 		func textColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
-				case .roundedBlue, .roundedBlueImage:
+				case .roundedBlue, .narrowRoundedBlue, .roundedBlueImage:
 					return isEnabled ? C.white()! : C.grey2()!
 				case .roundedWhite:
 					return C.black()!
@@ -62,15 +64,17 @@ class Button: TappableButton {
 		var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
+				case .roundedBlue: return .topBottom(10) + .leftRight(56)
+				case .narrowRoundedBlue: return .topBottom(10) + .leftRight(32)
 				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(66)
-				default: return .topBottom(15) + .leftRight(56)
+				default: return .topBottom(10) + .leftRight(32)
 			}
 		}
 		
-		var imageEdgeInsets: UIEdgeInsets {
+		var imageTitlePadding: CGFloat {
 			switch self {
-				case .roundedBlueImage: return .left(22)
-				default: return .zero
+				case .roundedBlueImage: return 11
+				default: return 0
 			}
 		}
 		
@@ -159,10 +163,12 @@ class Button: TappableButton {
 	// MARK: - Overrides
 	
 	override func layoutSubviews() {
-		
+
 		super.layoutSubviews()
 		layer.cornerRadius = style.isRounded ? min(bounds.width, bounds.height) / 2 : 0
 		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
+		
+		applyInsets()
 	}
 	
 	// Calculates content size including insets for dynamic font size scaling
@@ -188,30 +194,40 @@ class Button: TappableButton {
 			height: maxHeight + verticalContentPadding
 		)
 	}
-	
-	override func setImage(_ image: UIImage?, for state: UIControl.State) {
-		guard style == .roundedBlueImage else {
-			super.setImage(image, for: state)
-			return
-		}
-		contentEdgeInsets = image != nil ? ButtonType.roundedBlueImage.contentEdgeInsets : ButtonType.roundedBlue.contentEdgeInsets
-		
-		if image != nil {
-			// Position image to the right of the label
-			semanticContentAttribute = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .forceLeftToRight : .forceRightToLeft
-			imageEdgeInsets = ButtonType.roundedBlueImage.imageEdgeInsets
-		}
-		
-		super.setImage(image, for: state)
-	}
-	
+
 	// MARK: - Private
+	
+	private func applyInsets() {
+		contentEdgeInsets = style.contentEdgeInsets
+		
+		switch style {
+			case .roundedBlueImage:
+				guard let imageView = imageView, let titleLabel = titleLabel
+				else { return }
+
+				// Position image to the right of the label
+			
+				titleEdgeInsets = UIEdgeInsets(
+					top: 0,
+					left: -imageView.frame.size.width,
+					bottom: 0,
+					right: imageView.frame.size.width)
+				
+				imageEdgeInsets = UIEdgeInsets(
+					top: 0,
+					left: titleLabel.frame.size.width + style.imageTitlePadding,
+					bottom: 0,
+					right: -titleLabel.frame.size.width
+				)
+				
+			default: break
+		}
+	}
 	
 	private func setupButtonType() {
 		
 		setupColors()
 		titleLabel?.font = style.font
-		contentEdgeInsets = style.contentEdgeInsets
 		layer.borderWidth = style.borderWidth
 		
 		setNeedsLayout()

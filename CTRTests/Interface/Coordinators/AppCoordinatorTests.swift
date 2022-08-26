@@ -767,4 +767,26 @@ class AppCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.sut.unhandledUniversalLink) == universalLink
 	}
+	
+	func test_diskFullNotification_presentsAppStateModal() throws {
+
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		sut.flavor = .holder
+		sut.start()
+
+		// When 
+		NotificationCenter.default.post(name: Notification.Name.diskFull, object: nil)
+
+		// Then
+		expect(self.sut.navigationController.viewControllers.first).toEventually(beAnInstanceOf(LaunchViewController.self))
+		expect(self.sut.navigationController.presentedViewController).toEventually(Predicate<UIViewController>({ expression in
+			let viewController = try XCTUnwrap(expression.evaluate() as? AppStatusViewController)
+			expect(viewController.modalPresentationStyle) == .fullScreen
+			expect(viewController.viewModel).to(beAnInstanceOf(DiskFullViewModel.self))
+			return PredicateResult(status: .matches, message: ExpectationMessage.expectedTo("Use `DiskFullViewModel` viewmodel"))
+		}))
+	}
+
 }

@@ -96,7 +96,7 @@ class PaperProofInputCouplingCodeViewController: TraitWrappedGenericViewControll
 		
 		tapGestureRecognizer = UITapGestureRecognizer(
 			target: self,
-			action: #selector(handleSingleTap(sender:))
+			action: #selector(handleSingleTap)
 		)
 		if let gesture = tapGestureRecognizer {
 			gesture.isEnabled = false
@@ -104,7 +104,7 @@ class PaperProofInputCouplingCodeViewController: TraitWrappedGenericViewControll
 		}
 	}
 	
-	@objc func handleSingleTap(sender: UITapGestureRecognizer) {
+	@objc func handleSingleTap() {
 		view?.endEditing(true)
 	}
 	

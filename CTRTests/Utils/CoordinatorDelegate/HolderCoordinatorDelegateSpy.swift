@@ -71,18 +71,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
-	var invokedUserDidScanRequestToken = false
-	var invokedUserDidScanRequestTokenCount = 0
-	var invokedUserDidScanRequestTokenParameters: (requestToken: RequestToken, Void)?
-	var invokedUserDidScanRequestTokenParametersList = [(requestToken: RequestToken, Void)]()
-
-	func userDidScanRequestToken(requestToken: RequestToken) {
-		invokedUserDidScanRequestToken = true
-		invokedUserDidScanRequestTokenCount += 1
-		invokedUserDidScanRequestTokenParameters = (requestToken, ())
-		invokedUserDidScanRequestTokenParametersList.append((requestToken, ()))
-	}
-
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
 	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
 
@@ -161,14 +149,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesMoreInfoAboutUnavailableQR = false
 	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
-	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)?
-	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)]()
+	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)?
+	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)]()
 
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) {
 		invokedUserWishesMoreInfoAboutUnavailableQR = true
 		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
-		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion, availableRegion)
-		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
+		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion)
+		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion))
 	}
 
 	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = false
@@ -273,14 +261,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToSeeEventDetailsCount += 1
 		invokedUserWishesToSeeEventDetailsParameters = (title, details)
 		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
-	}
-
-	var invokedUserWishesToSeeStoredEvents = false
-	var invokedUserWishesToSeeStoredEventsCount = 0
-
-	func userWishesToSeeStoredEvents() {
-		invokedUserWishesToSeeStoredEvents = true
-		invokedUserWishesToSeeStoredEventsCount += 1
 	}
 
 	var invokedUserWishesToViewQRs = false

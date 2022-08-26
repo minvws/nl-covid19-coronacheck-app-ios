@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -200,7 +199,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
 	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
-	private var remoteConfigManagerUpdateObserverToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
@@ -354,7 +352,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
@@ -363,7 +360,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		} else if state.shouldShowOnlyInternationalPane {
@@ -375,7 +371,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				forValidityRegion: .domestic,
 				state: state,
 				actionHandler: self,
-				remoteConfigManager: Current.remoteConfigManager,
 				now: Current.now()
 			)
 		}
@@ -384,7 +379,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			forValidityRegion: .europeanUnion,
 			state: state,
 			actionHandler: self,
-			remoteConfigManager: Current.remoteConfigManager,
 			now: Current.now()
 		)
 
@@ -411,30 +405,30 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		// Handle combination of Loading State + Expiry State + Error presentation:
 		switch (refresherState.loadingState, refresherState.greencardsCredentialExpiryState, refresherState.userHasPreviouslyDismissedALoadingError) {
 			case (_, .noActionNeeded, _):
-				Current.logHandler.logDebug("StrippenRefresh: No action needed.")
+				logDebug("StrippenRefresh: No action needed.")
 
 			// 🔌 NO INTERNET: Refresher has no internet and wants to know what to do next
 
 			case (.noInternet, .expired, false):
-				Current.logHandler.logDebug("StrippenRefresh: Need refreshing now, but no internet. Presenting alert.")
+				logDebug("StrippenRefresh: Need refreshing now, but no internet. Presenting alert.")
 				currentlyPresentedAlert.value = AlertContent.strippenExpiredWithNoInternet(strippenRefresher: strippenRefresher)
 
 			case (.noInternet, .expired, true):
-				Current.logHandler.logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
+				logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
 				state.errorForQRCardsMissingCredentials = L.holderDashboardStrippenExpiredErrorfooterNointernet()
 
 			case (.noInternet, .expiring, true):
 				// Do nothing
-				Current.logHandler.logDebug("StrippenRefresh: Need refreshing soon, but no internet. Do nothing.")
+				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Do nothing.")
 
 			case (.noInternet, .expiring(let expiryDate), false):
-				Current.logHandler.logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
+				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
 				currentlyPresentedAlert.value = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: Current.now())
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 
 			case (.failed, .expired, _):
-				Current.logHandler.logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
+				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
 					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
@@ -443,14 +437,14 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			case (.failed, .expiring, _):
 				// In this case we just swallow the server errors.
 				// We do handle "no internet" though - see above.
-				Current.logHandler.logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
+				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
 
 			case (.serverResponseHasNoChanges, _, _) :
 				// This is a special case, and is caused by the user putting their system time
 				// so far into the future that it forces a strippen refresh, .. however the server time
 				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`
 				// state which the StrippenRefresher is currently in.
-				Current.logHandler.logDebug("StrippenRefresh: .serverResponseHasNoChanges. Stopping.")
+				logDebug("StrippenRefresh: .serverResponseHasNoChanges. Stopping.")
 				
 			case (.completed, _, _):
 				// The strippen were successfully renewed.
@@ -543,7 +537,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -564,10 +557,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -576,7 +568,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -597,17 +588,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -616,7 +605,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		typealias VCCard = HolderDashboardViewController.Card
@@ -637,17 +625,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -656,7 +642,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling,
-		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 		
@@ -684,10 +669,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			validityRegion: validityRegion,
 			state: state,
 			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler,
-			remoteConfigManager: remoteConfigManager
+			actionHandler: actionHandler
 		)
-		cards += VCCard.makeAddCertificateCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
@@ -720,10 +704,7 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	}
 	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
-		coordinator?.userWishesMoreInfoAboutUnavailableQR(
-			originType: originType,
-			currentRegion: validityRegion,
-			availableRegion: validityRegion.opposite)
+		coordinator?.userWishesMoreInfoAboutUnavailableQR( originType: originType, currentRegion: validityRegion)
 	}
 	
 	func didTapDeviceHasClockDeviationMoreInfo() {

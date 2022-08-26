@@ -95,8 +95,7 @@ class QRCardView: BaseView {
 	
 	private let viewQRButton: Button = {
 
-		let button = Button(title: "", style: .roundedBlue)
-		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
+		let button = Button(title: "", style: .narrowRoundedBlue)
 		button.accessibilityIdentifier = "viewQRButton"
 		return button
 	}()

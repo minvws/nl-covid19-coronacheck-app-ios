@@ -12,14 +12,6 @@ import XCTest
 
 class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate, OpenUrlProtocol {
 
-	var invokedNavigateToConsent = false
-	var invokedNavigateToConsentCount = 0
-
-	func navigateToConsent() {
-		invokedNavigateToConsent = true
-		invokedNavigateToConsentCount += 1
-	}
-
 	var invokedConsentGiven = false
 	var invokedConsentGivenCount = 0
 

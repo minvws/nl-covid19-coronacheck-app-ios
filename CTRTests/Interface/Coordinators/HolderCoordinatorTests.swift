@@ -600,7 +600,7 @@ class HolderCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.userWishesMoreInfoAboutUnavailableQR(originType: .vaccination, currentRegion: .domestic, availableRegion: .europeanUnion)
+		sut.userWishesMoreInfoAboutUnavailableQR(originType: .vaccination, currentRegion: .domestic)
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true

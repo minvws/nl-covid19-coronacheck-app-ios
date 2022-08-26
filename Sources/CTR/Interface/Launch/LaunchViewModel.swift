@@ -93,7 +93,7 @@ class LaunchViewModel {
 					self.coordinator?.handleLaunchState(.finished)
 					
 				default:
-					Current.logHandler.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+					logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
 		}
 	}
@@ -120,7 +120,7 @@ class LaunchViewModel {
 						completion(.finished)
 
 					case let .failure(error):
-						Current.logHandler.logError("Error getting the remote config: \(error)")
+						logError("Error getting the remote config: \(error)")
 						completion(.serverError([error]))
 				}
 			})
@@ -145,7 +145,7 @@ class LaunchViewModel {
 						completion(.finished)
 
 					case let .failure(error):
-						Current.logHandler.logError("Error getting the issuers public keys: \(error)")
+						logError("Error getting the issuers public keys: \(error)")
 						completion(.serverError([error]))
 				}
 			}
