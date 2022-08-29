@@ -322,7 +322,7 @@ class GreenCardModelTests: XCTestCase {
 					// When
 					credential = CredentialModel.create(
 						data: json,
-						validFrom: now.addingTimeInterval(1 * days * ago) ,
+						validFrom: now.addingTimeInterval(1 * days * ago),
 						expirationTime: now.addingTimeInterval(1 * days),
 						greenCard: unwrappedGreenCard,
 						managedContext: context
@@ -361,7 +361,7 @@ class GreenCardModelTests: XCTestCase {
 					// When
 					credential = CredentialModel.create(
 						data: json,
-						validFrom: now.addingTimeInterval(2 * days * ago) ,
+						validFrom: now.addingTimeInterval(2 * days * ago),
 						expirationTime: now.addingTimeInterval(1 * days * ago),
 						greenCard: unwrappedGreenCard,
 						managedContext: context
@@ -401,14 +401,14 @@ class GreenCardModelTests: XCTestCase {
 					// When
 					credentialValidFrom10HoursAgo = CredentialModel.create(
 						data: json,
-						validFrom: now.addingTimeInterval(10 * hour * ago) ,
+						validFrom: now.addingTimeInterval(10 * hour * ago),
 						expirationTime: now.addingTimeInterval(1 * days),
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
 					credentialValidFrom5HoursAgo = CredentialModel.create(
 						data: json,
-						validFrom: now.addingTimeInterval(5 * hour * ago) ,
+						validFrom: now.addingTimeInterval(5 * hour * ago),
 						expirationTime: now.addingTimeInterval(1 * days),
 						greenCard: unwrappedGreenCard,
 						managedContext: context
