@@ -207,9 +207,19 @@ final class FetchRemoteEventsViewModel {
 			
 		var errorCodes = [ErrorCode]()
 		var serverErrors = [ServerError]()
+			
+		let accessTokenFuture: Future<[EventFlow.AccessToken], ServerError> = {
+			guard authenticationMode != .patientAuthenticationProvider else { return Future(value: []) }
+			return fetchEventAccessTokens(token: token)
+				.onFailure { [self] serverError in
+					logError("Error getting access tokens: \(serverError)")
+					errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .accessTokens))
+					serverErrors.append(serverError)
+				}
+		}()
 
 		fetchEventProviders()
-			.onFailure { [self] serverError in // swiftlint:disable:this disable_onFailure
+			.onFailure { [self] serverError in
 				logError("Error getting event providers: \(serverError)")
 				errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .providers))
 				serverErrors.append(serverError)
@@ -218,17 +228,9 @@ final class FetchRemoteEventsViewModel {
 				filterEventProvidersForEventMode(providers)
 			}
 			.flatMap { [self] providers -> Future<[EventFlow.EventProvider], ServerError> in
-
-				let accessTokenFuture = fetchEventAccessTokens(token: token)
-					.onFailure { [self] serverError in  // swiftlint:disable:this disable_onFailure
-						logError("Error getting access tokens: \(serverError)")
-						errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .accessTokens))
-						serverErrors.append(serverError)
-					}
-
-				return processProviders(providers: providers, token: token, accessTokenFuture: accessTokenFuture)
+				processProviders(providers: providers, token: token, accessTokenFuture: accessTokenFuture)
 			}
-			.onComplete(callback: { [self] providersResult in
+			.onComplete { [self] providersResult in
 				switch providersResult {
 					case .success(let providers):
 						if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
@@ -238,7 +240,7 @@ final class FetchRemoteEventsViewModel {
 					case .failure:
 						completion([], errorCodes, serverErrors)
 				}
-			})
+			}
 	}
 
 	private func processProviders(providers: [EventFlow.EventProvider], token: String, accessTokenFuture: Future<[EventFlow.AccessToken], ServerError>) -> Future<[EventFlow.EventProvider], ServerError> {
