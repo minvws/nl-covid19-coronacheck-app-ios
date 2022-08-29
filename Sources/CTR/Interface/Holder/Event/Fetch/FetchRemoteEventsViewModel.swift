@@ -457,16 +457,8 @@ final class FetchRemoteEventsViewModel {
 						// Transform regular .error to .provider to display the provider identifier
 						.mapError { $0.toProviderError(provider: provider) }
 					
-					if Configuration().getEnvironment() == "production" {
-						eventResponseResults += [mapped.map({ RemoteEvent(wrapper: $0, signedResponse: $1) })]
-					} else {
-						eventResponseResults += [mapped.map({ wrapper, signed in
-							var mappedWrapper = wrapper
-							// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
-							mappedWrapper.providerIdentifier = provider.identifier
-							return RemoteEvent(wrapper: mappedWrapper, signedResponse: signed)
-						})]
-					}
+					eventResponseResults += [mapped.map({ RemoteEvent(wrapper: $0, signedResponse: $1) })]
+					
 					self.eventFetchingGroup.leave()
 				}
 			}
