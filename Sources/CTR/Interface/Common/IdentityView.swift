@@ -30,13 +30,13 @@ class IdentityElementView: BaseView {
 		static let borderWidth: CGFloat = 1.0
 		static let headerAlignment: NSTextAlignment = .natural
 		static let bodyFont: UIFont = Fonts.title2
-		static let headerColor: UIColor = C.black()!
+		static let headerColor: UIColor = C.black() ?? .black
 
-		static let hasContentBorderColor: UIColor = C.grey3()!
-		static let hasContentBackgroundColor: UIColor = C.white()!
+		static let hasContentBorderColor: UIColor = C.grey3() ?? .gray
+		static let hasContentBackgroundColor: UIColor = C.white() ?? .white
 
-		static let noContentBorderColor: UIColor = C.grey5()!
-		static let noContentBackgroundColor = C.grey5()
+		static let noContentBorderColor: UIColor = C.grey5() ?? .gray
+		static let noContentBackgroundColor: UIColor = C.grey5() ?? .gray
 	}
 
 	/// Initialize the identity element view
