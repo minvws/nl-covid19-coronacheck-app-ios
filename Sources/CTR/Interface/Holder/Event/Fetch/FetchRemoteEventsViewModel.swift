@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import BrightFutures
 
 final class FetchRemoteEventsViewModel {
 
@@ -203,85 +204,81 @@ final class FetchRemoteEventsViewModel {
 		token: String,
 		authenticationMode: AuthenticationMode,
 		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
-
-		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
-		// Skip fetching tokens if we have a papToken
-		if authenticationMode == .manyAuthenticationExchange {
 			
-			prefetchingGroup.enter()
-			fetchEventAccessTokens(token: token) { result in
-				accessTokenResult = result
-				self.prefetchingGroup.leave()
-			}
-		}
-
-		var remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?
-		prefetchingGroup.enter()
-		fetchEventProviders { result in
-			remoteEventProvidersResult = result
-			self.prefetchingGroup.leave()
-		}
-
-		prefetchingGroup.notify(queue: DispatchQueue.main) {
-
-			self.processEventProvidersWithAccessTokens(
-				token: token,
-				authenticationMode: authenticationMode,
-				accessTokenResult: accessTokenResult,
-				remoteEventProvidersResult: remoteEventProvidersResult,
-				completion: completion
-			)
-		}
-	}
-
-	private func processEventProvidersWithAccessTokens(
-		token: String,
-		authenticationMode: AuthenticationMode,
-		accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?,
-		remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?,
-		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
-
 		var errorCodes = [ErrorCode]()
 		var serverErrors = [ServerError]()
-		var providers = [EventFlow.EventProvider]()
-
-		if let providerError = remoteEventProvidersResult?.failureError {
-			logError("Error getting event providers: \(providerError)")
-			errorCodes.append(self.convert(providerError, for: eventMode.flow, step: .providers))
-			serverErrors.append(providerError)
-		}
-
-		if let accessError = accessTokenResult?.failureError {
-			logError("Error getting access tokens: \(accessError)")
-			errorCodes.append(self.convert(accessError, for: eventMode.flow, step: .accessTokens))
-			serverErrors.append(accessError)
-		}
-		
-		if let eventProviders = remoteEventProvidersResult?.successValue {
-			providers = self.filterEventProvidersForEventMode(eventProviders)
 			
-			if authenticationMode == .patientAuthenticationProvider {
-				// Use the pap Token for both Unomi and Event
-				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider) }
-				for index in 0 ..< providers.count {
-					providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: token, eventAccessToken: token)
+		let accessTokenFuture: Future<[EventFlow.AccessToken], ServerError> = {
+			guard authenticationMode != .patientAuthenticationProvider else { return Future(value: []) }
+			return fetchEventAccessTokens(token: token)
+				.onFailure { [self] serverError in
+					logError("Error getting access tokens: \(serverError)")
+					errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .accessTokens))
+					serverErrors.append(serverError)
 				}
-			} else if let accessTokens = accessTokenResult?.successValue {
-				providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange) }
-				for index in 0 ..< providers.count {
-					for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
-						providers[index].accessToken = accessToken
-					}
+		}()
+
+		fetchEventProviders()
+			.onFailure { [self] serverError in
+				logError("Error getting event providers: \(serverError)")
+				errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .providers))
+				serverErrors.append(serverError)
+			}
+			.map { [self] providers in
+				filterEventProvidersForEventMode(providers)
+			}
+			.flatMap { [self] providers -> Future<[EventFlow.EventProvider], ServerError> in
+				processProviders(providers: providers, token: token, accessTokenFuture: accessTokenFuture)
+			}
+			.onComplete { [self] providersResult in
+				switch providersResult {
+					case .success(let providers):
+						if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
+							errorCodes.append(errorCode)
+						}
+						completion(providers, errorCodes, serverErrors)
+					case .failure:
+						completion([], errorCodes, serverErrors)
 				}
 			}
-			if providers.isEmpty, let errorCode = mapNoProviderAvailable() {
-				errorCodes.append(errorCode)
-			}
-		}
-		
-		completion(providers, errorCodes, serverErrors)
 	}
 
+	private func processProviders(providers: [EventFlow.EventProvider], token: String, accessTokenFuture: Future<[EventFlow.AccessToken], ServerError>) -> Future<[EventFlow.EventProvider], ServerError> {
+		
+		// Skip fetching tokens if we have a papToken
+		if authenticationMode == .patientAuthenticationProvider {
+			
+			return Future(value: providers)
+				.map { providers in
+					// Use the pap Token for both Unomi and Event
+					return providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider) }
+				}
+				.map { providers in
+					var providers = providers
+					for index in 0 ..< providers.count {
+						providers[index].accessToken = EventFlow.AccessToken(providerIdentifier: providers[index].identifier, unomiAccessToken: token, eventAccessToken: token)
+					}
+					return providers
+				}
+		} else {
+			
+			return Future(value: providers).zip(accessTokenFuture)
+				.map { providers, accessTokens -> ([EventFlow.EventProvider], [EventFlow.AccessToken]) in
+					let providers = providers.filter { $0.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange) }
+					return (providers, accessTokens)
+				}
+				.map { providers, accessTokens -> [EventFlow.EventProvider] in
+					var providers = providers
+					for index in 0 ..< providers.count {
+						for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
+							providers[index].accessToken = accessToken
+						}
+					}
+					return providers
+				}
+		}
+	}
+	
 	private func filterEventProvidersForEventMode(_ eventProviders: [EventFlow.EventProvider]) -> [EventFlow.EventProvider] {
 
 		switch eventMode {
@@ -343,22 +340,28 @@ final class FetchRemoteEventsViewModel {
 		}
 	}
 
-	private func fetchEventAccessTokens(token: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
+	private func fetchEventAccessTokens(token: String) -> Future<[EventFlow.AccessToken], ServerError> {
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventAccessTokens(maxToken: token) { [weak self] result in
-			completion(result)
-			self?.progressIndicationCounter.decrement()
-		}
+		
+		return Future { completion in
+				networkManager.fetchEventAccessTokens(maxToken: token, completion: completion)
+			}
+			.onComplete { [self] _ in
+				progressIndicationCounter.decrement()
+			}
 	}
 
-	private func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
+	private func fetchEventProviders() -> Future<[EventFlow.EventProvider], ServerError> {
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventProviders { [weak self] result in
-			completion(result)
-			self?.progressIndicationCounter.decrement()
-		}
+		
+		return Future { completion in
+				networkManager.fetchEventProviders(completion: completion)
+			}
+			.onComplete { [self] _ in
+				progressIndicationCounter.decrement()
+			}
 	}
 
 	// MARK: Fetch event information
