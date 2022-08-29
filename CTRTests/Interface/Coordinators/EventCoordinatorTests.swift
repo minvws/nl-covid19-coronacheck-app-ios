@@ -231,6 +231,34 @@ class EventCoordinatorTests: XCTestCase {
 		expect(viewModel.eventMode) == EventMode.paperflow
 	}
 	
+	// MARK: - showHintsScreenDidFinish
+	
+	func test_showHintsScreenDidFinish() {
+		
+		// Given
+		
+		// When
+		sut.showHintsScreenDidFinish(.continue(eventMode: .vaccination))
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == false
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
+	}
+
+	func test_showHintsScreenDidFinish_shouldCompleteVaccinationAssessment() {
+		
+		// Given
+		
+		// When
+		sut.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
+	}
+	
 	// MARK: - eventStartScreenDidFinish
 	
 	func test_eventStartScreenDidFinish_continue() {
@@ -821,5 +849,37 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+	}
+	
+	func test_continueToPAP_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
+		
+		// Given
+		sut.childCoordinators = []
+		
+		// When
+		sut.continueToPap(eventMode: .vaccination)
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == false
+	}
+	
+	func test_continueToPAP() {
+		
+		// Given
+		let alternativeCoordinator = AlternativeRouteCoordinator(
+			navigationController: sut.navigationController,
+			delegate: sut,
+			eventMode: .vaccination
+		)
+		sut.childCoordinators = [alternativeCoordinator]
+		
+		// When
+		sut.continueToPap(eventMode: .vaccination)
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == false
+		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController).toEventually(beTrue())
 	}
 }
