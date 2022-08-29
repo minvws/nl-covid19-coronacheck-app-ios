@@ -50,7 +50,7 @@ class AboutThisAppViewModel {
 		case coordinatorShouldRestart
 	}
 	
-	private let outcomeHandler: (Outcome) -> Void
+	internal let outcomeHandler: (Outcome) -> Void
 	private var flavor: AppFlavor
 
 	// MARK: - Bindable
