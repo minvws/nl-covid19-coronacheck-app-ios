@@ -111,7 +111,7 @@ extension EventFlow.Identity {
 			firstNameInitial: getFirstNameInitIal(),
 			lastNameInitial: getLastNameInitial(),
 			day: getBirthDay(),
-			month:  getBirthMonth()
+			month: getBirthMonth()
 		)
 	}
 
