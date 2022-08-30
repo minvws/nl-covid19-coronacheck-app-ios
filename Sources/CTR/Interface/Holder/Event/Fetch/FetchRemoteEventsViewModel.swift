@@ -30,9 +30,7 @@ final class FetchRemoteEventsViewModel {
 
 	@Bindable private(set) var alert: AlertContent?
 
-	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
-	private let eventFetchingGroup = DispatchGroup()
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
@@ -443,33 +441,39 @@ final class FetchRemoteEventsViewModel {
 		unomiServerErrors: [ServerError],
 		completion: @escaping ([RemoteEvent], [ServerError], [ServerError], Bool) -> Void) {
 
-		var eventResponseResults = [Result<RemoteEvent, ServerError>]()
-
-		for provider in eventProviders {
-
-			if let url = provider.eventUrl?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
-			   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
-
-				eventFetchingGroup.enter()
-				fetchRemoteEvent(from: provider) { result in
-
-					let mapped = result
-						// Transform regular .error to .provider to display the provider identifier
-						.mapError { $0.toProviderError(provider: provider) }
+		// Collect failures:
+		var failuresExperienced = [ServerError]()
+			
+		eventProviders.map { provider -> Future<RemoteEvent?, Never> in
+			
+			guard let url = provider.eventUrl?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
+				  let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable
+			else { return Future(value: nil) }
+			
+			return Future(value: provider)
+				.flatMap { [self] provider -> Future<(EventFlow.EventResultWrapper, SignedResponse)?, Never> in
 					
-					eventResponseResults += [mapped.map({ RemoteEvent(wrapper: $0, signedResponse: $1) })]
-					
-					self.eventFetchingGroup.leave()
+					// Fetch remote events for given provider, catching errors
+					// inside this `.flatMap` to prevent the whole `.sequence()` failing, if a single Future fails.
+					return fetchRemoteEvent(from: provider)
+						.mapError { serverError in
+							serverError.toProviderError(provider: provider)
+						}
+						.onFailure { serverError in
+							// Errors are logged externally, but should not fail the larger set of requests.
+							failuresExperienced += [serverError]
+						}
+						.catchErrorReplacingWithNil()
 				}
-			}
+				.map { params -> RemoteEvent? in
+					guard let (eventResultWrapper, signedResponse) = params else { return nil }
+					return RemoteEvent(wrapper: eventResultWrapper, signedResponse: signedResponse)
+				}
 		}
-
-		eventFetchingGroup.notify(queue: DispatchQueue.main) {
-			// Process successes:
-			let successfulEventResponses = eventResponseResults.compactMap { $0.successValue }
-
-			// Process failures:
-			let failuresExperienced = eventResponseResults.compactMap { $0.failureError }
+		.sequence() // Group the successful `Future` results together when they all complete
+		.onComplete(DispatchQueue.main.context) { result in
+			guard case .success(let remoteEvents) = result else { return } // impossible case as Futures have error type: `Never`.
+			let successfulEventResponses = remoteEvents.compactMap { $0 }
 
 			// We propagate the potential unomi server errors and not append them to failuresExperienced,
 			// because we need to distinguish between them in the error states.
@@ -477,20 +481,21 @@ final class FetchRemoteEventsViewModel {
 		}
 	}
 
-	private func fetchRemoteEvent(
-		from provider: EventFlow.EventProvider,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
-
+	private func fetchRemoteEvent(from provider: EventFlow.EventProvider) -> Future<(EventFlow.EventResultWrapper, SignedResponse), ServerError> {
 		progressIndicationCounter.increment()
-
-		networkManager.fetchEvents(provider: provider) { [weak self] result in
-			// (Result<(TestResultWrapper, SignedResponse), ServerError>
-			completion(result)
-
-			self?.progressIndicationCounter.decrement()
+		
+		return Future { completion in
+			networkManager.fetchEvents(provider: provider) { result in
+				// (Result<(TestResultWrapper, SignedResponse), ServerError>
+				completion(result)
+			}
+		}
+		.onComplete { [self] _ in
+			progressIndicationCounter.decrement()
 		}
 	}
 }
+
 
 extension FetchRemoteEventsViewModel {
 
