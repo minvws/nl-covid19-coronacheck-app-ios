@@ -19,23 +19,19 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 	var navigationController = UINavigationController() // unused
 
 	let error: Error
-	
-	let bypassCanSendMail: Bool
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
-	init(scene: UIWindowScene, error: Error, bypassCanSendMail: Bool = false) {
+	init(scene: UIWindowScene, error: Error) {
 		self.window = UIWindow(windowScene: scene)
 		self.error = error
-		self.bypassCanSendMail = bypassCanSendMail
 	}
 	
 	/// For use with iOS 12.
-	init(error: Error, bypassCanSendMail: Bool = false) {
+	init(error: Error) {
 		
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.error = error
-		self.bypassCanSendMail = bypassCanSendMail
 	}
 	
 	// Designated starter method
@@ -63,7 +59,7 @@ class UnrecoverableErrorCoordinator: NSObject, Coordinator {
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
 		
-		guard MFMailComposeViewController.canSendMail() || bypassCanSendMail else { // Simulator can't send mail.
+		guard MFMailComposeViewController.canSendMail() else { // Simulator can't send mail.
 			self.presentRestartTheAppDialog()
 			return
 		}

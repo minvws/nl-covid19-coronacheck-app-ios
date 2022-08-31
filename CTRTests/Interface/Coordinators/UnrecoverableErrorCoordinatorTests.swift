@@ -30,36 +30,11 @@ class UnrecoverableErrorCoordinatorTests: XCTestCase {
 		expect(self.sut.navigationController.viewControllers).to(beEmpty())
 	}
 	
-	func test_start_crashReport_doBypassCanSendMail() {
+	func test_start_crashReport() {
 		
 		// Given
 		let error = NSError(domain: "CoronaCheck", code: -1)
-		sut = UnrecoverableErrorCoordinator(error: error, bypassCanSendMail: true)
-		let alertVerifier = AlertVerifier()
-		
-		// When
-		sut.start()
-		
-		// Then
-		expect(self.sut.window.rootViewController is AppStatusViewController) != true
-		expect(self.sut.navigationController.viewControllers).to(haveCount(1))
-		
-		alertVerifier.verify(
-			title: L.general_unrecoverableError_sendCrashReport_title(),
-			message: L.general_unrecoverableError_sendCrashReport_message(),
-			animated: false,
-			actions: [
-				.default(L.general_unrecoverableError_sendCrashReport_action()),
-				.cancel(L.generalClose())
-			]
-		)
-	}
-	
-	func test_start_crashReport_doNotBypassCanSendMail() {
-		
-		// Given
-		let error = NSError(domain: "CoronaCheck", code: -1)
-		sut = UnrecoverableErrorCoordinator(error: error, bypassCanSendMail: false)
+		sut = UnrecoverableErrorCoordinator(error: error)
 		let alertVerifier = AlertVerifier()
 		
 		// When
