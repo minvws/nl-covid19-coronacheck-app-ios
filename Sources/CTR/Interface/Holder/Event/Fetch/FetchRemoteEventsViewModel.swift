@@ -30,8 +30,6 @@ final class FetchRemoteEventsViewModel {
 
 	@Bindable private(set) var alert: AlertContent?
 
-	private let hasEventInformationFetchingGroup = DispatchGroup()
-
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		token: String,
@@ -367,38 +365,38 @@ final class FetchRemoteEventsViewModel {
 	private func fetchHasEventInformation(
 		forEventProviders eventProviders: [EventFlow.EventProvider],
 		completion: @escaping ([EventFlow.EventProvider], [ServerError]) -> Void) {
-
-		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, ServerError>]()
-
-		for provider in eventProviders {
-			guard let url = provider.unomiUrl?.absoluteString, provider.accessToken != nil, url.starts(with: "https") else { continue }
-
-			hasEventInformationFetchingGroup.enter()
-			fetchHasEventInformationResponse(
-				from: provider,
-				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
-
-					let mappedToProvider = result
-						// Transform regular .error to .provider to display the provider identifier
-						.mapError { $0.toProviderError(provider: provider) }
-						.map { info in
-						// Map the right provider identifier (fixes duplication on ACC for ZZZ and GGD)
-						return EventFlow.EventInformationAvailable(
-							providerIdentifier: provider.identifier,
-							protocolVersion: info.protocolVersion,
-							informationAvailable: info.informationAvailable
-						)
-					}
-					eventInformationAvailableResults += [mappedToProvider]
-					self.hasEventInformationFetchingGroup.leave()
+		
+		// Collect failures:
+		var failuresExperienced = [ServerError]()
+		
+		eventProviders.compactMap({ provider -> EventFlow.EventProvider? in
+			guard let url = provider.unomiUrl?.absoluteString, provider.accessToken != nil, url.starts(with: "https") else { return nil }
+			return provider
+		}).map { provider -> Future<EventFlow.EventInformationAvailable?, Never> in
+			
+			return fetchHasEventInformationResponse(from: provider)
+				.mapError { serverError in
+					serverError.toProviderError(provider: provider)
 				}
-			)
+				.onFailure { serverError in
+					// Errors are logged externally, but should not fail the larger set of requests.
+					failuresExperienced += [serverError]
+				}
+				.map { eventInfoAvailable in
+					// Map the right provider identifier (fixes duplication on ACC for ZZZ and GGD)
+					EventFlow.EventInformationAvailable(
+						providerIdentifier: provider.identifier,
+						protocolVersion: eventInfoAvailable.protocolVersion,
+						informationAvailable: eventInfoAvailable.informationAvailable
+					)
+				}
+				.catchErrorReplacingWithNil()
 		}
+		.sequence() // Group the successful `Future` results together when they all complete
+		.onComplete(DispatchQueue.main.context) { result in
+			guard case .success(let eventInformationAvailable) = result else { return } // impossible case as Futures have error type: `Never`.
+			let successfulEventInformationAvailable = eventInformationAvailable.compactMap { $0 }
 
-		hasEventInformationFetchingGroup.notify(queue: DispatchQueue.main) {
-
-			// Process successes:
-			let successfulEventInformationAvailable = eventInformationAvailableResults.compactMap { $0.successValue }
 			let outputEventProviders = eventProviders.map { eventProvider -> EventFlow.EventProvider in
 				var eventProvider = eventProvider
 				for response in successfulEventInformationAvailable where
@@ -407,29 +405,25 @@ final class FetchRemoteEventsViewModel {
 				}
 				return eventProvider
 			}.filter { $0.eventInformationAvailable != nil }
-
-			// Process failures:
-			let failuresExperienced = eventInformationAvailableResults.compactMap { $0.failureError }
-
+			
+			// We propagate the potential unomi server errors and not append them to failuresExperienced,
+			// because we need to distinguish between them in the error states.
 			completion(outputEventProviders, failuresExperienced)
 		}
 	}
 
-	private func fetchHasEventInformationResponse(
-		from provider: EventFlow.EventProvider,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
-
+	private func fetchHasEventInformationResponse(from provider: EventFlow.EventProvider) -> Future<EventFlow.EventInformationAvailable, ServerError> {
 		logVerbose("eventprovider: \(provider.identifier) - \(provider.name) - \(provider.queryFilter) - \(String(describing: provider.unomiUrl?.absoluteString))")
 
 		progressIndicationCounter.increment()
-		networkManager.fetchEventInformation(provider: provider) { [weak self] result in
-			// Result<EventFlow.EventInformationAvailable, ServerError>
-
-			if case let .success(info) = result {
-				logVerbose("EventInformationAvailable: \(info)")
+			
+		return Future { [self] completion in
+			networkManager.fetchEventInformation(provider: provider) { result in
+				// Result<EventFlow.EventInformationAvailable, ServerError>
+				completion(result)
 			}
-			completion(result)
-			self?.progressIndicationCounter.decrement()
+		}.onComplete { [self] _ in
+			progressIndicationCounter.decrement()
 		}
 	}
 
