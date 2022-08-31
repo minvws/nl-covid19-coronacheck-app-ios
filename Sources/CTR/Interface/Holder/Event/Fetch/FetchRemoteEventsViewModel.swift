@@ -496,7 +496,6 @@ final class FetchRemoteEventsViewModel {
 	}
 }
 
-
 extension FetchRemoteEventsViewModel {
 
 	static let detailedCodeNonceExpired: Int = 99708
