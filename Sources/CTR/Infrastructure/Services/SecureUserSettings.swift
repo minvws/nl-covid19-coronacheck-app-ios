@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable let_var_whitespace redundant_optional_initialization
+// swiftlint:disable redundant_optional_initialization
 
 import Foundation
 
