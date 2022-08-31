@@ -12,7 +12,6 @@ final class DeniedAccessView: BaseView {
 	private enum ViewTraits {
 		
 		enum Margin {
-			static let top: CGFloat = 4
 			static let secondaryButtonBottom: CGFloat = 8
 			static let horizontal: CGFloat = 32
 		}
@@ -178,8 +177,4 @@ final class DeniedAccessView: BaseView {
 
 	/// The user tapped on the secondary button
 	var readMoreTappedCommand: (() -> Void)?
-	
-	func focusAccessibility() {
-		UIAccessibility.post(notification: .screenChanged, argument: self.titleLabel)
-	}
 }

@@ -120,14 +120,6 @@ class TextView: UIStackView {
 		self.text = text
 	}
 	
-	/// Initializes the TextView with an attributed string
-	init(attributedText: NSAttributedString) {
-		super.init(frame: .zero)
-		setup()
-		
-		self.attributedText = attributedText
-	}
-	
 	required init(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -232,13 +224,6 @@ extension NSAttributedString {
 			}
 			
 			return false
-		}
-	}
-	
-	/// Determines whether the attributed string contains a link
-	var containsLink: Bool {
-		return attributes { key, value, range in
-			return key == NSAttributedString.Key.link
 		}
 	}
 	

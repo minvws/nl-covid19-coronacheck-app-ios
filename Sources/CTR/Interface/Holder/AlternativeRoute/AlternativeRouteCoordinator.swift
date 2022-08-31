@@ -20,8 +20,6 @@ protocol AlternativeRouteCoordinatorDelegate: AnyObject {
 	
 	func userWishesToCheckForBSN()
 	
-	func userWishesToCheckForDigiD()
-	
 	func userWishesToRequestADigiD()
 	
 	func userWishesToContactHelpDeksWithBSN()

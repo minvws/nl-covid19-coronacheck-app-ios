@@ -43,16 +43,6 @@ extension OIDTokenResponse: OpenIdManagerToken {
 
 class OpenIdManager: OpenIdManaging {
 	
-	var isAuthorizationInProgress: Bool = false
-	private let logHandler: Logging?
-	
-	/// Initializer
-	/// - Parameter configuration: the digid configuration
-	init(logHandler: Logging? = nil) {
-		
-		self.logHandler = logHandler
-	}
-
 	/// Request an access token
 	/// - Parameters:
 	///   - issuerConfiguration: openID configuration
@@ -88,8 +78,6 @@ class OpenIdManager: OpenIdManaging {
 		onCompletion: @escaping (OpenIdManagerToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 			
-			isAuthorizationInProgress = true
-			
 			let request = generateRequest(
 				issuerConfiguration: issuerConfiguration,
 				serviceConfiguration: serviceConfiguration
@@ -109,7 +97,7 @@ class OpenIdManager: OpenIdManaging {
 						if let lastTokenResponse = authState?.lastTokenResponse {
 							onCompletion(lastTokenResponse)
 						} else {
-							self.logHandler?.logError("OpenIdManager: \(String(describing: error))")
+							logError("OpenIdManager: \(String(describing: error))")
 							onError(error)
 						}
 					}

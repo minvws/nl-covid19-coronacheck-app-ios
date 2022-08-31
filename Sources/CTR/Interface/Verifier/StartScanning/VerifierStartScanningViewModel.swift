@@ -138,7 +138,7 @@ class VerifierStartScanningViewModel {
 	// MARK: - State
 	
 	@Atomic<Mode>
-	private var mode = .noLevelSet // swiftlint:disable:this let_var_whitespace
+	private var mode = .noLevelSet
 	
 	private lazy var lockLabelCountdownTimer: Timeable = {
 		return vendTimer(TimeInterval(1), true) { [weak self] in

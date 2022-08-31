@@ -7,24 +7,7 @@
 
 import Foundation
 
-protocol ConfigurationDigidProtocol: AnyObject {
-
-	/// Get the TVS url
-	/// - Returns: the tvs url
-	func getTVSURL() -> URL
-
-	/// Get the consumer ID for DigiD
-	/// - Returns: the consumer ID for DigiD
-	func getTVSClientId() -> String
-
-	/// Get the redirect uri for Digid
-	/// - Returns: the redirect uri for Digid
-	func getTVSRedirectUri() -> URL
-}
-
-// MARK: - ConfigurationDigidProtocol
-
-extension Configuration: ConfigurationDigidProtocol {
+extension Configuration {
 
 	/// Get the TVS url
 	/// - Returns: the tvs url

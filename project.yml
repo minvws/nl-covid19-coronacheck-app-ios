@@ -12,9 +12,6 @@ packages:
     ## Forked from: https://github.com/openid/AppAuth-iOS
     github: GlennChiu/AppAuth-iOS
     revision: c0507aaff96d95a3c39bd3ca868106185674436f
-  CocoaLumberjack:
-    github: CocoaLumberjack/CocoaLumberjack
-    majorVersion: 3.7.4
   Inject: 
     github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
     branch: main
@@ -27,9 +24,15 @@ packages:
   Nimble:
     github: Quick/Nimble
     majorVersion: 10.0.0
+  OHHTTPStubs:
+    github: AliSoftware/OHHTTPStubs
+    majorVersion: 9.1.0
   OpenSSL:
     github: krzyzanowskim/OpenSSL
     exactVersion: 1.1.1700
+  BrightFutures:
+    github: Thomvis/BrightFutures
+    branch: master
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -39,9 +42,6 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     majorVersion: 1.9.0
-  OHHTTPStubs:
-    github: AliSoftware/OHHTTPStubs
-    majorVersion: 9.1.0
 
 
 # - Attributes:
@@ -91,10 +91,6 @@ targetTemplates:
       # SPM:
       - package: AppAuth
         product: AppAuth
-      - package: CocoaLumberjack
-        product: CocoaLumberjack
-      - package: CocoaLumberjack
-        product: CocoaLumberjackSwift
       - package: IOSSecuritySuite
       - package: Lottie
       - package: OpenSSL
@@ -103,6 +99,8 @@ targetTemplates:
         product: Reachability
       - package: RSwiftLibrary
         product: Rswift
+      - package: BrightFutures
+        product: BrightFutures
       # Frameworks:
       - framework: clcore.xcframework
         embed: false
@@ -113,6 +111,7 @@ targetTemplates:
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Core/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
+        PRODUCT_MODULE_NAME: CTR
         VALIDATE_PRODUCT: YES
         DEBUG_INFORMATION_FORMAT: dwarf-with-dsym # Firebase warns that this must be set for all targets.
         CODE_SIGN_STYLE: Manual
@@ -121,7 +120,6 @@ targetTemplates:
         ENABLE_BITCODE: false # because it's deprecated
       configs:
         Development:
-          PRODUCT_MODULE_NAME: CTR
           NETWORK_CONFIGURATION: DEV
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
@@ -290,7 +288,7 @@ targets:
       base:
         APP_FLAVOR: holder
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 4.6.0 # holder
+        MARKETING_VERSION: 4.7.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
         TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad

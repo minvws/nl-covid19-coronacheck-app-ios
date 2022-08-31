@@ -198,6 +198,14 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.negativeTestEvent]
 	)
+
+	static var fakeNegativeTestGGDResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "GGD",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		events: [EventFlow.Event.negativeTestEvent]
+	)
 	
 	static var fakePaperProofResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
@@ -1261,6 +1269,13 @@ struct FakeRemoteEvent {
 	static var fakeRemoteEventNegativeTest: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventNegativeTestGGD: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestGGDResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
 	}

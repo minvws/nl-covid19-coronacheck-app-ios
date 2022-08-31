@@ -401,6 +401,53 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
+	func test_navigateToAboutThisApp_openURL() throws {
+		
+		// Given
+		sut.navigateToAboutThisApp()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+		
+		// When
+		viewModel.outcomeHandler(.openURL(url, inApp: true))
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == true
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_navigateToAboutThisApp_userWishesToSeeStoredEvents() throws {
+		
+		// Given
+		sut.navigateToAboutThisApp()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
+		
+		// When
+		viewModel.outcomeHandler(.userWishesToSeeStoredEvents)
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == false
+		expect(self.navigationSpy.pushViewControllerCallCount) == 2
+		expect(self.navigationSpy.viewControllers.last is ListStoredEventsViewController).toEventually(beTrue())
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_navigateToAboutThisApp_userWishesToOpenScanLog() throws {
+		
+		// Given
+		sut.navigateToAboutThisApp()
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
+		
+		// When
+		viewModel.outcomeHandler(.userWishesToOpenScanLog) // Should not be handled by HolderCoordinator
+		
+		// Then
+		expect(self.navigationSpy.invokedPresent) == false
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
 	func test_navigateBackToStart() {
 		
 		// Given
@@ -600,7 +647,7 @@ class HolderCoordinatorTests: XCTestCase {
 		]
 		
 		// When
-		sut.userWishesMoreInfoAboutUnavailableQR(originType: .vaccination, currentRegion: .domestic, availableRegion: .europeanUnion)
+		sut.userWishesMoreInfoAboutUnavailableQR(originType: .vaccination, currentRegion: .domestic)
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true

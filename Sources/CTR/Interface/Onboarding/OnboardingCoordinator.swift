@@ -9,12 +9,6 @@ import UIKit
 import SafariServices
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
-	
-	/// Dismiss the presented viewController
-	func dismiss()
-
-	/// Navigate to the consent page
-	func navigateToConsent()
 
 	/// Consent was given
 	func consentGiven()
@@ -42,9 +36,6 @@ class OnboardingCoordinator: Coordinator {
 
 	/// The onboarding factory
 	var onboardingFactory: OnboardingFactoryProtocol
-	
-	/// A presenting view controller
-	weak var presentingViewController: UIViewController?
 	
 	private var appFlavor: AppFlavor
 	
@@ -136,13 +127,6 @@ extension OnboardingCoordinator: PagedAnnouncementDelegate {
 // MARK: - OnboardingCoordinatorDelegate
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
-
-	/// Dismiss the presented viewController
-	func dismiss() {
-		
-		presentingViewController?.dismiss(animated: true, completion: nil)
-		presentingViewController = nil
-	}
 
 	/// Navigate to the consent page
 	func navigateToConsent() {

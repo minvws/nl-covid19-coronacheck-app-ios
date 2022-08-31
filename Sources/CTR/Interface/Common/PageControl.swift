@@ -9,7 +9,7 @@ import UIKit
 
 protocol PageControlDelegate: AnyObject {
 	
-	func pageControl(_ pageControl: PageControl, didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int)
+	func pageControl(didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int)
 }
 
 final class PageControl: BaseView {
@@ -34,8 +34,8 @@ final class PageControl: BaseView {
 			static let animation: TimeInterval = 0.15
 		}
 		enum Color {
-			static let selected = C.primaryBlue()!
-			static let deselected = C.grey2()
+			static let selected: UIColor = C.primaryBlue() ?? .systemBlue
+			static let deselected: UIColor = C.grey2() ?? .gray
 		}
 	}
 	
@@ -161,14 +161,14 @@ private extension PageControl {
 		guard canGoToNexPage else { return }
 		
 		let nextIndex = currentPageIndex + 1
-		delegate?.pageControl(self, didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
+		delegate?.pageControl(didChangeToPageIndex: nextIndex, previousPageIndex: currentPageIndex)
 	}
 	
 	@objc func navigateToPreviousPage() {
 		guard canGoToPreviousPage else { return }
 		
 		let previousIndex = currentPageIndex - 1
-		delegate?.pageControl(self, didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
+		delegate?.pageControl(didChangeToPageIndex: previousIndex, previousPageIndex: currentPageIndex)
 	}
 	
 	func addRoundIndicator() -> UIView {

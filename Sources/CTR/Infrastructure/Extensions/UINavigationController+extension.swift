@@ -10,6 +10,7 @@ import UIKit
 // Extend push/pop with completion blocks:
 
 extension UINavigationController {
+	
 	func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
 		pushViewController(viewController, animated: animated)
 

@@ -75,7 +75,7 @@ final class CheckIdentityViewController: BaseViewController {
 		viewModel.$hideForCapture.binding = { [weak self] in
 
 			#if DEBUG
-			Current.logHandler.logDebug("Skipping hiding of result because in DEBUG mode")
+			logDebug("Skipping hiding of result because in DEBUG mode")
 			#else
 			self?.sceneView.isHidden = $0
 			#endif

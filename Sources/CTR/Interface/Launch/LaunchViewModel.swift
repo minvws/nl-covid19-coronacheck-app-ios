@@ -11,7 +11,6 @@ import LocalAuthentication
 class LaunchViewModel {
 
 	private weak var coordinator: AppCoordinatorDelegate?
-	private var walletManager: WalletManaging?
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -39,7 +38,6 @@ class LaunchViewModel {
 		message = flavor == .holder ? L.holderLaunchText() : L.verifierLaunchText()
 		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 
-		walletManager = flavor == .holder ? Current.walletManager : nil
 		startChecks()
 	}
 
@@ -95,7 +93,7 @@ class LaunchViewModel {
 					self.coordinator?.handleLaunchState(.finished)
 					
 				default:
-					Current.logHandler.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+					logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
 		}
 	}
@@ -122,7 +120,7 @@ class LaunchViewModel {
 						completion(.finished)
 
 					case let .failure(error):
-						Current.logHandler.logError("Error getting the remote config: \(error)")
+						logError("Error getting the remote config: \(error)")
 						completion(.serverError([error]))
 				}
 			})
@@ -147,7 +145,7 @@ class LaunchViewModel {
 						completion(.finished)
 
 					case let .failure(error):
-						Current.logHandler.logError("Error getting the issuers public keys: \(error)")
+						logError("Error getting the issuers public keys: \(error)")
 						completion(.serverError([error]))
 				}
 			}

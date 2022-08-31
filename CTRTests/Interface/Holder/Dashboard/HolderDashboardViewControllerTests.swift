@@ -75,7 +75,7 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		sut.holderDashboardView(sut.sceneView, didDisplay: .domestic)
+		sut.holderDashboardView(didDisplay: .domestic)
 		
 		// Assert
 		expect(self.viewModelSpy.invokedDashboardRegionToggleValueList.first!) == .domestic

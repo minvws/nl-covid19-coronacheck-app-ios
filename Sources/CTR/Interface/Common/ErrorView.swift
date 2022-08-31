@@ -12,14 +12,13 @@ class ErrorView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 		
-		// Dimension
-		static let imageSize: CGFloat = 16.0
-		
-		// Margins
-		static let margin: CGFloat = 20.0
-		static let textLeadingMargin: CGFloat = 8.0
-		static let imageTopMargin: CGFloat = 5.0
-		
+		enum Image {
+			static let size: CGFloat = 16.0
+			static let topMargin: CGFloat = 5.0
+		}
+		enum Text {
+			static let leadingMargin: CGFloat = 8.0
+		}
 		enum Font {
 			static let font: UIFont = Fonts.subhead
 			static let lineHeight: CGFloat = 18
@@ -67,11 +66,11 @@ class ErrorView: BaseView {
 			
 			// Image View
 			errorImageView.leadingAnchor.constraint( equalTo: leadingAnchor),
-			errorImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageSize),
-			errorImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageSize),
+			errorImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Image.size),
+			errorImageView.heightAnchor.constraint(equalToConstant: ViewTraits.Image.size),
 			errorImageView.topAnchor.constraint(
 				equalTo: topAnchor,
-				constant: ViewTraits.imageTopMargin
+				constant: ViewTraits.Image.topMargin
 			),
 			
 			// Title
@@ -81,7 +80,7 @@ class ErrorView: BaseView {
 			),
 			errorLabel.leadingAnchor.constraint(
 				equalTo: errorImageView.trailingAnchor,
-				constant: ViewTraits.textLeadingMargin
+				constant: ViewTraits.Text.leadingMargin
 			),
 			errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			errorLabel.bottomAnchor.constraint(equalTo: bottomAnchor)

@@ -333,6 +333,31 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 		expect(self.sut.alert?.cancelAction?.title).toEventually(beNil())
 	}
 	
+	func test_unomiOK_eventNoInternet() {
+
+		// Given
+		environmentSpies.networkManagerSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([EventFlow.AccessToken.fakeTestToken]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventProvidersCompletionResult = (.success([EventFlow.EventProvider.vaccinationProvider]), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventInformationCompletionResult = (.success(EventFlow.EventInformationAvailable.fakeInformationIsAvailable), ())
+		environmentSpies.networkManagerSpy.stubbedFetchEventsCompletionResult =
+		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
+
+		// When
+		sut = FetchRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			token: "test",
+			authenticationMode: .patientAuthenticationProvider,
+			eventMode: .vaccination
+		)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.sut.alert?.okAction.title).toEventually(equal(L.generalRetry()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
+	}
+	
 	func test_unomiOK_eventServerError() {
 		
 		// Given
@@ -358,19 +383,6 @@ class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 			expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		}))
-	}
-
-	func test_openUrl() throws {
-
-		// Given
-		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
-
-		// When
-		sut.openUrl(url)
-
-		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
 
 	// MARK: Default values

@@ -86,18 +86,7 @@ class SecurityFeaturesView: BaseView {
 
 		animationView.animation = currentAnimation.animation
 		animationView.loopMode = currentAnimation.loopMode
-
-		if let section = currentAnimation.section {
-			// only play a section of the animation
-			animationView.play(
-				fromFrame: section.start,
-				toFrame: section.end,
-				loopMode: currentAnimation.loopMode,
-				completion: nil
-			)
-		} else {
-			animationView.play()
-		}
+		animationView.play()
 	}
 
 	// MARK: Public Access

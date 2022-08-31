@@ -230,7 +230,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
 	func found(code: String) {
 
-		Current.logHandler.logInfo("CTR: Found code: \(code)")
+		logInfo("CTR: Found code: \(code)")
 	}
 
 	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -255,7 +255,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 			}
 			device.unlockForConfiguration()
 		} catch {
-			Current.logHandler.logError("toggleTorch: \(error)")
+			logError("toggleTorch: \(error)")
 		}
 	}
 	

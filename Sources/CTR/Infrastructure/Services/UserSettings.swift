@@ -46,55 +46,55 @@ protocol UserSettingsProtocol: AnyObject {
 class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
-	var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
+	var scanInstructionShown: Bool
 
 	@UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
-	var jailbreakWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+	var jailbreakWarningShown: Bool
 
 	@UserDefaults(key: "dashboardRegionToggleValue")
-	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic // swiftlint:disable:this let_var_whitespace
+	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic
 
 	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
-	var configFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+	var configFetchedTimestamp: TimeInterval?
 
 	@UserDefaults(key: "configFetchedHash", defaultValue: nil)
-	var configFetchedHash: String? // swiftlint:disable:this let_var_whitespace
+	var configFetchedHash: String?
 
 	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
-	var issuerKeysFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+	var issuerKeysFetchedTimestamp: TimeInterval?
 
 	@UserDefaults(key: "lastScreenshotTime", defaultValue: nil)
-	var lastScreenshotTime: Date? // swiftlint:disable:this let_var_whitespace
+	var lastScreenshotTime: Date?
 
 	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
-	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval?
 
 	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
-	var lastSeenRecommendedUpdate: String? // swiftlint:disable:this let_var_whitespace
+	var lastSeenRecommendedUpdate: String?
 	
 	@UserDefaults(key: "lastSuccessfulCompletionOfAddCertificateFlowDate", defaultValue: nil)
-	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? // swiftlint:disable:this let_var_whitespace
+	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date?
 
 	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
-	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+	var deviceAuthenticationWarningShown: Bool
 	
 	@UserDefaults(key: "configVerificationPolicies")
-	var configVerificationPolicies: [VerificationPolicy] = [] // swiftlint:disable:this let_var_whitespace
+	var configVerificationPolicies: [VerificationPolicy] = []
 	
 	@UserDefaults(key: "policyInformationShown", defaultValue: false)
-	var policyInformationShown: Bool // swiftlint:disable:this let_var_whitespace
+	var policyInformationShown: Bool
 
 	@UserDefaults(key: "lastDismissedDisclosurePolicy")
-	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = [] // swiftlint:disable:this let_var_whitespace
+	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = []
 
 	@UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
 	var hasDismissedZeroGPolicy: Bool = false
 	
 	@UserDefaults(key: "overrideDisclosurePolicies")
-	var overrideDisclosurePolicies: [String] = [] // swiftlint:disable:this let_var_whitespace
+	var overrideDisclosurePolicies: [String] = []
 	
 	@UserDefaults(key: "lastKnownConfigDisclosurePolicy")
-	var lastKnownConfigDisclosurePolicy: [String] = ["3G"] // swiftlint:disable:this let_var_whitespace
+	var lastKnownConfigDisclosurePolicy: [String] = ["3G"]
 }
 
 extension UserSettings {

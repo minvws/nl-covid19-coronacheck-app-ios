@@ -70,7 +70,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 					// completes, so need to jump to next runloop:
 					DispatchQueue.main.async {
 						self.viewDidLoad()
-						Current.logHandler.logDebug("♻️ ♻️ ♻️ Re-Injected View at \(type(of: self)) ♻️ ♻️ ♻️ ")
+						logDebug("♻️ ♻️ ♻️ Re-Injected View at \(type(of: self)) ♻️ ♻️ ♻️ ")
 					}
 				}
 			}

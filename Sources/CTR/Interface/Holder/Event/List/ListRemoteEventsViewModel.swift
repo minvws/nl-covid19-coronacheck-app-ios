@@ -134,7 +134,7 @@ class ListRemoteEventsViewModel {
 		var eventModeToUse: EventMode {
 			if let paperFlowEmbeddedEventMode = getPaperFlowEmbeddedEventMode() {
 				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
-				Current.logHandler.logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
+				logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
 				return paperFlowEmbeddedEventMode
 			} else if originalEventMode == .vaccinationassessment {
 				return .vaccinationassessment

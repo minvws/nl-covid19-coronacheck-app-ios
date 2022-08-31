@@ -5,7 +5,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
-// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
@@ -267,40 +266,6 @@ class WalletManagerTests: XCTestCase {
 		expect(signedEvents).to(haveCount(2))
 		expect(signedEvents.first).to(contain("test"))
 		expect(signedEvents.last).to(contain("vaccination"))
-	}
-
-	func test_hasEventGroup_vaccination() {
-
-		// Given
-		sut.storeEventGroup(
-			.vaccination,
-			providerIdentifier: "GGD",
-			jsonData: Data(),
-			expiryDate: nil
-		)
-
-		// When
-		let hasEventGroup = sut.hasEventGroup(type: "vaccination", providerIdentifier: "GGD")
-
-		// Then
-		expect(hasEventGroup) == true
-	}
-
-	func test_hasEventGroup_recovery() {
-
-		// Given
-		sut.storeEventGroup(
-			.recovery,
-			providerIdentifier: "DCC",
-			jsonData: Data(),
-			expiryDate: nil
-		)
-
-		// When
-		let hasEventGroup = sut.hasEventGroup(type: "recovery", providerIdentifier: EventFlow.paperproofIdentier)
-
-		// Then
-		expect(hasEventGroup) == true
 	}
 	
 	func test_expireEventGroups_noEvents() {
@@ -601,16 +566,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneValidGreenCard() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
 			cryptoManager: environmentSpies.cryptoManagerSpy
@@ -626,16 +582,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneExpiredGreenCard() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpired30DaysAgo,
 			cryptoManager: environmentSpies.cryptoManagerSpy
@@ -652,16 +599,7 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_vaccination() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
@@ -672,31 +610,15 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be now for a CTB
 		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) != Date(timeIntervalSince1970: 0)
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == true
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 	
 	func test_storeDomesticGreenCard_recovery() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
@@ -707,29 +629,13 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == true
-		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 	
 	func test_storeDomesticGreenCard_vaccinationAssessment() throws {
 		
 		// Given
-		let domesticCredentials: [DomesticCredential] = [
-			DomesticCredential(
-				credential: Data("test".utf8),
-				attributes: DomesticCredentialAttributes.sample(category: "3")
-			)
-		]
-		let encodedDomesticCredentials = try JSONEncoder().encode(domesticCredentials)
-		let jsonString = try XCTUnwrap( String(data: encodedDomesticCredentials, encoding: .utf8))
-		let jsonData = Data(jsonString.utf8)
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(jsonData)
+		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
@@ -740,14 +646,7 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(haveCount(1))
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccinationassessment")) == true
 	}
 	
 	func test_storeInternationalGreenCard_vaccination() throws {
@@ -767,16 +666,9 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be epoch for a DCC (immediately valid)
 		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) == Date(timeIntervalSince1970: 0)
-		expect(self.sut.hasDomesticGreenCard(originType: "vaccination")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "recovery")) == false
-		expect(self.sut.hasDomesticGreenCard(originType: "test")) == false
 	}
 
 	func test_storeInternationalGreenCard_vaccination_failedCredential() throws {
@@ -794,10 +686,6 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == false
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .vaccinationassessment)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(beEmpty())
 	}
 	
@@ -818,9 +706,6 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(success) == true
 		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listOrigins(type: .vaccination)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(haveCount(1))
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 	
@@ -841,9 +726,6 @@ class WalletManagerTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(haveCount(2))
-		expect(self.sut.listOrigins(type: .vaccination)).to(haveCount(2))
-		expect(self.sut.listOrigins(type: .test)).to(beEmpty())
-		expect(self.sut.listOrigins(type: .recovery)).to(beEmpty())
 		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 	
@@ -883,4 +765,6 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 		expect(self.sut.listEventGroups().first?.expiryDate) == nil
 	}
+	
+	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)
 }

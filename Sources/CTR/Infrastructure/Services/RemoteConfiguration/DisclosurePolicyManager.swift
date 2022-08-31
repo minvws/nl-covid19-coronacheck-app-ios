@@ -26,13 +26,11 @@ class DisclosurePolicyManager: DisclosurePolicyManaging {
 	
 	private var remoteConfigManagerObserverToken: Observatory.ObserverToken?
 	private var remoteConfigManager: RemoteConfigManaging
-	private let logHandler: Logging?
 	private let userSettings: UserSettingsProtocol
 	
 	/// Initiializer
-	init(remoteConfigManager: RemoteConfigManaging, userSettings: UserSettingsProtocol, logHandler: Logging? = nil) {
+	init(remoteConfigManager: RemoteConfigManaging, userSettings: UserSettingsProtocol) {
 		self.remoteConfigManager = remoteConfigManager
-		self.logHandler = logHandler
 		self.userSettings = userSettings
 		(self.observatory, self.notifyObservers) = Observatory<()>.create()
 		configureRemoteConfigManager()
@@ -56,7 +54,7 @@ class DisclosurePolicyManager: DisclosurePolicyManaging {
 		}
 		
 		// Locally stored profile different than the remote ones
-		logHandler?.logDebug("DisclosurePolicyManager: policy changed detected")
+		logDebug("DisclosurePolicyManager: policy changed detected")
 
 		// - Update the observers
 		notifyObservers(())

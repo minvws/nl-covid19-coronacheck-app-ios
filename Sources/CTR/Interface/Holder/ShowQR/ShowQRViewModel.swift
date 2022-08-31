@@ -15,11 +15,9 @@ class ShowQRViewModel {
 		
 		private let initialBrightness: CGFloat
 		private var latestAnimation: UUID?
-		private let notificationCenter: NotificationCenterProtocol
 		
 		init(initialBrightness: CGFloat = UIScreen.main.brightness, notificationCenter: NotificationCenterProtocol) {
 			self.initialBrightness = initialBrightness
-			self.notificationCenter = notificationCenter
 			
 			notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
 				self?.animateToFullBrightness()
@@ -75,10 +73,7 @@ class ShowQRViewModel {
 	// MARK: - private variables
 
 	weak private var coordinator: HolderCoordinatorDelegate?
-
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
-	weak private var remoteConfigManager: RemoteConfigManaging? = Current.remoteConfigManager
-	private var mappingManager: MappingManaging? = Current.mappingManager
 	private let notificationCenter: NotificationCenterProtocol
 	private let screenBrightnessManager: ScreenBrightnessManager
 	private let disclosurePolicy: DisclosurePolicy?
@@ -87,7 +82,7 @@ class ShowQRViewModel {
 
 	private var currentPage: Int {
 		didSet {
-			Current.logHandler.logVerbose("current page set to \(currentPage)")
+			logVerbose("current page set to \(currentPage)")
 			displayQRInformation()
 		}
 	}
@@ -248,7 +243,7 @@ class ShowQRViewModel {
 				openURLsInApp: true
 			)
 		} else {
-			Current.logHandler.logError("Can't read the domestic credentials")
+			logError("Can't read the domestic credentials")
 		}
 	}
 	

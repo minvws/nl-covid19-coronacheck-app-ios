@@ -24,14 +24,6 @@ protocol NotificationCenterProtocol {
 		queue: OperationQueue?,
 		using block: @escaping (Notification) -> Void) -> NSObjectProtocol
 
-	func post(name aName: NSNotification.Name, object anObject: Any?)
-
-	func post(
-		name aName: NSNotification.Name,
-		object anObject: Any?,
-		userInfo aUserInfo: [AnyHashable: Any]?
-	)
-
 	func removeObserver(_ observer: Any)
 }
 

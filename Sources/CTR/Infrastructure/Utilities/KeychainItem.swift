@@ -190,10 +190,6 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
 	}
 
 	private var cachedValue: T?
-
-	func clearCache() {
-		cachedValue = nil
-	}
 }
 
 // MARK: - Property Wrapper

@@ -50,7 +50,7 @@ class AboutThisAppViewModel {
 		case coordinatorShouldRestart
 	}
 	
-	private let outcomeHandler: (Outcome) -> Void
+	internal let outcomeHandler: (Outcome) -> Void
 	private var flavor: AppFlavor
 
 	// MARK: - Bindable
@@ -104,7 +104,7 @@ class AboutThisAppViewModel {
 	private func setupMenuHolder() {
 
 		var list: [AboutThisAppMenuOption] = [
-			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()),
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
 			AboutThisAppMenuOption(identifier: .storedEvents, name: L.holder_menu_storedEvents()),
@@ -135,7 +135,7 @@ class AboutThisAppViewModel {
 	private func setupMenuVerifier() {
 
 		var topList: [AboutThisAppMenuOption] = [
-			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()) ,
+			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()),
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]

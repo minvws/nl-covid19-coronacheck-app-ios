@@ -15,7 +15,6 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
 		static let textLineHeight: CGFloat = 18
 		static let textKerning: CGFloat = -0.24
 		

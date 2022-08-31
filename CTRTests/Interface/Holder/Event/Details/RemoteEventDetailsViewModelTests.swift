@@ -13,13 +13,11 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 	
 	/// Subject under test
 	private var sut: RemoteEventDetailsViewModel!
-	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 		
-		coordinatorSpy = EventCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 	}
 	
@@ -36,7 +34,6 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 		
 		// When
 		sut = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: "Title Vaccination",
 			details: details,
 			footer: "Footer Vaccination"
@@ -59,7 +56,6 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 		
 		// When
 		sut = RemoteEventDetailsViewModel(
-			coordinator: coordinatorSpy,
 			title: "Title Positive Test",
 			details: details,
 			footer: "Footer Positive Test"

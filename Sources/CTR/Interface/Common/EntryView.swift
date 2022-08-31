@@ -50,7 +50,7 @@ class EntryView: BaseView {
 		super.setupViews()
 		let tapGestureRecognizer = UITapGestureRecognizer(
 			target: self,
-			action: #selector(handleSingleTap(sender:))
+			action: #selector(handleSingleTap)
 		)
 		self.addGestureRecognizer(tapGestureRecognizer)
 	}
@@ -65,7 +65,7 @@ class EntryView: BaseView {
 	
 	/// User tapped on the view
 	/// - Parameter sender: the tapgesture
-	@objc func handleSingleTap(sender: UITapGestureRecognizer) {
+	@objc func handleSingleTap() {
 		
 		inputField.becomeFirstResponder()
 	}

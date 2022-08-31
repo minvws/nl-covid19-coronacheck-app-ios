@@ -26,8 +26,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	func userWishesToOpenTheMenu()
 	
-	func userWishesToOpenScanLog()
-	
 	func userWishesToLaunchThirdPartyScannerApp()
 	
 	func navigateToCheckIdentity(_ verificationDetails: MobilecoreVerificationDetails)
@@ -47,8 +45,6 @@ class VerifierCoordinator: SharedCoordinator {
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 	
 	internal var thirdPartyScannerApp: (name: String, returnURL: URL)?
-	
-	private var userSettings: UserSettingsProtocol = UserSettings()
 	
 	private var verificationPolicyEnablerObserverToken: Observatory.ObserverToken?
 	

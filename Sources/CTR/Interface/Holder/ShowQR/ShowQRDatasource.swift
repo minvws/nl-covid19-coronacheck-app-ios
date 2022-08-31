@@ -12,8 +12,6 @@ protocol ShowQRDatasourceProtocol {
 
 	var items: [ShowQRItem] { get }
 
-	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?)
-
 	func getGreenCardForIndex(_ index: Int) -> GreenCard?
 	
 	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes?
@@ -39,7 +37,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 	private var fullyVaccinatedGreenCards = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 	private var greencardsWithDosage = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 
-	required init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
 
 		self.items = greenCards
 			.compactMap { greenCard in
@@ -117,7 +115,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 			return false
 		}
 		
-		Current.logHandler.logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
+		logVerbose("We are \(doseNumber) / \(totalDose) : \(highestFullyVaccinatedGreenCard.totalDose)")
 		return doseNumber < highestFullyVaccinatedGreenCard.totalDose
 	}
 	
@@ -128,7 +126,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 			// No attributes
 			return false
 		}
-		Current.logHandler.logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
+		logVerbose("expirationTime: \(Date(timeIntervalSince1970: euCredentialAttributes.expirationTime))")
 		return Date(timeIntervalSince1970: euCredentialAttributes.expirationTime) < Current.now()
 	}
 	
@@ -156,7 +154,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 		// Rule 1: return the card with the highest doseNumber
 		if let card = sorted.first,
 		   let index = items.firstIndex(where: { $0.greenCard == card.greenCard }) {
-			Current.logHandler.logVerbose("getIndexForMostRelevantGreenCard -> \(index)")
+			logVerbose("getIndexForMostRelevantGreenCard -> \(index)")
 			return index
 		}
 		return 0

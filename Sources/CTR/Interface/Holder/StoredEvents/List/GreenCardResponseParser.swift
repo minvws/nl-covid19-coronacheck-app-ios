@@ -44,7 +44,7 @@ class GreenCardResponseErrorParser {
 				return handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials)
 				
 			default:
-				Current.logHandler.logError("GreenCardResponseHelper - handleResult - unhandled: \(error)")
+				logError("GreenCardResponseHelper - handleResult - unhandled: \(error)")
 				return handleClientSideError(clientCode: .unhandled, for: .signer)
 		}
 	}
@@ -59,7 +59,7 @@ class GreenCardResponseErrorParser {
 		
 		switch serverError {
 			case .error(let statusCode, let serverResponse, let error), .provider(_, let statusCode, let serverResponse, let error):
-				Current.logHandler.logDebug("GreenCardResponseParser = handleServerError \(serverError)")
+				logDebug("GreenCardResponseParser = handleServerError \(serverError)")
 				
 				switch error {
 					case .serverBusy:
@@ -98,7 +98,7 @@ class GreenCardResponseErrorParser {
 	
 	private func customErrorForServerUnreachable(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
-		Current.logHandler.logDebug("GreenCardResponseParser - showServerUnreachable - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - showServerUnreachable - errorCode: \(errorCode)")
 		return GreenCardResponseError.customError(
 			title: L.holderErrorstateTitle(),
 			message: L.generalErrorServerUnreachableErrorCode("\(errorCode)")
@@ -107,7 +107,7 @@ class GreenCardResponseErrorParser {
 	
 	private func customErrorForServerBusy(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
-		Current.logHandler.logDebug("GreenCardResponseParser - showServerBusy - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - showServerBusy - errorCode: \(errorCode)")
 		return GreenCardResponseError.customError(
 			title: L.generalNetworkwasbusyTitle(),
 			message: L.generalNetworkwasbusyErrorcode("\(errorCode)")
@@ -116,7 +116,7 @@ class GreenCardResponseErrorParser {
 	
 	private func customErrorForClientErrorCode(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
-		Current.logHandler.logDebug("GreenCardResponseParser - displayClientErrorCode - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - displayClientErrorCode - errorCode: \(errorCode)")
 		return GreenCardResponseError.customError(
 			title: L.holderErrorstateTitle(),
 			message: L.holderErrorstateClientMessage("\(errorCode)")
@@ -125,7 +125,7 @@ class GreenCardResponseErrorParser {
 	
 	private func customErrorForServerErrorCode(_ errorCode: ErrorCode) -> GreenCardResponseError {
 		
-		Current.logHandler.logDebug("GreenCardResponseParser - displayServerErrorCode - errorCode: \(errorCode)")
+		logDebug("GreenCardResponseParser - displayServerErrorCode - errorCode: \(errorCode)")
 		return GreenCardResponseError.customError(
 			title: L.holderErrorstateTitle(),
 			message: L.holderErrorstateServerMessage("\(errorCode)")

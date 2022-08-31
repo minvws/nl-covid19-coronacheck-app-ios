@@ -73,6 +73,34 @@ struct DomesticCredentialAttributes: Codable {
 }
 
 struct DomesticCredential: Codable {
+	
+	struct DomesticCredentialContainer: Codable {
+		
+		let attributes: [String?]
+		let signature: DomesticSignature
+		
+		enum CodingKeys: String, CodingKey {
+			
+			case attributes
+			case signature
+		}
+	}
+	
+	struct DomesticSignature: Codable {
+		
+		let aPart: String
+		let ePart: String
+		let keyShareP: String?
+		let vPart: String
+		
+		enum CodingKeys: String, CodingKey {
+			
+			case aPart = "A"
+			case ePart = "e"
+			case keyShareP
+			case vPart = "v"
+		}
+	}
 
 	let credential: Data?
 	let attributes: DomesticCredentialAttributes
@@ -93,7 +121,7 @@ struct DomesticCredential: Codable {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 
 		attributes = try container.decode(DomesticCredentialAttributes.self, forKey: .attributes)
-		let structure = try container.decode(AnyCodable.self, forKey: .credential)
+		let structure = try container.decode(DomesticCredentialContainer.self, forKey: .credential)
 		let jsonEncoder = JSONEncoder()
 
 		if let data = try? jsonEncoder.encode(structure),

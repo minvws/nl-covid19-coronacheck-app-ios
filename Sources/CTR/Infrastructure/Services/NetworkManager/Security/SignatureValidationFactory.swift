@@ -115,13 +115,13 @@ class SignatureValidator: SignatureValidation {
 			
 			if let subjectKeyIdentifier = signer.subjectKeyIdentifier,
 			   !openssl.validateSubjectKeyIdentifier(subjectKeyIdentifier, forCertificateData: certificateData) {
-				Current.logHandler.logError("validateSubjectKeyIdentifier(subjectKeyIdentifier) failed")
+				logError("validateSubjectKeyIdentifier(subjectKeyIdentifier) failed")
 				return false
 			}
 			
 			if let serial = signer.rootSerial,
 			   !openssl.validateSerialNumber( serial, forCertificateData: certificateData) {
-				Current.logHandler.logError("validateSerialNumber(serial) is invalid")
+				logError("validateSerialNumber(serial) is invalid")
 				return false
 			}
 			

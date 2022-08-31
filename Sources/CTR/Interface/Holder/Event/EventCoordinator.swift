@@ -284,7 +284,6 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		let viewController = RemoteEventDetailsViewController(
 			viewModel: RemoteEventDetailsViewModel(
-				coordinator: self,
 				title: title,
 				details: details,
 				footer: footer,
@@ -351,12 +350,12 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 extension EventCoordinator: EventCoordinatorDelegate {
 	
 	func showHintsScreenDidFinish(_ result: EventScreenResult) {
-        switch result {
-            case .shouldCompleteVaccinationAssessment:
-                delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-            default:
-                delegate?.eventFlowDidComplete()
-        }
+		switch result {
+			case .shouldCompleteVaccinationAssessment:
+				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
+			default:
+				delegate?.eventFlowDidComplete()
+		}
 	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
@@ -542,14 +541,6 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 		navigationController.popbackTo(instanceOf: RemoteEventStartViewController.self, animated: false) {
 			self.navigateToAuthentication(eventMode: eventMode, authenticationMode: .patientAuthenticationProvider)
 		}
-	}
-}
-
-extension EventCoordinator: Dismissable {
-
-	func dismiss() {
-
-		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
 	}
 }
 

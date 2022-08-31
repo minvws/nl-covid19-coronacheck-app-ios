@@ -720,7 +720,7 @@ private final class ErrorRowView: BaseView {
 	private enum ViewTraits {
 		
 		enum Color {
-			static let tint: UIColor = C.error()!
+			static let tint: UIColor = C.error() ?? .red // iOS 11 had a crash where C.error()! was nil
 		}
 		enum Font {
 			static let lineHeight: CGFloat = 20
