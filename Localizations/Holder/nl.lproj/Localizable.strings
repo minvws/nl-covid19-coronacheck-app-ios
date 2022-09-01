@@ -618,6 +618,7 @@
 "holder_event_vaccination_assessment_about_name" = "Naam:";
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingsnummer:";
+"holder_event_vaccination_assessment_action_title" = "Toevoegen";
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatiebeoordeling en moet je later opnieuw je gegevens ophalen.";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Ga terug naar de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";

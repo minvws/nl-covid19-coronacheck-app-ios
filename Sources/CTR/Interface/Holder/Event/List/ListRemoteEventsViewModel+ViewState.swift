@@ -78,7 +78,7 @@ extension ListRemoteEventsViewModel {
 			content: Content(
 				title: Strings.title(forEventMode: eventMode),
 				body: Strings.listMessage(forEventMode: eventMode),
-				primaryActionTitle: eventMode != .paperflow ? L.holderVaccinationListAction() : L.holderDccListAction(),
+				primaryActionTitle: Strings.actionTitle(forEventMode: eventMode),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR()
 				},
