@@ -14,7 +14,7 @@ extension HolderDashboardViewModelTests {
 	
 	// MARK: - Vaccination Assessment
 	
-	func test_vaccinationassessment_domestic_shouldShow() {
+	func test_vaccinationassessment_domestic_shouldShow_3G() {
 		
 		// Arrange
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
@@ -24,7 +24,10 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
-		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_incompleteVisitorPass_message()
+			expect(buttonTitle) == nil
+		}))
 		expect(self.sut.domesticCards.value[1]).toEventually(beCompleteYourVaccinationAssessmentCard(test: { message, buttonTitle, _ in
 			expect(message) == L.holder_dashboard_visitorpassincompletebanner_title()
 			expect(buttonTitle) == L.holder_dashboard_visitorpassincompletebanner_button_makecomplete()
@@ -33,7 +36,51 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
 	}
 	
-	func test_vaccinationassessment_domestic_shouldNotShow() {
+	func test_vaccinationassessment_domestic_shouldShow_1G() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G])
+		
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_incompleteVisitorPass_message()
+			expect(buttonTitle) == nil
+		}))
+		expect(self.sut.domesticCards.value[1]).toEventually(beCompleteYourVaccinationAssessmentCard(test: { message, buttonTitle, _ in
+			expect(message) == L.holder_dashboard_visitorpassincompletebanner_title()
+			expect(buttonTitle) == L.holder_dashboard_visitorpassincompletebanner_button_makecomplete()
+		}))
+		expect(self.sut.domesticCards.value[2]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
+	}
+
+	func test_vaccinationassessment_domestic_shouldShow_1G3G() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = true
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G, .policy3G])
+		
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_incompleteVisitorPass_message()
+			expect(buttonTitle) == nil
+		}))
+		expect(self.sut.domesticCards.value[1]).toEventually(beCompleteYourVaccinationAssessmentCard(test: { message, buttonTitle, _ in
+			expect(message) == L.holder_dashboard_visitorpassincompletebanner_title()
+			expect(buttonTitle) == L.holder_dashboard_visitorpassincompletebanner_button_makecomplete()
+		}))
+		expect(self.sut.domesticCards.value[2]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards.value[3]).toEventually(beAddCertificateCard())
+	}
+	
+	func test_vaccinationassessment_domestic_shouldNotShow_3G() {
 		
 		// Arrange
 		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
@@ -43,6 +90,46 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_empty_domestic_only3Gaccess_message()
+			expect(buttonTitle) == nil
+		}))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_vaccinationassessment_domestic_shouldNotShow1G() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G])
+		
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_empty_domestic_only1Gaccess_message()
+			expect(buttonTitle) == nil
+		}))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
+	}
+	
+	func test_vaccinationassessment_domestic_shouldNotShow1G3G() {
+		
+		// Arrange
+		vaccinationAssessmentNotificationManagerSpy.stubbedHasVaccinationAssessmentEventButNoOriginResult = false
+		
+		// Act
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G, .policy3G])
+		
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
+			expect(buttonTitle) == nil
+		}))
 		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
 		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
