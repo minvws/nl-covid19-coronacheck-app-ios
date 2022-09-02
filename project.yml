@@ -133,7 +133,7 @@ targetTemplates:
         FirebaseTest:
         FirebaseProduction:
         AppStore:
-
+        
   Standard_iOS:
     platform: iOS
     type: application
@@ -286,16 +286,16 @@ targetTemplates:
     type: bundle.ui-testing
     dependencies:
       - target: Holder
-
+    
 # - Targets
 
 targets:
   Transport:
-    templates:
+    templates: 
       - Standard_Signing
       - Standard_BaseSettings
     platform: iOS
-    type: library.dynamic
+    type: framework
     sources:
       - path: Sources/Transport
     dependencies:
