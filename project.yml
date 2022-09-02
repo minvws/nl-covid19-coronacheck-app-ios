@@ -290,13 +290,34 @@ targetTemplates:
 # - Targets
 
 targets:
+  Transport:
+    templates:
+      - Standard_Signing
+      - Standard_BaseSettings
+    platform: iOS
+    type: library.dynamic
+    sources:
+      - path: Sources/Transport
+    dependencies:
+      - package: Reachability
+        product: Reachability
+      - package: BrightFutures
+        product: BrightFutures
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.transport
+    info:
+      path: Sources/Transport/Transport-Info.plist
+
   Holder:
+    dependencies:
+      - target: Transport
     templates:
       - Standard_iOS
       - Standard_Signing
       - Standard_BaseSettings
     sources:
-      - path: Sources
+      - path: Sources/CTR
         excludes:
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
@@ -371,7 +392,7 @@ targets:
       - Standard_Signing
       - Standard_BaseSettings
     sources:
-      - path: Sources
+      - path: Sources/CTR
         excludes:
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
