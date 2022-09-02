@@ -293,6 +293,8 @@ targets:
   Holder:
     templates:
       - Standard_iOS
+      - Standard_Signing
+      - Standard_BaseSettings
     sources:
       - path: Sources
         excludes:
@@ -366,6 +368,8 @@ targets:
   Verifier:
     templates:
       - Standard_iOS
+      - Standard_Signing
+      - Standard_BaseSettings
     sources:
       - path: Sources
         excludes:
