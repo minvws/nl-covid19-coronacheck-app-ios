@@ -5,32 +5,16 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import CTR
+@testable import Transport
 import XCTest
 import Nimble
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-class NetworkManagerEventTests: XCTestCase {
+class NetworkManagerTestProvidersTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/event"
-	private let provider = EventFlow.EventProvider(
-		identifier: "CC",
-		name: "CoronaCheck",
-		unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
-		eventUrl: URL(string: "https://coronacheck.nl/event"),
-		cmsCertificates: [OpenSSLData.providerCertificate],
-		tlsCertificates: [OpenSSLData.providerCertificate],
-		accessToken: EventFlow.AccessToken(
-			providerIdentifier: "CC",
-			unomiAccessToken: "accessToken",
-			eventAccessToken: "eventToken"
-		),
-		eventInformationAvailable: nil,
-		usages: [.vaccination],
-		providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
-	)
+	private let path = "/v8/holder/config_providers"
 	
 	override func setUp() {
 		
@@ -44,67 +28,9 @@ class NetworkManagerEventTests: XCTestCase {
 		HTTPStubs.removeAllStubs()
 	}
 	
-	// MARK: Pre flight errors
-	
-	func test_fetchEvents_noUrl() {
-
-		// Given
-		let noEventsUrlprovider = EventFlow.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
-			eventUrl: nil,
-			cmsCertificates: [OpenSSLData.providerCertificate],
-			tlsCertificates: [OpenSSLData.providerCertificate],
-			accessToken: nil,
-			eventInformationAvailable: nil,
-			usages: [.vaccination],
-			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
-		)
-
-		// When
-		waitUntil { done in
-			self.sut.fetchEvents(provider: noEventsUrlprovider) { result in
-
-				// Then
-				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.provider(provider: "CC", statusCode: nil, response: nil, error: .invalidRequest)
-				done()
-			}
-		}
-	}
-	
-	func test_fetchEvents_noAccessToken() {
-		
-		// Given
-		let noAccessTokenprovider = EventFlow.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
-			eventUrl: URL(string: "https://coronacheck.nl/event"),
-			cmsCertificates: [OpenSSLData.providerCertificate],
-			tlsCertificates: [OpenSSLData.providerCertificate],
-			accessToken: nil,
-			eventInformationAvailable: nil,
-			usages: [.vaccination],
-			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
-		)
-		
-		// When
-		waitUntil { done in
-			self.sut.fetchEvents(provider: noAccessTokenprovider) { result in
-				
-				// Then
-				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.provider(provider: "CC", statusCode: nil, response: nil, error: .invalidRequest)
-				done()
-			}
-		}
-	}
-
 	// MARK: Network errors
 
-	func test_fetchEvents_noInternet() {
+	func test_fetchTestProviders_noInternet() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -114,7 +40,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -124,7 +50,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_serverBusy() {
+	func test_fetchTestProviders_serverBusy() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -133,7 +59,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -143,7 +69,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_timeOut() {
+	func test_fetchTestProviders_timeOut() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -153,7 +79,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -163,7 +89,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_invalidHost() {
+	func test_fetchTestProviders_invalidHost() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -173,7 +99,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -183,7 +109,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_networkConnectionLost() {
+	func test_fetchTestProviders_networkConnectionLost() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -193,7 +119,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -203,7 +129,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_cancelled() {
+	func test_fetchTestProviders_cancelled() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -213,7 +139,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -223,7 +149,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_unknownError() {
+	func test_fetchTestProviders_unknownError() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -233,7 +159,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -245,39 +171,26 @@ class NetworkManagerEventTests: XCTestCase {
 
 	// MARK: Signed Response Checks
 
-	func test_fetchEvents_unsignedResponse() {
+	func test_fetchTestProviders_unsignedResponse() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"provider_identifier": "CC",
-					"protocolVersion": "3.0",
-					"status": "complete",
-					"holder": [
-						"firstName": "Corrie",
-						"infix": "van",
-						"lastName": "Geer",
-						"birthDate": "1960-01-01"
-					],
-					"events": [
+					"tokenProviders": [
 						[
-							"type": "vaccination",
-							"unique": "092841f0-eded-4336-923f-6f2df27bbb55",
-							"isSpecimen": true,
-							"vaccination": [
-								"date": "2022-03-14",
-								"hpkCode": "2924528",
-								"type": "",
-								"manufacturer": "",
-								"brand": "",
-								"completedByMedicalStatement": false,
-								"completedByPersonalStatement": false,
-								"completionReason": nil,
-								"country": "NL",
-								"doseNumber": nil,
-								"totalDoses": nil
+							"name": "CTP-TEST-MVWS1",
+							"identifier": "ZZZ",
+							"url": "https://coronacheck.nl/api/token",
+							"cms": [
+								OpenSSLData.providerCertificate
+							],
+							"tls": [
+								OpenSSLData.providerCertificate
+							],
+							"usage": [
+								"nt"
 							]
 						]
 					]
@@ -289,7 +202,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -299,7 +212,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_signedResponse_signatureNotBase64() {
+	func test_fetchTestProviders_signedResponse_signatureNotBase64() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -316,7 +229,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -326,7 +239,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_signedResponse_payloadNotBase64() {
+	func test_fetchTestProviders_signedResponse_payloadNotBase64() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -343,7 +256,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -353,7 +266,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_signedResponse_invalidSignature() {
+	func test_fetchTestProviders_signedResponse_invalidSignature() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -379,7 +292,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -389,7 +302,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_signedResponse_invalidContent() {
+	func test_fetchTestProviders_signedResponse_invalidContent() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -415,7 +328,7 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -425,7 +338,7 @@ class NetworkManagerEventTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEvents_validContent() throws {
+	func test_fetchTestProviders_validContent() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -441,7 +354,7 @@ class NetworkManagerEventTests: XCTestCase {
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"payload": "eyJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCJwcm92aWRlcklkZW50aWZpZXIiOiJaWloiLCJzdGF0dXMiOiJjb21wbGV0ZSIsImhvbGRlciI6eyJmaXJzdE5hbWUiOiJDb3JyaWUiLCJpbmZpeCI6InZhbiIsImxhc3ROYW1lIjoiR2VlciIsImJpcnRoRGF0ZSI6IjE5NjAtMDEtMDEifSwiZXZlbnRzIjpbeyJ0eXBlIjoidmFjY2luYXRpb24iLCJ1bmlxdWUiOiIwOTI4NDFmMC1lZGVkLTQzMzYtOTIzZi02ZjJkZjI3YmJiNTUiLCJpc1NwZWNpbWVuIjp0cnVlLCJ2YWNjaW5hdGlvbiI6eyJkYXRlIjoiMjAyMi0wMy0xNCIsImhwa0NvZGUiOiIyOTI0NTI4IiwidHlwZSI6IiIsIm1hbnVmYWN0dXJlciI6IiIsImJyYW5kIjoiIiwiY29tcGxldGVkQnlNZWRpY2FsU3RhdGVtZW50IjpmYWxzZSwiY29tcGxldGVkQnlQZXJzb25hbFN0YXRlbWVudCI6ZmFsc2UsImNvbXBsZXRpb25SZWFzb24iOm51bGwsImNvdW50cnkiOiJOTCIsImRvc2VOdW1iZXIiOm51bGwsInRvdGFsRG9zZXMiOm51bGx9fV19",
+					"payload": "eyJ0b2tlblByb3ZpZGVycyI6W3sibmFtZSI6IkNDIFRlc3QgUHJvdmlkZXIiLCJpZGVudGlmaWVyIjoiQ1RQIiwidXJsIjoiaHR0cHM6Ly9jb3JvbmFjaGVjay5ubC9hcGkvdG9rZW4iLCJjbXMiOlsidGVzdCJdLCJ0bHMiOlsidGVzdCJdLCJ1c2FnZSI6WyJudCJdfV19",
 					"signature": "test"
 				],
 				statusCode: 200,
@@ -451,55 +364,16 @@ class NetworkManagerEventTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
+			self.sut.fetchTestProviders { result in
 
 				// Then
 				expect(result.isSuccess) == true
-				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
-				expect(result.successValue?.0.protocolVersion) == "3.0"
-				expect(result.successValue?.0.identity?.firstName) == "Corrie"
-				expect(result.successValue?.0.events?.first?.vaccination?.hpkCode) == "2924528"
-				expect(result.successValue?.0.events?.first?.unique) == "092841f0-eded-4336-923f-6f2df27bbb55"
-				done()
-			}
-		}
-	}
-	
-	func test_fetchEvents_validContent_verificationRequired() throws {
-
-		// Given
-		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
-		let signatureValidationSpy = SignatureValidationSpy()
-		signatureValidationSpy.stubbedValidateResult = true
-		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
-		sut = NetworkManager(
-			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy
-		)
-
-		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"payload": "eyJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCJwcm92aWRlcklkZW50aWZpZXIiOiJaWloiLCJzdGF0dXMiOiJ2ZXJpZmljYXRpb25fcmVxdWlyZWQifQ==",
-					"signature": "test"
-				],
-				statusCode: 200,
-				headers: nil
-			)
-		}
-
-		// When
-		waitUntil { done in
-			self.sut.fetchEvents(provider: self.provider) { result in
-
-				// Then
-				expect(result.isSuccess) == true
-				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
-				expect(result.successValue?.0.protocolVersion) == "3.0"
-				expect(result.successValue?.0.status) == .verificationRequired
-				expect(result.successValue?.0.identity) == nil
-				expect(result.successValue?.0.events) == nil
+				expect(result.successValue?.first is TestProvider) == true
+				expect(result.successValue?.first?.name) == "CC Test Provider"
+				expect(result.successValue?.first?.identifier) == "CTP"
+				expect(result.successValue?.first?.resultURL) == URL(string: "https://coronacheck.nl/api/token")
+				expect(result.successValue?.first?.cmsCertificates.first) == "test"
+				expect(result.successValue?.first?.tlsCertificates.first) == "test"
 				done()
 			}
 		}

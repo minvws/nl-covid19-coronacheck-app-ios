@@ -5,32 +5,16 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import CTR
+@testable import Transport
 import XCTest
 import Nimble
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-class NetworkManagerUnomiTests: XCTestCase {
+class NetworkManagerEventProvidersTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/unomi"
-	private let provider = EventFlow.EventProvider(
-		identifier: "CC",
-		name: "CoronaCheck",
-		unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
-		eventUrl: URL(string: "https://coronacheck.nl/event"),
-		cmsCertificates: [OpenSSLData.providerCertificate],
-		tlsCertificates: [OpenSSLData.providerCertificate],
-		accessToken: EventFlow.AccessToken(
-			providerIdentifier: "CC",
-			unomiAccessToken: "accessToken",
-			eventAccessToken: "eventToken"
-		),
-		eventInformationAvailable: nil,
-		usages: [.vaccination],
-		providerAuthentication: [.manyAuthenticationExchange]
-	)
+	private let path = "/v8/holder/config_providers"
 	
 	override func setUp() {
 		
@@ -44,78 +28,20 @@ class NetworkManagerUnomiTests: XCTestCase {
 		HTTPStubs.removeAllStubs()
 	}
 	
-	// MARK: Pre flight errors
-	
-	func test_fetchEventInformation_noUrl() {
-		
-		// Given
-		let noUnomiUrlprovider = EventFlow.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiUrl: nil,
-			eventUrl: URL(string: "https://coronacheck.nl/event"),
-			cmsCertificates: [OpenSSLData.providerCertificate],
-			tlsCertificates: [OpenSSLData.providerCertificate],
-			accessToken: nil,
-			eventInformationAvailable: nil,
-			usages: [.vaccination],
-			providerAuthentication: [.manyAuthenticationExchange]
-		)
-		
-		// When
-		waitUntil { done in
-			self.sut.fetchEventInformation(provider: noUnomiUrlprovider) { result in
-				
-				// Then
-				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.provider(provider: "CC", statusCode: nil, response: nil, error: .invalidRequest)
-				done()
-			}
-		}
-	}
-	
-	func test_fetchEventInformation_noAccessToken() {
-		
-		// Given
-		let noAccessTokenprovider = EventFlow.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiUrl: URL(string: "https://coronacheck.nl/unomi"),
-			eventUrl: URL(string: "https://coronacheck.nl/event"),
-			cmsCertificates: [OpenSSLData.providerCertificate],
-			tlsCertificates: [OpenSSLData.providerCertificate],
-			accessToken: nil,
-			eventInformationAvailable: nil,
-			usages: [.vaccination],
-			providerAuthentication: [.manyAuthenticationExchange]
-		)
-		
-		// When
-		waitUntil { done in
-			self.sut.fetchEventInformation(provider: noAccessTokenprovider) { result in
-				
-				// Then
-				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.provider(provider: "CC", statusCode: nil, response: nil, error: .invalidRequest)
-				done()
-			}
-		}
-	}
-	
 	// MARK: Network errors
-	
-	func test_fetchEventInformation_noInternet() {
-		
+
+	func test_fetchEventProviders_noInternet() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
@@ -123,18 +49,18 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_serverBusy() {
-		
+
+	func test_fetchEventProviders_serverBusy() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(data: Data(), statusCode: 429, headers: nil)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: 429, response: nil, error: .serverBusy)
@@ -142,19 +68,19 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_timeOut() {
-		
+
+	func test_fetchEventProviders_timeOut() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.timedOut.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
@@ -162,19 +88,19 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_invalidHost() {
-		
+
+	func test_fetchEventProviders_invalidHost() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cannotFindHost.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
@@ -182,19 +108,19 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_networkConnectionLost() {
-		
+
+	func test_fetchEventProviders_networkConnectionLost() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.networkConnectionLost.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
@@ -202,19 +128,19 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_cancelled() {
-		
+
+	func test_fetchEventProviders_cancelled() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
@@ -222,19 +148,19 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_unknownError() {
-		
+
+	func test_fetchEventProviders_unknownError() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
@@ -242,29 +168,43 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
+
 	// MARK: Signed Response Checks
-	
-	func test_fetchEventInformation_unsignedResponse() {
-		
+
+	func test_fetchEventProviders_unsignedResponse() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"provider_identifier": "CC",
-					"protocolVersion": "3.0",
-					"informationAvailable": true
+					"tokenProviders": [
+						[
+							"name": "CTP-TEST-MVWS1",
+							"identifier": "ZZZ",
+							"unomiUrl": "https://coronacheck.nl/api/unomi",
+							"eventUrl": "https://coronacheck.nl/api/event",
+							"cms": [
+								OpenSSLData.providerCertificate
+							],
+							"tls": [
+								OpenSSLData.providerCertificate
+							],
+							"usage": [
+								"v"
+							]
+						]
+					]
 				],
 				statusCode: 200,
 				headers: nil
 			)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
@@ -272,9 +212,9 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_signedResponse_signatureNotBase64() {
-		
+
+	func test_fetchEventProviders_signedResponse_signatureNotBase64() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -287,11 +227,11 @@ class NetworkManagerUnomiTests: XCTestCase {
 				headers: nil
 			)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)
@@ -299,9 +239,9 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_signedResponse_payloadNotBase64() {
-		
+
+	func test_fetchEventProviders_signedResponse_payloadNotBase64() {
+
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -314,11 +254,11 @@ class NetworkManagerUnomiTests: XCTestCase {
 				headers: nil
 			)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)
@@ -326,9 +266,9 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_signedResponse_invalidSignature() {
-		
+
+	func test_fetchEventProviders_signedResponse_invalidSignature() {
+
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -338,7 +278,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy
 		)
-		
+
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -350,11 +290,11 @@ class NetworkManagerUnomiTests: XCTestCase {
 				headers: nil
 			)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)
@@ -362,9 +302,9 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_signedResponse_invalidContent() {
-		
+
+	func test_fetchEventProviders_signedResponse_invalidContent() {
+
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -374,7 +314,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy
 		)
-		
+
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -386,11 +326,11 @@ class NetworkManagerUnomiTests: XCTestCase {
 				headers: nil
 			)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
@@ -398,9 +338,9 @@ class NetworkManagerUnomiTests: XCTestCase {
 			}
 		}
 	}
-	
-	func test_fetchEventInformation_validContent() {
-		
+
+	func test_fetchEventProviders_validContent() {
+
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -410,26 +350,39 @@ class NetworkManagerUnomiTests: XCTestCase {
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy
 		)
-		
+
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"payload": "eyJwcm92aWRlcklkZW50aWZpZXIiOiJDQyIsICJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCAiaW5mb3JtYXRpb25BdmFpbGFibGUiOiB0cnVlfQ==",
+					"payload": "eyJldmVudFByb3ZpZGVycyI6W3sibmFtZSI6IkNDIFRlc3QgUHJvdmlkZXIiLCJpZGVudGlmaWVyIjoiQ1RQIiwidW5vbWlVcmwiOiJodHRwczovL2Nvcm9uYWNoZWNrLm5sL2FwaS91bm9taSIsImV2ZW50VXJsIjoiaHR0cHM6Ly9jb3JvbmFjaGVjay5ubC9hcGkvZXZlbnQiLCJjbXMiOlsidGVzdCJdLCJ0bHMiOlsidGVzdCJdLCJ1c2FnZSI6WyJwdCIsIm50IiwiciIsInYiXSwgImF1dGgiOlsibWF4IiwgInBhcCJdfV19",
 					"signature": "test"
 				],
 				statusCode: 200,
 				headers: nil
 			)
 		}
-		
+
 		// When
 		waitUntil { done in
-			self.sut.fetchEventInformation(provider: self.provider) { result in
-				
+			self.sut.fetchEventProviders { result in
+
 				// Then
 				expect(result.isSuccess) == true
-				expect(result.successValue) == EventFlow.EventInformationAvailable(providerIdentifier: "CC", protocolVersion: "3.0", informationAvailable: true)
+				expect(result.successValue?.first is EventFlow.EventProvider) == true
+				expect(result.successValue?.first?.name) == "CC Test Provider"
+				expect(result.successValue?.first?.identifier) == "CTP"
+				expect(result.successValue?.first?.unomiUrl) == URL(string: "https://coronacheck.nl/api/unomi")
+				expect(result.successValue?.first?.eventUrl) == URL(string: "https://coronacheck.nl/api/event")
+				expect(result.successValue?.first?.cmsCertificates.first) == "test"
+				expect(result.successValue?.first?.tlsCertificates.first) == "test"
+				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider)) == true
+				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.positiveTest)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.negativeTest)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.recovery)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.vaccination)) == true
+				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.none)) == false
 				done()
 			}
 		}

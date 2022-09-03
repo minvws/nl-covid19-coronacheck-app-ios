@@ -7,7 +7,7 @@
 
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Transport
 
 class SecurityCheckerFactoryTests: XCTestCase {
 	

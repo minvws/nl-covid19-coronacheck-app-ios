@@ -5,16 +5,16 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import CTR
+@testable import Transport
 import XCTest
 import Nimble
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-class NetworkManagerEventProvidersTests: XCTestCase {
+class NetworkManagerPublicKeysTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/config_providers"
+	private let path = "/v8/holder/public_keys"
 	
 	override func setUp() {
 		
@@ -30,7 +30,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 	
 	// MARK: Network errors
 
-	func test_fetchEventProviders_noInternet() {
+	func test_getPublicKeys_noInternet() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -40,7 +40,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -50,7 +50,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_serverBusy() {
+	func test_getPublicKeys_serverBusy() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -59,7 +59,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -69,7 +69,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_timeOut() {
+	func test_getPublicKeys_timeOut() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -79,7 +79,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -89,7 +89,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_invalidHost() {
+	func test_getPublicKeys_invalidHost() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -99,7 +99,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -109,7 +109,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_networkConnectionLost() {
+	func test_getPublicKeys_networkConnectionLost() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -119,7 +119,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -129,7 +129,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_cancelled() {
+	func test_getPublicKeys_cancelled() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -139,7 +139,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -149,7 +149,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_unknownError() {
+	func test_getPublicKeys_unknownError() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -159,7 +159,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -171,27 +171,27 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 	// MARK: Signed Response Checks
 
-	func test_fetchEventProviders_unsignedResponse() {
+	func test_getPublicKeys_unsignedResponse() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"tokenProviders": [
-						[
-							"name": "CTP-TEST-MVWS1",
-							"identifier": "ZZZ",
-							"unomiUrl": "https://coronacheck.nl/api/unomi",
-							"eventUrl": "https://coronacheck.nl/api/event",
-							"cms": [
-								OpenSSLData.providerCertificate
+					[
+						"cl_keys": [],
+						"nl_keys": [
+							"VWS-ACC-0": [
+								"public_key": "test 0"
 							],
-							"tls": [
-								OpenSSLData.providerCertificate
+							"VWS-ACC-1": [
+								"public_key": "test 1"
 							],
-							"usage": [
-								"v"
+							"VWS-ACC-2": [
+								"public_key": "test 2"
+							],
+							"VWS-ACC-3": [
+								"public_key": "test 3"
 							]
 						]
 					]
@@ -203,7 +203,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -213,7 +213,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_signedResponse_signatureNotBase64() {
+	func test_getPublicKeys_signedResponse_signatureNotBase64() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -230,7 +230,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -240,7 +240,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_signedResponse_payloadNotBase64() {
+	func test_getPublicKeys_signedResponse_payloadNotBase64() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -257,7 +257,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -267,7 +267,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_signedResponse_invalidSignature() {
+	func test_getPublicKeys_signedResponse_invalidSignature() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -293,7 +293,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -303,7 +303,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchEventProviders_signedResponse_invalidContent() {
+	func test_getPublicKeys_validContent() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -319,7 +319,30 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"payload": "test",
+					"payload":
+						/*
+						 eyJjbF9rZXlzIjpbXSwibmxfa2V5cyI6eyJWV1MtQUNDLTAiOnsicHVibGljX2tleSI6InRlc3QgMCJ9LCJWV1MtQUNDLTEiOnsicHVibGljX2tleSI6InRlc3QgMSJ9LCJWV1MtQUNDLTIiOnsicHVibGljX2tleSI6InRlc3QgMiJ9LCJWV1MtQUNDLTMiOnsicHVibGljX2tleSI6InRlc3QgMyJ9fX0=
+						 {
+						   "cl_keys":[
+							 
+						   ],
+						   "nl_keys":{
+							 "VWS-ACC-0":{
+							   "public_key":"test 0"
+							 },
+							 "VWS-ACC-1":{
+							   "public_key":"test 1"
+							 },
+							 "VWS-ACC-2":{
+							   "public_key":"test 2"
+							 },
+							 "VWS-ACC-3":{
+							   "public_key":"test 3"
+							 }
+						   }
+						 }
+						 */
+					"eyJjbF9rZXlzIjpbXSwibmxfa2V5cyI6eyJWV1MtQUNDLTAiOnsicHVibGljX2tleSI6InRlc3QgMCJ9LCJWV1MtQUNDLTEiOnsicHVibGljX2tleSI6InRlc3QgMSJ9LCJWV1MtQUNDLTIiOnsicHVibGljX2tleSI6InRlc3QgMiJ9LCJWV1MtQUNDLTMiOnsicHVibGljX2tleSI6InRlc3QgMyJ9fX0=",
 					"signature": "test"
 				],
 				statusCode: 200,
@@ -329,60 +352,11 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchEventProviders { result in
-
-				// Then
-				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
-				done()
-			}
-		}
-	}
-
-	func test_fetchEventProviders_validContent() {
-
-		// Given
-		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
-		let signatureValidationSpy = SignatureValidationSpy()
-		signatureValidationSpy.stubbedValidateResult = true
-		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
-		sut = NetworkManager(
-			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy
-		)
-
-		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"payload": "eyJldmVudFByb3ZpZGVycyI6W3sibmFtZSI6IkNDIFRlc3QgUHJvdmlkZXIiLCJpZGVudGlmaWVyIjoiQ1RQIiwidW5vbWlVcmwiOiJodHRwczovL2Nvcm9uYWNoZWNrLm5sL2FwaS91bm9taSIsImV2ZW50VXJsIjoiaHR0cHM6Ly9jb3JvbmFjaGVjay5ubC9hcGkvZXZlbnQiLCJjbXMiOlsidGVzdCJdLCJ0bHMiOlsidGVzdCJdLCJ1c2FnZSI6WyJwdCIsIm50IiwiciIsInYiXSwgImF1dGgiOlsibWF4IiwgInBhcCJdfV19",
-					"signature": "test"
-				],
-				statusCode: 200,
-				headers: nil
-			)
-		}
-
-		// When
-		waitUntil { done in
-			self.sut.fetchEventProviders { result in
+			self.sut.getPublicKeys { result in
 
 				// Then
 				expect(result.isSuccess) == true
-				expect(result.successValue?.first is EventFlow.EventProvider) == true
-				expect(result.successValue?.first?.name) == "CC Test Provider"
-				expect(result.successValue?.first?.identifier) == "CTP"
-				expect(result.successValue?.first?.unomiUrl) == URL(string: "https://coronacheck.nl/api/unomi")
-				expect(result.successValue?.first?.eventUrl) == URL(string: "https://coronacheck.nl/api/event")
-				expect(result.successValue?.first?.cmsCertificates.first) == "test"
-				expect(result.successValue?.first?.tlsCertificates.first) == "test"
-				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.patientAuthenticationProvider)) == true
-				expect(result.successValue?.first?.providerAuthentication.contains(EventFlow.ProviderAuthenticationType.manyAuthenticationExchange)) == true
-				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.positiveTest)) == true
-				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.negativeTest)) == true
-				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.recovery)) == true
-				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.vaccination)) == true
-				expect(result.successValue?.first?.usages.contains(EventFlow.ProviderUsage.none)) == false
+				expect(result.successValue).toNot(beEmpty())
 				done()
 			}
 		}

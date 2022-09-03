@@ -5,16 +5,30 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import CTR
+@testable import Transport
 import XCTest
 import Nimble
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-class NetworkManagerTestProvidersTests: XCTestCase {
+class NetworkManagerTestResultsTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/config_providers"
+	private let path = "/testResult"
+	private let provider = TestProvider(
+		identifier: "CC",
+		name: "CoronaCheck",
+		resultURLString: "https://coronacheck.nl/testResult",
+		cmsCertificates: [OpenSSLData.providerCertificate],
+		tlsCertificates: [OpenSSLData.providerCertificate],
+		usages: [.negativeTest]
+	)
+	
+	private let token = RequestToken(
+		token: "QGJ6Y2SBSY",
+		protocolVersion: "3.0",
+		providerIdentifier: "CC"
+	)
 	
 	override func setUp() {
 		
@@ -28,9 +42,35 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		HTTPStubs.removeAllStubs()
 	}
 	
+	// MARK: Pre flight errors
+	
+	func test_fetchTestResult_invalidUrl() {
+
+		// Given
+		let invalidResultsUrlprovider = TestProvider(
+			identifier: "CC",
+			name: "CoronaCheck",
+			resultURLString: "https://coronacheck.nl?filter|test",
+			cmsCertificates: [OpenSSLData.providerCertificate],
+			tlsCertificates: [OpenSSLData.providerCertificate],
+			usages: [.negativeTest]
+		)
+
+		// When
+		waitUntil { done in
+			self.sut.fetchTestResult(provider: invalidResultsUrlprovider, token: self.token, code: nil) { result in
+
+				// Then
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.provider(provider: "CC", statusCode: nil, response: nil, error: .invalidRequest)
+				done()
+			}
+		}
+	}
+
 	// MARK: Network errors
 
-	func test_fetchTestProviders_noInternet() {
+	func test_fetchEvents_noInternet() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -40,7 +80,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -50,7 +90,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_serverBusy() {
+	func test_fetchEvents_serverBusy() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -59,7 +99,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -69,7 +109,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_timeOut() {
+	func test_fetchEvents_timeOut() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -79,7 +119,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -89,7 +129,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_invalidHost() {
+	func test_fetchEvents_invalidHost() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -99,7 +139,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -109,7 +149,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_networkConnectionLost() {
+	func test_fetchEvents_networkConnectionLost() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -119,7 +159,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -129,7 +169,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_cancelled() {
+	func test_fetchEvents_cancelled() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -139,7 +179,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -149,7 +189,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_unknownError() {
+	func test_fetchEvents_unknownError() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -159,7 +199,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -170,27 +210,36 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 	}
 
 	// MARK: Signed Response Checks
-
-	func test_fetchTestProviders_unsignedResponse() {
-
+	
+	func test_fetchEvents_unsignedResponse() {
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"tokenProviders": [
+					"provider_identifier": "CC",
+					"protocolVersion": "3.0",
+					"status": "complete",
+					"holder": [
+						"firstName": "Corrie",
+						"infix": "van",
+						"lastName": "Geer",
+						"birthDate": "1960-01-01"
+					],
+					"events": [
 						[
-							"name": "CTP-TEST-MVWS1",
-							"identifier": "ZZZ",
-							"url": "https://coronacheck.nl/api/token",
-							"cms": [
-								OpenSSLData.providerCertificate
-							],
-							"tls": [
-								OpenSSLData.providerCertificate
-							],
-							"usage": [
-								"nt"
+							"type": "negativetest",
+							"unique": "e5147b810046cd24fde6d5183cb27a31ff05b423",
+							"isSpecimen": true,
+							"negativetest": [
+								"sampleDate": "2022-04-13T04:19:00Z",
+								"negativeResult": true,
+								"facility": "Yellow Banana Test Center",
+								"sampleMethod": nil,
+								"type": "LP217198-3",
+								"name": "Test Rolus",
+								"manufacturer": "2696"
 							]
 						]
 					]
@@ -202,7 +251,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -212,7 +261,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_signedResponse_signatureNotBase64() {
+	func test_fetchEvents_signedResponse_signatureNotBase64() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -229,7 +278,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -239,7 +288,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_signedResponse_payloadNotBase64() {
+	func test_fetchEvents_signedResponse_payloadNotBase64() {
 
 		// Given
 		stub(condition: isPath(path)) { _ in
@@ -256,7 +305,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -266,7 +315,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_signedResponse_invalidSignature() {
+	func test_fetchEvents_signedResponse_invalidSignature() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -292,7 +341,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -302,7 +351,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_signedResponse_invalidContent() {
+	func test_fetchEvents_signedResponse_invalidContent() {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -328,7 +377,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isFailure) == true
@@ -338,7 +387,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 		}
 	}
 
-	func test_fetchTestProviders_validContent() {
+	func test_fetchEvents_validContent() throws {
 
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
@@ -354,7 +403,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 			// Return valid tokens
 			return HTTPStubsResponse(
 				jsonObject: [
-					"payload": "eyJ0b2tlblByb3ZpZGVycyI6W3sibmFtZSI6IkNDIFRlc3QgUHJvdmlkZXIiLCJpZGVudGlmaWVyIjoiQ1RQIiwidXJsIjoiaHR0cHM6Ly9jb3JvbmFjaGVjay5ubC9hcGkvdG9rZW4iLCJjbXMiOlsidGVzdCJdLCJ0bHMiOlsidGVzdCJdLCJ1c2FnZSI6WyJudCJdfV19",
+					"payload": "eyJwcm90b2NvbFZlcnNpb24iOiIzLjAiLCJwcm92aWRlcklkZW50aWZpZXIiOiJaWloiLCJzdGF0dXMiOiJjb21wbGV0ZSIsImhvbGRlciI6eyJmaXJzdE5hbWUiOiJCb2IiLCJsYXN0TmFtZSI6IkJvdXdlciIsImluZml4IjoiZGUiLCJiaXJ0aERhdGUiOiIxOTkyLTA0LTIwIn0sImV2ZW50cyI6W3sidHlwZSI6Im5lZ2F0aXZldGVzdCIsInVuaXF1ZSI6ImU1MTQ3YjgxMDA0NmNkMjRmZGU2ZDUxODNjYjI3YTMxZmYwNWI0MjMiLCJpc1NwZWNpbWVuIjp0cnVlLCJuZWdhdGl2ZXRlc3QiOnsic2FtcGxlRGF0ZSI6IjIwMjItMDQtMTNUMDQ6MTk6MDBaIiwibmVnYXRpdmVSZXN1bHQiOnRydWUsImZhY2lsaXR5IjoiWWVsbG93IEJhbmFuYSBUZXN0IENlbnRlciIsInNhbXBsZU1ldGhvZCI6bnVsbCwidHlwZSI6IkxQMjE3MTk4LTMiLCJuYW1lIjoiVGVzdCBSb2x1cyIsIm1hbnVmYWN0dXJlciI6IjI2OTYifX1dfQ==",
 					"signature": "test"
 				],
 				statusCode: 200,
@@ -364,16 +413,15 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 
 		// When
 		waitUntil { done in
-			self.sut.fetchTestProviders { result in
+			self.sut.fetchTestResult(provider: self.provider, token: self.token, code: nil) { result in
 
 				// Then
 				expect(result.isSuccess) == true
-				expect(result.successValue?.first is TestProvider) == true
-				expect(result.successValue?.first?.name) == "CC Test Provider"
-				expect(result.successValue?.first?.identifier) == "CTP"
-				expect(result.successValue?.first?.resultURL) == URL(string: "https://coronacheck.nl/api/token")
-				expect(result.successValue?.first?.cmsCertificates.first) == "test"
-				expect(result.successValue?.first?.tlsCertificates.first) == "test"
+				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
+				expect(result.successValue?.0.protocolVersion) == "3.0"
+				expect(result.successValue?.0.identity?.firstName) == "Bob"
+				expect(result.successValue?.0.events?.first?.negativeTest?.sampleDateString) == "2022-04-13T04:19:00Z"
+				expect(result.successValue?.0.events?.first?.unique) == "e5147b810046cd24fde6d5183cb27a31ff05b423"
 				done()
 			}
 		}

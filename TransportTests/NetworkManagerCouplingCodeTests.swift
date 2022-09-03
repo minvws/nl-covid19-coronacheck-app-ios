@@ -5,16 +5,16 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import CTR
+@testable import Transport
 import XCTest
 import Nimble
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-class NetworkManagerEventAccessTokenTests: XCTestCase {
+class NetworkManagerCouplingCodeTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/access_tokens"
+	private let path = "/v8/holder/coupling"
 	
 	override func setUp() {
 		
@@ -28,43 +28,55 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		HTTPStubs.removeAllStubs()
 	}
 	
-	func test_fetchEventAccessTokens_validResponse() {
+	func test_checkCouplingStatus_invalidInput() throws {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_validResponse"
+		// This will not serialize into a valid JSONObject
+		let bogusStr = try XCTUnwrap(String(bytes: [0xD8, 0x00] as [UInt8], encoding: String.Encoding.utf16BigEndian))
+		let testDictionary: [String: AnyObject] = ["test": bogusStr as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
-			// Return valid tokens
-			return HTTPStubsResponse(
-				jsonObject: [
-					"tokens": [
-						["provider_identifier": "ZZZ", "unomi": "test unomi ZZZ", "event": "test event ZZZ"],
-						["provider_identifier": "GGD", "unomi": "test unomi GGD", "event": "test event GGD"]
-					]
-				],
-				statusCode: 200,
-				headers: nil
-			)
+			return HTTPStubsResponse(jsonObject: ["status": "accepted"], statusCode: 200, headers: nil)
 		}
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
-				expect(result.isSuccess) == true
-				expect(result.successValue).to(haveCount(2))
-				expect(result.successValue?[0].providerIdentifier) == "ZZZ"
-				expect(result.successValue?[1].providerIdentifier) == "GGD"
+				expect(result.isFailure) == true
+				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)
 				done()
 			}
 		}
 	}
 	
-	func test_fetchEventAccessTokens_invalidResponse() {
+	func test_checkCouplingStatus_validResponse() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_invalidResponse"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
+		
+		stub(condition: isPath(path)) { _ in
+			// Return status accepted
+			return HTTPStubsResponse(jsonObject: ["status": "accepted"], statusCode: 200, headers: nil)
+		}
+		
+		// When
+		waitUntil { done in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
+				
+				// Then
+				expect(result.isSuccess) == true
+				expect(result.successValue?.status) == DccCoupling.CouplingState.accepted
+				done()
+			}
+		}
+	}
+	
+	func test_checkCouplingStatus_invalidResponse() {
+		
+		// Given
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			// Return status accepted
@@ -73,7 +85,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -83,10 +95,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_noInternet() {
+	func test_checkCouplingStatus_noInternet() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_noInternet"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
@@ -95,7 +107,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -105,10 +117,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_serverBusy() {
+	func test_checkCouplingStatus_serverBusy() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_serverBusy"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(data: Data(), statusCode: 429, headers: nil)
@@ -116,7 +128,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -126,10 +138,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_timeOut() {
+	func test_checkCouplingStatus_timeOut() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_timeOut"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.timedOut.rawValue)
@@ -138,7 +150,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -148,10 +160,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_invalidHost() {
+	func test_checkCouplingStatus_invalidHost() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_invalidHost"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cannotFindHost.rawValue)
@@ -160,7 +172,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -170,10 +182,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_networkConnectionLost() {
+	func test_checkCouplingStatus_networkConnectionLost() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_networkConnectionLost"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.networkConnectionLost.rawValue)
@@ -182,7 +194,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -192,10 +204,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_unknownError() {
+	func test_checkCouplingStatus_unknownError() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_unknownError"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
@@ -204,7 +216,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -214,10 +226,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_authenticationCancelled() {
+	func test_checkCouplingStatus_authenticationCancelled() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_authenticationCancelled"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
@@ -226,7 +238,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -236,10 +248,10 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		}
 	}
 	
-	func test_fetchEventAccessTokens_serverErrorMessage() {
+	func test_checkCouplingStatus_serverErrorMessage() {
 		
 		// Given
-		let token = "test_fetchEventAccessTokens_serverErrorMessage"
+		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702], statusCode: 500, headers: nil)
@@ -247,7 +259,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 		
 		// When
 		waitUntil { done in
-			self.sut.fetchEventAccessTokens(maxToken: token) { result in
+			self.sut.checkCouplingStatus(dictionary: testDictionary) { result in
 				
 				// Then
 				expect(result.isFailure) == true
