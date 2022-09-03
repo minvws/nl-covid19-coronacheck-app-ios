@@ -326,6 +326,22 @@ targets:
     info:
       path: Sources/Transport/Transport-Info.plist
 
+  TransportTests:
+    platform: iOS
+    type: bundle.unit-test
+    dependencies:
+      - package: Nimble
+      - package: OHHTTPStubs
+        product: OHHTTPStubsSwift
+      - package: SnapshotTesting
+    info:
+      path: TransportTests/Info.plist    
+    sources:
+      - path: TransportTests
+        excludes:
+          - "**/__Snapshots__"
+
+
   Holder:
     dependencies:
       - target: Shared
@@ -570,6 +586,19 @@ schemes:
       commandLineArguments:
         "-shouldInjectView": true
 
+  Transport:
+    build:
+      config: Development
+      targets:
+        TransportTests: testing
+    test:
+      config: Development
+      targets:
+        - name: TransportTests
+          parallelizable: false
+          randomExecutionOrder: true
+    
+    
   Holder UI Tests:
     templates:
       - DevelopmentConfigScheme

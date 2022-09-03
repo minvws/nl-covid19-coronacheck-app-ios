@@ -49,3 +49,4 @@ report.xml
 /.bundle
 .vscode
 /Sources/Transport/Transport-Info.plist
+/TransportTests/Info.plist
