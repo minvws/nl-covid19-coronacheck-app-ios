@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Result {
+public extension Result {
 
 	var isSuccess: Bool {
 		switch self {

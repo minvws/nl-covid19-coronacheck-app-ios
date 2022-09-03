@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array {
+public extension Array {
 	
 	var isNotEmpty: Bool {
 		
@@ -15,7 +15,7 @@ extension Array {
 	}
 }
 
-extension String {
+public extension String {
 	
 	var isNotEmpty: Bool {
 		

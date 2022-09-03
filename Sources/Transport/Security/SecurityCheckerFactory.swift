@@ -7,12 +7,14 @@
 
 import Foundation
 import Security
+import Shared
 
 struct SecurityCheckerFactory {
 	
 	static func getSecurityChecker(
 		_ strategy: SecurityStrategy,
 		challenge: URLAuthenticationChallenge?,
+		remoteConfig: RemoteConfiguration,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 			
 #if DEBUG
@@ -29,7 +31,7 @@ struct SecurityCheckerFactory {
 		
 		if case SecurityStrategy.data = strategy {
 			trustedCertificates = []
-			for tlsCertificate in Current.remoteConfigManager.storedConfiguration.getTLSCertificates() {
+			for tlsCertificate in remoteConfig.getTLSCertificates() {
 				trustedCertificates.append(tlsCertificate)
 			}
 		}

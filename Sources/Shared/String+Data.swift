@@ -8,7 +8,7 @@
 import Foundation
 import CommonCrypto
 
-extension String {
+public extension String {
 	
 	var sha256: String {
 		
@@ -31,7 +31,7 @@ extension String {
 	}
 }
 
-extension String {
+public extension String {
 	
 	func base64Decoded() -> String? {
 		
@@ -44,7 +44,7 @@ extension String {
 	}
 }
 
-extension Data {
+public extension Data {
 	
 	var sha256: Data {
 		

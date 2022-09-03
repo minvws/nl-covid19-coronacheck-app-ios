@@ -7,6 +7,8 @@
 
 import Foundation
 import Security
+import Shared
+import OpenSSL
 
 class SecurityCheckerWorker {
 	

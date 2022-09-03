@@ -290,6 +290,20 @@ targetTemplates:
 # - Targets
 
 targets:
+  Shared:
+    templates: 
+      - Standard_Signing
+      - Standard_BaseSettings
+    platform: iOS
+    type: framework
+    sources:
+      - path: Sources/Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.shared
+    info:
+      path: Sources/Shared/Shared-Info.plist
+
   Transport:
     templates: 
       - Standard_Signing
@@ -299,6 +313,8 @@ targets:
     sources:
       - path: Sources/Transport
     dependencies:
+      - package: OpenSSL
+      - target: Shared
       - package: Reachability
         product: Reachability
       - package: BrightFutures
@@ -306,11 +322,13 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.transport
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/Transport/Transport-objc-bridging-header.h
     info:
       path: Sources/Transport/Transport-Info.plist
 
   Holder:
     dependencies:
+      - target: Shared
       - target: Transport
     templates:
       - Standard_iOS

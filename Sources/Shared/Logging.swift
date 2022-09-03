@@ -8,7 +8,7 @@
 // swiftlint:disable disable_print
 
 import Foundation
-import BrightFutures
+// import BrightFutures
 
 private enum LoggingLevel: String, Comparable {
 	
@@ -50,7 +50,7 @@ private let loggingLevel: LoggingLevel = {
 /// Log for verbose purpose
 /// - Parameters:
 ///   - message: the message to log
-func logVerbose(_ message: String, _ values: Any...) {
+public func logVerbose(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.verbose else { return }
 	log(icon: "💤", message: message, values)
 }
@@ -58,7 +58,7 @@ func logVerbose(_ message: String, _ values: Any...) {
 /// Log for debug purpose
 /// - Parameters:
 ///   - message: the message to log
-func logDebug(_ message: String, _ values: Any...) {
+public func logDebug(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.debug else { return }
 	log(icon: "🐞", message: message, values)
 }
@@ -66,7 +66,7 @@ func logDebug(_ message: String, _ values: Any...) {
 /// Log for information purpose
 /// - Parameters:
 ///   - message: the message to log
-func logInfo(_ message: String, _ values: Any...) {
+public func logInfo(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.info else { return }
 	log(icon: "📋", message: message, values)
 }
@@ -74,7 +74,7 @@ func logInfo(_ message: String, _ values: Any...) {
 /// Log for warning purpose
 /// - Parameters:
 ///   - message: the message to log
-func logWarning(_ message: String, _ values: Any...) {
+public func logWarning(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.warning else { return }
 	log(icon: "❗️", message: message, values)
 }
@@ -82,7 +82,7 @@ func logWarning(_ message: String, _ values: Any...) {
 /// Log for error purpose
 /// - Parameters:
 ///   - message: the message to log
-func logError(_ message: String, _ values: Any...) {
+public func logError(_ message: String, _ values: Any...) {
 	guard loggingLevel >= LoggingLevel.error else { return }
 	log(icon: "🔥", message: message, values)
 }
@@ -99,40 +99,40 @@ private func log(icon: String, message: String, _ values: Any...) {
 	}
 }
 
-extension Future {
-	
-	func logVerbose(_ message: String) -> Future<T, E> {
-		return self.map { value -> T in
-			CTR.logVerbose(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logDebug(_ message: String) -> Future<T, E> {
-		return self.map { value -> T in
-			CTR.logDebug(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logInfo(_ message: String) -> Future<T, E> {
-		return self.map { value -> T in
-			CTR.logInfo(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logWarning(_ message: String) -> Future<T, E> {
-		return self.map { value -> T in
-			CTR.logWarning(message + ": \(value)")
-			return value
-		}
-	}
-	
-	func logError(_ message: String) -> Future<T, E> {
-		return self.map { value -> T in
-			CTR.logError(message + ": \(value)")
-			return value
-		}
-	}
-}
+//extension Future {
+//	
+//	func logVerbose(_ message: String) -> Future<T, E> {
+//		return self.map { value -> T in
+//			logVerbose(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logDebug(_ message: String) -> Future<T, E> {
+//		return self.map { value -> T in
+//			logDebug(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logInfo(_ message: String) -> Future<T, E> {
+//		return self.map { value -> T in
+//			logInfo(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logWarning(_ message: String) -> Future<T, E> {
+//		return self.map { value -> T in
+//			logWarning(message + ": \(value)")
+//			return value
+//		}
+//	}
+//	
+//	func logError(_ message: String) -> Future<T, E> {
+//		return self.map { value -> T in
+//			logError(message + ": \(value)")
+//			return value
+//		}
+//	}
+//}

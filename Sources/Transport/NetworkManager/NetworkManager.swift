@@ -6,22 +6,26 @@
 */
 
 import Foundation
+import Shared
 
 class NetworkManager {
 
 	internal let networkConfiguration: NetworkConfiguration
 	private let signatureValidationFactory: SignatureValidationFactoryProtocol
-
+	private let remoteConfig: () -> RemoteConfiguration
+	
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
 	required init(
 		configuration: NetworkConfiguration,
-		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory()
+		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory(),
+		remoteConfig: @escaping () -> RemoteConfiguration
 	) {
 
 		self.networkConfiguration = configuration
 		self.signatureValidationFactory = signatureValidationFactory
+		self.remoteConfig = remoteConfig
 	}
 
 	// MARK: - Decode Signed Data
@@ -318,10 +322,12 @@ class NetworkManager {
 	// MARK: - Private
 
 	private func createSession(strategy: SecurityStrategy) -> URLSession {
-
 		return URLSession(
 			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(strategy: strategy),
+			delegate: NetworkManagerURLSessionDelegate(
+				strategy: strategy,
+				remoteConfig: remoteConfig
+			),
 			delegateQueue: nil
 		)
 	}

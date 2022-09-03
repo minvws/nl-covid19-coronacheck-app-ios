@@ -432,26 +432,26 @@ extension EventFlow.Event {
 		return dccEvent != nil
 	}
 	
-	var storageMode: EventMode? {
-		
-		if hasVaccination {
-			return .vaccination
-		}
-		if hasRecovery {
-			return .recovery
-		}
-		if hasPositiveTest {
-			return .vaccinationAndPositiveTest
-		}
-		if hasNegativeTest {
-			return .test(.ggd)
-		}
-		if hasVaccinationAssessment {
-			return .vaccinationassessment
-		}
-		if hasPaperCertificate {
-			return .paperflow
-		}
-		return nil
-	}
+//	var storageMode: EventMode? {
+//		
+//		if hasVaccination {
+//			return .vaccination
+//		}
+//		if hasRecovery {
+//			return .recovery
+//		}
+//		if hasPositiveTest {
+//			return .vaccinationAndPositiveTest
+//		}
+//		if hasNegativeTest {
+//			return .test(.ggd)
+//		}
+//		if hasVaccinationAssessment {
+//			return .vaccinationassessment
+//		}
+//		if hasPaperCertificate {
+//			return .paperflow
+//		}
+//		return nil
+//	}
 }

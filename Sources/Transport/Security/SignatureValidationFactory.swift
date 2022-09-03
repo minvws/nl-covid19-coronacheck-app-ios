@@ -7,6 +7,8 @@
 
 import Foundation
 import Security
+import OpenSSL
+import Shared
 
 protocol SignatureValidationFactoryProtocol {
 	
