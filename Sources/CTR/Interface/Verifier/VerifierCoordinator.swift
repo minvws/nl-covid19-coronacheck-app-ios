@@ -139,9 +139,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				}
 			case .userTappedProceedToScanInstructions:
 				navigateToScanInstruction(allowSkipInstruction: false)
-				
-			case .userTappedProceedToInstructionsOrRiskSetting:
-				navigateToScanInstruction(allowSkipInstruction: true)
 		}
 	}
 	

@@ -283,20 +283,6 @@ class VerifierCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(1))
 	}
 	
-	func test_didFinish_userTappedProceedToInstructionsOrRiskSetting() {
-		
-		// Given
-		
-		// When
-		sut.didFinish(VerifierStartResult.userTappedProceedToInstructionsOrRiskSetting)
-		
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
-	}
-	
 	func test_navigateToCheckIdentity() {
 		
 		// Given

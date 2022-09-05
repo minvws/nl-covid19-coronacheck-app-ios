@@ -13,8 +13,6 @@ enum VerifierStartResult {
 	case userTappedProceedToScan
 
 	case userTappedProceedToScanInstructions
-	
-	case userTappedProceedToInstructionsOrRiskSetting
 }
 
 class VerifierStartScanningViewModel {
