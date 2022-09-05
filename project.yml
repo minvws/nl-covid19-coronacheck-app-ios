@@ -588,6 +588,7 @@ schemes:
     build:
       config: Development
       targets:
+        Transport: running
         TransportTests: testing
     test:
       config: Development
