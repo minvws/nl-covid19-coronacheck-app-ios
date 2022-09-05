@@ -9,6 +9,8 @@ import Foundation
 import XCTest
 import CoreData
 @testable import CTR
+@testable import Transport
+@testable import Shared
 import Nimble
 import Reachability
 

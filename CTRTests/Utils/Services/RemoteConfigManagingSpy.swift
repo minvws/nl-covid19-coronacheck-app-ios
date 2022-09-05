@@ -7,6 +7,9 @@
 
 import XCTest
 @testable import CTR
+@testable import Transport
+@testable import Shared
+
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 

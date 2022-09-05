@@ -8,6 +8,9 @@
 import XCTest
 import Nimble
 @testable import CTR
+@testable import Transport
+@testable import Shared
+
 
 class ListStoredEventsViewModelRemovalTests: XCTestCase {
 	

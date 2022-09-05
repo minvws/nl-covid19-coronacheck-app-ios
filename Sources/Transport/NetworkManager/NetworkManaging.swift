@@ -7,7 +7,6 @@
 
 import Foundation
 import Shared
-import Transport
 
 public struct ServerResponse: Decodable, Equatable {
 	public let status: String
