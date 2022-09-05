@@ -19,7 +19,7 @@ class NetworkManagerEventAccessTokenTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development)
+		sut = NetworkManager(configuration: NetworkConfiguration.development, remoteConfig: { .default })
 	}
 	
 	override func tearDown() {

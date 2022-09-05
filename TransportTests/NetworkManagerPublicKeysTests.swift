@@ -19,7 +19,7 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development)
+		sut = NetworkManager(configuration: NetworkConfiguration.development, remoteConfig: { .default })
 	}
 	
 	override func tearDown() {
@@ -276,7 +276,8 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy
+			signatureValidationFactory: signatureValidationFactorySpy,
+			remoteConfig: { .default }
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -312,7 +313,8 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 		signatureValidationFactorySpy.stubbedGetSignatureValidatorResult = signatureValidationSpy
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
-			signatureValidationFactory: signatureValidationFactorySpy
+			signatureValidationFactory: signatureValidationFactorySpy,
+			remoteConfig: { .default }
 		)
 
 		stub(condition: isPath(path)) { _ in
