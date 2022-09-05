@@ -315,8 +315,6 @@ targets:
     dependencies:
       - package: OpenSSL
       - target: Shared
-      - package: Reachability
-        product: Reachability
       - package: BrightFutures
         product: BrightFutures
     settings:
