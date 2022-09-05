@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import SQLite3
+import Shared
 
 enum StorageType {
 	case persistent, inMemory

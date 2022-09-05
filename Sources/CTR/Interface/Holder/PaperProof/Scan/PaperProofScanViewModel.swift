@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Transport
+import Shared
 
 class PaperProofScanViewModel: ScanPermissionViewModel {
 

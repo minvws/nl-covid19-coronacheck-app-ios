@@ -8,6 +8,7 @@
 // swiftlint:disable file_length
 
 import UIKit
+import Shared
 
 class QRCardView: BaseView {
 

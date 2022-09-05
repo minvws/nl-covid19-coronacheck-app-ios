@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 protocol VerificationPolicyEnableable: AnyObject {
 	var observatory: Observatory<[VerificationPolicy]> { get }

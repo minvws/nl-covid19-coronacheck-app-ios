@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+import Transport
+import Shared
 
 protocol WalletManaging: AnyObject {
 

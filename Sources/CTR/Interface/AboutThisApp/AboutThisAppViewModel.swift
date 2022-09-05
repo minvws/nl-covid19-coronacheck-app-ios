@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 /// the various about menu options
 enum AboutThisAppMenuIdentifier: String {

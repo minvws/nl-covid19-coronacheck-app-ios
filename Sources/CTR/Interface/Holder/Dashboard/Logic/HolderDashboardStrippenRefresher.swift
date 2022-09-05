@@ -8,6 +8,8 @@
 import Foundation
 import Reachability
 import UIKit
+import Transport
+import Shared
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()

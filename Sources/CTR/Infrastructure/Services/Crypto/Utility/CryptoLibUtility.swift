@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import Reachability
 import Clcore
+import Transport
+import Shared
 
 protocol CryptoLibUtilityProtocol: AnyObject {
 	

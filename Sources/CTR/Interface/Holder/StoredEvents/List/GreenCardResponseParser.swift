@@ -6,6 +6,8 @@
  */
 
 import Foundation
+import Shared
+import Transport
 
 enum GreenCardResponseError: Error {
 

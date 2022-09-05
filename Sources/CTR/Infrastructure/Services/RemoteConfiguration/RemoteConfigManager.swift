@@ -8,6 +8,7 @@
 import Foundation
 import Reachability
 import UIKit
+import Transport
 
 protocol RemoteConfigManaging: AnyObject {
 	var storedConfiguration: RemoteConfiguration { get }

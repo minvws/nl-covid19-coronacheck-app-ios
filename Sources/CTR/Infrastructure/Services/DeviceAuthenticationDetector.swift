@@ -7,6 +7,7 @@
 
 import Foundation
 import LocalAuthentication
+import Shared
 
 protocol DeviceAuthenticationProtocol: AnyObject {
 

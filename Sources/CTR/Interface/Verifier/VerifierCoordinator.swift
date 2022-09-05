@@ -7,6 +7,8 @@
 
 import UIKit
 import Clcore
+import Transport
+import Shared
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
