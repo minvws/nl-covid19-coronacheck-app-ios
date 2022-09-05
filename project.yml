@@ -338,7 +338,7 @@ targets:
       - path: TransportTests
         excludes:
           - "**/__Snapshots__"
-
+      - path: CTRTests/Infrastrucure/Crypto/Utility/OpenSSLTests+Data.swift
 
   Holder:
     dependencies:
@@ -551,10 +551,6 @@ schemeTemplates:
       gatherCoverageData: true
       coverageTargets:
         - ${appTargetName}
-      targets:
-        - name: ${unitTestTargetName}
-          parallelizable: false
-          randomExecutionOrder: true
 
   # Template for adding UI tests to a scheme:
   UITestScheme:
@@ -577,12 +573,19 @@ schemes:
       - UnitTestScheme # This scheme has unit tests
     templateAttributes:
       appTargetName: Holder
-      unitTestTargetName: CTRTests
       configEnvironment: Development
     run:
       language: nl
       commandLineArguments:
         "-shouldInjectView": true
+    test:
+      targets:
+        - name: CTRTests
+          parallelizable: false
+          randomExecutionOrder: true
+        - name: TransportTests
+          parallelizable: false
+          randomExecutionOrder: true
 
   Transport:
     build:
