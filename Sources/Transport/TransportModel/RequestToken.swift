@@ -7,22 +7,23 @@
 
 import Foundation
 
+// TODO: Move back? 
 /// The request token to fetch a test result form a commercial tester
-struct RequestToken: Codable, Equatable {
+public struct RequestToken: Codable, Equatable {
 
     /// The current highest known protocol version
     /// 1.0: Checksum
     /// 2.0: Initials + Birthday/month
-    static let highestKnownProtocolVersion = "3.0"
+	public static let highestKnownProtocolVersion = "3.0"
 
 	/// The request token
-	let token: String
+	public let token: String
 
 	/// The version of the protocol
-	let protocolVersion: String
+	public let protocolVersion: String
 
 	/// The identifier of the provider
-	let providerIdentifier: String
+	public let providerIdentifier: String
 
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -32,13 +33,13 @@ struct RequestToken: Codable, Equatable {
 		case providerIdentifier
 	}
 
-    init(token: String, protocolVersion: String, providerIdentifier: String) {
+    public init(token: String, protocolVersion: String, providerIdentifier: String) {
         self.token = token
         self.protocolVersion = protocolVersion
         self.providerIdentifier = providerIdentifier
     }
 
-    init?(input: String, tokenValidator: TokenValidatorProtocol) {
+    public init?(input: String, tokenValidator: TokenValidatorProtocol) {
         // Check the validity of the input
         guard tokenValidator.validate(input) else {
             return nil

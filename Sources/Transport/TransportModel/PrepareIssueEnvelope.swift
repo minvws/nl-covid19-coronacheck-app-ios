@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct PrepareIssueEnvelope: Codable {
+public struct PrepareIssueEnvelope: Codable {
 
-	let prepareIssueMessage: String
-	let stoken: String
+	public let prepareIssueMessage: String
+	public let stoken: String
 }

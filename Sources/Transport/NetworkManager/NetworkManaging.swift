@@ -6,18 +6,20 @@
 */
 
 import Foundation
+import Shared
+import Transport
 
-struct ServerResponse: Decodable, Equatable {
-	let status: String
-	let code: Int
+public struct ServerResponse: Decodable, Equatable {
+	public let status: String
+	public let code: Int
 }
 
-enum ServerError: Error, Equatable {
+public enum ServerError: Error, Equatable {
 	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
 	case provider(provider: String?, statusCode: Int?, response: ServerResponse?, error: NetworkError)
 }
 
-enum NetworkError: String, Error, Equatable {
+public enum NetworkError: String, Error, Equatable {
 	case invalidRequest
 	case serverUnreachableTimedOut
 	case serverUnreachableInvalidHost
@@ -34,7 +36,7 @@ enum NetworkError: String, Error, Equatable {
 	case cannotDeserialize
 	case authenticationCancelled
 
-	func getClientErrorCode() -> ErrorCode.ClientCode? {
+	public func getClientErrorCode() -> ErrorCode.ClientCode? {
 
 		switch self {
 
@@ -64,7 +66,7 @@ enum NetworkError: String, Error, Equatable {
 	}
 
 	/// Checks for valid HTTPResponse and status codes
-	static func inspect(response: URLResponse) -> NetworkError? {
+	public static func inspect(response: URLResponse) -> NetworkError? {
 		guard let response = response as? HTTPURLResponse else {
 			return .invalidResponse
 		}
@@ -105,7 +107,7 @@ enum HTTPBodyKeys: String {
 }
 
 /// - Tag: NetworkManaging
-protocol NetworkManaging: AnyObject {
+public protocol NetworkManaging: AnyObject {
 	
 	/// The network configuration
 	var networkConfiguration: NetworkConfiguration { get }

@@ -8,25 +8,25 @@
 import Foundation
 
 /// The test providers
-struct TestProvider: Codable, CertificateProvider, Equatable {
+public struct TestProvider: Codable, CertificateProvider, Equatable {
 
 	/// The identifier of the provider
-	let identifier: String
+	public let identifier: String
 
 	/// The name of the provider
-	let name: String
+	public let name: String
 
 	/// The url of the provider to fetch the result
-	let resultURLString: String
+	public let resultURLString: String
 
 	/// The public key of the provider
-	var cmsCertificates: [String]
+	public var cmsCertificates: [String]
 
 	/// The ssl certificate of the provider
-	var tlsCertificates: [String]
+	public var tlsCertificates: [String]
 	
 	/// Where can we use this provider for?
-	var usages: [EventFlow.ProviderUsage]
+	public var usages: [EventFlow.ProviderUsage]
 
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -39,7 +39,7 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 		case usages = "usage"
 	}
 
-	var resultURL: URL? {
+	public var resultURL: URL? {
 
 		return URL(string: resultURLString)
 	}

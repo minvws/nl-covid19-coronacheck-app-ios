@@ -7,19 +7,24 @@
 
 import Foundation
 
-struct EventFlow {
+public struct EventFlow {
 
 	/// The access token used to fetch fat and thin ID Hashes
-	struct AccessToken: Codable, Equatable {
+	public struct AccessToken: Codable, Equatable {
+		public init(providerIdentifier: String, unomiAccessToken: String, eventAccessToken: String) {
+			self.providerIdentifier = providerIdentifier
+			self.unomiAccessToken = unomiAccessToken
+			self.eventAccessToken = eventAccessToken
+		}
 
 		/// The provider identifier
-		let providerIdentifier: String
+		public let providerIdentifier: String
 
 		/// The unomi access token (thin ID Hash)
-		let unomiAccessToken: String
+		public let unomiAccessToken: String
 
 		/// The event access token (fat ID Hash)
-		let eventAccessToken: String
+		public let eventAccessToken: String
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -30,7 +35,7 @@ struct EventFlow {
 		}
 	}
 
-	enum ProviderUsage: String, Codable {
+	public enum ProviderUsage: String, Codable {
 
 		case positiveTest = "pt"
 		case negativeTest = "nt"
@@ -41,52 +46,65 @@ struct EventFlow {
 		/// Custom initializer to default to unknown state
 		/// - Parameter decoder: the decoder
 		/// - Throws: Decoding error
-		init(from decoder: Decoder) throws {
+		public init(from decoder: Decoder) throws {
 			self = try ProviderUsage(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
 		}
 	}
 	
 	/// The type of token a provider can handle
-	enum ProviderAuthenticationType: String, Codable {
+	public enum ProviderAuthenticationType: String, Codable {
 		case manyAuthenticationExchange = "max"
 		case patientAuthenticationProvider = "pap"
 	}
 
 	// A Vaccination Event Provider (VEP)
-	struct EventProvider: Codable, Equatable, CertificateProvider {
+	public struct EventProvider: Codable, Equatable, CertificateProvider {
+		public init(identifier: String, name: String, unomiUrl: URL?, eventUrl: URL?, cmsCertificates: [String], tlsCertificates: [String], accessToken: EventFlow.AccessToken? = nil, eventInformationAvailable: EventFlow.EventInformationAvailable? = nil, usages: [EventFlow.ProviderUsage], providerAuthentication: [EventFlow.ProviderAuthenticationType], queryFilter: [String : String?] = [:]) {
+			self.identifier = identifier
+			self.name = name
+			self.unomiUrl = unomiUrl
+			self.eventUrl = eventUrl
+			self.cmsCertificates = cmsCertificates
+			self.tlsCertificates = tlsCertificates
+			self.accessToken = accessToken
+			self.eventInformationAvailable = eventInformationAvailable
+			self.usages = usages
+			self.providerAuthentication = providerAuthentication
+			self.queryFilter = queryFilter
+		}
 
 		/// The identifier of the provider
-		let identifier: String
+		public let identifier: String
 
 		/// The name of the provider
-		let name: String
+		public let name: String
 
 		/// The url of the provider to fetch the unomi
-		let unomiUrl: URL?
+		public let unomiUrl: URL?
 
 		/// The url of the provider to fetch the events
-		let eventUrl: URL?
+		public let eventUrl: URL?
 
 		/// The public key of the provider
-		var cmsCertificates: [String]
+		public var cmsCertificates: [String]
 		
 		/// The ssl certificate of the provider
-		var tlsCertificates: [String]
+		public var tlsCertificates: [String]
 
 		/// The access token for api calls
-		var accessToken: AccessToken?
+		public var accessToken: AccessToken?
 
 		/// Result of the unomi call
-		var eventInformationAvailable: EventInformationAvailable?
+		public var eventInformationAvailable: EventInformationAvailable?
 
 		/// Where can we use this provider for?
-		var usages: [ProviderUsage]
+		public var usages: [ProviderUsage]
 		
 		/// The type of tokens the provider can handle
-		var providerAuthentication: [ProviderAuthenticationType]
+		public var providerAuthentication: [ProviderAuthenticationType]
 
 		/// The query filter to pass along to the provider
-		var queryFilter: [String: String?] = [:]
+		public var queryFilter: [String: String?] = [:]
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -103,16 +121,21 @@ struct EventFlow {
 	}
 
 	/// The response of a unomi call
-	struct EventInformationAvailable: Codable, Equatable {
-
+	public struct EventInformationAvailable: Codable, Equatable {
+		public init(providerIdentifier: String, protocolVersion: String?, informationAvailable: Bool) {
+			self.providerIdentifier = providerIdentifier
+			self.protocolVersion = protocolVersion
+			self.informationAvailable = informationAvailable
+		}
+		
 		/// The provider identifier
-		let providerIdentifier: String
+		public let providerIdentifier: String
 
 		/// The protocol version
-		let protocolVersion: String?
+		public let protocolVersion: String?
 
 		/// The event access token
-		let informationAvailable: Bool
+		public let informationAvailable: Bool
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -124,13 +147,20 @@ struct EventFlow {
 	}
 
 	/// A wrapper around an event result.
-	struct EventResultWrapper: Codable, Equatable {
+	public struct EventResultWrapper: Codable, Equatable {
+		public init(providerIdentifier: String, protocolVersion: String, identity: EventFlow.Identity?, status: EventFlow.EventState, events: [EventFlow.Event]? = []) {
+			self.providerIdentifier = providerIdentifier
+			self.protocolVersion = protocolVersion
+			self.identity = identity
+			self.status = status
+			self.events = events
+		}
 
-		var providerIdentifier: String
-		let protocolVersion: String
-		let identity: Identity?
-		let status: EventState
-		var events: [Event]? = []
+		public var providerIdentifier: String
+		public let protocolVersion: String
+		public let identity: Identity?
+		public let status: EventState
+		public var events: [Event]? = []
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -142,21 +172,21 @@ struct EventFlow {
 			case events
 		}
 		
-		var isGGD: Bool {
+		public var isGGD: Bool {
 			return providerIdentifier.lowercased() == "ggd"
 		}
 		
-		var isRIVM: Bool {
+		public var isRIVM: Bool {
 			return providerIdentifier.lowercased() == "rvv"
 		}
 		
-		var isZKVI: Bool {
+		public var isZKVI: Bool {
 			return providerIdentifier.lowercased() == "zkv"
 		}
 	}
 
 	/// The state of a test
-	enum EventState: String, Codable, Equatable {
+	public enum EventState: String, Codable, Equatable {
 
 		/// The vaccination result is pending
 		case pending
@@ -180,45 +210,61 @@ struct EventFlow {
 		/// Custom initializer to default to unknown state
 		/// - Parameter decoder: the decoder
 		/// - Throws: Decoding error
-		init(from decoder: Decoder) throws {
+		public init(from decoder: Decoder) throws {
 			self = try EventState(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
 		}
 	}
 
-	struct Identity: Codable, Equatable {
+	public struct Identity: Codable, Equatable {
+		public init(infix: String?, firstName: String?, lastName: String?, birthDateString: String?) {
+			self.infix = infix
+			self.firstName = firstName
+			self.lastName = lastName
+			self.birthDateString = birthDateString
+		}
 
-		let infix: String?
-		let firstName: String?
-		let lastName: String?
-		let birthDateString: String?
+		public let infix: String?
+		public let firstName: String?
+		public let lastName: String?
+		public let birthDateString: String?
 
-		enum CodingKeys: String, CodingKey {
-
+		public enum CodingKeys: String, CodingKey {
 			case infix
 			case firstName
 			case lastName
 			case birthDateString = "birthDate"
 		}
 
-		var fullName: String {
+		public var fullName: String {
 
 			"\(infix ?? "") \(lastName ?? ""), \(firstName ?? "")".trimmingCharacters(in: .whitespaces)
 		}
 	}
 
-	struct Event: Codable, Equatable {
+	public struct Event: Codable, Equatable {
+		public init(type: String, unique: String?, isSpecimen: Bool?, vaccination: EventFlow.VaccinationEvent?, negativeTest: EventFlow.TestEvent?, positiveTest: EventFlow.TestEvent?, recovery: EventFlow.RecoveryEvent?, dccEvent: EventFlow.DccEvent?, vaccinationAssessment: EventFlow.VaccinationAssessment?) {
+			self.type = type
+			self.unique = unique
+			self.isSpecimen = isSpecimen
+			self.vaccination = vaccination
+			self.negativeTest = negativeTest
+			self.positiveTest = positiveTest
+			self.recovery = recovery
+			self.dccEvent = dccEvent
+			self.vaccinationAssessment = vaccinationAssessment
+		}
+		
+		public let type: String
+		public let unique: String?
+		public let isSpecimen: Bool?
+		public let vaccination: VaccinationEvent?
+		public let negativeTest: TestEvent?
+		public let positiveTest: TestEvent?
+		public let recovery: RecoveryEvent?
+		public let dccEvent: DccEvent?
+		public let vaccinationAssessment: VaccinationAssessment?
 
-		let type: String
-		let unique: String?
-		let isSpecimen: Bool?
-		let vaccination: VaccinationEvent?
-		let negativeTest: TestEvent?
-		let positiveTest: TestEvent?
-		let recovery: RecoveryEvent?
-		let dccEvent: DccEvent?
-		let vaccinationAssessment: VaccinationAssessment?
-
-		enum CodingKeys: String, CodingKey {
+		public enum CodingKeys: String, CodingKey {
 
 			case type
 			case unique
@@ -232,28 +278,32 @@ struct EventFlow {
 		}
 	}
 
-	struct DccEvent: Codable, Equatable {
+	public struct DccEvent: Codable, Equatable {
+		public init(credential: String, couplingCode: String?) {
+			self.credential = credential
+			self.couplingCode = couplingCode
+		}
+		
+		public let credential: String
+		public let couplingCode: String?
 
-		let credential: String
-		let couplingCode: String?
-
-		enum CodingKeys: String, CodingKey {
+		public enum CodingKeys: String, CodingKey {
 
 			case credential
 			case couplingCode
 		}
 	}
 
-	struct RecoveryEvent: Codable, Equatable {
+	public struct RecoveryEvent: Codable, Equatable {
 
-		let sampleDate: String?
-		let validFrom: String?
-		let validUntil: String?
+		public let sampleDate: String?
+		public let validFrom: String?
+		public let validUntil: String?
 
 		/// Get the date for this event
 		/// - Parameter dateformatter: the date formatter
 		/// - Returns: optional date
-		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+		public func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
 			if let dateString = sampleDate {
 				return  dateformatter.date(from: dateString)
@@ -263,21 +313,21 @@ struct EventFlow {
 	}
 
 	/// An actual vaccination event
-	struct VaccinationEvent: Codable, Equatable {
+	public struct VaccinationEvent: Codable, Equatable {
 
-		let dateString: String?
-		let hpkCode: String? /// the hpk code of the vaccine (https://hpkcode.nl/) if available: type/brand can be left blank.
-		let type: String?
-		let manufacturer: String?
-		let brand: String?
-		let doseNumber: Int?
-		let totalDoses: Int?
-		let country: String?
-		let completedByMedicalStatement: Bool?
-		let completedByPersonalStatement: Bool?
-		let completionReason: CompletionReason?
+		public let dateString: String?
+		public let hpkCode: String? /// the hpk code of the vaccine (https://hpkcode.nl/) if available: type/brand can be left blank.
+		public let type: String?
+		public let manufacturer: String?
+		public let brand: String?
+		public let doseNumber: Int?
+		public let totalDoses: Int?
+		public let country: String?
+		public let completedByMedicalStatement: Bool?
+		public let completedByPersonalStatement: Bool?
+		public let completionReason: CompletionReason?
 
-		enum CodingKeys: String, CodingKey {
+		public enum CodingKeys: String, CodingKey {
 
 			case dateString = "date"
 			case hpkCode
@@ -292,7 +342,7 @@ struct EventFlow {
 			case completionReason
 		}
 		
-		enum CompletionReason: String, Codable, Equatable {
+		public enum CompletionReason: String, Codable, Equatable {
 			case none = ""
 			case recovery = "recovery"
 			case firstVaccinationElsewhere = "first-vaccination-elsewhere"
@@ -300,7 +350,7 @@ struct EventFlow {
 			/// Custom initializer to default to none state
 			/// - Parameter decoder: the decoder
 			/// - Throws: Decoding error
-			init(from decoder: Decoder) throws {
+			public init(from decoder: Decoder) throws {
 				self = try CompletionReason(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .none
 			}
 		}
@@ -317,17 +367,17 @@ struct EventFlow {
 		}
 	}
 
-	struct TestEvent: Codable, Equatable {
+	public struct TestEvent: Codable, Equatable {
 
-		let sampleDateString: String?
-		let negativeResult: Bool?
-		let positiveResult: Bool?
-		let facility: String?
-		let type: String?
-		let name: String?
-		let manufacturer: String?
+		public let sampleDateString: String?
+		public let negativeResult: Bool?
+		public let positiveResult: Bool?
+		public let facility: String?
+		public let type: String?
+		public let name: String?
+		public let manufacturer: String?
 
-		enum CodingKeys: String, CodingKey {
+		public enum CodingKeys: String, CodingKey {
 
 			case sampleDateString = "sampleDate"
 			case negativeResult
@@ -341,7 +391,7 @@ struct EventFlow {
 		/// Get the date for this event
 		/// - Parameter dateformatter: the date formatter
 		/// - Returns: optional date
-		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+		public func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
 			if let dateString = sampleDateString {
 				return  dateformatter.date(from: dateString)
@@ -350,13 +400,13 @@ struct EventFlow {
 		}
 	}
 	
-	struct VaccinationAssessment: Codable, Equatable {
+	public struct VaccinationAssessment: Codable, Equatable {
 		
-		let dateTimeString: String?
-		let country: String?
-		let verified: Bool
+		public let dateTimeString: String?
+		public let country: String?
+		public let verified: Bool
 		
-		enum CodingKeys: String, CodingKey {
+		public enum CodingKeys: String, CodingKey {
 			
 			case dateTimeString = "assessmentDate"
 			case country
@@ -366,7 +416,7 @@ struct EventFlow {
 		/// Get the date for this event
 		/// - Parameter dateformatter: the date formatter
 		/// - Returns: optional date
-		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+		public func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 			
 			if let dateString = dateTimeString {
 				return  dateformatter.date(from: dateString)
@@ -376,10 +426,10 @@ struct EventFlow {
 	}
 
 	/// This identifier is used for persiting paper proofs.
-	static let paperproofIdentier = "DCC"
+	public static let paperproofIdentier = "DCC"
 }
 
-extension EventFlow.VaccinationEvent {
+public extension EventFlow.VaccinationEvent {
 
 	func doesMatchEvent(_ otherEvent: EventFlow.VaccinationEvent) -> Bool {
 
@@ -391,7 +441,7 @@ extension EventFlow.VaccinationEvent {
 
 extension EventFlow.Event {
 
-	func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+	public func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
 		if hasVaccination {
 			return vaccination?.getDate(with: dateformatter)
@@ -408,50 +458,27 @@ extension EventFlow.Event {
 		return positiveTest?.getDate(with: dateformatter)
 	}
 
-	var hasVaccination: Bool {
+	public var hasVaccination: Bool {
 		return vaccination != nil
 	}
 
-	var hasNegativeTest: Bool {
+	public var hasNegativeTest: Bool {
 		return negativeTest != nil
 	}
 
-	var hasPositiveTest: Bool {
+	public var hasPositiveTest: Bool {
 		return positiveTest != nil
 	}
 
-	var hasRecovery: Bool {
+	public var hasRecovery: Bool {
 		return recovery != nil
 	}
 
-	var hasVaccinationAssessment: Bool {
+	public var hasVaccinationAssessment: Bool {
 		return vaccinationAssessment != nil
 	}
 
-	var hasPaperCertificate: Bool {
+	public var hasPaperCertificate: Bool {
 		return dccEvent != nil
 	}
-	
-//	var storageMode: EventMode? {
-//		
-//		if hasVaccination {
-//			return .vaccination
-//		}
-//		if hasRecovery {
-//			return .recovery
-//		}
-//		if hasPositiveTest {
-//			return .vaccinationAndPositiveTest
-//		}
-//		if hasNegativeTest {
-//			return .test(.ggd)
-//		}
-//		if hasVaccinationAssessment {
-//			return .vaccinationassessment
-//		}
-//		if hasPaperCertificate {
-//			return .paperflow
-//		}
-//		return nil
-//	}
 }

@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct RemoteEvent {
+public struct RemoteEvent {
 	
-	let wrapper: EventFlow.EventResultWrapper
-	let signedResponse: SignedResponse? // (optional, a scanned DCC does not have a signature)
+	public let wrapper: EventFlow.EventResultWrapper
+	public let signedResponse: SignedResponse? // (optional, a scanned DCC does not have a signature)
 }
 
 extension RemoteEvent {

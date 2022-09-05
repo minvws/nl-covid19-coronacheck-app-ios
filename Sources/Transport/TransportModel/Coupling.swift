@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct DccCoupling {
+public struct DccCoupling {
 
-	struct CouplingResponse: Codable {
+	public struct CouplingResponse: Codable {
 
-		let status: CouplingState
+		public let status: CouplingState
 	}
 
 	/// The state of the coupling
-	enum CouplingState: String, Codable {
+	public enum CouplingState: String, Codable {
 
 		/// The coupling is accepted
 		case accepted
@@ -34,7 +34,7 @@ struct DccCoupling {
 		/// Custom initializer to default to unknown state
 		/// - Parameter decoder: the decoder
 		/// - Throws: Decoding error
-		init(from decoder: Decoder) throws {
+		public init(from decoder: Decoder) throws {
 			self = try CouplingState(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
 		}
 	}

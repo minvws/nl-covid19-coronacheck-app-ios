@@ -7,123 +7,123 @@
 
 import Foundation
 
-struct HPKData: Codable, Equatable {
+public struct HPKData: Codable, Equatable {
 	
-	let code: String
+	public let code: String
 	
-	let name: String
+	public let name: String
 	
 	/// euVaccinationTypes lookup
-	let vp: String
+	public let vp: String
 	
 	/// euBrands lookup
-	let mp: String
+	public let mp: String
 	
 	/// euManufacturers lookup
-	let ma: String
+	public let ma: String
 }
 
-struct Mapping: Codable, Equatable {
+public struct Mapping: Codable, Equatable {
 
-	let code: String
+	public let code: String
 	
-	let name: String
+	public let name: String
 }
 
-struct UniversalLinkPermittedDomain: Codable, Equatable {
+public struct UniversalLinkPermittedDomain: Codable, Equatable {
 
-	let url: String
+	public let url: String
 
-	let name: String
+	public let name: String
 }
 
-struct RemoteConfiguration: Codable, Equatable {
+public struct RemoteConfiguration: Codable, Equatable {
 
 	/// The minimum required version
-	var minimumVersion: String
+	public var minimumVersion: String
 
 	/// The message for the minimum required version
-	var minimumVersionMessage: String?
+	public var minimumVersionMessage: String?
 
 	/// The recommended version
-	var recommendedVersion: String?
+	public var recommendedVersion: String?
 
 	/// The recommended version nag interval
-	var recommendedNagIntervalHours: Int?
+	public var recommendedNagIntervalHours: Int?
 
 	/// The url to the appStore
-	var appStoreURL: URL?
+	public var appStoreURL: URL?
 
 	/// The url to the site
-	var informationURL: URL?
+	public var informationURL: URL?
 
 	/// Is the app deactivated?
-	var appDeactivated: Bool?
+	public var appDeactivated: Bool?
 
 	/// What is the TTL of the config
-	var configTTL: Int?
+	public var configTTL: Int?
 
 	/// Loading config should always be done opportunisically,
 	/// but never more often than this value:
-	var configMinimumIntervalSeconds: Int?
+	public var configMinimumIntervalSeconds: Int?
 
-	var configAlmostOutOfDateWarningSeconds: Int?
+	public var configAlmostOutOfDateWarningSeconds: Int?
 
-	var recoveryExpirationDays: Int?
+	public var recoveryExpirationDays: Int?
 
-	var domesticQRRefreshSeconds: Int?
+	public var domesticQRRefreshSeconds: Int?
 	
-	var hpkCodes: [HPKData]? = []
+	public var hpkCodes: [HPKData]? = []
 
-	var nlTestTypes: [Mapping]? = []
+	public var nlTestTypes: [Mapping]? = []
 
-	var euBrands: [Mapping]? = []
+	public var euBrands: [Mapping]? = []
 
-	var euManufacturers: [Mapping]?
+	public var euManufacturers: [Mapping]?
 
-	var euVaccinationTypes: [Mapping]?
+	public var euVaccinationTypes: [Mapping]?
 
-	var euTestTypes: [Mapping]? = []
+	public var euTestTypes: [Mapping]? = []
 
-	var euTestNames: [Mapping]? = []
+	public var euTestNames: [Mapping]? = []
 
-	var euTestManufacturers: [Mapping]? = []
+	public var euTestManufacturers: [Mapping]? = []
 	
-	var providerIdentifiers: [Mapping]? = []
+	public var providerIdentifiers: [Mapping]? = []
 
 	/// Restricts access to GGD test provider login
-	var isGGDEnabled: Bool?
+	public var isGGDEnabled: Bool?
 	
 	/// Restricts access to PAP provider login
-	var isPAPEnabled: Bool?
+	public var isPAPEnabled: Bool?
 
-	var credentialRenewalDays: Int?
+	public var credentialRenewalDays: Int?
 
-	var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
+	public var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
 
-	var clockDeviationThresholdSeconds: Int?
+	public var clockDeviationThresholdSeconds: Int?
 	
 	/// Enables luhn check for token validation
-	var isLuhnCheckEnabled: Bool?
+	public var isLuhnCheckEnabled: Bool?
 
 	/// The minimum number of seconds between switching risk level
-	var scanLockSeconds: Int?
+	public var scanLockSeconds: Int?
 
 	/// The number of seconds we show a warning before switching risk level
-	var scanLockWarningSeconds: Int?
+	public var scanLockWarningSeconds: Int?
 
 	/// The number of seconds to keep scan entries in the log
-	var scanLogStorageSeconds: Int?
+	public var scanLogStorageSeconds: Int?
 	
-	var visitorPassEnabled: Bool?
+	public var visitorPassEnabled: Bool?
 	
-	var shouldShowCoronaMelderRecommendation: Bool?
+	public var shouldShowCoronaMelderRecommendation: Bool?
 	
-	var verificationPolicies: [String]?
+	public var verificationPolicies: [String]?
 	
-	var disclosurePolicies: [String]?
+	public var disclosurePolicies: [String]?
 	
-	var backendTLSCertificates: [String]?
+	public var backendTLSCertificates: [String]?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -171,7 +171,7 @@ struct RemoteConfiguration: Codable, Equatable {
 	}
 
 	/// Default remote configuration
-	static var `default`: RemoteConfiguration {
+	public static var `default`: RemoteConfiguration {
 
 		var config = RemoteConfiguration(minVersion: "1.0.0")
 		config.minimumVersionMessage = nil
@@ -203,12 +203,12 @@ struct RemoteConfiguration: Codable, Equatable {
 	}
 
 	/// Is the app deactivated?
-	var isDeactivated: Bool {
+	public var isDeactivated: Bool {
 
 		return appDeactivated ?? false
 	}
 	
-	func getTLSCertificates() -> [Data] {
+	public func getTLSCertificates() -> [Data] {
 		
 		var result = [Data]()
 		backendTLSCertificates?.forEach { tlsCertificate in

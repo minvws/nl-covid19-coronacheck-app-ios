@@ -8,19 +8,19 @@
 import Foundation
 import Shared
 
-class NetworkManager {
+public class NetworkManager {
 
-	internal let networkConfiguration: NetworkConfiguration
+	public let networkConfiguration: NetworkConfiguration
 	private let signatureValidationFactory: SignatureValidationFactoryProtocol
 	private let remoteConfig: () -> RemoteConfiguration
 	
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
-	required init(
+	public required init(
 		configuration: NetworkConfiguration,
 		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory(),
-		remoteConfig: @escaping () -> RemoteConfiguration
+		remoteConfig: @escaping () -> RemoteConfiguration = { RemoteConfiguration.default }
 	) {
 
 		self.networkConfiguration = configuration
@@ -366,7 +366,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameters:
 	///   - maxToken: the tvs token
 	///   - completion: completion handler
-	func fetchEventAccessTokens(
+	public func fetchEventAccessTokens(
 		maxToken: String,
 		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 		
@@ -386,7 +386,7 @@ extension NetworkManager: NetworkManaging {
 
 	/// Prepare the issue (get the nonce)
 	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
+	public func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.prepareIssueUrl, let urlRequest = URLRequest(url: url) else {
 			logError("NetworkManager - prepareIssue: invalid request")
@@ -403,7 +403,7 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
+	public func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.publicKeysUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getPublicKeys: invalid request")
@@ -425,7 +425,7 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
+	public func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 
 		guard let url = networkConfiguration.remoteConfigurationUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getRemoteConfiguration: invalid request")
@@ -445,7 +445,7 @@ extension NetworkManager: NetworkManaging {
 		)
 	}
 
-	func fetchGreencards(
+	public func fetchGreencards(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void) {
 
@@ -472,14 +472,14 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
+	public func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 
 		fetchProviders(completion: completion)
 	}
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
+	public func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 
 		fetchProviders(completion: completion)
 	}
@@ -510,7 +510,7 @@ extension NetworkManager: NetworkManaging {
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
-	func fetchTestResult(
+	public func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
@@ -550,7 +550,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func fetchEventInformation(
+	public func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
@@ -589,7 +589,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func fetchEvents(
+	public func fetchEvents(
 		provider: EventFlow.EventProvider,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
@@ -628,7 +628,7 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameters:
 	///   - dictionary: the dcc and the coupling code as dictionary
 	///   - completion: completion handler
-	func checkCouplingStatus(
+	public func checkCouplingStatus(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {
 
@@ -658,7 +658,7 @@ extension NetworkManager: NetworkManaging {
 
 extension URLResponse {
 
-	var httpStatusCode: Int? {
+	public var httpStatusCode: Int? {
 
 		(self as? HTTPURLResponse)?.statusCode
 	}

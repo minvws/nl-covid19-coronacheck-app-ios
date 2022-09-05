@@ -8,20 +8,20 @@
 import Foundation
 import Shared
 
-struct NetworkConfiguration {
+public struct NetworkConfiguration {
 
-    struct EndpointConfiguration {
-        let scheme: String
-        let host: String
-        let port: Int?
-        let path: [String]
+    public struct EndpointConfiguration {
+		public let scheme: String
+		public let host: String
+		public let port: Int?
+		public let path: [String]
     }
 
-    let name: String
-    let api: EndpointConfiguration
-	let cdn: EndpointConfiguration
+    public let name: String
+    public let api: EndpointConfiguration
+	public let cdn: EndpointConfiguration
 
-	static let development = NetworkConfiguration(
+	public static let development = NetworkConfiguration(
 		name: "DEV",
 		api: .init(
 			scheme: "https",
@@ -37,7 +37,7 @@ struct NetworkConfiguration {
 		)
 	)
 
-	static let test = NetworkConfiguration(
+	public static let test = NetworkConfiguration(
 		name: "TEST",
 		api: .init(
 			scheme: "https",
@@ -53,7 +53,7 @@ struct NetworkConfiguration {
 		)
 	)
 
-	static let acceptance = NetworkConfiguration(
+	public static let acceptance = NetworkConfiguration(
 		name: "ACC",
 		api: .init(
 			scheme: "https",
@@ -69,7 +69,7 @@ struct NetworkConfiguration {
 		)
 	)
 
-	static let production = NetworkConfiguration(
+	public static let production = NetworkConfiguration(
 		name: "Production",
 		api: .init(
 			scheme: "https",

@@ -10,14 +10,15 @@ import Security
 import OpenSSL
 import Shared
 
-protocol SignatureValidationFactoryProtocol {
+public protocol SignatureValidationFactoryProtocol {
 	
 	func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation
 }
 
-struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
+public struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 	
-	func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation {
+	public init() {}
+	public func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation {
 #if DEBUG
 		if case SecurityStrategy.none = strategy {
 			return SignatureValidatorAlwaysAllow()
@@ -49,7 +50,7 @@ struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 	}
 }
 
-protocol SignatureValidation {
+public protocol SignatureValidation {
 	
 	/// Validate a PKCS7 signature
 	/// - Parameters:

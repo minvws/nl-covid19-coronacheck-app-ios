@@ -12,7 +12,7 @@ extension String {
 
 	/// Get a three digit string of the version
 	/// - Returns: three digit string of the version
-	func fullVersionString() -> String {
+	public func fullVersionString() -> String {
 
 		var components = self.split(separator: ".")
 		let missingComponents = max(0, 3 - components.count)

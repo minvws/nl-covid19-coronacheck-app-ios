@@ -9,7 +9,7 @@ import Foundation
 import Security
 import Shared
 
-protocol CertificateProvider {
+public protocol CertificateProvider {
 	
 	/// The public key of the provider
 	var cmsCertificates: [String] { get }
@@ -24,12 +24,12 @@ protocol CertificateProvider {
 
 extension CertificateProvider {
 	
-	func getTLSCertificates() -> [Data] {
+	public func getTLSCertificates() -> [Data] {
 		
 		return convertCertificates(tlsCertificates)
 	}
 	
-	func getCMSCertificates() -> [Data] {
+	public func getCMSCertificates() -> [Data] {
 		
 		return convertCertificates(cmsCertificates)
 	}

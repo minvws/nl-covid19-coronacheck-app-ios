@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct RemoteGreenCards: Codable, Equatable {
+public struct RemoteGreenCards: Codable, Equatable {
 
-	struct Response: Codable, Equatable {
+	public struct Response: Codable, Equatable {
 
-		var domesticGreenCard: DomesticGreenCard?
-		var euGreenCards: [EuGreenCard]?
-		var blobExpireDates: [BlobExpiry]?
-		var hints: [String]?
+		public var domesticGreenCard: DomesticGreenCard?
+		public var euGreenCards: [EuGreenCard]?
+		public var blobExpireDates: [BlobExpiry]?
+		public var hints: [String]?
 		
 		enum CodingKeys: String, CodingKey {
 
@@ -25,31 +25,31 @@ struct RemoteGreenCards: Codable, Equatable {
 		}
 	}
 
-	struct DomesticGreenCard: Codable, Equatable {
+	public struct DomesticGreenCard: Codable, Equatable {
 
-		let origins: [RemoteGreenCards.Origin]
-		let createCredentialMessages: String?
+		public let origins: [RemoteGreenCards.Origin]
+		public let createCredentialMessages: String?
 	}
 
-	struct EuGreenCard: Codable, Equatable {
+	public struct EuGreenCard: Codable, Equatable {
 
-		let origins: [RemoteGreenCards.Origin]
-		let credential: String
+		public let origins: [RemoteGreenCards.Origin]
+		public let credential: String
 	}
 
-	struct Origin: Codable, Equatable {
+	public struct Origin: Codable, Equatable {
 
-		let type: String
-		let eventTime: Date
-		let expirationTime: Date
-		let validFrom: Date
-		let doseNumber: Int?
+		public let type: String
+		public let eventTime: Date
+		public let expirationTime: Date
+		public let validFrom: Date
+		public let doseNumber: Int?
 	}
 	
-	struct BlobExpiry: Codable, Equatable {
+	public struct BlobExpiry: Codable, Equatable {
 		
-		let identifier: String
-		let expirationDate: Date
+		public let identifier: String
+		public let expirationDate: Date
 		
 		enum CodingKeys: String, CodingKey {
 

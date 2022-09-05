@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct SignedResponse: Codable, Equatable {
+public struct SignedResponse: Codable, Equatable {
 	
 	/// The payload
-	let payload: String
+	public let payload: String
 	
 	/// The signature
-	let signature: String
+	public let signature: String
 	
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -22,11 +22,11 @@ struct SignedResponse: Codable, Equatable {
 		case signature
 	}
 
-	var decodedPayload: Data? {
+	public var decodedPayload: Data? {
 		Data(base64Encoded: payload)
 	}
 
-	var decodedSignature: Data? {
+	public var decodedSignature: Data? {
 		Data(base64Encoded: signature)
 	}
 }

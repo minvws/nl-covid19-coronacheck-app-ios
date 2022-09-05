@@ -7,27 +7,39 @@
 
 import Foundation
 
-struct ErrorCode: CustomStringConvertible {
+public struct ErrorCode: CustomStringConvertible {
 
-	struct Flow {
+	public struct Flow {
+		public init(value: String) {
+			self.value = value
+		}
+		
 		var value: String
 	}
 
-	struct Step {
+	public struct Step {
+		public init(value: String) {
+			self.value = value
+		}
+		
 		var value: String
 	}
 
-	struct ClientCode: Equatable {
+	public struct ClientCode: Equatable {
+		public init(value: String) {
+			self.value = value
+		}
+		
 		var value: String
 	}
 
-	var flow: String
-	var step: String
-	var provider: String?
-	var errorCode: String
-	var detailedCode: Int?
+	public var flow: String
+	public var step: String
+	public var provider: String?
+	public var errorCode: String
+	public var detailedCode: Int?
 
-	init(flow: Flow, step: Step, provider: String? = nil, errorCode: String, detailedCode: Int? = nil) {
+	public init(flow: Flow, step: Step, provider: String? = nil, errorCode: String, detailedCode: Int? = nil) {
 		self.flow = flow.value
 		self.step = step.value
 		self.provider = provider
@@ -35,7 +47,7 @@ struct ErrorCode: CustomStringConvertible {
 		self.detailedCode = detailedCode
 	}
 
-	init(flow: Flow, step: Step, provider: String? = nil, clientCode: ClientCode, detailedCode: Int? = nil) {
+	public init(flow: Flow, step: Step, provider: String? = nil, clientCode: ClientCode, detailedCode: Int? = nil) {
 		self.flow = flow.value
 		self.step = step.value
 		self.provider = provider
@@ -43,7 +55,7 @@ struct ErrorCode: CustomStringConvertible {
 		self.detailedCode = detailedCode
 	}
 
-	var description: String {
+	public var description: String {
 		// s/xyy/ppp/hhh/bbbbbb (system / flow.step / provider / errorcode / detailederrorcode)
 		var result = "i \(flow)\(step)"
 		result += " \(provider ?? "000")"
@@ -60,7 +72,7 @@ struct ErrorCode: CustomStringConvertible {
 
 // MARK: ErrorCode.Flow
 
-extension ErrorCode.Flow {
+public extension ErrorCode.Flow {
 
 	static let onboarding = ErrorCode.Flow(value: "0")
 	static let commercialTest = ErrorCode.Flow(value: "1")
@@ -75,7 +87,7 @@ extension ErrorCode.Flow {
 
 // MARK: ErrorCode.Step (Startup)
 
-extension ErrorCode.Step {
+public extension ErrorCode.Step {
 
 	static let configuration = ErrorCode.Step(value: "10")
 	static let publicKeys = ErrorCode.Step(value: "20")
@@ -83,7 +95,7 @@ extension ErrorCode.Step {
 
 // MARK: ErrorCode.Step (Common between test / vaccination flows)
 
-extension ErrorCode.Step {
+public extension ErrorCode.Step {
 
 	static let providers = ErrorCode.Step(value: "20")
 	static let storingEvents = ErrorCode.Step(value: "60")
@@ -94,14 +106,14 @@ extension ErrorCode.Step {
 
 // MARK: ErrorCode.Step (Commercial Test)
 
-extension ErrorCode.Step {
+public extension ErrorCode.Step {
 
 	static let testResult = ErrorCode.Step(value: "50")
 }
 
 // MARK: ErrorCode.Step (Vaccination / Recovery / GGD Test)
 
-extension ErrorCode.Step {
+public extension ErrorCode.Step {
 
 	static let max = ErrorCode.Step(value: "10")
 	static let pap = ErrorCode.Step(value: "15")
@@ -112,7 +124,7 @@ extension ErrorCode.Step {
 
 // MARK: ErrorCode.Step (Paper flow)
 
-extension ErrorCode.Step {
+public extension ErrorCode.Step {
 
 	static let coupling = ErrorCode.Step(value: "10")
 	static let scan = ErrorCode.Step(value: "20")
@@ -120,7 +132,7 @@ extension ErrorCode.Step {
 
 // MARK: ErrorCode.Step (QR flow)
 
-extension ErrorCode.Step {
+public extension ErrorCode.Step {
 
 	static let showQR = ErrorCode.Step(value: "10")
 }

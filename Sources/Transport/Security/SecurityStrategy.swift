@@ -9,7 +9,7 @@ import Foundation
 import Security
 
 /// The security strategy
-enum SecurityStrategy {
+public enum SecurityStrategy {
 #if DEBUG
 	case none
 #endif

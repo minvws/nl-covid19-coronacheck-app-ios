@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension ProcessInfo {
+public extension ProcessInfo {
 
 	/// Are we testing?
 	var isTesting: Bool {

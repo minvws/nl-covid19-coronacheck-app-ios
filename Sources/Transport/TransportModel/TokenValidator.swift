@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol TokenValidatorProtocol {
+public protocol TokenValidatorProtocol {
 
 	/// Validate the token
 	/// - Parameters:
@@ -15,8 +15,8 @@ protocol TokenValidatorProtocol {
 	/// - Returns: True if the token is valid
 	func validate(_ token: String) -> Bool
 }
-
-class TokenValidator: TokenValidatorProtocol {
+// TODO: Move back? 
+public class TokenValidator: TokenValidatorProtocol {
 
 	private let tokenChars: [String.Element]
 	private let allowedCharacterSet: CharacterSet
@@ -26,7 +26,7 @@ class TokenValidator: TokenValidatorProtocol {
 	/// - Parameters:
 	///   - alphabet: the alphabet to use
 	///   - isLuhnCheckEnabled: True if we should use the Luhn Check
-	init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
+	public init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
 
 		self.tokenChars = Array(alphabet)
 		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
@@ -37,7 +37,7 @@ class TokenValidator: TokenValidatorProtocol {
 	/// - Parameters:
 	///   - token: the token to validate
 	/// - Returns: True if the token is valid
-	func validate(_ token: String) -> Bool {
+	public func validate(_ token: String) -> Bool {
 
 		let codeSplit = token.components(separatedBy: "-")
 
