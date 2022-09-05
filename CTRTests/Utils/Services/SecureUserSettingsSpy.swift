@@ -9,7 +9,6 @@
 @testable import Transport
 @testable import Shared
 
-
 class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 
 	var invokedScanLockUntilSetter = false

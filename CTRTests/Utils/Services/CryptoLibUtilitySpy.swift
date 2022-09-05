@@ -10,7 +10,6 @@ import XCTest
 @testable import Transport
 @testable import Shared
 
-
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
 	var invokedHasPublicKeysGetter = false

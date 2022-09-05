@@ -12,7 +12,6 @@ import Nimble
 @testable import Transport
 @testable import Shared
 
-
 class ListStoredEventsViewModelTests: XCTestCase {
 	
 	/// Subject under test

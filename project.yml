@@ -419,6 +419,9 @@ targets:
         UILaunchStoryboardName: LaunchScreenHolder
 
   Verifier:
+    dependencies:
+      - target: Shared
+      - target: Transport
     templates:
       - Standard_iOS
       - Standard_Signing

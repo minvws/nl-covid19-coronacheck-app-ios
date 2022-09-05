@@ -11,7 +11,6 @@ import Clcore
 @testable import Transport
 @testable import Shared
 
-
 ///
 /// Set of Spies with sensible default stubbed values, which can be modified per-test.
 ///

@@ -59,7 +59,7 @@ public struct EventFlow {
 
 	// A Vaccination Event Provider (VEP)
 	public struct EventProvider: Codable, Equatable, CertificateProvider {
-		public init(identifier: String, name: String, unomiUrl: URL?, eventUrl: URL?, cmsCertificates: [String], tlsCertificates: [String], accessToken: EventFlow.AccessToken? = nil, eventInformationAvailable: EventFlow.EventInformationAvailable? = nil, usages: [EventFlow.ProviderUsage], providerAuthentication: [EventFlow.ProviderAuthenticationType], queryFilter: [String : String?] = [:]) {
+		public init(identifier: String, name: String, unomiUrl: URL?, eventUrl: URL?, cmsCertificates: [String], tlsCertificates: [String], accessToken: EventFlow.AccessToken? = nil, eventInformationAvailable: EventFlow.EventInformationAvailable? = nil, usages: [EventFlow.ProviderUsage], providerAuthentication: [EventFlow.ProviderAuthenticationType], queryFilter: [String: String?] = [:]) {
 			self.identifier = identifier
 			self.name = name
 			self.unomiUrl = unomiUrl

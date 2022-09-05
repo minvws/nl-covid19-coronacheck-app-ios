@@ -10,7 +10,6 @@ import XCTest
 @testable import Transport
 @testable import Shared
 
-
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
 	var invokedStoredConfigurationGetter = false
