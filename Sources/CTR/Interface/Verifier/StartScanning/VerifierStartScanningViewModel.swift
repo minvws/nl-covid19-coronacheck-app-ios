@@ -288,18 +288,11 @@ extension VerifierStartScanningViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 		
-		if !Current.userSettings.scanInstructionShown ||
-			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) ||
-			(Current.verificationPolicyManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
-			// Show the scan instructions the first time no matter what link was tapped
-			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
+		if Current.cryptoManager.hasPublicKeys() {
+			coordinator?.didFinish(.userTappedProceedToScan)
 		} else {
-			if Current.cryptoManager.hasPublicKeys() {
-				coordinator?.didFinish(.userTappedProceedToScan)
-			} else {
-				updatePublicKeys()
-				showError = true
-			}
+			updatePublicKeys()
+			showError = true
 		}
 	}
 

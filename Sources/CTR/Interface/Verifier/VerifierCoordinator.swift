@@ -128,8 +128,15 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		
 		switch result {
 			case .userTappedProceedToScan:
-				navigateToScan()
 				
+				if !Current.userSettings.scanInstructionShown ||
+					(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) ||
+					(Current.verificationPolicyManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
+					// Show the scan instructions the first time no matter what link was tapped
+					navigateToScanInstruction(allowSkipInstruction: true)
+				} else {
+					navigateToScan()
+				}
 			case .userTappedProceedToScanInstructions:
 				navigateToScanInstruction(allowSkipInstruction: false)
 				
