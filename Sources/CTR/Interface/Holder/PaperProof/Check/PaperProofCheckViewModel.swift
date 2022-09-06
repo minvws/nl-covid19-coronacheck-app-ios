@@ -64,9 +64,9 @@ class PaperProofCheckViewModel {
 	private func handleSuccess(response: DccCoupling.CouplingResponse, scannedDcc: String, couplingCode: String) {
 
 		switch response.status {
-			case .accepted: handleAccepted(scannedDcc: scannedDcc, couplingCode: couplingCode)
+			// US 4664: Accept expired domestic DCC with a coupling code.
+			case .accepted, .expired: handleAccepted(scannedDcc: scannedDcc, couplingCode: couplingCode)
 			case .blocked: handleBlocked()
-			case .expired: handleExpired()
 			case .rejected, .unknown: handleRejected()
 		}
 	}
@@ -88,22 +88,6 @@ class PaperProofCheckViewModel {
 			content: Content(
 				title: L.holderCheckdccBlockedTitle(),
 				body: L.holderCheckdccBlockedMessage(),
-				primaryActionTitle: L.general_toMyOverview(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.userWantsToGoBackToDashboard()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-
-	private func handleExpired() {
-
-		viewState = .feedback(
-			content: Content(
-				title: L.holderCheckdccExpiredTitle(),
-				body: L.holderCheckdccExpiredMessage(),
 				primaryActionTitle: L.general_toMyOverview(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
