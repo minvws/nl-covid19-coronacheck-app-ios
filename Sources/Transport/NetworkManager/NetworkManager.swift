@@ -12,7 +12,7 @@ public class NetworkManager {
 
 	public let networkConfiguration: NetworkConfiguration
 	private let signatureValidationFactory: SignatureValidationFactoryProtocol
-	private let remoteConfig: () -> RemoteConfiguration
+	private let dataTLSCertificates: () -> [Data]
 	
 	/// Initializer
 	/// - Parameters:
@@ -20,12 +20,12 @@ public class NetworkManager {
 	public required init(
 		configuration: NetworkConfiguration,
 		signatureValidationFactory: SignatureValidationFactoryProtocol = SignatureValidationFactory(),
-		remoteConfig: @escaping () -> RemoteConfiguration = { RemoteConfiguration.default }
+		dataTLSCertificates: @escaping () -> [Data] = { RemoteConfiguration.default.getTLSCertificates() }
 	) {
 
 		self.networkConfiguration = configuration
 		self.signatureValidationFactory = signatureValidationFactory
-		self.remoteConfig = remoteConfig
+		self.dataTLSCertificates = dataTLSCertificates
 	}
 
 	// MARK: - Decode Signed Data
@@ -326,7 +326,7 @@ public class NetworkManager {
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(
 				strategy: strategy,
-				remoteConfig: remoteConfig
+				data: dataTLSCertificates
 			),
 			delegateQueue: nil
 		)

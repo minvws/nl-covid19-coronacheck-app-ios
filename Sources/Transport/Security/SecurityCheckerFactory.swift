@@ -14,7 +14,7 @@ struct SecurityCheckerFactory {
 	static func getSecurityChecker(
 		_ strategy: SecurityStrategy,
 		challenge: URLAuthenticationChallenge?,
-		remoteConfig: RemoteConfiguration,
+		dataTLSCertificates: [Data],
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 			
 #if DEBUG
@@ -31,7 +31,7 @@ struct SecurityCheckerFactory {
 		
 		if case SecurityStrategy.data = strategy {
 			trustedCertificates = []
-			for tlsCertificate in remoteConfig.getTLSCertificates() {
+			for tlsCertificate in dataTLSCertificates {
 				trustedCertificates.append(tlsCertificate)
 			}
 		}
