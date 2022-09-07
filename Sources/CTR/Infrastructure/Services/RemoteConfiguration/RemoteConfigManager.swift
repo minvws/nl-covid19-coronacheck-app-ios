@@ -8,7 +8,6 @@
 import Foundation
 import Reachability
 import UIKit
-import Shared
 import Transport
 
 protocol RemoteConfigManaging: AnyObject {

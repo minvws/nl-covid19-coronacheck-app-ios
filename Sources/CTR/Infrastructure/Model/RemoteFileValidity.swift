@@ -6,7 +6,6 @@
 */
 
 import Foundation
-import Shared
 import Transport
 
 enum RemoteFileValidity {
