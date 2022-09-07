@@ -15,7 +15,7 @@ public protocol TokenValidatorProtocol {
 	/// - Returns: True if the token is valid
 	func validate(_ token: String) -> Bool
 }
-// TODO: Move back? 
+
 public class TokenValidator: TokenValidatorProtocol {
 
 	private let tokenChars: [String.Element]
