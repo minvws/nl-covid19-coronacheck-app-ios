@@ -175,8 +175,8 @@ class ListRemoteEventsViewModel {
 		}
 		
 		let existingEvents = walletManager.listEventGroups()
-		let uniqueIdentifier = "DCC-\(unique)"
-		let filtered = existingEvents.filter { $0.providerIdentifier == uniqueIdentifier }
+		let uniqueIdentifier = EventFlow.paperproofIdentier + "-\(unique)"
+		let filtered = existingEvents.filter { $0.providerIdentifier?.lowercased() == uniqueIdentifier.lowercased() }
 		return filtered.isNotEmpty
 	}
 	
