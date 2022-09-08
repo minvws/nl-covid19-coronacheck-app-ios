@@ -129,7 +129,7 @@ class ListRemoteEventsViewModel {
 	private func storeAndSign(replaceExistingEventGroups: Bool) {
 
 		// US 4664: Prevent duplicate scanned dcc.
-		if eventMode == .paperflow && doRemoteEventsContainExistingPaperProofs() {
+		guard !(eventMode == .paperflow && doRemoteEventsContainExistingPaperProofs()) else {
 			self.viewState = duplicateDccState()
 			return
 		}
