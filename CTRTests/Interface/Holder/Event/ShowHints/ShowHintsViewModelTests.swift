@@ -21,10 +21,10 @@ class ShowHintsViewModelTests: XCTestCase {
 		coordinatorStub = EventCoordinatorDelegateSpy()
 	}
 	
-	func test_singlehint_withNonalphanumericCharacters_failsToInitViewModel() {
+	func test_singlehint_withNonalphanumericCharacters_failsToInitViewModel() throws {
 
 		// Arrange
-		let hints = NonemptyArray(["🍕"])!
+		let hints = try XCTUnwrap(NonemptyArray(["🍕"]))
 
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccination, coordinator: coordinatorStub)
@@ -33,10 +33,10 @@ class ShowHintsViewModelTests: XCTestCase {
 		expect(self.sut) == nil
 	}
 
-	func test_multipleHints_withANonalphanumericCharacterHint_failsToInitViewModel() {
+	func test_multipleHints_withANonalphanumericCharacterHint_failsToInitViewModel() throws {
 
 		// Arrange
-		let hints = NonemptyArray(["🍕", "domestic_vaccination_created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["🍕", "domestic_vaccination_created"]))
 
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccination, coordinator: coordinatorStub)
@@ -45,9 +45,9 @@ class ShowHintsViewModelTests: XCTestCase {
 		expect(self.sut) == nil
 	}
 
-	func test_openURL() {
+	func test_openURL() throws {
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created"]))
 		
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccination, coordinator: coordinatorStub)
 		let url = URL(fileURLWithPath: "/")
@@ -66,7 +66,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate000() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccination, coordinator: coordinatorStub)
@@ -77,7 +77,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate001() throws { // matches: .internationalQROnly
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccination, coordinator: coordinatorStub))
@@ -95,7 +95,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate002() throws { // matches: .weCouldntMakeACertificate
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Rejected"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccination, coordinator: coordinatorStub))
@@ -114,7 +114,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate003() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub)
@@ -125,7 +125,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate004() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"])!
+		let hints = try XCTUnwrap( NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub)
@@ -136,7 +136,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate005() throws { // matches: .vaccinationsAndRecovery
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_applied", "Domestic_Recovery_Created", "International_Recovery_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_applied", "Domestic_Recovery_Created", "International_Recovery_Created"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub))
@@ -155,7 +155,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate006() throws { // matches: .vaccinationsAndRecovery
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Created", "International_Recovery_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Created", "International_Recovery_Created"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub))
@@ -174,7 +174,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate007() throws { // matches: .internationalVaccinationAndRecovery
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Created", "International_Recovery_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Created", "International_Recovery_Created"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub))
@@ -193,7 +193,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate008() throws { // matches: .internationalQROnly
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub))
@@ -212,7 +212,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate009() throws { // matches: .recoveryOnly
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Rejected", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Created", "International_Recovery_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Rejected", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Created", "International_Recovery_Created"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub))
@@ -231,7 +231,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate010() throws { // matches: .weCouldntMakeACertificate
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Rejected", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Rejected", "Vaccination_dose_correction_not_applied", "Domestic_Recovery_Rejected", "International_Recovery_Rejected"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationAndPositiveTest, coordinator: coordinatorStub))
@@ -251,7 +251,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	// Positive tests only
 	func testEndstate011() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub)
@@ -262,7 +262,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate012() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Rejected"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub)
@@ -273,7 +273,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate013() throws { // matches: .weCouldntMakeACertificate
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected"])!)
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub))
@@ -292,7 +292,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate014() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created", "Vaccination_dose_correction_not_applied"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created", "Vaccination_dose_correction_not_applied"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub)
@@ -303,7 +303,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate015() throws { // matches: .recoveryAndDosisCorrection
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created", "Vaccination_dose_correction_applied"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Created", "International_Recovery_Created", "Vaccination_dose_correction_applied"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub))
@@ -322,7 +322,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate016() throws { // matches: .noRecoveryButDosisCorrection
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected", "Vaccination_dose_correction_applied"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected", "Vaccination_dose_correction_applied"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub))
@@ -341,7 +341,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate017() throws { // matches: .recoveryTooOld
 		// Arrange
-		let hints = NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected", "International_recovery_too_old"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Recovery_Rejected", "International_Recovery_Rejected", "International_recovery_too_old"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.recovery, coordinator: coordinatorStub))
@@ -361,7 +361,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	// Negative tests
 	func testEndstate018() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_negativetest_created", "International_negativetest_created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_negativetest_created", "International_negativetest_created"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.ggd), coordinator: coordinatorStub)
@@ -372,7 +372,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate019() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_created"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.ggd), coordinator: coordinatorStub)
@@ -383,7 +383,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate021() throws { // matches: .weCouldntMakeACertificate
 		// Arrange
-		let hints = NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_rejected"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.ggd), coordinator: coordinatorStub))
@@ -402,7 +402,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate021_commercialTest() throws { // matches: .weCouldntMakeACertificate
 		// Arrange
-		let hints = NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_negativetest_rejected", "International_negativetest_rejected"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.test(.commercial), coordinator: coordinatorStub))
@@ -422,7 +422,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	// Visitor Flow
 	func testEndstate210() throws { // matches: .addVaccinationAssessment
 		// Arrange
-		let hints = NonemptyArray(["negativetest_without_vaccinationassessment"])!
+		let hints = try XCTUnwrap(NonemptyArray(["negativetest_without_vaccinationassessment"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub))
@@ -441,7 +441,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate023() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Vaccinationassessment_missing_supporting_negative_test"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Vaccinationassessment_missing_supporting_negative_test"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub)
@@ -452,7 +452,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate024() throws { // matches: .noEndState
 		// Arrange
-		let hints = NonemptyArray(["Domestic_vaccinationassessment_created"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_vaccinationassessment_created"]))
 		
 		// Act
 		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub)
@@ -463,7 +463,7 @@ class ShowHintsViewModelTests: XCTestCase {
 	
 	func testEndstate025() throws { // matches: .weCouldntMakeACertificate
 		// Arrange
-		let hints = NonemptyArray(["Domestic_vaccinationassessment_rejected"])!
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_vaccinationassessment_rejected"]))
 		
 		// Act
 		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub))

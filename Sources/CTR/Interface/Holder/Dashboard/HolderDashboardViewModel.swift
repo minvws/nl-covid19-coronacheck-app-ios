@@ -439,7 +439,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				// We do handle "no internet" though - see above.
 				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
 
-			case (.serverResponseHasNoChanges, _, _) :
+			case (.serverResponseHasNoChanges, _, _):
 				// This is a special case, and is caused by the user putting their system time
 				// so far into the future that it forces a strippen refresh, .. however the server time
 				// remains unchanged, so what it sends back does not resolve the `.expiring` or `.expired`

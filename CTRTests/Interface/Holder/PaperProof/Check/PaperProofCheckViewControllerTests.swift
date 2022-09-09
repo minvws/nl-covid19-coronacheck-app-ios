@@ -80,53 +80,6 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
 	}
 
-	func test_viewStateExpired() {
-
-		// Given
-		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
-
-		sut = PaperProofCheckViewController(
-			viewModel: PaperProofCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test"
-			)
-		)
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.sceneView.title) == L.holderCheckdccExpiredTitle()
-		expect(self.sut.sceneView.message) == L.holderCheckdccExpiredMessage()
-		expect(self.sut.sceneView.primaryTitle) == L.general_toMyOverview()
-
-		sut.assertImage()
-	}
-
-	func test_viewStateExpired_primaryAction() {
-
-		// Given
-		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
-
-		sut = PaperProofCheckViewController(
-			viewModel: PaperProofCheckViewModel(
-				coordinator: coordinatorDelegateSpy,
-				scannedDcc: "test",
-				couplingCode: "test"
-			)
-		)
-		loadView()
-
-		// When
-		sut.sceneView.primaryButtonTapped()
-
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
-	}
-
 	func test_viewStateRejected() {
 
 		// Given

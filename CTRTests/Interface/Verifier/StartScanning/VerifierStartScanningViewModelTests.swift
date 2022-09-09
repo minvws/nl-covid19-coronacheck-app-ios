@@ -100,28 +100,10 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	
 	// MARK: - Primary Button behaviour -
 	
-	func test_primaryButtonTapped_noScanInstructionsShown() {
-		
-		// Given
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
-		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
-		
-		// When
-		sut.primaryButtonTapped()
-		
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
-		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == true
-	}
-	
 	func test_primaryButtonTapped_scanInstructionsShown_havePublicKeys() {
 		
 		// Given
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
-		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		
 		// When
@@ -136,9 +118,7 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_scanInstructionsShown_noPublicKeys() {
 		
 		// Given
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
-		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
 		
 		// When
@@ -177,24 +157,6 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == false
-	}
-	
-	func test_primaryButtonTapped_policyInformationShown() {
-		
-		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
-		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
-		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
-		
-		// When
-		sut.primaryButtonTapped()
-		
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
-		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 	
 	func test_showInstructionsButtonTapped() {
@@ -355,6 +317,18 @@ class VerifierStartScanningViewModelTests: XCTestCase {
 		for _ in (0 ..< 28) { timerAction!() }
 		
 		expect(self.sut.header).toEventually(equal(L.verifier_home_countdown_title("00:00")))
+	}
+	
+	func test_userWishesToOpenTheMenu() {
+		
+		// Given
+		sut = VerifierStartScanningViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		
+		// When
+		sut.userTappedMenuButton()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesToOpenTheMenu) == true
 	}
 	
 	// MARK: - Helpers

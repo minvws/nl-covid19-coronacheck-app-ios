@@ -133,15 +133,17 @@ extension HolderDashboardViewController.Card {
 		switch validityRegion {
 			case .domestic:
 				let domesticTitle: String
-				switch state.activeDisclosurePolicyMode {
-					case .exclusive1G:
-						domesticTitle = L.holder_dashboard_empty_domestic_only1Gaccess_message()
-					case .exclusive3G:
-						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
-					case .combined1gAnd3g:
-						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
-					case .zeroG:
+				switch (state.activeDisclosurePolicyMode, state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion)) {
+					case (.zeroG, _):
 						domesticTitle = "" // isn't shown in zeroG.
+					case(_, true):
+						domesticTitle = L.holder_dashboard_incompleteVisitorPass_message()
+					case (.exclusive1G, _):
+						domesticTitle = L.holder_dashboard_empty_domestic_only1Gaccess_message()
+					case (.exclusive3G, _):
+						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
+					case (.combined1gAnd3g, _):
+						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
 				}
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: domesticTitle,

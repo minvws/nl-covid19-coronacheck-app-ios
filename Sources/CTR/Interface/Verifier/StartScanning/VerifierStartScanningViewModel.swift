@@ -13,8 +13,6 @@ enum VerifierStartResult {
 	case userTappedProceedToScan
 
 	case userTappedProceedToScanInstructions
-	
-	case userTappedProceedToInstructionsOrRiskSetting
 }
 
 class VerifierStartScanningViewModel {
@@ -138,7 +136,7 @@ class VerifierStartScanningViewModel {
 	// MARK: - State
 	
 	@Atomic<Mode>
-	private var mode = .noLevelSet // swiftlint:disable:this let_var_whitespace
+	private var mode = .noLevelSet
 	
 	private lazy var lockLabelCountdownTimer: Timeable = {
 		return vendTimer(TimeInterval(1), true) { [weak self] in
@@ -288,18 +286,11 @@ extension VerifierStartScanningViewModel {
 	func primaryButtonTapped() {
 		guard mode.allowsStartScanning else { return }
 		
-		if !Current.userSettings.scanInstructionShown ||
-			(!Current.userSettings.policyInformationShown && Current.featureFlagManager.is1GVerificationPolicyEnabled()) ||
-			(Current.verificationPolicyManager.state == nil && Current.featureFlagManager.areMultipleVerificationPoliciesEnabled()) {
-			// Show the scan instructions the first time no matter what link was tapped
-			coordinator?.didFinish(.userTappedProceedToInstructionsOrRiskSetting)
+		if Current.cryptoManager.hasPublicKeys() {
+			coordinator?.didFinish(.userTappedProceedToScan)
 		} else {
-			if Current.cryptoManager.hasPublicKeys() {
-				coordinator?.didFinish(.userTappedProceedToScan)
-			} else {
-				updatePublicKeys()
-				showError = true
-			}
+			updatePublicKeys()
+			showError = true
 		}
 	}
 

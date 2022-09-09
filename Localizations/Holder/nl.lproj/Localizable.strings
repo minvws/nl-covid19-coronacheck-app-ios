@@ -578,6 +578,7 @@
 "holder_dashboard_empty_domestic_only1Gaccess_message" = "<p>In Nederland krijg je alleen toegang met een testbewijs op plekken waar om een coronabewijs wordt gevraagd <a href=\"https://coronacheck.nl/toegangsregels/1g-toegang\">(1G-toegang)</a>.</p>";
 "holder_dashboard_empty_domestic_only3Gaccess_message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.</p>";
 "holder_dashboard_filledState_international_0G_message" = "Ga je naar een land waar een coronabewijs nodig is? Controleer altijd voor vertrek of je het goede bewijs hebt.";
+"holder_dashboard_incompleteVisitorPass_message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.</p>";
 "holder_dashboard_international_0G_action_certificateNeeded" = "Is een bewijs nodig op mijn bestemming?";
 "holder_dashboard_intro_domestic_3Gand1Gaccess" = "<p>Check vooraf of je een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/3g-1g-toegang\">3G- of 1G toegang</a> nodig hebt. Laat ook je identiteitsbewijs zien.</p>";
 "holder_dashboard_intro_domestic_only1Gaccess" = "<p>Laat in Nederland een bewijs voor <a href=\"https://coronacheck.nl/toegangsregels/1g-toegang\">1G-toegang</a> zien als om een coronabewijs wordt gevraagd. Laat ook je identiteitsbewijs zien.</p>";
@@ -618,6 +619,7 @@
 "holder_event_vaccination_assessment_about_name" = "Naam:";
 "holder_event_vaccination_assessment_about_subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder_event_vaccination_assessment_about_unique_identifier" = "Uniek beoordelingsnummer:";
+"holder_event_vaccination_assessment_action_title" = "Toevoegen";
 "holder_event_vaccination_assessment_alert_message" = "Hierdoor stop je het toevoegen van je vaccinatiebeoordeling en moet je later opnieuw je gegevens ophalen.";
 "holder_event_vaccination_assessment_element_title" = "Vaccinatiebeoordeling";
 "holder_event_vaccination_assessment_nolist_message" = "<p>Er zijn geen gegevens over je vaccinatiebeoordeling beschikbaar. Ga terug naar de balie waar jouw vaccinatie is beoordeeld.</p><p>Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";

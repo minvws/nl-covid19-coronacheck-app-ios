@@ -53,5 +53,16 @@ extension ListRemoteEventsViewModel {
 			}
 		}
 		
+		static func actionTitle(forEventMode mode: EventMode) -> String {
+			switch mode {
+				case .paperflow:
+					return L.holderDccListAction()
+				case .vaccinationassessment:
+					return L.holder_event_vaccination_assessment_action_title()
+				default:
+					return L.holderVaccinationListAction()
+			}
+		}
+		
 	}
 }

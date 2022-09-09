@@ -58,26 +58,9 @@ class VerifierStartScanningViewControllerTests: XCTestCase {
 		sut.assertImage(precision: 0.98)
 	}
 
-	func test_primaryButtonTapped_noScanInstructionsShown() {
-
-		// Given
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
-		loadView()
-
-		// When
-		sut.sceneView.primaryButtonTapped()
-
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToInstructionsOrRiskSetting), description: "Result should match")
-		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == true
-	}
-
 	func test_primaryButtonTapped_scanInstructionsShown_havePublicKeys() {
 
 		// Given
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = true
 		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		loadView()
@@ -95,7 +78,6 @@ class VerifierStartScanningViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.cryptoManagerSpy.stubbedHasPublicKeysResult = false
 		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		loadView()
@@ -129,5 +111,17 @@ class VerifierStartScanningViewControllerTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 		expect(self.environmentSpies.userSettingsSpy.invokedScanInstructionShownGetter) == false
+	}
+	
+	func test_menuButtonTapped() {
+
+		// Given
+		loadView()
+
+		// When
+		sut.sceneView.tapMenuButtonHandler?()
+
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedUserWishesToOpenTheMenu) == true
 	}
 }

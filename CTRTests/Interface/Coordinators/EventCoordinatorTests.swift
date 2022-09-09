@@ -5,6 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 import XCTest
 @testable import CTR
@@ -155,7 +156,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(viewModel.eventMode) == EventMode.recovery
 	}
 	
-	func test_startWithListTestEvents_negativeTest() throws {
+	func test_startWithListTestEvents_negativeTest_commercial() throws {
 		
 		// Given
 		let event = FakeRemoteEvent.fakeRemoteEventNegativeTest
@@ -168,6 +169,21 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.test(.commercial)
+	}
+	
+	func test_startWithListTestEvents_negativeTest_ggd() throws {
+		
+		// Given
+		let event = FakeRemoteEvent.fakeRemoteEventNegativeTestGGD
+		
+		// When
+		sut.startWithListTestEvents([event], originalMode: .test(.ggd))
+		
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(viewModel.eventMode) == EventMode.test(.ggd)
 	}
 	
 	func test_startWithListTestEvents_recovery() throws {
@@ -213,6 +229,34 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.paperflow
+	}
+	
+	// MARK: - showHintsScreenDidFinish
+	
+	func test_showHintsScreenDidFinish() {
+		
+		// Given
+		
+		// When
+		sut.showHintsScreenDidFinish(.continue(eventMode: .vaccination))
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == false
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
+	}
+
+	func test_showHintsScreenDidFinish_shouldCompleteVaccinationAssessment() {
+		
+		// Given
+		
+		// When
+		sut.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		
+		// Then
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
 	}
 	
 	// MARK: - eventStartScreenDidFinish
@@ -680,6 +724,46 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
 	}
 	
+	func test_listEventsScreenDidFinish_showHints_invalidHint() throws {
+		
+		// Given
+		let hints = try XCTUnwrap(NonemptyArray(["🍕"]))
+
+		// When
+		sut.listEventsScreenDidFinish(.showHints(hints, eventMode: .vaccination))
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+
+	func test_listEventsScreenDidFinish_showHints_noEndstate() throws {
+		
+		// Given
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created"]))
+
+		// When
+		sut.listEventsScreenDidFinish(.showHints(hints, eventMode: .vaccination))
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_listEventsScreenDidFinish_showHints_validHint() throws {
+		
+		// Given
+		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created"]))
+
+		// When
+		sut.listEventsScreenDidFinish(.showHints(hints, eventMode: .vaccination))
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(self.navigationSpy.viewControllers.last is ShowHintsViewController) == true
+	}
+	
 	func test_alternativeRoute() {
 		
 		// Given
@@ -765,5 +849,37 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+	}
+	
+	func test_continueToPAP_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
+		
+		// Given
+		sut.childCoordinators = []
+		
+		// When
+		sut.continueToPap(eventMode: .vaccination)
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == false
+	}
+	
+	func test_continueToPAP() {
+		
+		// Given
+		let alternativeCoordinator = AlternativeRouteCoordinator(
+			navigationController: sut.navigationController,
+			delegate: sut,
+			eventMode: .vaccination
+		)
+		sut.childCoordinators = [alternativeCoordinator]
+		
+		// When
+		sut.continueToPap(eventMode: .vaccination)
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopViewController) == false
+		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController).toEventually(beTrue())
 	}
 }
