@@ -144,6 +144,32 @@ class WalletManager: WalletManaging {
 		
 		dataStoreManager.delete(objectID)
 	}
+	
+	@discardableResult func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent? {
+
+		var blockedEvent: BlockedEvent?
+		let context = dataStoreManager.managedObjectContext()
+
+		// TODO: also relate to the current wallet - see the EventGroup store logic.
+		
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
+				return
+			}
+			
+			blockedEvent = BlockedEventModel.create(
+				type: type,
+				eventDate: eventDate,
+				reason: reason,
+				wallet: wallet,
+				managedContext: context
+			)
+			dataStoreManager.save(context)
+		}
+		
+		return blockedEvent
+	}
 
 	func fetchSignedEvents() -> [String] {
 
