@@ -16,12 +16,12 @@ protocol WalletManaging: AnyObject {
 	///   - providerIdentifier: the identifier of the provider
 	///   - jsonData: the json  data of the original signed event or dcc
 	///   - expiryDate: when will this eventgroup expire?
-	/// - Returns: True if stored
+	/// - Returns: Object if stored
 	func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> Bool
+		expiryDate: Date?) -> EventGroup?
 
 	func fetchSignedEvents() -> [String]
 
@@ -97,19 +97,18 @@ class WalletManager: WalletManaging {
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> Bool {
+		expiryDate: Date?) -> EventGroup? {
 
-		var success = true
+		var eventGroup: EventGroup?
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
-				success = false
 				return
 			}
 			
-			EventGroupModel.create(
+			eventGroup = EventGroupModel.create(
 				type: type,
 				providerIdentifier: providerIdentifier,
 				expiryDate: expiryDate,
@@ -119,7 +118,7 @@ class WalletManager: WalletManaging {
 			)
 			dataStoreManager.save(context)
 		}
-		return success
+		return eventGroup
 	}
 	
 	/// Expire event groups that are no longer valid

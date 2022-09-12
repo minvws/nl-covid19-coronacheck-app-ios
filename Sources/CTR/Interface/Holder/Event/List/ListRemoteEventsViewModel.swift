@@ -252,9 +252,7 @@ class ListRemoteEventsViewModel {
 
 	private func storeEvent(
 		replaceExistingEventGroups: Bool,
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
+		onCompletion: @escaping ([EventGroup]?) -> Void) {
 
 		if replaceExistingEventGroups {
 			// Replace when there is a identity mismatch
@@ -265,10 +263,14 @@ class ListRemoteEventsViewModel {
 		// ZZZ sometimes returns an empty array of events in the combined flow.
 		let storableEvents = remoteEvents.filter { ($0.wrapper.events ?? []).isNotEmpty }
 
+		var newlyStoredEventGroups: [EventGroup] = []
+
 		for storableEvent in storableEvents where storableEvent.wrapper.status == .complete {
 			
 			guard let jsonData = storableEvent.getEventsAsJSON(),
 				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
+
+				onCompletion(nil)
 				return
 			}
 
@@ -285,17 +287,21 @@ class ListRemoteEventsViewModel {
 			walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
 			
 			// Store the event group
-			success = success && walletManager.storeEventGroup(
+
+			guard let eventGroup = walletManager.storeEventGroup(
 				storageMode,
 				providerIdentifier: uniqueIdentifier,
 				jsonData: jsonData,
 				expiryDate: nil
-			)
-			if !success {
-				break
+			) else {
+				onCompletion(nil)
+				return
 			}
+
+			newlyStoredEventGroups += [eventGroup]
 		}
-		onCompletion(success)
+
+		onCompletion(newlyStoredEventGroups)
 	}
 }
 
