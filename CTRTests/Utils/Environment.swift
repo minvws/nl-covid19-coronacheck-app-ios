@@ -160,9 +160,7 @@ final class EnvironmentSpies {
 	}()
 	
 	var walletManagerSpy: WalletManagerSpy = {
-		let spy = WalletManagerSpy()
-		spy.stubbedStoreEventGroupResult = true
-		return spy
+		WalletManagerSpy()
 	}()
 	
 	var verificationPolicyEnablerSpy: VerificationPolicyEnablerSpy = {

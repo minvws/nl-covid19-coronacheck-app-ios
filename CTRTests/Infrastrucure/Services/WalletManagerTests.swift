@@ -70,7 +70,7 @@ class WalletManagerTests: XCTestCase {
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 
 		// When
-		let result = sut.storeEventGroup(
+		let eventGroup = sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
@@ -78,7 +78,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		// Then
-		expect(result) == true
+		expect(eventGroup) != nil
 		expect(wallet?.eventGroups).to(haveCount(1))
 	}
 

@@ -576,7 +576,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -614,7 +614,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -652,7 +652,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -689,7 +689,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -726,7 +726,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 		
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -762,8 +762,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
@@ -803,7 +803,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
@@ -845,7 +845,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
@@ -887,7 +887,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 		
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
@@ -926,7 +926,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
@@ -968,7 +968,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99857), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
@@ -1010,7 +1010,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "Wrong", stoken: "test")), ())
@@ -1054,7 +1054,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1098,7 +1098,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1142,7 +1142,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 		
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1183,7 +1183,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1228,7 +1228,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1273,7 +1273,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 		
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1318,7 +1318,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1363,7 +1363,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = []
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1402,7 +1402,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = false
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1450,7 +1450,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = false
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1498,7 +1498,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1540,7 +1540,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1582,7 +1582,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1616,7 +1616,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	func test_makeQR_paperflow_vaccination() {
 
 		// Given
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1659,7 +1659,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	func test_makeQR_paperflow_recovery() {
 		
 		// Given
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1702,7 +1702,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	func test_makeQR_paperflow_test() {
 		
 		// Given
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
@@ -1853,7 +1853,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]

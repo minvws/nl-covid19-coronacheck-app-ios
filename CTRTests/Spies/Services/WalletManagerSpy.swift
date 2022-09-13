@@ -15,13 +15,13 @@ class WalletManagerSpy: WalletManaging {
 	var invokedStoreEventGroupCount = 0
 	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)?
 	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)]()
-	var stubbedStoreEventGroupResult: Bool! = false
+	var stubbedStoreEventGroupResult: EventGroup!
 
 	func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> Bool {
+		expiryDate: Date?) -> EventGroup? {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
 		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, expiryDate)
@@ -67,6 +67,14 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveExistingGreenCardsCount += 1
 	}
 
+	var invokedRemoveExistingBlockedEvents = false
+	var invokedRemoveExistingBlockedEventsCount = 0
+
+	func removeExistingBlockedEvents() {
+		invokedRemoveExistingBlockedEvents = true
+		invokedRemoveExistingBlockedEventsCount += 1
+	}
+
 	var invokedStoreDomesticGreenCard = false
 	var invokedStoreDomesticGreenCardCount = 0
 	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)?
@@ -93,6 +101,20 @@ class WalletManagerSpy: WalletManaging {
 		invokedStoreEuGreenCardParameters = (remoteEuGreenCard, cryptoManager)
 		invokedStoreEuGreenCardParametersList.append((remoteEuGreenCard, cryptoManager))
 		return stubbedStoreEuGreenCardResult
+	}
+
+	var invokedStoreBlockedEvent = false
+	var invokedStoreBlockedEventCount = 0
+	var invokedStoreBlockedEventParameters: (type: EventMode, eventDate: Date, reason: String)?
+	var invokedStoreBlockedEventParametersList = [(type: EventMode, eventDate: Date, reason: String)]()
+	var stubbedStoreBlockedEventResult: BlockedEvent!
+
+	func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent? {
+		invokedStoreBlockedEvent = true
+		invokedStoreBlockedEventCount += 1
+		invokedStoreBlockedEventParameters = (type, eventDate, reason)
+		invokedStoreBlockedEventParametersList.append((type, eventDate, reason))
+		return stubbedStoreBlockedEventResult
 	}
 
 	var invokedListEventGroups = false

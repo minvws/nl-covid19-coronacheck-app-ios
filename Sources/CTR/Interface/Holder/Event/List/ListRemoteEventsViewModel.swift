@@ -333,7 +333,7 @@ class ListRemoteEventsViewModel {
 				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
 				
 				onCompletion(nil)
-				return 
+				return
 			}
 
 			// We must allow multiple events, but do not want duplicates.
