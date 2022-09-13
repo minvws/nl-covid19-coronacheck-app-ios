@@ -174,7 +174,7 @@ class WalletManager: WalletManaging {
 			
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 			
-			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
+			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier?.lowercased() == providerIdentifier.lowercased() && eventGroup.type == type.rawValue {
 				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 				context.delete(eventGroup)
 			}

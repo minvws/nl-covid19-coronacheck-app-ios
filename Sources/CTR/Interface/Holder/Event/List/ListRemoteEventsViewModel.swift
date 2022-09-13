@@ -128,6 +128,12 @@ class ListRemoteEventsViewModel {
 
 	private func storeAndSign(replaceExistingEventGroups: Bool) {
 
+		// US 4664: Prevent duplicate scanned dcc.
+		guard !(eventMode == .paperflow && doRemoteEventsContainExistingPaperProofs()) else {
+			self.viewState = duplicateDccState()
+			return
+		}
+		
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
@@ -158,6 +164,20 @@ class ListRemoteEventsViewModel {
 				self.handleGreenCardResult(result, forEventMode: eventModeToUse)
 			}
 		}
+	}
+	
+	private func doRemoteEventsContainExistingPaperProofs() -> Bool {
+		
+		guard let firstEvent = remoteEvents.first?.wrapper.events?.first,
+			  let unique = firstEvent.unique,
+			  firstEvent.hasPaperCertificate else {
+			return false
+		}
+		
+		let existingEvents = walletManager.listEventGroups()
+		let uniqueIdentifier = EventFlow.paperproofIdentier + "-\(unique)"
+		let filtered = existingEvents.filter { $0.providerIdentifier?.lowercased() == uniqueIdentifier.lowercased() }
+		return filtered.isNotEmpty
 	}
 	
 	private func getPaperFlowEmbeddedEventMode() -> EventMode? {

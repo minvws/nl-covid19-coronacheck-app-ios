@@ -635,6 +635,8 @@
 "holder_inputRetrievalCode_error_blocked" = "Je hebt te vaak geprobeerd je code in te vullen. Probeer het over 5 minuten opnieuw.";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
+"holder_listRemoteEvents_endStateDuplicate_message" = "Het bewijs dat je probeert in te scannen staat al in de app. Je kunt een bewijs niet twee keer toevoegen.";
+"holder_listRemoteEvents_endStateDuplicate_title" = "Dit bewijs staat al in de app";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message" = "<p>Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.</p>";

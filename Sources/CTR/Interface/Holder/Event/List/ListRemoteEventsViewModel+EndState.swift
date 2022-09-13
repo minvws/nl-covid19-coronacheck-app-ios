@@ -92,6 +92,15 @@ extension ListRemoteEventsViewModel {
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
+	
+	internal func duplicateDccState() -> ListRemoteEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoteEvents_endStateDuplicate_title(),
+			subTitle: L.holder_listRemoteEvents_endStateDuplicate_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
 
 	// MARK: Recovery end states
 
