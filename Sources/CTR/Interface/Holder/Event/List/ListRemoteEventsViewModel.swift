@@ -242,24 +242,8 @@ class ListRemoteEventsViewModel {
 				// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 				// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
 				// Note: This is not relevant to the end state.
-				blockItemsMatchingEventGroupsNOTBeingAdded.forEach { blockItem, existingEventGroup in
-					guard let jsonData = existingEventGroup.jsonData,
-						  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
-						  let credentialData = object.credential.data(using: .utf8),
-						  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData),
-						  let eventMode = euCredentialAttributes.eventMode
-					else { return }
-					
-					var eventDate: Date? {
-						guard let eventDate = euCredentialAttributes.eventDate else { return nil }
-						return DateFormatter.Event.iso8601.date(from: eventDate)
-					}
-					
-					Current.walletManager.storeBlockedEvent(
-						type: eventMode,
-						eventDate: eventDate ?? .distantPast,
-						reason: blockItem.reason
-					)
+				blockItemsMatchingEventGroupsNOTBeingAdded.forEach { blockItem, eventGroup in
+					BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
 				}
 				
 				// We may need to show an error screen here, if there's a block on events being added now:
@@ -369,7 +353,6 @@ extension ErrorCode.ClientCode {
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }
 
-
 private extension Array where Element == RemoteGreenCards.BlobExpiry {
 	
 	/// Determine which blockItems match EventGroups which were sent to be signed:
@@ -378,5 +361,29 @@ private extension Array where Element == RemoteGreenCards.BlobExpiry {
 			guard let matchingEvent = eventGroups.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
 			return partialResult + [(blockItem, matchingEvent)]
 		}
+	}
+}
+
+private extension BlockedEvent {
+	
+	@discardableResult
+	static func createAndPersist(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup) -> BlockedEvent? {
+		guard let jsonData = existingEventGroup.jsonData,
+			  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
+			  let credentialData = object.credential.data(using: .utf8),
+			  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData),
+			  let eventMode = euCredentialAttributes.eventMode
+		else { return nil }
+		
+		var eventDate: Date? {
+			guard let eventDate = euCredentialAttributes.eventDate else { return nil }
+			return DateFormatter.Event.iso8601.date(from: eventDate)
+		}
+		
+		return Current.walletManager.storeBlockedEvent(
+			type: eventMode,
+			eventDate: eventDate ?? .distantPast,
+			reason: blockItem.reason
+		)
 	}
 }
