@@ -230,32 +230,44 @@ class ListRemoteEventsViewModel {
 				let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
 				
 				// Determine which blockItems match EventGroups which were sent to be signed:
-				let blockItemsMatchingEventsBeingAdded = blockItems.filter { blockItem in
-					eventsBeingAdded.contains { eventGroup in
-						blockItem.identifier == "\(eventGroup.autoId)"
-					}
-				}
-			
-			// Alternative if we need the EventGroup with the Block Item
-//				let blockItemsMatchingEventsBeingAdded: [(RemoteGreenCards.BlobExpiry, EventGroup)] = blockItems.reduce([]) { partialResult, blockItem in
-//					guard let matchingEvent = eventsBeingAdded.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
-//					return partialResult + [(blockItem, matchingEvent)]
+//				let blockItemsMatchingEventsBeingAdded = blockItems.filter { blockItem in
+//					eventsBeingAdded.contains { eventGroup in
+//						blockItem.identifier == "\(eventGroup.autoId)"
+//					}
 //				}
 			
-				let blockItemsNOTMatchingEventGroupsBeingAdded = Array(Set(blockItems).subtracting(Set(blockItemsMatchingEventsBeingAdded)))
+				// Alternative if we need the EventGroup with the Block Item
+				let blockItemsMatchingEventsBeingAdded: [(RemoteGreenCards.BlobExpiry, EventGroup)] = blockItems.reduce([]) { partialResult, blockItem in
+					guard let matchingEvent = eventsBeingAdded.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
+					return partialResult + [(blockItem, matchingEvent)]
+				}
+			
+				// TODO: filter `eventsBeingAdded` from `submittedEventGroups`
+				let blockItemsNOTMatchingEventGroupsBeingAdded: [(RemoteGreenCards.BlobExpiry, EventGroup)] = blockItems.reduce([]) { partialResult, blockItem in
+					// Matching on `submittedEventGroups`, which is basically all the eventGroups in the database
+					guard let matchingEvent = submittedEventGroups.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
+					return partialResult + [(blockItem, matchingEvent)]
+				}
 			
 				// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 				// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
 				// Note: This is not relevant to the end state.
-				blockItemsNOTMatchingEventGroupsBeingAdded.forEach { blockItem in
-					// id, reason, expiry
-					_ = Current.walletManager.storeBlockedEvent(
-						type: eventMode,
-						eventDate: blockItem.expirationDate,
-						reason: blockItem.reason
-					)
+				blockItemsNOTMatchingEventGroupsBeingAdded.forEach { blockItem, existingEventGroup in
+					if let jsonData = existingEventGroup.jsonData,
+					   let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+						  let decodedPayloadData = Data(base64Encoded: object.payload),
+						  let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+						
+						_ = wrapper.events?.map { (event: EventFlow.Event) -> BlockedEvent? in
+							Current.walletManager.storeBlockedEvent(
+								type: event.storageMode ?? .vaccination, // TODO: not always a vaccine..
+								eventDate: event.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantPast,
+								reason: blockItem.reason
+							)
+						}
+					}
 				}
-			
+				
 				// We may need to show an error screen here, if there's a block on events being added now:
 				let shouldShowBlockingEndState = blockItemsMatchingEventsBeingAdded.isNotEmpty
 				guard !shouldShowBlockingEndState else {
