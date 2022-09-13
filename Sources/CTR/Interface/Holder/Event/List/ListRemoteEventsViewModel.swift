@@ -243,13 +243,8 @@ class ListRemoteEventsViewModel {
 				// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:
 				let shouldShowBlockingEndState = blockItems.blockItems(matchingEventGroups: eventsBeingAdded).isNotEmpty
 				guard !shouldShowBlockingEndState else {
-					let content = Content(
-						title: L.holder_listRemoteEvents_endStateNoValidCertificate_title(),
-						body: L.holder_listRemoteEvents_endStateNoValidCertificate_body("PLACEHOLDER")
-					)
-					coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: { [self] in
-						coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
-					}))
+					self.shouldPrimaryButtonBeEnabled = true
+					self.viewState = blockedEndState()
 					return
 				}
 
