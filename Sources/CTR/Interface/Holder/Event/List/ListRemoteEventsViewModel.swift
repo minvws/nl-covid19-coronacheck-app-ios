@@ -233,21 +233,15 @@ class ListRemoteEventsViewModel {
 				// The items which the backend has indicated are blocked:
 				let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
 				
-				// Determine which blockItems match EventGroups which were sent to be signed:
-				let blockItemsMatchingEventGroupsBeingAdded = blockItems.blockItems(matchingEventGroups: eventsBeingAdded)
-			
-				// Determine which blockItems match EventGroups which were NOT sent to be signed:
-				let blockItemsMatchingEventGroupsNOTBeingAdded = blockItems.blockItems(matchingEventGroups: eventsNotBeingAdded)
-			
 				// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 				// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
 				// Note: This is not relevant to the end state.
-				blockItemsMatchingEventGroupsNOTBeingAdded.forEach { blockItem, eventGroup in
+				blockItems.blockItems(matchingEventGroups: eventsNotBeingAdded).forEach { blockItem, eventGroup in
 					BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
 				}
 				
-				// We may need to show an error screen here, if there's a block on events being added now:
-				let shouldShowBlockingEndState = blockItemsMatchingEventGroupsBeingAdded.isNotEmpty
+				// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:
+				let shouldShowBlockingEndState = blockItems.blockItems(matchingEventGroups: eventsBeingAdded).isNotEmpty
 				guard !shouldShowBlockingEndState else {
 					let content = Content(
 						title: L.holder_listRemoteEvents_endStateNoValidCertificate_title(),
