@@ -40,6 +40,7 @@ protocol WalletManaging: AnyObject {
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 	
+	@discardableResult
 	func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent?
 
 	/// List all the event groups
