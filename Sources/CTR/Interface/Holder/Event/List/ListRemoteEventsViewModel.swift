@@ -253,19 +253,23 @@ class ListRemoteEventsViewModel {
 				// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
 				// Note: This is not relevant to the end state.
 				blockItemsNOTMatchingEventGroupsBeingAdded.forEach { blockItem, existingEventGroup in
-					if let jsonData = existingEventGroup.jsonData,
-					   let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
-						  let decodedPayloadData = Data(base64Encoded: object.payload),
-						  let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
-						
-						_ = wrapper.events?.map { (event: EventFlow.Event) -> BlockedEvent? in
-							Current.walletManager.storeBlockedEvent(
-								type: event.storageMode ?? .vaccination, // TODO: not always a vaccine..
-								eventDate: event.getSortDate(with: DateFormatter.Event.iso8601) ?? .distantPast,
-								reason: blockItem.reason
-							)
-						}
+					guard let jsonData = existingEventGroup.jsonData,
+						  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
+						  let credentialData = object.credential.data(using: .utf8),
+						  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData),
+						  let eventMode = euCredentialAttributes.eventMode
+					else { return }
+					
+					var eventDate: Date? {
+						guard let eventDate = euCredentialAttributes.eventDate else { return nil }
+						return DateFormatter.Event.iso8601.date(from: eventDate)
 					}
+					
+					Current.walletManager.storeBlockedEvent(
+						type: eventMode,
+						eventDate: eventDate ?? .distantPast,
+						reason: blockItem.reason
+					)
 				}
 				
 				// We may need to show an error screen here, if there's a block on events being added now:
