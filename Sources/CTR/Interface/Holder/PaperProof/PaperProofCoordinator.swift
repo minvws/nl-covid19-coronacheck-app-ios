@@ -136,9 +136,11 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 		
-//		userDidScanDCC(CouplingManager.expiredDCC)
-//		userDidSubmitPaperProofToken(token: CouplingManager.expiredCouplingCode)
-//		userWishesToCreateACertificate()
+		// #warning("Do not commit")
+		// userDidScanDCC(CouplingManager.expiredDCC)
+		// userDidSubmitPaperProofToken(token: CouplingManager.expiredCouplingCode)
+		// userWishesToCreateACertificate()
+		// return 
 		
 		if let scannedDCC = LaunchArgumentsHandler.getScannedDCC() {
 			userDidScanDCC(scannedDCC)
