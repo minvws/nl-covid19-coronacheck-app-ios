@@ -35,6 +35,8 @@ protocol WalletManaging: AnyObject {
 	func removeExistingEventGroups()
 
 	func removeExistingGreenCards()
+	
+	func removeExistingBlockedEvents()
 
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
 
@@ -236,6 +238,24 @@ class WalletManager: WalletManaging {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
 						greenCard.delete(context: context)
+					}
+					dataStoreManager.save(context)
+				}
+			}
+		}
+	}
+
+	func removeExistingBlockedEvents() {
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let blockedEvents = wallet.blockedEvents {
+					for case let blockedEvent as BlockedEvent in blockedEvents.allObjects {
+
+						blockedEvent.delete(context: context)
 					}
 					dataStoreManager.save(context)
 				}
