@@ -230,29 +230,28 @@ class ListRemoteEventsViewModel {
 				let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
 				
 				// Determine which blockItems match EventGroups which were sent to be signed:
-//				let blockItemsMatchingEventsBeingAdded = blockItems.filter { blockItem in
-//					eventsBeingAdded.contains { eventGroup in
-//						blockItem.identifier == "\(eventGroup.autoId)"
-//					}
-//				}
-			
-				// Alternative if we need the EventGroup with the Block Item
 				let blockItemsMatchingEventsBeingAdded: [(RemoteGreenCards.BlobExpiry, EventGroup)] = blockItems.reduce([]) { partialResult, blockItem in
 					guard let matchingEvent = eventsBeingAdded.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
 					return partialResult + [(blockItem, matchingEvent)]
 				}
 			
-				// TODO: filter `eventsBeingAdded` from `submittedEventGroups`
-				let blockItemsNOTMatchingEventGroupsBeingAdded: [(RemoteGreenCards.BlobExpiry, EventGroup)] = blockItems.reduce([]) { partialResult, blockItem in
+				let blockItemsMatchingEventGroupsNOTBeingAdded: [(RemoteGreenCards.BlobExpiry, EventGroup)] = blockItems.reduce([]) { partialResult, blockItem in
 					// Matching on `submittedEventGroups`, which is basically all the eventGroups in the database
 					guard let matchingEvent = submittedEventGroups.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
+					
+					let matchesEventBeingAdded = blockItemsMatchingEventsBeingAdded.contains { blockItem, eventGroup in
+						eventGroup == matchingEvent
+					}
+
+					guard !matchesEventBeingAdded else { return partialResult }
+					
 					return partialResult + [(blockItem, matchingEvent)]
 				}
 			
 				// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 				// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
 				// Note: This is not relevant to the end state.
-				blockItemsNOTMatchingEventGroupsBeingAdded.forEach { blockItem, existingEventGroup in
+				blockItemsMatchingEventGroupsNOTBeingAdded.forEach { blockItem, existingEventGroup in
 					guard let jsonData = existingEventGroup.jsonData,
 						  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
 						  let credentialData = object.credential.data(using: .utf8),
