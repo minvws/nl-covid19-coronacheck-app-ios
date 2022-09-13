@@ -136,8 +136,9 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 		
-		// userDidScanDCC(CouplingManager.vaccinationDCC)
-		// userWishesToEnterToken()
+//		userDidScanDCC(CouplingManager.expiredDCC)
+//		userDidSubmitPaperProofToken(token: CouplingManager.expiredCouplingCode)
+//		userWishesToCreateACertificate()
 		
 		if let scannedDCC = LaunchArgumentsHandler.getScannedDCC() {
 			userDidScanDCC(scannedDCC)
@@ -154,7 +155,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 			}
 			return
 		}
-		
+
 		let destination = PaperProofScanViewController(
 			viewModel: PaperProofScanViewModel(
 				coordinator: self
@@ -165,19 +166,16 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	
 	func userWishesToEnterToken() {
 		
-		// userDidSubmitPaperProofToken(token: "ZKGBKH")
-		// userWishesToCreateACertificate()
-		
 		if let couplingCode = LaunchArgumentsHandler.getCouplingCode() {
 			userDidSubmitPaperProofToken(token: couplingCode)
 			userWishesToCreateACertificate()
 			return
 		}
-		
+
 		let destination = PaperProofInputCouplingCodeViewController(
 			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
 		)
-		
+
 		navigationController.pushViewController(destination, animated: true)
 	}
 	

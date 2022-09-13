@@ -176,6 +176,10 @@ extension QRCard {
 					from: credential?.validFrom ?? Date.distantFuture,
 					to: credential?.expirationTime ?? Date.distantPast
 				)
+				if let credentialData = credential?.data,
+				   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData), euCredentialAttributes.expirationTime < date.timeIntervalSince1970 {
+					return hasValidOrigin
+				}
 				return hasValidOrigin && hasValidCredential
 			} else {
 				
