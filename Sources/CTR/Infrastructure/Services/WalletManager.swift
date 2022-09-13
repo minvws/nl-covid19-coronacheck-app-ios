@@ -151,8 +151,6 @@ class WalletManager: WalletManaging {
 
 		var blockedEvent: BlockedEvent?
 		let context = dataStoreManager.managedObjectContext()
-
-		// TODO: also relate to the current wallet - see the EventGroup store logic.
 		
 		context.performAndWait {
 			
