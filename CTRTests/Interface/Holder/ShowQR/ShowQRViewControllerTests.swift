@@ -62,7 +62,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == true
 		expect(self.sut.sceneView.navigationInfoView.nextButton.isHidden) == true
 		expect(self.sut.sceneView.navigationInfoView.previousButton.isHidden) == true
@@ -93,7 +93,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == false
 		expect(self.sut.sceneView.navigationInfoView.nextButton.isHidden) == true
 		expect(self.sut.sceneView.navigationInfoView.previousButton.isHidden) == true
