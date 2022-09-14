@@ -140,7 +140,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		// userDidScanDCC(CouplingManager.expiredDCC)
 		// userDidSubmitPaperProofToken(token: CouplingManager.expiredCouplingCode)
 		// userWishesToCreateACertificate()
-		// return 
+		// return
 		
 		if let scannedDCC = LaunchArgumentsHandler.getScannedDCC() {
 			userDidScanDCC(scannedDCC)
@@ -167,6 +167,11 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	}
 	
 	func userWishesToEnterToken() {
+		
+		// #warning("Do not commit")
+		// userDidSubmitPaperProofToken(token: "ZKGBKH")
+		// userWishesToCreateACertificate()
+		// return
 		
 		if let couplingCode = LaunchArgumentsHandler.getCouplingCode() {
 			userDidSubmitPaperProofToken(token: couplingCode)
