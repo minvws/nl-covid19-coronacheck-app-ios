@@ -635,6 +635,8 @@
 "holder_inputRetrievalCode_error_blocked" = "You’ve tried to enter your code too many times. Please try again in 5 minutes.";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We can't create a certificate";
+"holder_listRemoteEvents_endStateDuplicate_message" = "The certificate you are trying to add is already in the app. You don’t have to scan it again.";
+"holder_listRemoteEvents_endStateDuplicate_title" = "This certificate is already in the app";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Only an international vaccination certificate could be created from your retrieved details. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message" = "<p>Only an international vaccination certificate could be created from your retrieved vaccinations. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>A recovery certificate has also been created from your positive test result.</p>";
