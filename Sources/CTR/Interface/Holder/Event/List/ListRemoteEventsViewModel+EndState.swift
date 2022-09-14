@@ -117,11 +117,24 @@ extension ListRemoteEventsViewModel {
 	
 	internal func blockedEndState() -> ListRemoteEventsViewController.State {
 
+		let errorCode = ErrorCode(
+			flow: eventMode.flow,
+			step: .storingCredentials,
+			clientCode: .signerReturnedBlockedEvent
+		)
+		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holder_listRemoteEvents_endStateNoValidCertificate_title(),
-			body: L.holder_listRemoteEvents_endStateNoValidCertificate_body("PLACEHOLDER"), // TODO: fix error message
+			body: L.holder_listRemoteEvents_endStateNoValidCertificate_body(errorCode.description),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
+}
 
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+	
+	// 0514: signerReturnedBlockedEvent
+	static let signerReturnedBlockedEvent = ErrorCode.ClientCode(value: "0514")
 }
