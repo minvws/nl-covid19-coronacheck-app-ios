@@ -84,17 +84,17 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 
 		// Then
 		expect(result).to(haveCount(2))
-		expect(result[0].tagline) == L.general_newpolicy()
-		expect(result[0].title) == L.holder_newintheapp_content_only3G_title()
-		expect(result[0].content) == L.holder_newintheapp_content_only3G_body()
-		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
+		expect(result[0].tagline) == L.general_newintheapp()
+		expect(result[0].title) == L.holder_newintheapp_content_dutchAndInternationalCertificates_title()
+		expect(result[0].content) == L.holder_newintheapp_content_dutchAndInternationalCertificates_body()
+		expect(result[0].image) == I.disclosurePolicy.dutchAndInternationalQRCards()
 		expect(result[0].imageBackgroundColor) == nil
 		expect(result[0].nextButtonTitle) == nil
 		
-		expect(result[1].tagline) == L.general_newintheapp()
-		expect(result[1].title) == L.holder_newintheapp_content_dutchAndInternationalCertificates_title()
-		expect(result[1].content) == L.holder_newintheapp_content_dutchAndInternationalCertificates_body()
-		expect(result[1].image) == I.disclosurePolicy.dutchAndInternationalQRCards()
+		expect(result[1].tagline) == L.general_newpolicy()
+		expect(result[1].title) == L.holder_newintheapp_content_only3G_title()
+		expect(result[1].content) == L.holder_newintheapp_content_only3G_body()
+		expect(result[1].image) == I.disclosurePolicy.newInTheApp()
 		expect(result[1].nextButtonTitle) == L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
 		expect(result[1].imageBackgroundColor) == nil
 	}

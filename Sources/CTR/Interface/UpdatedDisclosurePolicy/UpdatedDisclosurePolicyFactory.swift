@@ -29,20 +29,20 @@ struct UpdatedDisclosurePolicyFactory {
 				// Special case: 0G -> 3G
 				return [
 					PagedAnnoucementItem(
-						title: L.holder_newintheapp_content_only3G_title(),
-						content: L.holder_newintheapp_content_only3G_body(),
-						image: I.disclosurePolicy.newInTheApp(),
-						imageBackgroundColor: nil,
-						tagline: L.general_newpolicy(),
-						step: 0
-					),
-					PagedAnnoucementItem(
 						title: L.holder_newintheapp_content_dutchAndInternationalCertificates_title(),
 						content: L.holder_newintheapp_content_dutchAndInternationalCertificates_body(),
 						image: I.disclosurePolicy.dutchAndInternationalQRCards(),
 						imageBackgroundColor: nil,
 						tagline: L.general_newintheapp(),
-						step: 1,
+						step: 1
+					),
+					PagedAnnoucementItem(
+						title: L.holder_newintheapp_content_only3G_title(),
+						content: L.holder_newintheapp_content_only3G_body(),
+						image: I.disclosurePolicy.newInTheApp(),
+						imageBackgroundColor: nil,
+						tagline: L.general_newpolicy(),
+						step: 0,
 						nextButtonTitle: L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
 					)
 				]
