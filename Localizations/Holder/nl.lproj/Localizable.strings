@@ -365,7 +365,6 @@
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan, hersteld of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
-"holder.showqr.domestic.title" = "Nederlandse QR";
 "holder.showqr.eu.about.recovery.country" = "Getest in / Member state of test:";
 "holder.showqr.eu.about.recovery.date" = "Testdatum / Test date:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
@@ -747,6 +746,9 @@
 "holder_scanner_permission_settings" = "Naar instellingen";
 "holder_scanner_permission_title" = "Geen toegang tot camera";
 "holder_scanner_title" = "Scan QR-code";
+"holder_showQR_domestic_title" = "Nederlandse QR";
+"holder_showQR_domestic_title_1g" = "1G-toegang";
+"holder_showQR_domestic_title_3g" = "3G-toegang";
 "holder_showQR_euAboutVaccination_daysSince" = "Dagen sinds vaccinatie / Days since vaccination:";
 "holder_showQR_label_expiredQR" = "Deze QR-code is niet meer geldig";
 "holder_showQR_label_newerQRAvailable" = "Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.";

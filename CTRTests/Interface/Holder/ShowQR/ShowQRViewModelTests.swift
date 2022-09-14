@@ -50,7 +50,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
@@ -76,7 +76,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(3))

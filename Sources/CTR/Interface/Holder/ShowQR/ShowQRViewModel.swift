@@ -155,7 +155,7 @@ class ShowQRViewModel {
 
 		if let greenCard = greenCards.first {
 			if greenCard.getType() == GreenCardType.domestic {
-				title = L.holderShowqrDomesticTitle()
+				setDomesticTitle()
 				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
 				animationStyle = .domestic(isWithinWinterPeriod: isWithinWinterPeriod)
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
@@ -167,6 +167,23 @@ class ShowQRViewModel {
 		}
 		
 		pageButtonAccessibility = (L.holderShowqrPreviousbutton(), L.holderShowqrNextbutton())
+	}
+	
+	private func setDomesticTitle() {
+		
+		guard Current.featureFlagManager.areBothDisclosurePoliciesEnabled() || Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() else {
+			title = L.holder_showQR_domestic_title()
+			return
+		}
+		
+		switch disclosurePolicy {
+			case .policy3G:
+				title = L.holder_showQR_domestic_title_3g()
+			case .policy1G:
+				title = L.holder_showQR_domestic_title_1g()
+			case .none:
+				title = L.holder_showQR_domestic_title()
+		}
 	}
 
 	private func setupListeners() {
