@@ -738,7 +738,7 @@ class WalletManagerTests: XCTestCase {
 			jsonData: Data(),
 			expiryDate: nil
 		)
-		let autoId = try XCTUnwrap(self.sut.listEventGroups().first?.autoId)
+		let autoId = try XCTUnwrap(self.sut.listEventGroups().first?.uniqueIdentifier)
 		
 		// When
 		sut.updateEventGroup(identifier: "\(autoId)", expiryDate: now)
