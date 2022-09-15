@@ -39,6 +39,8 @@ protocol WalletManaging: AnyObject {
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
+	
+	func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent?
 
 	/// List all the event groups
 	/// - Returns: all the event groups
