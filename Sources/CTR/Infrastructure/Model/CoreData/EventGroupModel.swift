@@ -69,3 +69,9 @@ extension EventGroup {
 	}
 	
 }
+
+extension EventGroup {
+	public var uniqueIdentifier: String {
+		objectID.uriRepresentation().relativePath
+	}
+}

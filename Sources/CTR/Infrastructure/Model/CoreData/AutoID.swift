@@ -31,9 +31,3 @@ extension NSManagedObject {
 		return 0
 	}
 }
-	
-extension EventGroup {
-	public var uniqueIdentifier: String {
-		objectID.uriRepresentation().relativePath
-	}
-}
