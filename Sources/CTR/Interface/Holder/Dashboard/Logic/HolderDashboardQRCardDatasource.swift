@@ -176,6 +176,11 @@ extension QRCard {
 					from: credential?.validFrom ?? Date.distantFuture,
 					to: credential?.expirationTime ?? Date.distantPast
 				)
+				// US 4662: There might be an expired dcc. We should enable the button for that.
+				if let credentialData = credential?.data,
+				   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData), euCredentialAttributes.expirationTime < date.timeIntervalSince1970 {
+					return hasValidOrigin
+				}
 				return hasValidOrigin && hasValidCredential
 			} else {
 				

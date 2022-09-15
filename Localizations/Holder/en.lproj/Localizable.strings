@@ -365,7 +365,6 @@
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested, recovered or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
-"holder.showqr.domestic.title" = "Dutch QR";
 "holder.showqr.eu.about.recovery.country" = "Member state of test:";
 "holder.showqr.eu.about.recovery.date" = "Test date:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Date noted in day-month-year";
@@ -635,6 +634,8 @@
 "holder_inputRetrievalCode_error_blocked" = "You’ve tried to enter your code too many times. Please try again in 5 minutes.";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We can't create a certificate";
+"holder_listRemoteEvents_endStateDuplicate_message" = "The certificate you are trying to add is already in the app. You don’t have to scan it again.";
+"holder_listRemoteEvents_endStateDuplicate_title" = "This certificate is already in the app";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Only an international vaccination certificate could be created from your retrieved details. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Only an international certificate was created";
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_message" = "<p>Only an international vaccination certificate could be created from your retrieved vaccinations. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>A recovery certificate has also been created from your positive test result.</p>";
@@ -745,6 +746,9 @@
 "holder_scanner_permission_settings" = "To Settings";
 "holder_scanner_permission_title" = "No access to camera";
 "holder_scanner_title" = "Scan QR code";
+"holder_showQR_domestic_title" = "Dutch QR";
+"holder_showQR_domestic_title_1g" = "1G access";
+"holder_showQR_domestic_title_3g" = "3G access";
 "holder_showQR_euAboutVaccination_daysSince" = "Days since vaccination:";
 "holder_showQR_label_expiredQR" = "This QR code is no longer valid";
 "holder_showQR_label_newerQRAvailable" = "You probably won't need this QR code because you have a more recent dose.";
