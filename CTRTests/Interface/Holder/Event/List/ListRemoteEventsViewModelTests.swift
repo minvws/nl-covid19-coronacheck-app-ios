@@ -125,7 +125,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -152,7 +152,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -180,7 +180,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -208,7 +208,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -236,7 +236,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -264,7 +264,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -293,7 +293,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -314,7 +314,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -339,7 +339,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -362,7 +362,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -385,7 +385,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -408,7 +408,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -433,7 +433,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -456,7 +456,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -479,7 +479,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -506,7 +506,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -535,7 +535,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -556,7 +556,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -579,7 +579,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -595,7 +595,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -617,7 +617,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -633,7 +633,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -655,7 +655,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -670,7 +670,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -692,7 +692,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -707,7 +707,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -729,7 +729,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = false
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -744,7 +744,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -768,7 +768,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -784,7 +784,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -810,7 +810,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -826,7 +826,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -852,7 +852,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -868,7 +868,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
@@ -894,7 +894,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -933,7 +933,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -949,7 +949,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -975,7 +975,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -991,7 +991,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1019,7 +1019,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1035,7 +1035,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1063,7 +1063,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1079,7 +1079,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1107,7 +1107,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1123,7 +1123,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1151,7 +1151,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1192,7 +1192,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1209,7 +1209,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
@@ -1237,7 +1237,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1254,7 +1254,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1282,7 +1282,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1299,7 +1299,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1327,7 +1327,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1344,7 +1344,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1370,7 +1370,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1413,7 +1413,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = nil
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1431,7 +1431,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1461,7 +1461,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1479,7 +1479,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert) == nil
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
@@ -1509,7 +1509,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1551,7 +1551,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1592,7 +1592,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1635,7 +1635,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 
@@ -1678,7 +1678,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1721,7 +1721,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1775,7 +1775,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1805,7 +1805,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1814,7 +1814,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		// Then
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1863,7 +1863,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1900,7 +1900,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1921,7 +1921,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1942,7 +1942,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1963,7 +1963,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
@@ -1984,7 +1984,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state")
+			fail("wrong state: \(sut.viewState)")
 			return
 		}
 		
