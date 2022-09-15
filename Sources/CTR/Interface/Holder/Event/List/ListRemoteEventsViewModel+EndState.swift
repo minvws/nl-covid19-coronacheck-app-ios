@@ -97,7 +97,7 @@ extension ListRemoteEventsViewModel {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holder_listRemoteEvents_endStateDuplicate_title(),
-			subTitle: L.holder_listRemoteEvents_endStateDuplicate_message(),
+			body: L.holder_listRemoteEvents_endStateDuplicate_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
