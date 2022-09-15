@@ -227,7 +227,7 @@ class ListRemoteEventsViewModel {
 				let allEventGroups = Current.walletManager.listEventGroups()
 
 				let eventsNotBeingAdded = allEventGroups.filter { eventGroup in
-					!eventsBeingAdded.contains(where: { eventGroup.autoId != $0.autoId })
+					!eventsBeingAdded.contains(where: { eventGroup.uniqueIdentifier == $0.uniqueIdentifier })
 				}
 			
 				// The items which the backend has indicated are blocked:
@@ -347,7 +347,7 @@ private extension Array where Element == RemoteGreenCards.BlobExpiry {
 	/// Determine which blockItems match EventGroups which were sent to be signed:
 	func blockItems(matchingEventGroups eventGroups: [EventGroup]) -> [(RemoteGreenCards.BlobExpiry, EventGroup)] {
 		reduce([]) { partialResult, blockItem in
-			guard let matchingEvent = eventGroups.first(where: { "\($0.autoId)" == blockItem.identifier }) else { return partialResult }
+			guard let matchingEvent = eventGroups.first(where: { "\($0.uniqueIdentifier)" == blockItem.identifier }) else { return partialResult }
 			return partialResult + [(blockItem, matchingEvent)]
 		}
 	}

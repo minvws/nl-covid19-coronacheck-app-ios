@@ -520,7 +520,7 @@ class WalletManager: WalletManaging {
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 		
 			wallet.castEventGroups().forEach { eventGroup in
-				if String(eventGroup.autoId) == identifier {
+				if String(eventGroup.uniqueIdentifier) == identifier {
 					eventGroup.expiryDate = expiryDate
 				}
 			}
