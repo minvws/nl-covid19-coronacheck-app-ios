@@ -526,6 +526,75 @@ extension RemoteGreenCards.Response {
 			hints: nil
 		)
 	}
+	
+	static func internationalBlockedVaccination(blockedIdentifier: String) -> RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifier,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				)
+			],
+			hints: [
+				"event_blocked",
+				"domestic_vaccination_rejected",
+				"international_vaccination_rejected"
+			]
+		)
+	}
+	
+	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String) -> RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOrigin
+					],
+					credential: "test credential"
+				)
+			],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifierForExistingVaccination,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				)
+			],
+			hints: [
+				"event_blocked",
+				"domestic_vaccination_created",
+				"international_vaccination_created"
+			]
+		)
+	}
+
+	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String, blockedIdentifierForNewVaccination: String) -> RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifierForExistingVaccination,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				),
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifierForNewVaccination,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				)
+			],
+			hints: [
+				"event_blocked",
+				"domestic_vaccination_rejected",
+				"international_vaccination_rejected"
+			]
+		)
+	}
 
 	static var multipleDCC: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
@@ -1219,7 +1288,7 @@ extension EventGroup {
 					type: type,
 					providerIdentifier: "CoronaCheck",
 					expiryDate: expiryDate,
-					jsonData: Data(),
+					jsonData: try! JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test")),
 					wallet: wallet,
 					managedContext: context
 				)

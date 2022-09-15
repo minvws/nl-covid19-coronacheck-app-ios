@@ -1886,7 +1886,157 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
+	
+	// MARK: - Blocked State -
+	
+	// 1. - Add a single DCC that is blocked: show blocked end-state
+	
+	func test_singleDCC_whichIsBlocked_showsAnEndState() {
+		
+		// Arrange
+		
+		let fakeEventGroup: EventGroup = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeEventGroup
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeEventGroup]
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalBlockedVaccination(blockedIdentifier: fakeEventGroup.uniqueIdentifier)), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+		
+		// Act
+		content.primaryAction?()
+		
+		// Assert
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		
+		let feedback: Content? = eventuallyUnwrap(eval: { () -> Content? in
+			if case let ListRemoteEventsViewController.State.feedback(content: feedback) = self.sut.viewState {
+				return feedback
+			}
+			return nil
+		})
+
+		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
+		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback?.secondaryActionTitle) == nil
+	}
+
+	// 2. - Have a DCC in database (which is server-side blocked), send a vaccination: persist to DB, no end-state
+	
+	func test_singleDCC_whichIsBlockedRemotely_tryToAddVaccination_insertsBlockedEvent() {
+		
+		// Arrange
+		
+		let fakeExistingEventGroup: EventGroup = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		let fakeIncomingEventGroup: EventGroup = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeIncomingEventGroup
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeExistingEventGroup, fakeIncomingEventGroup]
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: fakeExistingEventGroup.uniqueIdentifier)), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+		
+		// Act
+		content.primaryAction?()
+		
+		// Assert
+		
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type).toEventually(equal(.vaccination))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason).toEventually(equal("event_blocked"))
+	}
+	
+	// 3. - Have a DCC in database (which is server-side blocked), send a DCC vaccination which is blocked: persist to DB and show blocked end-state
+	
+	func test_singleDCC_whichIsBlockedRemotely_tryToAddBlockedVaccination_insertsBlockedEventAndShowsEndState() {
+		
+		// Arrange
+		
+		let fakeExistingEventGroup: EventGroup = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		let fakeIncomingEventGroup: EventGroup = EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeIncomingEventGroup
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeExistingEventGroup, fakeIncomingEventGroup]
+		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: fakeExistingEventGroup.uniqueIdentifier, blockedIdentifierForNewVaccination: fakeIncomingEventGroup.uniqueIdentifier)), ())
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof],
+			greenCardLoader: greenCardLoader
+		)
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+		
+		// Act
+		content.primaryAction?()
+		
+		// Assert
+		
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type).toEventually(equal(.vaccination))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason).toEventually(equal("event_blocked"))
+		
+		let feedback: Content? = eventuallyUnwrap(eval: { () -> Content? in
+			if case let ListRemoteEventsViewController.State.feedback(content: feedback) = self.sut.viewState {
+				return feedback
+			}
+			return nil
+		})
+		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
+		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback?.secondaryActionTitle) == nil
+	}
+	
 	// MARK: - Empty States -
 	
 	func test_emptyState_negativeTest() throws {
