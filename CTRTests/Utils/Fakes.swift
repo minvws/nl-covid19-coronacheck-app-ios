@@ -1278,17 +1278,19 @@ extension EuCredentialAttributes {
 
 extension EventGroup {
 	
-	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, expiryDate: Date) -> EventGroup? {
+	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, expiryDate: Date) throws -> EventGroup? {
 		
 		var eventGroup: EventGroup?
 		let context = dataStoreManager.managedObjectContext()
+		let jsonData = try JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test"))
+		
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				eventGroup = EventGroupModel.create(
 					type: type,
 					providerIdentifier: "CoronaCheck",
 					expiryDate: expiryDate,
-					jsonData: try! JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test")),
+					jsonData: jsonData,
 					wallet: wallet,
 					managedContext: context
 				)
