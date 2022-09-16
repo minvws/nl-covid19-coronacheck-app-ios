@@ -196,7 +196,6 @@ extension BaseTest {
 	
 	private func tapOnInternationalTab() {
 		guard disclosureMode != .mode0G else {
-			app.textExists("Mijn bewijzen")
 			return
 		}
 		app.tapButton("Internationaal")
@@ -279,7 +278,7 @@ extension BaseTest {
 			app.textExists("Dosis " + dose)
 			
 			openQRDetails(for: person)
-			app.textExists("Over je dosis " + dose)
+			app.textExists("Over mijn dosis " + dose)
 			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
 			
@@ -302,7 +301,7 @@ extension BaseTest {
 		
 		openQRDetails(for: person)
 		if let dose = dose {
-			app.textExists("Over je dosis " + dose)
+			app.textExists("Over mijn dosis " + dose)
 		}
 		app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: vaccination.disease)
 		app.labelValuePairExist(label: "Vaccin / Vaccine:", value: vaccination.vaccine.rawValue)
@@ -350,7 +349,7 @@ extension BaseTest {
 		
 		openQRDetails(for: person)
 		app.textExists("Over mijn internationale QR-code")
-		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona)")
+		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona) / negative (no coronavirus)")
 		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
 		closeQRDetails()
 		app.tapButton("Terug")

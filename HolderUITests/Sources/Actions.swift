@@ -123,7 +123,7 @@ extension BaseTest {
 			return
 		}
 		
-		let username = safari.webViews.textFields["User Name"].assertExistence()
+		let username = safari.textFields["User Name"].assertExistence()
 		username.tap()
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
@@ -134,12 +134,12 @@ extension BaseTest {
 			makeScreenShot(name: "Hide continue button")
 		}
 		
-		let password = safari.webViews.secureTextFields["Password"].assertExistence()
+		let password = safari.secureTextFields["Password"].assertExistence()
 		password.tap()
 		password.typeText(authPassword)
 		makeScreenShot(name: "Password typed")
 		
-		let submitAuth = safari.webViews.buttons["Log In"].assertExistence()
+		let submitAuth = safari.buttons["Log In"].assertExistence()
 		submitAuth.tap()
 		makeScreenShot(name: "Auth submit button")
 	}
