@@ -1791,6 +1791,39 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 	
+	func test_duplicateDCC() throws {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .paperflow,
+			remoteEvents: [remotePaperFlowEvent],
+			greenCardLoader: greenCardLoader
+		)
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		// Then
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		expect(feedback.title) == L.holder_listRemoteEvents_endStateDuplicate_title()
+		expect(feedback.body) == L.holder_listRemoteEvents_endStateDuplicate_message()
+		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
+		expect(feedback.secondaryActionTitle) == nil
+	}
+	
 	// MARK: - Open URL -
 
 	func test_openUrl() throws {
@@ -2028,5 +2061,29 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			),
 			signedResponse: nil
 		)
+	}
+	
+	private func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
+
+		var eventGroup: EventGroup?
+		if let payloadData = try? JSONEncoder().encode(wrapper) {
+		   let base64String = payloadData.base64EncodedString()
+			let signedResponse = SignedResponse(payload: base64String, signature: "does not matter for this test")
+			let context = environmentSpies.dataStoreManager.managedObjectContext()
+			context.performAndWait {
+				if let wallet = WalletModel.createTestWallet(managedContext: context),
+				   let jsonData = try? JSONEncoder().encode(signedResponse) {
+					eventGroup = EventGroupModel.create(
+						type: EventMode.recovery,
+						providerIdentifier: "DCC-1234",
+						expiryDate: nil,
+						jsonData: jsonData,
+						wallet: wallet,
+						managedContext: context
+					)
+				}
+			}
+		}
+		return eventGroup
 	}
 }
