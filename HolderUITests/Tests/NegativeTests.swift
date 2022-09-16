@@ -15,7 +15,7 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidDutchTestCertificate()
 		assertNoValidDutchCertificate(ofType: .vaccination)
@@ -30,7 +30,7 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidDutchTestCertificate()
 		assertNoValidDutchCertificate(ofType: .vaccination)
@@ -46,7 +46,7 @@ class NegativeTests: BaseTest {
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidDutchTestCertificate()
 		assertNoValidDutchCertificate(ofType: .vaccination)

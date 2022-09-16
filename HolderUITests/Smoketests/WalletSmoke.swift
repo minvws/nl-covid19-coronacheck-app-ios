@@ -19,7 +19,7 @@ class WalletSmoke: BaseTest {
 		
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		assertWalletItem(ofType: .vaccination, with: vac)
@@ -65,7 +65,7 @@ class WalletSmoke: BaseTest {
 		let person = TestData.vacP1
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		deleteItemFromWallet()

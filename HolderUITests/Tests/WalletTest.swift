@@ -65,7 +65,7 @@ class WalletTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		assertWalletItem(ofType: .negative, with: neg)

@@ -33,7 +33,7 @@ class PositiveOthersSmoke: BaseTest {
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertHintForOnlyInternationalCertificate()
+		assertCertificateIsOnlyValidInternationally()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
