@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.4.0.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
