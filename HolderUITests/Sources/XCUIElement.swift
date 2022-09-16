@@ -9,7 +9,7 @@ import XCTest
 
 extension XCUIElement {
 	
-	private static let timeout = 15.0
+	private static let timeout = 5.0
 	
 	func clearText() {
 		guard let stringValue = self.value as? String else {
@@ -30,6 +30,11 @@ extension XCUIElement {
 		return self
 	}
 	
+	func assertNotExistence() {
+		let elementPresent = rapidlyEvaluate(timeout: 1.0) { self.exists }
+		XCTAssertFalse(elementPresent, self.description + " could be found")
+	}
+	
 	func tapButton(_ label: String, index: Int = 0) {
 		let predicate = NSPredicate(format: "label contains %@", label)
 		let elementQuery = self.descendants(matching: .any).matching(predicate)
@@ -47,6 +52,10 @@ extension XCUIElement {
 		_ = self.staticTexts[label].assertExistence()
 	}
 	
+	func textNotExists(_ label: String) {
+		self.staticTexts[label].assertNotExistence()
+	}
+	
 	func labelValuePairExist(label: String, value: String) {
 		let elementLabel = [label, value].joined(separator: ",")
 		_ = self.otherElements[elementLabel].assertExistence()
@@ -60,7 +69,7 @@ extension XCUIElement {
 	}
 	
 	func containsValue(_ text: String) {
-		let elementQuery = self.descendants(matching: .staticText)
+		let elementQuery = self.descendants(matching: .any)
 		let predicate = NSPredicate(format: "value contains[c] %@", text)
 		let element = elementQuery.element(matching: predicate)
 		_ = element.assertExistence()

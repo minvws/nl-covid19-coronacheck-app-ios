@@ -69,6 +69,27 @@ extension BaseTest {
 		retrieveCertificateFromServer(for: bsn)
 	}
 	
+	func addCommercialTestCertificate(for retrievalCode: String? = nil, with verificationCode: String? = nil) {
+		addEvent()
+		app.tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
+		app.tapButton("Andere testlocatie")
+		
+		if let retrievalCode = retrievalCode {
+			let retrievalField = app.textFields["Ophaalcode"]
+			retrievalField.tap()
+			retrievalField.typeText(retrievalCode)
+			app.staticTexts["Volgende"].tap()
+		}
+		
+		if let verificationCode = verificationCode {
+			app.containsText("Verificatiecode")
+			let verificationField = app.textFields["Verificatiecode"]
+			verificationField.tap()
+			verificationField.typeText(verificationCode)
+			app.staticTexts["Volgende"].tap()
+		}
+	}
+	
 	private func retrieveCertificateFromServer(for bsn: String) {
 		
 		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
@@ -87,6 +108,9 @@ extension BaseTest {
 		let submit = safari.webViews.staticTexts["Login / Submit"].assertExistence()
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
+		
+		let popup = safari.webViews.textViews["Deze pagina openen met 🤖 Dev Holder?"].waitForExistence(timeout: 1.0)
+		if popup { safari.webViews.buttons["Open"].tap() }
 	}
 	
 	private func loginToServer() {
