@@ -41,6 +41,7 @@ extension BaseTest {
 	}
 	
 	func assertNoCertificateCouldBeCreatedIn0G() {
+		guard ctbInUse else { return }
 		guard disclosureMode == .mode0G else { return }
 		assertNoCertificateCouldBeCreated()
 	}
@@ -52,9 +53,8 @@ extension BaseTest {
 	}
 	
 	func assertCertificateIsOnlyValidInternationally() {
-		guard ctbInUse else { return }
-		guard disclosureMode != .mode0G else { return }
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
+		app.containsValue("Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
 		returnToCertificateOverview()
 	}
 	
@@ -68,8 +68,17 @@ extension BaseTest {
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
 	
-	func assertCombinedVaccinationAndRecoveryRetrieval() {
+	func assertHintForInternationalVaccinationAndRecoveryCertificate() {
 		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		app.containsValue("Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
+		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.")
+		returnToCertificateOverview()
+	}
+	
+	func assertHintForVaccinationAndRecoveryCertificate() {
+		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		app.containsValue("Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.")
+		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.")
 		returnToCertificateOverview()
 	}
 	
@@ -85,7 +94,7 @@ extension BaseTest {
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
 		app.tapButton("Sluiten")
 	}
-
+	
 	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int) {
 		app.tapButton("Details", index: position)
 		app.containsText("Naam: " + person.name)

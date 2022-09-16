@@ -11,7 +11,6 @@ class NegativeSupervisedTest: BaseTest {
 		let person = TestData.negPcrSupervisedSelftest
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
 		
 		assertNoCertificateRetrieved()
 	}
@@ -20,7 +19,6 @@ class NegativeSupervisedTest: BaseTest {
 		let person = TestData.negRatSupervisedSelftest
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreated()
 		
 		assertNoCertificateRetrieved()
 	}

@@ -15,7 +15,7 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
+		assertHintForOnlyInternationalCertificate()
 		
 		assertValidDutchTestCertificate()
 		assertNoValidDutchCertificate(ofType: .vaccination)
@@ -30,7 +30,7 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
+		assertHintForOnlyInternationalCertificate()
 		
 		assertValidDutchTestCertificate()
 		assertNoValidDutchCertificate(ofType: .vaccination)
@@ -43,11 +43,10 @@ class NegativeTests: BaseTest {
 		let person = TestData.negAgobP1
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
+		assertHintForOnlyInternationalCertificate()
 		
 		assertValidDutchTestCertificate()
 		assertNoValidDutchCertificate(ofType: .vaccination)

@@ -47,7 +47,7 @@ class VaccinationAround18Test: BaseTest {
 		let person = TestData.around18Is18y2mWithP2LastDose9M
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
+		assertHintForOnlyInternationalCertificate()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
@@ -93,7 +93,7 @@ class VaccinationAround18Test: BaseTest {
 		let person = TestData.around18Is18y2mWithJ1LastDose9M
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
+		assertHintForOnlyInternationalCertificate()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)

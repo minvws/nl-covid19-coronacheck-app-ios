@@ -29,7 +29,7 @@ class WalletTest: BaseTest {
 		let vac = storeRetrievedCertificateDetails(atIndex: 0)
 		let pos = storeRetrievedCertificateDetails(atIndex: 1)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		viewWallet()
 		assertWalletItem(ofType: .positive, with: pos)
@@ -43,7 +43,7 @@ class WalletTest: BaseTest {
 		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
 		let pos = storeRetrievedCertificateDetails(atIndex: 2)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		addTestCertificateFromGGD(for: person.bsn)
 		let neg = storeRetrievedCertificateDetails()
@@ -65,7 +65,7 @@ class WalletTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
+		assertHintForOnlyInternationalCertificate()
 		
 		viewWallet()
 		assertWalletItem(ofType: .negative, with: neg)
@@ -120,7 +120,7 @@ class WalletTest: BaseTest {
 		let person = TestData.posPcrP1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForInternationalVaccinationAndRecoveryCertificate()
 		
 		viewWallet()
 		assertAmountOfWalletItems(ofType: .positive, is: 1)

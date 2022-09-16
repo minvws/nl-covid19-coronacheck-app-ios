@@ -11,7 +11,7 @@ class PositivePcrTest: BaseTest {
 		let person = TestData.posPcrJ2
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -24,7 +24,7 @@ class PositivePcrTest: BaseTest {
 		let person = TestData.posPcrJ3
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -37,7 +37,7 @@ class PositivePcrTest: BaseTest {
 		let person = TestData.posPcrP1J1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -46,11 +46,12 @@ class PositivePcrTest: BaseTest {
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
+	// TODO: Foutcode bij ophalen?
 	func test_posPcrP2J1() {
 		let person = TestData.posPcrP2J1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
