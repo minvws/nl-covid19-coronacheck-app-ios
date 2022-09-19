@@ -140,7 +140,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 		// userDidScanDCC(CouplingManager.expiredDCC)
 		// userDidSubmitPaperProofToken(token: CouplingManager.expiredCouplingCode)
 		// userWishesToCreateACertificate()
-		// return 
+		// return
 		
 		if let scannedDCC = LaunchArgumentsHandler.getScannedDCC() {
 			userDidScanDCC(scannedDCC)
