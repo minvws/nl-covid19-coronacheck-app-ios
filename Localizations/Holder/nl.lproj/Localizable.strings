@@ -632,6 +632,14 @@
 "holder_fetchRemoteEvents_title" = "Gegevens ophalen";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "Je hebt te vaak geprobeerd je code in te vullen. Probeer het over 5 minuten opnieuw.";
+"holder_invaliddetailsremoved_alert_body" = "Er zijn ongeldige vaccinatie- of testgegevens van jou gevonden. Deze zijn uit de app verwijderd. Mogelijk zijn hierdoor ook bewijzen weggehaald.";
+"holder_invaliddetailsremoved_alert_button_close" = "Sluiten";
+"holder_invaliddetailsremoved_alert_button_moreinfo" = "Meer informatie";
+"holder_invaliddetailsremoved_alert_title" = "Ongeldige gegevens verwijderd";
+"holder_invaliddetailsremoved_banner_button_readmore" = "Lees meer";
+"holder_invaliddetailsremoved_banner_title" = "Er zijn gegevens uit de app verwijderd.";
+"holder_invaliddetailsremoved_moreinfo_body" = "<p>Er zijn gegevens van jou ongeldig verklaard. Daarom zijn deze uit de app verwijderd. Het gaat om de volgende gegevens:</p>%@<p>Mogelijk zijn hierdoor ook bewijzen uit de app verwijderd. Voeg een geldige vaccinatie of test toe om bewijzen weer terug te halen.</p><p>Heb je vragen? Bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_invaliddetailsremoved_moreinfo_title" = "Verwijderde gegevens";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
 "holder_listRemoteEvents_endStateDuplicate_message" = "Het bewijs dat je probeert in te scannen staat al in de app. Je kunt een bewijs niet twee keer toevoegen.";
@@ -643,6 +651,8 @@
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Je positieve test kon wel meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We konden geen herstelbewijs maken";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>Van je opgehaalde gegevens kon een herstelbewijs worden gemaakt.</p><p>Je positieve test kon ook meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>Dit bewijs is ongeldig verklaard. Daarom kun je het niet aan de app toevoegen.</p><p>Probeer een geldig bewijs toe te voegen, of bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateNoValidCertificate_title" = "Geen geldig bewijs";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "Er is een herstelbewijs gemaakt";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Van je opgehaalde gegevens kon alleen een herstelbewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryOnly_title" = "Er is alleen een herstelbewijs gemaakt";

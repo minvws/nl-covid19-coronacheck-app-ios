@@ -632,6 +632,14 @@
 "holder_fetchRemoteEvents_title" = "Retrieve details";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>The vaccination(s) you've added to the app unfortunately don’t entitle you to a Dutch vaccination certificate.</p><p>Add a new vaccination or test to get a Dutch vaccination certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "You’ve tried to enter your code too many times. Please try again in 5 minutes.";
+"holder_invaliddetailsremoved_alert_body" = "Invalid vaccination or test details were found for you. These have been removed from the app. Certificates may also have been removed as a result.";
+"holder_invaliddetailsremoved_alert_button_close" = "Close";
+"holder_invaliddetailsremoved_alert_button_moreinfo" = "More information";
+"holder_invaliddetailsremoved_alert_title" = "Invalid details removed";
+"holder_invaliddetailsremoved_banner_button_readmore" = "Read more";
+"holder_invaliddetailsremoved_banner_title" = "Details have been removed from the app.";
+"holder_invaliddetailsremoved_moreinfo_body" = "<p>Some of your details were declared invalid. They have therefore been removed from the app. It concerns the following details:</p>%@<p>Certificates may have been removed from the app as well. Please add a valid vaccination or test to retrieve certificates again.</p><p>Do you have questions about this? Please contact the CoronaCheck helpdesk via <a href=\"tel:08001421\">0800-1421</a> and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
+"holder_invaliddetailsremoved_moreinfo_title" = "Removed details";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We can't create a certificate";
 "holder_listRemoteEvents_endStateDuplicate_message" = "The certificate you are trying to add is already in the app. You don’t have to scan it again.";
@@ -642,6 +650,8 @@
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccination and recovery certificates created";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>You were tested positive for coronavirus too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>However, your positive test could be recorded into your vaccination certificate. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We couldn't create a recovery certificate";
+"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>This certificate has been declared invalid. For that reason, you cannot add it to the app.</p><p>Try to add a valid certificate, or contact the CoronaCheck helpdesk via <a href=\"tel:08001421\">0800-1421</a> and pass on the error code below.</p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateNoValidCertificate_title" = "Invalid certificate";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>A recovery certificate has been created from your retrieved details.</p><p>Your positive test could also be recorded into your vaccination certificate. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "A recovery certificate has been created";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Only a recovery certificate could be created from your retrieved details. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";

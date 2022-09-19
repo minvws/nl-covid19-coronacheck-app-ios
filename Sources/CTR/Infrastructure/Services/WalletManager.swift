@@ -16,12 +16,12 @@ protocol WalletManaging: AnyObject {
 	///   - providerIdentifier: the identifier of the provider
 	///   - jsonData: the json  data of the original signed event or dcc
 	///   - expiryDate: when will this eventgroup expire?
-	/// - Returns: True if stored
+	/// - Returns: Object if stored
 	func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> Bool
+		expiryDate: Date?) -> EventGroup?
 
 	func fetchSignedEvents() -> [String]
 
@@ -35,10 +35,15 @@ protocol WalletManaging: AnyObject {
 	func removeExistingEventGroups()
 
 	func removeExistingGreenCards()
+	
+	func removeExistingBlockedEvents()
 
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
+	
+	@discardableResult
+	func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent?
 
 	/// List all the event groups
 	/// - Returns: all the event groups
@@ -97,19 +102,18 @@ class WalletManager: WalletManaging {
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> Bool {
+		expiryDate: Date?) -> EventGroup? {
 
-		var success = true
+		var eventGroup: EventGroup?
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
-				success = false
 				return
 			}
 			
-			EventGroupModel.create(
+			eventGroup = EventGroupModel.create(
 				type: type,
 				providerIdentifier: providerIdentifier,
 				expiryDate: expiryDate,
@@ -119,7 +123,7 @@ class WalletManager: WalletManaging {
 			)
 			dataStoreManager.save(context)
 		}
-		return success
+		return eventGroup
 	}
 	
 	/// Expire event groups that are no longer valid
@@ -143,6 +147,30 @@ class WalletManager: WalletManaging {
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		
 		dataStoreManager.delete(objectID)
+	}
+	
+	@discardableResult func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent? {
+
+		var blockedEvent: BlockedEvent?
+		let context = dataStoreManager.managedObjectContext()
+		
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
+				return
+			}
+			
+			blockedEvent = BlockedEventModel.create(
+				type: type,
+				eventDate: eventDate,
+				reason: reason,
+				wallet: wallet,
+				managedContext: context
+			)
+			dataStoreManager.save(context)
+		}
+		
+		return blockedEvent
 	}
 
 	func fetchSignedEvents() -> [String] {
@@ -210,6 +238,24 @@ class WalletManager: WalletManaging {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
 						greenCard.delete(context: context)
+					}
+					dataStoreManager.save(context)
+				}
+			}
+		}
+	}
+
+	func removeExistingBlockedEvents() {
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let blockedEvents = wallet.blockedEvents {
+					for case let blockedEvent as BlockedEvent in blockedEvents.allObjects {
+
+						blockedEvent.delete(context: context)
 					}
 					dataStoreManager.save(context)
 				}
@@ -474,7 +520,7 @@ class WalletManager: WalletManaging {
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 		
 			wallet.castEventGroups().forEach { eventGroup in
-				if String(eventGroup.autoId) == identifier {
+				if String(eventGroup.uniqueIdentifier) == identifier {
 					eventGroup.expiryDate = expiryDate
 				}
 			}

@@ -24,7 +24,7 @@ struct ErrorCode: CustomStringConvertible {
 	var flow: String
 	var step: String
 	var provider: String?
-	var errorCode: String
+	var errorCode: String // (the client code)
 	var detailedCode: Int?
 
 	init(flow: Flow, step: Step, provider: String? = nil, errorCode: String, detailedCode: Int? = nil) {
