@@ -193,8 +193,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		selectedTab.value = newTab
 	}
 
-	private let datasource: HolderDashboardQRCardDatasourceProtocol
-
+	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
@@ -221,7 +220,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	) {
 
 		self.coordinator = coordinator
-		self.datasource = datasource
+		self.qrcardDatasource = datasource
 		self.strippenRefresher = strippenRefresher
 		self.dashboardRegionToggleValue = Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() ? .europeanUnion : Current.userSettings.dashboardRegionToggleValue
 		self.configurationNotificationManager = configurationNotificationManager
@@ -265,7 +264,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		// Observers
 		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
-			self?.datasource.reload() // this could cause some QR code states to change, so reload.
+			self?.qrcardDatasource.reload() // this could cause some QR code states to change, so reload.
 		}
 		
 		// If the config ever changes, reload dependencies:
@@ -303,7 +302,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - Setup
 
 	private func setupDatasource() {
-		datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
+		qrcardDatasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			guard let self = self else { return }
 			
 			DispatchQueue.main.async {
@@ -335,7 +334,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - View Lifecycle callbacks:
 
 	func viewWillAppear() {
-		datasource.reload()
+		qrcardDatasource.reload()
 		recalculateActiveDisclosurePolicyMode()
 	}
 
@@ -399,7 +398,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 		// If we just stopped loading, reload data.
 		if !refresherState.loadingState.isLoading && (oldRefresherState?.loadingState.isLoading ?? false) {
-			datasource.reload()
+			qrcardDatasource.reload()
 		}
 
 		// Handle combination of Loading State + Expiry State + Error presentation:
@@ -505,7 +504,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	}
 
 	@objc func receiveDidBecomeActiveNotification() {
-		datasource.reload()
+		qrcardDatasource.reload()
 	}
 
 	@objc func userDefaultsDidChange() {
