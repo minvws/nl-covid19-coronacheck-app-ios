@@ -73,6 +73,20 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedIsForeignDCCResult
 	}
 
+	var invokedIsPaperBasedDCC = false
+	var invokedIsPaperBasedDCCCount = 0
+	var invokedIsPaperBasedDCCParameters: (data: Data, Void)?
+	var invokedIsPaperBasedDCCParametersList = [(data: Data, Void)]()
+	var stubbedIsPaperBasedDCCResult: Bool! = false
+
+	func isPaperBasedDCC(_ data: Data) -> Bool {
+		invokedIsPaperBasedDCC = true
+		invokedIsPaperBasedDCCCount += 1
+		invokedIsPaperBasedDCCParameters = (data, ())
+		invokedIsPaperBasedDCCParametersList.append((data, ()))
+		return stubbedIsPaperBasedDCCResult
+	}
+
 	var invokedIsDCC = false
 	var invokedIsDCCCount = 0
 	var invokedIsDCCParameters: (data: Data, Void)?
