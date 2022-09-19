@@ -29,7 +29,7 @@ jobs:
 
   test:
     runs-on: macos-12
-    timeout-minutes: 30
+    timeout-minutes: 45
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
