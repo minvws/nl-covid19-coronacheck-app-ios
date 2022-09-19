@@ -304,10 +304,12 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 					return
 				}
 				
-				// Filter expired foreign DCCs, those should not lead to a refresh
+				// Filter expired (domestic and foreign) DCCs, those should not lead to a refresh
 				if greencard.getType() == GreenCardType.eu,
 				   let lastCredentialData = allCredentialsForGreencard.last?.data,
-				   Current.cryptoManager.isForeignDCC(lastCredentialData) {
+				   let euCred = Current.cryptoManager.readEuCredentials(lastCredentialData),
+				   euCred.expirationTime < now.timeIntervalSince1970,
+				  (Current.cryptoManager.isForeignDCC(lastCredentialData) || Current.cryptoManager.isPaperBasedDCC(lastCredentialData)) {
 					return
 				}
 				
