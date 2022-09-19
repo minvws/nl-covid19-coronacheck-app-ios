@@ -39,7 +39,7 @@ final class RecommendCoronaMelderCardView: BaseView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		if let view = view {
+		if let view {
 			contentTextView.embed(in: view)
 		}
 	}

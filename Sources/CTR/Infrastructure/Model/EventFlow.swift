@@ -310,8 +310,8 @@ struct EventFlow {
 		/// - Returns: optional date
 		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
-			if let dateString = dateString {
-				return  dateformatter.date(from: dateString)
+			if let dateString {
+				return dateformatter.date(from: dateString)
 			}
 			return nil
 		}
@@ -343,8 +343,8 @@ struct EventFlow {
 		/// - Returns: optional date
 		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
-			if let dateString = sampleDateString {
-				return  dateformatter.date(from: dateString)
+			if let sampleDateString {
+				return dateformatter.date(from: sampleDateString)
 			}
 			return nil
 		}
@@ -368,8 +368,8 @@ struct EventFlow {
 		/// - Returns: optional date
 		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 			
-			if let dateString = dateTimeString {
-				return  dateformatter.date(from: dateString)
+			if let dateTimeString {
+				return dateformatter.date(from: dateTimeString)
 			}
 			return nil
 		}

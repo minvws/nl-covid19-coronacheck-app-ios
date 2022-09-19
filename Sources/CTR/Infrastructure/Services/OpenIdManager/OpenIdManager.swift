@@ -103,7 +103,7 @@ class OpenIdManager: OpenIdManaging {
 					}
 				}
 				
-				if let presentingViewController = presentingViewController {
+				if let presentingViewController {
 					appAuthState.currentAuthorizationFlow = OIDAuthState.authState(
 						byPresenting: request,
 						presenting: presentingViewController,
@@ -129,7 +129,7 @@ class OpenIdManager: OpenIdManaging {
 			DispatchQueue.main.async {
 				if let service = serviceConfiguration {
 					onCompletion(.success(service))
-				} else if let error = error {
+				} else if let error {
 					onCompletion(.failure(error))
 				}
 			}

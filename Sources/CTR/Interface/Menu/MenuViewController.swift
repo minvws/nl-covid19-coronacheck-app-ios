@@ -43,7 +43,7 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 							guard case .row = items[nextIndex] else { return false }
 							return true
 						}()
-						if let subTitle = subTitle {
+						if let subTitle {
 							row.showSubTitle(subTitle)
 							row.accessibilityLabel = title + ", " + subTitle
 						} else {

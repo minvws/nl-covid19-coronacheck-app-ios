@@ -494,7 +494,7 @@ class WalletManager: WalletManaging {
 					else { return false }
 
 					// Optional extra check:
-					if let originType = originType {
+					if let originType {
 						return origin.type == originType.rawValue
 					}
 

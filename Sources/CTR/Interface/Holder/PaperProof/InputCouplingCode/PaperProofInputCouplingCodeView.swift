@@ -106,7 +106,7 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 	/// The header
 	var header: String? {
 		didSet {
-			if let header = header {
+			if let header {
 				messageLabel.attributedText = header.setLineHeight(ViewTraits.messageLineHeight)
 				messageLabel.isHidden = false
 			} else {

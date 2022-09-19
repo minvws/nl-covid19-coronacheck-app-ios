@@ -164,7 +164,7 @@ class KeychainItem<T: Codable> {
 
 		var query = [String: AnyObject]()
 		query[kSecClass as String] = kSecClassGenericPassword
-		if let service = service {
+		if let service {
 			query[kSecAttrService as String] = service as AnyObject?
 		}
 		query[kSecAttrAccount as String] = name as AnyObject?

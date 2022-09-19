@@ -148,7 +148,7 @@ private struct ScanLogDataSource {
 				}
 				// Switch occurred
 				lineItem = ScanLogLineItem(mode: scanMode)
-				if let currentTime = currentTime, currentTime > scanDate {
+				if let currentTime, currentTime > scanDate {
 					lineItem?.skew = true
 				}
 			}

@@ -100,7 +100,7 @@ class ListRemoteEventsViewModel {
 
 	func goBack() {
 		
-		if let originalEventMode = originalEventMode {
+		if let originalEventMode {
 			coordinator?.listEventsScreenDidFinish(.back(eventMode: originalEventMode))
 		} else {
 			coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
