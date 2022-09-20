@@ -12,7 +12,7 @@ import Reachability
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapAddCertificate()
-	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem])
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem]) 
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
@@ -196,6 +196,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	}
 
 	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol
+	private let blockedEventsDatasource: HolderDashboardBlockedEventsDatasourceProtocol
+	
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
@@ -214,7 +216,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		datasource: HolderDashboardQRCardDatasourceProtocol,
+		qrcardDatasource: HolderDashboardQRCardDatasourceProtocol,
+		blockedEventsDatasource: HolderDashboardBlockedEventsDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
 		vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol,
@@ -222,7 +225,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	) {
 
 		self.coordinator = coordinator
-		self.qrcardDatasource = datasource
+		self.qrcardDatasource = qrcardDatasource
+		self.blockedEventsDatasource = blockedEventsDatasource
 		self.strippenRefresher = strippenRefresher
 		self.dashboardRegionToggleValue = Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() ? .europeanUnion : Current.userSettings.dashboardRegionToggleValue
 		self.configurationNotificationManager = configurationNotificationManager
@@ -250,7 +254,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			}()
 		)
 
-		setupDatasource()
+		setupQRCardDatasource()
+		setupBlockedEventsDatasource()
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
@@ -304,7 +309,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	// MARK: - Setup
 
-	private func setupDatasource() {
+	private func setupQRCardDatasource() {
 		qrcardDatasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			guard let self = self else { return }
 			
@@ -314,6 +319,16 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				state.expiredGreenCards += expiredGreenCards
 				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 				self.state = state
+			}
+		}
+	}
+
+	private func setupBlockedEventsDatasource() {
+		blockedEventsDatasource.didUpdate = { [weak self] (blockedEventItems) in
+			guard let self = self else { return }
+
+			DispatchQueue.main.async {
+				self.state.blockedEventItems = blockedEventItems
 			}
 		}
 	}

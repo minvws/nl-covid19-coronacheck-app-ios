@@ -255,7 +255,8 @@ class HolderCoordinator: SharedCoordinator {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(),
+				qrcardDatasource: HolderDashboardQRCardDatasource(),
+				blockedEventsDatasource: HolderDashboardBlockedEventsDatasource(),
 				strippenRefresher: DashboardStrippenRefresher(
 					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 					reachability: try? Reachability()
