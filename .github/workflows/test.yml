@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_14.0.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.0.1.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
@@ -29,13 +29,13 @@ jobs:
 
   test:
     runs-on: macos-12
-    timeout-minutes: 45
+    timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
         # 🧐 when changing below, don't forget to also change the device name in the Fastfile too: 
         run: | 
-          xcrun simctl boot "iPhone 13" || true
+          xcrun simctl boot "iPhone 14" || true
       
       - name: Checkout
         uses: actions/checkout@v3
