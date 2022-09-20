@@ -158,6 +158,8 @@ FOUNDATION_EXPORT BOOL MobilecoreIsDCC(NSData* _Nullable proofQREncoded);
 
 FOUNDATION_EXPORT BOOL MobilecoreIsForeignDCC(NSData* _Nullable proofQREncoded);
 
+FOUNDATION_EXPORT BOOL MobilecoreIsPaperBasedDCC(NSData* _Nullable proofQREncoded);
+
 FOUNDATION_EXPORT MobilecorePublicKeysConfig* _Nullable MobilecoreNewPublicKeysConfig(NSString* _Nullable pksPath, NSError* _Nullable* _Nullable error);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
