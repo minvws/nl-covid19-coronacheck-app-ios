@@ -9,7 +9,7 @@
 "general.dose" = "dose";
 "general.doses" = "doses";
 "general.dutch" = "Dutch";
-"general.error.cryptolib.message" = "Contact our help desk and give them error code (%@) or try again later.";
+"general.error.cryptolib.message" = "Contact our helpdesk and give them error code (%@) or try again later.";
 "general.error.cryptolib.retry" = "Try again";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
 "general.error.nointernet.text" = "You're not connected to the internet right now.";
@@ -70,7 +70,7 @@
 "general_testcertificate" = "test certificate";
 "general_testcertificate_0G" = "International test certificate";
 "general_toMyOverview" = "To my certificates";
-"general_unrecoverableError_email_body" = "This email was generated automatically, containing the information we need. We ask you not to add additional information. We will receive your e-mail address along with information about the technical issue. This information will be deleted as soon as possible.\n\nThis message is directed at the CoronaCheck development team. The problem will be solved as soon as possible.\n\nAn unrecoverable error was caught in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nError details:\n	Message: %@\n	More Info: %@\n-----------";
+"general_unrecoverableError_email_body" = "This email was generated automatically, containing the information we need. We ask you not to add additional information. With this email being sent, we will receive your email address along with information about the technical issue. These details will be deleted as soon as possible.\n\nThis message is intended for the CoronaCheck development team. The issue will be solved as soon as possible.\n\nAn unrecoverable error was caught in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nError details:\n	Message: %@\n	More Info: %@\n-----------";
 "general_unrecoverableError_email_subject" = "CoronaCheck problem report (%@ %@)";
 "general_unrecoverableError_restartTheApp_message" = "Please restart CoronaCheck. Does the problem still occur? Delete and reinstall the app.";
 "general_unrecoverableError_restartTheApp_title" = "Restart the app";
@@ -177,7 +177,7 @@
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.recommendcoronamelder.title" = "<p><b>Tip:</b> Prevent the spread of coronavirus, use <a href=\"itms-apps://apps.apple.com/nl/app/coronamelder/id1517652429\">CoronaMelder</a> too.</p>";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the helpdesk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR codes. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
@@ -630,7 +630,7 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 "holder_fetchRemoteEvents_title" = "Retrieve details";
-"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>The vaccination(s) you've added to the app unfortunately don’t entitle you to a Dutch vaccination certificate.</p><p>Add a new vaccination or test to get a Dutch vaccination certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>The vaccination(s) you've added to the app unfortunately don’t entitle you to a Dutch vaccination certificate.</p><p>Add a new (booster) vaccination or test to get a Dutch vaccination certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "You’ve tried to enter your code too many times. Please try again in 5 minutes.";
 "holder_invaliddetailsremoved_alert_body" = "Invalid vaccination or test details were found for you. These have been removed from the app. Certificates may also have been removed as a result.";
 "holder_invaliddetailsremoved_alert_button_close" = "Close";

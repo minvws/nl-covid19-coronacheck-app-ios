@@ -39,6 +39,7 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 	func test_content_1G() {
 
 		// Given
+		environmentSpies.userSettingsSpy.stubbedLastKnownConfigDisclosurePolicy = ["3G"] // not 0g, as that's special-cased.
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
 
 		// When
@@ -52,6 +53,31 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
 		expect(result[0].imageBackgroundColor) == nil
 		expect(result[0].nextButtonTitle) == nil
+	}
+	
+	func test_content_1G_from_0G() {
+
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
+
+		// When
+		let result = UpdatedDisclosurePolicyFactory().create()
+
+		// Then
+		expect(result).to(haveCount(2))
+		expect(result[0].tagline) == L.general_newintheapp()
+		expect(result[0].title) == L.holder_newintheapp_content_dutchAndInternationalCertificates_title()
+		expect(result[0].content) == L.holder_newintheapp_content_dutchAndInternationalCertificates_body()
+		expect(result[0].image) == I.disclosurePolicy.dutchAndInternationalQRCards()
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
+		
+		expect(result[1].tagline) == L.general_newpolicy()
+		expect(result[1].title) == L.holder_newintheapp_content_only1G_title()
+		expect(result[1].content) == L.holder_newintheapp_content_only1G_body()
+		expect(result[1].image) == I.disclosurePolicy.newInTheApp()
+		expect(result[1].nextButtonTitle) == L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
+		expect(result[1].imageBackgroundColor) == nil
 	}
 
 	func test_content_3G() {
@@ -73,7 +99,7 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		expect(result[0].nextButtonTitle) == nil
 	}
 
-	func test_content_3G_from_0g() {
+	func test_content_3G_from_0G() {
 
 		// Given
 		environmentSpies.userSettingsSpy.stubbedLastKnownConfigDisclosurePolicy = [] // special case
@@ -103,18 +129,44 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedLastKnownConfigDisclosurePolicy = ["1G"] // not 0g, as that's special-cased.
 
 		// When
 		let result = UpdatedDisclosurePolicyFactory().create()
 
 		// Then
 		expect(result).to(haveCount(1))
-		expect(result[0].tagline) == L.general_newintheapp()
+		expect(result[0].tagline) == L.general_newpolicy()
 		expect(result[0].title) == L.holder_newintheapp_content_3Gand1G_title()
 		expect(result[0].content) == L.holder_newintheapp_content_3Gand1G_body()
 		expect(result[0].image) == I.disclosurePolicy.newInTheApp()
 		expect(result[0].imageBackgroundColor) == nil
 		expect(result[0].nextButtonTitle) == nil
+	}
+	
+	func test_content_1GWith3G_from_0G() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
+
+		// When
+		let result = UpdatedDisclosurePolicyFactory().create()
+
+		// Then
+		expect(result).to(haveCount(2))
+		expect(result[0].tagline) == L.general_newintheapp()
+		expect(result[0].title) == L.holder_newintheapp_content_dutchAndInternationalCertificates_title()
+		expect(result[0].content) == L.holder_newintheapp_content_dutchAndInternationalCertificates_body()
+		expect(result[0].image) == I.disclosurePolicy.dutchAndInternationalQRCards()
+		expect(result[0].imageBackgroundColor) == nil
+		expect(result[0].nextButtonTitle) == nil
+		
+		expect(result[1].tagline) == L.general_newpolicy()
+		expect(result[1].title) == L.holder_newintheapp_content_3Gand1G_title()
+		expect(result[1].content) == L.holder_newintheapp_content_3Gand1G_body()
+		expect(result[1].image) == I.disclosurePolicy.newInTheApp()
+		expect(result[1].nextButtonTitle) == L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
+		expect(result[1].imageBackgroundColor) == nil
 	}
 
 	func test_content_noPolicy() {
