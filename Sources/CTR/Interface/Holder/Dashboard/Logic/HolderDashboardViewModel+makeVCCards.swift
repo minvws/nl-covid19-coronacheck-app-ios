@@ -91,6 +91,23 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
+	
+	static func makeBlockedEventsCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.blockedEventItems.isNotEmpty else { return [] }
+			
+		return [
+			.eventsWereBlocked(
+				message: L.holder_invaliddetailsremoved_banner_title(),
+				callToActionButtonText: L.holder_invaliddetailsremoved_banner_button_readmore(),
+				didTapCallToAction: {
+					actionHandler.didTapBlockedEventsDeletedMoreInfo(blockedEventItems: state.blockedEventItems)
+				}
+			)
+		]
+	}
 
 	static func makeExpiredQRCard(
 		validityRegion: QRCodeValidityRegion,

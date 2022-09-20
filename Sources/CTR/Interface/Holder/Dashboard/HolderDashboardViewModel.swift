@@ -12,6 +12,7 @@ import Reachability
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapAddCertificate()
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem])
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
@@ -84,6 +85,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	struct State: Equatable {
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
+		var blockedEventItems: [BlockedEventItem]
 		var isRefreshingStrippen: Bool
 
 		// Related to strippen refreshing.
@@ -230,6 +232,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.state = State(
 			qrCards: [],
 			expiredGreenCards: [],
+			blockedEventItems: [],
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
@@ -548,6 +551,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -579,6 +583,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -616,6 +621,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -654,6 +660,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		
@@ -696,6 +703,10 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapCloseExpiredQR(expiredQR: ExpiredQR) {
 		state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
+	}
+	
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem]) {
+		coordinator?.userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: blockedEventItems)
 	}
 	
 	func didTapExpiredDomesticVaccinationQRMoreInfo() {
