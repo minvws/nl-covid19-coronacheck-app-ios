@@ -626,7 +626,7 @@ extension HolderDashboardViewModel.QRCard {
 	}
 }
 
-private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: QRCodeOriginType, message: String)] {
+private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: OriginType, message: String)] {
 
 	// Calculate origins which exist in the other region but are not in this region:
 	let originTypesForCurrentRegion = Set(
@@ -653,7 +653,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 		.subtracting(originTypesForCurrentRegion)
 
 	// Map it to user messages:
-	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String)? in
+	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: OriginType) -> (originType: OriginType, message: String)? in
 		switch (originType, thisRegion) {
 			case (.test, .domestic):
 				let containsDomesticVaccinationAssessment = qrCards.contains(where: { $0.origins.contains { $0.type == .vaccinationassessment } })
@@ -703,7 +703,7 @@ private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]
 private func internationalCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]) -> String? {
 	
 	let uniqueOrigins = Set(origins.map { $0.type })
-	guard uniqueOrigins.count == 1, let originType = uniqueOrigins.first else { return nil } // assumption: international cards have a single QRCodeOriginType per-card.
+	guard uniqueOrigins.count == 1, let originType = uniqueOrigins.first else { return nil } // assumption: international cards have a single OriginType per-card.
 	
 	guard originType == .recovery else { return nil } // Only show a countdown on international cards when it's for type Recovery
 	

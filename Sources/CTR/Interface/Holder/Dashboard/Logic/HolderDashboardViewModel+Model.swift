@@ -36,7 +36,7 @@ extension HolderDashboardViewModel {
 
 			struct Origin: Equatable, Hashable { // swiftlint:disable:this nesting
 
-				let type: QRCodeOriginType // vaccination | test | recovery | vaccinationassessment
+				let type: OriginType // vaccination | test | recovery | vaccinationassessment
 				let eventDate: Date
 				let expirationTime: Date
 				let validFromDate: Date
@@ -94,14 +94,14 @@ extension HolderDashboardViewModel {
 				}
 			}
 			
-			func hasValidOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+			func hasValidOrigin(ofType type: OriginType, now: Date) -> Bool {
 				return origins
 					.filter { $0.isCurrentlyValid(now: now) }
 					.contains(where: { $0.type == type })
 			}
 			
 			/// Note: may _not yet_ be valid!
-			func hasUnexpiredOrigin(ofType type: QRCodeOriginType, now: Date) -> Bool {
+			func hasUnexpiredOrigin(ofType type: OriginType, now: Date) -> Bool {
 				return origins
 					.filter { $0.isNotYetExpired(now: now) }
 					.contains(where: { $0.type == type })
@@ -170,7 +170,7 @@ extension HolderDashboardViewModel {
 	struct ExpiredQR: Equatable {
 		let id = UUID().uuidString
 		let region: QRCodeValidityRegion
-		let type: QRCodeOriginType
+		let type: OriginType
 	}
 	
 	enum DisclosurePolicyMode {
