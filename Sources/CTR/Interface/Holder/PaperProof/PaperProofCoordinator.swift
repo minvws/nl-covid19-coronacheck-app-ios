@@ -168,6 +168,11 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	
 	func userWishesToEnterToken() {
 		
+		// #warning("Do not commit")
+		// userDidSubmitPaperProofToken(token: "ZKGBKH")
+		// userWishesToCreateACertificate()
+		// return
+		
 		if let couplingCode = LaunchArgumentsHandler.getCouplingCode() {
 			userDidSubmitPaperProofToken(token: couplingCode)
 			userWishesToCreateACertificate()

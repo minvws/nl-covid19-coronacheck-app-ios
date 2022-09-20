@@ -59,7 +59,7 @@ extension EventGroup {
 		guard var dictionary = try? JSONDecoder().decode([String: String].self, from: fixedJSONData) else {
 			return nil }
 		
-		dictionary["id"] = String(autoId)
+		dictionary["id"] = uniqueIdentifier
 		
 		guard let reencodedData = try? JSONEncoder().encode(dictionary),
 			  let finalJSONString = String(data: reencodedData, encoding: .utf8) else {
@@ -68,4 +68,10 @@ extension EventGroup {
 		return finalJSONString
 	}
 	
+}
+
+extension EventGroup {
+	public var uniqueIdentifier: String {
+		objectID.uriRepresentation().relativePath
+	}
 }
