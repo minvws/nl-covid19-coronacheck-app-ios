@@ -26,6 +26,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
@@ -386,6 +387,36 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem]) {
+
+		let bulletpoints = blockedEventItems
+			.compactMap { blockedEventItem -> String? in
+				guard let localizedDateLabel = blockedEventItem.type.localizedDateLabel else { return nil }
+				let dateString = DateFormatter.Format.dayMonthYear.string(from: blockedEventItem.eventDate)
+				return """
+				<p>
+					<b>\(blockedEventItem.type.localized.capitalized)</b>
+					<br />
+					<b>\(localizedDateLabel.capitalized): \(dateString)</b>
+				</p>
+				""" }
+			.joined()
+
+		guard bulletpoints.isNotEmpty else { return }
+
+		// I 1280 000 0514
+		let errorCode = ErrorCode(
+			flow: .dashboard,
+			step: .signer,
+			clientCode: .signerReturnedBlockedEvent
+		)
+
+		let title: String = L.holder_invaliddetailsremoved_moreinfo_title()
+		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(bulletpoints, errorCode.description)
+
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+	}
+
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
