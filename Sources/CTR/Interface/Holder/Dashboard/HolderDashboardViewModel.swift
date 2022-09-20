@@ -17,7 +17,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapDeviceHasClockDeviationMoreInfo()
 	func didTapExpiredDomesticVaccinationQRMoreInfo()
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
+	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion)
 	func didTapRecommendedUpdate()
 	func didTapRetryLoadQRCards()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
@@ -703,7 +703,7 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
 	}
 	
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
+	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion) {
 		coordinator?.userWishesMoreInfoAboutUnavailableQR( originType: originType, currentRegion: validityRegion)
 	}
 	

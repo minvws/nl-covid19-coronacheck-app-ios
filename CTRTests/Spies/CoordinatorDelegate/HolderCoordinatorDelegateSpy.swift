@@ -149,10 +149,10 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesMoreInfoAboutUnavailableQR = false
 	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
-	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)?
-	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)]()
+	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: OriginType, currentRegion: QRCodeValidityRegion)?
+	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: OriginType, currentRegion: QRCodeValidityRegion)]()
 
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) {
+	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
 		invokedUserWishesMoreInfoAboutUnavailableQR = true
 		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
 		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion)
