@@ -185,10 +185,10 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 							"unomiUrl": "https://coronacheck.nl/api/unomi",
 							"eventUrl": "https://coronacheck.nl/api/event",
 							"cms": [
-								OpenSSLData.providerCertificate
+								OpenSSLData.providerCMSCertificate
 							],
 							"tls": [
-								OpenSSLData.providerCertificate
+								OpenSSLData.providerTLSCertificate
 							],
 							"usage": [
 								"v"

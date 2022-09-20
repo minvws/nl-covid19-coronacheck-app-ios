@@ -19,8 +19,8 @@ class NetworkManagerTestResultsTests: XCTestCase {
 		identifier: "CC",
 		name: "CoronaCheck",
 		resultURLString: "https://coronacheck.nl/testResult",
-		cmsCertificates: [OpenSSLData.providerCertificate],
-		tlsCertificates: [OpenSSLData.providerCertificate],
+		cmsCertificates: [OpenSSLData.providerCMSCertificate],
+		tlsCertificates: [OpenSSLData.providerTLSCertificate],
 		usages: [.negativeTest]
 	)
 	
@@ -51,8 +51,8 @@ class NetworkManagerTestResultsTests: XCTestCase {
 			identifier: "CC",
 			name: "CoronaCheck",
 			resultURLString: "https://coronacheck.nl?filter|test",
-			cmsCertificates: [OpenSSLData.providerCertificate],
-			tlsCertificates: [OpenSSLData.providerCertificate],
+			cmsCertificates: [OpenSSLData.providerCMSCertificate],
+			tlsCertificates: [OpenSSLData.providerTLSCertificate],
 			usages: [.negativeTest]
 		)
 
