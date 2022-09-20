@@ -70,7 +70,7 @@
 "general_testcertificate" = "testbewijs";
 "general_testcertificate_0G" = "Internationaal testbewijs";
 "general_toMyOverview" = "Naar mijn bewijzen";
-"general_unrecoverableError_email_body" = "Deze email is automatisch gegenereerd met alle gegevens die wij nodig hebben. Wij vragen u geen extra informatie toe te voegen. Wij ontvangen bij verzending uw e-mail adres tezamen met informatie over het technische probleem. Deze informatie zal zo spoedig mogelijk worden verwijderd.\n\nDit bericht is bedoeld voor het CoronaCheck ontwikkelteam. Het probleem zal zo snel mogelijk opgelost worden.\n\nEen onoplosbaar probleem heeft plaats gevonden in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nError details:\n	Bericht: %@\n	Meer informatie: %@\n-----------";
+"general_unrecoverableError_email_body" = "Deze e-mail is automatisch opgesteld met alle gegevens die wij nodig hebben. We vragen je geen extra informatie toe te voegen. Wij ontvangen bij verzending je e-mailadres, samen met informatie over het technische probleem. Deze gegevens zullen zo snel mogelijk worden verwijderd.\n\nDit bericht is bedoeld voor het CoronaCheck ontwikkelteam. Het probleem zal zo snel mogelijk opgelost worden.\n\nEen onoplosbaar probleem heeft plaatsgevonden in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nProbleem details:\n	Bericht: %@\n	Meer informatie: %@\n-----------";
 "general_unrecoverableError_email_subject" = "CoronaCheck problem report (%@ %@)";
 "general_unrecoverableError_restartTheApp_message" = "Start CoronaCheck opnieuw op. Nog steeds een probleem? Verwijder de app en installeer deze opnieuw.";
 "general_unrecoverableError_restartTheApp_title" = "Start de app opnieuw op";
@@ -630,7 +630,7 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 "holder_fetchRemoteEvents_title" = "Gegevens ophalen";
-"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe (booster)vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "Je hebt te vaak geprobeerd je code in te vullen. Probeer het over 5 minuten opnieuw.";
 "holder_invaliddetailsremoved_alert_body" = "Er zijn ongeldige vaccinatie- of testgegevens van jou gevonden. Deze zijn uit de app verwijderd. Mogelijk zijn hierdoor ook bewijzen weggehaald.";
 "holder_invaliddetailsremoved_alert_button_close" = "Sluiten";
@@ -642,7 +642,7 @@
 "holder_invaliddetailsremoved_moreinfo_title" = "Verwijderde gegevens";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
-"holder_listRemoteEvents_endStateDuplicate_message" = "Het bewijs dat je probeert in te scannen staat al in de app. Je kunt een bewijs niet twee keer toevoegen.";
+"holder_listRemoteEvents_endStateDuplicate_message" = "Het bewijs dat je probeert toe te voegen staat al in de app. Je hoeft het niet nog een keer te scannen.";
 "holder_listRemoteEvents_endStateDuplicate_title" = "Dit bewijs staat al in de app";
 "holder_listRemoteEvents_endStateInternationalQROnly_message" = "<p>Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateInternationalQROnly_title" = "Er is alleen een internationaal bewijs gemaakt";
@@ -650,9 +650,9 @@
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Je positieve test kon wel meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We konden geen herstelbewijs maken";
-"holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>Van je opgehaalde gegevens kon een herstelbewijs worden gemaakt.</p><p>Je positieve test kon ook meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>Dit bewijs is ongeldig verklaard. Daarom kun je het niet aan de app toevoegen.</p><p>Probeer een geldig bewijs toe te voegen, of bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateNoValidCertificate_title" = "Geen geldig bewijs";
+"holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>Van je opgehaalde gegevens is een herstelbewijs gemaakt.</p><p>Je positieve test kon ook meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "Er is een herstelbewijs gemaakt";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Van je opgehaalde gegevens kon alleen een herstelbewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryOnly_title" = "Er is alleen een herstelbewijs gemaakt";
