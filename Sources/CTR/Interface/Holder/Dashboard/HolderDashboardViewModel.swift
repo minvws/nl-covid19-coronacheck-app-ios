@@ -324,8 +324,13 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	}
 
 	private func setupBlockedEventsDatasource() {
-		blockedEventsDatasource.didUpdate = { [weak self] (blockedEventItems) in
+
+		blockedEventsDatasource.didUpdate = { [weak self] blockedEventItems in
 			guard let self = self else { return }
+
+			if blockedEventItems.isNotEmpty && Current.userSettings.hasShownBlockedEventsAlert == false {
+				self.displayBlockedEventsAlert(blockedEventItems: blockedEventItems)
+			}
 
 			DispatchQueue.main.async {
 				self.state.blockedEventItems = blockedEventItems
@@ -506,19 +511,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	
 	fileprivate func setupNotificationListeners() {
 
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(receiveDidBecomeActiveNotification),
-			name: UIApplication.didBecomeActiveNotification,
-			object: nil
-		)
-
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(userDefaultsDidChange),
-			name: Foundation.UserDefaults.didChangeNotification,
-			object: nil
-		)
+		notificationCenter.addObserver(self, selector: #selector(receiveDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
+		notificationCenter.addObserver(self, selector: #selector(userDefaultsDidChange), name: Foundation.UserDefaults.didChangeNotification, object: nil)
 	}
 
 	@objc func receiveDidBecomeActiveNotification() {
@@ -529,6 +523,26 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		DispatchQueue.main.async {
 			self.recalculateActiveDisclosurePolicyMode()
 		}
+	}
+
+	// MARK: - Present alerts
+
+	private func displayBlockedEventsAlert(blockedEventItems: [BlockedEventItem]) {
+		Current.userSettings.hasShownBlockedEventsAlert = true
+		currentlyPresentedAlert.value = AlertContent(
+			title: L.holder_invaliddetailsremoved_alert_title(),
+			subTitle: L.holder_invaliddetailsremoved_alert_body(),
+			okAction: AlertContent.Action(
+				title: L.holder_invaliddetailsremoved_alert_button_moreinfo(),
+				action: { [weak self] _ in
+					self?.didTapBlockedEventsDeletedMoreInfo(blockedEventItems: blockedEventItems)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holder_invaliddetailsremoved_alert_button_close(),
+				action: nil
+			)
+		)
 	}
 
 	// MARK: Capture User input:
