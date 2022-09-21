@@ -384,6 +384,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedHasShownBlockedEventsAlertSetter = false
+	var invokedHasShownBlockedEventsAlertSetterCount = 0
+	var invokedHasShownBlockedEventsAlert: Bool?
+	var invokedHasShownBlockedEventsAlertList = [Bool]()
+	var invokedHasShownBlockedEventsAlertGetter = false
+	var invokedHasShownBlockedEventsAlertGetterCount = 0
+	var stubbedHasShownBlockedEventsAlert: Bool! = false
+
+	var hasShownBlockedEventsAlert: Bool {
+		set {
+			invokedHasShownBlockedEventsAlertSetter = true
+			invokedHasShownBlockedEventsAlertSetterCount += 1
+			invokedHasShownBlockedEventsAlert = newValue
+			invokedHasShownBlockedEventsAlertList.append(newValue)
+		}
+		get {
+			invokedHasShownBlockedEventsAlertGetter = true
+			invokedHasShownBlockedEventsAlertGetterCount += 1
+			return stubbedHasShownBlockedEventsAlert
+		}
+	}
+
 	var invokedWipePersistedData = false
 	var invokedWipePersistedDataCount = 0
 
