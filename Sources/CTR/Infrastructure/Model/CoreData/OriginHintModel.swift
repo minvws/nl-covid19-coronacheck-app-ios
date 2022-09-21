@@ -17,13 +17,13 @@ class OriginHintModel {
 		hint: String,
 		managedContext: NSManagedObjectContext) -> OriginHint? {
 			
-			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? OriginHint else {
-				return nil
-			}
-			
-			object.hint = hint
-			object.origin = origin
-			
-			return object
+		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? OriginHint else {
+			return nil
 		}
+		
+		object.hint = hint
+		object.origin = origin
+		
+		return object
+	}
 }

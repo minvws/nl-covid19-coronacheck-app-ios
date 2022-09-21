@@ -83,6 +83,16 @@ extension Origin {
 		
 		return hints?.compactMap({ $0 as? OriginHint }) ?? []
 	}
+	
+	/// Is this a paper based dcc?
+	/// - Returns: True if this is a paper based dcc
+	func isPaperBasedDCC() -> Bool {
+		
+		for hint in castHints() where hint.hint == "event_from_dcc" {
+			return true
+		}
+		return false
+	}
 }
 
 extension Array {
@@ -92,5 +102,11 @@ extension Array {
 		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
 			.last?
 			.expirationTime
+	}
+	
+	/// Is there an origin that is paper based dcc?
+	func hasPaperBasedDCC() -> Bool where Element == Origin {
+		
+		filter { $0.isPaperBasedDCC() }.isNotEmpty
 	}
 }
