@@ -388,7 +388,7 @@ extension RemoteGreenCards.Origin {
 			expirationTime: now.addingTimeInterval(300 * days),
 			validFrom: now,
 			doseNumber: 1,
-			hints: []
+			hints: ["fakeVaccinationOrigin"]
 		)
 	}
 	
@@ -399,7 +399,7 @@ extension RemoteGreenCards.Origin {
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
 			doseNumber: 1,
-			hints: []
+			hints: ["fakeVaccinationOriginExpiringIn30Days"]
 		)
 	}
 	
