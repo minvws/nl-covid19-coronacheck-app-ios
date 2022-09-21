@@ -127,8 +127,8 @@ class OpenIdManager: OpenIdManaging {
 		
 		OIDAuthorizationService.discoverConfiguration(forIssuer: issuerConfiguration.issuerUrl) { serviceConfiguration, error in
 			DispatchQueue.main.async {
-				if let service = serviceConfiguration {
-					onCompletion(.success(service))
+				if let serviceConfiguration {
+					onCompletion(.success(serviceConfiguration))
 				} else if let error {
 					onCompletion(.failure(error))
 				}
