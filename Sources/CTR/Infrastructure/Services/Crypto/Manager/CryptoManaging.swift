@@ -41,11 +41,6 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: True if the DCC is foreign
 	func isForeignDCC(_ data: Data) -> Bool
 	
-	/// Is this data a paper based DCC
-	/// - Parameter data: the data of the DCC
-	/// - Returns: True if the DCC is paper based
-	func isPaperBasedDCC(_ data: Data) -> Bool
-	
 	/// Is this data a DCC
 	/// - Parameter data: the data
 	/// - Returns: True if the data is a DCC
