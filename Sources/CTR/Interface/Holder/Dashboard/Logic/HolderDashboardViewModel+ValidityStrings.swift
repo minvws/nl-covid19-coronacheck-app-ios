@@ -201,7 +201,7 @@ private func validityText_hasBegun_domestic_vaccination(
 
 	let titleString: String = {
 		var string = ""
-		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
+		string += OriginType.vaccination.localizedProof.capitalizingFirstLetter()
 		if let doseNumber, doseNumber > 0 {
 			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
 			string += " (\(doseNumber) \(dosePluralised))"
