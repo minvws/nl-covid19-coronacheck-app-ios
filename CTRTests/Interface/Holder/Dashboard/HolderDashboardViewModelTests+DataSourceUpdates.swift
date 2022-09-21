@@ -1785,14 +1785,14 @@ extension HolderDashboardViewModelTests {
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.vaccinationassessment,
+						type: OriginType.vaccinationassessment,
 						eventDate: now.addingTimeInterval(72 * hours * ago),
 						expirationTime: now.addingTimeInterval(11 * days * fromNow),
 						validFromDate: now.addingTimeInterval(72 * hours * ago),
 						doseNumber: nil
 					),
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(12 * hours * ago),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1806,7 +1806,7 @@ extension HolderDashboardViewModelTests {
 				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(30 * days * fromNow),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1870,14 +1870,14 @@ extension HolderDashboardViewModelTests {
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.vaccinationassessment,
+						type: OriginType.vaccinationassessment,
 						eventDate: now.addingTimeInterval(72 * hours * ago),
 						expirationTime: now.addingTimeInterval(11 * days * fromNow),
 						validFromDate: now.addingTimeInterval(72 * hours * ago),
 						doseNumber: nil
 					),
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(12 * hours * ago),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1891,7 +1891,7 @@ extension HolderDashboardViewModelTests {
 				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(30 * days * fromNow),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1961,14 +1961,14 @@ extension HolderDashboardViewModelTests {
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.vaccinationassessment,
+						type: OriginType.vaccinationassessment,
 						eventDate: now.addingTimeInterval(72 * hours * ago),
 						expirationTime: now.addingTimeInterval(11 * days * fromNow),
 						validFromDate: now.addingTimeInterval(72 * hours * ago),
 						doseNumber: nil
 					),
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(12 * hours * ago),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1982,7 +1982,7 @@ extension HolderDashboardViewModelTests {
 				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(30 * days * fromNow),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),

@@ -227,7 +227,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	
 	let titleString: String = {
 		var string = ""
-		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
+		string += OriginType.vaccination.localizedProof.capitalizingFirstLetter()
 		if let doseNumber, doseNumber > 0 {
 			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
 			string += " (\(doseNumber) \(dosePluralised))"
@@ -253,7 +253,7 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date) -> Holder
 	let formatter = DateFormatter.Format.dayNameDayNumericMonthWithTime
 	let dateString = formatter.string(from: expirationTime)
 
-	let titleString = QRCodeOriginType.test.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = OriginType.test.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
@@ -267,7 +267,7 @@ private func validityText_hasBegun_domestic_recovery(expirationTime: Date) -> Ho
     let formatter = DateFormatter.Format.dayMonthYear
     let dateString = formatter.string(from: expirationTime)
 
-    let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+    let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
     let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
     return .init(
         lines: [titleString, valueString],
@@ -294,7 +294,7 @@ private func validityText_hasNotYetBegun_domestic_recovery(validFrom: Date, expi
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: validFrom)
     let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
 
-    let titleString = QRCodeOriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+    let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
     let valueString = "\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
     return .init(
         // geldig vanaf 17 juli t/m 11 mei 2022
@@ -336,7 +336,7 @@ private func validityText_hasBegun_domestic_vaccinationAssessment(expirationTime
 	let formatter = DateFormatter.Format.dayNameDayNumericMonthWithTime
 	let dateString = formatter.string(from: expirationTime)
 	
-	let titleString = QRCodeOriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = OriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
@@ -350,7 +350,7 @@ private func validityText_hasNotYetBegun_domestic_vaccinationAssessment(validFro
 	let formatter = DateFormatter.Format.dayNameDayNumericMonthWithTime
 	let dateString = formatter.string(from: validFrom)
 	
-	let titleString = QRCodeOriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = OriginType.vaccinationassessment.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
