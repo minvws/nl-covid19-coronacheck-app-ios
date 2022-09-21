@@ -30,7 +30,7 @@ class DeviceAuthenticationDetector: DeviceAuthenticationProtocol {
 
 		var error: NSError?
 		let deviceOwnerAuthentication = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
-		if let error = error {
+		if let error {
 			logError("Error checking LocalAuthentication status: \(error)")
 		}
 		logVerbose("LocalAuthentication status: \(deviceOwnerAuthentication)")

@@ -46,7 +46,7 @@ final class AppInstalledSinceManager: AppInstalledSinceManaging {
 
 		guard var serverDate = DateFormatter.Header.serverDate.date(from: serverHeaderDate) else { return }
 
-		if let ageHeader = ageHeader {
+		if let ageHeader {
 			
 			// CDN has a stale Date, but adds an Age field in seconds.
 			let age = TimeInterval(ageHeader) ?? 0

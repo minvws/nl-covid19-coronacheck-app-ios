@@ -59,21 +59,21 @@ class OriginModel {
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
 			
-			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
-				return nil
-			}
-			
-			object.type = type.rawValue
-			object.eventDate = eventDate
-			object.expirationTime = expirationTime
-			object.validFromDate = validFromDate
-			if let doseNumber = doseNumber {
-				object.doseNumber = doseNumber as NSNumber
-			}
-			object.greenCard = greenCard
-			
-			return object
+		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
+			return nil
 		}
+		
+		object.type = type.rawValue
+		object.eventDate = eventDate
+		object.expirationTime = expirationTime
+		object.validFromDate = validFromDate
+		if let doseNumber = doseNumber {
+			object.doseNumber = doseNumber as NSNumber
+		}
+		object.greenCard = greenCard
+		
+		return object
+	}
 }
 	
 extension Origin {

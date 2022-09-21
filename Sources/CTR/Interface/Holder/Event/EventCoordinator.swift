@@ -318,7 +318,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 					return false
 			}
 		}
-		if let popBackToViewController = popBackToViewController {
+		if let popBackToViewController {
 			
 			navigationController.popToViewController(
 				popBackToViewController,
@@ -497,7 +497,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			self.navigationController.present(alertController, animated: true, completion: nil)
 		}
 
-		if let popback = popback {
+		if let popback {
 			navigationController.popToViewController(popback, animated: true, completion: presentError)
 		} else {
 			navigationController.popToRootViewController(animated: true, completion: presentError)

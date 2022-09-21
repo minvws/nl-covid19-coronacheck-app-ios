@@ -163,7 +163,7 @@ public extension NSAttributedString {
 
 			let newFont: UIFont
 
-			if let boldFont = boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
+			if let boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
 				newFont = boldFont
 			} else {
 				newFont = style.font

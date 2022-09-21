@@ -113,7 +113,7 @@ class ListOptionsView: ScrolledStackView {
 	/// The message
 	var message: String? {
 		didSet {
-			if let message = message {
+			if let message {
 				messageLabel.attributedText = message.setLineHeight(ViewTraits.Message.lineHeight)
 				messageLabel.isHidden = false
 			} else {
