@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -12,7 +13,7 @@ import Reachability
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapAddCertificate()
-	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem]) 
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem])
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
