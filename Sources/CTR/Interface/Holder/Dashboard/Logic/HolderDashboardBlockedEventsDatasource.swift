@@ -11,7 +11,6 @@ import CoreData
 protocol HolderDashboardBlockedEventsDatasourceProtocol: AnyObject {
 	var didUpdate: (([BlockedEventItem]) -> Void)? { get set }
 
-	func reload()
 }
 
 class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEventsDatasourceProtocol {
@@ -19,7 +18,7 @@ class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEv
 	var didUpdate: (([BlockedEventItem]) -> Void)? {
 		didSet {
 			guard didUpdate != nil else { return }
-			reload()
+			load()
 		}
 	}
 	
@@ -28,6 +27,7 @@ class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEv
 	override init() {
 		let fetchRequest = NSFetchRequest<BlockedEvent>(entityName: "BlockedEvent")
 		fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \BlockedEvent.type, ascending: true)]
+		
 		frc = NSFetchedResultsController<BlockedEvent>(
 			fetchRequest: fetchRequest,
 			managedObjectContext: Current.dataStoreManager.managedObjectContext(),
@@ -39,8 +39,9 @@ class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEv
 		
 		frc.delegate = self
 	}
-
-	func reload() {
+	
+	/// Is self-updating due to the FetchedResultsController. Performs first fetch when a `didUpdate` observer is registered.
+	private func load() {
 		guard didUpdate != nil else { return }
 		try? frc.performFetch()
 		notifyObserver()
