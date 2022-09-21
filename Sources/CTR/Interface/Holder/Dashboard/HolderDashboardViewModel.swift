@@ -329,11 +329,11 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		blockedEventsDatasource.didUpdate = { [weak self] blockedEventItems in
 			guard let self = self else { return }
 
-			if blockedEventItems.isNotEmpty && Current.userSettings.hasShownBlockedEventsAlert == false {
-				self.displayBlockedEventsAlert(blockedEventItems: blockedEventItems)
-			}
-
 			DispatchQueue.main.async {
+				if blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
+					self.displayBlockedEventsAlert(blockedEventItems: blockedEventItems)
+				}
+
 				self.state.blockedEventItems = blockedEventItems
 			}
 		}
