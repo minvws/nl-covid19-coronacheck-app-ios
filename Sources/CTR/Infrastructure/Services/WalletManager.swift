@@ -320,6 +320,9 @@ class WalletManager: WalletManaging {
 
 					for remoteOrigin in remoteDomesticGreenCard.origins {
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
+						for hint in remoteOrigin.hints {
+							result = result && GreenCardHintModel.create(greenCard: greenCard, hint: hint, managedContext: context) != nil
+						}
 					}
 					if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
 						switch convertToDomesticCredentials(cryptoManager: cryptoManager, data: data) {
@@ -401,6 +404,10 @@ class WalletManager: WalletManaging {
 					// Origins
 					for remoteOrigin in remoteEuGreenCard.origins {
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
+						
+						for hint in remoteOrigin.hints {
+							result = result && GreenCardHintModel.create(greenCard: greenCard, hint: hint, managedContext: context) != nil
+						}
 					}
 					// Credential (DCC has 1 credential)
 					let data = Data(remoteEuGreenCard.credential.utf8)

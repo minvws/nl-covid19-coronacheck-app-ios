@@ -131,6 +131,12 @@ extension GreenCard {
 		return origins?.compactMap({ $0 as? Origin })
 	}
 	
+	/// Get the hints, strongly typed.
+	func castHints() -> [GreenCardHint] {
+		
+		return hints?.compactMap({ $0 as? GreenCardHint }) ?? []
+	}
+	
 	func getLatestInternationalCredential() -> Credential? {
 		
 		guard getType() == GreenCardType.eu else {
