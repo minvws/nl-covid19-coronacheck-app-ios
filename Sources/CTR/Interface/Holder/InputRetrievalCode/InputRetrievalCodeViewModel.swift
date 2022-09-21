@@ -243,7 +243,7 @@ class InputRetrievalCodeViewModel {
 
 		fieldErrorMessage = nil
 
-		if let requestToken = requestToken {
+		if let requestToken {
 			self.fetchProviders(requestToken, verificationCode: nil)
 		}
 	}

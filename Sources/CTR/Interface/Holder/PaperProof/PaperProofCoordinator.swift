@@ -230,12 +230,12 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	func userWishesToCreateACertificate() {
 
 		// Navigate to Check Certificate
-		if let scannedDcc = scannedDCC, let couplingCode = token {
+		if let scannedDCC, let token {
 			let viewController = PaperProofCheckViewController(
 				viewModel: PaperProofCheckViewModel(
 					coordinator: self,
-					scannedDcc: scannedDcc,
-					couplingCode: couplingCode
+					scannedDcc: scannedDCC,
+					couplingCode: token
 				)
 			)
 			navigationController.pushViewController(viewController, animated: false)

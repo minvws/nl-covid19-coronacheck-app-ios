@@ -243,7 +243,7 @@ class NetworkManager {
 
 		logVerbose("--RESPONSE--")
 
-		if let error = error {
+		if let error {
 			logDebug("Error with response: \(error)")
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet:

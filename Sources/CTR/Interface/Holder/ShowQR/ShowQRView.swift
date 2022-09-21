@@ -244,7 +244,7 @@ class ShowQRView: BaseView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		
-		if let window = window {
+		if let window {
 			// Don't allow the animation to overlap the containerView (QR) too much:
 			let qrWidth = containerView.frame.height // using width because width == height
 			let qrWidthFractionOfWholeWindow = qrWidth / window.bounds.width

@@ -48,7 +48,7 @@ struct ErrorCode: CustomStringConvertible {
 		var result = "i \(flow)\(step)"
 		result += " \(provider ?? "000")"
 		result += " \(errorCode)"
-		if let detailedCode = detailedCode {
+		if let detailedCode {
 			result += " \(detailedCode)"
 		}
 		return result

@@ -201,8 +201,8 @@ private func validityText_hasBegun_domestic_vaccination(
 
 	let titleString: String = {
 		var string = ""
-		string += OriginType.vaccination.localizedProof.capitalizingFirstLetter()
-		if let doseNumber = doseNumber, doseNumber > 0 {
+		string += QRCodeOriginType.vaccination.localizedProof.capitalizingFirstLetter()
+		if let doseNumber, doseNumber > 0 {
 			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
 			string += " (\(doseNumber) \(dosePluralised))"
 		}
@@ -228,7 +228,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	let titleString: String = {
 		var string = ""
 		string += OriginType.vaccination.localizedProof.capitalizingFirstLetter()
-		if let doseNumber = doseNumber, doseNumber > 0 {
+		if let doseNumber, doseNumber > 0 {
 			let dosePluralised = doseNumber == 1 ? L.generalDose() : L.generalDoses()
 			string += " (\(doseNumber) \(dosePluralised))"
 		}

@@ -105,7 +105,7 @@ class HolderCoordinator: SharedCoordinator {
 			newFeaturesFactory: HolderNewFeaturesFactory()
 		) {
 			
-			if let unhandledUniversalLink = unhandledUniversalLink {
+			if let unhandledUniversalLink {
 				
 				// Attempt to consume the universal link again:
 				self.unhandledUniversalLink = nil // prevent potential infinite loops

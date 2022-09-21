@@ -83,7 +83,7 @@ class ClockDeviationManager: ClockDeviationManaging {
 			  let systemUptime = currentSystemUptime()
 		else { return }
 
-		if let ageHeader = ageHeader {
+		if let ageHeader {
 			// CDN has a stale Date, but adds an Age field in seconds.
 			let age = TimeInterval(ageHeader) ?? 0
 			logVerbose("Added \(age) seconds to stale CDN date \(serverDate)")

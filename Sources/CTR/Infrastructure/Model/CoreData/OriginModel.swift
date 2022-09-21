@@ -67,7 +67,7 @@ class OriginModel {
 		object.eventDate = eventDate
 		object.expirationTime = expirationTime
 		object.validFromDate = validFromDate
-		if let doseNumber = doseNumber {
+		if let doseNumber {
 			object.doseNumber = doseNumber as NSNumber
 		}
 		object.greenCard = greenCard

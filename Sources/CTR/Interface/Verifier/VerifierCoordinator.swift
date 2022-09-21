@@ -299,7 +299,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 	
 	func userWishesToLaunchThirdPartyScannerApp() {
-		if let thirdPartyScannerApp = thirdPartyScannerApp {
+		if let thirdPartyScannerApp {
 			openUrl(thirdPartyScannerApp.returnURL, inApp: false)
 		} else {
 			navigateToScan()
