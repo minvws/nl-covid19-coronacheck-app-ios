@@ -23,13 +23,8 @@
     <entity name="GreenCard" representedClassName="GreenCard" syncable="YES" codeGenerationType="class">
         <attribute name="type" attributeType="String"/>
         <relationship name="credentials" toMany="YES" deletionRule="Cascade" destinationEntity="Credential" inverseName="greenCard" inverseEntity="Credential"/>
-        <relationship name="hints" toMany="YES" deletionRule="Cascade" destinationEntity="GreenCardHint" inverseName="greenCard" inverseEntity="GreenCardHint"/>
         <relationship name="origins" toMany="YES" deletionRule="Cascade" destinationEntity="Origin" inverseName="greenCard" inverseEntity="Origin"/>
         <relationship name="wallet" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="greenCards" inverseEntity="Wallet"/>
-    </entity>
-    <entity name="GreenCardHint" representedClassName="GreenCardHint" syncable="YES" codeGenerationType="class">
-        <attribute name="hint" attributeType="String"/>
-        <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="hints" inverseEntity="GreenCard"/>
     </entity>
     <entity name="Origin" representedClassName="Origin" syncable="YES" codeGenerationType="class">
         <attribute name="doseNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
@@ -38,6 +33,11 @@
         <attribute name="type" attributeType="String"/>
         <attribute name="validFromDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="origins" inverseEntity="GreenCard"/>
+        <relationship name="hints" toMany="YES" deletionRule="Cascade" destinationEntity="OriginHint" inverseName="origin" inverseEntity="OriginHint"/>
+    </entity>
+    <entity name="OriginHint" representedClassName="OriginHint" syncable="YES" codeGenerationType="class">
+        <attribute name="hint" attributeType="String"/>
+        <relationship name="origin" maxCount="1" deletionRule="Nullify" destinationEntity="Origin" inverseName="hints" inverseEntity="Origin"/>
     </entity>
     <entity name="Wallet" representedClassName="Wallet" syncable="YES" codeGenerationType="class">
         <attribute name="label" attributeType="String"/>

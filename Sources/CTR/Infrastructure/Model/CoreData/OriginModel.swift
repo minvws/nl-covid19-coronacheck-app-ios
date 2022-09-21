@@ -47,9 +47,9 @@ enum OriginType: String, Codable, Equatable {
 }
 
 class OriginModel {
-
+	
 	static let entityName = "Origin"
-
+	
 	@discardableResult class func create(
 		type: OriginType,
 		eventDate: Date,
@@ -58,21 +58,30 @@ class OriginModel {
 		doseNumber: Int?,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
-
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
-			return nil
+			
+			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
+				return nil
+			}
+			
+			object.type = type.rawValue
+			object.eventDate = eventDate
+			object.expirationTime = expirationTime
+			object.validFromDate = validFromDate
+			if let doseNumber = doseNumber {
+				object.doseNumber = doseNumber as NSNumber
+			}
+			object.greenCard = greenCard
+			
+			return object
 		}
-
-		object.type = type.rawValue
-		object.eventDate = eventDate
-		object.expirationTime = expirationTime
-		object.validFromDate = validFromDate
-		if let doseNumber = doseNumber {
-			object.doseNumber = doseNumber as NSNumber
-		}
-		object.greenCard = greenCard
-
-		return object
+}
+	
+extension Origin {
+	
+	/// Get the hints, strongly typed.
+	func castHints() -> [OriginHint] {
+		
+		return hints?.compactMap({ $0 as? OriginHint }) ?? []
 	}
 }
 

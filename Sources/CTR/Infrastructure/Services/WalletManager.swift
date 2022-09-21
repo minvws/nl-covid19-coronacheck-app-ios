@@ -320,9 +320,6 @@ class WalletManager: WalletManaging {
 
 					for remoteOrigin in remoteDomesticGreenCard.origins {
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
-						for hint in remoteOrigin.hints {
-							result = result && GreenCardHintModel.create(greenCard: greenCard, hint: hint, managedContext: context) != nil
-						}
 					}
 					if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
 						switch convertToDomesticCredentials(cryptoManager: cryptoManager, data: data) {
@@ -404,10 +401,6 @@ class WalletManager: WalletManaging {
 					// Origins
 					for remoteOrigin in remoteEuGreenCard.origins {
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
-						
-						for hint in remoteOrigin.hints {
-							result = result && GreenCardHintModel.create(greenCard: greenCard, hint: hint, managedContext: context) != nil
-						}
 					}
 					// Credential (DCC has 1 credential)
 					let data = Data(remoteEuGreenCard.credential.utf8)
@@ -437,7 +430,7 @@ class WalletManager: WalletManaging {
 
 		if let type = OriginType(rawValue: remoteOrigin.type) {
 
-			return OriginModel.create(
+			guard let origin = OriginModel.create(
 				type: type,
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
@@ -445,7 +438,16 @@ class WalletManager: WalletManaging {
 				doseNumber: remoteOrigin.doseNumber,
 				greenCard: greenCard,
 				managedContext: context
-			) != nil
+			) else {
+				return false
+			}
+			
+			// Store the origin hints
+			var result = true
+			for hint in remoteOrigin.hints {
+				result = result && OriginHintModel.create(origin: origin, hint: hint, managedContext: context) != nil
+			}
+			return result
 
 		} else {
 			return false

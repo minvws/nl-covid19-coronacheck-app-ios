@@ -8,21 +8,21 @@
 import Foundation
 import CoreData
 
-class GreenCardHintModel {
+class OriginHintModel {
 	
-	static let entityName = "GreenCardHint"
+	static let entityName = "OriginHint"
 	
 	@discardableResult class func create(
-		greenCard: GreenCard,
+		origin: Origin,
 		hint: String,
-		managedContext: NSManagedObjectContext) -> GreenCardHint? {
+		managedContext: NSManagedObjectContext) -> OriginHint? {
 			
-			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? GreenCardHint else {
+			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? OriginHint else {
 				return nil
 			}
 			
 			object.hint = hint
-			object.greenCard = greenCard
+			object.origin = origin
 			
 			return object
 		}
