@@ -90,7 +90,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
@@ -114,7 +114,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
@@ -157,7 +157,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(7))

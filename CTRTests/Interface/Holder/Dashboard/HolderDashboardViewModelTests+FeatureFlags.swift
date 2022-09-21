@@ -22,7 +22,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], [])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventuallyNot(containRecommendCoronaMelderCard())
@@ -46,7 +46,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		
@@ -71,7 +71,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		

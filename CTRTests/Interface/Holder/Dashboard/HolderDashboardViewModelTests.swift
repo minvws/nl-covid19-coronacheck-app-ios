@@ -16,7 +16,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	var sut: HolderDashboardViewModel!
 	var configSpy: ConfigurationGeneralSpy!
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	var datasourceSpy: HolderDashboardDatasourceSpy!
+	var qrCardDatasourceSpy: HolderDashboardDatasourceSpy!
+	var blockedEventsSpy: HolderDashboardBlockedEventsDatasourceSpy!
 	var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	var sampleGreencardObjectID: NSManagedObjectID!
 	var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
@@ -44,7 +45,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		configSpy = ConfigurationGeneralSpy()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		datasourceSpy = HolderDashboardDatasourceSpy()
+		qrCardDatasourceSpy = HolderDashboardDatasourceSpy()
+		blockedEventsSpy = HolderDashboardBlockedEventsDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = Observatory.create().0
@@ -62,7 +64,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = activeDisclosurePolicies.isEmpty
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			datasource: datasourceSpy,
+			qrcardDatasource: qrCardDatasourceSpy,
+			blockedEventsDatasource: blockedEventsSpy,
 			strippenRefresher: strippenRefresherSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
 			vaccinationAssessmentNotificationManager: vaccinationAssessmentNotificationManagerSpy,

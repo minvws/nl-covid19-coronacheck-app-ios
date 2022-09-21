@@ -62,7 +62,7 @@ extension HolderDashboardViewModelTests {
 		let expiredTest = HolderDashboardViewModel.ExpiredQR(region: .domestic, type: .test)
 		
 		// Act & Assert
-		datasourceSpy.invokedDidUpdate?([], [expiredRecovery, expiredTest])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [expiredRecovery, expiredTest])
 		
 		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
@@ -193,7 +193,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], [])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
@@ -221,7 +221,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G])
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], [])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
@@ -249,7 +249,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy1G, .policy3G])
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], [])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, didTapCallToAction, didTapClose in
@@ -277,7 +277,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], [])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value[0]).to(beEmptyStateDescription())

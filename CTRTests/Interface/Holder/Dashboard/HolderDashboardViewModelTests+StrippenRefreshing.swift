@@ -18,7 +18,7 @@ extension HolderDashboardViewModelTests {
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
-		expect(self.datasourceSpy.invokedReload) == false
+		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		let oldStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .loading(silently: true),
@@ -38,7 +38,7 @@ extension HolderDashboardViewModelTests {
 		)
 		strippenRefresherSpy.invokedDidUpdate?(oldStrippenState, newStrippenState)
 
-		expect(self.datasourceSpy.invokedReload) == true
+		expect(self.qrCardDatasourceSpy.invokedReload) == true
 	}
 
 	func test_strippen_domestic_startLoading_shouldClearError() {
@@ -53,7 +53,7 @@ extension HolderDashboardViewModelTests {
 				evaluateEnabledState: { _ in true }
 			)
 		]
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -100,7 +100,7 @@ extension HolderDashboardViewModelTests {
 				evaluateEnabledState: { _ in true }
 			)
 		]
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -152,7 +152,7 @@ extension HolderDashboardViewModelTests {
 				evaluateEnabledState: { _ in true }
 			)
 		]
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -235,7 +235,7 @@ extension HolderDashboardViewModelTests {
 		]
 
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -358,7 +358,7 @@ extension HolderDashboardViewModelTests {
 		]
 
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		strippenRefresherSpy.invokedDidUpdate?(nil, newStrippenState)
 
 		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
@@ -387,7 +387,7 @@ extension HolderDashboardViewModelTests {
 		]
 
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
@@ -430,7 +430,7 @@ extension HolderDashboardViewModelTests {
 		]
 
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
@@ -478,7 +478,7 @@ extension HolderDashboardViewModelTests {
 		]
 
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
@@ -515,7 +515,7 @@ extension HolderDashboardViewModelTests {
 		]
 
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: error),
