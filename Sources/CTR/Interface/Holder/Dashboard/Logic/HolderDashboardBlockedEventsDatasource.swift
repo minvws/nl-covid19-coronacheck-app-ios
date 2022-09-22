@@ -10,7 +10,6 @@ import CoreData
 
 protocol HolderDashboardBlockedEventsDatasourceProtocol: AnyObject {
 	var didUpdate: (([BlockedEventItem]) -> Void)? { get set }
-
 }
 
 class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEventsDatasourceProtocol {

@@ -239,7 +239,11 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 					guard let self = self else { return }
 
 					switch $0 {
-						case .success:
+						case .success(let response):
+						
+							// Check if any events that we sent have come back blocked from the signer:
+							Self.processBlockedEvents(fromResponse: response)
+						
 							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: self.minimumThresholdOfValidCredentialsTriggeringRefresh,
 								walletManager: self.walletManager,
@@ -264,6 +268,18 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 	func userDismissedALoadingError() {
 		state.userHasPreviouslyDismissedALoadingError = true
+	}
+	
+	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response) {
+		
+		// The items which the backend has indicated are blocked (if any):
+		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		let allEventGroups = Current.walletManager.listEventGroups()
+	
+		// Match blockItems (`blobExpiry`) to relevant eventGroups so that a BlockedEvent can be created & persisted:
+		blockItems.combinedWith(matchingEventGroups: allEventGroups).forEach { blockItem, eventGroup in
+			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+		}
 	}
 
 	/// Greencards where the number of valid credentials is <= 5 and the latest credential expiration time is < than the origin expiration time
