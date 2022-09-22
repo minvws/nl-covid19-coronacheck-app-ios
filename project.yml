@@ -41,7 +41,7 @@ packages:
     majorVersion: 5.4.0
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
-    majorVersion: 1.9.0
+    majorVersion: 1.10.0
 
 
 # - Attributes:
@@ -413,6 +413,9 @@ targets:
         UILaunchStoryboardName: LaunchScreenVerifier
 
   CTRTests:
+    settings: 
+      base: 
+        IPHONEOS_DEPLOYMENT_TARGET: 13.0
     templates:
       - Standard_UnitTesting
     sources:
