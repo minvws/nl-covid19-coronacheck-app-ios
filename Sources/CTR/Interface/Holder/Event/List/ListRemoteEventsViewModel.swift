@@ -341,15 +341,3 @@ extension ErrorCode.ClientCode {
 	static let storingEvents = ErrorCode.ClientCode(value: "056")
 	static let unhandled = ErrorCode.ClientCode(value: "999")
 }
-
-private extension Array where Element == RemoteGreenCards.BlobExpiry {
-	
-	/// Determine which blockItems match EventGroups which were sent to be signed:
-	func blockItems(matchingEventGroups eventGroups: [EventGroup]) -> [(RemoteGreenCards.BlobExpiry, EventGroup)] {
-		reduce([]) { partialResult, blockItem in
-			guard let matchingEvent = eventGroups.first(where: { "\($0.uniqueIdentifier)" == blockItem.identifier }) else { return partialResult }
-			return partialResult + [(blockItem, matchingEvent)]
-		}
-	}
-}
-
