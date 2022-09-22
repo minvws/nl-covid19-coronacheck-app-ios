@@ -353,26 +353,3 @@ private extension Array where Element == RemoteGreenCards.BlobExpiry {
 	}
 }
 
-private extension BlockedEvent {
-	
-	@discardableResult
-	static func createAndPersist(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup) -> BlockedEvent? {
-		guard let jsonData = existingEventGroup.jsonData,
-			  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
-			  let credentialData = object.credential.data(using: .utf8),
-			  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData),
-			  let eventMode = euCredentialAttributes.eventMode
-		else { return nil }
-		
-		var eventDate: Date? {
-			guard let eventDate = euCredentialAttributes.eventDate else { return nil }
-			return DateFormatter.Event.iso8601.date(from: eventDate)
-		}
-		
-		return Current.walletManager.storeBlockedEvent(
-			type: eventMode,
-			eventDate: eventDate ?? .distantPast,
-			reason: blockItem.reason
-		)
-	}
-}
