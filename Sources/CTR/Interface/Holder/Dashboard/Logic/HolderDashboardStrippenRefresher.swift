@@ -271,6 +271,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 		minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int,
 		walletManager: WalletManaging,
 		now: Date) -> State.GreencardsCredentialExpiryState {
+		
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(
 			now: now,
 			ofOriginType: nil
@@ -281,7 +282,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 		validGreenCardsForCurrentWallet
 			.forEach { (greencard: GreenCard) in
-
+				
 				guard let allCredentialsForGreencard: [Credential] = greencard.castCredentials(),
 					  let allOriginsForGreencard = greencard.castOrigins()
 				else { return } // unlikely logical error, greencard should have non-nil origins & credentials arrays (even if empty).
@@ -304,12 +305,9 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 					return
 				}
 				
-				// Filter expired (foreign) DCCs, those should not lead to a refresh
+				// Filter paper based DCCs, those should not lead to a refresh
 				if greencard.getType() == GreenCardType.eu,
-				   let lastCredentialData = allCredentialsForGreencard.last?.data,
-				   let euCred = Current.cryptoManager.readEuCredentials(lastCredentialData),
-				   euCred.expirationTime < now.timeIntervalSince1970,
-				  Current.cryptoManager.isForeignDCC(lastCredentialData) {
+				   allOriginsForGreencard.hasPaperBasedDCC() {
 					return
 				}
 				

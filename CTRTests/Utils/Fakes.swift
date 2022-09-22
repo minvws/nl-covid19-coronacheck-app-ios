@@ -387,7 +387,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(300 * days),
 			validFrom: now,
-			doseNumber: 1
+			doseNumber: 1,
+			hints: ["fakeVaccinationOrigin"]
 		)
 	}
 	
@@ -397,7 +398,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
-			doseNumber: 1
+			doseNumber: 1,
+			hints: ["fakeVaccinationOriginExpiringIn30Days"]
 		)
 	}
 	
@@ -407,7 +409,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now.addingTimeInterval(60 * days * ago),
 			expirationTime: now.addingTimeInterval(30 * days * ago),
 			validFrom: now.addingTimeInterval(60 * days * ago),
-			doseNumber: 1
+			doseNumber: 1,
+			hints: []
 		)
 	}
 	
@@ -417,7 +420,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 	
@@ -427,7 +431,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now.addingTimeInterval(30 * days * ago),
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 	
@@ -437,7 +442,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(14 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 	
@@ -447,7 +453,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(1 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 }
@@ -863,7 +870,8 @@ extension RemoteGreenCards.Response {
 						eventTime: now.addingTimeInterval(400 * days * ago),
 						expirationTime: now.addingTimeInterval(30 * days * ago),
 						validFrom: now.addingTimeInterval(400 * days * ago),
-						doseNumber: nil
+						doseNumber: nil,
+						hints: []
 					)
 				],
 				createCredentialMessages: "test"
@@ -882,7 +890,8 @@ extension RemoteGreenCards.Response {
 							eventTime: now.addingTimeInterval(400 * days * ago),
 							expirationTime: now.addingTimeInterval(30 * days * ago),
 							validFrom: now.addingTimeInterval(400 * days * ago),
-							doseNumber: nil
+							doseNumber: nil,
+							hints: []
 						)
 					],
 					credential: "recovery credential"

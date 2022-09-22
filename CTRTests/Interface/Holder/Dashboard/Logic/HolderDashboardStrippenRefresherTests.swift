@@ -415,7 +415,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 					eventTime: Date(),
 					expirationTime: Date().addingTimeInterval(60 * days * fromNow),
 					validFrom: Date(),
-					doseNumber: 1
+					doseNumber: 1,
+					hints: []
 				)
 			],
 			createCredentialMessages: "validGreenCardResponse"
@@ -428,7 +429,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 						eventTime: Date(),
 						expirationTime: Date().addingTimeInterval(60 * days * fromNow),
 						validFrom: Date(),
-						doseNumber: nil
+						doseNumber: nil,
+						hints: []
 					)
 				],
 				credential: "validGreenCardResponse"
