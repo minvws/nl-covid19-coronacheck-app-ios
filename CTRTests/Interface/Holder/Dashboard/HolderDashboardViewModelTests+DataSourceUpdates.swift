@@ -19,26 +19,26 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		expect(self.datasourceSpy.invokedReload) == false
+		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		// Act
 		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
 
 		// Assert
-		expect(self.datasourceSpy.invokedReload) == true
+		expect(self.qrCardDatasourceSpy.invokedReload) == true
 	}
 	
 	func test_viewWillAppear_triggersDatasourceReload() {
 		// Arrange
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		expect(self.datasourceSpy.invokedReload) == false
+		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		// Act
 		sut.viewWillAppear()
 
 		// Assert
-		expect(self.datasourceSpy.invokedReload) == true
+		expect(self.qrCardDatasourceSpy.invokedReload) == true
 	}
 	
 	func test_datasourceupdate_mutliplefailures_shouldShowHelpDeskErrorBeneathCard() {
@@ -56,7 +56,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: DashboardStrippenRefresher.Error.networkError(error: .invalidRequest, timestamp: now)),
@@ -92,7 +92,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -157,7 +157,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -203,7 +203,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -244,7 +244,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -297,7 +297,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -344,7 +344,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -399,7 +399,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -457,7 +457,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -509,7 +509,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -600,7 +600,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -658,7 +658,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -711,7 +711,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -759,7 +759,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -809,7 +809,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -863,7 +863,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -937,7 +937,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(6))
@@ -998,7 +998,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -1045,7 +1045,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -1095,7 +1095,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -1145,7 +1145,7 @@ extension HolderDashboardViewModelTests {
 			)
 		]
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -1199,7 +1199,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1259,7 +1259,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1316,7 +1316,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1361,7 +1361,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -1431,7 +1431,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -1501,7 +1501,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1541,7 +1541,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1596,7 +1596,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(6))
@@ -1666,7 +1666,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -1721,7 +1721,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -1761,7 +1761,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
@@ -1819,7 +1819,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1904,7 +1904,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -1995,7 +1995,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -2059,7 +2059,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -2108,7 +2108,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -2157,7 +2157,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -2207,7 +2207,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -2254,7 +2254,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
@@ -2303,7 +2303,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -2347,7 +2347,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -2393,7 +2393,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -2431,7 +2431,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
@@ -2466,7 +2466,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -2500,7 +2500,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(2))
@@ -2538,7 +2538,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
@@ -2613,7 +2613,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(4))

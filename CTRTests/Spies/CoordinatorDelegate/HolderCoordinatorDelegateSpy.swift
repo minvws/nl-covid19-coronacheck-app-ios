@@ -71,6 +71,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeleted = false
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount = 0
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters: (blockedEventItems: [BlockedEventItem], Void)?
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParametersList = [(blockedEventItems: [BlockedEventItem], Void)]()
+
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem]) {
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeleted = true
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount += 1
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters = (blockedEventItems, ())
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParametersList.append((blockedEventItems, ()))
+	}
+
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
 	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
 

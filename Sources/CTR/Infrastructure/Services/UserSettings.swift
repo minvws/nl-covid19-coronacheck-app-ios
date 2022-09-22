@@ -40,6 +40,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastKnownConfigDisclosurePolicy: [String] { get set }
 	var overrideDisclosurePolicies: [String] { get set }
 
+	var hasShownBlockedEventsAlert: Bool { get set }
+	
 	func wipePersistedData()
 }
 
@@ -95,6 +97,10 @@ class UserSettings: UserSettingsProtocol {
 	
 	@UserDefaults(key: "lastKnownConfigDisclosurePolicy")
 	var lastKnownConfigDisclosurePolicy: [String] = ["3G"]
+	
+	// The alert which tells the user that one of their certificates has been blocked:
+	@UserDefaults(key: "hasShownBlockedEventsAlert")
+	var hasShownBlockedEventsAlert: Bool = false
 }
 
 extension UserSettings {
@@ -123,6 +129,7 @@ extension UserSettings {
 			"overrideDisclosurePolicies",
 			"lastKnownConfigDisclosurePolicy",
 			"hasDismissedZeroGPolicy",
+			"hasShownBlockedEventsAlert",
 
 			// Deprecated keys
 			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
