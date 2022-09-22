@@ -181,7 +181,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		couplingManager: spies.couplingManagerSpy,
 		cryptoLibUtility: spies.cryptoLibUtilitySpy,
 		cryptoManager: spies.cryptoManagerSpy,
-		dataStoreManager: DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in }),
+		dataStoreManager: spies.dataStoreManager,
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,

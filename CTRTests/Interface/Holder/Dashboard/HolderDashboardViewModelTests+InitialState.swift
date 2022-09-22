@@ -102,7 +102,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 
 		// Act
-		datasourceSpy.invokedDidUpdate?([], [])
+		qrCardDatasourceSpy.invokedDidUpdate?([], [])
 
 		// Assert
 		expect(self.sut.title.value) == L.holderDashboardTitle()

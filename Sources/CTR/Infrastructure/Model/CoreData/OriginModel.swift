@@ -15,7 +15,16 @@ enum OriginType: String, Codable, Equatable {
 	case vaccination
 	case vaccinationassessment
 	
-	// e.g. "Test Certificate", "Vaccination Certificate"
+	var localized: String {
+		switch self {
+			case .recovery: return L.general_positiveTest()
+			case .vaccination: return L.general_vaccination()
+			case .test: return L.general_negativeTest()
+			case .vaccinationassessment: return L.general_visitorPass()
+		}
+	}
+	
+	/// e.g. "Test Certificate", "Vaccination Certificate"
 	var localizedProof: String {
 		switch self {
 			case .recovery: return L.general_recoverycertificate()
@@ -25,7 +34,17 @@ enum OriginType: String, Codable, Equatable {
 		}
 	}
 	
-	// e.g. "Internationaal vaccinatiebewijs"
+	/// e.g. Vaccinatiedatum etc.
+	var localizedDateLabel: String? {
+		switch self {
+			case .recovery: return L.generalRecoverydate()
+			case .vaccination: return L.generalVaccinationdate()
+			case .test: return L.generalTestdate()
+			case .vaccinationassessment: return nil // not localized.
+		}
+	}
+	
+	/// e.g. "Internationaal vaccinatiebewijs"
 	var localizedProofInternational0G: String {
 		switch self {
 			case .recovery: return L.general_recoverycertificate_0G()
