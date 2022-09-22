@@ -104,6 +104,9 @@ extension HolderDashboardViewController.Card {
 				callToActionButtonText: L.holder_invaliddetailsremoved_banner_button_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapBlockedEventsDeletedMoreInfo(blockedEventItems: state.blockedEventItems)
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapBlockedEventsDeletedDismiss(blockedEventItems: state.blockedEventItems)
 				}
 			)
 		]

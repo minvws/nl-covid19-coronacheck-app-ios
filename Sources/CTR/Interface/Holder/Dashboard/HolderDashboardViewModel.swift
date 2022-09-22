@@ -14,6 +14,7 @@ import Reachability
 protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapAddCertificate()
 	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem])
+	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [BlockedEventItem])
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
@@ -737,6 +738,11 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem]) {
 		coordinator?.userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: blockedEventItems)
+	}
+	
+	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [BlockedEventItem]) {
+		Current.walletManager.removeExistingBlockedEvents()
+		Current.userSettings.hasShownBlockedEventsAlert = false
 	}
 	
 	func didTapExpiredDomesticVaccinationQRMoreInfo() {
