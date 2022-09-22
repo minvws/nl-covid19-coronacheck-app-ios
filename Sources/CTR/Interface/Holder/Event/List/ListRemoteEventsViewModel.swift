@@ -217,31 +217,13 @@ class ListRemoteEventsViewModel {
 		}
 		return storageEventMode
 	}
-
+	
 	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>, forEventMode eventMode: EventMode, eventsBeingAdded: [EventGroup]) {
 		
 		switch result {
 			case let .success(response):
 	
-				// Events stored in the past, including whatever we're adding right now as well:
-				let allEventGroups = Current.walletManager.listEventGroups()
-
-				let eventsNotBeingAdded = allEventGroups.filter { eventGroup in
-					!eventsBeingAdded.contains(where: { eventGroup.uniqueIdentifier == $0.uniqueIdentifier })
-				}
-			
-				// The items which the backend has indicated are blocked:
-				let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
-				
-				// If any blockItem does not match an ID of an EventGroup that was sent to backend to
-				// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
-				// Note: This is not relevant to the end state.
-				blockItems.blockItems(matchingEventGroups: eventsNotBeingAdded).forEach { blockItem, eventGroup in
-					BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
-				}
-				
-				// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:
-				let shouldShowBlockingEndState = blockItems.blockItems(matchingEventGroups: eventsBeingAdded).isNotEmpty
+				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
 				guard !shouldShowBlockingEndState else {
 					self.shouldPrimaryButtonBeEnabled = true
 					self.viewState = blockedEndState()
@@ -264,7 +246,6 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
-						
 						showEventError()
 						shouldPrimaryButtonBeEnabled = true
 						
@@ -272,6 +253,31 @@ class ListRemoteEventsViewModel {
 						displayError(title: title, message: message)
 				}
 		}
+	}
+	
+	/// Returns Bool: `true` if what was processed should result in a UI blocking screen, or `false` if not.
+	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response, eventsBeingAdded: [EventGroup]) -> Bool {
+		
+		// Events stored in the past, including whatever we're adding right now as well:
+		let allEventGroups = Current.walletManager.listEventGroups()
+
+		let eventsNotBeingAdded = allEventGroups.filter { eventGroup in
+			!eventsBeingAdded.contains(where: { eventGroup.uniqueIdentifier == $0.uniqueIdentifier })
+		}
+	
+		// The items which the backend has indicated are blocked:
+		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		
+		// If any blockItem does not match an ID of an EventGroup that was sent to backend to
+		// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
+		// Note: This is not relevant to the end state.
+		blockItems.combinedWith(matchingEventGroups: eventsNotBeingAdded).forEach { blockItem, eventGroup in
+			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+		}
+		
+		// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:
+		let shouldShowBlockingEndState = blockItems.combinedWith(matchingEventGroups: eventsBeingAdded).isNotEmpty
+		return shouldShowBlockingEndState
 	}
 
 	// MARK: - Store events
