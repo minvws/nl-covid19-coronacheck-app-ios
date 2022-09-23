@@ -35,6 +35,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
 		
 		// Act
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
 		// Assert
@@ -55,6 +56,15 @@ extension HolderDashboardViewModelTests {
 		// Check the CTA button handler:
 		didTapCallToAction()
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1
+		
+		// Check the cancel button handler
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
+		didTapDismiss()
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents).toEventually(beTrue())
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 2
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false
 		
 		let alert = try XCTUnwrap(eventuallyUnwrap { self.sut.currentlyPresentedAlert.value })
 		expect(alert.title) == L.holder_invaliddetailsremoved_alert_title()
