@@ -66,7 +66,11 @@ class NetworkManagerCredentialsTests: XCTestCase {
 							 "eventTime": "2021-11-30T00:00:00+00:00",
 							 "expirationTime": "2025-11-30T00:00:00+00:00",
 							 "validFrom": "2021-12-28T00:00:00+00:00",
-							 "doseNumber": 1]
+							 "doseNumber": 1,
+							 "hints": [
+								"test_fetchGreencards_validResponse"
+							 ]
+							]
 						],
 						"createCredentialMessages": "test domestic credentials"
 					],
@@ -77,7 +81,9 @@ class NetworkManagerCredentialsTests: XCTestCase {
 								 "eventTime": "2021-11-30T00:00:00+00:00",
 								 "expirationTime": "2025-11-30T00:00:00+00:00",
 								 "validFrom": "2021-12-28T00:00:00+00:00",
-								 "doseNumber": 1]
+								 "doseNumber": 1,
+								 "hints": []
+								]
 							],
 							"credential": "test eu credentials"
 						]

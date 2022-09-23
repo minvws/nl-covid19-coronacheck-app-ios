@@ -44,6 +44,17 @@ struct RemoteGreenCards: Codable, Equatable {
 		let expirationTime: Date
 		let validFrom: Date
 		let doseNumber: Int?
+		let hints: [String]
+		
+		enum CodingKeys: String, CodingKey {
+
+			case type
+			case eventTime
+			case expirationTime
+			case validFrom
+			case doseNumber
+			case hints
+		}
 	}
 	
 	struct BlobExpiry: Codable, Equatable, Hashable {

@@ -66,9 +66,9 @@ enum OriginType: String, Codable, Equatable {
 }
 
 class OriginModel {
-
+	
 	static let entityName = "Origin"
-
+	
 	@discardableResult class func create(
 		type: OriginType,
 		eventDate: Date,
@@ -77,21 +77,40 @@ class OriginModel {
 		doseNumber: Int?,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
-
+			
 		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
 			return nil
 		}
-
+		
 		object.type = type.rawValue
 		object.eventDate = eventDate
 		object.expirationTime = expirationTime
 		object.validFromDate = validFromDate
-		if let doseNumber {
+		if let doseNumber = doseNumber {
 			object.doseNumber = doseNumber as NSNumber
 		}
 		object.greenCard = greenCard
-
+		
 		return object
+	}
+}
+	
+extension Origin {
+	
+	/// Get the hints, strongly typed.
+	func castHints() -> [OriginHint] {
+		
+		return hints?.compactMap({ $0 as? OriginHint }) ?? []
+	}
+	
+	/// Is this a paper based dcc?
+	/// - Returns: True if this is a paper based dcc
+	func isPaperBasedDCC() -> Bool {
+		
+		for hint in castHints() where hint.hint == "event_from_dcc" {
+			return true
+		}
+		return false
 	}
 }
 
@@ -102,5 +121,11 @@ extension Array {
 		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
 			.last?
 			.expirationTime
+	}
+	
+	/// Is there an origin that is paper based dcc?
+	func hasPaperBasedDCC() -> Bool where Element == Origin {
+		
+		filter { $0.isPaperBasedDCC() }.isNotEmpty
 	}
 }
