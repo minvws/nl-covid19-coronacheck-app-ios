@@ -22,7 +22,8 @@ protocol NotificationCenterProtocol {
 		forName name: NSNotification.Name?,
 		object obj: Any?,
 		queue: OperationQueue?,
-		using block: @escaping (Notification) -> Void) -> NSObjectProtocol
+		using block: @escaping @Sendable (Notification) -> Void
+	) -> NSObjectProtocol
 
 	func removeObserver(_ observer: Any)
 }
