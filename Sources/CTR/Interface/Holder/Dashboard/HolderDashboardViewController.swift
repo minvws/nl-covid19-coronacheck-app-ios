@@ -27,7 +27,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
         case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
         case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-		case eventsWereBlocked(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case eventsWereBlocked(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
         
 		// Vaccination & Recovery Validity
 		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
@@ -222,8 +222,7 @@ private extension HolderDashboardViewController.Card {
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
 				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
-				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction),
-				let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction):
+				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
@@ -233,7 +232,8 @@ private extension HolderDashboardViewController.Card {
 				
 			// Message Cards with a message + CTA button + close button
 			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+				let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,

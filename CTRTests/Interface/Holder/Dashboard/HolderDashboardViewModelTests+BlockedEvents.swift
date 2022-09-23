@@ -35,25 +35,36 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
 		
 		// Act
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
 		// Assert
-		let eventsWereBlockedValues = try XCTUnwrap(eventuallyUnwrap {
-			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void)? in
-				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction) = card {
-					return (message, callToActionButtonText, didTapCallToAction)
+		let eventsWereBlockedBannerValues = try XCTUnwrap(eventuallyUnwrap {
+			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
+				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
 				}
 				return nil
 			}
 			return matchingTuples.first
 		})
 
-		let (message, callToActionButtonText, didTapCallToAction) = eventsWereBlockedValues
+		let (message, callToActionButtonText, didTapCallToAction, didTapDismiss) = eventsWereBlockedBannerValues
 		expect(message) == L.holder_invaliddetailsremoved_banner_title()
 		expect(callToActionButtonText) == L.holder_invaliddetailsremoved_banner_button_readmore()
 		
+		// Check the CTA button handler:
 		didTapCallToAction()
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1
+		
+		// Check the cancel button handler
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
+		didTapDismiss()
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents).toEventually(beTrue())
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 2
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false
 		
 		let alert = try XCTUnwrap(eventuallyUnwrap { self.sut.currentlyPresentedAlert.value })
 		expect(alert.title) == L.holder_invaliddetailsremoved_alert_title()
@@ -78,16 +89,16 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		let eventsWereBlockedValues = try XCTUnwrap(eventuallyUnwrap {
-			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void)? in
-				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction) = card {
-					return (message, callToActionButtonText, didTapCallToAction)
+			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
+				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
 				}
 				return nil
 			}
 			return matchingTuples.first
 		})
 
-		let (message, callToActionButtonText, _) = eventsWereBlockedValues
+		let (message, callToActionButtonText, _, _) = eventsWereBlockedValues
 		expect(message) == L.holder_invaliddetailsremoved_banner_title()
 		expect(callToActionButtonText) == L.holder_invaliddetailsremoved_banner_button_readmore()
 		
