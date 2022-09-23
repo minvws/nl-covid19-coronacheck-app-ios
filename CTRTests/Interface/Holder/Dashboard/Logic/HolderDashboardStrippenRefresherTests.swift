@@ -439,6 +439,44 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == true
 	}
 
+	// MARK: - International Paper Based
+	
+	func test_paperbased_withoutValidCredentail_calculates_state_noActionNeeded() {
+		// Arrange
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: environmentSpies.dataStoreManager)
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		// Act
+		sut.load()
+
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+	}
+	
+	func test_paperbased_withValidCredential_calculates_state_noActionNeeded() {
+		// Arrange
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: environmentSpies.dataStoreManager)
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		// Act
+		sut.load()
+
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+	}
+	
+	// MARK: - helpers
+	
 	let validGreenCardResponse = RemoteGreenCards.Response(
 		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
 			origins: [
