@@ -100,6 +100,38 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent) == false
+	}
+
+	func test_loadingSuccess_persistsMatchingBlockedEvents() throws {
+		
+		// Arrange `expiring` starting state
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		var eventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
+		var greencardResponse = validGreenCardResponse
+		greencardResponse.blobExpireDates = [RemoteGreenCards.BlobExpiry(
+			identifier: eventGroup!.uniqueIdentifier,
+			expirationDate: .distantPast,
+			reason: "event_blocked"
+		)]
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(greencardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup!]
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+
+		// Act
+		sut.load()
+
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type) == .vaccination
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason) == "event_blocked"
 	}
 
 	func test_loadingFailure_setsErrorFlags_canBeRecovered() {
