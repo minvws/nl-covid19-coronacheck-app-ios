@@ -38,20 +38,21 @@ extension HolderDashboardViewModelTests {
 		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
 		// Assert
-		let eventsWereBlockedValues = try XCTUnwrap(eventuallyUnwrap {
-			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void)? in
-				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction) = card {
-					return (message, callToActionButtonText, didTapCallToAction)
+		let eventsWereBlockedBannerValues = try XCTUnwrap(eventuallyUnwrap {
+			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
+				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
 				}
 				return nil
 			}
 			return matchingTuples.first
 		})
 
-		let (message, callToActionButtonText, didTapCallToAction) = eventsWereBlockedValues
+		let (message, callToActionButtonText, didTapCallToAction, didTapDismiss) = eventsWereBlockedBannerValues
 		expect(message) == L.holder_invaliddetailsremoved_banner_title()
 		expect(callToActionButtonText) == L.holder_invaliddetailsremoved_banner_button_readmore()
 		
+		// Check the CTA button handler:
 		didTapCallToAction()
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
 		
@@ -78,16 +79,16 @@ extension HolderDashboardViewModelTests {
 		
 		// Assert
 		let eventsWereBlockedValues = try XCTUnwrap(eventuallyUnwrap {
-			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void)? in
-				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction) = card {
-					return (message, callToActionButtonText, didTapCallToAction)
+			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
+				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
 				}
 				return nil
 			}
 			return matchingTuples.first
 		})
 
-		let (message, callToActionButtonText, _) = eventsWereBlockedValues
+		let (message, callToActionButtonText, _, _) = eventsWereBlockedValues
 		expect(message) == L.holder_invaliddetailsremoved_banner_title()
 		expect(callToActionButtonText) == L.holder_invaliddetailsremoved_banner_button_readmore()
 		
