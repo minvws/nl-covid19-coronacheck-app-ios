@@ -41,7 +41,10 @@ class VerifierScanViewController: ScanViewController {
 
 		viewModel.$moreInformationButtonText.binding = { [weak self] in self?.sceneView.moreInformationButtonText = $0 }
 		
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
+		viewModel.$alert.binding = { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
 
 		viewModel.$shouldResumeScanning.binding = { [weak self] in
 			if let value = $0, value {
