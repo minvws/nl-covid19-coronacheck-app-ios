@@ -440,40 +440,4 @@ class FeatureFlagManagerTests: XCTestCase {
 		// Then
 		expect(flag) == true
 	}
-	
-	func test_shouldShowCoronaMelderRecommendation_recommendationDisabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.shouldShowCoronaMelderRecommendation = false
-		
-		// When
-		let flag = sut.shouldShowCoronaMelderRecommendation()
-		
-		// Then
-		expect(flag) == false
-	}
-	
-	func test_shouldShowCoronaMelderRecommendation_defaultToFalseWhenNil() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.shouldShowCoronaMelderRecommendation = nil
-		
-		// When
-		let flag = sut.shouldShowCoronaMelderRecommendation()
-		
-		// Then
-		expect(flag) == false
-	}
-	
-	func test_shouldShowCoronaMelderRecommendation_recommendationEnabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.shouldShowCoronaMelderRecommendation = true
-		
-		// When
-		let flag = sut.shouldShowCoronaMelderRecommendation()
-		
-		// Then
-		expect(flag) == true
-	}
 }
