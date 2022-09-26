@@ -32,18 +32,21 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		var optionalServerTrust: SecTrust?
 		XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + chain  as CFArray, policy, &optionalServerTrust))
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
+		var result = false
 		
 		// When
-		let result = sut.checkSSL(
-			serverTrust: serverTrust,
-			policies: [policy],
-			trustedCertificates: [],
-			hostname: "test",
-			trustedName: "test"
-		)
-		
+		DispatchQueue.global().async {
+			result = self.sut.checkSSL(
+				serverTrust: serverTrust,
+				policies: [policy],
+				trustedCertificates: [],
+				hostname: "test",
+				trustedName: "test"
+			)
+		}
+	
 		// Then
-		expect(result) == true
+		expect(result).toEventually(beTrue())
 	}
 	
 	func test_checkSSL_wrongHostname_shouldFail() throws {
@@ -58,18 +61,21 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
+		var result = false
 		
 		// When
-		let result = sut.checkSSL(
-			serverTrust: serverTrust,
-			policies: [policy],
-			trustedCertificates: [trustedServerCertificate],
-			hostname: "coronacheck",
-			trustedName: nil
-		)
+		DispatchQueue.global().async {
+			result = self.sut.checkSSL(
+				serverTrust: serverTrust,
+				policies: [policy],
+				trustedCertificates: [trustedServerCertificate],
+				hostname: "coronacheck",
+				trustedName: nil
+			)
+		}
 		
 		// Then
-		expect(result) == false
+		expect(result).toEventually(beFalse())
 	}
 	
 	func test_checkSSL_doesMatchTrustedHost_shouldSucceed() throws {
@@ -84,18 +90,21 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
+		var result = false
 		
 		// When
-		let result = sut.checkSSL(
-			serverTrust: serverTrust,
-			policies: [policy],
-			trustedCertificates: [trustedServerCertificate],
-			hostname: "holder-api.coronacheck.nl",
-			trustedName: ".coronacheck.nl"
-		)
+		DispatchQueue.global().async {
+			result = self.sut.checkSSL(
+				serverTrust: serverTrust,
+				policies: [policy],
+				trustedCertificates: [trustedServerCertificate],
+				hostname: "holder-api.coronacheck.nl",
+				trustedName: ".coronacheck.nl"
+			)
+		}
 		
 		// Then
-		expect(result) == true
+		expect(result).toEventually(beTrue())
 	}
 	
 	func test_checkSSL_doesNotMatchTrustedHost_shouldSucceed() throws {
@@ -110,18 +119,21 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
+		var result = false
 		
 		// When
-		let result = sut.checkSSL(
-			serverTrust: serverTrust,
-			policies: [policy],
-			trustedCertificates: [trustedServerCertificate],
-			hostname: "holder-api.coronacheck.nl",
-			trustedName: ".google.com"
-		)
+		DispatchQueue.global().async {
+			result = self.sut.checkSSL(
+				serverTrust: serverTrust,
+				policies: [policy],
+				trustedCertificates: [trustedServerCertificate],
+				hostname: "holder-api.coronacheck.nl",
+				trustedName: ".google.com"
+			)
+		}
 		
 		// Then
-		expect(result) == false
+		expect(result).toEventually(beFalse())
 	}
 	
 	func test_checkSSL_shouldSucceed() throws {
@@ -136,18 +148,20 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
+		var result = false
 		
 		// When
-		let result = sut.checkSSL(
-			serverTrust: serverTrust,
-			policies: [policy],
-			trustedCertificates: [trustedServerCertificate],
-			hostname: "holder-api.coronacheck.nl",
-			trustedName: nil
-		)
-		
+		DispatchQueue.global().async {
+			result = self.sut.checkSSL(
+				serverTrust: serverTrust,
+				policies: [policy],
+				trustedCertificates: [trustedServerCertificate],
+				hostname: "holder-api.coronacheck.nl",
+				trustedName: nil
+			)
+		}
 		// Then
-		expect(result) == true
+		expect(result).toEventually(beTrue())
 	}
 	
 	func test_checkSSL_expiredChain_shouldFail() throws {
@@ -161,9 +175,11 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("certRealLeaf")
+		var result = true
 		
 		// When
-		let result = sut.checkSSL(
+		DispatchQueue.global().async {
+			result = self.sut.checkSSL(
 			serverTrust: serverTrust,
 			policies: [policy],
 			trustedCertificates: [trustedServerCertificate],
@@ -172,7 +188,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		)
 		
 		// Then
-		expect(result) == false
+		expect(result).toEventually(beFalse())
 	}
 	
 	// MARK: helpers
