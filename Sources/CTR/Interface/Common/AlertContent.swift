@@ -42,23 +42,21 @@ extension UIViewController {
 	/// Show an alert
 	/// - Parameters:
 	///   - alertContent: the content of the alert
-	func showAlert(_ alertContent: AlertContent?) {
-	
-		guard let content = alertContent else {
-			return
-		}
+	func showAlert(_ alertContent: AlertContent) {
 
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAlertAction(action: content.okAction)
-		if let cancelAction = content.cancelAction {
-			alertController.addAlertAction(action: cancelAction, style: .cancel)
+		performUIUpdate {
+			let alertController = UIAlertController(
+				title: alertContent.title,
+				message: alertContent.subTitle,
+				preferredStyle: .alert
+			)
+			alertController.addAlertAction(action: alertContent.okAction)
+			if let cancelAction = alertContent.cancelAction {
+				alertController.addAlertAction(action: cancelAction, style: .cancel)
+			}
+			
+			self.present(alertController, animated: true, completion: nil)
 		}
-
-		present(alertController, animated: true, completion: nil)
 	}
 }
 

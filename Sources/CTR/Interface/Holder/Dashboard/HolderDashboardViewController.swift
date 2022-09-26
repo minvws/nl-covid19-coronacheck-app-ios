@@ -155,9 +155,8 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
-			performUIUpdate {
-				self?.showAlert(alertContent)
-			}
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
 		}
 
 		viewModel.selectedTab.observe { [weak self, sceneView] region in

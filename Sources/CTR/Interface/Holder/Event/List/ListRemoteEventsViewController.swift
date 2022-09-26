@@ -43,8 +43,9 @@ class ListRemoteEventsViewController: TraitWrappedGenericViewController<ListRemo
 			}
 		}
 
-		viewModel.$alert.binding = { [weak self] in
-			self?.showAlert($0)
+		viewModel.$alert.binding = { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
 		}
 
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in

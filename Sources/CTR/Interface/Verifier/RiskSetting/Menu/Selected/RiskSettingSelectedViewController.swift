@@ -45,8 +45,10 @@ final class RiskSettingSelectedViewController: BaseViewController {
 		viewModel.$highRiskAccessibilityLabel.binding = { [weak self] in self?.sceneView.riskSettingControlsView.highRiskAccessibilityLabel = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.$verificationPolicy.binding = { [weak self] in self?.sceneView.riskSettingControlsView.verificationPolicy = $0 }
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
-		
+		viewModel.$alert.binding = { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
 		sceneView.riskSettingControlsView.selectVerificationPolicyCommand = { [weak self] verificationPolicy in
 			
 			self?.viewModel.selectVerificationPolicy = verificationPolicy
