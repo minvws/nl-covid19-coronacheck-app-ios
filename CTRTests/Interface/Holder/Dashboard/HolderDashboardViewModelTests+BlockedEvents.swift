@@ -38,6 +38,8 @@ extension HolderDashboardViewModelTests {
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
+		sut.viewWillAppear() // required to process updates from the BlockedEventsDataSource, to prevent alert presentation when screen is offscreen.
+		
 		// Assert
 		let eventsWereBlockedBannerValues = try XCTUnwrap(eventuallyUnwrap {
 			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in

@@ -1936,6 +1936,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 	}
 
 	// 2. - Have a DCC in database (which is server-side blocked), send a vaccination: persist to DB, no end-state
@@ -1980,6 +1981,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type).toEventually(equal(.vaccination))
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason).toEventually(equal("event_blocked"))
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
 	
 	// 3. - Have a DCC in database (which is server-side blocked), send a DCC vaccination which is blocked: persist to DB and show blocked end-state
@@ -2035,6 +2038,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
 	
 	// MARK: - Empty States -
