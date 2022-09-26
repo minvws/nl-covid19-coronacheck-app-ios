@@ -58,7 +58,7 @@ class InputRetrievalCodeViewController: TraitWrappedGenericViewController<InputR
 			} else {
 				self?.sceneView.shouldShowLoadingSpinner = false
 			}
-		} 
+		}
 		viewModel.$networkErrorAlert.binding = { [weak self] alertContent in
 			guard let alertContent else { return }
 			self?.showAlert(alertContent)
