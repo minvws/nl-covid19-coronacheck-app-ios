@@ -117,8 +117,6 @@ struct RemoteConfiguration: Codable, Equatable {
 	
 	var visitorPassEnabled: Bool?
 	
-	var shouldShowCoronaMelderRecommendation: Bool?
-	
 	var verificationPolicies: [String]?
 	
 	var disclosurePolicies: [String]?
@@ -158,7 +156,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
 		case visitorPassEnabled = "visitorPassEnabled"
-		case shouldShowCoronaMelderRecommendation = "shouldShowCoronaMelderRecommendation"
 		case verificationPolicies = "verificationPolicies"
 		case disclosurePolicies = "disclosurePolicies"
 		case backendTLSCertificates = "backendTLSCertificates"
@@ -195,7 +192,6 @@ struct RemoteConfiguration: Codable, Equatable {
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
 		config.visitorPassEnabled = true
-		config.shouldShowCoronaMelderRecommendation = false
 		config.verificationPolicies = ["3G"]
 		config.disclosurePolicies = ["3G"]
 		config.backendTLSCertificates = []
