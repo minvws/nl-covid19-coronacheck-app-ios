@@ -223,7 +223,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol,
 		versionSupplier: AppVersionSupplierProtocol?
 	) {
-
 		self.coordinator = coordinator
 		self.qrcardDatasource = qrcardDatasource
 		self.blockedEventsDatasource = blockedEventsDatasource
@@ -326,15 +325,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private func setupBlockedEventsDatasource() {
 
 		blockedEventsDatasource.didUpdate = { [weak self] blockedEventItems in
-			guard let self = self else { return }
-
-			DispatchQueue.main.async {
-				if blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
-					self.displayBlockedEventsAlert(blockedEventItems: blockedEventItems)
-				}
-
-				self.state.blockedEventItems = blockedEventItems
-			}
+			self?.state.blockedEventItems = blockedEventItems
 		}
 	}
 
@@ -363,6 +354,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	func viewWillAppear() {
 		qrcardDatasource.reload()
 		recalculateActiveDisclosurePolicyMode()
+		
+		if state.blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
+			displayBlockedEventsAlert(blockedEventItems: state.blockedEventItems)
+		}
 	}
 
 	// MARK: - Receive Updates
