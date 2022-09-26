@@ -61,7 +61,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
-		var result = false
+		var result = true
 		
 		// When
 		DispatchQueue.global().async {
@@ -107,7 +107,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		expect(result).toEventually(beTrue())
 	}
 	
-	func test_checkSSL_doesNotMatchTrustedHost_shouldSucceed() throws {
+	func test_checkSSL_doesNotMatchTrustedHost_shouldFail() throws {
 		
 		// Given
 		let realLeafCert = try getCertificate("holder-api.coronacheck.nl")
@@ -119,7 +119,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
 		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl")
-		var result = false
+		var result = true
 		
 		// When
 		DispatchQueue.global().async {
