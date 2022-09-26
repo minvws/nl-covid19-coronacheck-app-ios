@@ -19,7 +19,7 @@ class NetworkManagerPrepareIssueTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development, remoteConfig: { .default })
+		sut = NetworkManager(configuration: NetworkConfiguration.development, dataTLSCertificates: { [] })
 	}
 	
 	override func tearDown() {

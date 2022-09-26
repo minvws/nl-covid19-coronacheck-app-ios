@@ -35,7 +35,7 @@ class NetworkManagerEventTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		sut = NetworkManager(configuration: NetworkConfiguration.development, remoteConfig: { .default })
+		sut = NetworkManager(configuration: NetworkConfiguration.development, dataTLSCertificates: { [] })
 	}
 	
 	override func tearDown() {
@@ -363,7 +363,7 @@ class NetworkManagerEventTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			remoteConfig: { .default }
+			dataTLSCertificates: { [] }
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -400,7 +400,7 @@ class NetworkManagerEventTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			remoteConfig: { .default }
+			dataTLSCertificates: { [] }
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -437,7 +437,7 @@ class NetworkManagerEventTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			remoteConfig: { .default }
+			dataTLSCertificates: { [] }
 		)
 
 		stub(condition: isPath(path)) { _ in
@@ -478,7 +478,7 @@ class NetworkManagerEventTests: XCTestCase {
 		sut = NetworkManager(
 			configuration: NetworkConfiguration.development,
 			signatureValidationFactory: signatureValidationFactorySpy,
-			remoteConfig: { .default }
+			dataTLSCertificates: { [] }
 		)
 
 		stub(condition: isPath(path)) { _ in

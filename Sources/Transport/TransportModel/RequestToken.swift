@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: Move back? 
 /// The request token to fetch a test result form a commercial tester
 public struct RequestToken: Codable, Equatable {
 

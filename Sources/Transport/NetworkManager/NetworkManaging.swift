@@ -6,7 +6,6 @@
 */
 
 import Foundation
-import Shared
 
 public struct ServerResponse: Decodable, Equatable {
 	public let status: String

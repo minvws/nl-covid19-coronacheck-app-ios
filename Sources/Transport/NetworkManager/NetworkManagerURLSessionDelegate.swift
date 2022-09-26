@@ -12,13 +12,13 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 
 	/// The security strategy
 	private (set) var securityStrategy: SecurityStrategy
-	private (set) var remoteConfig: () -> RemoteConfiguration
+	private (set) var dataTLSCertificates: () -> [Data]
 	
 	/// Initialise session delegate with certificate used for SSL pinning
-	init(strategy: SecurityStrategy, remoteConfig: @escaping () -> RemoteConfiguration) {
+	init(strategy: SecurityStrategy, data: @escaping () -> [Data]) {
 
 		self.securityStrategy = strategy
-		self.remoteConfig = remoteConfig
+		self.dataTLSCertificates = data
 	}
 
 	/// The security checker (certificate ssl check, PKSC7 signature check)
@@ -37,7 +37,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 		checker = SecurityCheckerFactory.getSecurityChecker(
 			securityStrategy,
 			challenge: challenge,
-			remoteConfig: remoteConfig(),
+			dataTLSCertificates: dataTLSCertificates(),
 			completionHandler: completionHandler
 		)
 		checker?.checkSSL()
