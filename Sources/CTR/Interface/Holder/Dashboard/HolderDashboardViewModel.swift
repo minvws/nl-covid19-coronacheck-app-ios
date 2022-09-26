@@ -181,7 +181,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	private var state: State {
 		didSet {
-			didUpdateState(fromOldState: oldValue)
+			performUIUpdate {
+				self.didUpdateState(fromOldState: oldValue)
+			}
 		}
 	}
 	
