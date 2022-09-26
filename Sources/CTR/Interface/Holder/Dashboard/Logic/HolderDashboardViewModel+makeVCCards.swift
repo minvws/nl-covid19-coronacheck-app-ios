@@ -208,21 +208,6 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 	
-	static func makeRecommendCoronaMelderCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State
-	) -> [HolderDashboardViewController.Card] {
-		guard state.shouldShowRecommendCoronaMelderCard else { return [] } // based on feature flag
-		
-		let regionFilteredQRCards = state.regionFilteredQRCards(validityRegion: validityRegion)
-		
-		guard !regionFilteredQRCards.isEmpty,
-			  !regionFilteredQRCards.contains(where: { $0.shouldShowErrorBeneathCard })
-		else { return [] }
-		
-		return [HolderDashboardViewController.Card.recommendCoronaMelder]
-	}
-	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
 	static func makeOriginNotValidInThisRegionCard(

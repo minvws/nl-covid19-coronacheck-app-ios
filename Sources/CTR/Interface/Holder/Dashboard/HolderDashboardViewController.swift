@@ -8,27 +8,27 @@
 import UIKit
 
 class HolderDashboardViewController: GenericViewController<HolderDashboardView, HolderDashboardViewModelType> {
-
-    enum Card {
+	
+	enum Card {
 		
 		struct Error {
 			let message: String
 			let didTapURL: (URL) -> Void
 		}
 		
-        case headerMessage(message: String, buttonTitle: String?)
-        case emptyStateDescription(message: String, buttonTitle: String?)
-        case emptyStatePlaceholderImage(image: UIImage, title: String)
+		case headerMessage(message: String, buttonTitle: String?)
+		case emptyStateDescription(message: String, buttonTitle: String?)
+		case emptyStatePlaceholderImage(image: UIImage, title: String)
 		case addCertificate(title: String, didTapAdd: () -> Void)
-
-        // Warnings:
-        case expiredQR(message: String, didTapClose: () -> Void)
-        case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-        case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-        case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
-        case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		
+		// Warnings:
+		case expiredQR(message: String, didTapClose: () -> Void)
+		case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
+		case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
+		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case eventsWereBlocked(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-        
+		
 		// Vaccination & Recovery Validity
 		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
@@ -36,12 +36,11 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
-        // QR Cards:
+		// QR Cards:
 		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
-        case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
+		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
 		// Recommendations
-		case recommendCoronaMelder
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		
 		// Disclosure Policy
@@ -289,12 +288,6 @@ private extension HolderDashboardViewController.Card {
 				qrCard.errorMessage = cardError?.message
 				qrCard.errorMessageTapHandler = cardError?.didTapURL
 				return qrCard
-			
-			case .recommendCoronaMelder:
-				let view = RecommendCoronaMelderCardView()
-				view.message = L.holderDashboardRecommendcoronamelderTitle()
-				view.urlTapHandler = openURLHandler
-				return view
 		}
 		
 	}

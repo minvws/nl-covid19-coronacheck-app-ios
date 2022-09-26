@@ -116,10 +116,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			activeDisclosurePolicyMode == .zeroG
 		}
 		
-		var shouldShowRecommendCoronaMelderCard: Bool {
-			Current.featureFlagManager.shouldShowCoronaMelderRecommendation()
-		}
-		
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
@@ -594,7 +590,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -632,7 +627,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -670,7 +664,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -709,7 +702,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
