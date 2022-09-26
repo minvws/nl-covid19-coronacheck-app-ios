@@ -177,16 +177,6 @@ func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> V
 	}
 }
 
-func beRecommendCoronaMelderCard() -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beRecommendCoronaMelderCard with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case .recommendCoronaMelder = actual {
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beRecommendedUpdateCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),

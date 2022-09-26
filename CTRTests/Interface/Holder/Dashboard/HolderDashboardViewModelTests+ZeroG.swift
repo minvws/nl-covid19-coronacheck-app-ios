@@ -160,7 +160,7 @@ extension HolderDashboardViewModelTests {
 		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(7))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(6))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_filledState_international_0G_message()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -208,6 +208,5 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		expect(self.sut.internationalCards.value[5]).toEventually(beAddCertificateCard())
-		expect(self.sut.internationalCards.value[6]).toEventually(beRecommendCoronaMelderCard())
 	}
 }

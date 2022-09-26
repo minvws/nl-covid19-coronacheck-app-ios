@@ -27,7 +27,6 @@ protocol FeatureFlagManaging {
 	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
 	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
 	func areBothDisclosurePoliciesEnabled() -> Bool
-	func shouldShowCoronaMelderRecommendation() -> Bool
 	func isGGDPortalEnabled() -> Bool
 }
 
@@ -64,10 +63,6 @@ class FeatureFlagManager: FeatureFlagManaging {
 	func isVisitorPassEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
-	}
-	
-	func shouldShowCoronaMelderRecommendation() -> Bool {
-		return remoteConfigManager.storedConfiguration.shouldShowCoronaMelderRecommendation ?? false
 	}
 	
 	func areMultipleVerificationPoliciesEnabled() -> Bool {
