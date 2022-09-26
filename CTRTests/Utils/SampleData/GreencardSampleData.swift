@@ -111,6 +111,46 @@ extension GreenCard {
 		return greencard
 	}
 
+	static func sampleInternationalPaperBasedExpiringIn24Days(dataStoreManager: DataStoreManager) -> GreenCard {
+		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
+		greencard.type = GreenCardType.eu.rawValue
+
+		let origin = Origin.sampleVaccination(eventTime: 25 * days * ago, validFromDate: 25 * days * ago, expirationTime: 24 * days * fromNow, dataStoreManager: dataStoreManager)
+		
+		greencard.origins = [
+			origin
+		]
+		
+		// Add Paper based hint
+		OriginHintModel.create(origin: origin, hint: "event_from_dcc", managedContext: dataStoreManager.managedObjectContext())
+
+		greencard.credentials = [
+			Credential.sample(validFrom: 25 * days * ago, expirationTime: 24 * days * ago, dataStoreManager: dataStoreManager)
+		]
+
+		return greencard
+	}
+	
+	static func sampleInternationalPaperBasedExpiringIn24DaysWithValidCredential(dataStoreManager: DataStoreManager) -> GreenCard {
+		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
+		greencard.type = GreenCardType.eu.rawValue
+
+		let origin = Origin.sampleVaccination(eventTime: 25 * days * ago, validFromDate: 25 * days * ago, expirationTime: 24 * days * fromNow, dataStoreManager: dataStoreManager)
+		
+		greencard.origins = [
+			origin
+		]
+		
+		// Add Paper based hint
+		OriginHintModel.create(origin: origin, hint: "event_from_dcc", managedContext: dataStoreManager.managedObjectContext())
+
+		greencard.credentials = [
+			Credential.sample(validFrom: 25 * days * ago, expirationTime: 24 * days * fromNow, dataStoreManager: dataStoreManager)
+		]
+
+		return greencard
+	}
+	
 	static func sampleDomesticCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
 		greencard.type = GreenCardType.domestic.rawValue
@@ -380,6 +420,20 @@ extension WalletManagerSpy {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
 			.sampleDomesticCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
+		]
+	}
+	
+	func loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: DataStoreManager) {
+
+		stubbedGreencardsWithUnexpiredOriginsResult = [
+			.sampleInternationalPaperBasedExpiringIn24Days(dataStoreManager: dataStoreManager)
+		]
+	}
+	
+	func loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: DataStoreManager) {
+
+		stubbedGreencardsWithUnexpiredOriginsResult = [
+			.sampleInternationalPaperBasedExpiringIn24DaysWithValidCredential(dataStoreManager: dataStoreManager)
 		]
 	}
 }
