@@ -101,6 +101,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 	}
 
 	func test_loadingSuccess_persistsMatchingBlockedEvents() throws {
@@ -132,6 +133,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type) == .vaccination
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason) == "event_blocked"
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
 
 	func test_loadingFailure_setsErrorFlags_canBeRecovered() {
