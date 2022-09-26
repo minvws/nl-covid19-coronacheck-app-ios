@@ -271,7 +271,12 @@ class ListRemoteEventsViewModel {
 		// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 		// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
 		// Note: This is not relevant to the end state.
-		blockItems.combinedWith(matchingEventGroups: eventsNotBeingAdded).forEach { blockItem, eventGroup in
+		let blockItemsForEventsNotBeingAdded = blockItems.combinedWith(matchingEventGroups: eventsNotBeingAdded)
+		if blockItemsForEventsNotBeingAdded.isNotEmpty {
+			// We need to show the alert to the user again:
+			Current.userSettings.hasShownBlockedEventsAlert = false
+		}
+		blockItemsForEventsNotBeingAdded.forEach { blockItem, eventGroup in
 			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
 		}
 		
