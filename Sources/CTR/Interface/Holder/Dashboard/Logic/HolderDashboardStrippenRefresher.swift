@@ -276,6 +276,10 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
 		let allEventGroups = Current.walletManager.listEventGroups()
 	
+		guard blockItems.isNotEmpty else { return }
+
+		Current.userSettings.hasShownBlockedEventsAlert = false
+
 		// Match blockItems (`blobExpiry`) to relevant eventGroups so that a BlockedEvent can be created & persisted:
 		blockItems.combinedWith(matchingEventGroups: allEventGroups).forEach { blockItem, eventGroup in
 			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
