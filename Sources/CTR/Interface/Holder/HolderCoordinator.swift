@@ -252,26 +252,30 @@ class HolderCoordinator: SharedCoordinator {
 	// MARK: - Navigate to..
 	
 	func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
-		
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				qrcardDatasource: HolderDashboardQRCardDatasource(),
-				blockedEventsDatasource: HolderDashboardBlockedEventsDatasource(),
-				strippenRefresher: DashboardStrippenRefresher(
-					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability()
-				),
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
-				versionSupplier: versionSupplier
+
+		if let existingDashboardVC = navigationController.viewControllers.first(where: { $0 is HolderDashboardViewController }) {
+			navigationController.popToViewController(existingDashboardVC, animated: true)
+		} else {
+			let dashboardViewController = HolderDashboardViewController(
+				viewModel: HolderDashboardViewModel(
+					coordinator: self,
+					qrcardDatasource: HolderDashboardQRCardDatasource(),
+					blockedEventsDatasource: HolderDashboardBlockedEventsDatasource(),
+					strippenRefresher: DashboardStrippenRefresher(
+						minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
+						reachability: try? Reachability()
+					),
+					configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
+					vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
+					versionSupplier: versionSupplier
+				)
 			)
-		)
-		
-		navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
-		
-		if replacingWindowRootViewController {
-			window.replaceRootViewController(with: navigationController)
+			
+			navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
+			
+			if replacingWindowRootViewController {
+				window.replaceRootViewController(with: navigationController)
+			}
 		}
 	}
 	
