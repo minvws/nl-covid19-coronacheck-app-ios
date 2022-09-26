@@ -113,7 +113,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			reachability: reachabilitySpy
 		)
 
-		var eventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
+		let eventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		var greencardResponse = validGreenCardResponse
 		greencardResponse.blobExpireDates = [RemoteGreenCards.BlobExpiry(
 			identifier: eventGroup!.uniqueIdentifier,
