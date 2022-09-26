@@ -180,13 +180,13 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		// When
 		DispatchQueue.global().async {
 			result = self.sut.checkSSL(
-			serverTrust: serverTrust,
-			policies: [policy],
-			trustedCertificates: [trustedServerCertificate],
-			hostname: "holder-api.coronacheck.nl",
-			trustedName: nil
-		)
-		
+				serverTrust: serverTrust,
+				policies: [policy],
+				trustedCertificates: [trustedServerCertificate],
+				hostname: "holder-api.coronacheck.nl",
+				trustedName: nil
+			)
+		}
 		// Then
 		expect(result).toEventually(beFalse())
 	}
