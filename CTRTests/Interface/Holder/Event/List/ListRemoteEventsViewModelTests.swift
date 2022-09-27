@@ -1933,7 +1933,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		})
 
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
@@ -2035,7 +2035,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return nil
 		})
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
