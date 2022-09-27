@@ -94,8 +94,6 @@ class Tokentest: BaseTest {
 		
 		// Assert info dialog
 		app.tapButton("Geen verificatiecode gekregen?")
-		print(app.debugDescription)
-		app.printChildElements()
 		app.textExists("Geen verificatiecode gekregen?")
 		app.textExists("Je krijgt de verificatiecode via een sms of e-mail. Niks gekregen? Klik hieronder op ‘stuur opnieuw’ voor een nieuwe code.")
 		app.tapButton("Sluiten")
