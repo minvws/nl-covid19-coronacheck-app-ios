@@ -157,8 +157,8 @@ final class TestData {
 	static let posPcrJ1 = TestPerson(bsn: "999991395", dose: 1, doseIntl: ["1/1"], vacFrom: -2, vacUntil: 210, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 janssen
 	static let posPcrJ2 = TestPerson(bsn: "899991401", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 2 janssen
 	static let posPcrJ3 = TestPerson(bsn: "999991413", dose: 3, doseIntl: ["1/1", "2/1", "3/1"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 3 janssen
-	static let posPcrP1J1 = TestPerson(bsn: "999991425", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 pfizer + 1 janssen
-	static let posPcrP2J1 = TestPerson(bsn: "899991437", dose: 3, doseIntl: ["1/1", "2/1", "3/1"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 2 pfizer + 1 janssen
+	static let posPcrP1J1 = TestPerson(bsn: "899991425", dose: 2, doseIntl: ["1/1", "2/1"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 pfizer + 1 janssen
+	static let posPcrP2J1 = TestPerson(bsn: "999991437", dose: 3, doseIntl: ["1/1", "2/1", "3/1"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 2 pfizer + 1 janssen
 	static let posPcrP1M1 = TestPerson(bsn: "999991449", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -60, vacUntil: 210, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 1 pfizer + 1 moderna
 	static let posPcrP2M1 = TestPerson(bsn: "999991450", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacFrom: -60, vacOffset: -60, recUntil: 150) // Positive PCR (NAAT) + 2 pfizer + 1 moderna
 	static let posRat = TestPerson(bsn: "999991310", recUntil: 150) // Positive Sneltest (RAT)

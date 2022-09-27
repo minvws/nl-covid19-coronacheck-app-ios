@@ -46,7 +46,6 @@ class PositivePcrTest: BaseTest {
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
-	// TODO: Foutcode bij ophalen?
 	func test_posPcrP2J1() {
 		let person = TestData.posPcrP2J1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
