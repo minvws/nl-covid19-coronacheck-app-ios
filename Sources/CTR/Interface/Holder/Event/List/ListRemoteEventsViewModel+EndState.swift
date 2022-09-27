@@ -119,7 +119,7 @@ extension ListRemoteEventsViewModel {
 
 		let errorCode = ErrorCode(
 			flow: eventMode.flow,
-			step: .storingCredentials,
+			step: .signer,
 			clientCode: .signerReturnedBlockedEvent
 		)
 		
