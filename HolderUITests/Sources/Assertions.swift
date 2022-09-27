@@ -141,6 +141,13 @@ extension BaseTest {
 		app.containsText("Je hebt geen Nederlands \(certificateType.rawValue.lowercased())")
 	}
 	
+	func assertVaccinationAssessmentIncomplete() {
+		guard disclosureMode != .mode0G else { return }
+		tapOnTheNetherlandsTab()
+		app.containsText("Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag")
+		app.containsText("Maak bewijs compleet")
+	}
+	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffsetInDays: Int? = nil, validUntilOffsetInDays: Int? = nil, validUntilDate: String? = nil) {
 		guard ctbInUse else { return }
 		guard disclosureMode != .mode0G else { return }
@@ -190,6 +197,13 @@ extension BaseTest {
 			}
 			card.containsText("Wordt automatisch geldig")
 		}
+	}
+	
+	func assertValidDutchAssessmentCertificate(validUntilDate: Date) {
+		guard disclosureMode != .mode0G else { return }
+		tapOnTheNetherlandsTab()
+		card3G().containsText(CertificateType.assessment.rawValue)
+		card3G().containsText("Bezoekersbewijs: geldig tot " + validUntilDate.toString(.recently))
 	}
 	
 	// MARK: - International
@@ -248,7 +262,11 @@ extension BaseTest {
 	
 	func assertInternationalTest(of negativeTest: NegativeTest) {
 		tapOnInternationalTab()
-		card(of: .test).containsText(negativeTest.internationalEventCertificate)
+		if disclosureMode == .mode0G {
+			card(of: .test).containsText(negativeTest.internationalEventCertificate)
+		} else {
+			card(of: .test).containsText(negativeTest.eventCertificate)
+		}
 		card(of: .test).containsText("Type test: " + negativeTest.testType.rawValue)
 		card(of: .test).containsText("Testdatum: " + negativeTest.eventDate.toString(.recently))
 		card(of: .test).containsText("Bekijk QR")
@@ -266,6 +284,11 @@ extension BaseTest {
 		app.containsText("Geldig vanaf " + formattedOffsetDate(with: validFromOffsetInDays, withYear: false))
 		app.containsText("tot " + formattedOffsetDate(with: validUntilOffsetInDays))
 		app.containsText("Wordt automatisch geldig")
+	}
+	
+	func assertAssessmentNotValidInternationally() {
+		tapOnInternationalTab()
+		app.textExists("Je bezoekersbewijs is niet geldig buiten Nederland")
 	}
 	
 	// MARK: - International QR Details

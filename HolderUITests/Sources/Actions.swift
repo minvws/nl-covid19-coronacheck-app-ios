@@ -22,6 +22,12 @@ extension BaseTest {
 		waitUntilSpinnerIsGone()
 	}
 	
+	func addVisitorPass() {
+		app.tapButton("Open menu")
+		app.tapButton("Bezoekersbewijs toevoegen")
+		app.tapButton("Volgende")
+	}
+	
 	private func viewQR(of certificate: CertificateType, label: String, hiddenQR: Bool) {
 		card(of: certificate).tapButton(label)
 		if hiddenQR { assertHiddenQR() }
@@ -78,7 +84,7 @@ extension BaseTest {
 			let retrievalField = app.textFields["Ophaalcode"]
 			retrievalField.tap()
 			retrievalField.typeText(retrievalCode)
-			app.staticTexts["Volgende"].tap()
+			app.tapButton("Volgende", index: 1)
 		}
 		
 		if let verificationCode = verificationCode {
@@ -86,9 +92,28 @@ extension BaseTest {
 			let verificationField = app.textFields["Verificatiecode"]
 			verificationField.tap()
 			verificationField.typeText(verificationCode)
-			app.staticTexts["Volgende"].tap()
+			app.tapButton("Volgende")
 		}
 	}
+	
+	func addVaccinationAssessment(for approvalCode: String? = nil, with verificationCode: String? = nil) {
+		addVisitorPass()
+		
+		if let approvalCode = approvalCode {
+			let approvalField = app.textFields["Beoordelingscode"]
+			approvalField.tap()
+			approvalField.typeText(approvalCode)
+			app.tapButton("Volgende", index: 1)
+		}
+		
+		if let verificationCode = verificationCode {
+			let verificationField = app.textFields["Verificatiecode"]
+			verificationField.tap()
+			verificationField.typeText(verificationCode)
+			app.tapButton("Volgende")
+		}
+	}
+	
 	
 	private func retrieveCertificateFromServer(for bsn: String) {
 		
