@@ -183,7 +183,7 @@ class RedDisclosureButton: SimpleDisclosureButton {
 			titleLabel.attributedText = title?.setLineHeight(
 				SimpleDisclosureButton.ViewTraits.lineHeight,
 				kerning: SimpleDisclosureButton.ViewTraits.kerning,
-				textColor: C.error() ?? UIColor.red
+				textColor: C.ccError() ?? UIColor.red
 			)
 			button.accessibilityLabel = title
 		}
