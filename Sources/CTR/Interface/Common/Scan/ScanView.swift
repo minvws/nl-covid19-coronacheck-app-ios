@@ -21,6 +21,8 @@ final class ScanView: BaseView {
 		static let viewFinderMaximumSquareLength: CGFloat = 650
 		static let viewFinderiPadMaxPercentageOfShortestScreenDimension: CGFloat = 0.6
 		static let viewFinderTopMarginPercentageOfScreenHeight: CGFloat = 0.15
+		
+		static let cameraInterruptedTextInsets = UIEdgeInsets(top: 60, left: 30, bottom: 60, right: 30)
 	}
 	
 	let cameraView: UIView = {
@@ -41,10 +43,28 @@ final class ScanView: BaseView {
 	/// When there is a interruption to the camera (e.g. iPad splitscreen is started), show this view over the top:
 	private let cameraInterruptedCurtain: UIView = {
 		let view = UIView()
-		view.backgroundColor = .white
+		view.backgroundColor = UIColor.black // completely obscure the frozen image
 		view.accessibilityIdentifier = "cameraInterruptedCurtain"
 		view.isHidden = true
 		return view
+	}()
+	
+	private let cameraInterruptedMessageView: UIView = {
+		let view = UIView()
+		view.backgroundColor = UIColor(white: 0.2, alpha: 1)
+		view.accessibilityIdentifier = "cameraInterruptedMessage"
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+	
+	private let cameraInterruptedMessageLabel: UILabel = {
+		let label = Label(bodyBold: "Camera is alleen te gebruiken in volledig scherm. Sluit je vensterweergave.", textColor: C.white()!)
+		label.textAlignment = .center
+		label.numberOfLines = 0
+		label.accessibilityIdentifier = "cameraInterruptedMessageText"
+		label.translatesAutoresizingMaskIntoConstraints = false
+		return label
 	}()
 	
 	private let viewfinderView: UIView = {
@@ -82,6 +102,8 @@ final class ScanView: BaseView {
 		
 		cameraView.embed(in: self)
 		cameraInterruptedCurtain.embed(in: self)
+		addSubview(cameraInterruptedMessageView)
+		cameraInterruptedMessageLabel.embed(in: cameraInterruptedMessageView, insets: ViewTraits.cameraInterruptedTextInsets)
 		backgroundView.embed(in: self)
 
 		addSubview(viewfinderView)
@@ -93,6 +115,7 @@ final class ScanView: BaseView {
 		super.setupViewConstraints()
 		setupMaskLayoutGuideConstraints()
 		setupViewfinderConstraints()
+		setupCameraInterruptedConstraints()
 	}
 	
 	override func layoutSubviews() {
@@ -143,6 +166,13 @@ final class ScanView: BaseView {
 			max60PercentOfScreenHeight.isActive = true
 		}
 	}
+	
+	private func setupCameraInterruptedConstraints() {
+		cameraInterruptedMessageView.leftAnchor.constraint(equalTo: maskLayoutGuide.leftAnchor, constant: 0).isActive = true
+		cameraInterruptedMessageView.rightAnchor.constraint(equalTo: maskLayoutGuide.rightAnchor, constant: 0).isActive = true
+		cameraInterruptedMessageView.topAnchor.constraint(equalTo: maskLayoutGuide.topAnchor, constant: 0).isActive = true
+		cameraInterruptedMessageView.bottomAnchor.constraint(equalTo: maskLayoutGuide.bottomAnchor, constant: 0).isActive = true
+	}
 		
 	private static func calculateMaskLayer(fromView sampleMaskView: UIView, inSuperview superview: UIView) -> CALayer {
 
@@ -187,6 +217,7 @@ final class ScanView: BaseView {
 	var shouldShowCurtain: Bool = false {
 		didSet {
 			cameraInterruptedCurtain.isHidden = !shouldShowCurtain
+			cameraInterruptedMessageView.isHidden = !shouldShowCurtain
 		}
 	}
 }
