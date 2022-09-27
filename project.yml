@@ -104,6 +104,7 @@ targetTemplates:
       # Frameworks:
       - framework: clcore.xcframework
         embed: false
+      - sdk: libSwiftCoreGraphics.tbd
     settings:
       base:
         CURRENT_PROJECT_VERSION: 1 # needs to be present for project to build locally, but is overwritten by fastlane. No need to change.
