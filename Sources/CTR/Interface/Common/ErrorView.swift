@@ -31,7 +31,7 @@ class ErrorView: BaseView {
 		
 		let view = UIImageView(image: I.error())
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.tintColor = C.error()
+		view.tintColor = C.ccError()
 		return view
 	}()
 	
@@ -95,7 +95,7 @@ class ErrorView: BaseView {
 			errorLabel.attributedText = error?.setLineHeight(
 				ViewTraits.Font.lineHeight,
 				kerning: ViewTraits.Font.kerning,
-				textColor: C.error()!
+				textColor: C.ccError()!
 			)
 			
 			if let error {
