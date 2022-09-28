@@ -65,7 +65,6 @@ final class EnvironmentSpies {
 	
 	var featureFlagManagerSpy: FeatureFlagManagerSpy = {
 		let spy = FeatureFlagManagerSpy()
-		spy.stubbedShouldShowCoronaMelderRecommendationResult = true
 		return spy
 	}()
 	
@@ -160,9 +159,7 @@ final class EnvironmentSpies {
 	}()
 	
 	var walletManagerSpy: WalletManagerSpy = {
-		let spy = WalletManagerSpy()
-		spy.stubbedStoreEventGroupResult = true
-		return spy
+		WalletManagerSpy()
 	}()
 	
 	var verificationPolicyEnablerSpy: VerificationPolicyEnablerSpy = {
@@ -183,7 +180,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		couplingManager: spies.couplingManagerSpy,
 		cryptoLibUtility: spies.cryptoLibUtilitySpy,
 		cryptoManager: spies.cryptoManagerSpy,
-		dataStoreManager: DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in }),
+		dataStoreManager: spies.dataStoreManager,
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,

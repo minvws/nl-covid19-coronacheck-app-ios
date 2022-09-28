@@ -239,7 +239,11 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 					guard let self = self else { return }
 
 					switch $0 {
-						case .success:
+						case .success(let response):
+						
+							// Check if any events that we sent have come back blocked from the signer:
+							Self.processBlockedEvents(fromResponse: response)
+						
 							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: self.minimumThresholdOfValidCredentialsTriggeringRefresh,
 								walletManager: self.walletManager,
@@ -265,12 +269,29 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 	func userDismissedALoadingError() {
 		state.userHasPreviouslyDismissedALoadingError = true
 	}
+	
+	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response) {
+		
+		// The items which the backend has indicated are blocked (if any):
+		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		let allEventGroups = Current.walletManager.listEventGroups()
+	
+		guard blockItems.isNotEmpty else { return }
+
+		Current.userSettings.hasShownBlockedEventsAlert = false
+
+		// Match blockItems (`blobExpiry`) to relevant eventGroups so that a BlockedEvent can be created & persisted:
+		blockItems.combinedWith(matchingEventGroups: allEventGroups).forEach { blockItem, eventGroup in
+			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+		}
+	}
 
 	/// Greencards where the number of valid credentials is <= 5 and the latest credential expiration time is < than the origin expiration time
 	private static func calculateGreenCardsCredentialExpiryState(
 		minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int,
 		walletManager: WalletManaging,
 		now: Date) -> State.GreencardsCredentialExpiryState {
+		
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(
 			now: now,
 			ofOriginType: nil
@@ -281,7 +302,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 		validGreenCardsForCurrentWallet
 			.forEach { (greencard: GreenCard) in
-
+				
 				guard let allCredentialsForGreencard: [Credential] = greencard.castCredentials(),
 					  let allOriginsForGreencard = greencard.castOrigins()
 				else { return } // unlikely logical error, greencard should have non-nil origins & credentials arrays (even if empty).
@@ -304,10 +325,9 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 					return
 				}
 				
-				// Filter expired foreign DCCs, those should not lead to a refresh
+				// Filter paper based DCCs, those should not lead to a refresh
 				if greencard.getType() == GreenCardType.eu,
-				   let lastCredentialData = allCredentialsForGreencard.last?.data,
-				   Current.cryptoManager.isForeignDCC(lastCredentialData) {
+				   allOriginsForGreencard.hasPaperBasedDCC() {
 					return
 				}
 				

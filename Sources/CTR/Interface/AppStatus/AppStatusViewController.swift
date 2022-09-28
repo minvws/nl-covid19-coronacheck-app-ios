@@ -21,7 +21,10 @@ class AppStatusViewController: GenericViewController<AppStatusView, AppStatusVie
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
 		viewModel.image.observe { [weak self] in self?.sceneView.image = $0 }
 		viewModel.actionTitle.observe { [weak self] in self?.sceneView.primaryTitle = $0 }
-		viewModel.alert.observe { [weak self] in self?.showAlert($0) }
+		viewModel.alert.observe { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.actionButtonTapped() }
 	}
 

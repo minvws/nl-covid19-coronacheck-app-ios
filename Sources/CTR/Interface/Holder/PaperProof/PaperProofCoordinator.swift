@@ -136,8 +136,11 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 		
-		// userDidScanDCC(CouplingManager.vaccinationDCC)
-		// userWishesToEnterToken()
+		// #warning("Do not commit")
+		// userDidScanDCC(CouplingManager.expiredDCC)
+		// userDidSubmitPaperProofToken(token: CouplingManager.expiredCouplingCode)
+		// userWishesToCreateACertificate()
+		// return
 		
 		if let scannedDCC = LaunchArgumentsHandler.getScannedDCC() {
 			userDidScanDCC(scannedDCC)
@@ -154,7 +157,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 			}
 			return
 		}
-		
+
 		let destination = PaperProofScanViewController(
 			viewModel: PaperProofScanViewModel(
 				coordinator: self
@@ -165,19 +168,21 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	
 	func userWishesToEnterToken() {
 		
+		// #warning("Do not commit")
 		// userDidSubmitPaperProofToken(token: "ZKGBKH")
 		// userWishesToCreateACertificate()
+		// return
 		
 		if let couplingCode = LaunchArgumentsHandler.getCouplingCode() {
 			userDidSubmitPaperProofToken(token: couplingCode)
 			userWishesToCreateACertificate()
 			return
 		}
-		
+
 		let destination = PaperProofInputCouplingCodeViewController(
 			viewModel: PaperProofInputCouplingCodeViewModel(coordinator: self)
 		)
-		
+
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
@@ -225,12 +230,12 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 	func userWishesToCreateACertificate() {
 
 		// Navigate to Check Certificate
-		if let scannedDcc = scannedDCC, let couplingCode = token {
+		if let scannedDCC, let token {
 			let viewController = PaperProofCheckViewController(
 				viewModel: PaperProofCheckViewModel(
 					coordinator: self,
-					scannedDcc: scannedDcc,
-					couplingCode: couplingCode
+					scannedDcc: scannedDCC,
+					couplingCode: token
 				)
 			)
 			navigationController.pushViewController(viewController, animated: false)

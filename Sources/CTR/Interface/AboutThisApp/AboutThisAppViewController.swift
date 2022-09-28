@@ -17,7 +17,10 @@ class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisApp
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$appVersion.binding = { [weak self] in self?.sceneView.appVersion = $0 }
 		viewModel.$configVersion.binding = { [weak self] in self?.sceneView.configVersion = $0 }
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
+		viewModel.$alert.binding = { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
 
 		addBackButton(customAction: nil)
 		setupMenuOptions()

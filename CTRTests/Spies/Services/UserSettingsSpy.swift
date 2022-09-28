@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-
+// swiftlint:disable type_body_length
 import XCTest
 @testable import CTR
 
@@ -381,6 +381,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedOverrideDisclosurePoliciesGetter = true
 			invokedOverrideDisclosurePoliciesGetterCount += 1
 			return stubbedOverrideDisclosurePolicies
+		}
+	}
+
+	var invokedHasShownBlockedEventsAlertSetter = false
+	var invokedHasShownBlockedEventsAlertSetterCount = 0
+	var invokedHasShownBlockedEventsAlert: Bool?
+	var invokedHasShownBlockedEventsAlertList = [Bool]()
+	var invokedHasShownBlockedEventsAlertGetter = false
+	var invokedHasShownBlockedEventsAlertGetterCount = 0
+	var stubbedHasShownBlockedEventsAlert: Bool! = false
+
+	var hasShownBlockedEventsAlert: Bool {
+		set {
+			invokedHasShownBlockedEventsAlertSetter = true
+			invokedHasShownBlockedEventsAlertSetterCount += 1
+			invokedHasShownBlockedEventsAlert = newValue
+			invokedHasShownBlockedEventsAlertList.append(newValue)
+		}
+		get {
+			invokedHasShownBlockedEventsAlertGetter = true
+			invokedHasShownBlockedEventsAlertGetterCount += 1
+			return stubbedHasShownBlockedEventsAlert
 		}
 	}
 

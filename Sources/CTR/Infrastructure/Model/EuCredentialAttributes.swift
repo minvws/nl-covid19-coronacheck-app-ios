@@ -161,7 +161,7 @@ struct EuCredentialAttributes: Codable {
 		return nil
 	}
 
-	var maxIssuedAt: String? {
+	var eventDate: String? {
 
 		if let vaccination = digitalCovidCertificate.vaccinations?.first {
 			return vaccination.dateOfVaccination

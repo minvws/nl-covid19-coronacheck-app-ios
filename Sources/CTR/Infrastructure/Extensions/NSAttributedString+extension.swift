@@ -8,7 +8,7 @@
 import UIKit
 
 extension String {
-	func components<T>(separatedBy separators: [T]) -> [String] where T: StringProtocol {
+	func components(separatedBy separators: [some StringProtocol]) -> [String] {
 		var result = [self]
 		for separator in separators {
 			result = result
@@ -163,7 +163,7 @@ public extension NSAttributedString {
 
 			let newFont: UIFont
 
-			if let boldFont = boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
+			if let boldFont, currentFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
 				newFont = boldFont
 			} else {
 				newFont = style.font

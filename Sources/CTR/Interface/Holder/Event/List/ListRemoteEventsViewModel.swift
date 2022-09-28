@@ -18,7 +18,7 @@ class ListRemoteEventsViewModel {
 
 	var eventMode: EventMode
 	var originalEventMode: EventMode?
-	var remoteEvents: [RemoteEvent]
+	var remoteEvents: [RemoteEvent] // these are the events we are adding in this flow.
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -100,7 +100,7 @@ class ListRemoteEventsViewModel {
 
 	func goBack() {
 		
-		if let originalEventMode = originalEventMode {
+		if let originalEventMode {
 			coordinator?.listEventsScreenDidFinish(.back(eventMode: originalEventMode))
 		} else {
 			coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
@@ -150,9 +150,9 @@ class ListRemoteEventsViewModel {
 		}
 		
 		storeEvent(
-			replaceExistingEventGroups: replaceExistingEventGroups) { saved in
+			replaceExistingEventGroups: replaceExistingEventGroups) { newlyStoredEventGroups in
 
-			guard saved else {
+			guard let newlyStoredEventGroups = newlyStoredEventGroups else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
 				self.handleStorageError()
@@ -161,7 +161,7 @@ class ListRemoteEventsViewModel {
 			
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: eventModeToUse) { result in
 				self.progressIndicationCounter.decrement()
-				self.handleGreenCardResult(result, forEventMode: eventModeToUse)
+				self.handleGreenCardResult(result, forEventMode: eventModeToUse, eventsBeingAdded: newlyStoredEventGroups)
 			}
 		}
 	}
@@ -217,11 +217,19 @@ class ListRemoteEventsViewModel {
 		}
 		return storageEventMode
 	}
-
-	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>, forEventMode eventMode: EventMode) {
+	
+	private func handleGreenCardResult(_ result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>, forEventMode eventMode: EventMode, eventsBeingAdded: [EventGroup]) {
 		
 		switch result {
 			case let .success(response):
+	
+				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
+				guard !shouldShowBlockingEndState else {
+					self.shouldPrimaryButtonBeEnabled = true
+					self.viewState = blockedEndState()
+					return
+				}
+
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
 				if let hints = response.hints, let nonEmptyHints = NonemptyArray(hints) {
@@ -238,7 +246,6 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
-						
 						showEventError()
 						shouldPrimaryButtonBeEnabled = true
 						
@@ -247,14 +254,42 @@ class ListRemoteEventsViewModel {
 				}
 		}
 	}
+	
+	/// Returns Bool: `true` if what was processed should result in a UI blocking screen, or `false` if not.
+	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response, eventsBeingAdded: [EventGroup]) -> Bool {
+		
+		// Events stored in the past, including whatever we're adding right now as well:
+		let allEventGroups = Current.walletManager.listEventGroups()
+
+		let eventsNotBeingAdded = allEventGroups.filter { eventGroup in
+			!eventsBeingAdded.contains(where: { eventGroup.uniqueIdentifier == $0.uniqueIdentifier })
+		}
+	
+		// The items which the backend has indicated are blocked:
+		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		
+		// If any blockItem does not match an ID of an EventGroup that was sent to backend to
+		// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
+		// Note: This is not relevant to the end state.
+		let blockItemsForEventsNotBeingAdded = blockItems.combinedWith(matchingEventGroups: eventsNotBeingAdded)
+		if blockItemsForEventsNotBeingAdded.isNotEmpty {
+			// We need to show the alert to the user again:
+			Current.userSettings.hasShownBlockedEventsAlert = false
+		}
+		blockItemsForEventsNotBeingAdded.forEach { blockItem, eventGroup in
+			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+		}
+		
+		// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:
+		let shouldShowBlockingEndState = blockItems.combinedWith(matchingEventGroups: eventsBeingAdded).isNotEmpty
+		return shouldShowBlockingEndState
+	}
 
 	// MARK: - Store events
 
 	private func storeEvent(
 		replaceExistingEventGroups: Bool,
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
+		onCompletion: @escaping ([EventGroup]?) -> Void) {
 
 		if replaceExistingEventGroups {
 			// Replace when there is a identity mismatch
@@ -264,11 +299,15 @@ class ListRemoteEventsViewModel {
 		// We can not store empty remoteEvents without an event. (happens with .pending)
 		// ZZZ sometimes returns an empty array of events in the combined flow.
 		let storableEvents = remoteEvents.filter { ($0.wrapper.events ?? []).isNotEmpty }
-
+			
+		var newlyStoredEventGroups: [EventGroup] = []
+		
 		for storableEvent in storableEvents where storableEvent.wrapper.status == .complete {
 			
 			guard let jsonData = storableEvent.getEventsAsJSON(),
 				  let storageMode = getStorageMode(remoteEvent: storableEvent) else {
+				
+				onCompletion(nil)
 				return
 			}
 
@@ -285,17 +324,21 @@ class ListRemoteEventsViewModel {
 			walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
 			
 			// Store the event group
-			success = success && walletManager.storeEventGroup(
+			
+			guard let eventGroup = walletManager.storeEventGroup(
 				storageMode,
 				providerIdentifier: uniqueIdentifier,
 				jsonData: jsonData,
 				expiryDate: nil
-			)
-			if !success {
-				break
+			) else {
+				onCompletion(nil)
+				return
 			}
+			
+			newlyStoredEventGroups += [eventGroup]
 		}
-		onCompletion(success)
+			
+		onCompletion(newlyStoredEventGroups)
 	}
 }
 

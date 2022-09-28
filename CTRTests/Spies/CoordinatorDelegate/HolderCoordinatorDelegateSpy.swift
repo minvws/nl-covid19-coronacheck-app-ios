@@ -71,6 +71,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
 	}
 
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeleted = false
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount = 0
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters: (blockedEventItems: [BlockedEventItem], Void)?
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParametersList = [(blockedEventItems: [BlockedEventItem], Void)]()
+
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem]) {
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeleted = true
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount += 1
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters = (blockedEventItems, ())
+		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParametersList.append((blockedEventItems, ()))
+	}
+
 	var invokedUserWishesMoreInfoAboutClockDeviation = false
 	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
 
@@ -149,10 +161,10 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesMoreInfoAboutUnavailableQR = false
 	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
-	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)?
-	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)]()
+	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: OriginType, currentRegion: QRCodeValidityRegion)?
+	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: OriginType, currentRegion: QRCodeValidityRegion)]()
 
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) {
+	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
 		invokedUserWishesMoreInfoAboutUnavailableQR = true
 		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
 		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion)

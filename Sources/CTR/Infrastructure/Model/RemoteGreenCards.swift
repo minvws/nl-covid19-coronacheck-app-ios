@@ -44,17 +44,41 @@ struct RemoteGreenCards: Codable, Equatable {
 		let expirationTime: Date
 		let validFrom: Date
 		let doseNumber: Int?
+		let hints: [String]
+		
+		enum CodingKeys: String, CodingKey {
+
+			case type
+			case eventTime
+			case expirationTime
+			case validFrom
+			case doseNumber
+			case hints
+		}
 	}
 	
-	struct BlobExpiry: Codable, Equatable {
+	struct BlobExpiry: Codable, Equatable, Hashable {
 		
 		let identifier: String
 		let expirationDate: Date
+		let reason: String
 		
 		enum CodingKeys: String, CodingKey {
 
 			case identifier = "id"
 			case expirationDate = "expiry"
+			case reason = "reason"
+		}
+	}
+}
+
+extension Array where Element == RemoteGreenCards.BlobExpiry {
+	
+	/// Determine which BlobExpiry elements ("blockItems") match EventGroups which were sent to be signed:
+	func combinedWith(matchingEventGroups eventGroups: [EventGroup]) -> [(RemoteGreenCards.BlobExpiry, EventGroup)] {
+		reduce([]) { partialResult, blockItem in
+			guard let matchingEvent = eventGroups.first(where: { "\($0.uniqueIdentifier)" == blockItem.identifier }) else { return partialResult }
+			return partialResult + [(blockItem, matchingEvent)]
 		}
 	}
 }

@@ -24,7 +24,7 @@ struct ErrorCode: CustomStringConvertible {
 	var flow: String
 	var step: String
 	var provider: String?
-	var errorCode: String
+	var errorCode: String // (the client code)
 	var detailedCode: Int?
 
 	init(flow: Flow, step: Step, provider: String? = nil, errorCode: String, detailedCode: Int? = nil) {
@@ -48,7 +48,7 @@ struct ErrorCode: CustomStringConvertible {
 		var result = "i \(flow)\(step)"
 		result += " \(provider ?? "000")"
 		result += " \(errorCode)"
-		if let detailedCode = detailedCode {
+		if let detailedCode {
 			result += " \(detailedCode)"
 		}
 		return result
@@ -71,6 +71,7 @@ extension ErrorCode.Flow {
 	static let qr = ErrorCode.Flow(value: "6")
 	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
 	static let visitorPass = ErrorCode.Flow(value: "9")
+	static let dashboard = ErrorCode.Flow(value: "12")
 }
 
 // MARK: ErrorCode.Step (Startup)

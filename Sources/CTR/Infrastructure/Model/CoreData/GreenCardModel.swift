@@ -55,7 +55,7 @@ extension GreenCard {
 	/// - Returns: greenCard type
 	func getType() -> GreenCardType? {
 		
-		if let type = type {
+		if let type {
 			return GreenCardType(rawValue: type)
 		}
 		return nil

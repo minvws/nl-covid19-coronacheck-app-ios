@@ -64,8 +64,8 @@ class ShowQRView: BaseView {
 		/// The default ratio of width to height of the animation:
 		var ratioWidthToHeight: CGFloat {
 			switch self {
-				case let .domestic(isWithinWinterPeriod):
-					return isWithinWinterPeriod ? 1.33 : 1
+				case .domestic:
+					return 1.33
 				case let .international(isWithinWinterPeriod):
 					return isWithinWinterPeriod ? 1.768 : 1.34
 			}
@@ -244,7 +244,7 @@ class ShowQRView: BaseView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		
-		if let window = window {
+		if let window {
 			// Don't allow the animation to overlap the containerView (QR) too much:
 			let qrWidth = containerView.frame.height // using width because width == height
 			let qrWidthFractionOfWholeWindow = qrWidth / window.bounds.width
@@ -321,7 +321,6 @@ class ShowQRView: BaseView {
 			
 			securityViewWidthHeightConstraint = securityAnimationView.widthAnchor.constraint(equalTo: securityAnimationView.heightAnchor, multiplier: animationStyle.ratioWidthToHeight) // the animation is not quite square
 			securityViewWidthHeightConstraint?.isActive = true
-			
 		}
 	}
 }
