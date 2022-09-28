@@ -5,7 +5,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
 @testable import Transport
 @testable import Shared
 import XCTest
@@ -15,13 +14,11 @@ class OpenSSLChainTests: XCTestCase {
 
 	var sut = OpenSSL()
 	let testBundle = Bundle(for: OpenSSLChainTests.self)
-	var environmentalSpies: EnvironmentSpies!
 
 	override func setUp() {
 
 		super.setUp()
 		sut = OpenSSL()
-		environmentalSpies = setupEnvironmentSpies()
 	}
 
 	func needs_fixing_expired_DSTRootCAX3_test_fake_chain() {

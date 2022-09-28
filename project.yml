@@ -337,9 +337,6 @@ targets:
       path: TransportTests/Info.plist    
     sources:
       - path: TransportTests
-        excludes:
-          - "**/__Snapshots__"
-      - path: CTRTests/Infrastrucure/Crypto/Utility/OpenSSLTests+Data.swift
 
   Holder:
     dependencies:
