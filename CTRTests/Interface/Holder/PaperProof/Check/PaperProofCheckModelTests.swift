@@ -101,7 +101,7 @@ class PaperProofCheckModelTests: XCTestCase {
 		}
 	}
 
-	func test_success_expired() {
+	func test_success_expired_wrongDCC() {
 
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
@@ -118,13 +118,39 @@ class PaperProofCheckModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert) == nil
-
-		if case let .feedback(content: content) = sut.viewState {
-			expect(content.title) == L.holderCheckdccExpiredTitle()
-			expect(content.body) == L.holderCheckdccExpiredMessage()
+		expect(self.coordinatorDelegateSpy.invokedDisplayErrorForPaperProofCheck).toEventually(beTrue())
+		if let content = coordinatorDelegateSpy.invokedDisplayErrorForPaperProofCheckParameters?.0 {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.body) == L.holderErrorstateClientMessage("i 510 000 052")
+			expect(content.primaryActionTitle) == L.general_toMyOverview()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
 		}
+	}
+	
+	func test_success_expired_correctDCC() {
+
+		// Given
+		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
+		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			identity: EventFlow.Identity.fakeIdentity,
+			status: .complete
+		)
+
+		// When
+		sut = PaperProofCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test"
+		)
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == true
+		expect(self.sut.alert) == nil
 	}
 
 	func test_success_rejected() {
@@ -459,42 +485,6 @@ class PaperProofCheckModelTests: XCTestCase {
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
-		}
-	}
-}
-
-class CouplingManagerSpy: CouplingManaging {
-
-	var invokedConvert = false
-	var invokedConvertCount = 0
-	var invokedConvertParameters: (dcc: String, couplingCode: String?)?
-	var invokedConvertParametersList = [(dcc: String, couplingCode: String?)]()
-	var stubbedConvertResult: EventFlow.EventResultWrapper!
-
-	func convert(_ dcc: String, couplingCode: String?) -> EventFlow.EventResultWrapper? {
-		invokedConvert = true
-		invokedConvertCount += 1
-		invokedConvertParameters = (dcc, couplingCode)
-		invokedConvertParametersList.append((dcc, couplingCode))
-		return stubbedConvertResult
-	}
-
-	var invokedCheckCouplingStatus = false
-	var invokedCheckCouplingStatusCount = 0
-	var invokedCheckCouplingStatusParameters: (dcc: String, couplingCode: String)?
-	var invokedCheckCouplingStatusParametersList = [(dcc: String, couplingCode: String)]()
-	var stubbedCheckCouplingStatusOnCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
-
-	func checkCouplingStatus(
-		dcc: String,
-		couplingCode: String,
-		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {
-		invokedCheckCouplingStatus = true
-		invokedCheckCouplingStatusCount += 1
-		invokedCheckCouplingStatusParameters = (dcc, couplingCode)
-		invokedCheckCouplingStatusParametersList.append((dcc, couplingCode))
-		if let result = stubbedCheckCouplingStatusOnCompletionResult {
-			onCompletion(result.0)
 		}
 	}
 }

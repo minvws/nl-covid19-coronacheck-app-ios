@@ -4,6 +4,7 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -28,6 +29,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
@@ -37,7 +39,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion)
+	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion)
 	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	func userWishesToChooseTestLocation()
 	func userWishesToCreateANegativeTestQR()
@@ -107,7 +109,7 @@ class HolderCoordinator: SharedCoordinator {
 			newFeaturesFactory: HolderNewFeaturesFactory()
 		) {
 			
-			if let unhandledUniversalLink = unhandledUniversalLink {
+			if let unhandledUniversalLink {
 				
 				// Attempt to consume the universal link again:
 				self.unhandledUniversalLink = nil // prevent potential infinite loops
@@ -252,25 +254,30 @@ class HolderCoordinator: SharedCoordinator {
 	// MARK: - Navigate to..
 	
 	func navigateToDashboard(replacingWindowRootViewController: Bool = false, completion: @escaping () -> Void = {}) {
-		
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				datasource: HolderDashboardQRCardDatasource(),
-				strippenRefresher: DashboardStrippenRefresher(
-					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
-					reachability: try? Reachability()
-				),
-				configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-				vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
-				versionSupplier: versionSupplier
+
+		if let existingDashboardVC = navigationController.viewControllers.first(where: { $0 is HolderDashboardViewController }) {
+			navigationController.popToViewController(existingDashboardVC, animated: true)
+		} else {
+			let dashboardViewController = HolderDashboardViewController(
+				viewModel: HolderDashboardViewModel(
+					coordinator: self,
+					qrcardDatasource: HolderDashboardQRCardDatasource(),
+					blockedEventsDatasource: HolderDashboardBlockedEventsDatasource(),
+					strippenRefresher: DashboardStrippenRefresher(
+						minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
+						reachability: try? Reachability()
+					),
+					configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
+					vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
+					versionSupplier: versionSupplier
+				)
 			)
-		)
-		
-		navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
-		
-		if replacingWindowRootViewController {
-			window.replaceRootViewController(with: navigationController)
+			
+			navigationController.setViewControllers([dashboardViewController], animated: !replacingWindowRootViewController, completion: completion)
+			
+			if replacingWindowRootViewController {
+				window.replaceRootViewController(with: navigationController)
+			}
 		}
 	}
 	
@@ -388,6 +395,36 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem]) {
+
+		let bulletpoints = blockedEventItems
+			.compactMap { blockedEventItem -> String? in
+				guard let localizedDateLabel = blockedEventItem.type.localizedDateLabel else { return nil }
+				let dateString = DateFormatter.Format.dayMonthYear.string(from: blockedEventItem.eventDate)
+				return """
+				<p>
+					<b>\(blockedEventItem.type.localized.capitalized)</b>
+					<br />
+					<b>\(localizedDateLabel.capitalized): \(dateString)</b>
+				</p>
+				""" }
+			.joined()
+
+		guard bulletpoints.isNotEmpty else { return }
+
+		// I 1280 000 0514
+		let errorCode = ErrorCode(
+			flow: .dashboard,
+			step: .signer,
+			clientCode: .signerReturnedBlockedEvent
+		)
+
+		let title: String = L.holder_invaliddetailsremoved_moreinfo_title()
+		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(bulletpoints, errorCode.description)
+
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+	}
+
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
@@ -531,7 +568,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 	
-	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) {
+	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
 		
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion)

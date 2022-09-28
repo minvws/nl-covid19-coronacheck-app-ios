@@ -88,7 +88,7 @@ class BaseViewController: UIViewController {
 		customAction: Selector? = nil) {
 
 		var action = #selector(onBack)
-		if let customAction = customAction {
+		if let customAction {
 			action = customAction
 		}
 		

@@ -11,12 +11,12 @@ extension ListRemoteEventsViewModel {
 	
 	// MARK: Helper
 	
-	private func feedbackWithDefaultPrimaryAction(title: String, subTitle: String, primaryActionTitle: String ) -> ListRemoteEventsViewController.State {
+	private func feedbackWithDefaultPrimaryAction(title: String, body: String, primaryActionTitle: String ) -> ListRemoteEventsViewController.State {
 
 		return .feedback(
 			content: Content(
 				title: title,
-				body: subTitle,
+				body: body,
 				primaryActionTitle: primaryActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
@@ -31,7 +31,7 @@ extension ListRemoteEventsViewModel {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestresultsPendingTitle(),
-			subTitle: L.holderTestresultsPendingText(),
+			body: L.holderTestresultsPendingText(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -55,7 +55,7 @@ extension ListRemoteEventsViewModel {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderVaccinationNolistTitle(),
-			subTitle: L.holderVaccinationNolistMessage(),
+			body: L.holderVaccinationNolistMessage(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -66,7 +66,7 @@ extension ListRemoteEventsViewModel {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestNolistTitle(),
-			subTitle: L.holderTestNolistMessage(),
+			body: L.holderTestNolistMessage(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -77,7 +77,7 @@ extension ListRemoteEventsViewModel {
 		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holder_event_vaccination_assessment_nolist_title(),
-			subTitle: L.holder_event_vaccination_assessment_nolist_message(),
+			body: L.holder_event_vaccination_assessment_nolist_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -88,7 +88,16 @@ extension ListRemoteEventsViewModel {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderCheckdccExpiredTitle(),
-			subTitle: L.holderCheckdccExpiredMessage(),
+			body: L.holderCheckdccExpiredMessage(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
+	
+	internal func duplicateDccState() -> ListRemoteEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoteEvents_endStateDuplicate_title(),
+			body: L.holder_listRemoteEvents_endStateDuplicate_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
@@ -99,8 +108,33 @@ extension ListRemoteEventsViewModel {
 
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderRecoveryNolistTitle(),
-			subTitle: L.holderRecoveryNolistMessage(),
+			body: L.holderRecoveryNolistMessage(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}
+	
+	// MARK: Blocked end states
+	
+	internal func blockedEndState() -> ListRemoteEventsViewController.State {
+
+		let errorCode = ErrorCode(
+			flow: eventMode.flow,
+			step: .storingCredentials,
+			clientCode: .signerReturnedBlockedEvent
+		)
+		
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_listRemoteEvents_endStateNoValidCertificate_title(),
+			body: L.holder_listRemoteEvents_endStateNoValidCertificate_body(errorCode.description),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+	
+	// 0514: signerReturnedBlockedEvent
+	static let signerReturnedBlockedEvent = ErrorCode.ClientCode(value: "0514")
 }

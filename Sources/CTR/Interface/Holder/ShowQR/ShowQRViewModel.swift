@@ -25,10 +25,17 @@ class ShowQRViewModel {
 			}
 			notificationCenter.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
 				guard let self = self else { return }
-				
-				// Immediately back to initial brightness as we left the app:
-				UIScreen.main.brightness = self.initialBrightness
+				self.revertToInitialBrightness()
 			}
+		}
+		
+		func revertToInitialBrightness() {
+			// Extracted from the closure, due to Swift 5.7, where the addObserver closure is Sendable:
+			// Main actor-isolated class property 'main' can not be mutated from a Sendable closure
+			// Main actor-isolated property 'brightness' can not be mutated from a Sendable closure
+			
+			// Immediately back to initial brightness as we left the app:
+			UIScreen.main.brightness = self.initialBrightness
 		}
 		
 		func animateToFullBrightness() {
@@ -156,7 +163,7 @@ class ShowQRViewModel {
 
 		if let greenCard = greenCards.first {
 			if greenCard.getType() == GreenCardType.domestic {
-				title = L.holderShowqrDomesticTitle()
+				setDomesticTitle()
 				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
 				animationStyle = .domestic(isWithinWinterPeriod: isWithinWinterPeriod)
 				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
@@ -168,6 +175,23 @@ class ShowQRViewModel {
 		}
 		
 		pageButtonAccessibility = (L.holderShowqrPreviousbutton(), L.holderShowqrNextbutton())
+	}
+	
+	private func setDomesticTitle() {
+		
+		guard Current.featureFlagManager.areBothDisclosurePoliciesEnabled() || Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() else {
+			title = L.holder_showQR_domestic_title()
+			return
+		}
+		
+		switch disclosurePolicy {
+			case .policy3G:
+				title = L.holder_showQR_domestic_title_3g()
+			case .policy1G:
+				title = L.holder_showQR_domestic_title_1g()
+			case .none:
+				title = L.holder_showQR_domestic_title()
+		}
 	}
 
 	private func setupListeners() {

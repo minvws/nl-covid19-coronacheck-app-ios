@@ -131,7 +131,7 @@ extension AuthenticationViewModel {
 		
 		let clientCode = OpenIdErrorMapper().mapError(error)
 
-		if let error = error {
+		if let error {
 			if  error.localizedDescription.contains("login_required") {
 				logDebug("Server busy")
 				displayServerBusy(

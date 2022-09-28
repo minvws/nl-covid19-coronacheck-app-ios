@@ -91,6 +91,26 @@ extension HolderDashboardViewController.Card {
 			)
 		]
 	}
+	
+	static func makeBlockedEventsCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.blockedEventItems.isNotEmpty else { return [] }
+			
+		return [
+			.eventsWereBlocked(
+				message: L.holder_invaliddetailsremoved_banner_title(),
+				callToActionButtonText: L.holder_invaliddetailsremoved_banner_button_readmore(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapBlockedEventsDeletedMoreInfo(blockedEventItems: state.blockedEventItems)
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapBlockedEventsDeletedDismiss(blockedEventItems: state.blockedEventItems)
+				}
+			)
+		]
+	}
 
 	static func makeExpiredQRCard(
 		validityRegion: QRCodeValidityRegion,
@@ -133,15 +153,17 @@ extension HolderDashboardViewController.Card {
 		switch validityRegion {
 			case .domestic:
 				let domesticTitle: String
-				switch state.activeDisclosurePolicyMode {
-					case .exclusive1G:
-						domesticTitle = L.holder_dashboard_empty_domestic_only1Gaccess_message()
-					case .exclusive3G:
-						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
-					case .combined1gAnd3g:
-						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
-					case .zeroG:
+				switch (state.activeDisclosurePolicyMode, state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion)) {
+					case (.zeroG, _):
 						domesticTitle = "" // isn't shown in zeroG.
+					case(_, true):
+						domesticTitle = L.holder_dashboard_incompleteVisitorPass_message()
+					case (.exclusive1G, _):
+						domesticTitle = L.holder_dashboard_empty_domestic_only1Gaccess_message()
+					case (.exclusive3G, _):
+						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
+					case (.combined1gAnd3g, _):
+						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
 				}
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: domesticTitle,
@@ -184,21 +206,6 @@ extension HolderDashboardViewController.Card {
 					title: L.holderDashboardEmptyInternationalTitle()
 				)]
 		}
-	}
-	
-	static func makeRecommendCoronaMelderCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State
-	) -> [HolderDashboardViewController.Card] {
-		guard state.shouldShowRecommendCoronaMelderCard else { return [] } // based on feature flag
-		
-		let regionFilteredQRCards = state.regionFilteredQRCards(validityRegion: validityRegion)
-		
-		guard !regionFilteredQRCards.isEmpty,
-			  !regionFilteredQRCards.contains(where: { $0.shouldShowErrorBeneathCard })
-		else { return [] }
-		
-		return [HolderDashboardViewController.Card.recommendCoronaMelder]
 	}
 	
 	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
@@ -624,7 +631,7 @@ extension HolderDashboardViewModel.QRCard {
 	}
 }
 
-private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: QRCodeOriginType, message: String)] {
+private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: OriginType, message: String)] {
 
 	// Calculate origins which exist in the other region but are not in this region:
 	let originTypesForCurrentRegion = Set(
@@ -651,7 +658,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], 
 		.subtracting(originTypesForCurrentRegion)
 
 	// Map it to user messages:
-	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String)? in
+	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: OriginType) -> (originType: OriginType, message: String)? in
 		switch (originType, thisRegion) {
 			case (.test, .domestic):
 				let containsDomesticVaccinationAssessment = qrCards.contains(where: { $0.origins.contains { $0.type == .vaccinationassessment } })
@@ -701,7 +708,7 @@ private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]
 private func internationalCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]) -> String? {
 	
 	let uniqueOrigins = Set(origins.map { $0.type })
-	guard uniqueOrigins.count == 1, let originType = uniqueOrigins.first else { return nil } // assumption: international cards have a single QRCodeOriginType per-card.
+	guard uniqueOrigins.count == 1, let originType = uniqueOrigins.first else { return nil } // assumption: international cards have a single OriginType per-card.
 	
 	guard originType == .recovery else { return nil } // Only show a countdown on international cards when it's for type Recovery
 	

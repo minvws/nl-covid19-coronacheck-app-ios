@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
 
-  static func holderDashboardQRExpired(originType: QRCodeOriginType, region: QRCodeValidityRegion) -> String {
+  static func holderDashboardQRExpired(originType: OriginType, region: QRCodeValidityRegion) -> String {
 	  switch (originType, region) {
 		  case (.test, .domestic):
 			  return L.holder_dashboard_originExpiredBanner_domesticTest_title()
@@ -30,7 +30,7 @@ extension String {
 	  }
   }
 
-  static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) -> String {
+  static func holderDashboardNotValidInThisRegionScreenTitle(originType: OriginType, currentRegion: QRCodeValidityRegion) -> String {
 	  switch (originType, currentRegion) {
 		  case (.vaccination, .domestic):
 			  return L.holderIncompletedutchvaccinationTitle()
@@ -51,7 +51,7 @@ extension String {
 	  }
   }
 
-  static func holderDashboardNotValidInThisRegionScreenMessage(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion) -> String {
+  static func holderDashboardNotValidInThisRegionScreenMessage(originType: OriginType, currentRegion: QRCodeValidityRegion) -> String {
 	  switch (originType, currentRegion) {
 		  case (.vaccination, .domestic):
 			  return L.holder_incompletedutchvaccination_paragraph_secondvaccine()

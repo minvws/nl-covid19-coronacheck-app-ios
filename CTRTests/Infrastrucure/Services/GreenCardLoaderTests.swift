@@ -341,7 +341,7 @@ class GreenCardLoaderTests: XCTestCase {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
-		let response = RemoteGreenCards.Response(domesticGreenCard: .fakeVaccinationAssessmentGreenCardExpiresIn14Days, euGreenCards: nil, blobExpireDates: [RemoteGreenCards.BlobExpiry(identifier: "id", expirationDate: Date())], hints: nil)
+		let response = RemoteGreenCards.Response(domesticGreenCard: .fakeVaccinationAssessmentGreenCardExpiresIn14Days, euGreenCards: nil, blobExpireDates: [RemoteGreenCards.BlobExpiry(identifier: "id", expirationDate: Date(), reason: "")], hints: nil)
 		environmentSpies.cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ()))
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]

@@ -19,7 +19,7 @@ extension RemoteEvent {
 	
 	func getEventsAsJSON() -> Data? {
 		
-		if let signedResponse = signedResponse,
+		if let signedResponse,
 		   let jsonData = try? JSONEncoder().encode(signedResponse) {
 			return jsonData
 		}

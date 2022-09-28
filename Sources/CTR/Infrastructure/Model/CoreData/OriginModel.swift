@@ -8,18 +8,67 @@
 import Foundation
 import CoreData
 
-enum OriginType: String {
+enum OriginType: String, Codable, Equatable {
 
 	case recovery
 	case test
 	case vaccination
 	case vaccinationassessment
+	
+	var localized: String {
+		switch self {
+			case .recovery: return L.general_positiveTest()
+			case .vaccination: return L.general_vaccination()
+			case .test: return L.general_negativeTest()
+			case .vaccinationassessment: return L.general_visitorPass()
+		}
+	}
+	
+	/// e.g. "Test Certificate", "Vaccination Certificate"
+	var localizedProof: String {
+		switch self {
+			case .recovery: return L.general_recoverycertificate()
+			case .vaccination: return L.general_vaccinationcertificate()
+			case .test: return L.general_testcertificate()
+			case .vaccinationassessment: return L.general_visitorPass()
+		}
+	}
+	
+	/// e.g. Vaccinatiedatum etc.
+	var localizedDateLabel: String? {
+		switch self {
+			case .recovery: return L.generalRecoverydate()
+			case .vaccination: return L.generalVaccinationdate()
+			case .test: return L.generalTestdate()
+			case .vaccinationassessment: return nil // not localized.
+		}
+	}
+	
+	/// e.g. "Internationaal vaccinatiebewijs"
+	var localizedProofInternational0G: String {
+		switch self {
+			case .recovery: return L.general_recoverycertificate_0G()
+			case .vaccination: return L.general_vaccinationcertificate_0G()
+			case .test: return L.general_testcertificate_0G()
+			case .vaccinationassessment: return localizedProof
+		}
+	}
+
+	/// There is a particular order to sort these onscreen
+	var customSortIndex: Double {
+		switch self {
+			case .vaccination: return 0
+			case .recovery: return 1
+			case .vaccinationassessment: return 2
+			case .test: return 3
+		}
+	}
 }
 
 class OriginModel {
-
+	
 	static let entityName = "Origin"
-
+	
 	@discardableResult class func create(
 		type: OriginType,
 		eventDate: Date,
@@ -28,11 +77,11 @@ class OriginModel {
 		doseNumber: Int?,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
-
+			
 		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
 			return nil
 		}
-
+		
 		object.type = type.rawValue
 		object.eventDate = eventDate
 		object.expirationTime = expirationTime
@@ -41,8 +90,27 @@ class OriginModel {
 			object.doseNumber = doseNumber as NSNumber
 		}
 		object.greenCard = greenCard
-
+		
 		return object
+	}
+}
+	
+extension Origin {
+	
+	/// Get the hints, strongly typed.
+	func castHints() -> [OriginHint] {
+		
+		return hints?.compactMap({ $0 as? OriginHint }) ?? []
+	}
+	
+	/// Is this a paper based dcc?
+	/// - Returns: True if this is a paper based dcc
+	func isPaperBasedDCC() -> Bool {
+		
+		for hint in castHints() where hint.hint == "event_from_dcc" {
+			return true
+		}
+		return false
 	}
 }
 
@@ -53,5 +121,11 @@ extension Array {
 		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
 			.last?
 			.expirationTime
+	}
+	
+	/// Is there an origin that is paper based dcc?
+	func hasPaperBasedDCC() -> Bool where Element == Origin {
+		
+		filter { $0.isPaperBasedDCC() }.isNotEmpty
 	}
 }

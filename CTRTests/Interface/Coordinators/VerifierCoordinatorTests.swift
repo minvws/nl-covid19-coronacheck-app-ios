@@ -192,9 +192,24 @@ class VerifierCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
 	}
 
-	func test_didFinish_userTappedProceedToScan() {
+	func test_didFinish_userTappedProceedToScan_scanInstructionsNotShown() {
 		
 		// Given
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
+		
+		// When
+		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
+	}
+	
+	func test_didFinish_userTappedProceedToScan_scanInstructionsShown() {
+		
+		// Given
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		
 		// When
 		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
@@ -205,9 +220,10 @@ class VerifierCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
 	}
 	
-	func test_didFinish_userTappedProceedToScan_withNavigationStack() {
+	func test_didFinish_userTappedProceedToScan_scanInstructionsShown_withNavigationStack() {
 		
 		// Given
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		navigationSpy.viewControllers = [
 			VerifierStartScanningViewController(viewModel: VerifierStartScanningViewModel(coordinator: sut)),
 			VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: sut)),
@@ -223,26 +239,44 @@ class VerifierCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
 	}
 	
+	func test_didFinish_userTappedProceedToScan_scanInstructionsShown_policyInformationNotShown() {
+		
+		// Given
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
+		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
+		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
+		
+		// When
+		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
+	}
+	
+	func test_didFinish_userTappedProceedToScan_scanInstructionsShown_policy3G() {
+		
+		// Given
+		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
+		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
+		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
+		
+		// When
+		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
+	}
+	
 	func test_didFinish_userTappedProceedToScanInstructions() {
 		
 		// Given
 		
 		// When
 		sut.didFinish(VerifierStartResult.userTappedProceedToScanInstructions)
-		
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
-	}
-	
-	func test_didFinish_userTappedProceedToInstructionsOrRiskSetting() {
-		
-		// Given
-		
-		// When
-		sut.didFinish(VerifierStartResult.userTappedProceedToInstructionsOrRiskSetting)
 		
 		// Then
 		expect(self.navigationSpy.invokedPopToViewController) == false

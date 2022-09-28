@@ -184,10 +184,10 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 							"identifier": "ZZZ",
 							"url": "https://coronacheck.nl/api/token",
 							"cms": [
-								OpenSSLData.providerCertificate
+								OpenSSLData.providerCMSCertificate
 							],
 							"tls": [
-								OpenSSLData.providerCertificate
+								OpenSSLData.providerTLSCertificate
 							],
 							"usage": [
 								"nt"

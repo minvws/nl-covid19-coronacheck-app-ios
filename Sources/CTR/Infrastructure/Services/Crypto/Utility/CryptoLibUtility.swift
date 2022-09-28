@@ -147,7 +147,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 			result = MobilecoreInitializeVerifier(path)
 		}
 		
-		if let result = result, !result.error.isEmpty {
+		if let result, !result.error.isEmpty {
 			logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {

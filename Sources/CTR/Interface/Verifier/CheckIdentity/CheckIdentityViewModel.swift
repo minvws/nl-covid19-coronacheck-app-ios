@@ -155,7 +155,7 @@ private extension CheckIdentityViewModel {
 	/// - Returns: the value of the attribute, or a hyphen if empty
 	func determineAttributeValue(_ value: String?) -> String? {
 
-		if let value = value, !value.isEmpty {
+		if let value, !value.isEmpty {
 			return value
 		}
 		return nil

@@ -291,7 +291,7 @@ class QRCardView: BaseView {
 			var nextBottomAnchor: NSLayoutYAxisAnchor?
 			
 			squashedCards.forEach { squashedCardView in
-				if let nextTopAnchor = nextTopAnchor {
+				if let nextTopAnchor {
 					NSLayoutConstraint.activate([
 						nextTopAnchor.constraint(equalTo: squashedCardView.topAnchor, constant: -1 * ViewTraits.interSquashedCardSpacing)
 					])
@@ -305,7 +305,7 @@ class QRCardView: BaseView {
 				nextBottomAnchor = squashedCardView.bottomAnchor
 			}
 			
-			if let nextBottomAnchor = nextBottomAnchor {
+			if let nextBottomAnchor {
 				NSLayoutConstraint.activate([
 					nextBottomAnchor.constraint(equalTo: bottomAnchor)
 				])
@@ -381,7 +381,7 @@ class QRCardView: BaseView {
 					|| desiresToShowAutomaticallyBecomesValidFooter
 			}
 			
-			if let buttonEnabledEvaluator = buttonEnabledEvaluator {
+			if let buttonEnabledEvaluator {
 				let enabledState = buttonEnabledEvaluator(now)
 				if !enabledState && originDesiresToShowAutomaticallyBecomesValidFooter {
 					let becomesValidLabel = Label(bodyBold: L.holderDashboardQrValidityDateAutomaticallyBecomesValidOn())
@@ -399,7 +399,7 @@ class QRCardView: BaseView {
 			}
 		}
 
-		if let expiryEvaluator = expiryEvaluator {
+		if let expiryEvaluator {
 			let expiryLabel = Label(bodyBold: expiryEvaluator(now))
 			expiryLabel.numberOfLines = 0
 
@@ -427,7 +427,7 @@ class QRCardView: BaseView {
 	}
 
 	private func reapplyButtonEnabledState() {
-		if let buttonEnabledEvaluator = buttonEnabledEvaluator {
+		if let buttonEnabledEvaluator {
 			let enabledState = buttonEnabledEvaluator(Current.now())
 			viewQRButton.isEnabled = enabledState
 			if shouldStyleForEU && enabledState {
@@ -556,7 +556,7 @@ class QRCardView: BaseView {
 	// nil, 1G or 3G
 	var disclosurePolicyLabel: String? {
 		didSet {
-			if let disclosurePolicyLabel = disclosurePolicyLabel {
+			if let disclosurePolicyLabel {
 				largeIconImageView.isHidden = true
 				disclosurePolicyIndicatorView.isHidden = false
 				disclosurePolicyIndicatorView.title = disclosurePolicyLabel

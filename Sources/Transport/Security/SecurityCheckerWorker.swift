@@ -90,7 +90,7 @@ class SecurityCheckerWorker {
 	private func evaluateServerTrust(_ serverTrust: SecTrust) -> Bool {
 		var error: CFError?
 		let result = SecTrustEvaluateWithError(serverTrust, &error)
-		if let error = error {
+		if let error {
 			logError("checkATS: SecTrustEvaluateWithError: \(error)")
 		}
 		return result

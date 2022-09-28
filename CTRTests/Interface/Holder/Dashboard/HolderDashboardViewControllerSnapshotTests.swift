@@ -297,20 +297,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image)
 	}
 	
-	func test_recommendCoronaMelder() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.recommendCoronaMelder
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
 	func test_recommendedUpdate() {
 
 		// Arrange

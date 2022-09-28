@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -13,12 +14,14 @@ import Shared
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapAddCertificate()
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem])
+	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [BlockedEventItem])
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapDeviceHasClockDeviationMoreInfo()
 	func didTapExpiredDomesticVaccinationQRMoreInfo()
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion)
+	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion)
 	func didTapRecommendedUpdate()
 	func didTapRetryLoadQRCards()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
@@ -85,6 +88,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	struct State: Equatable {
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
+		var blockedEventItems: [BlockedEventItem]
 		var isRefreshingStrippen: Bool
 
 		// Related to strippen refreshing.
@@ -111,10 +115,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		
 		var shouldShowOnlyInternationalPane: Bool {
 			activeDisclosurePolicyMode == .zeroG
-		}
-		
-		var shouldShowRecommendCoronaMelderCard: Bool {
-			Current.featureFlagManager.shouldShowCoronaMelderRecommendation()
 		}
 		
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
@@ -182,7 +182,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	private var state: State {
 		didSet {
-			didUpdateState(fromOldState: oldValue)
+			performUIUpdate {
+				self.didUpdateState(fromOldState: oldValue)
+			}
 		}
 	}
 	
@@ -194,8 +196,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		selectedTab.value = newTab
 	}
 
-	private let datasource: HolderDashboardQRCardDatasourceProtocol
-
+	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol
+	private let blockedEventsDatasource: HolderDashboardBlockedEventsDatasourceProtocol
+	
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
@@ -214,15 +217,16 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		datasource: HolderDashboardQRCardDatasourceProtocol,
+		qrcardDatasource: HolderDashboardQRCardDatasourceProtocol,
+		blockedEventsDatasource: HolderDashboardBlockedEventsDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
 		vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol,
 		versionSupplier: AppVersionSupplierProtocol?
 	) {
-
 		self.coordinator = coordinator
-		self.datasource = datasource
+		self.qrcardDatasource = qrcardDatasource
+		self.blockedEventsDatasource = blockedEventsDatasource
 		self.strippenRefresher = strippenRefresher
 		self.dashboardRegionToggleValue = Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() ? .europeanUnion : Current.userSettings.dashboardRegionToggleValue
 		self.configurationNotificationManager = configurationNotificationManager
@@ -232,6 +236,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.state = State(
 			qrCards: [],
 			expiredGreenCards: [],
+			blockedEventItems: [],
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
@@ -249,7 +254,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			}()
 		)
 
-		setupDatasource()
+		setupQRCardDatasource()
+		setupBlockedEventsDatasource()
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
@@ -266,7 +272,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		// Observers
 		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
 			self?.state.deviceHasClockDeviation = hasClockDeviation
-			self?.datasource.reload() // this could cause some QR code states to change, so reload.
+			self?.qrcardDatasource.reload() // this could cause some QR code states to change, so reload.
 		}
 		
 		// If the config ever changes, reload dependencies:
@@ -303,8 +309,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	// MARK: - Setup
 
-	private func setupDatasource() {
-		datasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
+	private func setupQRCardDatasource() {
+		qrcardDatasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
 			guard let self = self else { return }
 			
 			DispatchQueue.main.async {
@@ -317,12 +323,23 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 	}
 
+	private func setupBlockedEventsDatasource() {
+
+		blockedEventsDatasource.didUpdate = { [weak self] blockedEventItems in
+			self?.state.blockedEventItems = blockedEventItems
+		}
+	}
+
 	private func setupStrippenRefresher() {
 		// Map RefresherState to State:
 		strippenRefresher.didUpdate = { [weak self] oldValue, newValue in
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
-		strippenRefresher.load()
+		
+		// Relatively important as user could be waiting for new strippen after launching the app.
+		DispatchQueue.global(qos: .userInitiated).async {
+			self.strippenRefresher.load()
+		}
 	}
 
 	func setupConfigNotificationManager() {
@@ -336,8 +353,12 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - View Lifecycle callbacks:
 
 	func viewWillAppear() {
-		datasource.reload()
+		qrcardDatasource.reload()
 		recalculateActiveDisclosurePolicyMode()
+		
+		if state.blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
+			displayBlockedEventsAlert(blockedEventItems: state.blockedEventItems)
+		}
 	}
 
 	// MARK: - Receive Updates
@@ -400,7 +421,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 		// If we just stopped loading, reload data.
 		if !refresherState.loadingState.isLoading && (oldRefresherState?.loadingState.isLoading ?? false) {
-			datasource.reload()
+			qrcardDatasource.reload()
 		}
 
 		// Handle combination of Loading State + Expiry State + Error presentation:
@@ -490,29 +511,38 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	
 	fileprivate func setupNotificationListeners() {
 
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(receiveDidBecomeActiveNotification),
-			name: UIApplication.didBecomeActiveNotification,
-			object: nil
-		)
-
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(userDefaultsDidChange),
-			name: Foundation.UserDefaults.didChangeNotification,
-			object: nil
-		)
+		notificationCenter.addObserver(self, selector: #selector(receiveDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
+		notificationCenter.addObserver(self, selector: #selector(userDefaultsDidChange), name: Foundation.UserDefaults.didChangeNotification, object: nil)
 	}
 
 	@objc func receiveDidBecomeActiveNotification() {
-		datasource.reload()
+		qrcardDatasource.reload()
 	}
 
 	@objc func userDefaultsDidChange() {
 		DispatchQueue.main.async {
 			self.recalculateActiveDisclosurePolicyMode()
 		}
+	}
+
+	// MARK: - Present alerts
+
+	private func displayBlockedEventsAlert(blockedEventItems: [BlockedEventItem]) {
+		Current.userSettings.hasShownBlockedEventsAlert = true
+		currentlyPresentedAlert.value = AlertContent(
+			title: L.holder_invaliddetailsremoved_alert_title(),
+			subTitle: L.holder_invaliddetailsremoved_alert_body(),
+			okAction: AlertContent.Action(
+				title: L.holder_invaliddetailsremoved_alert_button_moreinfo(),
+				action: { [weak self] _ in
+					self?.didTapBlockedEventsDeletedMoreInfo(blockedEventItems: blockedEventItems)
+				}
+			),
+			cancelAction: AlertContent.Action(
+				title: L.holder_invaliddetailsremoved_alert_button_close(),
+				action: nil
+			)
+		)
 	}
 
 	// MARK: Capture User input:
@@ -550,6 +580,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -561,7 +592,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -581,6 +611,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -598,7 +629,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -618,6 +648,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -635,7 +666,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -656,6 +686,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
+		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		
@@ -673,7 +704,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendCoronaMelderCard(validityRegion: validityRegion, state: state)
 		return cards
 	}
 	
@@ -700,11 +730,20 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
 	}
 	
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem]) {
+		coordinator?.userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: blockedEventItems)
+	}
+	
+	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [BlockedEventItem]) {
+		Current.walletManager.removeExistingBlockedEvents()
+		Current.userSettings.hasShownBlockedEventsAlert = false
+	}
+	
 	func didTapExpiredDomesticVaccinationQRMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
 	}
 	
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: QRCodeOriginType, validityRegion: QRCodeValidityRegion) {
+	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion) {
 		coordinator?.userWishesMoreInfoAboutUnavailableQR( originType: originType, currentRegion: validityRegion)
 	}
 	

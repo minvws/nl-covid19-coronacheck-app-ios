@@ -102,6 +102,41 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent) == false
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
+	}
+
+	func test_loadingSuccess_persistsMatchingBlockedEvents() throws {
+		
+		// Arrange `expiring` starting state
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		let eventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
+		var greencardResponse = validGreenCardResponse
+		greencardResponse.blobExpireDates = [RemoteGreenCards.BlobExpiry(
+			identifier: eventGroup!.uniqueIdentifier,
+			expirationDate: .distantPast,
+			reason: "event_blocked"
+		)]
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(greencardResponse), ())
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup!]
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+
+		// Act
+		sut.load()
+
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type) == .vaccination
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason) == "event_blocked"
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
+		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
 
 	func test_loadingFailure_setsErrorFlags_canBeRecovered() {
@@ -409,6 +444,44 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.environmentSpies.greenCardLoaderSpy.invokedSignTheEventsIntoGreenCardsAndCredentials) == true
 	}
 
+	// MARK: - International Paper Based
+	
+	func test_paperbased_withoutValidCredentail_calculates_state_noActionNeeded() {
+		// Arrange
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: environmentSpies.dataStoreManager)
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		// Act
+		sut.load()
+
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+	}
+	
+	func test_paperbased_withValidCredential_calculates_state_noActionNeeded() {
+		// Arrange
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: environmentSpies.dataStoreManager)
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		// Act
+		sut.load()
+
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+	}
+	
+	// MARK: - helpers
+	
 	let validGreenCardResponse = RemoteGreenCards.Response(
 		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
 			origins: [
@@ -417,7 +490,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 					eventTime: Date(),
 					expirationTime: Date().addingTimeInterval(60 * days * fromNow),
 					validFrom: Date(),
-					doseNumber: 1
+					doseNumber: 1,
+					hints: []
 				)
 			],
 			createCredentialMessages: "validGreenCardResponse"
@@ -430,7 +504,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 						eventTime: Date(),
 						expirationTime: Date().addingTimeInterval(60 * days * fromNow),
 						validFrom: Date(),
-						doseNumber: nil
+						doseNumber: nil,
+						hints: []
 					)
 				],
 				credential: "validGreenCardResponse"

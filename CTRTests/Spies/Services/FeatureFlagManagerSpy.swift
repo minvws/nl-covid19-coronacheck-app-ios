@@ -100,16 +100,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedAreBothDisclosurePoliciesEnabledResult
 	}
 
-	var invokedShouldShowCoronaMelderRecommendation = false
-	var invokedShouldShowCoronaMelderRecommendationCount = 0
-	var stubbedShouldShowCoronaMelderRecommendationResult: Bool! = false
-
-	func shouldShowCoronaMelderRecommendation() -> Bool {
-		invokedShouldShowCoronaMelderRecommendation = true
-		invokedShouldShowCoronaMelderRecommendationCount += 1
-		return stubbedShouldShowCoronaMelderRecommendationResult
-	}
-
 	var invokedIsGGDPortalEnabled = false
 	var invokedIsGGDPortalEnabledCount = 0
 	var stubbedIsGGDPortalEnabledResult: Bool! = false
