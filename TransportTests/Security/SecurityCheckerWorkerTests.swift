@@ -5,7 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import CTR
 @testable import Transport
 @testable import Shared
 import XCTest
@@ -15,13 +14,11 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	
 	var sut = SecurityCheckerWorker()
 	let testBundle = Bundle(for: SecurityCheckerWorkerTests.self)
-	var environmentalSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		
 		super.setUp()
 		sut = SecurityCheckerWorker()
-		environmentalSpies = setupEnvironmentSpies()
 	}
 	
 	func test_checkSSL_noTrustCertificates_shouldSucceed() throws {
