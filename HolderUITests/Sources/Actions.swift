@@ -119,7 +119,6 @@ extension BaseTest {
 		}
 	}
 	
-	
 	private func retrieveCertificateFromServer(for bsn: String) {
 		
 		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
