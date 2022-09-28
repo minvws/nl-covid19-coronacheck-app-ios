@@ -34,9 +34,14 @@ extension BaseTest {
 	}
 	
 	private func assertHiddenQR() {
-		app.containsText("QR-code verborgen")
+		app.containsText("QR-code is verborgen")
+		app.containsText("Wat betekent dit?")
 		app.containsText("Laat toch zien")
-		app.textExists("Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.")
+		app.tapButton("Wat betekent dit?")
+		app.textExists("Verborgen QR-code")
+		app.tapButton("Sluiten")
+		app.tapButton("Laat toch zien")
+		app.textNotExists("QR-code is verborgen")
 	}
 	
 	func viewQRCode(of certificate: CertificateType, hiddenQR: Bool = false) {

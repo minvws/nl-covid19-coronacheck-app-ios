@@ -95,7 +95,7 @@ extension BaseTest {
 		app.tapButton("Sluiten")
 	}
 	
-	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int) {
+	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int = 0) {
 		app.tapButton("Details", index: position)
 		app.containsText("Naam: " + person.name)
 		app.containsText("Geboortedatum: " + person.birthDate.toString(.written))

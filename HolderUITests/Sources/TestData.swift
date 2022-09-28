@@ -117,12 +117,12 @@ final class TestData {
 	
 	// Vaccinations - event matching
 	static let vacP2DifferentSetupSituation = TestPerson(bsn: "999993562", name: "van Geer, Corrie", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // 2 pfizer setup situation
-	static let vacJ1DifferentFirstNameReplaces = TestPerson(bsn: "999991255", name: "van Geer, Pieter", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different first name, replaces setup
-	static let vacJ1DifferentLastNameReplaces = TestPerson(bsn: "999991267", name: "de Heuvel, Corrie", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different last name, replaces setup
+	static let vacJ1DifferentFirstNameMerges = TestPerson(bsn: "999991255", name: "van Geer, Pieter", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // 1 janssen different first name, merges with setup
+	static let vacJ1DifferentLastNameMerges = TestPerson(bsn: "999991267", name: "de Heuvel, Corrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // 1 janssen different last name, merges with setup
 	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999992156", name: "de Heuvel, Pieter", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
-	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "999991279", birthDate: "1960-01-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
+	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "899991279", birthDate: "1960-01-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
 	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", birthDate: "1960-02-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
-	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "999991292", birthDate: "1970-01-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
+	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "899991292", birthDate: "1970-01-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
 	static let vacJ1DifferentEverythingReplaces = TestPerson(bsn: "999991723", name: "de Heuvel, Pieter", birthDate: "1970-02-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name and birthdate, replaces setup
 	
 	// Vaccinations - around 18
