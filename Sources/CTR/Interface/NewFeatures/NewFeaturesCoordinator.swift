@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import Shared
 
 protocol NewFeaturesDelegate: AnyObject {
 

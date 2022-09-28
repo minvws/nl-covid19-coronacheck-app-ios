@@ -6,6 +6,8 @@
 */
 
 import Foundation
+import Transport
+import Shared
 
 enum UniversalLink: Equatable {
 	

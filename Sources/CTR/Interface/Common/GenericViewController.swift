@@ -7,6 +7,7 @@
 
 import UIKit
 import Inject
+import Shared
 
 /// A generic viewcontroller
 /// V: The view to use for the scene, must be a (subclass of) baseview

@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+@testable import Shared
 
 class SnapshotViewControllerTests: XCTestCase {
 

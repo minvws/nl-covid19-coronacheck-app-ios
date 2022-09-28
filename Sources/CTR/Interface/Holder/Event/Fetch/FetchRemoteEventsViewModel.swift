@@ -7,6 +7,8 @@
 
 import Foundation
 import BrightFutures
+import Transport
+import Shared
 
 final class FetchRemoteEventsViewModel {
 

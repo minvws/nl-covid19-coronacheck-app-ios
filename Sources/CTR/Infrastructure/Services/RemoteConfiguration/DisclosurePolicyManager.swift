@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 protocol DisclosurePolicyManaging {
 	func setDisclosurePolicyUpdateHasBeenSeen()

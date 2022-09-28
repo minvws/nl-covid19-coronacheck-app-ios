@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 protocol Embeddable {
 	var view: UIView? { get }

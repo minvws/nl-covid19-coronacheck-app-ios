@@ -6,6 +6,8 @@
  */
 
 import UIKit
+import Transport
+import Shared
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	

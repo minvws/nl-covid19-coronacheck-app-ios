@@ -6,6 +6,8 @@
 */
 
 import Foundation
+import Transport
+import Shared
 
 typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
 

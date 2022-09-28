@@ -48,3 +48,6 @@ report.xml
 /Vendor/bundle/
 /.bundle
 .vscode
+/Sources/Transport/Transport-Info.plist
+/TransportTests/Info.plist
+/Sources/Shared/Shared-Info.plist

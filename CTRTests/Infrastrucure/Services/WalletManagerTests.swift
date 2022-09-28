@@ -7,6 +7,8 @@
 // swiftlint:disable type_body_length
 
 @testable import CTR
+@testable import Transport
+@testable import Shared
 import XCTest
 import Nimble
 

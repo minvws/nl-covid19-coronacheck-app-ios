@@ -7,6 +7,8 @@
 
 import Foundation
 @testable import CTR
+@testable import Transport
+@testable import Shared
 
 class GreenCardLoaderSpy: GreenCardLoading {
 

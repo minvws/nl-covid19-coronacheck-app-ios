@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+import Shared
+import Transport
 
 class ListStoredEventsViewModel {
 

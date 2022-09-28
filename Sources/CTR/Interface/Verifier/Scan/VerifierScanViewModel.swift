@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import Clcore
+import Transport
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 

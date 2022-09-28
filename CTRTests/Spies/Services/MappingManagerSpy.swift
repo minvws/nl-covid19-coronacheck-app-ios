@@ -6,6 +6,8 @@
 */
 
 @testable import CTR
+@testable import Transport
+@testable import Shared
 
 class MappingManagerSpy: MappingManaging {
 
