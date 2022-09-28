@@ -32,27 +32,9 @@ public struct RequestToken: Codable, Equatable {
 		case providerIdentifier
 	}
 
-    public init(token: String, protocolVersion: String, providerIdentifier: String) {
-        self.token = token
-        self.protocolVersion = protocolVersion
-        self.providerIdentifier = providerIdentifier
-    }
-
-    public init?(input: String, tokenValidator: TokenValidatorProtocol) {
-        // Check the validity of the input
-        guard tokenValidator.validate(input) else {
-            return nil
-        }
-
-        let parts = input.split(separator: "-")
-        guard parts.count >= 2, parts[0].count == 3 else { return nil }
-
-        let identifierPart = String(parts[0])
-        let tokenPart = String(parts[1])
-        self = RequestToken(
-            token: tokenPart,
-            protocolVersion: type(of: self).highestKnownProtocolVersion,
-            providerIdentifier: identifierPart
-        )
-    }
+	public init(token: String, protocolVersion: String, providerIdentifier: String) {
+		self.token = token
+		self.protocolVersion = protocolVersion
+		self.providerIdentifier = providerIdentifier
+	}
 }
