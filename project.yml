@@ -332,6 +332,7 @@ targets:
       - package: OHHTTPStubs
         product: OHHTTPStubsSwift
       - package: SnapshotTesting
+      - target: Transport
     info:
       path: TransportTests/Info.plist    
     sources:
