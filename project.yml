@@ -84,6 +84,56 @@ settings:
 # - Target Templates (i.e. shared default settings for targets):
 
 targetTemplates:
+
+  Standard_BaseSettings:
+    info:
+      properties:
+        # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
+        NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
+        APP_FLAVOR: ${APP_FLAVOR}
+        LOG_LEVEL: ${LOG_LEVEL}
+    settings:
+      base:
+        VALIDATE_PRODUCT: YES
+        DEBUG_INFORMATION_FORMAT: dwarf-with-dsym # Firebase warns that this must be set for all targets.
+        ENABLE_BITCODE: false # because it's deprecated
+      configs:
+        Development:
+          NETWORK_CONFIGURATION: DEV
+          VALIDATE_PRODUCT: NO
+          LOG_LEVEL: debug
+          OTHER_LDFLAGS: -Xlinker -interposable -weak_framework SwiftUI # all for Inject
+        FirebaseAcceptance:
+          NETWORK_CONFIGURATION: ACC
+          LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
+        FirebaseTest:
+          NETWORK_CONFIGURATION: TEST
+          LOG_LEVEL: debug
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
+        FirebaseProduction:
+          NETWORK_CONFIGURATION: Production
+          LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
+        AppStore:
+          NETWORK_CONFIGURATION: Production
+          LOG_LEVEL: error
+          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
+
+  Standard_Signing:
+    settings:
+      base:
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: iPhone Distribution
+        DEVELOPMENT_TEAM: C2H38GV99H
+      configs:
+        Development:
+          CODE_SIGN_IDENTITY: iPhone Developer
+        FirebaseAcceptance:
+        FirebaseTest:
+        FirebaseProduction:
+        AppStore:
+        
   Standard_iOS:
     platform: iOS
     type: application
@@ -112,41 +162,8 @@ targetTemplates:
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
         PRODUCT_MODULE_NAME: CTR
-        VALIDATE_PRODUCT: YES
-        DEBUG_INFORMATION_FORMAT: dwarf-with-dsym # Firebase warns that this must be set for all targets.
-        CODE_SIGN_STYLE: Manual
-        CODE_SIGN_IDENTITY: iPhone Distribution
-        DEVELOPMENT_TEAM: C2H38GV99H
-        ENABLE_BITCODE: false # because it's deprecated
-      configs:
-        Development:
-          NETWORK_CONFIGURATION: DEV
-          CODE_SIGN_IDENTITY: iPhone Developer
-          VALIDATE_PRODUCT: NO
-          LOG_LEVEL: debug
-          OTHER_LDFLAGS: -Xlinker -interposable -weak_framework SwiftUI # all for Inject
-        FirebaseAcceptance:
-          NETWORK_CONFIGURATION: ACC
-          LOG_LEVEL: error
-          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
-        FirebaseTest:
-          NETWORK_CONFIGURATION: TEST
-          LOG_LEVEL: debug
-          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
-        FirebaseProduction:
-          NETWORK_CONFIGURATION: Production
-          LOG_LEVEL: error
-          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
-        AppStore:
-          NETWORK_CONFIGURATION: Production
-          LOG_LEVEL: error
-          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
     info:
       properties:
-        # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
-        NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
-        APP_FLAVOR: ${APP_FLAVOR}
-        LOG_LEVEL: ${LOG_LEVEL}
         CFBundleDevelopmentRegion: nl_NL
         CFBundleExecutable: $(EXECUTABLE_NAME)
         CFBundleName: ${DISPLAY_NAME}
@@ -269,15 +286,71 @@ targetTemplates:
     type: bundle.ui-testing
     dependencies:
       - target: Holder
-
+    
 # - Targets
 
 targets:
+  Shared:
+    templates: 
+      - Standard_Signing
+      - Standard_BaseSettings
+    platform: iOS
+    type: framework
+    sources:
+      - path: Sources/Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.shared
+    info:
+      path: Sources/Shared/Shared-Info.plist
+
+  Transport:
+    templates: 
+      - Standard_Signing
+      - Standard_BaseSettings
+    platform: iOS
+    type: framework
+    sources:
+      - path: Sources/Transport
+    dependencies:
+      - package: OpenSSL
+      - target: Shared
+      - package: BrightFutures
+        product: BrightFutures
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.transport
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/Transport/Transport-objc-bridging-header.h
+    info:
+      path: Sources/Transport/Transport-Info.plist
+
+  TransportTests:
+    platform: iOS
+    type: bundle.unit-test
+    dependencies:
+      - package: Nimble
+      - package: OHHTTPStubs
+        product: OHHTTPStubsSwift
+      - package: SnapshotTesting
+      - target: Transport
+    info:
+      path: TransportTests/Info.plist    
+    sources:
+      - path: TransportTests
+        excludes:
+          - "**/__Snapshots__"
+      - path: CTRTests/Infrastrucure/Crypto/Utility/OpenSSLTests+Data.swift
+
   Holder:
+    dependencies:
+      - target: Shared
+      - target: Transport
     templates:
       - Standard_iOS
+      - Standard_Signing
+      - Standard_BaseSettings
     sources:
-      - path: Sources
+      - path: Sources/CTR
         excludes:
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
@@ -347,10 +420,15 @@ targets:
         UILaunchStoryboardName: LaunchScreenHolder
 
   Verifier:
+    dependencies:
+      - target: Shared
+      - target: Transport
     templates:
       - Standard_iOS
+      - Standard_Signing
+      - Standard_BaseSettings
     sources:
-      - path: Sources
+      - path: Sources/CTR
         excludes:
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
@@ -477,10 +555,6 @@ schemeTemplates:
       gatherCoverageData: true
       coverageTargets:
         - ${appTargetName}
-      targets:
-        - name: ${unitTestTargetName}
-          parallelizable: false
-          randomExecutionOrder: true
 
   # Template for adding UI tests to a scheme:
   UITestScheme:
@@ -503,13 +577,34 @@ schemes:
       - UnitTestScheme # This scheme has unit tests
     templateAttributes:
       appTargetName: Holder
-      unitTestTargetName: CTRTests
       configEnvironment: Development
     run:
       language: nl
       commandLineArguments:
         "-shouldInjectView": true
+    test:
+      targets:
+        - name: CTRTests
+          parallelizable: false
+          randomExecutionOrder: true
+        - name: TransportTests
+          parallelizable: false
+          randomExecutionOrder: true
 
+  Transport:
+    build:
+      config: Development
+      targets:
+        Transport: running
+        TransportTests: testing
+    test:
+      config: Development
+      targets:
+        - name: TransportTests
+          parallelizable: false
+          randomExecutionOrder: true
+    
+    
   Holder UI Tests:
     templates:
       - DevelopmentConfigScheme

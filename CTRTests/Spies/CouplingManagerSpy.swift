@@ -6,6 +6,7 @@
 */
 
 @testable import CTR
+@testable import Transport
 
 class CouplingManagerSpy: CouplingManaging {
 

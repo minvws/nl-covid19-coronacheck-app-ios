@@ -7,6 +7,7 @@
 
 import UIKit
 import AppAuth
+import Shared
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {

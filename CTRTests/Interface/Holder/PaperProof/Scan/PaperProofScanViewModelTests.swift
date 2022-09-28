@@ -9,6 +9,8 @@ import XCTest
 import Nimble
 import SnapshotTesting
 @testable import CTR
+@testable import Transport
+@testable import Shared
 
 final class PaperProofScanViewModelTests: XCTestCase {
 	

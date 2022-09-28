@@ -8,6 +8,8 @@
 // swiftlint:disable file_length
 
 @testable import CTR
+@testable import Transport
+@testable import Shared
 import XCTest
 import Nimble
 

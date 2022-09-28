@@ -7,6 +7,7 @@
 
 import AVFoundation
 import UIKit
+import Shared
 
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 

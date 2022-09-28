@@ -7,6 +7,8 @@
 
 import Foundation
 import Reachability
+import Transport
+import Shared
 
 // MARK: - 1: Define the Environment
 

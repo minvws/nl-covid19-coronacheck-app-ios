@@ -7,6 +7,8 @@
 // swiftlint:disable redundant_optional_initialization
 
 import Foundation
+import Transport
+import Shared
 
 protocol SecureUserSettingsProtocol: AnyObject {
 	typealias ForcedInformationData = NewFeaturesManager.ForcedInformationData

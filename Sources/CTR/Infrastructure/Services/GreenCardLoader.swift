@@ -7,6 +7,8 @@
 
 import Foundation
 import BrightFutures
+import Transport
+import Shared
 
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(
