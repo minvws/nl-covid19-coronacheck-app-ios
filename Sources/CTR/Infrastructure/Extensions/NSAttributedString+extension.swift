@@ -8,7 +8,7 @@
 import UIKit
 
 extension String {
-	func components<T>(separatedBy separators: [T]) -> [String] where T: StringProtocol {
+	func components(separatedBy separators: [some StringProtocol]) -> [String] {
 		var result = [self]
 		for separator in separators {
 			result = result
