@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Transport
 
 class BlockedEventModel {
 	

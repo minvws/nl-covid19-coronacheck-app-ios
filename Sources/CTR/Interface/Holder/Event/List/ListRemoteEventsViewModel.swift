@@ -6,6 +6,8 @@
 */
 
 import Foundation
+import Transport
+import Shared
 
 class ListRemoteEventsViewModel {
 
@@ -351,4 +353,30 @@ extension ErrorCode.ClientCode {
 	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
 	static let storingEvents = ErrorCode.ClientCode(value: "056")
 	static let unhandled = ErrorCode.ClientCode(value: "999")
+}
+
+extension EventFlow.Event {
+	
+	var storageMode: EventMode? {
+		
+		if hasVaccination {
+			return .vaccination
+		}
+		if hasRecovery {
+			return .recovery
+		}
+		if hasPositiveTest {
+			return .vaccinationAndPositiveTest
+		}
+		if hasNegativeTest {
+			return .test(.ggd)
+		}
+		if hasVaccinationAssessment {
+			return .vaccinationassessment
+		}
+		if hasPaperCertificate {
+			return .paperflow
+		}
+		return nil
+	}
 }

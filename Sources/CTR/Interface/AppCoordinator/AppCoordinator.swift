@@ -6,6 +6,8 @@
  */
 
 import UIKit
+import Shared
+import Transport
 
 protocol AppCoordinatorDelegate: AnyObject {
 	

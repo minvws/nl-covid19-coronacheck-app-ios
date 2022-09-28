@@ -7,6 +7,7 @@
 
 import UIKit
 import MessageUI
+import Shared
 
 // Note: Do NOT use `Current` in this context, as it's not available
 

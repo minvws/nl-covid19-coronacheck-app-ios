@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 protocol FileStorageProtocol: AnyObject {
 	func store(_ data: Data, as fileName: String) throws

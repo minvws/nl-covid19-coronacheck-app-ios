@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 protocol ClockDeviationManaging: AnyObject {
 	var hasSignificantDeviation: Bool? { get }

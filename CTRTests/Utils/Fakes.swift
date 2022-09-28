@@ -8,6 +8,8 @@
 
 import Foundation
 @testable import CTR
+@testable import Transport
+@testable import Shared
 import UIKit
 
 extension TestProvider {

@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Transport
+import Shared
 
 enum EventScreenResult: Equatable {
 

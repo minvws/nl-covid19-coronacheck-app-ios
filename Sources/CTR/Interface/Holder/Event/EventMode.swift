@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Transport
 
 enum EventMode: Equatable {
 
@@ -80,7 +81,7 @@ enum EventMode: Equatable {
 
 extension EventMode {
 
-	var flow: ErrorCode.Flow {
+	public var flow: ErrorCode.Flow {
 
 		switch self {
 			case .paperflow: return .paperproof

@@ -6,6 +6,8 @@
 */
 
 import Foundation
+import Transport
+import Shared
 
 struct EuCredentialAttributes: Codable {
 
@@ -142,7 +144,6 @@ struct EuCredentialAttributes: Codable {
 
 		return EventFlow.Identity(
 			infix: nil,
-
 			firstName: digitalCovidCertificate.name.givenName,
 			lastName: digitalCovidCertificate.name.familyName,
 			birthDateString: digitalCovidCertificate.dateOfBirth
