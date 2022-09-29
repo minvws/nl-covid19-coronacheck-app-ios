@@ -523,7 +523,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - Present alerts
 
 	private func displayBlockedEventsAlert(blockedEventItems: [BlockedEventItem]) {
-		Current.userSettings.hasShownBlockedEventsAlert = true
+		
 		currentlyPresentedAlert.value = AlertContent(
 			title: L.holder_invaliddetailsremoved_alert_title(),
 			subTitle: L.holder_invaliddetailsremoved_alert_body(),
@@ -536,7 +536,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			cancelAction: AlertContent.Action(
 				title: L.holder_invaliddetailsremoved_alert_button_close(),
 				action: nil
-			)
+			),
+			alertWasPresentedCallback: {
+				Current.userSettings.hasShownBlockedEventsAlert = true
+			}
 		)
 	}
 
