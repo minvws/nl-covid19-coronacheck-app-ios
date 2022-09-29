@@ -91,14 +91,24 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		viewModel.viewWillAppear()
 	}
 	
+	var currentlyPresentedAlertDisposable: Observable<AlertContent?>.Disposable?
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
+		
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+		
+		currentlyPresentedAlertDisposable = viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		navigationController?.navigationBar.isHidden = false
+		
+		currentlyPresentedAlertDisposable = nil
 		
 		// As the screen animates out, fade out the (fake) navigation bar,
 		// as an approximation of the animation that occurs with UINavigationBar.
@@ -153,11 +163,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		viewModel.primaryButtonTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
-
-		viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
-			guard let alertContent else { return }
-			self?.showAlert(alertContent)
-		}
 
 		viewModel.selectedTab.observe { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
