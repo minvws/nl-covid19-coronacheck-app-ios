@@ -7,6 +7,8 @@
 
 import UIKit
 import AppAuth
+import Shared
+import Transport
 
 // MARK: Mapping Errors
 

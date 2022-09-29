@@ -7,6 +7,8 @@
 
 import UIKit
 import LocalAuthentication
+import Transport
+import Shared
 
 class LaunchViewModel {
 

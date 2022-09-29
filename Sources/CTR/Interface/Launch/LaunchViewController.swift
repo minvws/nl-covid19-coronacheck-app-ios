@@ -35,6 +35,9 @@ class LaunchViewController: GenericViewController<LaunchView, LaunchViewModel> {
 
 		// We can't start this on viewDidLoad.
 		// It could present the dialog while the view is not yet on screen, resulting in an error
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
+		viewModel.$alert.binding = { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
 	}
 }

@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+@testable import Shared
 
 class SnapshotViewControllerTests: XCTestCase {
 
@@ -35,7 +36,7 @@ class SnapshotViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
+		if let sut {
 			window.addSubview(sut.view)
 			RunLoop.current.run(until: Date())
 		}

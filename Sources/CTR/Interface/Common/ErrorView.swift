@@ -98,7 +98,7 @@ class ErrorView: BaseView {
 				textColor: C.error()!
 			)
 			
-			if let error = error {
+			if let error {
 				accessibilityValue = error
 				accessibilityLabel = L.general_notification()
  				isAccessibilityElement = true

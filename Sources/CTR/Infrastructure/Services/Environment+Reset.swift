@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 extension Environment {
 	
@@ -24,6 +25,7 @@ extension Environment {
 			case .holder:
 				walletManager.removeExistingEventGroups()
 				walletManager.removeExistingGreenCards()
+				walletManager.removeExistingBlockedEvents()
 			case .verifier:
 				verificationPolicyEnabler.wipePersistedData()
 				verificationPolicyManager.wipePersistedData()

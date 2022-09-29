@@ -6,6 +6,7 @@
 */
 
 import BrightFutures
+import Shared
 
 extension Future {
 
@@ -14,5 +15,43 @@ extension Future {
 		return self
 			.map { Optional.some($0) }
 			.recover { _ in return nil }
+	}
+}
+
+extension Future {
+
+	func logVerbose(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			Shared.logVerbose(message + ": \(value)")
+			return value
+		}
+	}
+
+	func logDebug(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			Shared.logDebug(message + ": \(value)")
+			return value
+		}
+	}
+
+	func logInfo(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			Shared.logInfo(message + ": \(value)")
+			return value
+		}
+	}
+
+	func logWarning(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			Shared.logWarning(message + ": \(value)")
+			return value
+		}
+	}
+
+	func logError(_ message: String) -> Future<T, E> {
+		return self.map { value -> T in
+			Shared.logError(message + ": \(value)")
+			return value
+		}
 	}
 }

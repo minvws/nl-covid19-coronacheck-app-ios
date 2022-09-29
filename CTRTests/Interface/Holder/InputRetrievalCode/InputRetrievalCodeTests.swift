@@ -10,6 +10,8 @@ import Foundation
 import XCTest
 import Nimble
 @testable import CTR
+@testable import Transport
+@testable import Shared
 import SnapshotTesting
 
 /// (Experimentally) combines TokenEntryViewModel tests and TokenEntryViewController snapshot tests

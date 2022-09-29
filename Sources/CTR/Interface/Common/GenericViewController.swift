@@ -7,6 +7,7 @@
 
 import UIKit
 import Inject
+import Shared
 
 /// A generic viewcontroller
 /// V: The view to use for the scene, must be a (subclass of) baseview
@@ -171,7 +172,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 		customAction: Selector? = nil) {
 			
 			var action = #selector(onBack)
-			if let customAction = customAction {
+			if let customAction {
 				action = customAction
 			}
 			

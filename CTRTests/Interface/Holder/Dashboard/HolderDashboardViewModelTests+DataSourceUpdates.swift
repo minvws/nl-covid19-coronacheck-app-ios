@@ -19,26 +19,26 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		expect(self.datasourceSpy.invokedReload) == false
+		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		// Act
 		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
 
 		// Assert
-		expect(self.datasourceSpy.invokedReload) == true
+		expect(self.qrCardDatasourceSpy.invokedReload) == true
 	}
 	
 	func test_viewWillAppear_triggersDatasourceReload() {
 		// Arrange
 		
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-		expect(self.datasourceSpy.invokedReload) == false
+		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		// Act
 		sut.viewWillAppear()
 
 		// Assert
-		expect(self.datasourceSpy.invokedReload) == true
+		expect(self.qrCardDatasourceSpy.invokedReload) == true
 	}
 	
 	func test_datasourceupdate_mutliplefailures_shouldShowHelpDeskErrorBeneathCard() {
@@ -56,7 +56,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .failed(error: DashboardStrippenRefresher.Error.networkError(error: .invalidRequest, timestamp: now)),
@@ -92,10 +92,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -157,10 +157,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
@@ -203,10 +203,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
 			expect(isLoading) == false
@@ -244,10 +244,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -297,10 +297,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -344,10 +344,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -399,10 +399,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -457,10 +457,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle) == nil
@@ -509,10 +509,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
 			expect(buttonTitle) == nil
@@ -600,10 +600,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -658,10 +658,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -711,10 +711,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle) == nil
@@ -759,10 +759,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
 			expect(buttonTitle) == nil
@@ -809,10 +809,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -863,10 +863,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -937,10 +937,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(6))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -978,7 +978,6 @@ extension HolderDashboardViewModelTests {
 			expect(nowValidityTexts[0].kind) == .current
 			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
 		}))
-		expect(self.sut.internationalCards.value[5]).toEventually(beRecommendCoronaMelderCard())
 	}
 	
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_0_of_2() {
@@ -998,10 +997,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -1045,10 +1044,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -1095,10 +1094,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -1145,10 +1144,10 @@ extension HolderDashboardViewModelTests {
 			)
 		]
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -1199,10 +1198,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -1259,10 +1258,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle) == nil
@@ -1316,10 +1315,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -1361,10 +1360,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only1Gaccess()
 			expect(buttonTitle) == nil
@@ -1431,10 +1430,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_3Gand1Gaccess()
 			expect(buttonTitle) == nil
@@ -1501,10 +1500,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -1541,10 +1540,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -1596,10 +1595,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(6))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -1666,7 +1665,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -1721,7 +1720,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -1761,7 +1760,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
@@ -1785,14 +1784,14 @@ extension HolderDashboardViewModelTests {
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.vaccinationassessment,
+						type: OriginType.vaccinationassessment,
 						eventDate: now.addingTimeInterval(72 * hours * ago),
 						expirationTime: now.addingTimeInterval(11 * days * fromNow),
 						validFromDate: now.addingTimeInterval(72 * hours * ago),
 						doseNumber: nil
 					),
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(12 * hours * ago),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1806,7 +1805,7 @@ extension HolderDashboardViewModelTests {
 				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(30 * days * fromNow),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1819,10 +1818,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, _, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -1839,7 +1838,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
-		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards.value[1]).toEventually(beOriginNotValidInThisRegionCard(test: { title, callToActionButtonText, _ in
 			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
@@ -1870,14 +1869,14 @@ extension HolderDashboardViewModelTests {
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.vaccinationassessment,
+						type: OriginType.vaccinationassessment,
 						eventDate: now.addingTimeInterval(72 * hours * ago),
 						expirationTime: now.addingTimeInterval(11 * days * fromNow),
 						validFromDate: now.addingTimeInterval(72 * hours * ago),
 						doseNumber: nil
 					),
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(12 * hours * ago),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1891,7 +1890,7 @@ extension HolderDashboardViewModelTests {
 				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(30 * days * fromNow),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1904,10 +1903,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -1930,7 +1929,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
-		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards.value[1]).toEventually(beOriginNotValidInThisRegionCard(test: { title, callToActionButtonText, _ in
 			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
@@ -1961,14 +1960,14 @@ extension HolderDashboardViewModelTests {
 				region: .netherlands(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.vaccinationassessment,
+						type: OriginType.vaccinationassessment,
 						eventDate: now.addingTimeInterval(72 * hours * ago),
 						expirationTime: now.addingTimeInterval(11 * days * fromNow),
 						validFromDate: now.addingTimeInterval(72 * hours * ago),
 						doseNumber: nil
 					),
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(12 * hours * ago),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1982,7 +1981,7 @@ extension HolderDashboardViewModelTests {
 				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
 				greencards: [.init(id: NSManagedObjectID(), origins: [
 					.init(
-						type: QRCodeOriginType.test,
+						type: OriginType.test,
 						eventDate: now.addingTimeInterval(60 * hours * ago),
 						expirationTime: now.addingTimeInterval(30 * days * fromNow),
 						validFromDate: now.addingTimeInterval(60 * hours * ago),
@@ -1995,10 +1994,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			// check isLoading
@@ -2021,7 +2020,7 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		
-		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.internationalCards.value[1]).toEventually(beOriginNotValidInThisRegionCard(test: { title, callToActionButtonText, _ in
 			expect(title) == L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title()
@@ -2059,10 +2058,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -2108,10 +2107,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -2157,10 +2156,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -2207,10 +2206,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -2254,10 +2253,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.domesticCards.value).toEventually(haveCount(5))
+		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
 			expect(buttonTitle) == nil
@@ -2303,10 +2302,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -2347,10 +2346,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -2393,7 +2392,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
@@ -2431,7 +2430,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
@@ -2466,7 +2465,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
@@ -2500,7 +2499,7 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?([], expiredCards)
+		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(2))
@@ -2538,10 +2537,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -2613,10 +2612,10 @@ extension HolderDashboardViewModelTests {
 		]
 		
 		// Act
-		datasourceSpy.invokedDidUpdate?(qrCards, [])
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holderDashboardIntroInternational()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()

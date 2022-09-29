@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import SQLite3
+import Shared
 
 enum StorageType {
 	case persistent, inMemory
@@ -72,7 +73,7 @@ class DataStoreManager: DataStoreManaging {
 		persistentContainer.persistentStoreDescriptions = [description]
 		persistentContainer.loadPersistentStores(completionHandler: { storeDescription, error in
 			
-			if let error = error {
+			if let error {
 				// Catch an error indicating low disk-space:
 				if DataStoreManager.isDiskFullError(error as NSError) {
 					loadPersistentStoreCompletion(.failure(.diskFull))

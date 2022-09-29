@@ -7,6 +7,8 @@
 // swiftlint:disable type_body_length
 
 import UIKit
+import Transport
+import Shared
 
 enum InputRetrievalCodeMode {
 	case negativeTest
@@ -243,7 +245,7 @@ class InputRetrievalCodeViewModel {
 
 		fieldErrorMessage = nil
 
-		if let requestToken = requestToken {
+		if let requestToken {
 			self.fetchProviders(requestToken, verificationCode: nil)
 		}
 	}

@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Transport
 
 /// Should the app be updated?
 enum LaunchState: Equatable {

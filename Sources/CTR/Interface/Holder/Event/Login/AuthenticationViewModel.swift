@@ -7,6 +7,8 @@
 
 import UIKit
 import AppAuth
+import Shared
+import Transport
 
 enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)
@@ -129,7 +131,7 @@ extension AuthenticationViewModel {
 		
 		let clientCode = OpenIdErrorMapper().mapError(error)
 
-		if let error = error {
+		if let error {
 			if  error.localizedDescription.contains("login_required") {
 				logDebug("Server busy")
 				displayServerBusy(

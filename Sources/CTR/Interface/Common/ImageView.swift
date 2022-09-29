@@ -12,7 +12,7 @@ class ImageView: UIImageView {
     init(imageName: String, highlightedImageName: String? = nil) {
         super.init(image: UIImage(named: imageName))
         
-        if let highlightedImageName = highlightedImageName {
+        if let highlightedImageName {
             highlightedImage = UIImage(named: highlightedImageName)
         }
     }

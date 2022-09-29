@@ -6,6 +6,8 @@
 */
 
 import Foundation
+import Transport
+import Shared
 
 enum ScanLogDisplayEntry: Equatable {
 
@@ -148,7 +150,7 @@ private struct ScanLogDataSource {
 				}
 				// Switch occurred
 				lineItem = ScanLogLineItem(mode: scanMode)
-				if let currentTime = currentTime, currentTime > scanDate {
+				if let currentTime, currentTime > scanDate {
 					lineItem?.skew = true
 				}
 			}

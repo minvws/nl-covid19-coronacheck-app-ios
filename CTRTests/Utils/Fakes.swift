@@ -8,6 +8,8 @@
 
 import Foundation
 @testable import CTR
+@testable import Transport
+@testable import Shared
 import UIKit
 
 extension TestProvider {
@@ -387,7 +389,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(300 * days),
 			validFrom: now,
-			doseNumber: 1
+			doseNumber: 1,
+			hints: ["fakeVaccinationOrigin"]
 		)
 	}
 	
@@ -397,7 +400,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
-			doseNumber: 1
+			doseNumber: 1,
+			hints: ["fakeVaccinationOriginExpiringIn30Days"]
 		)
 	}
 	
@@ -407,7 +411,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now.addingTimeInterval(60 * days * ago),
 			expirationTime: now.addingTimeInterval(30 * days * ago),
 			validFrom: now.addingTimeInterval(60 * days * ago),
-			doseNumber: 1
+			doseNumber: 1,
+			hints: []
 		)
 	}
 	
@@ -417,7 +422,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 	
@@ -427,7 +433,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now.addingTimeInterval(30 * days * ago),
 			expirationTime: now.addingTimeInterval(30 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 	
@@ -437,7 +444,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(14 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 	
@@ -447,7 +455,8 @@ extension RemoteGreenCards.Origin {
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(1 * days),
 			validFrom: now,
-			doseNumber: nil
+			doseNumber: nil,
+			hints: []
 		)
 	}
 }
@@ -519,10 +528,80 @@ extension RemoteGreenCards.Response {
 			blobExpireDates: [
 				RemoteGreenCards.BlobExpiry(
 					identifier: "12345",
-					expirationDate: Formatter.getDateFrom(dateString8601: "2024-07-06:12:00:00+00:00")!
+					expirationDate: Formatter.getDateFrom(dateString8601: "2024-07-06:12:00:00+00:00")!,
+					reason: ""
 				)
 			],
 			hints: nil
+		)
+	}
+	
+	static func internationalBlockedVaccination(blockedIdentifier: String) -> RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifier,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				)
+			],
+			hints: [
+				"event_blocked",
+				"domestic_vaccination_rejected",
+				"international_vaccination_rejected"
+			]
+		)
+	}
+	
+	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String) -> RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [
+				RemoteGreenCards.EuGreenCard(
+					origins: [
+						RemoteGreenCards.Origin.fakeVaccinationOrigin
+					],
+					credential: "test credential"
+				)
+			],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifierForExistingVaccination,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				)
+			],
+			hints: [
+				"event_blocked",
+				"domestic_vaccination_created",
+				"international_vaccination_created"
+			]
+		)
+	}
+
+	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String, blockedIdentifierForNewVaccination: String) -> RemoteGreenCards.Response {
+		RemoteGreenCards.Response(
+			domesticGreenCard: nil,
+			euGreenCards: [],
+			blobExpireDates: [
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifierForExistingVaccination,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				),
+				RemoteGreenCards.BlobExpiry(
+					identifier: blockedIdentifierForNewVaccination,
+					expirationDate: Date.distantPast,
+					reason: "event_blocked"
+				)
+			],
+			hints: [
+				"event_blocked",
+				"domestic_vaccination_rejected",
+				"international_vaccination_rejected"
+			]
 		)
 	}
 
@@ -793,7 +872,8 @@ extension RemoteGreenCards.Response {
 						eventTime: now.addingTimeInterval(400 * days * ago),
 						expirationTime: now.addingTimeInterval(30 * days * ago),
 						validFrom: now.addingTimeInterval(400 * days * ago),
-						doseNumber: nil
+						doseNumber: nil,
+						hints: []
 					)
 				],
 				createCredentialMessages: "test"
@@ -812,7 +892,8 @@ extension RemoteGreenCards.Response {
 							eventTime: now.addingTimeInterval(400 * days * ago),
 							expirationTime: now.addingTimeInterval(30 * days * ago),
 							validFrom: now.addingTimeInterval(400 * days * ago),
-							doseNumber: nil
+							doseNumber: nil,
+							hints: []
 						)
 					],
 					credential: "recovery credential"
@@ -1208,17 +1289,19 @@ extension EuCredentialAttributes {
 
 extension EventGroup {
 	
-	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, expiryDate: Date) -> EventGroup? {
+	static func fakeEventGroup(dataStoreManager: DataStoreManaging, type: EventMode, expiryDate: Date) throws -> EventGroup? {
 		
 		var eventGroup: EventGroup?
 		let context = dataStoreManager.managedObjectContext()
+		let jsonData = try JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test"))
+		
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				eventGroup = EventGroupModel.create(
 					type: type,
 					providerIdentifier: "CoronaCheck",
 					expiryDate: expiryDate,
-					jsonData: Data(),
+					jsonData: jsonData,
 					wallet: wallet,
 					managedContext: context
 				)
