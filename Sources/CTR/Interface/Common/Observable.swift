@@ -10,21 +10,56 @@ import Foundation
 /// wrap a value to make it observable (i.e. observers get updates to `value`).
 /// immediately calls observer with current value when said observer is added.
 class Observable<T> {
-	
-	var value: T {
-		didSet {
-			observers.forEach { observer in observer(value) }
+
+	/// Returned from `Observable.observe`, allowing an observation to be unregistered either
+	/// by deallocating the Disposable instance, or manually calling `dispose()`:
+	class Disposable {
+		private let teardown: () -> Void
+		
+		fileprivate init(_ teardown: @escaping () -> Void) {
+			self.teardown = teardown
+		}
+		
+		func dispose() {
+			teardown()
+		}
+		
+		deinit {
+			dispose()
 		}
 	}
 	
-	private var observers = [(T) -> Void]()
+	private struct Observer: Equatable {
+		static func == (lhs: Observable<T>.Observer, rhs: Observable<T>.Observer) -> Bool {
+			return lhs.id == rhs.id
+		}
+ 
+		/// Callback to pass a value to the Observer:
+		let receive: (T) -> Void
+		
+		private let id = UUID() // for Equatable conformance
+	}
+	
+	var value: T {
+		didSet {
+			observers.forEach { observer in observer.receive(value) }
+		}
+	}
+	
+	private var observers = [Observer]()
 	
 	init(value: T) {
 		self.value = value
 	}
 	
-	func observe(_ handler: @escaping (T) -> Void) {
-		observers.append(handler)
-		handler(value)
+	@discardableResult
+	func observe(_ handler: @escaping (T) -> Void) -> Disposable {
+		let observer = Observer(receive: handler)
+		observers.append(observer)
+		observer.receive(value)
+		
+		return Disposable { [weak self] in
+			self?.observers.removeAll(where: { $0 == observer })
+		}
 	}
 }
