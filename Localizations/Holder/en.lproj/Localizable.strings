@@ -745,6 +745,7 @@
 "holder_qr_code_hidden_explanation_url" = "https://www.coronacheck.nl/en/faq/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
+"holder_scanner_cameraBlockedDueToMultitasking" = "Camera can only be used in full screen. Close your tile window view.";
 "holder_scanner_error_action" = "Scan again";
 "holder_scanner_error_message_ctb" = "You don’t need to scan your Dutch QR code. Scan the QR code on the international certificate you received from your health care provider or the government. It contains the information needed to add your certificate to the app. You can recognise this certificate by the European flag.";
 "holder_scanner_error_message_unknown" = "The QR code you are trying to scan is not recognised as a coronavirus pass. Make sure you are holding the correct QR code in front of the camera.";
