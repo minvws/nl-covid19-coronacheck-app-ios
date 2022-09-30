@@ -31,7 +31,7 @@ struct AlertContent {
 		subTitle: String,
 		okAction: AlertContent.Action,
 		cancelAction: AlertContent.Action? = nil,
-		alertWasPresentedCallback: (() -> Void)?) {
+		alertWasPresentedCallback: (() -> Void)? = nil) {
 		self.title = title
 		self.subTitle = subTitle
 		self.okAction = okAction

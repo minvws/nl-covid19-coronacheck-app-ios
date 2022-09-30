@@ -62,7 +62,8 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 	}
 
 	private var didSetInitialStartingTabOnSceneView = false
-
+	private var currentlyPresentedAlertDisposable: Observable<AlertContent?>.Disposable?
+	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
@@ -90,8 +91,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		navigationController?.navigationBar.isHidden = true
 		viewModel.viewWillAppear()
 	}
-	
-	var currentlyPresentedAlertDisposable: Observable<AlertContent?>.Disposable?
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
