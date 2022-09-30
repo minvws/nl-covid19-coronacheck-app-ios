@@ -58,7 +58,7 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	///   - delegate: the vaccination flow delegate
+	///   - delegate: the paper flow delegate
 	init(
 		navigationController: UINavigationController,
 		delegate: PaperProofFlowDelegate) {
