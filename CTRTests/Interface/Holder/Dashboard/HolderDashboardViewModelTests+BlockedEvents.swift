@@ -38,9 +38,24 @@ extension HolderDashboardViewModelTests {
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
-		sut.viewWillAppear() // required to process updates from the BlockedEventsDataSource, to prevent alert presentation when screen is offscreen.
-		
 		// Assert
+		
+		// Check alert:
+		
+		let alert = try XCTUnwrap(eventuallyUnwrap { self.sut.currentlyPresentedAlert.value })
+		alert.alertWasPresentedCallback?()
+		
+		expect(alert.title) == L.holder_invaliddetailsremoved_alert_title()
+		expect(alert.subTitle) == L.holder_invaliddetailsremoved_alert_body()
+		expect(alert.okAction.title) == L.holder_invaliddetailsremoved_alert_button_moreinfo()
+		
+		alert.okAction.action?(UIAlertAction()) // trigger the okay button
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		
+		expect(alert.cancelAction?.title) == L.holder_invaliddetailsremoved_alert_button_close()
+		
+		// Check banner:
+
 		let eventsWereBlockedBannerValues = try XCTUnwrap(eventuallyUnwrap {
 			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
 				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
@@ -57,26 +72,16 @@ extension HolderDashboardViewModelTests {
 		
 		// Check the CTA button handler:
 		didTapCallToAction()
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 2
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1
 		
 		// Check the cancel button handler
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
 		didTapDismiss()
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents).toEventually(beTrue())
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 2 // still same as above
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 2
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false
-		
-		let alert = try XCTUnwrap(eventuallyUnwrap { self.sut.currentlyPresentedAlert.value })
-		expect(alert.title) == L.holder_invaliddetailsremoved_alert_title()
-		expect(alert.subTitle) == L.holder_invaliddetailsremoved_alert_body()
-		expect(alert.okAction.title) == L.holder_invaliddetailsremoved_alert_button_moreinfo()
-		
-		alert.okAction.action?(UIAlertAction()) // trigger the okay button
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 2
-		
-		expect(alert.cancelAction?.title) == L.holder_invaliddetailsremoved_alert_button_close()
 	}
 	
 	func test_blockedEvent_eventBeingAdded_hasAlreadySeenAlert_triggersBannerAndDoesNotAlert() throws {

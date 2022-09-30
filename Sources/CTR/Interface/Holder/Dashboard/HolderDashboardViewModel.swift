@@ -325,7 +325,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private func setupBlockedEventsDatasource() {
 
 		blockedEventsDatasource.didUpdate = { [weak self] blockedEventItems in
-			self?.state.blockedEventItems = blockedEventItems
+			guard let self = self else { return }
+
+			DispatchQueue.main.async {
+				if blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
+					self.displayBlockedEventsAlert(blockedEventItems: blockedEventItems)
+				}
+
+				self.state.blockedEventItems = blockedEventItems
+			}
 		}
 	}
 
@@ -350,10 +358,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	func viewWillAppear() {
 		qrcardDatasource.reload()
 		recalculateActiveDisclosurePolicyMode()
-		
-		if state.blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
-			displayBlockedEventsAlert(blockedEventItems: state.blockedEventItems)
-		}
 	}
 
 	// MARK: - Receive Updates
@@ -523,7 +527,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// MARK: - Present alerts
 
 	private func displayBlockedEventsAlert(blockedEventItems: [BlockedEventItem]) {
-		Current.userSettings.hasShownBlockedEventsAlert = true
+		
 		currentlyPresentedAlert.value = AlertContent(
 			title: L.holder_invaliddetailsremoved_alert_title(),
 			subTitle: L.holder_invaliddetailsremoved_alert_body(),
@@ -536,7 +540,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			cancelAction: AlertContent.Action(
 				title: L.holder_invaliddetailsremoved_alert_button_close(),
 				action: nil
-			)
+			),
+			alertWasPresentedCallback: {
+				Current.userSettings.hasShownBlockedEventsAlert = true
+			}
 		)
 	}
 
