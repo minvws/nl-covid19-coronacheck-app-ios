@@ -97,7 +97,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		navigationController?.interactivePopGestureRecognizer?.isEnabled = false
 		
-		currentlyPresentedAlertDisposable = viewModel.currentlyPresentedAlert.observe { [weak self] alertContent in
+		currentlyPresentedAlertDisposable = viewModel.currentlyPresentedAlert.observeReturningDisposable { [weak self] alertContent in
 			guard let alertContent else { return }
 			self?.showAlert(alertContent)
 		}

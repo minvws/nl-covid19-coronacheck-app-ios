@@ -10,24 +10,6 @@ import Foundation
 /// wrap a value to make it observable (i.e. observers get updates to `value`).
 /// immediately calls observer with current value when said observer is added.
 class Observable<T> {
-
-	/// Returned from `Observable.observe`, allowing an observation to be unregistered either
-	/// by deallocating the Disposable instance, or manually calling `dispose()`:
-	class Disposable {
-		private let teardown: () -> Void
-		
-		fileprivate init(_ teardown: @escaping () -> Void) {
-			self.teardown = teardown
-		}
-		
-		func dispose() {
-			teardown()
-		}
-		
-		deinit {
-			dispose()
-		}
-	}
 	
 	private struct Observer: Equatable {
 		static func == (lhs: Observable<T>.Observer, rhs: Observable<T>.Observer) -> Bool {
@@ -51,9 +33,39 @@ class Observable<T> {
 	init(value: T) {
 		self.value = value
 	}
+
+	/// Observe until the Observable itself is deallocated
+	func observe(_ handler: @escaping (T) -> Void) {
+		let observer = Observer(receive: handler)
+		observers.append(observer)
+		observer.receive(value)
+	}
+}
+
+// MARK: - Disposable Observables -
+
+extension Observable {
 	
-	@discardableResult
-	func observe(_ handler: @escaping (T) -> Void) -> Disposable {
+	/// Returned from `Observable.observe`, allowing an observation to be unregistered either
+	/// by deallocating the Disposable instance, or manually calling `dispose()`:
+	class Disposable {
+		private let teardown: () -> Void
+		
+		fileprivate init(_ teardown: @escaping () -> Void) {
+			self.teardown = teardown
+		}
+		
+		private func dispose() {
+			teardown()
+		}
+		
+		deinit {
+			dispose()
+		}
+	}
+	
+	/// Observe until the returned Disposable is deallocated
+	func observeReturningDisposable(_ handler: @escaping (T) -> Void) -> Disposable {
 		let observer = Observer(receive: handler)
 		observers.append(observer)
 		observer.receive(value)
