@@ -335,11 +335,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		strippenRefresher.didUpdate = { [weak self] oldValue, newValue in
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
-		
-		// Relatively important as user could be waiting for new strippen after launching the app.
-		DispatchQueue.global(qos: .userInitiated).async {
-			self.strippenRefresher.load()
-		}
+		strippenRefresher.load()
 	}
 
 	func setupConfigNotificationManager() {
