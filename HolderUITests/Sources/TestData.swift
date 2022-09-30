@@ -122,7 +122,7 @@ final class TestData {
 	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999992156", name: "de Heuvel, Pieter", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
 	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "899991279", birthDate: "1960-01-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
 	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", birthDate: "1960-02-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
-	static let vacJ1DifferentBirthYearReplaces = TestPerson(bsn: "899991292", birthDate: "1970-01-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth year, replaces setup
+	static let vacJ1DifferentBirthYearMerges = TestPerson(bsn: "899991292", birthDate: "1970-01-01", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // 1 janssen different birth year, merges with setup
 	static let vacJ1DifferentEverythingReplaces = TestPerson(bsn: "999991723", name: "de Heuvel, Pieter", birthDate: "1970-02-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name and birthdate, replaces setup
 	
 	// Vaccinations - around 18
