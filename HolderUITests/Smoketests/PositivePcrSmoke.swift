@@ -21,8 +21,7 @@ class PositivePcrSmoke: BaseTest {
 		let person = TestData.posPcrP1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForInternationalVaccinationAndRecoveryCertificate()
 		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -37,7 +36,7 @@ class PositivePcrSmoke: BaseTest {
 		let person = TestData.posPcrP2
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -50,7 +49,7 @@ class PositivePcrSmoke: BaseTest {
 		let person = TestData.posPcrP3
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -63,7 +62,7 @@ class PositivePcrSmoke: BaseTest {
 		let person = TestData.posPcrJ1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -76,7 +75,7 @@ class PositivePcrSmoke: BaseTest {
 		let person = TestData.posPcrP1M1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -89,7 +88,7 @@ class PositivePcrSmoke: BaseTest {
 		let person = TestData.posPcrP2M1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)

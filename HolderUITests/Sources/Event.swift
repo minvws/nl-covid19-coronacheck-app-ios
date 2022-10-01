@@ -18,6 +18,17 @@ open class Event {
 	let dcc: String?
 	let couplingCode: String?
 	
+	var eventCertificate: String {
+		switch self.type {
+			case .vaccination:
+				return "Vaccinatiebewijs"
+			case .positiveTest:
+				return "Herstelbewijs"
+			case .negativeTest:
+				return "Testbewijs"
+		}
+	}
+	
 	var internationalEventCertificate: String {
 		switch self.type {
 			case .vaccination:

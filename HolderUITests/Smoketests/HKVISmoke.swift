@@ -5,8 +5,6 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-
 class DccValidVac2of2NL: BaseTest {
 	
 	let vaccination = TestData.validVac2of2NL

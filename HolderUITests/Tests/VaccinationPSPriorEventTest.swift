@@ -5,19 +5,20 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class VaccinationPersonalStatementTest: BaseTest {
+class VaccinationPSPriorEventTest: BaseTest {
 	
-	func test_vacP2PersonalStatement() {
-		let person = TestData.vacP2PersonalStatement
+	func test_vacP1PSPriorEvent() {
+		let person = TestData.vacP1PSPriorEvent
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
+		assertCertificateIsOnlyValidInternationally()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
-	func test_vacJ1PersonalStatement() {
-		let person = TestData.vacJ1PersonalStatement
+	func test_vacP2PSPriorEventBoth() {
+		let person = TestData.vacP2PSPriorEventBoth
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
@@ -25,21 +26,12 @@ class VaccinationPersonalStatementTest: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
-	func test_vacM1PersonalStatement() {
-		let person = TestData.vacM1PersonalStatement
+	func test_vacP2PSPriorEventFirst() {
+		let person = TestData.vacP2PSPriorEventFirst
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
-	}
-	
-	func test_vacM3PersonalStatement() {
-		let person = TestData.vacM3PersonalStatement
-		addVaccinationCertificate(for: person.bsn)
-		addRetrievedCertificateToApp()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 }

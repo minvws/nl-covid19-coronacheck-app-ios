@@ -29,8 +29,8 @@ class VaccinationTest: BaseTest {
 		let person = TestData.vacM1
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		
 		assertCertificateIsOnlyValidInternationally()
+		
 		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}

@@ -286,7 +286,10 @@ targetTemplates:
     type: bundle.ui-testing
     dependencies:
       - target: Holder
-    
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+
 # - Targets
 
 targets:

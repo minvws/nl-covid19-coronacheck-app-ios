@@ -13,7 +13,7 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posPcrBeforeP1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -26,7 +26,7 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posPcrBeforeP2
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -39,7 +39,7 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posPcrBeforeJ1
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -52,7 +52,7 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posPcrBeforeM2
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
-		assertCombinedVaccinationAndRecoveryRetrieval()
+		assertHintForVaccinationAndRecoveryCertificate()
 		
 		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -68,7 +68,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertPositiveTestResultNotValidAnymore()
-		assertNoCertificateCouldBeCreatedIn0G()
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
