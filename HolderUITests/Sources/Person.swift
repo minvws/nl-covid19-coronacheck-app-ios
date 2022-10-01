@@ -13,15 +13,11 @@ class Person {
 	let birthDate: Date
 	
 	init(
-		bsn: String?,
-		name: String,
-		birthDate: Date) {
+		bsn: String? = nil,
+		name: String = "van Geer, Corrie",
+		birthDate: Date = Date("1960-01-01")) {
 			self.bsn = bsn
 			self.name = name
 			self.birthDate = birthDate
 		}
-	
-	convenience init(bsn: String? = nil) {
-		self.init(bsn: bsn, name: "van Geer, Corrie", birthDate: Date("1960-01-01"))
-	}
 }

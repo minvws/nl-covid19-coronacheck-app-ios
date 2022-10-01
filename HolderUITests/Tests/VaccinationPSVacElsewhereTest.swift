@@ -5,10 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-class VaccinationPersonalStatementSmoke: BaseTest {
+class VaccinationPSVacElsewhereTest: BaseTest {
 	
-	func test_vacP1PersonalStatement() {
-		let person = TestData.vacP1PersonalStatement
+	func test_vacP1PSVacElsewhere() {
+		let person = TestData.vacP1PSVacElsewhere
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
@@ -16,8 +16,17 @@ class VaccinationPersonalStatementSmoke: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
-	func test_vacP3PersonalStatement() {
-		let person = TestData.vacP3PersonalStatement
+	func test_vacP2PSVacElsewhereBoth() {
+		let person = TestData.vacP2PSVacElsewhereBoth
+		addVaccinationCertificate(for: person.bsn)
+		addRetrievedCertificateToApp()
+		
+		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
+		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
+	}
+	
+	func test_vacP2PSVacElsewhereFirst() {
+		let person = TestData.vacP2PSVacElsewhereFirst
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
