@@ -629,6 +629,13 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Boostervaccinatie toevoegen";
 "holder_expiredDomesticVaccinationModal_title" = "Verlopen vaccinatiebewijs";
 "holder_fetchRemoteEvents_title" = "Gegevens ophalen";
+"holder_fuzzyMatching_onboarding_firstPage_body" = "Voor een betere veiligheid, moet je naam bij alle testen en vaccinaties op precies dezelfde manier zijn geschreven. Helaas is dit bij jou niet het geval. ";
+"holder_fuzzyMatching_onboarding_firstPage_title" = "Je naam is verschillend geschreven";
+"holder_fuzzyMatching_onboarding_secondPage_body" = "Kies straks één manier van schrijven voor je naam. Bij die naam horen vaccinatie- of testgegevens. Alle andere gegevens worden uit de app verwijderd. Mogelijk verdwijnen hiermee ook coronabewijzen.";
+"holder_fuzzyMatching_onboarding_secondPage_title" = "Er kunnen bewijzen verdwijnen";
+"holder_fuzzyMatching_onboarding_thirdPage_action" = "Bekijk gegevens";
+"holder_fuzzyMatching_onboarding_thirdPage_body" = "Zijn er bewijzen verdwenen? Laat je namen aanpassen door de plek waar je die vaccinatie of test hebt gehad. Zorg dat je naam altijd precies hetzelfde wordt geschreven.";
+"holder_fuzzyMatching_onboarding_thirdPage_title" = "Laat je gegevens aanpassen";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe (booster)vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "Je hebt te vaak geprobeerd je code in te vullen. Probeer het over 5 minuten opnieuw.";
 "holder_invaliddetailsremoved_alert_body" = "Er zijn ongeldige vaccinatie- of testgegevens van jou gevonden. Deze zijn uit de app verwijderd. Mogelijk zijn hierdoor ook bewijzen weggehaald.";

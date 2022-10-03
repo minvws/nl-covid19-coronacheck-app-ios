@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 protocol FuzzyMatchingFlowDelegate: AnyObject {
 	
@@ -27,6 +28,8 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	
 	var navigationController: UINavigationController
 	
+	var factory: FuzzyMatchingOnboardingFactoryProtocol
+	
 	private weak var delegate: FuzzyMatchingFlowDelegate?
 	
 	/// Initializer
@@ -35,9 +38,11 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	///   - delegate: the fuzzy matching flow delegate
 	init(
 		navigationController: UINavigationController,
+		factory: FuzzyMatchingOnboardingFactoryProtocol,
 		delegate: FuzzyMatchingFlowDelegate) {
 			
 			self.navigationController = navigationController
+			self.factory = factory
 			self.delegate = delegate
 		}
 	
@@ -57,7 +62,20 @@ final class FuzzyMatchingCoordinator: Coordinator {
 extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesToSeeOnboarding() {
-		// Todo
+		
+		let viewController = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: self,
+				pages: factory.pages,
+				itemsShouldShowWithFullWidthHeaderImage: true,
+				shouldShowWithVWSRibbon: false
+			),
+			allowsBackButton: true,
+			allowsCloseButton: false,
+			allowsNextButton: true
+		)
+		
+		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	func userWishesToSeeEventDetails() {
@@ -70,5 +88,13 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutWhy() {
 		// Todo
+	}
+}
+
+extension FuzzyMatchingCoordinator: PagedAnnouncementDelegate {
+	
+	func didFinishPagedAnnouncement() {
+		logInfo("FuzzyMatchingCoordinator - didFinishPagedAnnouncement")
+		delegate?.fuzzyMatchingFlowDidFinish()
 	}
 }

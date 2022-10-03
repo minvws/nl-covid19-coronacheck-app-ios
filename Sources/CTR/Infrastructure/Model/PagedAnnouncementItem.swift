@@ -29,4 +29,21 @@ struct PagedAnnoucementItem: Equatable {
 
 	/// The title of the primary "next" button (or `nil` for default)
 	var nextButtonTitle: String?
+	
+	internal init(
+		title: String,
+		content: String,
+		image: UIImage? = nil,
+		imageBackgroundColor: UIColor? = nil,
+		tagline: String? = nil,
+		step: Int,
+		nextButtonTitle: String? = nil) {
+		self.title = title
+		self.content = content
+		self.image = image
+		self.imageBackgroundColor = imageBackgroundColor
+		self.tagline = tagline
+		self.step = step
+		self.nextButtonTitle = nextButtonTitle
+	}
 }
