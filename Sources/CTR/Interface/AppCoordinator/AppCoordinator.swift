@@ -499,6 +499,9 @@ extension AppCoordinator {
 	}
 	
 	@objc private func onDiskFullNotification() {
+		// Prevent further notifications, as presenting .diskFull terminates the app
+		NotificationCenter.default.removeObserver(self, name: Notification.Name.diskFull, object: nil)
+		
 		popPresentedViewController {
 			let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
 			viewController.modalPresentationStyle = .fullScreen
