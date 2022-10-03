@@ -87,7 +87,16 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	}
 	
 	func userWishesMoreInfoAboutWhy() {
-		// Todo
+
+		let viewModel = BottomSheetContentViewModel(
+			content: Content(
+				title: L.holder_fuzzyMatching_why_title(),
+				body: L.holder_fuzzyMatching_why_body()
+			)
+		)
+		
+		let viewController = BottomSheetContentViewController(viewModel: viewModel)
+		presentAsBottomSheet(viewController)
 	}
 }
 

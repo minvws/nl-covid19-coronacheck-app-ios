@@ -86,6 +86,25 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		// Then
 		expect(consumed) == false
 	}
+	
+	func test_userWishesMoreInfoAboutWhy() {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutWhy()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel: BottomSheetContentViewModel? = ((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel
+		
+		expect(viewModel?.content.title) == L.holder_fuzzyMatching_why_title()
+		expect(viewModel?.content.body) == L.holder_fuzzyMatching_why_body()
+	}
 }
 
 class FuzzyMatchingFlowSpy: FuzzyMatchingFlowDelegate {
