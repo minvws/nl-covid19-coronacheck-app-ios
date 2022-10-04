@@ -33,7 +33,7 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
-				reason: "The reason",
+				reason: RemovedEventModel.blockedEvent,
 				wallet: WalletModel.createTestWallet(managedContext: context)!,
 				managedContext: context
 			)
@@ -49,9 +49,38 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
  
 		// Assert
 		expect(didUpdateResult).to(haveCount(1))
-		expect(didUpdateResult?.first?.reason) == "The reason"
+		expect(didUpdateResult?.first?.reason) == RemovedEventModel.blockedEvent
 		expect(didUpdateResult?.first?.eventDate) == now
 		expect(didUpdateResult?.first?.type) == .vaccination
+	}
+	
+	func test_existingRemovedEvents_shouldNotArriveInCallback() throws {
+		
+		// Arrange
+		let context = environmentSpies.dataStoreManager.managedObjectContext()
+		var blockedEvent: RemovedEvent?
+		
+		context.performAndWait {
+			
+			blockedEvent = RemovedEventModel.create(
+				type: EventMode.vaccination,
+				eventDate: now,
+				reason: RemovedEventModel.identityMismatch,
+				wallet: WalletModel.createTestWallet(managedContext: context)!,
+				managedContext: context
+			)
+		}
+
+		// Act
+		sut = HolderDashboardBlockedEventsDatasource()
+
+		var didUpdateResult: [BlockedEventItem]?
+		sut.didUpdate = { blockedEventItem in
+			didUpdateResult = blockedEventItem
+		}
+ 
+		// Assert
+		expect(didUpdateResult).to(haveCount(0))
 	}
 	
 	func test_nonexistingBlockedEvents_arriveInCallback() throws {
@@ -73,7 +102,7 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
-				reason: "The reason",
+				reason: RemovedEventModel.blockedEvent,
 				wallet: WalletModel.createTestWallet(managedContext: context)!,
 				managedContext: context
 			)
@@ -81,7 +110,7 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
  
 		// Assert
 		expect(didUpdateResult).toEventually(haveCount(1))
-		expect(didUpdateResult?.first?.reason).toEventually(equal("The reason"))
+		expect(didUpdateResult?.first?.reason).toEventually(equal(RemovedEventModel.blockedEvent))
 		expect(didUpdateResult?.first?.eventDate).toEventually(equal(now))
 		expect(didUpdateResult?.first?.type).toEventually(equal(.vaccination))
 	}

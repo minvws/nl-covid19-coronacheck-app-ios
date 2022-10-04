@@ -102,7 +102,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEvent) == false
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 	}
 
@@ -132,9 +132,9 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type) == .vaccination
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason) == RemovedEventModel.blockedEvent
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type) == .vaccination
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason) == RemovedEventModel.blockedEvent
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
