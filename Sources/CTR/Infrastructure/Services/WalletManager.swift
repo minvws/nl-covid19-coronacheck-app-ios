@@ -264,7 +264,7 @@ class WalletManager: WalletManaging {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 
-				if let blockedEvents = wallet.blockedEvents {
+				if let blockedEvents = wallet.removedEvents {
 					for case let removedEvent as RemovedEvent in blockedEvents.allObjects where removedEvent.reason == reason {
 							removedEvent.delete(context: context)
 						}
