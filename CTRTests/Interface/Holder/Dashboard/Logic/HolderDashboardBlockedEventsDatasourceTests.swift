@@ -26,11 +26,11 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 		
 		// Arrange
  		let context = environmentSpies.dataStoreManager.managedObjectContext()
-		var blockedEvent: BlockedEvent?
+		var blockedEvent: RemovedEvent?
 		
 		context.performAndWait {
 			
-			blockedEvent = BlockedEventModel.create(
+			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: "The reason",
@@ -66,11 +66,11 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 
 		// Act
 		let context = environmentSpies.dataStoreManager.managedObjectContext()
-		var blockedEvent: BlockedEvent?
+		var blockedEvent: RemovedEvent?
 		
 		context.performAndWait {
 			
-			blockedEvent = BlockedEventModel.create(
+			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: "The reason",

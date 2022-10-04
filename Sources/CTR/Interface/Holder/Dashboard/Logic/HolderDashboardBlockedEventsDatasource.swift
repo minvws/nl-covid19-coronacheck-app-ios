@@ -21,13 +21,14 @@ class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEv
 		}
 	}
 	
-	private let frc: NSFetchedResultsController<BlockedEvent>
+	private let frc: NSFetchedResultsController<RemovedEvent>
 	
 	override init() {
-		let fetchRequest = NSFetchRequest<BlockedEvent>(entityName: "BlockedEvent")
-		fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \BlockedEvent.type, ascending: true)]
+		let fetchRequest = NSFetchRequest<RemovedEvent>(entityName: RemovedEventModel.entityName)
+		fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \RemovedEvent.type, ascending: true)]
+		fetchRequest.predicate = NSPredicate(format: "reason == %@", RemovedEventModel.blockedEvent)
 		
-		frc = NSFetchedResultsController<BlockedEvent>(
+		frc = NSFetchedResultsController<RemovedEvent>(
 			fetchRequest: fetchRequest,
 			managedObjectContext: Current.dataStoreManager.managedObjectContext(),
 			sectionNameKeyPath: nil,

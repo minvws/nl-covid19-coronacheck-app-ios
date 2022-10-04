@@ -275,7 +275,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response) {
 		
 		// The items which the backend has indicated are blocked (if any):
-		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovedEventModel.blockedEvent } ?? []
 		let allEventGroups = Current.walletManager.listEventGroups()
 	
 		guard blockItems.isNotEmpty else { return }
@@ -284,7 +284,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 		// Match blockItems (`blobExpiry`) to relevant eventGroups so that a BlockedEvent can be created & persisted:
 		blockItems.combinedWith(matchingEventGroups: allEventGroups).forEach { blockItem, eventGroup in
-			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+			RemovedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
 		}
 	}
 

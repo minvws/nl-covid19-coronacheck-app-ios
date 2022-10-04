@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21279" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Credential" representedClassName="Credential" syncable="YES" codeGenerationType="class">
+        <attribute name="data" attributeType="Binary"/>
+        <attribute name="expirationTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="validFrom" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="version" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="credentials" inverseEntity="GreenCard"/>
+    </entity>
+    <entity name="EventGroup" representedClassName="EventGroup" syncable="YES" codeGenerationType="class">
+        <attribute name="expiryDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="jsonData" attributeType="Binary"/>
+        <attribute name="providerIdentifier" attributeType="String"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="wallet" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="eventGroups" inverseEntity="Wallet"/>
+    </entity>
+    <entity name="GreenCard" representedClassName="GreenCard" syncable="YES" codeGenerationType="class">
+        <attribute name="type" attributeType="String"/>
+        <relationship name="credentials" toMany="YES" deletionRule="Cascade" destinationEntity="Credential" inverseName="greenCard" inverseEntity="Credential"/>
+        <relationship name="origins" toMany="YES" deletionRule="Cascade" destinationEntity="Origin" inverseName="greenCard" inverseEntity="Origin"/>
+        <relationship name="wallet" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="greenCards" inverseEntity="Wallet"/>
+    </entity>
+    <entity name="Origin" representedClassName="Origin" syncable="YES" codeGenerationType="class">
+        <attribute name="doseNumber" optional="YES" attributeType="Integer 16" usesScalarValueType="NO"/>
+        <attribute name="eventDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expirationTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String"/>
+        <attribute name="validFromDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="origins" inverseEntity="GreenCard"/>
+        <relationship name="hints" toMany="YES" deletionRule="Cascade" destinationEntity="OriginHint" inverseName="origin" inverseEntity="OriginHint"/>
+    </entity>
+    <entity name="OriginHint" representedClassName="OriginHint" syncable="YES" codeGenerationType="class">
+        <attribute name="hint" attributeType="String"/>
+        <relationship name="origin" maxCount="1" deletionRule="Nullify" destinationEntity="Origin" inverseName="hints" inverseEntity="Origin"/>
+    </entity>
+    <entity name="RemovedEvent" representedClassName="RemovedEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="eventDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="reason" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="wallet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="blockedEvents" inverseEntity="Wallet"/>
+    </entity>
+    <entity name="Wallet" representedClassName="Wallet" syncable="YES" codeGenerationType="class">
+        <attribute name="label" attributeType="String"/>
+        <relationship name="blockedEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RemovedEvent" inverseName="wallet" inverseEntity="RemovedEvent"/>
+        <relationship name="eventGroups" toMany="YES" deletionRule="Cascade" destinationEntity="EventGroup" inverseName="wallet" inverseEntity="EventGroup"/>
+        <relationship name="greenCards" toMany="YES" deletionRule="Cascade" destinationEntity="GreenCard" inverseName="wallet" inverseEntity="GreenCard"/>
+    </entity>
+</model>
