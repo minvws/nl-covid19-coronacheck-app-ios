@@ -9,18 +9,21 @@ import Foundation
 import CoreData
 import Transport
 
-class BlockedEventModel {
+class RemovedEventModel {
 	
-	static let entityName = "BlockedEvent"
+	static let entityName = "RemovedEvent"
+	
+	static let blockedEvent = "event_blocked"
+	static let identityMismatch = "identity_mismatched"
 	
 	@discardableResult class func create(
 		type: EventMode,
 		eventDate: Date,
 		reason: String,
 		wallet: Wallet,
-		managedContext: NSManagedObjectContext) -> BlockedEvent? {
+		managedContext: NSManagedObjectContext) -> RemovedEvent? {
 			
-			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? BlockedEvent else {
+			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? RemovedEvent else {
 				return nil
 			}
 			
@@ -33,7 +36,7 @@ class BlockedEventModel {
 		}
 }
 
-extension BlockedEvent {
+extension RemovedEvent {
 	
 	func delete(context: NSManagedObjectContext) {
 		
@@ -41,7 +44,7 @@ extension BlockedEvent {
 	}
 	
 	@discardableResult
-	static func createAndPersist(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup) -> BlockedEvent? {
+	static func createAndPersist(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup) -> RemovedEvent? {
 		guard let jsonData = existingEventGroup.jsonData,
 			  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
 			  let credentialData = object.credential.data(using: .utf8),
@@ -54,7 +57,7 @@ extension BlockedEvent {
 			return DateFormatter.Event.iso8601.date(from: eventDate)
 		}
 		
-		return Current.walletManager.storeBlockedEvent(
+		return Current.walletManager.storeRemovedEvent(
 			type: eventMode,
 			eventDate: eventDate ?? .distantPast,
 			reason: blockItem.reason

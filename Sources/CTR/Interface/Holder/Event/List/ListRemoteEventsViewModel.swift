@@ -268,7 +268,7 @@ class ListRemoteEventsViewModel {
 		}
 	
 		// The items which the backend has indicated are blocked:
-		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovedEventModel.blockedEvent } ?? []
 		
 		// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 		// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
@@ -279,7 +279,7 @@ class ListRemoteEventsViewModel {
 			Current.userSettings.hasShownBlockedEventsAlert = false
 		}
 		blockItemsForEventsNotBeingAdded.forEach { blockItem, eventGroup in
-			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+			RemovedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
 		}
 		
 		// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:

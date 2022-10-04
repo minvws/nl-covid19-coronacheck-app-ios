@@ -45,7 +45,7 @@ protocol WalletManaging: AnyObject {
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 	
 	@discardableResult
-	func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent?
+	func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent?
 
 	/// List all the event groups
 	/// - Returns: all the event groups
@@ -151,9 +151,9 @@ class WalletManager: WalletManaging {
 		dataStoreManager.delete(objectID)
 	}
 	
-	@discardableResult func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent? {
+	@discardableResult func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
 
-		var blockedEvent: BlockedEvent?
+		var blockedEvent: RemovedEvent?
 		let context = dataStoreManager.managedObjectContext()
 		
 		context.performAndWait {
@@ -162,7 +162,7 @@ class WalletManager: WalletManaging {
 				return
 			}
 			
-			blockedEvent = BlockedEventModel.create(
+			blockedEvent = RemovedEventModel.create(
 				type: type,
 				eventDate: eventDate,
 				reason: reason,
@@ -248,17 +248,26 @@ class WalletManager: WalletManaging {
 	}
 
 	func removeExistingBlockedEvents() {
-
+		
+		removeExistingRemovedEvents(reason: RemovedEventModel.blockedEvent)
+	}
+	
+	func removeExistingIdentityMismatchedEvents() {
+		
+		removeExistingRemovedEvents(reason: RemovedEventModel.identityMismatch)
+	}
+	
+	func removeExistingRemovedEvents(reason: String) {
+		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 
-				if let blockedEvents = wallet.blockedEvents {
-					for case let blockedEvent as BlockedEvent in blockedEvents.allObjects {
-
-						blockedEvent.delete(context: context)
-					}
+				if let blockedEvents = wallet.removedEvents {
+					for case let removedEvent as RemovedEvent in blockedEvents.allObjects where removedEvent.reason == reason {
+							removedEvent.delete(context: context)
+						}
 					dataStoreManager.save(context)
 				}
 			}
