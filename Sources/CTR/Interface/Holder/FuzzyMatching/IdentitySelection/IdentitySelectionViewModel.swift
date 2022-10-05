@@ -15,14 +15,23 @@ enum IdentitySelectionState {
 	case warning(String)
 }
 
-struct IdentityObject {
+class IdentityObject {
+	 
+	init(blobIds: [String], name: String, content: String, onShowDetails: @escaping () -> Void, onSelectIdentity: @escaping () -> Void, state: Observable<IdentitySelectionState>) {
+		self.blobIds = blobIds
+		self.name = name
+		self.content = content
+		self.onShowDetails = onShowDetails
+		self.onSelectIdentity = onSelectIdentity
+		self.state = state
+	}
 	
 	var blobIds: [String]
 	var name: String
 	var content: String
-	var showDetails: () -> Void
-	var onSelect: () -> Void
-	var state: IdentitySelectionState
+	var onShowDetails: () -> Void
+	var onSelectIdentity: () -> Void
+	var state: Observable<IdentitySelectionState>
 }
 
 class IdentitySelectionViewModel {
@@ -31,6 +40,7 @@ class IdentitySelectionViewModel {
 	let message = Observable<String>(value: L.holder_identitySelection_message())
 	let whyTitle = Observable<String>(value: L.holder_identitySelection_why())
 	let actionTitle = Observable<String>(value: L.holder_identitySelection_actionTitle())
+	var errorMessage = Observable<String?>(value: nil)
 	var objects = Observable<[IdentityObject]>(value: [])
 	private var selectedBlobIds = [String]()
 	
@@ -49,48 +59,35 @@ class IdentitySelectionViewModel {
 		//			logInfo("EG: \($0.uniqueIdentifier)")
 		//		}
 		
-		objects.value = [
-			IdentityObject(
-				blobIds: ["1"],
-				name: "Rolus",
-				content: "2 vaccinaties",
-				showDetails: {
-					logInfo("Pressed details")
-				}, onSelect: {
-					self.selectedBlobIds = ["1"]
-				}, state: .selected
-			),
-			IdentityObject(
-				blobIds: ["2"],
-				name: "Rolus 2",
-				content: "2 testuitslagen",
-				showDetails: {
-					logInfo("Pressed details")
-				}, onSelect: {
-					self.selectedBlobIds = ["2"]
-				}, state: .unselected
-			),
-			IdentityObject(
-				blobIds: ["3"],
-				name: "Rolus 3",
-				content: "2 vaccinaties",
-				showDetails: {
-					logInfo("Pressed details")
-				}, onSelect: {
-					self.selectedBlobIds = ["3"]
-				}, state: .selectionError
-			),
-			IdentityObject(
-				blobIds: ["4"],
-				name: "Rolus 4",
-				content: "1 vaccinatie",
-				showDetails: {
-					logInfo("Pressed details")
-				}, onSelect: {
-					self.selectedBlobIds = ["4"]
-				}, state: .warning(L.holder_identitySelection_error_willBeRemoved())
-			)
-		]
+		var identities = [IdentityObject]()
+		
+		for index in 1...4 {
+		
+			let identity = IdentityObject(blobIds: ["\(index)"], name: "Rolus \(index)", content: "Vaccinatie content", onShowDetails: {
+				logInfo("show details")
+			}, onSelectIdentity: {
+				self.onSelectIdentity(["\(index)"])
+			}, state: Observable<IdentitySelectionState>(value: .unselected))
+			
+			identities.append(identity)
+		}
+		
+		objects.value = identities
+	}
+	
+	private func onSelectIdentity(_ blobIds: [String]) {
+		
+		logInfo("onSelectIdentity: \(blobIds)")
+		self.selectedBlobIds = blobIds
+		objects.value.forEach {
+			if $0.blobIds == blobIds {
+				$0.state.value = .selected
+			} else {
+				$0.state.value = .warning(L.holder_identitySelection_error_willBeRemoved())
+			}
+		}
+		
+		errorMessage.value = nil
 	}
 	
 	func userWishedToReadMore() {
@@ -101,13 +98,19 @@ class IdentitySelectionViewModel {
 	func userWishesToSaveEvents() {
 		
 		logInfo("userWishesToSaveEvents")
+		
+		guard selectedBlobIds.isNotEmpty else {
+		
+			objects.value.forEach { $0.state.value = .selectionError }
+			errorMessage.value = L.holder_identitySelection_error_makeAChoice()
+			return
+		}
+		
 		coordinatorDelegate?.userHasFinishedTheFlow()
 	}
 }
 
 /*
-
- holder_identitySelection_error_makeAChoice
  holder_identitySelection_error_willBeRemoved
 
  general_vaccination [existing entry in lokalize]
@@ -122,7 +125,7 @@ class IdentitySelectionViewModel {
  
  */
 
-class IdentitySelectionViewController: GenericViewController<IdentitySelectionView, IdentitySelectionViewModel> {
+class IdentitySelectionViewController: TraitWrappedGenericViewController<IdentitySelectionView, IdentitySelectionViewModel> {
 	
 	override func viewDidLoad() {
 		
@@ -132,6 +135,7 @@ class IdentitySelectionViewController: GenericViewController<IdentitySelectionVi
 		viewModel.message.observe { [weak self] in self?.sceneView.header = $0 }
 		viewModel.actionTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.whyTitle.observe { [weak self] in self?.sceneView.moreButtonTitle = $0 }
+		viewModel.errorMessage.observe { [weak self] in self?.sceneView.errorMessage = $0 }
 		
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.userWishesToSaveEvents()
@@ -147,7 +151,8 @@ class IdentitySelectionViewController: GenericViewController<IdentitySelectionVi
 				IdentitySelectionControlView.makeView(
 						title: rowModel.name,
 						content: rowModel.content,
-						action: rowModel.showDetails,
+						selectAction: rowModel.onSelectIdentity,
+						detailsAction: rowModel.onShowDetails,
 						state: rowModel.state
 					)
 				}
@@ -157,26 +162,31 @@ class IdentitySelectionViewController: GenericViewController<IdentitySelectionVi
 }
 
 extension IdentitySelectionControlView {
-
-	/// Create a event item view
+	
+	/// Create a IdentitySelectionControl view
 	/// - Parameters:
 	///   - title: the title of the view
-	///   - content: the sub title of the view
-	///   - action: the command to execute when tapped
-	/// - Returns: an event item view
+	///   - content: the content of the view
+	///   - selectAction: the action when the view is selected
+	///   - detailsAction: the action when the details button is pressed
+	///   - state: the state of the button
+	/// - Returns: IdentitySelectionControlView
 	fileprivate static func makeView(
 		title: String,
 		content: String,
-		action: (() -> Void)?,
-		state: IdentitySelectionState) -> IdentitySelectionControlView {
-
+		selectAction: (() -> Void)?,
+		detailsAction: (() -> Void)?,
+		state: Observable<IdentitySelectionState>) -> IdentitySelectionControlView {
+		
 		let view = IdentitySelectionControlView()
 		view.isUserInteractionEnabled = true
 		view.title = title
 		view.content = content
 		view.actionButtonTitle = L.general_details()
-		view.actionButtonCommand = action
-		view.state = state
+		view.actionButtonCommand = detailsAction
+		view.selectionButtonCommand = selectAction
+		
+		state.observe { view.state = $0 }
 		return view
 	}
 }

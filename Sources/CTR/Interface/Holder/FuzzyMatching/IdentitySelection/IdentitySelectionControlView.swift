@@ -143,7 +143,6 @@ class IdentitySelectionControlView: BaseView {
 		actionButtonCommand?()
 	}
 	
-	
 	@objc private func selectionButtonTapped() {
 		
 		selectionButtonCommand?()

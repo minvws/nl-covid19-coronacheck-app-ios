@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 class IdentitySelectionView: BaseView {
 	
@@ -73,6 +74,8 @@ class IdentitySelectionView: BaseView {
 		return Button(style: .textLabelBlue)
 	}()
 	
+	private let errorView = ErrorView()
+	
 	let footerButtonView: FooterButtonView = {
 		
 		let view = FooterButtonView()
@@ -94,6 +97,8 @@ class IdentitySelectionView: BaseView {
 			let translatedOffset = scrollView.translatedBottomScrollOffset
 			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
 		}
+		
+		footerButtonView.buttonStackView.alignment = .center
 	}
 	
 	override func setupViewHierarchy() {
@@ -107,6 +112,8 @@ class IdentitySelectionView: BaseView {
 		scrollView.addSubview(separatorView)
 		scrollView.addSubview(selectionStackView)
 		scrollView.addSubview(moreButton)
+		
+		footerButtonView.buttonStackView.insertArrangedSubview(errorView, at: 0)
 	}
 	
 	override func setupViewConstraints() {
@@ -256,11 +263,12 @@ class IdentitySelectionView: BaseView {
 		}
 	}
 	
-//	var errorMessage: String? {
-//		didSet {
-//			errorView.error = errorMessage
-//		}
-//	}
+	var errorMessage: String? {
+		didSet {
+			errorView.error = errorMessage
+			errorView.isHidden = errorMessage == nil // Hide if errorMessage is nil
+		}
+	}
 	
 	var moreButtonTitle: String? {
 		didSet {
@@ -269,14 +277,6 @@ class IdentitySelectionView: BaseView {
 	}
 	
 	var readMoreCommand: (() -> Void)?
-	
-//	var hasErrorState: Bool? {
-//		didSet {
-//			guard let hasError = hasErrorState else { return }
-//			errorView.isHidden = !hasError
-//			riskSettingControlsView.hasError = hasError
-//		}
-//	}
 	
 	func addIdentitySelectionControlView(_ controlView: IdentitySelectionControlView) {
 		

@@ -51,8 +51,8 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	/// Start the scene
 	func start() {
 		
-//		userWishesToSeeOnboarding()
-		userWishesToSeeEvents()
+		userWishesToSeeOnboarding()
+//		userWishesToSeeEvents()
 	}
 	
 	// MARK: - Universal Link handling
