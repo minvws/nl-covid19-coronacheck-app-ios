@@ -20,6 +20,8 @@ protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 	func userWishesToSeeEvents()
 	
 	func userWishesMoreInfoAboutWhy()
+	
+	func userHasFinishedTheFlow()
 }
 
 final class FuzzyMatchingCoordinator: Coordinator {
@@ -49,7 +51,8 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	/// Start the scene
 	func start() {
 		
-		userWishesToSeeOnboarding()
+//		userWishesToSeeOnboarding()
+		userWishesToSeeEvents()
 	}
 	
 	// MARK: - Universal Link handling
@@ -83,11 +86,22 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	}
 	
 	func userWishesToSeeEvents() {
-		// Todo
+		
+		let blobIds = [["/EventGroup/p1", "/EventGroup/p3"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5"]]
+		
+		let viewModel = IdentitySelectionViewModel(coordinatorDelegate: self, blobIds: blobIds)
+		let viewController = IdentitySelectionViewController(viewModel: viewModel)
+		
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userHasFinishedTheFlow() {
+		
+		delegate?.fuzzyMatchingFlowDidFinish()
 	}
 	
 	func userWishesMoreInfoAboutWhy() {
-
+		
 		let viewModel = BottomSheetContentViewModel(
 			content: Content(
 				title: L.holder_fuzzyMatching_why_title(),
@@ -104,6 +118,7 @@ extension FuzzyMatchingCoordinator: PagedAnnouncementDelegate {
 	
 	func didFinishPagedAnnouncement() {
 		logInfo("FuzzyMatchingCoordinator - didFinishPagedAnnouncement")
-		delegate?.fuzzyMatchingFlowDidFinish()
+		
+		userWishesToSeeEvents()
 	}
 }

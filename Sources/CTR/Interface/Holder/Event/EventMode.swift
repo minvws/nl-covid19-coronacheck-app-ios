@@ -31,7 +31,7 @@ enum EventMode: Equatable {
 			case .paperflow: return L.generalPaperflow()
 			case .vaccinationAndPositiveTest: return L.generalPositiveTest()
 			case .recovery: return L.general_recoverycertificate()
-			case .test: return L.generalTestresult()
+			case .test: return L.general_testresult()
 			case .vaccination: return L.general_vaccination()
 			case .vaccinationassessment: return L.general_visitorPass()
 		}
