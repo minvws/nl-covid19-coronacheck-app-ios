@@ -44,7 +44,6 @@
 "general.recoverydate" = "recovery date";
 "general.retry" = "Try again";
 "general.testdate" = "test date";
-"general.testresult" = "test result";
 "general.testtype" = "Test type";
 "general.uptoandincluding" = "until";
 "general.url.link" = "Link";
@@ -52,6 +51,7 @@
 /* MARK: - General */
 "general_cancel" = "Cancel";
 "general_delete" = "Remove data";
+"general_details" = "Details";
 "general_diskFull_body" = "It didn’t work because your phone’s storage is full. Please free up space on your phone and retry.";
 "general_diskFull_title" = "Your storage is full";
 "general_menu" = "Menu";
@@ -69,6 +69,8 @@
 "general_scannedQRCode" = "scanned QR code";
 "general_testcertificate" = "test certificate";
 "general_testcertificate_0G" = "International test certificate";
+"general_testresult" = "test result";
+"general_testresults" = "test results";
 "general_toMyOverview" = "To my certificates";
 "general_unrecoverableError_email_body" = "This email was generated automatically, containing the information we need. We ask you not to add additional information. With this email being sent, we will receive your email address along with information about the technical issue. These details will be deleted as soon as possible.\n\nThis message is intended for the CoronaCheck development team. The issue will be solved as soon as possible.\n\nAn unrecoverable error was caught in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nError details:\n	Message: %@\n	More Info: %@\n-----------";
 "general_unrecoverableError_email_subject" = "CoronaCheck problem report (%@ %@)";
@@ -81,6 +83,7 @@
 "general_vaccinationAssessment" = "vaccination approval";
 "general_vaccinationcertificate" = "vaccination certificate";
 "general_vaccinationcertificate_0G" = "International vaccination certificate";
+"general_vaccinations" = "vaccinations";
 "general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
