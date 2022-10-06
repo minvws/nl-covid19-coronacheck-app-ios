@@ -48,6 +48,7 @@
 "general.uptoandincluding" = "until";
 "general.url.link" = "Link";
 "general.vaccinationdate" = "Vaccination date";
+"general_and" = "and";
 /* MARK: - General */
 "general_cancel" = "Cancel";
 "general_delete" = "Remove data";
@@ -81,6 +82,7 @@
 "general_unrecoverableError_sendCrashReport_title" = "App error";
 "general_vaccination" = "vaccination";
 "general_vaccinationAssessment" = "vaccination approval";
+"general_vaccinationAssessments" = "vaccination approvals";
 "general_vaccinationcertificate" = "vaccination certificate";
 "general_vaccinationcertificate_0G" = "International vaccination certificate";
 "general_vaccinations" = "vaccinations";

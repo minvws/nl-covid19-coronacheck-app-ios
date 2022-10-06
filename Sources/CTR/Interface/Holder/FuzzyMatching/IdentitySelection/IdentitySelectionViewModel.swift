@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Shared
+import Transport
 
 enum IdentitySelectionState {
 	case selected
@@ -50,32 +51,32 @@ class IdentitySelectionViewModel {
 	
 	weak private var coordinatorDelegate: FuzzyMatchingCoordinatorDelegate?
 	
-	init(coordinatorDelegate: FuzzyMatchingCoordinatorDelegate, blobIds: [[String]]) {
+	init(coordinatorDelegate: FuzzyMatchingCoordinatorDelegate, nestedBlobIds: [[String]]) {
 		
 		self.coordinatorDelegate = coordinatorDelegate
-		self.populateIdentityObjects(blobIds: blobIds)
+		self.populateIdentityObjects(nestedBlobIds: nestedBlobIds)
 	}
 	
-	private func populateIdentityObjects( blobIds: [[String]]) {
-		
-		//		let eventGroups = Current.walletManager.listEventGroups()
-		//		eventGroups.forEach {
-		//			logInfo("EG: \($0.uniqueIdentifier)")
-		//		}
+	private func populateIdentityObjects(nestedBlobIds: [[String]]) {
 		
 		var identities = [IdentityObject]()
 		
-		for index in 1...4 {
-		
-			let identity = IdentityObject(blobIds: ["\(index)"], name: "Rolus \(index)", content: "Vaccinatie content", onShowDetails: {
-				logInfo("show details")
-			}, onSelectIdentity: {
-				self.onSelectIdentity(["\(index)"])
-			}, state: Observable<IdentitySelectionState>(value: .unselected))
-			
-			identities.append(identity)
+		let tuples = IdentitySelectionDataSource().populate(nestedBlobIds: nestedBlobIds)
+		for identity in tuples {
+			let object = IdentityObject(
+				blobIds: identity.blobIds,
+				name: identity.name,
+				content: identity.content,
+				onShowDetails: {
+					logInfo("show details")
+				},
+				onSelectIdentity: {
+					self.onSelectIdentity(identity.blobIds)
+				},
+				state: Observable<IdentitySelectionState>(value: .unselected)
+			)
+			identities.append(object)
 		}
-		
 		objects.value = identities
 	}
 	
@@ -127,7 +128,6 @@ class IdentitySelectionViewModel {
 }
 
 /*
- holder_identitySelection_error_willBeRemoved
 
  general_vaccination [existing entry in lokalize]
  general_vaccinations
@@ -135,3 +135,145 @@ class IdentitySelectionViewModel {
  general_testresults
  
  */
+
+class IdentitySelectionDataSource {
+	
+	func populate(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, content: String)] {
+		
+		var result = [(blobIds: [String], name: String, content: String)]()
+		
+		nestedBlobIds.forEach { blobIds in
+			
+			var fullName: String?
+			var vaccinationCount = 0
+			var testCount = 0
+			var assessmentCount = 0
+			
+			if let primaryId = blobIds.first, let identity = getIdentity(primaryId) {
+				fullName = identity.fullName
+				logInfo("Name: \(identity.fullName)")
+			}
+			
+			blobIds.forEach { blobId in
+				let count = getEventCount(blobId)
+				vaccinationCount += count.vaccinationCount
+				testCount += count.testCount
+				assessmentCount += count.assessmentCount
+			}
+			
+			if let fullName {
+				result.append(
+					(blobIds: blobIds,
+					 name: fullName,
+					 content: getEventOverview(
+						vaccinationCount: vaccinationCount,
+						testCount: testCount,
+						assessmentCount: assessmentCount)
+					)
+				)
+			}
+		}
+		
+		return result
+	}
+	
+	func getIdentity(_ uniqueIdentifier: String) -> EventFlow.Identity? {
+		
+		var result: EventFlow.Identity?
+		let eventGroups = Current.walletManager.listEventGroups()
+		if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
+			
+			guard let jsonData = eventGroup.jsonData else {
+				return result
+			}
+			
+			if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+			   let decodedPayloadData = Data(base64Encoded: object.payload),
+			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+				
+				result = wrapper.identity
+			} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
+				guard let credentialData = object.credential.data(using: .utf8),
+					  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) else {
+					return result
+				}
+				result = euCredentialAttributes.identity
+			}
+		}
+		return result
+	}
+	
+	private func getEventCount(_ uniqueIdentifier: String) -> (vaccinationCount: Int, testCount: Int, assessmentCount: Int) {
+		
+		var vaccinationCount = 0
+		var testCount = 0
+		var assessmentCount = 0
+		
+		let eventGroups = Current.walletManager.listEventGroups()
+		if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
+			
+			if let jsonData = eventGroup.jsonData {
+				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+				   let decodedPayloadData = Data(base64Encoded: object.payload),
+				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+					
+					wrapper.events?.forEach { event in
+						if event.hasVaccination {
+							vaccinationCount += 1
+						}
+						if event.hasRecovery || event.hasNegativeTest || event.hasPositiveTest {
+							testCount += 1
+						}
+						if event.hasVaccinationAssessment {
+							assessmentCount += 1
+						}
+						if event.hasPaperCertificate {
+							logWarning("Help rolus!")
+						}
+					}
+				
+				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
+						  let credentialData = object.credential.data(using: .utf8),
+						  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
+					
+					euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { _ in vaccinationCount += 1 }
+					euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { _ in testCount += 1 }
+					euCredentialAttributes.digitalCovidCertificate.tests?.forEach { _ in testCount += 1 }
+				}
+			}
+		}
+		
+		return (vaccinationCount: vaccinationCount, testCount: testCount, assessmentCount: assessmentCount)
+	}
+	
+	private func getEventOverview(vaccinationCount: Int, testCount: Int, assessmentCount: Int) -> String {
+		
+		var result = ""
+		if vaccinationCount > 1 {
+			result += "\(vaccinationCount) \(L.general_vaccinations())"
+		} else if vaccinationCount == 1 {
+			result += "\(vaccinationCount) \(L.general_vaccination())"
+		}
+		if testCount > 0 {
+			if result.isNotEmpty {
+				result += " \(L.general_and()) "
+			}
+			if testCount > 1 {
+				result += "\(testCount) \(L.general_testresults())"
+			} else {
+				result += "\(testCount) \(L.general_testresult())"
+			}
+		}
+		if assessmentCount > 0 {
+			if result.isNotEmpty {
+				result += " \(L.general_and()) "
+			}
+			if assessmentCount > 1 {
+				result += "\(assessmentCount) \(L.general_vaccinationAssessments())"
+			} else {
+				result += "\(assessmentCount) \(L.general_vaccinationAssessment())"
+			}
+		}
+		return result
+	}
+}

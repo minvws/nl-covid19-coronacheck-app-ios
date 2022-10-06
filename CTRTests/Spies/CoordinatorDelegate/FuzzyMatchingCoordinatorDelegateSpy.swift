@@ -18,12 +18,12 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 		invokedUserWishesToSeeEventDetailsCount += 1
 	}
 
-	var invokedUserWishesToSeeEvents = false
-	var invokedUserWishesToSeeEventsCount = 0
+	var invokedUserWishesToSeeIdentitiyGroups = false
+	var invokedUserWishesToSeeIdentitiyGroupsCount = 0
 
-	func userWishesToSeeEvents() {
-		invokedUserWishesToSeeEvents = true
-		invokedUserWishesToSeeEventsCount += 1
+	func userWishesToSeeIdentitiyGroups() {
+		invokedUserWishesToSeeIdentitiyGroups = true
+		invokedUserWishesToSeeIdentitiyGroupsCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutWhy = false

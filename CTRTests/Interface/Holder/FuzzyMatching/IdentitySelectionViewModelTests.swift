@@ -19,7 +19,7 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
-		sut = IdentitySelectionViewModel(coordinatorDelegate: coordinatorDelegateSpy, blobIds: [])
+		sut = IdentitySelectionViewModel(coordinatorDelegate: coordinatorDelegateSpy, nestedBlobIds: [])
 	}
 
 	func test_userWishesToSkip() {

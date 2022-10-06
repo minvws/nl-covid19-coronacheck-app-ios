@@ -48,6 +48,7 @@
 "general.uptoandincluding" = "tot";
 "general.url.link" = "Link";
 "general.vaccinationdate" = "Vaccinatiedatum";
+"general_and" = "en";
 /* MARK: - General */
 "general_cancel" = "Annuleer";
 "general_delete" = "Verwijderen";
@@ -82,6 +83,7 @@
 "general_unrecoverableError_sendCrashReport_title" = "Probleem met de app";
 "general_vaccination" = "vaccinatie";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
+"general_vaccinationAssessments" = "vaccinatiebeoordelingen";
 "general_vaccinationcertificate" = "vaccinatiebewijs";
 "general_vaccinationcertificate_0G" = "Internationaal vaccinatiebewijs";
 "general_vaccinations" = "vaccinaties";

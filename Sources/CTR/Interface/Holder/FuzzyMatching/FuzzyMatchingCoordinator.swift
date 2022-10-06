@@ -17,7 +17,7 @@ protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 	
 	func userWishesToSeeEventDetails()
 	
-	func userWishesToSeeEvents()
+	func userWishesToSeeIdentitiyGroups()
 	
 	func userWishesMoreInfoAboutWhy()
 	
@@ -53,7 +53,7 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	func start() {
 		
 //		userWishesToSeeOnboarding()
-		userWishesToSeeEvents()
+		userWishesToSeeIdentitiyGroups()
 	}
 	
 	// MARK: - Universal Link handling
@@ -86,11 +86,11 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		// Todo
 	}
 	
-	func userWishesToSeeEvents() {
+	func userWishesToSeeIdentitiyGroups() {
 		
-		let blobIds = [["/EventGroup/p1", "/EventGroup/p3"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5"]]
+		let blobIds = [["/EventGroup/p1", "/EventGroup/p3", "/EventGroup/p6"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5"]]
 		
-		let viewModel = IdentitySelectionViewModel(coordinatorDelegate: self, blobIds: blobIds)
+		let viewModel = IdentitySelectionViewModel(coordinatorDelegate: self, nestedBlobIds: blobIds)
 		let viewController = IdentitySelectionViewController(viewModel: viewModel)
 		
 		navigationController.pushViewController(viewController, animated: true)
@@ -118,8 +118,8 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 extension FuzzyMatchingCoordinator: PagedAnnouncementDelegate {
 	
 	func didFinishPagedAnnouncement() {
-		logInfo("FuzzyMatchingCoordinator - didFinishPagedAnnouncement")
 		
-		userWishesToSeeEvents()
+		// Onboarding is done. Continue with the identity groups overview
+		userWishesToSeeIdentitiyGroups()
 	}
 }
