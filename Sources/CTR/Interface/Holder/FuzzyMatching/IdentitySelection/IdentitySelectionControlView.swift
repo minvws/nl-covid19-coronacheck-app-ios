@@ -181,7 +181,7 @@ class IdentitySelectionControlView: BaseView {
 			warningLabel.attributedText = warning?.setLineHeight(
 				ViewTraits.Content.lineHeight,
 				kerning: ViewTraits.Content.kerning,
-				textColor: C.error()! // Todo: replace with ccError after 4.7 merge.
+				textColor: C.ccError()!
 			)
 		}
 	}
