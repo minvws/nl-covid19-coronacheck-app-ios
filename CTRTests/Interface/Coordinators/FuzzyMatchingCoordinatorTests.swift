@@ -58,16 +58,16 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == false
 	}
 
-	func test_onboardingFinished_shouldInvokeFinishFlow() {
-		
-		// Given
-		
-		// When
-		sut.didFinishPagedAnnouncement()
-		
-		// Then
-		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == true
-	}
+//	func test_onboardingFinished_shouldInvokeFinishFlow() {
+//		
+//		// Given
+//		
+//		// When
+//		sut.didFinishPagedAnnouncement()
+//		
+//		// Then
+//		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == true
+//	}
 	
 	func test_consume_redeemHolder() {
 		
