@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
+
+import Foundation
+import Shared
+import UIKit
+
+class IdentitySelectionViewController: TraitWrappedGenericViewController<IdentitySelectionView, IdentitySelectionViewModel> {
+	
+	override func viewDidLoad() {
+		
+		super.viewDidLoad()
+		setupBinding()
+		setupCallbacks()
+		setupSkipButton()
+		addBackButton()
+	}
+	
+	private func setupBinding() {
+		
+		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
+		viewModel.message.observe { [weak self] in self?.sceneView.header = $0 }
+		viewModel.actionTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
+		viewModel.whyTitle.observe { [weak self] in self?.sceneView.moreButtonTitle = $0 }
+		viewModel.errorMessage.observe { [weak self] in self?.sceneView.errorMessage = $0 }
+	
+		viewModel.objects.observe { [weak self] elements in
+			guard let self = self else { return }
+			elements.map { rowModel -> IdentitySelectionControlView in
+				IdentitySelectionControlView.makeView(
+						title: rowModel.name,
+						content: rowModel.content,
+						selectAction: rowModel.onSelectIdentity,
+						detailsAction: rowModel.onShowDetails,
+						state: rowModel.state
+					)
+				}
+				.forEach(self.sceneView.addIdentitySelectionControlView)
+		}
+		
+		viewModel.alert.observe { [weak self] alertContent in
+			guard let alertContent else { return }
+			self?.showAlert(alertContent)
+		}
+	}
+	
+	private func setupCallbacks() {
+		
+		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.userWishesToSaveEvents()
+		}
+		
+		sceneView.readMoreCommand = { [weak self] in
+			self?.viewModel.userWishedToReadMore()
+		}
+	}
+	
+	private func setupSkipButton() {
+		
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: #selector(onSkip),
+			content: .text(L.general_skip()),
+			tintColor: C.primaryBlue(),
+			accessibilityIdentifier: "SkipButton",
+			accessibilityLabel: L.general_skip()
+		)
+		navigationItem.rightBarButtonItem = .create(config)
+	}
+	
+	@objc func onSkip() {
+		
+		viewModel.userWishesToSkip()
+	}
+}
+
+extension IdentitySelectionControlView {
+	
+	/// Create a IdentitySelectionControl view
+	/// - Parameters:
+	///   - title: the title of the view
+	///   - content: the content of the view
+	///   - selectAction: the action when the view is selected
+	///   - detailsAction: the action when the details button is pressed
+	///   - state: the state of the button
+	/// - Returns: IdentitySelectionControlView
+	fileprivate static func makeView(
+		title: String,
+		content: String,
+		selectAction: (() -> Void)?,
+		detailsAction: (() -> Void)?,
+		state: Observable<IdentitySelectionState>) -> IdentitySelectionControlView {
+		
+		let view = IdentitySelectionControlView()
+		view.isUserInteractionEnabled = true
+		view.title = title
+		view.content = content
+		view.actionButtonTitle = L.general_details()
+		view.actionButtonCommand = detailsAction
+		view.selectionButtonCommand = selectAction
+		
+		state.observe { view.state = $0 }
+		return view
+	}
+}

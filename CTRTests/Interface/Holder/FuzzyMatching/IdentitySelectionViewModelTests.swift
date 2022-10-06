@@ -30,7 +30,8 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 		sut.userWishesToSkip()
 		
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserHasFinishedTheFlow) == true
+		expect(self.coordinatorDelegateSpy.invokedUserHasFinishedTheFlow) == false
+		expect(self.sut.alert.value) != nil
 	}
 	
 	func test_userWishedToReadMore() {
