@@ -24,16 +24,19 @@ struct AlertContent {
 	private (set) var subTitle: String
 	private (set) var okAction: AlertContent.Action
 	private (set) var cancelAction: AlertContent.Action?
+	private (set) var alertWasPresentedCallback: (() -> Void)?
 	
 	init(
 		title: String,
 		subTitle: String,
 		okAction: AlertContent.Action,
-		cancelAction: AlertContent.Action? = nil) {
+		cancelAction: AlertContent.Action? = nil,
+		alertWasPresentedCallback: (() -> Void)? = nil) {
 		self.title = title
 		self.subTitle = subTitle
 		self.okAction = okAction
 		self.cancelAction = cancelAction
+		self.alertWasPresentedCallback = alertWasPresentedCallback
 	}
 }
 
@@ -55,7 +58,7 @@ extension UIViewController {
 				alertController.addAlertAction(action: cancelAction, style: .cancel)
 			}
 			
-			self.present(alertController, animated: true, completion: nil)
+			self.present(alertController, animated: true, completion: alertContent.alertWasPresentedCallback)
 		}
 	}
 }

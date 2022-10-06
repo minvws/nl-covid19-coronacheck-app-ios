@@ -423,14 +423,14 @@ extension WalletManagerSpy {
 		]
 	}
 	
-	func loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: DataStoreManager) {
+	func loadInternationalPaperbasedExpiringIn24Days(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
 			.sampleInternationalPaperBasedExpiringIn24Days(dataStoreManager: dataStoreManager)
 		]
 	}
 	
-	func loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: DataStoreManager) {
+	func loadInternationalPaperbasedExpiringIn24DaysWithValidCredential(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
 			.sampleInternationalPaperBasedExpiringIn24DaysWithValidCredential(dataStoreManager: dataStoreManager)

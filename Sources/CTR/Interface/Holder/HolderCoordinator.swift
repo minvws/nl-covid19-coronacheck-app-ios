@@ -405,7 +405,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				<p>
 					<b>\(blockedEventItem.type.localized.capitalized)</b>
 					<br />
-					<b>\(localizedDateLabel.capitalized): \(dateString)</b>
+					<b>\(localizedDateLabel.capitalizingFirstLetter()): \(dateString)</b>
 				</p>
 				""" }
 			.joined()

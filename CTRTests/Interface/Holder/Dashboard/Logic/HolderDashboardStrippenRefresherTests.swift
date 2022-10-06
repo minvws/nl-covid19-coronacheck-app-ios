@@ -446,9 +446,9 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 	// MARK: - International Paper Based
 	
-	func test_paperbased_withoutValidCredentail_calculates_state_noActionNeeded() {
+	func test_paperbased_withoutValidCredential_calculates_state_noActionNeeded() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedExpiringIn24Days(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -465,7 +465,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	
 	func test_paperbased_withValidCredential_calculates_state_noActionNeeded() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedExpiringIn24DaysWithValidCredential(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
