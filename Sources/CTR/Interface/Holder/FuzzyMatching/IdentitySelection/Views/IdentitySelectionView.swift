@@ -278,7 +278,7 @@ class IdentitySelectionView: BaseView {
 	
 	var readMoreCommand: (() -> Void)?
 	
-	func addIdentitySelectionControlView(_ controlView: IdentitySelectionControlView) {
+	func addIdentityControlView(_ controlView: IdentityControlView) {
 		
 		selectionStackView.addArrangedSubview(controlView)
 	}

@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class IdentitySelectionControlView: BaseView {
+class IdentityControlView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -196,7 +196,7 @@ class IdentitySelectionControlView: BaseView {
 	
 	var selectionButtonCommand: (() -> Void)?
 	
-	var state: IdentitySelectionState = .unselected {
+	var state: IdentityControlViewState = .unselected {
 		
 		didSet {
 			

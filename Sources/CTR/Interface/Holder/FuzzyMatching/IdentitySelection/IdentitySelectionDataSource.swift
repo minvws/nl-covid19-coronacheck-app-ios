@@ -65,9 +65,9 @@ class IdentitySelectionDataSource {
 	
 	// MARK: - Populate
 	
-	func populate(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, content: String)] {
+	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
 		
-		var result = [(blobIds: [String], name: String, content: String)]()
+		var result = [(blobIds: [String], name: String, eventCountInformation: String)]()
 		
 		nestedBlobIds.forEach { blobIds in
 			
@@ -92,7 +92,7 @@ class IdentitySelectionDataSource {
 				result.append(
 					(blobIds: blobIds,
 					 name: fullName,
-					 content: getEventOverview(
+					 eventCountInformation: getEventOverview(
 						vaccinationCount: vaccinationCount,
 						testCount: testCount,
 						assessmentCount: assessmentCount)

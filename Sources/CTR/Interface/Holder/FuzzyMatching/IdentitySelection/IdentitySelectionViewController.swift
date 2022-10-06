@@ -28,18 +28,18 @@ class IdentitySelectionViewController: TraitWrappedGenericViewController<Identit
 		viewModel.whyTitle.observe { [weak self] in self?.sceneView.moreButtonTitle = $0 }
 		viewModel.errorMessage.observe { [weak self] in self?.sceneView.errorMessage = $0 }
 	
-		viewModel.objects.observe { [weak self] elements in
+		viewModel.identityItems.observe { [weak self] elements in
 			guard let self = self else { return }
-			elements.map { rowModel -> IdentitySelectionControlView in
-				IdentitySelectionControlView.makeView(
+			elements.map { rowModel -> IdentityControlView in
+				IdentityControlView.makeView(
 						title: rowModel.name,
-						content: rowModel.content,
+						content: rowModel.eventCountInformation,
 						selectAction: rowModel.onSelectIdentity,
 						detailsAction: rowModel.onShowDetails,
 						state: rowModel.state
 					)
 				}
-				.forEach(self.sceneView.addIdentitySelectionControlView)
+				.forEach(self.sceneView.addIdentityControlView)
 		}
 		
 		viewModel.alert.observe { [weak self] alertContent in
@@ -78,7 +78,7 @@ class IdentitySelectionViewController: TraitWrappedGenericViewController<Identit
 	}
 }
 
-extension IdentitySelectionControlView {
+extension IdentityControlView {
 	
 	/// Create a IdentitySelectionControl view
 	/// - Parameters:
@@ -87,15 +87,15 @@ extension IdentitySelectionControlView {
 	///   - selectAction: the action when the view is selected
 	///   - detailsAction: the action when the details button is pressed
 	///   - state: the state of the button
-	/// - Returns: IdentitySelectionControlView
+	/// - Returns: IdentityControlView
 	fileprivate static func makeView(
 		title: String,
 		content: String,
 		selectAction: (() -> Void)?,
 		detailsAction: (() -> Void)?,
-		state: Observable<IdentitySelectionState>) -> IdentitySelectionControlView {
+		state: Observable<IdentityControlViewState>) -> IdentityControlView {
 		
-		let view = IdentitySelectionControlView()
+		let view = IdentityControlView()
 		view.isUserInteractionEnabled = true
 		view.title = title
 		view.content = content

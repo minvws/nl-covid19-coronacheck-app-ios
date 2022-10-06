@@ -9,19 +9,19 @@ import Foundation
 import Shared
 import Transport
 
-enum IdentitySelectionState {
+enum IdentityControlViewState {
 	case selected
 	case unselected
 	case selectionError
 	case warning(String)
 }
 
-class IdentityObject {
+class IdentityItem {
 	 
-	init(blobIds: [String], name: String, content: String, onShowDetails: @escaping () -> Void, onSelectIdentity: @escaping () -> Void, state: Observable<IdentitySelectionState>) {
+	init(blobIds: [String], name: String, eventCountInformation: String, onShowDetails: @escaping () -> Void, onSelectIdentity: @escaping () -> Void, state: Observable<IdentityControlViewState>) {
 		self.blobIds = blobIds
 		self.name = name
-		self.content = content
+		self.eventCountInformation = eventCountInformation
 		self.onShowDetails = onShowDetails
 		self.onSelectIdentity = onSelectIdentity
 		self.state = state
@@ -29,10 +29,10 @@ class IdentityObject {
 	
 	var blobIds: [String]
 	var name: String
-	var content: String
+	var eventCountInformation: String
 	var onShowDetails: () -> Void
 	var onSelectIdentity: () -> Void
-	var state: Observable<IdentitySelectionState>
+	var state: Observable<IdentityControlViewState>
 }
 
 class IdentitySelectionViewModel {
@@ -43,7 +43,7 @@ class IdentitySelectionViewModel {
 	let whyTitle = Observable<String>(value: L.holder_identitySelection_why())
 	let actionTitle = Observable<String>(value: L.holder_identitySelection_actionTitle())
 	var errorMessage = Observable<String?>(value: nil)
-	var objects = Observable<[IdentityObject]>(value: [])
+	var identityItems = Observable<[IdentityItem]>(value: [])
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 	
 	private var selectedBlobIds = [String]()
@@ -58,32 +58,32 @@ class IdentitySelectionViewModel {
 	
 	private func populateIdentityObjects(nestedBlobIds: [[String]]) {
 		
-		var identities = [IdentityObject]()
+		var items = [IdentityItem]()
 		
-		let tuples = IdentitySelectionDataSource().populate(nestedBlobIds: nestedBlobIds)
+		let tuples = IdentitySelectionDataSource().getIdentityInformation(nestedBlobIds: nestedBlobIds)
 		for identity in tuples {
-			let object = IdentityObject(
+			let object = IdentityItem(
 				blobIds: identity.blobIds,
 				name: identity.name,
-				content: identity.content,
+				eventCountInformation: identity.eventCountInformation,
 				onShowDetails: {
 					logInfo("show details")
 				},
 				onSelectIdentity: {
 					self.onSelectIdentity(identity.blobIds)
 				},
-				state: Observable<IdentitySelectionState>(value: .unselected)
+				state: Observable<IdentityControlViewState>(value: .unselected)
 			)
-			identities.append(object)
+			items.append(object)
 		}
-		objects.value = identities
+		identityItems.value = items
 	}
 	
 	private func onSelectIdentity(_ blobIds: [String]) {
 		
 		logInfo("onSelectIdentity: \(blobIds)")
 		self.selectedBlobIds = blobIds
-		objects.value.forEach {
+		identityItems.value.forEach {
 			if $0.blobIds == blobIds {
 				$0.state.value = .selected
 			} else {
@@ -105,7 +105,7 @@ class IdentitySelectionViewModel {
 		
 		guard selectedBlobIds.isNotEmpty else {
 		
-			objects.value.forEach { $0.state.value = .selectionError }
+			identityItems.value.forEach { $0.state.value = .selectionError }
 			errorMessage.value = L.holder_identitySelection_error_makeAChoice()
 			return
 		}
