@@ -37,22 +37,23 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
+	///   - factory: the onboarding content factory
 	///   - delegate: the fuzzy matching flow delegate
 	init(
 		navigationController: UINavigationController,
 		factory: FuzzyMatchingOnboardingFactoryProtocol,
 		delegate: FuzzyMatchingFlowDelegate) {
-			
-			self.navigationController = navigationController
-			self.factory = factory
-			self.delegate = delegate
-		}
+		
+		self.navigationController = navigationController
+		self.factory = factory
+		self.delegate = delegate
+	}
 	
 	/// Start the scene
 	func start() {
 		
-		userWishesToSeeOnboarding()
-//		userWishesToSeeEvents()
+//		userWishesToSeeOnboarding()
+		userWishesToSeeEvents()
 	}
 	
 	// MARK: - Universal Link handling

@@ -6,6 +6,7 @@
  */
 
 import Foundation
+import UIKit
 import Shared
 
 enum IdentitySelectionState {
@@ -108,6 +109,11 @@ class IdentitySelectionViewModel {
 		
 		coordinatorDelegate?.userHasFinishedTheFlow()
 	}
+	
+	func userWishesToSkip() {
+		
+		coordinatorDelegate?.userHasFinishedTheFlow()
+	}
 }
 
 /*
@@ -130,6 +136,12 @@ class IdentitySelectionViewController: TraitWrappedGenericViewController<Identit
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
+		setupBinding()
+		setupSkipButton()
+		addBackButton()
+	}
+	
+	private func setupBinding() {
 		
 		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
 		viewModel.message.observe { [weak self] in self?.sceneView.header = $0 }
@@ -158,6 +170,24 @@ class IdentitySelectionViewController: TraitWrappedGenericViewController<Identit
 				}
 				.forEach(self.sceneView.addIdentitySelectionControlView)
 		}
+	}
+	
+	private func setupSkipButton() {
+		
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: #selector(onSkip),
+			content: .text(L.general_skip()),
+			tintColor: C.primaryBlue(),
+			accessibilityIdentifier: "SkipButton",
+			accessibilityLabel: L.general_skip()
+		)
+		navigationItem.rightBarButtonItem = .create(config)
+	}
+	
+	@objc func onSkip() {
+		
+		viewModel.userWishesToSkip()
 	}
 }
 
