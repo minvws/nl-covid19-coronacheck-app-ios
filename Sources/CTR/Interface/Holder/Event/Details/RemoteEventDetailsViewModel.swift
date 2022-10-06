@@ -14,7 +14,7 @@ final class RemoteEventDetailsViewModel {
 	/// The title of the information page
 	@Bindable private(set) var title: String
 	
-	@Bindable private(set) var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)]
+	@Bindable private(set) var details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)]
 
 	@Bindable private(set) var footer: String?
 
@@ -36,14 +36,14 @@ final class RemoteEventDetailsViewModel {
 			guard $0.field.isRequired || $0.value?.isEmpty == false else {
 
 				if $0.field.isSeparator {
-					return (NSAttributedString(), false, true)
+					return (String(), false, true)
 				}
 				return nil
 			}
 			
-			let field = NSMutableAttributedString(string: $0.field.displayTitle, attributes: [.font: Fonts.body])
+			var field = $0.field.displayTitle
 			if let value = $0.value, !value.isEmpty {
-				field.append(NSAttributedString(string: " \(value)", attributes: [.font: Fonts.bodyBold]))
+				field += " <b>\(value)</b>"
 			}
 			return (field, $0.field.hasLineBreak, $0.field.isSeparator)
 		}
