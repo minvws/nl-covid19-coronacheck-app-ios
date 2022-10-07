@@ -77,18 +77,7 @@ class IdentitySelectionViewModel {
 					
 					let details = IdentitySelectionDetails(
 						name: identity.name,
-						details: [
-							[
-								"Vaccinatie",
-								"Opgehaald bij RIVM",
-								"11 januari 2022"
-							],
-							[
-								"Negatieve Test",
-								"Opgehaald bij TEST BOER BV",
-								"31 januari 2022"
-							]
-						]
+						details: self?.dataSource.getEventOveriew(blobIds: identity.blobIds) ?? [[]]
 					)
 					
 					self?.coordinatorDelegate?.userWishesToSeeIdentitySelectionDetails(details)

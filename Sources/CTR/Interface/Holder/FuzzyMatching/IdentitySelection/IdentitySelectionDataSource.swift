@@ -12,6 +12,8 @@ import Transport
 protocol IdentitySelectionDataSourceProtocol {
 	
 	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)]
+	
+	func getEventOveriew(blobIds: [String]) -> [[String]]
 }
 
 class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
@@ -107,6 +109,86 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		}
 		
 		return result
+	}
+	
+	func getEventOveriew(blobIds: [String]) -> [[String]] {
+		
+		var result = [[String]]()
+		
+//		result.append(
+//			[
+//				"Vaccinatie",
+//				"Opgehaald bij RIVM",
+//				"11 januari 2022"
+//			]
+//		)
+//		result.append(
+//			[
+//				"Negatieve Test",
+//				"Opgehaald bij TEST BOER BV",
+//				"31 januari 2022"
+//			]
+//		)
+		
+		blobIds.forEach { blobId in
+			if let wrapper = getCachedEventResultWrapper(blobId) {
+				
+			} else if let euCredentialAttributes = getCachedEUCreditialAttributes(blobId) {
+				
+				euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
+					result.append(getDetailsFromVaccinationDCC(vaccination))
+				}
+				euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { recovery in
+					result.append(getDetailsFromRecoveryDCC(recovery))
+				}
+				euCredentialAttributes.digitalCovidCertificate.tests?.forEach { test in
+					result.append(getDetailsFromNegativeTestDCC(test))
+				}
+			}
+		}
+		return result
+	}
+	
+	private func getDetailsFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination) -> [String] {
+		
+		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? vaccination.dateOfVaccination
+		
+		var dosage: String = ""
+		if let doseNumber = vaccination.doseNumber,
+		   let totalDose = vaccination.totalDose {
+			dosage = "\(L.generalDose()) \(doseNumber)/\(totalDose)"
+		}
+		
+		return [
+			"\(L.general_vaccination().capitalizingFirstLetter()) \(dosage)".trimmingCharacters(in: .whitespaces),
+			L.holder_identitySelection_details_scannedPaperProof(),
+			formattedVaccinationDate
+		]
+	}
+	
+	private func getDetailsFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry) -> [String] {
+
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? recovery.firstPositiveTestDate
+
+		return [
+			L.general_recoverycertificate().capitalizingFirstLetter(),
+			L.holder_identitySelection_details_scannedPaperProof(),
+			formattedTestDate
+		]
+	}
+
+	private func getDetailsFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry) -> [String] {
+
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
+
+		return [
+			L.general_negativeTest().capitalizingFirstLetter(),
+			L.holder_identitySelection_details_scannedPaperProof(),
+			formattedTestDate
+		]
 	}
 	
 	// MARK: - helpers
