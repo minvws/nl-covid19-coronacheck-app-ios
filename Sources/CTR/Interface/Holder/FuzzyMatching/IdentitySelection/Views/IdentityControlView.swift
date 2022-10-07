@@ -128,7 +128,7 @@ class IdentityControlView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			
-			separatorView.leftAnchor.constraint(equalTo: leftAnchor),
+			separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			separatorView.rightAnchor.constraint(equalTo: rightAnchor),
 			separatorView.topAnchor.constraint(
 				equalTo: bottomAnchor,

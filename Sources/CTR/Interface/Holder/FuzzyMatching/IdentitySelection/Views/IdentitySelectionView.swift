@@ -133,7 +133,7 @@ class IdentitySelectionView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
 		])
 	}
@@ -142,7 +142,7 @@ class IdentitySelectionView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
@@ -155,8 +155,8 @@ class IdentitySelectionView: BaseView {
 				equalTo: scrollView.topAnchor,
 				constant: ViewTraits.Margin.top
 			),
-			titleLabel.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			titleLabel.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
 			titleLabel.rightAnchor.constraint(
@@ -177,8 +177,8 @@ class IdentitySelectionView: BaseView {
 				equalTo: titleLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.titleToHeader
 			),
-			headerLabel.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			headerLabel.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
 			headerLabel.rightAnchor.constraint(
@@ -196,7 +196,7 @@ class IdentitySelectionView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			
-			separatorView.leftAnchor.constraint(equalTo: leftAnchor),
+			separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			separatorView.rightAnchor.constraint(equalTo: rightAnchor),
 			separatorView.topAnchor.constraint(
 				equalTo: headerLabel.bottomAnchor,
@@ -210,7 +210,7 @@ class IdentitySelectionView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			selectionStackView.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
-			selectionStackView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			selectionStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
 			selectionStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
 			selectionStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
 		])
@@ -223,8 +223,8 @@ class IdentitySelectionView: BaseView {
 				equalTo: selectionStackView.bottomAnchor,
 				constant: ViewTraits.Spacing.stackviewToMoreButton
 			),
-			moreButton.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			moreButton.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
 			moreButton.rightAnchor.constraint(
