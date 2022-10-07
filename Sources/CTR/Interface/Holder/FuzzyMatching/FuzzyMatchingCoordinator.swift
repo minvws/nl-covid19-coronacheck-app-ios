@@ -15,7 +15,7 @@ protocol FuzzyMatchingFlowDelegate: AnyObject {
 
 protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 	
-	func userWishesToSeeEventDetails()
+	func userWishesToSeeIdentitySelectionDetails(_ identitySelectionDetails: IdentitySelectionDetails)
 	
 	func userWishesToSeeIdentitiyGroups()
 	
@@ -82,15 +82,23 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	func userWishesToSeeEventDetails() {
-		// Todo
+	func userWishesToSeeIdentitySelectionDetails(_ identitySelectionDetails: IdentitySelectionDetails) {
+		
+		let viewModel = IdentitySelectionDetailsViewModel(identitySelectionDetails: identitySelectionDetails)
+		let viewController = IdentitySelectionDetailsViewController(viewModel: viewModel)
+		
+		presentAsBottomSheet(viewController)
 	}
 	
 	func userWishesToSeeIdentitiyGroups() {
 		
 		let blobIds = [["/EventGroup/p1", "/EventGroup/p3", "/EventGroup/p6"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5"]]
 		
-		let viewModel = IdentitySelectionViewModel(coordinatorDelegate: self, nestedBlobIds: blobIds)
+		let viewModel = IdentitySelectionViewModel(
+			coordinatorDelegate: self,
+			dataSource: IdentitySelectionDataSource(),
+			nestedBlobIds: blobIds
+		)
 		let viewController = IdentitySelectionViewController(viewModel: viewModel)
 		
 		navigationController.pushViewController(viewController, animated: true)

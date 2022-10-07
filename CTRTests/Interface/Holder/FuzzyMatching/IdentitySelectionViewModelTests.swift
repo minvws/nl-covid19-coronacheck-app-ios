@@ -14,12 +14,18 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 	var sut: IdentitySelectionViewModel!
 
 	var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
+	var dataSourceSpy: IdentitySelectionDataSourceSpy!
 	
 	override func setUp() {
 		super.setUp()
 
+		dataSourceSpy = IdentitySelectionDataSourceSpy()
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
-		sut = IdentitySelectionViewModel(coordinatorDelegate: coordinatorDelegateSpy, nestedBlobIds: [])
+		sut = IdentitySelectionViewModel(
+			coordinatorDelegate: coordinatorDelegateSpy,
+			dataSource: dataSourceSpy,
+			nestedBlobIds: []
+		)
 	}
 
 	func test_userWishesToSkip() {
@@ -43,5 +49,22 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInfoAboutWhy) == true
+	}
+}
+
+class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
+
+	var invokedGetIdentityInformation = false
+	var invokedGetIdentityInformationCount = 0
+	var invokedGetIdentityInformationParameters: (nestedBlobIds: [[String]], Void)?
+	var invokedGetIdentityInformationParametersList = [(nestedBlobIds: [[String]], Void)]()
+	var stubbedGetIdentityInformationResult: [(blobIds: [String], name: String, eventCountInformation: String)]! = []
+
+	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
+		invokedGetIdentityInformation = true
+		invokedGetIdentityInformationCount += 1
+		invokedGetIdentityInformationParameters = (nestedBlobIds, ())
+		invokedGetIdentityInformationParametersList.append((nestedBlobIds, ()))
+		return stubbedGetIdentityInformationResult
 	}
 }

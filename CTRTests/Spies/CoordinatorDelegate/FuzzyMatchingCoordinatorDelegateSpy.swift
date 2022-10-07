@@ -10,12 +10,16 @@ import XCTest
 
 final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegate {
 
-	var invokedUserWishesToSeeEventDetails = false
-	var invokedUserWishesToSeeEventDetailsCount = 0
+	var invokedUserWishesToSeeIdentitySelectionDetails = false
+	var invokedUserWishesToSeeIdentitySelectionDetailsCount = 0
+	var invokedUserWishesToSeeIdentitySelectionDetailsParameters: (identitySelectionDetails: IdentitySelectionDetails, Void)?
+	var invokedUserWishesToSeeIdentitySelectionDetailsParametersList = [(identitySelectionDetails: IdentitySelectionDetails, Void)]()
 
-	func userWishesToSeeEventDetails() {
-		invokedUserWishesToSeeEventDetails = true
-		invokedUserWishesToSeeEventDetailsCount += 1
+	func userWishesToSeeIdentitySelectionDetails(_ identitySelectionDetails: IdentitySelectionDetails) {
+		invokedUserWishesToSeeIdentitySelectionDetails = true
+		invokedUserWishesToSeeIdentitySelectionDetailsCount += 1
+		invokedUserWishesToSeeIdentitySelectionDetailsParameters = (identitySelectionDetails, ())
+		invokedUserWishesToSeeIdentitySelectionDetailsParametersList.append((identitySelectionDetails, ()))
 	}
 
 	var invokedUserWishesToSeeIdentitiyGroups = false

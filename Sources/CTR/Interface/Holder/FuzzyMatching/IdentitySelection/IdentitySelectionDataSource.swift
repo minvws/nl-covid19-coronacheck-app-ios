@@ -9,7 +9,12 @@ import Foundation
 import Shared
 import Transport
 
-class IdentitySelectionDataSource {
+protocol IdentitySelectionDataSourceProtocol {
+	
+	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)]
+}
+
+class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
 	// MARK: - Cache
 	

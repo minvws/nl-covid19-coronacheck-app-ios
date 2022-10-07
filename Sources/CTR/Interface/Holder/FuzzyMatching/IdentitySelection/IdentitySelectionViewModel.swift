@@ -50,9 +50,15 @@ class IdentitySelectionViewModel {
 	
 	weak private var coordinatorDelegate: FuzzyMatchingCoordinatorDelegate?
 	
-	init(coordinatorDelegate: FuzzyMatchingCoordinatorDelegate, nestedBlobIds: [[String]]) {
+	private var dataSource: IdentitySelectionDataSourceProtocol!
+	
+	init(
+		coordinatorDelegate: FuzzyMatchingCoordinatorDelegate,
+		dataSource: IdentitySelectionDataSourceProtocol,
+		nestedBlobIds: [[String]]) {
 		
 		self.coordinatorDelegate = coordinatorDelegate
+		self.dataSource = dataSource
 		self.populateIdentityObjects(nestedBlobIds: nestedBlobIds)
 	}
 	
@@ -60,14 +66,32 @@ class IdentitySelectionViewModel {
 		
 		var items = [IdentityItem]()
 		
-		let tuples = IdentitySelectionDataSource().getIdentityInformation(nestedBlobIds: nestedBlobIds)
+		let tuples = dataSource.getIdentityInformation(nestedBlobIds: nestedBlobIds)
 		for identity in tuples {
 			let object = IdentityItem(
 				blobIds: identity.blobIds,
 				name: identity.name,
 				eventCountInformation: identity.eventCountInformation,
-				onShowDetails: {
+				onShowDetails: { [weak self] in
 					logInfo("show details")
+					
+					let details = IdentitySelectionDetails(
+						name: identity.name,
+						details: [
+							[
+								"Vaccinatie",
+								"Opgehaald bij RIVM",
+								"11 januari 2022"
+							],
+							[
+								"Negatieve Test",
+								"Opgehaald bij TEST BOER BV",
+								"31 januari 2022"
+							]
+						]
+					)
+					
+					self?.coordinatorDelegate?.userWishesToSeeIdentitySelectionDetails(details)
 				},
 				onSelectIdentity: {
 					self.onSelectIdentity(identity.blobIds)
@@ -81,7 +105,6 @@ class IdentitySelectionViewModel {
 	
 	private func onSelectIdentity(_ blobIds: [String]) {
 		
-		logInfo("onSelectIdentity: \(blobIds)")
 		self.selectedBlobIds = blobIds
 		identityItems.value.forEach {
 			if $0.blobIds == blobIds {
