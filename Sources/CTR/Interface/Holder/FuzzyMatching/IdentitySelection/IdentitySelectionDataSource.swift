@@ -6,7 +6,6 @@
  */
 
 import Foundation
-import Shared
 import Transport
 
 protocol IdentitySelectionDataSourceProtocol {
@@ -20,57 +19,9 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
 	// MARK: - Cache
 	
-	private var wrapperCache: [String: EventFlow.EventResultWrapper] = [:]
-	private var euCredentialAttributesCache: [String: EuCredentialAttributes] = [:]
-	
-	private func getCachedEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper? {
+	private var cache = EventGroupCache()
 		
-		if let wrapper = wrapperCache[uniqueIdentifier] {
-			return wrapper
-		}
-		
-		let eventGroups = Current.walletManager.listEventGroups()
-		if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
-			
-			guard let jsonData = eventGroup.jsonData else {
-				return nil
-			}
-			
-			if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
-			   let decodedPayloadData = Data(base64Encoded: object.payload),
-			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
-				
-				wrapperCache[uniqueIdentifier] = wrapper
-				return wrapper
-			}
-		}
-		return nil
-	}
-	
-	private func getCachedEUCreditialAttributes(_ uniqueIdentifier: String) -> EuCredentialAttributes? {
-		
-		if let attributes = euCredentialAttributesCache[uniqueIdentifier] {
-			return attributes
-		}
-		
-		let eventGroups = Current.walletManager.listEventGroups()
-		if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
-			
-			guard let jsonData = eventGroup.jsonData else {
-				return nil
-			}
-			
-			if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
-			   let credentialData = object.credential.data(using: .utf8),
-			   let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData) {
-				euCredentialAttributesCache[uniqueIdentifier] = euCredentialAttributes
-				return euCredentialAttributes
-			}
-		}
-		return nil
-	}
-	
-	// MARK: - Populate
+	// MARK: - Identity Information
 	
 	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
 		
@@ -85,7 +36,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 			
 			if let primaryId = blobIds.first, let identity = getIdentity(primaryId) {
 				fullName = identity.fullName
-				logInfo("Name: \(identity.fullName)")
 			}
 			
 			blobIds.forEach { blobId in
@@ -111,29 +61,31 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		return result
 	}
 	
+	// MARK: Event Overview
+	
 	func getEventOveriew(blobIds: [String]) -> [[String]] {
 		
 		var result = [[String]]()
 		
-//		result.append(
-//			[
-//				"Vaccinatie",
-//				"Opgehaald bij RIVM",
-//				"11 januari 2022"
-//			]
-//		)
-//		result.append(
-//			[
-//				"Negatieve Test",
-//				"Opgehaald bij TEST BOER BV",
-//				"31 januari 2022"
-//			]
-//		)
-		
 		blobIds.forEach { blobId in
-			if let wrapper = getCachedEventResultWrapper(blobId) {
-				
-			} else if let euCredentialAttributes = getCachedEUCreditialAttributes(blobId) {
+			if let wrapper = cache.getEventResultWrapper(blobId) {
+				wrapper.events?.forEach { event in
+					
+					let providerName = Current.mappingManager.getProviderIdentifierMapping(wrapper.providerIdentifier) ?? wrapper.providerIdentifier
+					
+					if event.hasNegativeTest {
+						result.append(getRowFromNegativeTestEvent(event, providerName: providerName))
+					} else if event.hasPositiveTest {
+						result.append(getRowFromPositiveTestEvent(event, providerName: providerName))
+					} else if event.hasRecovery {
+						result.append(getRowFromRecoveryEvent(event, providerName: providerName))
+					} else if event.hasVaccination {
+						result.append(getRowFromVaccinationEvent(event, providerName: providerName))
+					} else if event.hasVaccinationAssessment {
+						result.append(getRowFromAssessementEvent(event))
+					}
+				}
+			} else if let euCredentialAttributes = cache.getEUCreditialAttributes(blobId) {
 				
 				euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
 					result.append(getDetailsFromVaccinationDCC(vaccination))
@@ -148,6 +100,74 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		}
 		return result
 	}
+	
+	// MARK: - Details From Event
+
+	private func getRowFromNegativeTestEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+		
+		let formattedDate: String = event.negativeTest?.sampleDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.negativeTest?.sampleDateString ?? "")
+		
+		return [
+			L.general_negativeTest().capitalizingFirstLetter(),
+			L.holder_identitySelection_details_fetchedFromProvider(providerName),
+			formattedDate
+		]
+	}
+	
+	private func getRowFromPositiveTestEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+		
+		let formattedDate: String = event.positiveTest?.sampleDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.positiveTest?.sampleDateString ?? "")
+		
+		return [
+			L.general_positiveTest().capitalizingFirstLetter(),
+			L.holder_identitySelection_details_fetchedFromProvider(providerName),
+			formattedDate
+		]
+	}
+	
+	private func getRowFromRecoveryEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+		
+		let formattedDate: String = event.recovery?.sampleDate
+			.flatMap(Formatter.getDateFrom)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.recovery?.sampleDate ?? "")
+		
+		return [
+			L.general_recoverycertificate().capitalizingFirstLetter(),
+			L.holder_identitySelection_details_fetchedFromProvider(providerName),
+			formattedDate
+		]
+	}
+	
+	private func getRowFromVaccinationEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+		
+		let formattedDate: String = event.vaccination?.dateString
+			.flatMap(Formatter.getDateFrom)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.vaccination?.dateString ?? "")
+		
+		return [
+			L.general_vaccination().capitalizingFirstLetter(),
+			L.holder_identitySelection_details_fetchedFromProvider(providerName),
+			formattedDate
+		]
+	}
+	
+	private func getRowFromAssessementEvent(_ event: EventFlow.Event) -> [String] {
+		
+		let formattedDate: String = event.vaccinationAssessment?.dateTimeString
+			.flatMap(Formatter.getDateFrom)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
+		
+		return [
+			L.general_vaccinationAssessment().capitalizingFirstLetter(),
+			formattedDate
+		]
+	}
+	
+	// MARK: - Details From DCC
 	
 	private func getDetailsFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination) -> [String] {
 		
@@ -197,9 +217,9 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		
 		var result: EventFlow.Identity?
 		
-		if let wrapper = getCachedEventResultWrapper(uniqueIdentifier) {
+		if let wrapper = cache.getEventResultWrapper(uniqueIdentifier) {
 			result = wrapper.identity
-		} else if let euCredentialAttributes = getCachedEUCreditialAttributes(uniqueIdentifier) {
+		} else if let euCredentialAttributes = cache.getEUCreditialAttributes(uniqueIdentifier) {
 			result = euCredentialAttributes.identity
 		}
 		return result
@@ -211,7 +231,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		var testCount = 0
 		var assessmentCount = 0
 		
-		if let wrapper = getCachedEventResultWrapper(uniqueIdentifier) {
+		if let wrapper = cache.getEventResultWrapper(uniqueIdentifier) {
 			wrapper.events?.forEach { event in
 				if event.hasVaccination {
 					vaccinationCount += 1
@@ -222,11 +242,8 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 				if event.hasVaccinationAssessment {
 					assessmentCount += 1
 				}
-				if event.hasPaperCertificate {
-					logWarning("Help rolus!")
-				}
 			}
-		} else if let euCredentialAttributes = getCachedEUCreditialAttributes(uniqueIdentifier) {
+		} else if let euCredentialAttributes = cache.getEUCreditialAttributes(uniqueIdentifier) {
 			
 			euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { _ in vaccinationCount += 1 }
 			euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { _ in testCount += 1 }
@@ -238,30 +255,20 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	private func getEventOverview(vaccinationCount: Int, testCount: Int, assessmentCount: Int) -> String {
 		
 		var result = ""
-		if vaccinationCount > 1 {
-			result += "\(vaccinationCount) \(L.general_vaccinations())"
-		} else if vaccinationCount == 1 {
-			result += "\(vaccinationCount) \(L.general_vaccination())"
+		if vaccinationCount > 0 {
+			result += "\(vaccinationCount) \(L.general_vaccinations(vaccinationCount))"
 		}
 		if testCount > 0 {
 			if result.isNotEmpty {
 				result += " \(L.general_and()) "
 			}
-			if testCount > 1 {
-				result += "\(testCount) \(L.general_testresults())"
-			} else {
-				result += "\(testCount) \(L.general_testresult())"
-			}
+			result += "\(testCount) \(L.general_testresults(testCount))"
 		}
 		if assessmentCount > 0 {
 			if result.isNotEmpty {
 				result += " \(L.general_and()) "
 			}
-			if assessmentCount > 1 {
-				result += "\(assessmentCount) \(L.general_vaccinationAssessments())"
-			} else {
-				result += "\(assessmentCount) \(L.general_vaccinationAssessment())"
-			}
+			result += "\(assessmentCount) \(L.general_vaccinationAssessments(assessmentCount))"
 		}
 		return result
 	}

@@ -71,7 +71,6 @@
 "general_testcertificate" = "test certificate";
 "general_testcertificate_0G" = "International test certificate";
 "general_testresult" = "test result";
-"general_testresults" = "test results";
 "general_toMyOverview" = "To my certificates";
 "general_unrecoverableError_email_body" = "This email was generated automatically, containing the information we need. We ask you not to add additional information. With this email being sent, we will receive your email address along with information about the technical issue. These details will be deleted as soon as possible.\n\nThis message is intended for the CoronaCheck development team. The issue will be solved as soon as possible.\n\nAn unrecoverable error was caught in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nError details:\n	Message: %@\n	More Info: %@\n-----------";
 "general_unrecoverableError_email_subject" = "CoronaCheck problem report (%@ %@)";
@@ -82,10 +81,8 @@
 "general_unrecoverableError_sendCrashReport_title" = "App error";
 "general_vaccination" = "vaccination";
 "general_vaccinationAssessment" = "vaccination approval";
-"general_vaccinationAssessments" = "vaccination approvals";
 "general_vaccinationcertificate" = "vaccination certificate";
 "general_vaccinationcertificate_0G" = "International vaccination certificate";
-"general_vaccinations" = "vaccinations";
 "general_visitorPass" = "visitor pass";
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
@@ -634,6 +631,7 @@
 "holder_expiredDomesticVaccinationModal_button_addBoosterVaccination" = "Add booster vaccination";
 "holder_expiredDomesticVaccinationModal_title" = "Expired vaccination certificate";
 "holder_fetchRemoteEvents_title" = "Retrieve details";
+"holder_identitySelection_details_fetchedFromProvider" = "Retrieved at %@";
 "holder_identitySelection_details_scannedPaperProof" = "Scanned certificate";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>The vaccination(s) you've added to the app unfortunately don’t entitle you to a Dutch vaccination certificate.</p><p>Add a new (booster) vaccination or test to get a Dutch vaccination certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_inputRetrievalCode_error_blocked" = "You’ve tried to enter your code too many times. Please try again in 5 minutes.";

@@ -72,7 +72,6 @@
 "general_testcertificate" = "testbewijs";
 "general_testcertificate_0G" = "Internationaal testbewijs";
 "general_testresult" = "testuitslag";
-"general_testresults" = "testuitslagen";
 "general_toMyOverview" = "Naar mijn bewijzen";
 "general_unrecoverableError_email_body" = "Deze e-mail is automatisch opgesteld met alle gegevens die wij nodig hebben. We vragen je geen extra informatie toe te voegen. Wij ontvangen bij verzending je e-mailadres, samen met informatie over het technische probleem. Deze gegevens zullen zo snel mogelijk worden verwijderd.\n\nDit bericht is bedoeld voor het CoronaCheck ontwikkelteam. Het probleem zal zo snel mogelijk opgelost worden.\n\nEen onoplosbaar probleem heeft plaatsgevonden in CoronaCheck %@ %@ version %@ (%@).\n\n-----------\nProbleem details:\n	Bericht: %@\n	Meer informatie: %@\n-----------";
 "general_unrecoverableError_email_subject" = "CoronaCheck problem report (%@ %@)";
@@ -83,10 +82,8 @@
 "general_unrecoverableError_sendCrashReport_title" = "Probleem met de app";
 "general_vaccination" = "vaccinatie";
 "general_vaccinationAssessment" = "vaccinatiebeoordeling";
-"general_vaccinationAssessments" = "vaccinatiebeoordelingen";
 "general_vaccinationcertificate" = "vaccinatiebewijs";
 "general_vaccinationcertificate_0G" = "Internationaal vaccinatiebewijs";
-"general_vaccinations" = "vaccinaties";
 "general_visitorPass" = "bezoekersbewijs";
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
@@ -646,6 +643,7 @@
 "holder_fuzzyMatching_why_title" = "Waarom moet ik gegevens kiezen?";
 "holder_identitySelection_actionTitle" = "Opslaan";
 "holder_identitySelection_details_body" = "Deze gegevens horen bij de naam <b>%@</b>";
+"holder_identitySelection_details_fetchedFromProvider" = "Opgehaald bij %@";
 "holder_identitySelection_details_scannedPaperProof" = "Ingescand bewijs";
 "holder_identitySelection_error_makeAChoice" = "Graag eerst een keuze maken";
 "holder_identitySelection_error_willBeRemoved" = "Deze wordt verwijderd";
