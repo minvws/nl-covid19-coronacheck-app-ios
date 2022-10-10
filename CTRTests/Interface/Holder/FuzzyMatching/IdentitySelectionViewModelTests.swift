@@ -51,20 +51,3 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserWishesMoreInfoAboutWhy) == true
 	}
 }
-
-class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
-
-	var invokedGetIdentityInformation = false
-	var invokedGetIdentityInformationCount = 0
-	var invokedGetIdentityInformationParameters: (nestedBlobIds: [[String]], Void)?
-	var invokedGetIdentityInformationParametersList = [(nestedBlobIds: [[String]], Void)]()
-	var stubbedGetIdentityInformationResult: [(blobIds: [String], name: String, eventCountInformation: String)]! = []
-
-	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
-		invokedGetIdentityInformation = true
-		invokedGetIdentityInformationCount += 1
-		invokedGetIdentityInformationParameters = (nestedBlobIds, ())
-		invokedGetIdentityInformationParametersList.append((nestedBlobIds, ()))
-		return stubbedGetIdentityInformationResult
-	}
-}
