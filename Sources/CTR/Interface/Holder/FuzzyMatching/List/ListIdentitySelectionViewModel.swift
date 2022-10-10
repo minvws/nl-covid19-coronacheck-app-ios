@@ -35,7 +35,7 @@ class IdentityItem {
 	var state: Observable<IdentityControlViewState>
 }
 
-class IdentitySelectionViewModel {
+class ListIdentitySelectionViewModel {
 	
 	// Observable variables
 	let title = Observable<String>(value: L.holder_identitySelection_title())
@@ -47,6 +47,7 @@ class IdentitySelectionViewModel {
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 	
 	private var selectedBlobIds = [String]()
+	private var nestedBlobIds = [[String]]()
 	
 	weak private var coordinatorDelegate: FuzzyMatchingCoordinatorDelegate?
 	
@@ -59,10 +60,11 @@ class IdentitySelectionViewModel {
 		
 		self.coordinatorDelegate = coordinatorDelegate
 		self.dataSource = dataSource
-		self.populateIdentityObjects(nestedBlobIds: nestedBlobIds)
+		self.nestedBlobIds = nestedBlobIds
+		self.populateIdentityObjects()
 	}
 	
-	private func populateIdentityObjects(nestedBlobIds: [[String]]) {
+	private func populateIdentityObjects() {
 		
 		var items = [IdentityItem]()
 		
@@ -73,17 +75,15 @@ class IdentitySelectionViewModel {
 				name: identity.name,
 				eventCountInformation: identity.eventCountInformation,
 				onShowDetails: { [weak self] in
-					logInfo("show details")
-					
-					let details = IdentitySelectionDetails(
-						name: identity.name,
-						details: self?.dataSource.getEventOveriew(blobIds: identity.blobIds) ?? [[]]
+					self?.coordinatorDelegate?.userWishesToSeeIdentitySelectionDetails(
+						IdentitySelectionDetails(
+							name: identity.name,
+							details: self?.dataSource.getEventOveriew(blobIds: identity.blobIds) ?? [[]]
+						)
 					)
-					
-					self?.coordinatorDelegate?.userWishesToSeeIdentitySelectionDetails(details)
 				},
-				onSelectIdentity: {
-					self.onSelectIdentity(identity.blobIds)
+				onSelectIdentity: { [weak self] in
+					self?.onSelectIdentity(identity.blobIds)
 				},
 				state: Observable<IdentityControlViewState>(value: .unselected)
 			)
@@ -122,7 +122,29 @@ class IdentitySelectionViewModel {
 			return
 		}
 		
+		persistAndRemoveEventGroups()
 		coordinatorDelegate?.userHasFinishedTheFlow()
+	}
+	
+	private func persistAndRemoveEventGroups() {
+		
+		nestedBlobIds.forEach { blobIds in
+			if selectedBlobIds != blobIds {
+				blobIds.forEach { uniqueIdentifier in
+					if let wrapper = dataSource.cache.getEventResultWrapper(uniqueIdentifier) {
+						RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovedEventModel.identityMismatch)
+					} else if let euCredentialAttributes = dataSource.cache.getEUCreditialAttributes(uniqueIdentifier) {
+						RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovedEventModel.identityMismatch)
+					}
+					
+					let eventGroups = Current.walletManager.listEventGroups()
+					if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
+						logInfo("ABOUT TO REMOVE \(eventGroup.objectID)")
+						Current.dataStoreManager.delete(eventGroup.objectID)
+					}
+				}
+			}
+		}
 	}
 	
 	func userWishesToSkip() {

@@ -11,7 +11,7 @@ import Nimble
 
 final class IdentitySelectionViewModelTests: XCTestCase {
 
-	var sut: IdentitySelectionViewModel!
+	var sut: ListIdentitySelectionViewModel!
 
 	var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
 	var dataSourceSpy: IdentitySelectionDataSourceSpy!
@@ -21,7 +21,7 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 
 		dataSourceSpy = IdentitySelectionDataSourceSpy()
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
-		sut = IdentitySelectionViewModel(
+		sut = ListIdentitySelectionViewModel(
 			coordinatorDelegate: coordinatorDelegateSpy,
 			dataSource: dataSourceSpy,
 			nestedBlobIds: []

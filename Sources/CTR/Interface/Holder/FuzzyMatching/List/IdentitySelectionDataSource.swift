@@ -13,13 +13,19 @@ protocol IdentitySelectionDataSourceProtocol {
 	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)]
 	
 	func getEventOveriew(blobIds: [String]) -> [[String]]
+	
+	var cache: EventGroupCacheProtocol { get }
 }
 
 class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
+	init(cache: EventGroupCacheProtocol) {
+		self.cache = cache
+	}
+	
 	// MARK: - Cache
 	
-	private var cache = EventGroupCache()
+	var cache: EventGroupCacheProtocol
 		
 	// MARK: - Identity Information
 	

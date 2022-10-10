@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class IdentitySelectionView: BaseView {
+class ListIdentitySelectionView: BaseView {
 	
 	/// The display constants
 	private enum ViewTraits {

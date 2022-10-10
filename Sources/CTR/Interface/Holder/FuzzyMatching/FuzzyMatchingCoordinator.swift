@@ -92,14 +92,15 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesToSeeIdentitiyGroups() {
 		
-		let blobIds = [["/EventGroup/p1", "/EventGroup/p3", "/EventGroup/p6"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5", "/EventGroup/p7"]]
+//		let blobIds = [["/EventGroup/p1", "/EventGroup/p3", "/EventGroup/p6"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5", "/EventGroup/p7"]]
+		let blobIds = [["/EventGroup/p1"], ["/EventGroup/p2"]]
 		
-		let viewModel = IdentitySelectionViewModel(
+		let viewModel = ListIdentitySelectionViewModel(
 			coordinatorDelegate: self,
-			dataSource: IdentitySelectionDataSource(),
+			dataSource: IdentitySelectionDataSource(cache: EventGroupCache()),
 			nestedBlobIds: blobIds
 		)
-		let viewController = IdentitySelectionViewController(viewModel: viewModel)
+		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
 		
 		navigationController.pushViewController(viewController, animated: true)
 	}

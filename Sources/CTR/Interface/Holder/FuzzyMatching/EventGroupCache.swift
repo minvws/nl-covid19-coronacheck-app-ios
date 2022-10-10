@@ -8,7 +8,14 @@
 import Foundation
 import Transport
 
-class EventGroupCache {
+protocol EventGroupCacheProtocol {
+	
+	func getEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper?
+	
+	func getEUCreditialAttributes(_ uniqueIdentifier: String) -> EuCredentialAttributes?
+}
+
+class EventGroupCache: EventGroupCacheProtocol {
 	
 	// MARK: - Cache
 	

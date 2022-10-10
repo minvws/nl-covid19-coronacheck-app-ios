@@ -9,7 +9,7 @@ import Foundation
 import Shared
 import UIKit
 
-class IdentitySelectionViewController: TraitWrappedGenericViewController<IdentitySelectionView, IdentitySelectionViewModel> {
+class ListIdentitySelectionViewController: TraitWrappedGenericViewController<ListIdentitySelectionView, ListIdentitySelectionViewModel> {
 	
 	override func viewDidLoad() {
 		
