@@ -47,7 +47,7 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	///   - matchingBlobIds: an array of an an array of blob IDs with a matching identity
+	///   - matchingBlobIds: an array of an array of blob IDs with a matching identity
 	///   - onboardingFactory: the onboarding content factory
 	///   - delegate: the fuzzy matching flow delegate
 	init(
