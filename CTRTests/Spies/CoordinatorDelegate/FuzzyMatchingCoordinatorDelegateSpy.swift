@@ -12,14 +12,14 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 
 	var invokedUserHasSelectedIdentityGroup = false
 	var invokedUserHasSelectedIdentityGroupCount = 0
-	var invokedUserHasSelectedIdentityGroupParameters: (selectedBlobIds: [String], nestedBlobIds: [[String]])?
-	var invokedUserHasSelectedIdentityGroupParametersList = [(selectedBlobIds: [String], nestedBlobIds: [[String]])]()
+	var invokedUserHasSelectedIdentityGroupParameters: (selectedBlobIds: [String], matchingBlobIds: [[String]])?
+	var invokedUserHasSelectedIdentityGroupParametersList = [(selectedBlobIds: [String], matchingBlobIds: [[String]])]()
 
-	func userHasSelectedIdentityGroup(selectedBlobIds: [String], nestedBlobIds: [[String]]) {
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String], matchingBlobIds: [[String]]) {
 		invokedUserHasSelectedIdentityGroup = true
 		invokedUserHasSelectedIdentityGroupCount += 1
-		invokedUserHasSelectedIdentityGroupParameters = (selectedBlobIds, nestedBlobIds)
-		invokedUserHasSelectedIdentityGroupParametersList.append((selectedBlobIds, nestedBlobIds))
+		invokedUserHasSelectedIdentityGroupParameters = (selectedBlobIds, matchingBlobIds)
+		invokedUserHasSelectedIdentityGroupParametersList.append((selectedBlobIds, matchingBlobIds))
 	}
 
 	var invokedUserHasFinishedTheFlow = false

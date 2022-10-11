@@ -16,7 +16,7 @@ class SendIdentitySelectionViewModel {
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 
 	private var selectedBlobIds = [String]()
-	private var nestedBlobIds = [[String]]()
+	private var matchingBlobIds = [[String]]()
 	private var selectedIdentity: String? {
 		get {
 			return Current.secureUserSettings.selectedIdentity
@@ -33,18 +33,18 @@ class SendIdentitySelectionViewModel {
 	init(
 		coordinatorDelegate: FuzzyMatchingCoordinatorDelegate,
 		dataSource: IdentitySelectionDataSourceProtocol,
-		nestedBlobIds: [[String]],
+		matchingBlobIds: [[String]],
 		selectedBlobIds: [String]) {
 		
 		self.coordinatorDelegate = coordinatorDelegate
 		self.dataSource = dataSource
-		self.nestedBlobIds = nestedBlobIds
+		self.matchingBlobIds = matchingBlobIds
 		self.selectedBlobIds = selectedBlobIds
 	}
 	
 	func viewDidAppear() {
 		
-		guard nestedBlobIds.count > 1, selectedBlobIds.isNotEmpty else {
+		guard matchingBlobIds.count > 1, selectedBlobIds.isNotEmpty else {
 			displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .removeEventGroups, clientCode: .noSelectionMade))
 			return
 		}
@@ -76,7 +76,7 @@ class SendIdentitySelectionViewModel {
 		
 		var result = true
 		
-		nestedBlobIds.forEach { blobIds in
+		matchingBlobIds.forEach { blobIds in
 			if selectedBlobIds != blobIds {
 				blobIds.forEach { uniqueIdentifier in
 					if let wrapper = dataSource.cache.getEventResultWrapper(uniqueIdentifier) {

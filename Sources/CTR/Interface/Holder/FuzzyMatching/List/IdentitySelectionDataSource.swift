@@ -12,7 +12,7 @@ protocol IdentitySelectionDataSourceProtocol {
 	
 	func getIdentity(_ uniqueIdentifier: String) -> EventFlow.Identity?
 	
-	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)]
+	func getIdentityInformation(matchingBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)]
 	
 	func getEventOveriew(blobIds: [String]) -> [[String]]
 	
@@ -41,11 +41,11 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		return result
 	}
 	
-	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
+	func getIdentityInformation(matchingBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
 		
 		var result = [(blobIds: [String], name: String, eventCountInformation: String)]()
 		
-		nestedBlobIds.forEach { blobIds in
+		matchingBlobIds.forEach { blobIds in
 			
 			var fullName: String?
 			var vaccinationCount = 0

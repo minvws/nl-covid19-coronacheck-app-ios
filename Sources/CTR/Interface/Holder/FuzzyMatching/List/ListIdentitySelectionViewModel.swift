@@ -47,7 +47,7 @@ class ListIdentitySelectionViewModel {
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 	
 	private var selectedBlobIds = [String]()
-	private var nestedBlobIds = [[String]]()
+	private var matchingBlobIds = [[String]]()
 	
 	weak private var coordinatorDelegate: FuzzyMatchingCoordinatorDelegate?
 	
@@ -56,11 +56,11 @@ class ListIdentitySelectionViewModel {
 	init(
 		coordinatorDelegate: FuzzyMatchingCoordinatorDelegate,
 		dataSource: IdentitySelectionDataSourceProtocol,
-		nestedBlobIds: [[String]]) {
+		matchingBlobIds: [[String]]) {
 		
 		self.coordinatorDelegate = coordinatorDelegate
 		self.dataSource = dataSource
-		self.nestedBlobIds = nestedBlobIds
+		self.matchingBlobIds = matchingBlobIds
 		self.populateIdentityObjects()
 	}
 	
@@ -68,7 +68,7 @@ class ListIdentitySelectionViewModel {
 		
 		var items = [IdentityItem]()
 		
-		let tuples = dataSource.getIdentityInformation(nestedBlobIds: nestedBlobIds)
+		let tuples = dataSource.getIdentityInformation(matchingBlobIds: matchingBlobIds)
 		for identity in tuples {
 			let object = IdentityItem(
 				blobIds: identity.blobIds,
@@ -120,7 +120,7 @@ class ListIdentitySelectionViewModel {
 			return
 		}
 		
-		coordinatorDelegate?.userHasSelectedIdentityGroup(selectedBlobIds: selectedBlobIds, nestedBlobIds: nestedBlobIds)
+		coordinatorDelegate?.userHasSelectedIdentityGroup(selectedBlobIds: selectedBlobIds)
 	}
 	
 	func userWishesToSkip() {

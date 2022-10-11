@@ -37,15 +37,15 @@ class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
 
 	var invokedGetIdentityInformation = false
 	var invokedGetIdentityInformationCount = 0
-	var invokedGetIdentityInformationParameters: (nestedBlobIds: [[String]], Void)?
-	var invokedGetIdentityInformationParametersList = [(nestedBlobIds: [[String]], Void)]()
+	var invokedGetIdentityInformationParameters: (matchingBlobIds: [[String]], Void)?
+	var invokedGetIdentityInformationParametersList = [(matchingBlobIds: [[String]], Void)]()
 	var stubbedGetIdentityInformationResult: [(blobIds: [String], name: String, eventCountInformation: String)]! = []
 
-	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
+	func getIdentityInformation(matchingBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
 		invokedGetIdentityInformation = true
 		invokedGetIdentityInformationCount += 1
-		invokedGetIdentityInformationParameters = (nestedBlobIds, ())
-		invokedGetIdentityInformationParametersList.append((nestedBlobIds, ()))
+		invokedGetIdentityInformationParameters = (matchingBlobIds, ())
+		invokedGetIdentityInformationParametersList.append((matchingBlobIds, ()))
 		return stubbedGetIdentityInformationResult
 	}
 

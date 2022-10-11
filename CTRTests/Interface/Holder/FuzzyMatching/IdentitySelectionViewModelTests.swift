@@ -24,7 +24,7 @@ final class IdentitySelectionViewModelTests: XCTestCase {
 		sut = ListIdentitySelectionViewModel(
 			coordinatorDelegate: coordinatorDelegateSpy,
 			dataSource: dataSourceSpy,
-			nestedBlobIds: []
+			matchingBlobIds: []
 		)
 	}
 

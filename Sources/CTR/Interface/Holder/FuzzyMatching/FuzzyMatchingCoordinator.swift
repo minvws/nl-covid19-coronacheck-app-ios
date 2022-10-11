@@ -15,7 +15,7 @@ protocol FuzzyMatchingFlowDelegate: AnyObject {
 
 protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 		
-	func userHasSelectedIdentityGroup(selectedBlobIds: [String], nestedBlobIds: [[String]])
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String])
 
 	func userHasFinishedTheFlow()
 
@@ -40,28 +40,32 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	
 	var dataSource: IdentitySelectionDataSourceProtocol = IdentitySelectionDataSource(cache: EventGroupCache())
 	
+	var matchingBlobIds = [[String]]()
+	
 	private weak var delegate: FuzzyMatchingFlowDelegate?
 	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	///   - factory: the onboarding content factory
+	///   - matchingBlobIds: an array of an an array of blob IDs with a matching identity
+	///   - onboardingFactory: the onboarding content factory
 	///   - delegate: the fuzzy matching flow delegate
 	init(
 		navigationController: UINavigationController,
-		factory: FuzzyMatchingOnboardingFactoryProtocol,
+		matchingBlobIds: [[String]],
+		onboardingFactory: FuzzyMatchingOnboardingFactoryProtocol,
 		delegate: FuzzyMatchingFlowDelegate) {
 		
 		self.navigationController = navigationController
-		self.factory = factory
+		self.matchingBlobIds = matchingBlobIds
+		self.factory = onboardingFactory
 		self.delegate = delegate
 	}
 	
 	/// Start the scene
 	func start() {
 		
-//		userWishesToSeeOnboarding()
-		userWishesToSeeIdentitiyGroups()
+		userWishesToSeeOnboarding()
 	}
 	
 	// MARK: - Universal Link handling
@@ -100,25 +104,22 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesToSeeIdentitiyGroups() {
 		
-//		let blobIds = [["/EventGroup/p1", "/EventGroup/p3", "/EventGroup/p6"], ["/EventGroup/p2", "/EventGroup/p4"], ["/EventGroup/p5", "/EventGroup/p7"]]
-		let blobIds = [["/EventGroup/p1"], ["/EventGroup/p2"]]
-		
 		let viewModel = ListIdentitySelectionViewModel(
 			coordinatorDelegate: self,
 			dataSource: dataSource,
-			nestedBlobIds: blobIds
+			matchingBlobIds: matchingBlobIds
 		)
 		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
 		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	func userHasSelectedIdentityGroup(selectedBlobIds: [String], nestedBlobIds: [[String]]) {
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String]) {
 
 		let viewModel = SendIdentitySelectionViewModel(
 			coordinatorDelegate: self,
 			dataSource: dataSource,
-			nestedBlobIds: nestedBlobIds,
+			matchingBlobIds: matchingBlobIds,
 			selectedBlobIds: selectedBlobIds
 		)
 		let viewController = SendIdentitySelectionViewController(viewModel: viewModel)
