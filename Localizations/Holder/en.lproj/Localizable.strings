@@ -647,6 +647,7 @@
 "holder_identitySelection_details_scannedPaperProof" = "Scanned certificate";
 "holder_identitySelection_error_makeAChoice" = "Please make a choice first";
 "holder_identitySelection_error_willBeRemoved" = "This one will be removed";
+"holder_identitySelection_loading_title" = "Updating details";
 "holder_identitySelection_message" = "Please check in the details which vaccinations or test results are connected to your preferred name.";
 "holder_identitySelection_skipAlert_action" = "Yes, skip";
 "holder_identitySelection_skipAlert_body" = "You may not be able to use your QR codes. We will ask you again to make a choice next time you open the app.";

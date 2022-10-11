@@ -656,7 +656,7 @@
 "holder_identitySelection_skipAlert_action" = "Ja, overslaan";
 "holder_identitySelection_skipAlert_body" = "Je kunt je QR-codes dan mogelijk niet gebruiken. De volgende keer dat je de app opstart vragen we opnieuw om een keuze te maken.";
 "holder_identitySelection_skipAlert_title" = "Weet je zeker dat je wilt overslaan?";
-"holder_identitySelection_success_body" = "De gegevens die bij de naam horen die je hebt gekozen zijn bewaard (%@). Alle andere vaccinatie- en testgegevens zijn verwijderd. Mogelijk zijn hierdoor ook bewijzen weg.";
+"holder_identitySelection_success_body" = "De gegevens die bij de naam horen die je hebt gekozen zijn bewaard (<b>%@</b>). Alle andere vaccinatie- en testgegevens zijn verwijderd. Mogelijk zijn hierdoor ook bewijzen weg.";
 "holder_identitySelection_success_title" = "Dank! Je gegevens zijn bijgewerkt";
 "holder_identitySelection_title" = "Welke naam kies je?";
 "holder_identitySelection_why" = "Waarom moet ik kiezen?";

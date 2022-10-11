@@ -10,6 +10,8 @@ import Transport
 
 protocol IdentitySelectionDataSourceProtocol {
 	
+	func getIdentity(_ uniqueIdentifier: String) -> EventFlow.Identity?
+	
 	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)]
 	
 	func getEventOveriew(blobIds: [String]) -> [[String]]
@@ -19,15 +21,25 @@ protocol IdentitySelectionDataSourceProtocol {
 
 class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
+	var cache: EventGroupCacheProtocol
+	
 	init(cache: EventGroupCacheProtocol) {
 		self.cache = cache
 	}
-	
-	// MARK: - Cache
-	
-	var cache: EventGroupCacheProtocol
 		
 	// MARK: - Identity Information
+	
+	func getIdentity(_ uniqueIdentifier: String) -> EventFlow.Identity? {
+		
+		var result: EventFlow.Identity?
+		
+		if let wrapper = cache.getEventResultWrapper(uniqueIdentifier) {
+			result = wrapper.identity
+		} else if let euCredentialAttributes = cache.getEUCreditialAttributes(uniqueIdentifier) {
+			result = euCredentialAttributes.identity
+		}
+		return result
+	}
 	
 	func getIdentityInformation(nestedBlobIds: [[String]]) -> [(blobIds: [String], name: String, eventCountInformation: String)] {
 		
@@ -218,18 +230,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	}
 	
 	// MARK: - helpers
-	
-	private func getIdentity(_ uniqueIdentifier: String) -> EventFlow.Identity? {
-		
-		var result: EventFlow.Identity?
-		
-		if let wrapper = cache.getEventResultWrapper(uniqueIdentifier) {
-			result = wrapper.identity
-		} else if let euCredentialAttributes = cache.getEUCreditialAttributes(uniqueIdentifier) {
-			result = euCredentialAttributes.identity
-		}
-		return result
-	}
 	
 	private func getEventCount(_ uniqueIdentifier: String) -> (vaccinationCount: Int, testCount: Int, assessmentCount: Int) {
 		
