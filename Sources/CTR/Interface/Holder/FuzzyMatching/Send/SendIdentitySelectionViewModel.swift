@@ -136,7 +136,7 @@ class SendIdentitySelectionViewModel {
 				title: L.generalClose(),
 				action: { [weak self] _ in
 					guard let self = self else { return }
-					self.coordinatorDelegate?.userHasFinishedTheFlow()
+					self.coordinatorDelegate?.userHasStoppedTheFlow()
 				}
 			)
 		)
@@ -159,7 +159,7 @@ class SendIdentitySelectionViewModel {
 			body: message,
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
-				self?.coordinatorDelegate?.userHasFinishedTheFlow()
+				self?.coordinatorDelegate?.userHasStoppedTheFlow()
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {

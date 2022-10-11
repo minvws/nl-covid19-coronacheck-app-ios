@@ -10,6 +10,8 @@ import Shared
 
 protocol FuzzyMatchingFlowDelegate: AnyObject {
 	
+	func fuzzyMatchingFlowDidStop()
+
 	func fuzzyMatchingFlowDidFinish()
 }
 
@@ -19,6 +21,8 @@ protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 
 	func userHasFinishedTheFlow()
 
+	func userHasStoppedTheFlow()
+	
 	func userWishesMoreInfoAboutWhy()
 
 	func userWishesToSeeIdentitiyGroups()
@@ -146,6 +150,11 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
+	}
+
+	func userHasStoppedTheFlow() {
+		
+		delegate?.fuzzyMatchingFlowDidStop()
 	}
 	
 	func userHasFinishedTheFlow() {

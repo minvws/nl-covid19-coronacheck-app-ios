@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct IdentitySelectionDetails {
+struct IdentitySelectionDetails: Equatable {
 	
 	let name: String
 	let details: [[String]]

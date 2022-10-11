@@ -12,14 +12,14 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 
 	var invokedUserHasSelectedIdentityGroup = false
 	var invokedUserHasSelectedIdentityGroupCount = 0
-	var invokedUserHasSelectedIdentityGroupParameters: (selectedBlobIds: [String], matchingBlobIds: [[String]])?
-	var invokedUserHasSelectedIdentityGroupParametersList = [(selectedBlobIds: [String], matchingBlobIds: [[String]])]()
+	var invokedUserHasSelectedIdentityGroupParameters: (selectedBlobIds: [String], Void)?
+	var invokedUserHasSelectedIdentityGroupParametersList = [(selectedBlobIds: [String], Void)]()
 
-	func userHasSelectedIdentityGroup(selectedBlobIds: [String], matchingBlobIds: [[String]]) {
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String]) {
 		invokedUserHasSelectedIdentityGroup = true
 		invokedUserHasSelectedIdentityGroupCount += 1
-		invokedUserHasSelectedIdentityGroupParameters = (selectedBlobIds, matchingBlobIds)
-		invokedUserHasSelectedIdentityGroupParametersList.append((selectedBlobIds, matchingBlobIds))
+		invokedUserHasSelectedIdentityGroupParameters = (selectedBlobIds, ())
+		invokedUserHasSelectedIdentityGroupParametersList.append((selectedBlobIds, ()))
 	}
 
 	var invokedUserHasFinishedTheFlow = false
@@ -28,6 +28,14 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 	func userHasFinishedTheFlow() {
 		invokedUserHasFinishedTheFlow = true
 		invokedUserHasFinishedTheFlowCount += 1
+	}
+
+	var invokedUserHasStoppedTheFlow = false
+	var invokedUserHasStoppedTheFlowCount = 0
+
+	func userHasStoppedTheFlow() {
+		invokedUserHasStoppedTheFlow = true
+		invokedUserHasStoppedTheFlowCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutWhy = false
