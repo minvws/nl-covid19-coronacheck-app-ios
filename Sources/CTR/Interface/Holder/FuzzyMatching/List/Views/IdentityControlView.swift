@@ -17,9 +17,6 @@ class IdentityControlView: BaseView {
 			static let spacing: CGFloat = 8
 			static let insets = UIEdgeInsets(top: 24, left: 68, bottom: 24, right: 0)
 		}
-		enum Spacing {
-			static let stackviewSpacing: CGFloat = 8
-		}
 		enum Size {
 			static let separatorHeight: CGFloat = 1
 		}

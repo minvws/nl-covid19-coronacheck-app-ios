@@ -13,7 +13,6 @@ class SendIdentitySelectionView: ScrolledStackView {
 	private struct ViewTraits {
 
 		enum Title {
-			static let spacing: CGFloat = 24
 			static let lineHeight: CGFloat = 26
 			static let kerning: CGFloat = -0.26
 		}
