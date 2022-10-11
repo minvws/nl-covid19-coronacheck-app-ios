@@ -61,7 +61,7 @@ class ListIdentitySelectionView: BaseView {
 		return view
 	}()
 
-	private let selectionStackView: UIStackView = {
+	internal let selectionStackView: UIStackView = {
 		
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
