@@ -9,7 +9,7 @@ import Foundation
 import Shared
 import Transport
 
-enum IdentityControlViewState {
+enum IdentityControlViewState: Equatable {
 	case selected
 	case unselected
 	case selectionError
@@ -46,8 +46,8 @@ class ListIdentitySelectionViewModel {
 	var identityItems = Observable<[IdentityItem]>(value: [])
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 	
-	private var selectedBlobIds = [String]()
-	private var matchingBlobIds = [[String]]()
+	internal var selectedBlobIds = [String]()
+	internal var matchingBlobIds = [[String]]()
 	
 	weak private var coordinatorDelegate: FuzzyMatchingCoordinatorDelegate?
 	
