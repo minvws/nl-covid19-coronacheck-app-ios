@@ -9,7 +9,7 @@ import XCTest
 import Nimble
 @testable import CTR
 
-final class DetailsIdentitySelectionViewModelTests: XCTestCase {
+final class IdentitySelectionDetailsViewModelTests: XCTestCase {
 
 	var sut: IdentitySelectionDetailsViewModel!
 

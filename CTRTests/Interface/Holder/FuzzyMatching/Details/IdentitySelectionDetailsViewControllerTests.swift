@@ -11,7 +11,7 @@ import SnapshotTesting
 @testable import CTR
 
 // swiftlint:disable type_name
-final class DetailsIdentitySelectionViewControllerTests: XCTestCase {
+final class IdentitySelectionDetailsViewControllerTests: XCTestCase {
 	
 	var sut: IdentitySelectionDetailsViewController!
 	var window = UIWindow()
