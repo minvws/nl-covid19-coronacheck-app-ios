@@ -113,8 +113,6 @@ class ListIdentitySelectionViewModel {
 	
 	func userWishesToSaveEvents() {
 		
-		logInfo("userWishesToSaveEvents")
-		
 		guard selectedBlobIds.isNotEmpty else {
 		
 			identityItems.value.forEach { $0.state.value = .selectionError }
@@ -122,29 +120,7 @@ class ListIdentitySelectionViewModel {
 			return
 		}
 		
-		persistAndRemoveEventGroups()
-		coordinatorDelegate?.userHasFinishedTheFlow()
-	}
-	
-	private func persistAndRemoveEventGroups() {
-		
-		nestedBlobIds.forEach { blobIds in
-			if selectedBlobIds != blobIds {
-				blobIds.forEach { uniqueIdentifier in
-					if let wrapper = dataSource.cache.getEventResultWrapper(uniqueIdentifier) {
-						RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovedEventModel.identityMismatch)
-					} else if let euCredentialAttributes = dataSource.cache.getEUCreditialAttributes(uniqueIdentifier) {
-						RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovedEventModel.identityMismatch)
-					}
-					
-					let eventGroups = Current.walletManager.listEventGroups()
-					if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
-						logInfo("ABOUT TO REMOVE \(eventGroup.objectID)")
-						Current.dataStoreManager.delete(eventGroup.objectID)
-					}
-				}
-			}
-		}
+		coordinatorDelegate?.userHasSelectedIdentityGroup(selectedBlobIds: selectedBlobIds, nestedBlobIds: nestedBlobIds)
 	}
 	
 	func userWishesToSkip() {

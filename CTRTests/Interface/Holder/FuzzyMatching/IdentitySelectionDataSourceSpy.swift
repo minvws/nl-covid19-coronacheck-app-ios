@@ -7,8 +7,33 @@
 
 import XCTest
 @testable import CTR
+import Transport
 
 class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
+
+	var invokedCacheGetter = false
+	var invokedCacheGetterCount = 0
+	var stubbedCache: EventGroupCacheProtocol!
+
+	var cache: EventGroupCacheProtocol {
+		invokedCacheGetter = true
+		invokedCacheGetterCount += 1
+		return stubbedCache
+	}
+
+	var invokedGetIdentity = false
+	var invokedGetIdentityCount = 0
+	var invokedGetIdentityParameters: (uniqueIdentifier: String, Void)?
+	var invokedGetIdentityParametersList = [(uniqueIdentifier: String, Void)]()
+	var stubbedGetIdentityResult: EventFlow.Identity!
+
+	func getIdentity(_ uniqueIdentifier: String) -> EventFlow.Identity? {
+		invokedGetIdentity = true
+		invokedGetIdentityCount += 1
+		invokedGetIdentityParameters = (uniqueIdentifier, ())
+		invokedGetIdentityParametersList.append((uniqueIdentifier, ()))
+		return stubbedGetIdentityResult
+	}
 
 	var invokedGetIdentityInformation = false
 	var invokedGetIdentityInformationCount = 0

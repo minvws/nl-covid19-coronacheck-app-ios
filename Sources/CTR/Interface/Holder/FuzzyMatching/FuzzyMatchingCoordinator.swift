@@ -14,14 +14,20 @@ protocol FuzzyMatchingFlowDelegate: AnyObject {
 }
 
 protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
+		
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String], nestedBlobIds: [[String]])
+
+	func userHasFinishedTheFlow()
+
+	func userWishesMoreInfoAboutWhy()
+
+	func userWishesToSeeIdentitiyGroups()
 	
 	func userWishesToSeeIdentitySelectionDetails(_ identitySelectionDetails: IdentitySelectionDetails)
 	
-	func userWishesToSeeIdentitiyGroups()
+	func userWishesToSeeSuccess(name: String)
 	
-	func userWishesMoreInfoAboutWhy()
-	
-	func userHasFinishedTheFlow()
+	func presentError(content: Content, backAction: (() -> Void)?)
 }
 
 final class FuzzyMatchingCoordinator: Coordinator {
@@ -31,6 +37,8 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	var navigationController: UINavigationController
 	
 	var factory: FuzzyMatchingOnboardingFactoryProtocol
+	
+	var dataSource: IdentitySelectionDataSourceProtocol = IdentitySelectionDataSource(cache: EventGroupCache())
 	
 	private weak var delegate: FuzzyMatchingFlowDelegate?
 	
@@ -97,12 +105,46 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		
 		let viewModel = ListIdentitySelectionViewModel(
 			coordinatorDelegate: self,
-			dataSource: IdentitySelectionDataSource(cache: EventGroupCache()),
+			dataSource: dataSource,
 			nestedBlobIds: blobIds
 		)
 		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
 		
 		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String], nestedBlobIds: [[String]]) {
+
+		let viewModel = SendIdentitySelectionViewModel(
+			coordinatorDelegate: self,
+			dataSource: dataSource,
+			nestedBlobIds: nestedBlobIds,
+			selectedBlobIds: selectedBlobIds
+		)
+		let viewController = SendIdentitySelectionViewController(viewModel: viewModel)
+		
+		navigationController.pushViewController(viewController, animated: false)
+	}
+	
+	func userWishesToSeeSuccess(name: String) {
+		
+		let content = Content(
+			title: L.holder_identitySelection_success_title(),
+			body: L.holder_identitySelection_success_body(name),
+			primaryActionTitle: L.general_toMyOverview(),
+			primaryAction: { [weak self] in
+				self?.userHasFinishedTheFlow()
+			}
+		)
+
+		let viewController = ContentViewController(
+			viewModel: ContentViewModel(
+				content: content,
+				backAction: nil,
+				allowsSwipeBack: false
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
 	}
 	
 	func userHasFinishedTheFlow() {
@@ -122,7 +164,14 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		let viewController = BottomSheetContentViewController(viewModel: viewModel)
 		presentAsBottomSheet(viewController)
 	}
+	
+	func presentError(content: Content, backAction: (() -> Void)?) {
+		
+		presentContent(content: content, backAction: backAction)
+	}
 }
+
+// MARK: - PagedAnnouncementDelegate
 
 extension FuzzyMatchingCoordinator: PagedAnnouncementDelegate {
 	

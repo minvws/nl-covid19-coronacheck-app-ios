@@ -19,6 +19,7 @@ protocol SecureUserSettingsProtocol: AnyObject {
 	var forcedInformationData: ForcedInformationData { get set }
 	var holderSecretKey: Data? { get set }
 	var onboardingData: OnboardingData { get set }
+	var selectedIdentity: String? { get set }
 	var storedConfiguration: RemoteConfiguration { get set }
 	var verificationPolicy: VerificationPolicy? { get set }
 	
@@ -33,6 +34,7 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 		static var holderSecretKey: Data? = nil
 		static var forcedInformationData: NewFeaturesManager.ForcedInformationData = .empty
 		static var onboardingData: OnboardingManager.OnboardingData = .empty
+		static var selectedIdentity: String? = nil
 		static var storedConfiguration: RemoteConfiguration = .default
 		static var verificationPolicy: VerificationPolicy? = .none
 	}
@@ -57,6 +59,9 @@ class SecureUserSettings: SecureUserSettingsProtocol {
 
 	@Keychain(name: "verificationPolicy", service: "RiskLevelManager" + Configuration().getEnvironment(), clearOnReinstall: false)
 	var verificationPolicy: VerificationPolicy? = Defaults.verificationPolicy
+	
+	@Keychain(name: "selectedIdentity", service: "FuzzyMatching" + Configuration().getEnvironment(), clearOnReinstall: false)
+	var selectedIdentity: String? = Defaults.selectedIdentity
 }
 
 extension SecureUserSettings {
@@ -67,6 +72,7 @@ extension SecureUserSettings {
 		forcedInformationData = Defaults.forcedInformationData
 		holderSecretKey = Defaults.holderSecretKey
 		onboardingData = Defaults.onboardingData
+		selectedIdentity = Defaults.selectedIdentity
 		storedConfiguration = Defaults.storedConfiguration
 		verificationPolicy = Defaults.verificationPolicy
 	}
