@@ -10,6 +10,42 @@ import XCTest
 
 final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegate {
 
+	var invokedUserHasSelectedIdentityGroup = false
+	var invokedUserHasSelectedIdentityGroupCount = 0
+	var invokedUserHasSelectedIdentityGroupParameters: (selectedBlobIds: [String], nestedBlobIds: [[String]])?
+	var invokedUserHasSelectedIdentityGroupParametersList = [(selectedBlobIds: [String], nestedBlobIds: [[String]])]()
+
+	func userHasSelectedIdentityGroup(selectedBlobIds: [String], nestedBlobIds: [[String]]) {
+		invokedUserHasSelectedIdentityGroup = true
+		invokedUserHasSelectedIdentityGroupCount += 1
+		invokedUserHasSelectedIdentityGroupParameters = (selectedBlobIds, nestedBlobIds)
+		invokedUserHasSelectedIdentityGroupParametersList.append((selectedBlobIds, nestedBlobIds))
+	}
+
+	var invokedUserHasFinishedTheFlow = false
+	var invokedUserHasFinishedTheFlowCount = 0
+
+	func userHasFinishedTheFlow() {
+		invokedUserHasFinishedTheFlow = true
+		invokedUserHasFinishedTheFlowCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutWhy = false
+	var invokedUserWishesMoreInfoAboutWhyCount = 0
+
+	func userWishesMoreInfoAboutWhy() {
+		invokedUserWishesMoreInfoAboutWhy = true
+		invokedUserWishesMoreInfoAboutWhyCount += 1
+	}
+
+	var invokedUserWishesToSeeIdentitiyGroups = false
+	var invokedUserWishesToSeeIdentitiyGroupsCount = 0
+
+	func userWishesToSeeIdentitiyGroups() {
+		invokedUserWishesToSeeIdentitiyGroups = true
+		invokedUserWishesToSeeIdentitiyGroupsCount += 1
+	}
+
 	var invokedUserWishesToSeeIdentitySelectionDetails = false
 	var invokedUserWishesToSeeIdentitySelectionDetailsCount = 0
 	var invokedUserWishesToSeeIdentitySelectionDetailsParameters: (identitySelectionDetails: IdentitySelectionDetails, Void)?
@@ -22,27 +58,31 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 		invokedUserWishesToSeeIdentitySelectionDetailsParametersList.append((identitySelectionDetails, ()))
 	}
 
-	var invokedUserWishesToSeeIdentitiyGroups = false
-	var invokedUserWishesToSeeIdentitiyGroupsCount = 0
+	var invokedUserWishesToSeeSuccess = false
+	var invokedUserWishesToSeeSuccessCount = 0
+	var invokedUserWishesToSeeSuccessParameters: (name: String, Void)?
+	var invokedUserWishesToSeeSuccessParametersList = [(name: String, Void)]()
 
-	func userWishesToSeeIdentitiyGroups() {
-		invokedUserWishesToSeeIdentitiyGroups = true
-		invokedUserWishesToSeeIdentitiyGroupsCount += 1
+	func userWishesToSeeSuccess(name: String) {
+		invokedUserWishesToSeeSuccess = true
+		invokedUserWishesToSeeSuccessCount += 1
+		invokedUserWishesToSeeSuccessParameters = (name, ())
+		invokedUserWishesToSeeSuccessParametersList.append((name, ()))
 	}
 
-	var invokedUserWishesMoreInfoAboutWhy = false
-	var invokedUserWishesMoreInfoAboutWhyCount = 0
+	var invokedPresentError = false
+	var invokedPresentErrorCount = 0
+	var invokedPresentErrorParameters: (content: Content, Void)?
+	var invokedPresentErrorParametersList = [(content: Content, Void)]()
+	var shouldInvokePresentErrorBackAction = false
 
-	func userWishesMoreInfoAboutWhy() {
-		invokedUserWishesMoreInfoAboutWhy = true
-		invokedUserWishesMoreInfoAboutWhyCount += 1
-	}
-
-	var invokedUserHasFinishedTheFlow = false
-	var invokedUserHasFinishedTheFlowCount = 0
-
-	func userHasFinishedTheFlow() {
-		invokedUserHasFinishedTheFlow = true
-		invokedUserHasFinishedTheFlowCount += 1
+	func presentError(content: Content, backAction: (() -> Void)?) {
+		invokedPresentError = true
+		invokedPresentErrorCount += 1
+		invokedPresentErrorParameters = (content, ())
+		invokedPresentErrorParametersList.append((content, ()))
+		if shouldInvokePresentErrorBackAction {
+			backAction?()
+		}
 	}
 }
