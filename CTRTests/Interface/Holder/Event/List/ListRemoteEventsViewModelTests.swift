@@ -26,7 +26,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		environmentSpies.cryptoManagerSpy.stubbedGenerateSecretKeyResult = Data()
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
@@ -1762,34 +1761,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderErrorstateSomeresultMessage()))
 		expect(self.sut.alert?.cancelAction?.title) == nil
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalOk()))
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
-	}
-	
-	func test_identityMismatched() {
-		
-		// Given
-		environmentSpies.identityCheckerSpy.stubbedCompareResult = false
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccination,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: environmentSpies.greenCardLoaderSpy
-		)
-		
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-		
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.sut.alert).toEventuallyNot(beNil())
-		expect(self.sut.alert?.title).toEventually(equal(L.holderEventIdentityAlertTitle()))
-		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderEventIdentityAlertMessage()))
-		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.holderEventIdentityAlertCancel()))
-		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderEventIdentityAlertOk()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 	
