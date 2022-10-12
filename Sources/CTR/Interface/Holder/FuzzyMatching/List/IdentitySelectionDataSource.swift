@@ -16,7 +16,9 @@ protocol IdentitySelectionDataSourceProtocol {
 	
 	func getEventOveriew(blobIds: [String]) -> [[String]]
 	
-	var cache: EventGroupCacheProtocol { get }
+	func getEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper?
+	
+	func getEUCreditialAttributes(_ uniqueIdentifier: String) -> EuCredentialAttributes?
 }
 
 class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
@@ -117,6 +119,16 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 			}
 		}
 		return result
+	}
+	
+	// MARK: - Cache proxy
+	
+	func getEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper? {
+		return cache.getEventResultWrapper(uniqueIdentifier)
+	}
+	
+	func getEUCreditialAttributes(_ uniqueIdentifier: String) -> EuCredentialAttributes? {
+		return cache.getEUCreditialAttributes(uniqueIdentifier)
 	}
 	
 	// MARK: - Details From Event

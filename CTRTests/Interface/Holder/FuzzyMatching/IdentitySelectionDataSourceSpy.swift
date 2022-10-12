@@ -11,16 +11,6 @@ import Transport
 
 class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
 
-	var invokedCacheGetter = false
-	var invokedCacheGetterCount = 0
-	var stubbedCache: EventGroupCacheProtocol!
-
-	var cache: EventGroupCacheProtocol {
-		invokedCacheGetter = true
-		invokedCacheGetterCount += 1
-		return stubbedCache
-	}
-
 	var invokedGetIdentity = false
 	var invokedGetIdentityCount = 0
 	var invokedGetIdentityParameters: (uniqueIdentifier: String, Void)?
@@ -61,5 +51,33 @@ class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
 		invokedGetEventOveriewParameters = (blobIds, ())
 		invokedGetEventOveriewParametersList.append((blobIds, ()))
 		return stubbedGetEventOveriewResult
+	}
+
+	var invokedGetEventResultWrapper = false
+	var invokedGetEventResultWrapperCount = 0
+	var invokedGetEventResultWrapperParameters: (uniqueIdentifier: String, Void)?
+	var invokedGetEventResultWrapperParametersList = [(uniqueIdentifier: String, Void)]()
+	var stubbedGetEventResultWrapperResult: EventFlow.EventResultWrapper!
+
+	func getEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper? {
+		invokedGetEventResultWrapper = true
+		invokedGetEventResultWrapperCount += 1
+		invokedGetEventResultWrapperParameters = (uniqueIdentifier, ())
+		invokedGetEventResultWrapperParametersList.append((uniqueIdentifier, ()))
+		return stubbedGetEventResultWrapperResult
+	}
+
+	var invokedGetEUCreditialAttributes = false
+	var invokedGetEUCreditialAttributesCount = 0
+	var invokedGetEUCreditialAttributesParameters: (uniqueIdentifier: String, Void)?
+	var invokedGetEUCreditialAttributesParametersList = [(uniqueIdentifier: String, Void)]()
+	var stubbedGetEUCreditialAttributesResult: EuCredentialAttributes!
+
+	func getEUCreditialAttributes(_ uniqueIdentifier: String) -> EuCredentialAttributes? {
+		invokedGetEUCreditialAttributes = true
+		invokedGetEUCreditialAttributesCount += 1
+		invokedGetEUCreditialAttributesParameters = (uniqueIdentifier, ())
+		invokedGetEUCreditialAttributesParametersList.append((uniqueIdentifier, ()))
+		return stubbedGetEUCreditialAttributesResult
 	}
 }

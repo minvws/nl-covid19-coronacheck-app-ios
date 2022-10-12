@@ -55,6 +55,7 @@ class SendIdentitySelectionViewModel {
 		}
 		
 		guard persistAndRemoveEventGroups() else {
+			selectedIdentity = nil
 			displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .removeEventGroups, clientCode: .failedToRemoveEventGroups))
 			return
 		}
@@ -79,15 +80,15 @@ class SendIdentitySelectionViewModel {
 		matchingBlobIds.forEach { blobIds in
 			if selectedBlobIds != blobIds {
 				blobIds.forEach { uniqueIdentifier in
-					if let wrapper = dataSource.cache.getEventResultWrapper(uniqueIdentifier) {
+					if let wrapper = dataSource.getEventResultWrapper(uniqueIdentifier) {
 						result = result && RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovedEventModel.identityMismatch).isNotEmpty
-					} else if let euCredentialAttributes = dataSource.cache.getEUCreditialAttributes(uniqueIdentifier) {
+					} else if let euCredentialAttributes = dataSource.getEUCreditialAttributes(uniqueIdentifier) {
 						result = result && RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovedEventModel.identityMismatch) != nil
 					}
 					
 					let eventGroups = Current.walletManager.listEventGroups()
 					if let eventGroup = eventGroups.first(where: { $0.uniqueIdentifier == uniqueIdentifier }) {
-						logDebug("SendIdentitySelectionViewModel - removing eventGroup: \(eventGroup.objectID)")
+						logVerbose("SendIdentitySelectionViewModel - removing eventGroup: \(eventGroup.objectID)")
 						result = result && Current.dataStoreManager.delete(eventGroup.objectID).isSuccess
 					}
 				}
