@@ -775,6 +775,7 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	
 	func didTapMismatchedIdentityEventsDeletedDismiss(items: [RemovedEventItem] ) {
 		Current.walletManager.removeExistingMismatchedIdentityEvents()
+		Current.secureUserSettings.selectedIdentity = nil
 	}
 	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion) {

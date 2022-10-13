@@ -112,4 +112,61 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.currentlyPresentedAlert.value).toEventually(beNil())
 	}
 	
+	// MARK: Mismatched Identity Events
+	
+	func test_mismatchedIdentityEvent_zeroInDB_doesntShowBanner() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		
+		// Act
+		mismatchedIdentityEventsSpy.invokedDidUpdate?([])
+		
+		// Assert
+		expect {
+			self.sut.internationalCards.value.first { (card: HolderDashboardViewController.Card) in
+				if case .eventsWereRemoved = card { return true }
+				return false
+			}
+		}.toEventually(beNil())
+	}
+	
+	func test_mismatchedIdentityEvent_eventBeingAdded_triggersBanner() throws {
+		// Arrange
+		environmentSpies.secureUserSettingsSpy.stubbedSelectedIdentity = "de Tester, Test"
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		
+		// Act
+		mismatchedIdentityEventsSpy.invokedDidUpdate?([RemovedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
+		
+		// Assert
+
+		let eventsWereRemovedBannerValues = try XCTUnwrap(eventuallyUnwrap {
+			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
+				if case let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
+				}
+				return nil
+			}
+			return matchingTuples.first
+		})
+
+		let (message, callToActionButtonText, didTapCallToAction, didTapDismiss) = eventsWereRemovedBannerValues
+		expect(message) == L.holder_identityRemoved_banner_title()
+		expect(callToActionButtonText) == L.holder_identityRemoved_banner_button_readmore()
+		
+		// Check the CTA button handler:
+		didTapCallToAction()
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted) == true
+
+		// Check the cancel button handler
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == false
+		expect(self.environmentSpies.secureUserSettingsSpy.selectedIdentity) == "de Tester, Test"
+
+		didTapDismiss()
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents).toEventually(beTrue())
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedSelectedIdentitySetter) == true
+		expect(self.environmentSpies.secureUserSettingsSpy.invokedSelectedIdentity) == nil
+
+	}
 }
