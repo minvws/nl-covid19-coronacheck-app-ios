@@ -7,6 +7,7 @@
 
 import Foundation
 import Transport
+import Shared
 
 protocol IdentitySelectionDataSourceProtocol {
 	
@@ -22,6 +23,22 @@ protocol IdentitySelectionDataSourceProtocol {
 }
 
 class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
+
+	internal struct EventSummary: Equatable {
+		let event: EventFlow.Event?
+		let dateString: String
+		let provider: String?
+		let paperProof: Bool
+		let type: String
+		
+		init(event: EventFlow.Event? = nil, dateString: String, provider: String? = nil, paperProof: Bool = false, type: String) {
+			self.event = event
+			self.dateString = dateString
+			self.provider = provider
+			self.paperProof = paperProof
+			self.type = type
+		}
+	}
 	
 	var cache: EventGroupCacheProtocol
 	
@@ -85,7 +102,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
 	func getEventOveriew(blobIds: [String]) -> [[String]] {
 		
-		var result = [[String]]()
+		var summaries = [EventSummary]()
 		
 		blobIds.forEach { blobId in
 			if let wrapper = cache.getEventResultWrapper(blobId) {
@@ -94,31 +111,83 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 					let providerName = Current.mappingManager.getProviderIdentifierMapping(wrapper.providerIdentifier) ?? wrapper.providerIdentifier
 					
 					if event.hasNegativeTest {
-						result.append(getRowFromNegativeTestEvent(event, providerName: providerName))
+						summaries.append(getRowFromNegativeTestEvent(event, providerName: providerName))
 					} else if event.hasPositiveTest {
-						result.append(getRowFromPositiveTestEvent(event, providerName: providerName))
+						summaries.append(getRowFromPositiveTestEvent(event, providerName: providerName))
 					} else if event.hasRecovery {
-						result.append(getRowFromRecoveryEvent(event, providerName: providerName))
+						summaries.append(getRowFromRecoveryEvent(event, providerName: providerName))
 					} else if event.hasVaccination {
-						result.append(getRowFromVaccinationEvent(event, providerName: providerName))
+						summaries.append(getRowFromVaccinationEvent(event, providerName: providerName))
 					} else if event.hasVaccinationAssessment {
-						result.append(getRowFromAssessementEvent(event))
+						summaries.append(getRowFromAssessementEvent(event))
 					}
 				}
 			} else if let euCredentialAttributes = cache.getEUCreditialAttributes(blobId) {
 				
 				euCredentialAttributes.digitalCovidCertificate.vaccinations?.forEach { vaccination in
-					result.append(getDetailsFromVaccinationDCC(vaccination))
+					summaries.append(getDetailsFromVaccinationDCC(vaccination))
 				}
 				euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { recovery in
-					result.append(getDetailsFromRecoveryDCC(recovery))
+					summaries.append(getDetailsFromRecoveryDCC(recovery))
 				}
 				euCredentialAttributes.digitalCovidCertificate.tests?.forEach { test in
-					result.append(getDetailsFromNegativeTestDCC(test))
+					summaries.append(getDetailsFromNegativeTestDCC(test))
 				}
 			}
 		}
-		return result
+		
+		return transformEventSummaries(summaries)
+	}
+	
+	private func transformEventSummaries(_ summaries: [EventSummary]) -> [[String]] {
+		
+		// Bucket for event summaries that are already processed.
+		var processedSummaries: [EventSummary] = []
+		
+		let result: [[String]?] = summaries
+			// Sort them by date
+			.sorted(by: { $0.dateString > $1.dateString })
+			// Map to an array of strings (title/type, info, date)
+			.map { summary in
+				
+				// Process only once, prevents duplication of combined events (Opghaald bij RIVM en GDD)
+				guard !processedSummaries.contains(summary) else {
+					return nil
+				}
+				
+				var info: String = ""
+				if summary.paperProof {
+					// Paper proof has a different information message
+					info = L.holder_identitySelection_details_scannedPaperProof()
+				} else if let providerName = summary.provider {
+					// Show the provider (Opgehaald bij RIVM etc)
+					info = L.holder_identitySelection_details_fetchedFromProvider(providerName)
+					
+					// if we are a vaccination
+					if let summaryVaccination = summary.event?.vaccination {
+						// Loop over all summaries, check if we can combine them
+						summaries.forEach { vaccination in
+							if let combinedWithVaccination = vaccination.event?.vaccination,
+							   let cominedProvider = vaccination.provider,
+							   // Actual matching is same date, same (hpkCode or manufacturer)
+							   summaryVaccination.doesMatchEvent(combinedWithVaccination),
+							   // Exclude ourself from the match.
+							   summaryVaccination != combinedWithVaccination {
+								// We can combine this summary! Append the provider, mark as processed.
+								info += " \(L.general_and()) \(cominedProvider)"
+								processedSummaries.append(vaccination)
+							}
+						}
+					}
+				}
+				processedSummaries.append(summary)
+				return [
+					summary.type,
+					info,
+					Formatter.getDateFrom(dateString8601: summary.dateString).map(DateFormatter.Format.dayMonthYear.string) ?? summary.dateString
+				]
+			}
+		return result.compactMap { $0 }
 	}
 	
 	// MARK: - Cache proxy
@@ -133,76 +202,59 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
 	// MARK: - Details From Event
 
-	private func getRowFromNegativeTestEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+	private func getRowFromNegativeTestEvent(_ event: EventFlow.Event, providerName: String) -> EventSummary {
 		
-		let formattedDate: String = event.negativeTest?.sampleDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.negativeTest?.sampleDateString ?? "")
-		
-		return [
-			L.general_negativeTest().capitalizingFirstLetter(),
-			L.holder_identitySelection_details_fetchedFromProvider(providerName),
-			formattedDate
-		]
+		return EventSummary(
+			event: event,
+			dateString: event.negativeTest?.sampleDateString ?? "",
+			provider: providerName,
+			type: L.general_negativeTest().capitalizingFirstLetter()
+		)
 	}
 	
-	private func getRowFromPositiveTestEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+	private func getRowFromPositiveTestEvent(_ event: EventFlow.Event, providerName: String) -> EventSummary {
 		
-		let formattedDate: String = event.positiveTest?.sampleDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.positiveTest?.sampleDateString ?? "")
-		
-		return [
-			L.general_positiveTest().capitalizingFirstLetter(),
-			L.holder_identitySelection_details_fetchedFromProvider(providerName),
-			formattedDate
-		]
+		return EventSummary(
+			event: event,
+			dateString: event.positiveTest?.sampleDateString ?? "",
+			provider: providerName,
+			type: L.general_positiveTest().capitalizingFirstLetter()
+		)
 	}
 	
-	private func getRowFromRecoveryEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+	private func getRowFromRecoveryEvent(_ event: EventFlow.Event, providerName: String) -> EventSummary {
 		
-		let formattedDate: String = event.recovery?.sampleDate
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.recovery?.sampleDate ?? "")
-		
-		return [
-			L.general_recoverycertificate().capitalizingFirstLetter(),
-			L.holder_identitySelection_details_fetchedFromProvider(providerName),
-			formattedDate
-		]
+		return EventSummary(
+			event: event,
+			dateString: event.recovery?.sampleDate ?? "",
+			provider: providerName,
+			type: L.general_recoverycertificate().capitalizingFirstLetter()
+		)
 	}
 	
-	private func getRowFromVaccinationEvent(_ event: EventFlow.Event, providerName: String) -> [String] {
+	private func getRowFromVaccinationEvent(_ event: EventFlow.Event, providerName: String) -> EventSummary {
 		
-		let formattedDate: String = event.vaccination?.dateString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.vaccination?.dateString ?? "")
-		
-		return [
-			L.general_vaccination().capitalizingFirstLetter(),
-			L.holder_identitySelection_details_fetchedFromProvider(providerName),
-			formattedDate
-		]
+		return EventSummary(
+			event: event,
+			dateString: event.vaccination?.dateString ?? "",
+			provider: providerName,
+			type: L.general_vaccination().capitalizingFirstLetter()
+		)
 	}
 	
-	private func getRowFromAssessementEvent(_ event: EventFlow.Event) -> [String] {
+	private func getRowFromAssessementEvent(_ event: EventFlow.Event) -> EventSummary {
 		
-		let formattedDate: String = event.vaccinationAssessment?.dateTimeString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
-		
-		return [
-			L.general_vaccinationAssessment().capitalizingFirstLetter(),
-			formattedDate
-		]
+		return EventSummary(
+			event: event,
+			dateString: event.vaccinationAssessment?.dateTimeString ?? "",
+			provider: nil,
+			type: L.general_vaccinationAssessment().capitalizingFirstLetter()
+		)
 	}
 	
 	// MARK: - Details From DCC
 	
-	private func getDetailsFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination) -> [String] {
-		
-		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? vaccination.dateOfVaccination
+	private func getDetailsFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination) -> EventSummary {
 		
 		var dosage: String = ""
 		if let doseNumber = vaccination.doseNumber,
@@ -210,35 +262,29 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 			dosage = "\(L.generalDose()) \(doseNumber)/\(totalDose)"
 		}
 		
-		return [
-			"\(L.general_vaccination().capitalizingFirstLetter()) \(dosage)".trimmingCharacters(in: .whitespaces),
-			L.holder_identitySelection_details_scannedPaperProof(),
-			formattedVaccinationDate
-		]
+		return EventSummary(
+			dateString: vaccination.dateOfVaccination,
+			paperProof: true,
+			type: "\(L.general_vaccination().capitalizingFirstLetter()) \(dosage)".trimmingCharacters(in: .whitespaces)
+		)
 	}
 	
-	private func getDetailsFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry) -> [String] {
+	private func getDetailsFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry) -> EventSummary {
 
-		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? recovery.firstPositiveTestDate
-
-		return [
-			L.general_recoverycertificate().capitalizingFirstLetter(),
-			L.holder_identitySelection_details_scannedPaperProof(),
-			formattedTestDate
-		]
+		return EventSummary(
+			dateString: recovery.firstPositiveTestDate,
+			paperProof: true,
+			type: L.general_recoverycertificate().capitalizingFirstLetter()
+		)
 	}
 
-	private func getDetailsFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry) -> [String] {
+	private func getDetailsFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry) -> EventSummary {
 
-		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
-
-		return [
-			L.general_negativeTest().capitalizingFirstLetter(),
-			L.holder_identitySelection_details_scannedPaperProof(),
-			formattedTestDate
-		]
+		return EventSummary(
+			dateString: test.sampleDate,
+			paperProof: true,
+			type: L.general_negativeTest().capitalizingFirstLetter()
+		)
 	}
 	
 	// MARK: - helpers
