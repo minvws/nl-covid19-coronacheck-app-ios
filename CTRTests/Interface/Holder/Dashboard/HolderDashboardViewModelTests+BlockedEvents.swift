@@ -24,7 +24,7 @@ extension HolderDashboardViewModelTests {
 		// Assert
 		expect {
 			self.sut.internationalCards.value.first { (card: HolderDashboardViewController.Card) in
-				if case .eventsWereBlocked = card { return true }
+				if case .eventsWereRemoved = card { return true }
 				return false
 			}
 		}.toEventually(beNil())
@@ -36,7 +36,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Act
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
-		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
+		blockedEventsSpy.invokedDidUpdate?([RemovedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
 		// Assert
 		
@@ -58,7 +58,7 @@ extension HolderDashboardViewModelTests {
 
 		let eventsWereBlockedBannerValues = try XCTUnwrap(eventuallyUnwrap {
 			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
-				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+				if case let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
 					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
 				}
 				return nil
@@ -92,12 +92,12 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
 		
 		// Act
-		blockedEventsSpy.invokedDidUpdate?([BlockedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
+		blockedEventsSpy.invokedDidUpdate?([RemovedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
 		
 		// Assert
 		let eventsWereBlockedValues = try XCTUnwrap(eventuallyUnwrap {
 			let matchingTuples = self.sut.internationalCards.value.compactMap { card -> (String, String, () -> Void, () -> Void)? in
-				if case let .eventsWereBlocked(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
+				if case let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapDismiss) = card {
 					return (message, callToActionButtonText, didTapCallToAction, didTapDismiss)
 				}
 				return nil

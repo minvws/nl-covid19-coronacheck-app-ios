@@ -598,6 +598,7 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Your international test certificate has expired";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Your international vaccination certificate has expired";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Your visitor pass has expired";
+"holder_dashboard_strippenExpiredError_fuzzyMatching_outOfStrippen" = "Something went wrong. Please close CoronaCheck entirely and restart the app.";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Your visitor pass isn’t valid outside of the Netherlands";
 "holder_dashboard_visitorpassexpired_body" = "<p>A visitor pass is valid up until %li days after review of your vaccination. Are you staying in the Netherlands longer? Then you can request a visitor pass again. For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
@@ -641,6 +642,10 @@
 "holder_fuzzyMatching_onboarding_thirdPage_title" = "Have other names rewritten";
 "holder_fuzzyMatching_why_body" = "<p>Your name must be written the same way on all vaccinations, test results and certificates in the app. Otherwise, CoronaCheck will think of them as belonging to different people. Therefore, please choose one name.</p><p>Only vaccinations and test results connected to the name you choose will be saved. The others will be deleted. Do you want to retrieve those vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test.</p><p>As soon as your name is adjusted, you can add the vaccinations and test results to the app again.</p>";
 "holder_fuzzyMatching_why_title" = "Why do I have to choose one name?";
+"holder_identityRemoved_banner_button_readmore" = "Read more";
+"holder_identityRemoved_banner_title" = "Your details were updated. Certificates may have been removed as a result.";
+"holder_identityRemoved_moreinfo_body" = "<p>Only vaccination and test details connected to the name you chose were saved (<b>%@</b>).</p><p>The details below have been removed from the app:</p>%@<p>Do you want to retrieve your vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test. You can add them to the app again after.</p>";
+"holder_identityRemoved_moreinfo_title" = "Updated details";
 "holder_identitySelection_actionTitle" = "Save choice";
 "holder_identitySelection_details_body" = "These details are connected to the name <b>%@</b>";
 "holder_identitySelection_details_fetchedFromProvider" = "Retrieved at %@";
@@ -652,6 +657,8 @@
 "holder_identitySelection_skipAlert_action" = "Yes, skip";
 "holder_identitySelection_skipAlert_body" = "You may not be able to use your QR codes. We will ask you again to make a choice next time you open the app.";
 "holder_identitySelection_skipAlert_title" = "Are you sure you want to skip this?";
+"holder_identitySelection_success_body" = "The details connected to the name you chose have been saved (<b>%@</b>). All other vaccination and test details were deleted. Certificates may have been removed as a result.";
+"holder_identitySelection_success_title" = "Thank you! Your details were updated";
 "holder_identitySelection_title" = "Which name will you choose?";
 "holder_identitySelection_why" = "Why do I have to choose?";
 "holder_incompletedutchvaccination_paragraph_secondvaccine" = "<p>The vaccination(s) you've added to the app unfortunately don’t entitle you to a Dutch vaccination certificate.</p><p>Add a new (booster) vaccination or test to get a Dutch vaccination certificate.</p><p>Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
