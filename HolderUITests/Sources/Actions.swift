@@ -138,7 +138,9 @@ extension BaseTest {
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
 		
-		let popup = safari.webViews.textViews["Deze pagina openen met 🤖 Dev Holder?"].waitForExistence(timeout: 1.0)
+		let predicate = NSPredicate(format: "label contains[c] %@", "Open this page in")
+		let elementQuery = safari.webViews.textViews.matching(predicate)
+		let popup = elementQuery.firstMatch.waitForExistence(timeout: 5.0)
 		if popup { safari.webViews.buttons["Open"].tap() }
 	}
 	
