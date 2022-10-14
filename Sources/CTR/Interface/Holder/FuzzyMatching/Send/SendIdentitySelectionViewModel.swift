@@ -116,6 +116,8 @@ class SendIdentitySelectionViewModel {
 							self.displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .signer, clientCode: .noEventsToSendToTheSigner))
 						case let .customError(title: title, message: message):
 							self.displayError(title: title, message: message)
+						case .mismatchedIdentity:
+							break
 					}
 			}
 		}

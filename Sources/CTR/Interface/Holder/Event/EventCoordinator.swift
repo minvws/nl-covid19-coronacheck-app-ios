@@ -44,6 +44,8 @@ enum EventScreenResult: Equatable {
 	
 	case showHints(NonemptyArray<String>, eventMode: EventMode)
 	
+	case mismatchedIdentity(matchingBlobIds: [[String]])
+	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
 			case (.back, .back), (.stop, .stop),
@@ -87,6 +89,9 @@ enum EventScreenResult: Equatable {
 			
 			case let (.showHints(lhsHints, lhsEventMode), .showHints(rhsHints, rhsEventMode)):
 				return lhsHints == rhsHints && lhsEventMode == rhsEventMode
+				
+			case (let .mismatchedIdentity(lhsBlobs), let .mismatchedIdentity(rhsBlobs)):
+				return lhsBlobs == rhsBlobs
 			
 			default:
 				return false
@@ -452,6 +457,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			case let .showHints(hints, eventMode):
 				navigateToShowHints(hints: hints, eventMode: eventMode)
+			case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
+				startFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
 			default:
 				break
 		}
@@ -516,7 +523,20 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			)
 		)
 	}
+	
+	private func startFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: navigationController,
+			matchingBlobIds: matchingBlobIds,
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: self
+		)
+		startChildCoordinator(fmCoordinator)
+	}
 }
+
+// MARK: - AlternativeRouteFlowDelegate
 
 extension EventCoordinator: AlternativeRouteFlowDelegate {
 	
@@ -546,6 +566,8 @@ extension EventCoordinator: AlternativeRouteFlowDelegate {
 	}
 }
 
+// MARK: - UINavigationControllerDelegate
+
 extension EventCoordinator: UINavigationControllerDelegate {
 	
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -557,5 +579,24 @@ extension EventCoordinator: UINavigationControllerDelegate {
 			delegate?.eventFlowDidCancel()
 			return
 		}
+	}
+}
+
+// MARK: - FuzzyMatchingFlowDelegate
+
+extension EventCoordinator: FuzzyMatchingFlowDelegate {
+	
+	func fuzzyMatchingFlowDidStop() {
+		
+		guard let coordinator = childCoordinators.last, coordinator is FuzzyMatchingCoordinator else { return }
+		removeChildCoordinator(coordinator)
+		delegate?.eventFlowDidComplete()
+	}
+	
+	func fuzzyMatchingFlowDidFinish() {
+		
+		guard let coordinator = childCoordinators.last, coordinator is FuzzyMatchingCoordinator else { return }
+		removeChildCoordinator(coordinator)
+		delegate?.eventFlowDidComplete()
 	}
 }

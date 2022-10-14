@@ -13,6 +13,7 @@ enum GreenCardResponseError: Error {
 
 	case noInternet
 	case noSignedEvents
+	case mismatchedIdentity(matchingBlobIds: [[String]])
 	case customError(title: String, message: String)
 }
 
@@ -82,6 +83,12 @@ class GreenCardResponseErrorParser {
 							errorCode: "\(statusCode ?? 000)",
 							detailedCode: serverResponse?.code
 						)
+						
+						if serverResponse?.code == 99790, let matchingBlobIds = serverResponse?.matchingBlobIds {
+							logDebug("We've encountered a 99790 error with \(matchingBlobIds)")
+							 return .mismatchedIdentity(matchingBlobIds: matchingBlobIds)
+						}
+						
 						return customErrorForServerErrorCode(errorCode)
 						
 					case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:

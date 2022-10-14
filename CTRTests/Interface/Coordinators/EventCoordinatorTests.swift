@@ -766,6 +766,19 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ShowHintsViewController) == true
 	}
 	
+	func test_listEventsScreenDidFinish_mismatchedIdentity() throws {
+		
+		// Given
+
+		// When
+		sut.listEventsScreenDidFinish(.mismatchedIdentity(matchingBlobIds: [["123"]]))
+
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
+		expect(self.navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
+	}
+	
 	func test_alternativeRoute() {
 		
 		// Given
