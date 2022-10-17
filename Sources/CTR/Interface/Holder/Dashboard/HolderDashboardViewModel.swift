@@ -449,8 +449,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 			// ❤️‍🩹 NETWORK ERRORS: Refresher has entered a failed state (i.e. Server Error)
 
-			case (.failed, .expired, _):
+			case let(.failed(error), .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
+	
+				if case let DashboardStrippenRefresher.Error.greencardLoaderError(error: GreenCardLoader.Error.credentials(.error(_, response, _))) = error {
+					if let matchingBlobIds = response?.matchingBlobIds, response?.code == 99790 {
+						coordinator?.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
+					}
+				}
+
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
 					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
