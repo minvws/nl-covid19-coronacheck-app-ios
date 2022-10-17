@@ -343,8 +343,9 @@ class ListStoredEventsViewModel {
 							
 						case let .customError(title: title, message: message):
 							self.displayError(title: title, message: message)
-						case .mismatchedIdentity:
-							break
+							
+						case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
+							self.coordinator?.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
 					}
 			}
 		}
