@@ -646,6 +646,8 @@
 "holder_identityRemoved_banner_title" = "Je gegevens zijn bijgewerkt. Mogelijk zijn daardoor bewijzen weg.";
 "holder_identityRemoved_moreinfo_body" = "<p>Alleen vaccinatie- en testgegevens die bij de naam horen die je hebt gekozen zijn bewaard (<b>%@</b>).</p><p>De onderstaande gegevens zijn verwijderd uit de app:</p>%@<p>Wil je vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad. Voeg ze daarna zelf opnieuw toe aan de app.</p>";
 "holder_identityRemoved_moreinfo_title" = "Bijgewerkte gegevens";
+"holder_identitySelection_accessibility_details" = "Bekijk de details voor %@";
+"holder_identitySelection_accessibility_select" = "Kies %@";
 "holder_identitySelection_actionTitle" = "Keuze opslaan";
 "holder_identitySelection_details_body" = "Deze gegevens horen bij de naam <b>%@</b>";
 "holder_identitySelection_details_fetchedFromProvider" = "Opgehaald bij %@";

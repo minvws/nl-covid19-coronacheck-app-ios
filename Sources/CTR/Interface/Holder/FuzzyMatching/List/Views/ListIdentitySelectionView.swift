@@ -30,7 +30,7 @@ class ListIdentitySelectionView: BaseView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
-		enum Header {
+		enum Message {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
 		}
@@ -48,9 +48,9 @@ class ListIdentitySelectionView: BaseView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	private let headerLabel: Label = {
+	private let messageLabel: Label = {
 		
-		return Label(body: nil).header().multiline()
+		return Label(body: nil).multiline()
 	}()
 	
 	private let separatorView: UIView = {
@@ -108,7 +108,7 @@ class ListIdentitySelectionView: BaseView {
 		addSubview(scrollView)
 		addSubview(footerButtonView)
 		scrollView.addSubview(titleLabel)
-		scrollView.addSubview(headerLabel)
+		scrollView.addSubview(messageLabel)
 		scrollView.addSubview(separatorView)
 		scrollView.addSubview(selectionStackView)
 		scrollView.addSubview(moreButton)
@@ -173,19 +173,19 @@ class ListIdentitySelectionView: BaseView {
 	func setupHeaderLabelViewConstraints() {
 		
 		NSLayoutConstraint.activate([
-			headerLabel.topAnchor.constraint(
+			messageLabel.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.titleToHeader
 			),
-			headerLabel.leadingAnchor.constraint(
+			messageLabel.leadingAnchor.constraint(
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			headerLabel.rightAnchor.constraint(
+			messageLabel.rightAnchor.constraint(
 				equalTo: scrollView.rightAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
-			headerLabel.widthAnchor.constraint(
+			messageLabel.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
 				constant: -2 * ViewTraits.Margin.edge
 			)
@@ -199,7 +199,7 @@ class ListIdentitySelectionView: BaseView {
 			separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			separatorView.rightAnchor.constraint(equalTo: rightAnchor),
 			separatorView.topAnchor.constraint(
-				equalTo: headerLabel.bottomAnchor,
+				equalTo: messageLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.headerToStackview
 			),
 			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.separatorHeight)
@@ -256,9 +256,9 @@ class ListIdentitySelectionView: BaseView {
 	
 	var header: String? {
 		didSet {
-			headerLabel.attributedText = header?.setLineHeight(
-				ViewTraits.Header.lineHeight,
-				kerning: ViewTraits.Header.kerning,
+			messageLabel.attributedText = header?.setLineHeight(
+				ViewTraits.Message.lineHeight,
+				kerning: ViewTraits.Message.kerning,
 				textColor: C.black()!)
 		}
 	}
