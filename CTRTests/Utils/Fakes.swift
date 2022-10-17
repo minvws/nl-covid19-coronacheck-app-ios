@@ -1309,6 +1309,30 @@ extension EventGroup {
 		}
 		return eventGroup
 	}
+
+	static func createEventGroup(dataStoreManager: DataStoreManaging, wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
+
+		var eventGroup: EventGroup?
+		if let payloadData = try? JSONEncoder().encode(wrapper) {
+		   let base64String = payloadData.base64EncodedString()
+			let signedResponse = SignedResponse(payload: base64String, signature: "does not matter for this test")
+			let context = dataStoreManager.managedObjectContext()
+			context.performAndWait {
+				if let wallet = WalletModel.createTestWallet(managedContext: context),
+				   let jsonData = try? JSONEncoder().encode(signedResponse) {
+					eventGroup = EventGroupModel.create(
+						type: EventMode.recovery,
+						providerIdentifier: "CoronaCheck",
+						expiryDate: nil,
+						jsonData: jsonData,
+						wallet: wallet,
+						managedContext: context
+					)
+				}
+			}
+		}
+		return eventGroup
+	}
 }
 
 // Can't extend RemoteEvent, so this struct will have to do.

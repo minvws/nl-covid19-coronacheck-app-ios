@@ -28,6 +28,7 @@ protocol DataStoreManaging {
 	/// - Parameter context: the context to be saved.
 	func save(_ context: NSManagedObjectContext)
 	
+	@discardableResult
 	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 }
 
@@ -121,6 +122,7 @@ class DataStoreManager: DataStoreManaging {
 		}
 	}
 	
+	@discardableResult
 	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Swift.Error> {
 
 		do {
