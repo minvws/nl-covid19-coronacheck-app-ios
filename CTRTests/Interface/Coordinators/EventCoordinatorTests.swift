@@ -897,4 +897,44 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.invokedPopViewController) == false
 		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController).toEventually(beTrue())
 	}
+	
+	func test_fuzzyMatchingFlowDidStop() {
+		
+		// Given
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		fmCoordinator.userHasStoppedTheFlow()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_fuzzyMatchingFlowDidFinish() {
+		
+		// Given
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		fmCoordinator.userHasFinishedTheFlow()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
 }
