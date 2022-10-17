@@ -93,4 +93,16 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 			backAction?()
 		}
 	}
+
+	var invokedRestartFlow = false
+	var invokedRestartFlowCount = 0
+	var invokedRestartFlowParameters: (matchingBlobIds: [[String]], Void)?
+	var invokedRestartFlowParametersList = [(matchingBlobIds: [[String]], Void)]()
+
+	func restartFlow(matchingBlobIds: [[String]]) {
+		invokedRestartFlow = true
+		invokedRestartFlowCount += 1
+		invokedRestartFlowParameters = (matchingBlobIds, ())
+		invokedRestartFlowParametersList.append((matchingBlobIds, ()))
+	}
 }

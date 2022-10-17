@@ -32,6 +32,8 @@ protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 	func userWishesToSeeSuccess(name: String)
 	
 	func presentError(content: Content, backAction: (() -> Void)?)
+	
+	func restartFlow(matchingBlobIds: [[String]])
 }
 
 final class FuzzyMatchingCoordinator: Coordinator {
@@ -80,6 +82,14 @@ final class FuzzyMatchingCoordinator: Coordinator {
 }
 
 extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
+	
+	func restartFlow(matchingBlobIds: [[String]]) {
+		
+		self.matchingBlobIds = matchingBlobIds
+		if !navigateBackToStart() {
+			userWishesToSeeOnboarding()
+		}
+	}
 	
 	func userWishesToSeeOnboarding() {
 		
@@ -178,6 +188,20 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	func presentError(content: Content, backAction: (() -> Void)?) {
 		
 		presentContent(content: content, backAction: backAction)
+	}
+	
+	@discardableResult private func navigateBackToStart() -> Bool {
+
+		if let eventStartViewController = navigationController.viewControllers
+			.first(where: { $0 is PagedAnnouncementViewController }) {
+
+			navigationController.popToViewController(
+				eventStartViewController,
+				animated: true
+			)
+			return true
+		}
+		return false
 	}
 }
 

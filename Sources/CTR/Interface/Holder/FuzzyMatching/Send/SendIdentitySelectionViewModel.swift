@@ -102,7 +102,7 @@ class SendIdentitySelectionViewModel {
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
 			
-			guard let self = self else { return }
+			guard let self else { return }
 			switch result {
 				case .success:
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
@@ -116,8 +116,8 @@ class SendIdentitySelectionViewModel {
 							self.displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .signer, clientCode: .noEventsToSendToTheSigner))
 						case let .customError(title: title, message: message):
 							self.displayError(title: title, message: message)
-						case .mismatchedIdentity:
-							break
+						case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
+							self.coordinatorDelegate?.restartFlow(matchingBlobIds: matchingBlobIds)
 					}
 			}
 		}
