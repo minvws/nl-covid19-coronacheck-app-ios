@@ -52,6 +52,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToOpenTheMenu()
 	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
+	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]])
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 }
 
@@ -161,6 +162,17 @@ class HolderCoordinator: SharedCoordinator {
 		addChildCoordinator(eventCoordinator)
 		eventCoordinator.startWithNegativeTest()
 		
+	}
+	
+	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: navigationController,
+			matchingBlobIds: matchingBlobIds,
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: self
+		)
+		startChildCoordinator(fmCoordinator)
 	}
 	
 	// MARK: - Setup Listeners
@@ -810,6 +822,19 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 		}
 		
 		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
+	}
+}
+
+extension HolderCoordinator: FuzzyMatchingFlowDelegate {
+	
+	func fuzzyMatchingFlowDidFinish() {
+		removeChildCoordinator()
+		navigateBackToStart()
+	}
+	
+	func fuzzyMatchingFlowDidStop() {
+		removeChildCoordinator()
+		navigateBackToStart()
 	}
 }
 
