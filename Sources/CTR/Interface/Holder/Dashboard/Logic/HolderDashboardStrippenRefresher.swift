@@ -300,85 +300,83 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 		walletManager: WalletManaging,
 		now: Date) -> State.GreencardsCredentialExpiryState {
 		
-			return .expired
-			
-//		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(
-//			now: now,
-//			ofOriginType: nil
-//		)
-//
-//		var expiredGreencards = [GreenCard]()
-//		var expiringGreencards = [(GreenCard, Date)]()
-//
-//		validGreenCardsForCurrentWallet
-//			.forEach { (greencard: GreenCard) in
-//
-//				guard let allCredentialsForGreencard: [Credential] = greencard.castCredentials(),
-//					  let allOriginsForGreencard = greencard.castOrigins()
-//				else { return } // unlikely logical error, greencard should have non-nil origins & credentials arrays (even if empty).
-//
-//				guard let latestOriginExpiryDate = allOriginsForGreencard.latestOriginExpiryTime()
-//				else { return } // unlikely logical error, origins should have an expiry time, even if it's in the past.
-//
-//				guard !allCredentialsForGreencard.isEmpty else {
-//					// It can be that a greencard is issued with zero credentials, but that it can still become valid in the future
-//					// (receiving credentials at some later point beyond the current signer horizon).
-//					if let originsValidWithinThreshold = greencard.originsActiveNowOrBeforeThresholdFromNow(
-//						now: now,
-//						thresholdDays: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh),
-//					   !originsValidWithinThreshold.isEmpty {
-//
-//						// Expired here is not quite accurate, because it never had a credential before.
-//						// But this is the correct external state for the Refresher to adopt for this greencard.
-//						expiredGreencards += [greencard]
-//					}
-//					return
-//				}
-//
-//				// Filter paper based DCCs, those should not lead to a refresh
-//				if greencard.getType() == GreenCardType.eu,
-//				   allOriginsForGreencard.hasPaperBasedDCC() {
-//					return
-//				}
-//
-//				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
-//				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
-//
-//				// Calculate if the latest credential expiration time is < than the origin expiration time
-//				// (i.e. "if the Green Card has a longer validity than the latest Credential")
-//				let thereAreMoreCredentialsToFetch = latestCredentialExpiryDate < latestOriginExpiryDate
-//
-//				guard thereAreMoreCredentialsToFetch
-//				else { return } // Yes we're running out of credentials, but actually the greencard itself is expiring. The user will need to add a new one.
-//
-//				guard let daysUntilLastCredentialExpiry = Calendar.current.dateComponents([.day], from: now, to: latestCredentialExpiryDate).day
-//				else { return } // unlikely logical error, Calendar should be able to make the calculation.
-//
-//				// Calculate how many valid credentials are remaining, and if that is below the threshold:
-//				// let remainingValidCredentialsForGreencard = allCredentialsForGreencard.filterValid()
-//				let greencardIsWithinThresholdForRefresh = daysUntilLastCredentialExpiry <= minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
-//
-//				guard greencardIsWithinThresholdForRefresh
-//				else { return } // There are still plenty of credentials remaining, no need to refresh.
-//
-//				if daysUntilLastCredentialExpiry <= 0 {
-//					expiredGreencards += [greencard]
-//				} else {
-//					expiringGreencards += [(greencard, latestCredentialExpiryDate)]
-//				}
-//			}
-//
-//		switch (expiredGreencards.count, expiringGreencards.count) {
-//			case (0, 0): return .noActionNeeded
-//			case (0, _):
-//				let earliestExpiryDate = expiringGreencards
-//					.map({ $1 })
-//					.reduce(.distantFuture) { result, date in
-//						return date < result ? date : result
-//					}
-//				return .expiring(deadline: earliestExpiryDate)
-//
-//			case (_, _): return .expired
-//		}
+		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(
+			now: now,
+			ofOriginType: nil
+		)
+
+		var expiredGreencards = [GreenCard]()
+		var expiringGreencards = [(GreenCard, Date)]()
+
+		validGreenCardsForCurrentWallet
+			.forEach { (greencard: GreenCard) in
+
+				guard let allCredentialsForGreencard: [Credential] = greencard.castCredentials(),
+					  let allOriginsForGreencard = greencard.castOrigins()
+				else { return } // unlikely logical error, greencard should have non-nil origins & credentials arrays (even if empty).
+
+				guard let latestOriginExpiryDate = allOriginsForGreencard.latestOriginExpiryTime()
+				else { return } // unlikely logical error, origins should have an expiry time, even if it's in the past.
+
+				guard !allCredentialsForGreencard.isEmpty else {
+					// It can be that a greencard is issued with zero credentials, but that it can still become valid in the future
+					// (receiving credentials at some later point beyond the current signer horizon).
+					if let originsValidWithinThreshold = greencard.originsActiveNowOrBeforeThresholdFromNow(
+						now: now,
+						thresholdDays: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh),
+					   !originsValidWithinThreshold.isEmpty {
+
+						// Expired here is not quite accurate, because it never had a credential before.
+						// But this is the correct external state for the Refresher to adopt for this greencard.
+						expiredGreencards += [greencard]
+					}
+					return
+				}
+
+				// Filter paper based DCCs, those should not lead to a refresh
+				if greencard.getType() == GreenCardType.eu,
+				   allOriginsForGreencard.hasPaperBasedDCC() {
+					return
+				}
+
+				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
+				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
+
+				// Calculate if the latest credential expiration time is < than the origin expiration time
+				// (i.e. "if the Green Card has a longer validity than the latest Credential")
+				let thereAreMoreCredentialsToFetch = latestCredentialExpiryDate < latestOriginExpiryDate
+
+				guard thereAreMoreCredentialsToFetch
+				else { return } // Yes we're running out of credentials, but actually the greencard itself is expiring. The user will need to add a new one.
+
+				guard let daysUntilLastCredentialExpiry = Calendar.current.dateComponents([.day], from: now, to: latestCredentialExpiryDate).day
+				else { return } // unlikely logical error, Calendar should be able to make the calculation.
+
+				// Calculate how many valid credentials are remaining, and if that is below the threshold:
+				// let remainingValidCredentialsForGreencard = allCredentialsForGreencard.filterValid()
+				let greencardIsWithinThresholdForRefresh = daysUntilLastCredentialExpiry <= minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
+
+				guard greencardIsWithinThresholdForRefresh
+				else { return } // There are still plenty of credentials remaining, no need to refresh.
+
+				if daysUntilLastCredentialExpiry <= 0 {
+					expiredGreencards += [greencard]
+				} else {
+					expiringGreencards += [(greencard, latestCredentialExpiryDate)]
+				}
+			}
+
+		switch (expiredGreencards.count, expiringGreencards.count) {
+			case (0, 0): return .noActionNeeded
+			case (0, _):
+				let earliestExpiryDate = expiringGreencards
+					.map({ $1 })
+					.reduce(.distantFuture) { result, date in
+						return date < result ? date : result
+					}
+				return .expiring(deadline: earliestExpiryDate)
+
+			case (_, _): return .expired
+		}
 	}
 }

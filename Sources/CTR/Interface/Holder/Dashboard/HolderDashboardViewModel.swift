@@ -470,22 +470,17 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 			case let(.failed(error), .expired, _):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
-	
-				if case let DashboardStrippenRefresher.Error.greencardLoaderError(error: GreenCardLoader.Error.credentials(.error(_, response, _))) = error {
-					if let matchingBlobIds = response?.matchingBlobIds, response?.code == 99790 {
-						coordinator?.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
-					}
-				}
-
+				checkForMismatchedIdentityError(error: error)
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
 					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
 					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 
-			case (.failed, .expiring, _):
+			case let (.failed(error), .expiring, _):
 				// In this case we just swallow the server errors.
 				// We do handle "no internet" though - see above.
 				logDebug("StrippenRefresh: Swallowing server error because can refresh later.")
+				checkForMismatchedIdentityError(error: error)
 
 			case (.serverResponseHasNoChanges, _, _):
 				// This is a special case, and is caused by the user putting their system time
@@ -500,6 +495,16 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			
 			case (.loading, _, _), (.idle, _, _):
 				break
+		}
+	}
+	
+	fileprivate func checkForMismatchedIdentityError(error: DashboardStrippenRefresher.Error) {
+	
+		// Check if we ran into a mismatched Identity error
+		if case let DashboardStrippenRefresher.Error.greencardLoaderError(error: GreenCardLoader.Error.credentials(.error(_, response, _))) = error {
+			if let matchingBlobIds = response?.matchingBlobIds, response?.code == 99790 {
+				coordinator?.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
+			}
 		}
 	}
 	
