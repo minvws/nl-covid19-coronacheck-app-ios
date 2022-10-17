@@ -20,9 +20,9 @@ public struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 	public init() {}
 	public func getSignatureValidator(_ strategy: SecurityStrategy) -> SignatureValidation {
 #if DEBUG
-//		if case SecurityStrategy.none = strategy {
+		if case SecurityStrategy.none = strategy {
 			return SignatureValidatorAlwaysAllow()
-//		}
+		}
 #endif
 		// Default for .config
 		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate]
