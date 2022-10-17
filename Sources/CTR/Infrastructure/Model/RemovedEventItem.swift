@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-struct BlockedEventItem: Equatable {
+struct RemovedEventItem: Equatable {
 	let objectID: NSManagedObjectID
 	let eventDate: Date
 	let reason: String

@@ -8,13 +8,13 @@
 import Foundation
 import CoreData
 
-protocol HolderDashboardBlockedEventsDatasourceProtocol: AnyObject {
-	var didUpdate: (([BlockedEventItem]) -> Void)? { get set }
+protocol HolderDashboardRemovedEventsDatasourceProtocol: AnyObject {
+	var didUpdate: (([RemovedEventItem]) -> Void)? { get set }
 }
 
-class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEventsDatasourceProtocol {
+class HolderDashboardRemovedEventsDatasource: NSObject, HolderDashboardRemovedEventsDatasourceProtocol {
  
-	var didUpdate: (([BlockedEventItem]) -> Void)? {
+	var didUpdate: (([RemovedEventItem]) -> Void)? {
 		didSet {
 			guard didUpdate != nil else { return }
 			load()
@@ -23,10 +23,12 @@ class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEv
 	
 	private let frc: NSFetchedResultsController<RemovedEvent>
 	
-	override init() {
+	/// Initializer
+	/// - Parameter reason: The reason of removed events. Currently RemovedEventModel.identityMismatch or RemovedEventModel.blockedEvent
+	init(reason: RemovalReason) {
 		let fetchRequest = NSFetchRequest<RemovedEvent>(entityName: RemovedEventModel.entityName)
 		fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \RemovedEvent.type, ascending: true)]
-		fetchRequest.predicate = NSPredicate(format: "reason == %@", RemovedEventModel.blockedEvent)
+		fetchRequest.predicate = NSPredicate(format: "reason == %@", reason.rawValue)
 		
 		frc = NSFetchedResultsController<RemovedEvent>(
 			fetchRequest: fetchRequest,
@@ -50,26 +52,26 @@ class HolderDashboardBlockedEventsDatasource: NSObject, HolderDashboardBlockedEv
 	private func notifyObserver() {
 		guard let didUpdate = didUpdate else { return }
 		
-		let blockedEventItems = frc.fetchedObjects?.compactMap { blockedEvent -> BlockedEventItem? in
-			guard let eventDate = blockedEvent.eventDate,
-				  let reason = blockedEvent.reason,
-				  let rawType = blockedEvent.type,
+		let eventItems = frc.fetchedObjects?.compactMap { event -> RemovedEventItem? in
+			guard let eventDate = event.eventDate,
+				  let reason = event.reason,
+				  let rawType = event.type,
 				  let originType = OriginType(rawValue: rawType)
 			else { return nil }
 			
-			return BlockedEventItem(
-				objectID: blockedEvent.objectID,
+			return RemovedEventItem(
+				objectID: event.objectID,
 				eventDate: eventDate,
 				reason: reason,
 				type: originType
 			)
 		}
 		
-		didUpdate(blockedEventItems ?? [])
+		didUpdate(eventItems ?? [])
 	}
 }
 
-extension HolderDashboardBlockedEventsDatasource: NSFetchedResultsControllerDelegate {
+extension HolderDashboardRemovedEventsDatasource: NSFetchedResultsControllerDelegate {
 	func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 		notifyObserver()
 	}

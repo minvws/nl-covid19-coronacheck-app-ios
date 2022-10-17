@@ -99,7 +99,7 @@ extension HolderDashboardViewController.Card {
 		guard state.blockedEventItems.isNotEmpty else { return [] }
 			
 		return [
-			.eventsWereBlocked(
+			.eventsWereRemoved(
 				message: L.holder_invaliddetailsremoved_banner_title(),
 				callToActionButtonText: L.holder_invaliddetailsremoved_banner_button_readmore(),
 				didTapCallToAction: { [weak actionHandler] in
@@ -107,6 +107,26 @@ extension HolderDashboardViewController.Card {
 				},
 				didTapClose: { [weak actionHandler] in
 					actionHandler?.didTapBlockedEventsDeletedDismiss(blockedEventItems: state.blockedEventItems)
+				}
+			)
+		]
+	}
+
+	static func makeMismatchedIdentityEventsCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.mismatchedIdentityItems.isNotEmpty else { return [] }
+			
+		return [
+			.eventsWereRemoved(
+				message: L.holder_identityRemoved_banner_title(),
+				callToActionButtonText: L.holder_identityRemoved_banner_button_readmore(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapMismatchedIdentityEventsDeletedMoreInfo(items: state.mismatchedIdentityItems)
+				},
+				didTapClose: { [weak actionHandler] in
+					actionHandler?.didTapMismatchedIdentityEventsDeletedDismiss(items: state.mismatchedIdentityItems)
 				}
 			)
 		]

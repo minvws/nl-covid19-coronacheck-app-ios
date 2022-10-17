@@ -9,17 +9,17 @@ import Foundation
 @testable import CTR
 
 // swiftlint:disable:next type_name
-class HolderDashboardBlockedEventsDatasourceSpy: HolderDashboardBlockedEventsDatasourceProtocol {
+class HolderDashboardRemovedEventsDatasourceSpy: HolderDashboardRemovedEventsDatasourceProtocol {
 
 	var invokedDidUpdateSetter = false
 	var invokedDidUpdateSetterCount = 0
-	var invokedDidUpdate: (([BlockedEventItem]) -> Void)?
-	var invokedDidUpdateList = [(([BlockedEventItem]) -> Void)?]()
+	var invokedDidUpdate: (([RemovedEventItem]) -> Void)?
+	var invokedDidUpdateList = [(([RemovedEventItem]) -> Void)?]()
 	var invokedDidUpdateGetter = false
 	var invokedDidUpdateGetterCount = 0
-	var stubbedDidUpdate: (([BlockedEventItem]) -> Void)!
+	var stubbedDidUpdate: (([RemovedEventItem]) -> Void)!
 
-	var didUpdate: (([BlockedEventItem]) -> Void)? {
+	var didUpdate: (([RemovedEventItem]) -> Void)? {
 		set {
 			invokedDidUpdateSetter = true
 			invokedDidUpdateSetterCount += 1

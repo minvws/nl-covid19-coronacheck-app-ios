@@ -39,6 +39,8 @@ protocol WalletManaging: AnyObject {
 	func removeExistingGreenCards()
 	
 	func removeExistingBlockedEvents()
+	
+	func removeExistingMismatchedIdentityEvents()
 
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
 
@@ -249,15 +251,15 @@ class WalletManager: WalletManaging {
 
 	func removeExistingBlockedEvents() {
 		
-		removeExistingRemovedEvents(reason: RemovedEventModel.blockedEvent)
+		removeExistingRemovedEvents(reason: RemovalReason.blockedEvent)
 	}
 	
-	func removeExistingIdentityMismatchedEvents() {
+	func removeExistingMismatchedIdentityEvents() {
 		
-		removeExistingRemovedEvents(reason: RemovedEventModel.identityMismatch)
+		removeExistingRemovedEvents(reason: RemovalReason.mismatchedIdentity)
 	}
 	
-	func removeExistingRemovedEvents(reason: String) {
+	func removeExistingRemovedEvents(reason: RemovalReason) {
 		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -265,7 +267,7 @@ class WalletManager: WalletManaging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 
 				if let blockedEvents = wallet.removedEvents {
-					for case let removedEvent as RemovedEvent in blockedEvents.allObjects where removedEvent.reason == reason {
+					for case let removedEvent as RemovedEvent in blockedEvents.allObjects where removedEvent.reason == reason.rawValue {
 							removedEvent.delete(context: context)
 						}
 					dataStoreManager.save(context)

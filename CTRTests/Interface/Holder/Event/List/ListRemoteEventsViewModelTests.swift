@@ -1953,7 +1953,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEvent).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type).toEventually(equal(.vaccination))
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason).toEventually(equal(RemovedEventModel.blockedEvent))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason).toEventually(equal(RemovalReason.blockedEvent.rawValue))
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
@@ -1999,7 +1999,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEvent).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type).toEventually(equal(.vaccination))
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason).toEventually(equal(RemovedEventModel.blockedEvent))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason).toEventually(equal(RemovalReason.blockedEvent.rawValue))
 		
 		let feedback: Content? = eventuallyUnwrap(eval: { () -> Content? in
 			if case let ListRemoteEventsViewController.State.feedback(content: feedback) = self.sut.viewState {

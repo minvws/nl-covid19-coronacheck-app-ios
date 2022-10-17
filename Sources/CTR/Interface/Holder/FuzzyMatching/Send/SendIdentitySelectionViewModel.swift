@@ -81,9 +81,9 @@ class SendIdentitySelectionViewModel {
 			if selectedBlobIds != blobIds {
 				blobIds.forEach { uniqueIdentifier in
 					if let wrapper = dataSource.getEventResultWrapper(uniqueIdentifier) {
-						result = result && RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovedEventModel.identityMismatch).isNotEmpty
+						result = result && RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovalReason.mismatchedIdentity).isNotEmpty
 					} else if let euCredentialAttributes = dataSource.getEUCreditialAttributes(uniqueIdentifier) {
-						result = result && RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovedEventModel.identityMismatch) != nil
+						result = result && RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovalReason.mismatchedIdentity) != nil
 					}
 					
 					let eventGroups = Current.walletManager.listEventGroups()
