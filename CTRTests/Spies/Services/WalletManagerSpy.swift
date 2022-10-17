@@ -78,6 +78,14 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveExistingBlockedEventsCount += 1
 	}
 
+	var invokedRemoveExistingMismatchedIdentityEvents = false
+	var invokedRemoveExistingMismatchedIdentityEventsCount = 0
+
+	func removeExistingMismatchedIdentityEvents() {
+		invokedRemoveExistingMismatchedIdentityEvents = true
+		invokedRemoveExistingMismatchedIdentityEventsCount += 1
+	}
+
 	var invokedStoreDomesticGreenCard = false
 	var invokedStoreDomesticGreenCardCount = 0
 	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)?

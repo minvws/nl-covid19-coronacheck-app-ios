@@ -9,12 +9,14 @@ import Foundation
 import CoreData
 import Transport
 
+enum RemovalReason: String {
+	case blockedEvent = "event_blocked"
+	case mismatchedIdentity = "identity_mismatched"
+}
+
 class RemovedEventModel {
 	
 	static let entityName = "RemovedEvent"
-	
-	static let blockedEvent = "event_blocked"
-	static let identityMismatch = "identity_mismatched"
 	
 	@discardableResult class func create(
 		type: EventMode,
@@ -65,7 +67,7 @@ extension RemovedEvent {
 	}
 	
 	@discardableResult
-	static func createAndPersist(euCredentialAttributes: EuCredentialAttributes, reason: String) -> RemovedEvent? {
+	static func createAndPersist(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
 		
 		if let eventMode = euCredentialAttributes.eventMode {
 			var eventDate: Date? {
@@ -76,14 +78,14 @@ extension RemovedEvent {
 			return Current.walletManager.storeRemovedEvent(
 				type: eventMode,
 				eventDate: eventDate ?? .distantPast,
-				reason: reason
+				reason: reason.rawValue
 			)
 		}
 		return nil
 	}
 	
 	@discardableResult
-	static func createAndPersist(wrapper: EventFlow.EventResultWrapper, reason: String) -> [RemovedEvent] {
+	static func createAndPersist(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
 		
 		var result = [RemovedEvent]()
 		
@@ -114,7 +116,7 @@ extension RemovedEvent {
 				let removedEvent = Current.walletManager.storeRemovedEvent(
 				type: eventMode,
 				eventDate: eventDate,
-				reason: reason
+				reason: reason.rawValue
 			) {
 				result.append( removedEvent)
 			}

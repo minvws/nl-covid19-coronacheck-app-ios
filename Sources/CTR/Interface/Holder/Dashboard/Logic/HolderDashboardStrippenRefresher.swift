@@ -281,7 +281,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response) {
 		
 		// The items which the backend has indicated are blocked (if any):
-		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovedEventModel.blockedEvent } ?? []
+		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovalReason.blockedEvent.rawValue } ?? []
 		let allEventGroups = Current.walletManager.listEventGroups()
 	
 		guard blockItems.isNotEmpty else { return }

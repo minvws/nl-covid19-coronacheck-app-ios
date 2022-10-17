@@ -11,9 +11,9 @@ import Nimble
 @testable import CTR
 
 // swiftlint:disable:next type_name
-class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
+class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 	
-	var sut: HolderDashboardBlockedEventsDatasource!
+	var sut: HolderDashboardRemovedEventsDatasource!
 	var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
@@ -33,23 +33,23 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
-				reason: RemovedEventModel.blockedEvent,
+				reason: RemovalReason.blockedEvent.rawValue,
 				wallet: WalletModel.createTestWallet(managedContext: context)!,
 				managedContext: context
 			)
 		}
 
 		// Act
-		sut = HolderDashboardBlockedEventsDatasource()
+		sut = HolderDashboardRemovedEventsDatasource(reason: RemovalReason.blockedEvent)
 
-		var didUpdateResult: [BlockedEventItem]?
+		var didUpdateResult: [RemovedEventItem]?
 		sut.didUpdate = { blockedEventItem in
 			didUpdateResult = blockedEventItem
 		}
  
 		// Assert
 		expect(didUpdateResult).to(haveCount(1))
-		expect(didUpdateResult?.first?.reason) == RemovedEventModel.blockedEvent
+		expect(didUpdateResult?.first?.reason) == RemovalReason.blockedEvent.rawValue
 		expect(didUpdateResult?.first?.eventDate) == now
 		expect(didUpdateResult?.first?.type) == .vaccination
 	}
@@ -65,16 +65,16 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
-				reason: RemovedEventModel.identityMismatch,
+				reason: RemovalReason.mismatchedIdentity.rawValue,
 				wallet: WalletModel.createTestWallet(managedContext: context)!,
 				managedContext: context
 			)
 		}
 
 		// Act
-		sut = HolderDashboardBlockedEventsDatasource()
+		sut = HolderDashboardRemovedEventsDatasource(reason: RemovalReason.blockedEvent)
 
-		var didUpdateResult: [BlockedEventItem]?
+		var didUpdateResult: [RemovedEventItem]?
 		sut.didUpdate = { blockedEventItem in
 			didUpdateResult = blockedEventItem
 		}
@@ -86,9 +86,9 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 	func test_nonexistingBlockedEvents_arriveInCallback() throws {
 		
 		// Arrange
-		sut = HolderDashboardBlockedEventsDatasource()
+		sut = HolderDashboardRemovedEventsDatasource(reason: RemovalReason.blockedEvent)
 		
-		var didUpdateResult: [BlockedEventItem]?
+		var didUpdateResult: [RemovedEventItem]?
 		sut.didUpdate = { blockedEventItem in
 			didUpdateResult = blockedEventItem
 		}
@@ -102,7 +102,7 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
 			blockedEvent = RemovedEventModel.create(
 				type: EventMode.vaccination,
 				eventDate: now,
-				reason: RemovedEventModel.blockedEvent,
+				reason: RemovalReason.blockedEvent.rawValue,
 				wallet: WalletModel.createTestWallet(managedContext: context)!,
 				managedContext: context
 			)
@@ -110,7 +110,7 @@ class HolderDashboardBlockedEventsDatasourceTests: XCTestCase {
  
 		// Assert
 		expect(didUpdateResult).toEventually(haveCount(1))
-		expect(didUpdateResult?.first?.reason).toEventually(equal(RemovedEventModel.blockedEvent))
+		expect(didUpdateResult?.first?.reason).toEventually(equal(RemovalReason.blockedEvent.rawValue))
 		expect(didUpdateResult?.first?.eventDate).toEventually(equal(now))
 		expect(didUpdateResult?.first?.type).toEventually(equal(.vaccination))
 	}

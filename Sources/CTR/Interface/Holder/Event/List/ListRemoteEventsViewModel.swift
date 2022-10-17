@@ -117,18 +117,11 @@ class ListRemoteEventsViewModel {
 	// MARK: Sign the events
 
 	internal func userWantsToMakeQR() {
-
-		if Current.identityChecker.compare(eventGroups: walletManager.listEventGroups(), with: remoteEvents) {
-			storeAndSign(replaceExistingEventGroups: false)
-		} else {
-			showIdentityMismatch {
-				// Replace the stored eventgroups
-				self.storeAndSign(replaceExistingEventGroups: true)
-			}
-		}
+		
+		storeAndSign()
 	}
 
-	private func storeAndSign(replaceExistingEventGroups: Bool) {
+	private func storeAndSign() {
 
 		// US 4664: Prevent duplicate scanned dcc.
 		guard !(eventMode == .paperflow && doRemoteEventsContainExistingPaperProofs()) else {
@@ -151,8 +144,7 @@ class ListRemoteEventsViewModel {
 			}
 		}
 		
-		storeEvent(
-			replaceExistingEventGroups: replaceExistingEventGroups) { newlyStoredEventGroups in
+		storeEvent { newlyStoredEventGroups in
 
 			guard let newlyStoredEventGroups = newlyStoredEventGroups else {
 				self.progressIndicationCounter.decrement()
@@ -271,7 +263,7 @@ class ListRemoteEventsViewModel {
 		}
 	
 		// The items which the backend has indicated are blocked:
-		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovedEventModel.blockedEvent } ?? []
+		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovalReason.blockedEvent.rawValue } ?? []
 		
 		// If any blockItem does not match an ID of an EventGroup that was sent to backend to
 		// be signed (i.e. does not match an event in `eventsBeingAdded`), then persist the blockItem:
@@ -293,13 +285,7 @@ class ListRemoteEventsViewModel {
 	// MARK: - Store events
 
 	private func storeEvent(
-		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping ([EventGroup]?) -> Void) {
-
-		if replaceExistingEventGroups {
-			// Replace when there is a identity mismatch
-			walletManager.removeExistingEventGroups()
-		}
 
 		// We can not store empty remoteEvents without an event. (happens with .pending)
 		// ZZZ sometimes returns an empty array of events in the combined flow.

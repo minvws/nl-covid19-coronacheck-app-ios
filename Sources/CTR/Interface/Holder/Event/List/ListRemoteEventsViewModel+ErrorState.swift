@@ -13,29 +13,6 @@ extension ListRemoteEventsViewModel {
 
 	// MARK: Errors
 
-	internal func showIdentityMismatch(onReplace: @escaping () -> Void) {
-
-		alert = AlertContent(
-			title: L.holderEventIdentityAlertTitle(),
-			subTitle: L.holderEventIdentityAlertMessage(),
-			okAction: AlertContent.Action(
-				title: L.holderEventIdentityAlertOk(),
-				action: { _ in
-					onReplace()
-				},
-				isDestructive: true,
-				isPreferred: true
-				
-			),
-			cancelAction: AlertContent.Action(
-				title: L.holderEventIdentityAlertCancel(),
-				action: { [weak self] _ in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
-				}
-			)
-		)
-	}
-
 	internal func showEventError() {
 
 		alert = AlertContent(

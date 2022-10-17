@@ -14,13 +14,15 @@ import Shared
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapAddCertificate()
-	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem])
-	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [BlockedEventItem])
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [RemovedEventItem])
+	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [RemovedEventItem])
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapDeviceHasClockDeviationMoreInfo()
 	func didTapExpiredDomesticVaccinationQRMoreInfo()
+	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem])
+	func didTapMismatchedIdentityEventsDeletedDismiss(items: [RemovedEventItem])
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion)
 	func didTapRecommendedUpdate()
 	func didTapRetryLoadQRCards()
@@ -88,7 +90,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	struct State: Equatable {
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
-		var blockedEventItems: [BlockedEventItem]
+		var blockedEventItems: [RemovedEventItem]
+		var mismatchedIdentityItems: [RemovedEventItem]
 		var isRefreshingStrippen: Bool
 
 		// Related to strippen refreshing.
@@ -197,7 +200,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	}
 
 	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol
-	private let blockedEventsDatasource: HolderDashboardBlockedEventsDatasourceProtocol
+	private let blockedEventsDatasource: HolderDashboardRemovedEventsDatasourceProtocol
+	private let mismatchedIdentityDatasource: HolderDashboardRemovedEventsDatasourceProtocol
 	
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
@@ -218,7 +222,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		qrcardDatasource: HolderDashboardQRCardDatasourceProtocol,
-		blockedEventsDatasource: HolderDashboardBlockedEventsDatasourceProtocol,
+		blockedEventsDatasource: HolderDashboardRemovedEventsDatasourceProtocol,
+		mismatchedIdentityDatasource: HolderDashboardRemovedEventsDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
 		vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol,
@@ -227,6 +232,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.coordinator = coordinator
 		self.qrcardDatasource = qrcardDatasource
 		self.blockedEventsDatasource = blockedEventsDatasource
+		self.mismatchedIdentityDatasource = mismatchedIdentityDatasource
 		self.strippenRefresher = strippenRefresher
 		self.dashboardRegionToggleValue = Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() ? .europeanUnion : Current.userSettings.dashboardRegionToggleValue
 		self.configurationNotificationManager = configurationNotificationManager
@@ -237,6 +243,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			qrCards: [],
 			expiredGreenCards: [],
 			blockedEventItems: [],
+			mismatchedIdentityItems: [],
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
@@ -256,6 +263,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 		setupQRCardDatasource()
 		setupBlockedEventsDatasource()
+		setupFuzzyMatchingRemovedEventsDatasource()
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupConfigNotificationManager()
@@ -334,6 +342,17 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				}
 
 				self.state.blockedEventItems = blockedEventItems
+			}
+		}
+	}
+	
+	private func setupFuzzyMatchingRemovedEventsDatasource() {
+
+		mismatchedIdentityDatasource.didUpdate = { [weak self] items in
+			guard let self = self else { return }
+
+			DispatchQueue.main.async {
+				self.state.mismatchedIdentityItems = items
 			}
 		}
 	}
@@ -534,7 +553,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	// MARK: - Present alerts
 
-	private func displayBlockedEventsAlert(blockedEventItems: [BlockedEventItem]) {
+	private func displayBlockedEventsAlert(blockedEventItems: [RemovedEventItem]) {
 		
 		currentlyPresentedAlert.value = AlertContent(
 			title: L.holder_invaliddetailsremoved_alert_title(),
@@ -591,6 +610,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -622,6 +642,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -659,6 +680,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
@@ -697,6 +719,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		
@@ -740,17 +763,26 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
 	}
 	
-	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [BlockedEventItem]) {
+	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [RemovedEventItem]) {
 		coordinator?.userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: blockedEventItems)
 	}
 	
-	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [BlockedEventItem]) {
+	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [RemovedEventItem]) {
 		Current.walletManager.removeExistingBlockedEvents()
 		Current.userSettings.hasShownBlockedEventsAlert = false
 	}
 	
 	func didTapExpiredDomesticVaccinationQRMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
+	}
+	
+	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem]) {
+		coordinator?.userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: items)
+	}
+	
+	func didTapMismatchedIdentityEventsDeletedDismiss(items: [RemovedEventItem] ) {
+		Current.walletManager.removeExistingMismatchedIdentityEvents()
+		Current.secureUserSettings.selectedIdentity = nil
 	}
 	
 	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion) {

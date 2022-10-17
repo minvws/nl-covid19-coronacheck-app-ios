@@ -598,6 +598,7 @@
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
 "holder_dashboard_originExpiredBanner_visitorPass_title" = "Je bezoekersbewijs is verlopen";
+"holder_dashboard_strippenExpiredError_fuzzyMatching_outOfStrippen" = "Er gaat iets mis. Sluit CoronaCheck helemaal af en start de app opnieuw op.";
 "holder_dashboard_visitorPassInvalidOutsideNLBanner_title" = "Je bezoekersbewijs is niet geldig buiten Nederland";
 "holder_dashboard_visitorpassexpired_body" = "<p>Een bezoekersbewijs is geldig tot %li dagen na de beoordeling van je vaccinatie. Blijf je langer in Nederland? Dan kun je opnieuw een bezoekersbewijs aanvragen. Ga voor meer informatie naar <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
@@ -643,7 +644,7 @@
 "holder_fuzzyMatching_why_title" = "Waarom moet ik één naam kiezen?";
 "holder_identityRemoved_banner_button_readmore" = "Lees meer";
 "holder_identityRemoved_banner_title" = "Je gegevens zijn bijgewerkt. Mogelijk zijn daardoor bewijzen weg.";
-"holder_identityRemoved_moreinfo_body" = "<p>Alleen vaccinatie- en testgegevens die bij de naam horen die je hebt gekozen zijn bewaard (%@).</p><p>De onderstaande gegevens zijn verwijderd uit de app:</p>%@<p>Wil je vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad. Voeg ze daarna zelf opnieuw toe aan de app.</p>";
+"holder_identityRemoved_moreinfo_body" = "<p>Alleen vaccinatie- en testgegevens die bij de naam horen die je hebt gekozen zijn bewaard (<b>%@</b>).</p><p>De onderstaande gegevens zijn verwijderd uit de app:</p>%@<p>Wil je vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad. Voeg ze daarna zelf opnieuw toe aan de app.</p>";
 "holder_identityRemoved_moreinfo_title" = "Bijgewerkte gegevens";
 "holder_identitySelection_actionTitle" = "Keuze opslaan";
 "holder_identitySelection_details_body" = "Deze gegevens horen bij de naam <b>%@</b>";
