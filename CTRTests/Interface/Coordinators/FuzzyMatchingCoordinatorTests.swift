@@ -225,6 +225,67 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == false
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidStop) == false
 	}
+	
+	func test_restartFlow_noOnboardingInNavigationStack() {
+		
+		// Given
+		factorySpy.stubbedPages = [PagedAnnoucementItem(
+			title: "test",
+			content: "test",
+			image: nil,
+			imageBackgroundColor: C.white(),
+			tagline: "test",
+			step: 0
+		)]
+
+		// When
+		sut.restartFlow(matchingBlobIds: [["123"]])
+
+		// Then
+		expect(self.navigationSpy.viewControllers).to(haveCount(1))
+		expect(self.navigationSpy.viewControllers.first is PagedAnnouncementViewController) == true
+		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == false
+		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidStop) == false
+	}
+	
+	func test_restartFlow_onboardingInNavigationStack() {
+		
+		// Given
+		factorySpy.stubbedPages = [PagedAnnoucementItem(
+			title: "test",
+			content: "test",
+			image: nil,
+			imageBackgroundColor: C.white(),
+			tagline: "test",
+			step: 0
+		)]
+		let viewController = PagedAnnouncementViewController(
+			viewModel: PagedAnnouncementViewModel(
+				delegate: sut,
+				pages: factorySpy.stubbedPages,
+				itemsShouldShowWithFullWidthHeaderImage: true,
+				shouldShowWithVWSRibbon: false
+			),
+			allowsBackButton: true,
+			allowsCloseButton: false,
+			allowsNextButton: true
+		)
+		
+		self.navigationSpy.viewControllers = [
+			viewController
+		]
+
+		// When
+		sut.restartFlow(matchingBlobIds: [["123"]])
+
+		// Then
+		expect(self.navigationSpy.viewControllers).to(haveCount(1))
+		expect(self.navigationSpy.viewControllers.first is PagedAnnouncementViewController) == true
+		expect(self.navigationSpy.invokedPopToViewController) == true
+		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == false
+		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidStop) == false
+	}
 }
 
 class FuzzyMatchingFlowSpy: FuzzyMatchingFlowDelegate {

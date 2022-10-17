@@ -245,6 +245,9 @@ class ListRemoteEventsViewModel {
 						
 					case let .customError(title: title, message: message):
 						displayError(title: title, message: message)
+						
+					case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
+						coordinator?.listEventsScreenDidFinish(.mismatchedIdentity(matchingBlobIds: matchingBlobIds))
 				}
 		}
 	}

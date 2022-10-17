@@ -7,7 +7,7 @@
 
 import XCTest
 import Nimble
-import Transport
+@testable import Transport
 @testable import CTR
 
 final class SendIdentitySelectionViewModelTests: XCTestCase {
@@ -144,5 +144,22 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserHasStoppedTheFlow).toEventually(beTrue())
+	}
+	
+	func test_viewDidAppear_greenCardLoader_errorFuzzyMatching() {
+		
+		// Given
+		setupSut(matchingBlobIds: [["123"], ["456"]], selectedBlobIds: ["123"])
+		dataSourceSpy.stubbedGetIdentityResult = EventFlow.Identity(infix: "van", firstName: "Tester", lastName: "Test", birthDateString: "2022-10-12")
+		environmentSpies.secureUserSettingsSpy.stubbedSelectedIdentity = "van Test, Tester"
+		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
+		
+		// When
+		sut.viewDidAppear()
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedRestartFlow).toEventually(beTrue())
 	}
 }

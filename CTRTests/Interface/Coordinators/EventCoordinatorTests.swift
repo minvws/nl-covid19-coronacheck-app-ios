@@ -766,6 +766,19 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ShowHintsViewController) == true
 	}
 	
+	func test_listEventsScreenDidFinish_mismatchedIdentity() throws {
+		
+		// Given
+
+		// When
+		sut.listEventsScreenDidFinish(.mismatchedIdentity(matchingBlobIds: [["123"]]))
+
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
+		expect(self.navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
+	}
+	
 	func test_alternativeRoute() {
 		
 		// Given
@@ -883,5 +896,45 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.navigationSpy.invokedPopViewController) == false
 		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController).toEventually(beTrue())
+	}
+	
+	func test_fuzzyMatchingFlowDidStop() {
+		
+		// Given
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		fmCoordinator.userHasStoppedTheFlow()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+	}
+	
+	func test_fuzzyMatchingFlowDidFinish() {
+		
+		// Given
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		fmCoordinator.userHasFinishedTheFlow()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 }

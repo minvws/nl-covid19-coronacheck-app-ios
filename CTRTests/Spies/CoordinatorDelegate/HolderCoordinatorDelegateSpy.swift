@@ -287,6 +287,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
 	}
 
+	var invokedUserWishesToStartFuzzyMatchingFlow = false
+	var invokedUserWishesToStartFuzzyMatchingFlowCount = 0
+	var invokedUserWishesToStartFuzzyMatchingFlowParameters: (matchingBlobIds: [[String]], Void)?
+	var invokedUserWishesToStartFuzzyMatchingFlowParametersList = [(matchingBlobIds: [[String]], Void)]()
+
+	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
+		invokedUserWishesToStartFuzzyMatchingFlow = true
+		invokedUserWishesToStartFuzzyMatchingFlowCount += 1
+		invokedUserWishesToStartFuzzyMatchingFlowParameters = (matchingBlobIds, ())
+		invokedUserWishesToStartFuzzyMatchingFlowParametersList.append((matchingBlobIds, ()))
+	}
+
 	var invokedUserWishesToViewQRs = false
 	var invokedUserWishesToViewQRsCount = 0
 	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)?

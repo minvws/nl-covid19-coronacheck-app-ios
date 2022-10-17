@@ -240,6 +240,27 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 2
 	}
+	
+	func test_serverError_mismatchedIdentity() {
+
+		// Arrange `expiring` starting state
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		// Act & Assert
+		sut.load()
+		
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
+		expect(self.sut.state.loadingState) == .failed(error: .greencardLoaderError(error: .credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))))
+	}
 
 	func test_serverResponseDidNotChangeExpiredOrExpiringState() {
 		// Arrange
