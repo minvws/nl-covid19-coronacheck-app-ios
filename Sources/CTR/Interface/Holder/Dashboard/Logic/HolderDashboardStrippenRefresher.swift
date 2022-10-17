@@ -108,9 +108,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 				case let GreenCardLoader.Error.credentials(.error(code, serverResponse, networkError)),
 					 let GreenCardLoader.Error.preparingIssue(.error(code, serverResponse, networkError)):
 					
-					if serverResponse?.code == 99790 {
-						// Mismatched Identity
-						logDebug("DSR: mismatched identity")
+					if serverResponse?.code == GreenCardResponseError.mismatchedIdentity {
 						state.loadingState = .failed(error: .greencardLoaderError(error: GreenCardLoader.Error.credentials(ServerError.error(statusCode: code, response: serverResponse, error: networkError)) ))
 					} else {
 						endLoadingWithError(error: networkError)

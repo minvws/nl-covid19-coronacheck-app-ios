@@ -15,6 +15,8 @@ enum GreenCardResponseError: Error {
 	case noSignedEvents
 	case mismatchedIdentity(matchingBlobIds: [[String]])
 	case customError(title: String, message: String)
+	
+	static let mismatchedIdentity = 99790
 }
 
 class GreenCardResponseErrorParser {
@@ -84,8 +86,8 @@ class GreenCardResponseErrorParser {
 							detailedCode: serverResponse?.code
 						)
 						
-						if serverResponse?.code == 99790, let matchingBlobIds = serverResponse?.matchingBlobIds {
-							logDebug("We've encountered a 99790 error with \(matchingBlobIds)")
+						if let matchingBlobIds = serverResponse?.matchingBlobIds,
+							serverResponse?.code == GreenCardResponseError.mismatchedIdentity {
 							 return .mismatchedIdentity(matchingBlobIds: matchingBlobIds)
 						}
 						

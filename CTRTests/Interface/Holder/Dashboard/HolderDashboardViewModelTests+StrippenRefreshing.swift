@@ -337,6 +337,84 @@ extension HolderDashboardViewModelTests {
 
 		expect(self.sut.currentlyPresentedAlert.value) == nil
 	}
+	
+	func test_strippenkaart_mismatchedIdentity_expiring_shouldInvokeFuzzyMatchingFlow() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
+		let error = DashboardStrippenRefresher.Error.greencardLoaderError(
+			error: .credentials(
+				.error(
+					statusCode: 500,
+					response: ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]]),
+					error: .serverError
+				)
+			)
+		)
+
+		let strippenState = DashboardStrippenRefresher.State(
+			loadingState: .failed(error: error),
+			now: { now },
+			greencardsCredentialExpiryState: .expiring(deadline: now.addingTimeInterval(2 * days * fromNow)),
+			userHasPreviouslyDismissedALoadingError: false,
+			hasLoadingEverFailed: false,
+			errorOccurenceCount: 0
+		)
+		
+		// Act
+		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
+
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
+
+		expect(self.sut.internationalCards.value).toEventually(haveCount(2))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
+
+		expect(self.sut.currentlyPresentedAlert.value) == nil
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToStartFuzzyMatchingFlow) == true
+	}
+	
+	func test_strippenkaart_mismatchedIdentity_expired_shouldInvokeFuzzyMatchingFlow() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
+		let error = DashboardStrippenRefresher.Error.greencardLoaderError(
+			error: .credentials(
+				.error(
+					statusCode: 500,
+					response: ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]]),
+					error: .serverError
+				)
+			)
+		)
+
+		let strippenState = DashboardStrippenRefresher.State(
+			loadingState: .failed(error: error),
+			now: { now },
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: false,
+			hasLoadingEverFailed: false,
+			errorOccurenceCount: 0
+		)
+		
+		// Act
+		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
+
+		// Assert
+		expect(self.sut.domesticCards.value).toEventually(haveCount(3))
+		expect(self.sut.domesticCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.domesticCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.domesticCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
+
+		expect(self.sut.internationalCards.value).toEventually(haveCount(2))
+		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
+		expect(self.sut.internationalCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
+
+		expect(self.sut.currentlyPresentedAlert.value) == nil
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToStartFuzzyMatchingFlow) == true
+	}
 
 	func test_strippen_expired_serverError_firstTime_shouldDisplayErrorWithRetry() {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])

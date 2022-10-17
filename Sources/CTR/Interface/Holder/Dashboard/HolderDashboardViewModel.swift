@@ -502,7 +502,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	
 		// Check if we ran into a mismatched Identity error
 		if case let DashboardStrippenRefresher.Error.greencardLoaderError(error: GreenCardLoader.Error.credentials(.error(_, response, _))) = error {
-			if let matchingBlobIds = response?.matchingBlobIds, response?.code == 99790 {
+			if let matchingBlobIds = response?.matchingBlobIds,
+			   response?.code == GreenCardResponseError.mismatchedIdentity {
 				coordinator?.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
 			}
 		}
