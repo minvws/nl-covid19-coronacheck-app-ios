@@ -51,7 +51,8 @@ extension RemovedEvent {
 			  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
 			  let credentialData = object.credential.data(using: .utf8),
 			  let euCredentialAttributes = Current.cryptoManager.readEuCredentials(credentialData),
-			  let eventMode = euCredentialAttributes.eventMode
+			  let eventMode = euCredentialAttributes.eventMode,
+			  let reason = blockItem.reason
 		else { return nil }
 		
 		var eventDate: Date? {
@@ -62,7 +63,7 @@ extension RemovedEvent {
 		return Current.walletManager.storeRemovedEvent(
 			type: eventMode,
 			eventDate: eventDate ?? .distantPast,
-			reason: blockItem.reason
+			reason: reason
 		)
 	}
 	

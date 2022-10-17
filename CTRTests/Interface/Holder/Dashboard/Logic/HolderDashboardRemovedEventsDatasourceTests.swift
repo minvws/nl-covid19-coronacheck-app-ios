@@ -109,6 +109,7 @@ class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 		}
  
 		// Assert
+		expect(blockedEvent) != nil
 		expect(didUpdateResult).toEventually(haveCount(1))
 		expect(didUpdateResult?.first?.reason).toEventually(equal(RemovalReason.blockedEvent.rawValue))
 		expect(didUpdateResult?.first?.eventDate).toEventually(equal(now))

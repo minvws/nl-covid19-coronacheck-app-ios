@@ -60,7 +60,7 @@ public struct RemoteGreenCards: Codable, Equatable {
 		
 		public let identifier: String
 		public let expirationDate: Date
-		public let reason: String
+		public let reason: String?
 		
 		enum CodingKeys: String, CodingKey {
 
