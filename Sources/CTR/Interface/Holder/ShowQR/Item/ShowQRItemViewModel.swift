@@ -198,7 +198,7 @@ class ShowQRItemViewModel {
 		screenshotWarningTimer = nil
 		
 		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			let timeRemaining = blockQRUntil.timeIntervalSince(Current.now())
 			

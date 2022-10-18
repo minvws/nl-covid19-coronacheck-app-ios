@@ -173,7 +173,7 @@ class VerifierStartScanningViewModel {
 		
 		// Add a `didSet` callback to the Atomic<Mode>:
 		$mode.projectedValue.didSet = { [weak self] atomic in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			let newMode: Mode = atomic.wrappedValue
 			self.reloadUI(forMode: newMode, hasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false)
@@ -183,7 +183,7 @@ class VerifierStartScanningViewModel {
 		
 		// Add an observer for when Clock Deviation is detected/undetected:
 		clockDeviationObserverToken = Current.clockDeviationManager.observatory.append { [weak self] hasClockDeviation in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.reloadUI(forMode: self.mode, hasClockDeviation: hasClockDeviation)
 		}
 		

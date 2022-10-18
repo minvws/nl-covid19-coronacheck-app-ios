@@ -325,7 +325,7 @@ class ListStoredEventsViewModel {
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
 			
-			guard let self = self else { return }
+			guard let self else { return }
 			switch result {
 				case .success:
 					self.viewState = self.getEventGroupListViewState()
@@ -366,7 +366,7 @@ class ListStoredEventsViewModel {
 			cancelAction: AlertContent.Action(
 				title: L.generalClose(),
 				action: { [weak self] _ in
-					guard let self = self else { return }
+					guard let self else { return }
 					self.viewState = self.getEventGroupListViewState()
 				}
 			)

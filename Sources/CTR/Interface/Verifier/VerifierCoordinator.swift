@@ -273,7 +273,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	func navigateToAboutThisApp() {
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
-			guard let self = self else { return }
+			guard let self else { return }
 			switch outcome {
 				case let .openURL(url, inApp):
 					self.openUrl(url, inApp: inApp)
