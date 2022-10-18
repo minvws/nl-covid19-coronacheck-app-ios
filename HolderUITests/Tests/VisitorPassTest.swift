@@ -19,7 +19,7 @@ class VisitorPassTest: BaseTest {
 	let vaccinationAssessment = "ZZZ-47Z2Q8FZ3VL3QQ-92"
 	let vaccinationAssessmentToken = "333333"
 	let negativeTest = "ZZZ-QB858FYFT7ZLUU-72"
-	let negativetestToken = "123456"
+	let negativeTestToken = "123456"
 	let fullName = "de Beer, Boris"
 	let birthDate = Date("1971-07-31")
 
@@ -55,7 +55,7 @@ class VisitorPassTest: BaseTest {
 		app.containsText("Verificatiecode")
 		let verificationField = app.textFields["Verificatiecode"]
 		verificationField.tap()
-		verificationField.typeText(negativetestToken)
+		verificationField.typeText(negativeTestToken)
 		app.tapButton("Volgende")
 
 		// Check data
@@ -83,7 +83,7 @@ class VisitorPassTest: BaseTest {
 	func test_negativeTestPlusVaccinationAssessment() {
 		
 		// Add negative test
-		addCommercialTestCertificate(for: negativeTest, with: negativetestToken)
+		addCommercialTestCertificate(for: negativeTest, with: negativeTestToken)
 		
 		// Check data
 		app.textExists("Negatieve testuitslag")
