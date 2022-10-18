@@ -24,7 +24,7 @@ class ShowQRViewModel {
 				self?.animateToFullBrightness()
 			}
 			notificationCenter.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
-				guard let self = self else { return }
+				guard let self else { return }
 				self.revertToInitialBrightness()
 			}
 		}

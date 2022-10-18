@@ -148,7 +148,7 @@ final class LaunchStateManager: LaunchStateManaging {
 		
 		remoteConfigManagerReloadObserverToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
 
-			guard let self = self else { return }
+			guard let self else { return }
 
 			switch result {
 				case .failure(let error):

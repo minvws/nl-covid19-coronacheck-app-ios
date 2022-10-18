@@ -118,27 +118,27 @@ final class HolderDashboardView: BaseView {
 		NSLayoutConstraint.activate([
 			
 			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			fakeNavigationBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			fakeNavigationBar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			
 			tabBar.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
-			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			tabBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			tabBar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			{
 				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
 				bottomScrollViewConstraint = constraint
 				return constraint
 			}(),
 			
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			internationalScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			internationalScrollView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			internationalScrollView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			internationalScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			internationalScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
 			{
@@ -150,10 +150,10 @@ final class HolderDashboardView: BaseView {
 	}
 	
 	lazy var domesticTabEnabledConstraints: [NSLayoutConstraint] = [
-		internationalScrollView.leftAnchor.constraint(equalTo: domesticScrollView.rightAnchor),
+		internationalScrollView.leadingAnchor.constraint(equalTo: domesticScrollView.trailingAnchor),
 		
 		domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-		domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+		domesticScrollView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
 		domesticScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 		domesticScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
 		{
@@ -164,7 +164,7 @@ final class HolderDashboardView: BaseView {
 	]
 	
 	lazy var domesticTabDisabledConstraints: [NSLayoutConstraint] = [
-		internationalScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor)
+		internationalScrollView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor)
 	]
 	
 	override var accessibilityElements: [Any]? {

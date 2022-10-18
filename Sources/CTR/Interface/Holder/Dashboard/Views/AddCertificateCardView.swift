@@ -154,8 +154,8 @@ private class LargeAddCertificateButton: UIControl {
 			
 			titleLabel.topAnchor.constraint(equalTo: plusImageView.bottomAnchor, constant: ViewTraits.spacing),
 			
-			titleLabel.leftAnchor.constraint(equalTo: leftAnchor),
-			titleLabel.rightAnchor.constraint(equalTo: rightAnchor),
+			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)
 		])
 	}

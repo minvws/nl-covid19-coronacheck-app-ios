@@ -134,7 +134,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
 		])
 	}
 	
@@ -143,7 +143,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
@@ -159,8 +159,8 @@ class ListIdentitySelectionView: BaseView {
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			titleLabel.rightAnchor.constraint(
-				equalTo: scrollView.rightAnchor,
+			titleLabel.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			titleLabel.widthAnchor.constraint(
@@ -181,8 +181,8 @@ class ListIdentitySelectionView: BaseView {
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			messageLabel.rightAnchor.constraint(
-				equalTo: scrollView.rightAnchor,
+			messageLabel.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			messageLabel.widthAnchor.constraint(
@@ -197,7 +197,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			
 			separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			separatorView.rightAnchor.constraint(equalTo: rightAnchor),
+			separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			separatorView.topAnchor.constraint(
 				equalTo: messageLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.headerToStackview
@@ -211,7 +211,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			selectionStackView.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
 			selectionStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-			selectionStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			selectionStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			selectionStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
 		])
 	}
@@ -227,8 +227,9 @@ class ListIdentitySelectionView: BaseView {
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			moreButton.rightAnchor.constraint(
-				lessThanOrEqualTo: scrollView.rightAnchor,
+			moreButton.trailingAnchor.constraint(
+				lessThanOrEqualTo: scrollView.trailingAnchor
+				,
 				constant: -ViewTraits.Margin.edge
 			),
 			moreButton.bottomAnchor.constraint(

@@ -317,7 +317,7 @@ class InputRetrievalCodeViewModel {
 
 		Current.networkManager.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
-			guard let self = self else { return }
+			guard let self else { return }
 
 			switch result {
 				case let .success(providers):
@@ -367,7 +367,7 @@ class InputRetrievalCodeViewModel {
 			code: verificationCode,
 			completion: { [weak self] (result: Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>) in
 
-				guard let self = self else { return }
+				guard let self else { return }
 				self.fieldErrorMessage = nil
 
 				switch result {

@@ -44,12 +44,12 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 		
 		NSLayoutConstraint.activate([
 			fieldLabel.topAnchor.constraint(equalTo: topAnchor),
-			fieldLabel.leftAnchor.constraint(equalTo: leftAnchor),
-			fieldLabel.rightAnchor.constraint(equalTo: rightAnchor),
+			fieldLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			fieldLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
 			valueLabel.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: ViewTraits.spacing),
-			valueLabel.leftAnchor.constraint(equalTo: leftAnchor),
-			valueLabel.rightAnchor.constraint(equalTo: rightAnchor),
+			valueLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			valueLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			valueLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

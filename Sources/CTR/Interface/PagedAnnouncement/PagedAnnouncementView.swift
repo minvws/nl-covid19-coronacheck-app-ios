@@ -111,8 +111,8 @@ class PagedAnnouncementView: BaseView {
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
 			footerButtonView.topAnchor.constraint(equalTo: containerView.bottomAnchor),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

@@ -90,7 +90,7 @@ final class ScanLockManager: ScanLockManaging {
 		
 		// Add a change handler to `state`:
 		$state.projectedValue.didSet = { [weak self] atomic in
-			guard let self = self else { return }
+			guard let self else { return }
 
 			if case .locked(let until) = atomic.wrappedValue {
 				// update the keychain:

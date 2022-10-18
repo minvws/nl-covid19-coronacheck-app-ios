@@ -36,7 +36,7 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		}
 	
 		viewModel.identityItems.observe { [weak self] elements in
-			guard let self = self else { return }
+			guard let self else { return }
 			elements.map { rowModel -> IdentityControlView in
 				IdentityControlView.makeView(
 						title: rowModel.name,

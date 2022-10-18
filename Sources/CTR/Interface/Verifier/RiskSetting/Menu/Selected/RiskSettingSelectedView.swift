@@ -89,27 +89,27 @@ final class RiskSettingSelectedView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			labelStackView.topAnchor.constraint(equalTo: scrollView.topAnchor,
 											constant: ViewTraits.Margin.top),
-			labelStackView.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+			labelStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor,
 											 constant: ViewTraits.Margin.edge),
-			labelStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
+			labelStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,
 											  constant: -ViewTraits.Margin.edge),
 			labelStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
 											  constant: -2 * ViewTraits.Margin.edge),
 			
 			riskSettingControlsView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor,
 														 constant: ViewTraits.Spacing.stackViewToControls),
-			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			riskSettingControlsView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			riskSettingControlsView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 			riskSettingControlsView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
 															constant: -ViewTraits.Margin.edge)

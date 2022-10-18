@@ -79,7 +79,7 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		restartTimer()
 		
 		remoteConfigManagerReloadObserverToken = remoteConfigManager.observatoryForReloads.append { [weak self] _ in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.almostOutOfDateNotifyObservers(self.shouldShowAlmostOutOfDateBanner)
 			self.restartTimer()
 		}
@@ -96,7 +96,7 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 			self?.stopTimer()
 		}
 		notificationCenter.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-			guard let self = self else { return }
+			guard let self else { return }
 			if let timeBeforeConfigAlmostOutOfDateWarning = self.timeBeforeConfigAlmostOutOfDateWarning, timeBeforeConfigAlmostOutOfDateWarning <= 0 {
 				// time's up:
 				self.almostOutOfDateNotifyObservers(self.shouldShowAlmostOutOfDateBanner)
@@ -112,7 +112,7 @@ final class ConfigurationNotificationManager: ConfigurationNotificationManagerPr
 		stopTimer()
 		
 		timer = vendTimer(timeBeforeConfigAlmostOutOfDateWarning) { [weak self] in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			DispatchQueue.main.async {
 				self.almostOutOfDateNotifyObservers(self.shouldShowAlmostOutOfDateBanner)

@@ -107,8 +107,8 @@ final class DashboardTabBar: BaseView {
 		
 		NSLayoutConstraint.activate([
 			
-			separatorView.leftAnchor.constraint(equalTo: stackView.leftAnchor),
-			separatorView.rightAnchor.constraint(equalTo: stackView.rightAnchor),
+			separatorView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			separatorView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
 			separatorView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
 			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.separatorHeight),
 			
@@ -151,9 +151,9 @@ final class DashboardTabBar: BaseView {
 		let button = tab.isDomestic ? domesticButton : internationalButton
 		button.isSelected = true
 		
-		selectionLineLeftConstraint = selectionLineView.leftAnchor.constraint(equalTo: button.leftAnchor)
+		selectionLineLeftConstraint = selectionLineView.leadingAnchor.constraint(equalTo: button.leadingAnchor)
 		selectionLineLeftConstraint?.isActive = true
-		selectionLineRightConstraint = selectionLineView.rightAnchor.constraint(equalTo: button.rightAnchor)
+		selectionLineRightConstraint = selectionLineView.trailingAnchor.constraint(equalTo: button.trailingAnchor)
 		selectionLineRightConstraint?.isActive = true
 		
 		setNeedsLayout()
@@ -252,8 +252,8 @@ private class TabBarButton: UIControl {
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.top),
 			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margin.bottom),
-			titleLabel.leftAnchor.constraint(equalTo: leftAnchor),
-			titleLabel.rightAnchor.constraint(equalTo: rightAnchor)
+			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
 		])
 	}
 	
