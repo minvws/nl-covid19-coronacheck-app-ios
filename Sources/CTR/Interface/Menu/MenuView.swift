@@ -47,8 +47,8 @@ class MenuView: ScrolledStackView {
 		
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += [navigationBackgroundView.leftAnchor.constraint(equalTo: leftAnchor)]
-		constraints += [navigationBackgroundView.rightAnchor.constraint(equalTo: rightAnchor)]
+		constraints += [navigationBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor)]
+		constraints += [navigationBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor)]
 		constraints += [navigationBackgroundView.topAnchor.constraint(equalTo: topAnchor)]
 		constraints += [navigationBackgroundView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor)]
 		

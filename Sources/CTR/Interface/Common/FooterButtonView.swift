@@ -86,8 +86,8 @@ final class FooterButtonView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			gradientView.bottomAnchor.constraint(equalTo: topAnchor),
-			gradientView.leftAnchor.constraint(equalTo: leftAnchor),
-			gradientView.rightAnchor.constraint(equalTo: rightAnchor),
+			gradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			gradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			gradientView.heightAnchor.constraint(equalToConstant: ViewTraits.Gradient.height)
 		])
 	}
@@ -97,12 +97,12 @@ final class FooterButtonView: BaseView {
 		NSLayoutConstraint.activate([
 			
 			buttonStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			buttonStackView.leftAnchor.constraint(
-				greaterThanOrEqualTo: safeAreaLayoutGuide.leftAnchor,
+			buttonStackView.leadingAnchor.constraint(
+				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			buttonStackView.rightAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.rightAnchor,
+			buttonStackView.trailingAnchor.constraint(
+				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			{

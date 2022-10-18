@@ -65,8 +65,8 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		scrollViewToFooterConstraint?.isActive = false
 				
 		NSLayoutConstraint.activate([
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
