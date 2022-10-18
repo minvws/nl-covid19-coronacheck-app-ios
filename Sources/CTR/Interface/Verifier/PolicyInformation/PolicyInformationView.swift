@@ -116,8 +116,8 @@ final class PolicyInformationView: ScrolledStackView {
 		
 		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

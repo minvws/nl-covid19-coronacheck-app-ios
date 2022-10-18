@@ -135,8 +135,8 @@ final class CheckIdentityView: BaseView {
 				equalTo: safeAreaLayoutGuide.topAnchor,
 				constant: ViewTraits.Margin.scrollViewTop
 			),
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor)
 		])
 	}
@@ -195,8 +195,8 @@ final class CheckIdentityView: BaseView {
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Button.height),
 			
 			// Footer view
-			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

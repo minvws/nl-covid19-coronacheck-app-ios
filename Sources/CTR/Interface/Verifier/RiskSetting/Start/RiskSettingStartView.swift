@@ -86,8 +86,8 @@ final class RiskSettingStartView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			{
 				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
 				bottomScrollViewConstraint = constraint
@@ -99,30 +99,30 @@ final class RiskSettingStartView: BaseView {
 				constraint.priority = .defaultLow
 				return constraint
 			}(),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			headerLabel.topAnchor.constraint(equalTo: scrollView.topAnchor,
 											 constant: ViewTraits.Margin.top),
-			headerLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+			headerLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor,
 											  constant: ViewTraits.Margin.edge),
-			headerLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
+			headerLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,
 											   constant: -ViewTraits.Margin.edge),
 			headerLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor,
 											   constant: -2 * ViewTraits.Margin.edge),
 			
 			readMoreButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor,
 												constant: ViewTraits.Spacing.headerToReadMoreButton),
-			readMoreButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor,
+			readMoreButton.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor,
 												 constant: ViewTraits.Margin.edge),
-			readMoreButton.rightAnchor.constraint(equalTo: scrollView.rightAnchor,
+			readMoreButton.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor,
 												  constant: -ViewTraits.Margin.edge),
 			
 			changeRiskSettingView.topAnchor.constraint(equalTo: readMoreButton.bottomAnchor,
 													   constant: ViewTraits.Spacing.readMoreButtonToChangeRiskView),
-			changeRiskSettingView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			changeRiskSettingView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			changeRiskSettingView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			changeRiskSettingView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			changeRiskSettingView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor,
 														  constant: -ViewTraits.Margin.edge)
 		])
