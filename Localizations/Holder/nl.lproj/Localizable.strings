@@ -1,6 +1,6 @@
-"appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol zit kun je CoronaCheck niet openen. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
+"appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol is werkt CoronaCheck niet. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
-"appstatus_diskfull_title" = "Je opslag zit vol";
+"appstatus_diskfull_title" = "Je opslag is vol";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -301,10 +301,6 @@
 "holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald bij %@:";
 "holder.event.about.vaccination.type" = "Type vaccin:";
 "holder.event.details" = "Details";
-"holder.event.identity.alert.cancel" = "Stoppen";
-"holder.event.identity.alert.message" = "De persoonsgegevens die je net hebt opgehaald zijn anders dan die in je huidige bewijs staan. Stop en laat eerst de gegevens aanpassen bij de organisatie die de gegevens voor je bewijs heeft geregistreerd, of vervang je bewijs. Je huidige bewijs wordt dan verwijderd.";
-"holder.event.identity.alert.ok" = "Vervang";
-"holder.event.identity.alert.title" = "Wil je je bewijs vervangen?";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
