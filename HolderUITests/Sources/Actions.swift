@@ -153,8 +153,10 @@ extension BaseTest {
 			XCTFail("The password is empty")
 			return
 		}
+
+		let dutchDialog = safari.textFields["Gebruikersnaam"].waitForExistence(timeout: 3.0)
 		
-		let username = safari.textFields["User Name"].assertExistence()
+		let username = safari.textFields[dutchDialog ? "Gebruikersnaam" : "User Name"]
 		username.tap()
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
@@ -165,12 +167,12 @@ extension BaseTest {
 			makeScreenShot(name: "Hide continue button")
 		}
 		
-		let password = safari.secureTextFields["Password"].assertExistence()
+		let password = safari.secureTextFields[dutchDialog ? "Wachtwoord" : "Password"]
 		password.tap()
 		password.typeText(authPassword)
 		makeScreenShot(name: "Password typed")
 		
-		let submitAuth = safari.buttons["Log In"].assertExistence()
+		let submitAuth = safari.buttons[dutchDialog ? "Log in" : "Log In"]
 		submitAuth.tap()
 		makeScreenShot(name: "Auth submit button")
 	}
