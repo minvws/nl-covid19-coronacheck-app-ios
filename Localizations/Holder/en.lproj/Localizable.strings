@@ -646,6 +646,8 @@
 "holder_identityRemoved_banner_title" = "Your details were updated. Certificates may have been removed as a result.";
 "holder_identityRemoved_moreinfo_body" = "<p>Only vaccination and test details connected to the name you chose were saved (<b>%@</b>).</p><p>The details below have been removed from the app:</p>%@<p>Do you want to retrieve your vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test. You can add them to the app again after.</p>";
 "holder_identityRemoved_moreinfo_title" = "Updated details";
+"holder_identitySelection_accessibility_details" = "See details for %@";
+"holder_identitySelection_accessibility_select" = "Select %@";
 "holder_identitySelection_actionTitle" = "Save choice";
 "holder_identitySelection_details_body" = "These details are connected to the name <b>%@</b>";
 "holder_identitySelection_details_fetchedFromProvider" = "Retrieved at %@";

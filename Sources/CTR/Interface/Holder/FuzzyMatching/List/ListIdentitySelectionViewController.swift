@@ -26,7 +26,14 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		viewModel.message.observe { [weak self] in self?.sceneView.header = $0 }
 		viewModel.actionTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.whyTitle.observe { [weak self] in self?.sceneView.moreButtonTitle = $0 }
-		viewModel.errorMessage.observe { [weak self] in self?.sceneView.errorMessage = $0 }
+		viewModel.errorMessage.observe {[weak self] errorMessage in
+			self?.sceneView.errorMessage = errorMessage
+			if let errorMessage {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					UIAccessibility.post(notification: .announcement, argument: errorMessage)
+				}
+			}
+		}
 	
 		viewModel.identityItems.observe { [weak self] elements in
 			guard let self = self else { return }

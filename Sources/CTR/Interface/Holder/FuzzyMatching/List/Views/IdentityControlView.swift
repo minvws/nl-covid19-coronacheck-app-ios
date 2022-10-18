@@ -135,6 +135,12 @@ class IdentityControlView: BaseView {
 		])
 	}
 	
+	override func setupAccessibility() {
+		
+		super.setupAccessibility()
+		self.accessibilityElements = [titleLabel, contentLabel, warningLabel, actionButton, selectionButton]
+	}
+	
 	@objc private func actionButtonTapped() {
 		
 		actionButtonCommand?()
@@ -160,6 +166,10 @@ class IdentityControlView: BaseView {
 				kerning: ViewTraits.Title.kerning,
 				textColor: C.black()!
 			)
+			if let title {
+				actionButton.accessibilityLabel = L.holder_identitySelection_accessibility_details(title)
+				selectionButton.accessibilityLabel = L.holder_identitySelection_accessibility_select(title)
+			}
 		}
 	}
 	
