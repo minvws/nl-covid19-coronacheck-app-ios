@@ -19,8 +19,8 @@ class EventGroupCache: EventGroupCacheProtocol {
 	
 	// MARK: - Cache
 	
-	private var wrapperCache: [String: EventFlow.EventResultWrapper] = [:]
-	private var euCredentialAttributesCache: [String: EuCredentialAttributes] = [:]
+	internal var wrapperCache: [String: EventFlow.EventResultWrapper] = [:]
+	internal var euCredentialAttributesCache: [String: EuCredentialAttributes] = [:]
 	
 	func getEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper? {
 		
