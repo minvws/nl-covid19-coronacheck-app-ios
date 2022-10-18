@@ -9,9 +9,9 @@ import Foundation
 import Transport
 import Shared
 
-struct EuCredentialAttributes: Codable {
+struct EuCredentialAttributes: Codable, Equatable {
 
-	struct DigitalCovidCertificate: Codable {
+	struct DigitalCovidCertificate: Codable, Equatable {
 
 		let dateOfBirth: String
 		let name: Name
@@ -31,7 +31,7 @@ struct EuCredentialAttributes: Codable {
 		}
 	}
 
-	struct Name: Codable {
+	struct Name: Codable, Equatable {
 
 		let familyName: String
 		let standardisedFamilyName: String
@@ -47,7 +47,7 @@ struct EuCredentialAttributes: Codable {
 		}
 	}
 
-	struct Vaccination: Codable {
+	struct Vaccination: Codable, Equatable {
 
 		let certificateIdentifier: String
 		let country: String
@@ -75,7 +75,7 @@ struct EuCredentialAttributes: Codable {
 		}
 	}
 
-	struct TestEntry: Codable {
+	struct TestEntry: Codable, Equatable {
 
 		let certificateIdentifier: String
 		let country: String
@@ -103,7 +103,7 @@ struct EuCredentialAttributes: Codable {
 		}
 	}
 
-	struct RecoveryEntry: Codable {
+	struct RecoveryEntry: Codable, Equatable {
 
 		let certificateIdentifier: String
 		let country: String

@@ -225,6 +225,20 @@ extension EventFlow.EventResultWrapper {
 		events: [EventFlow.Event.vaccinationAssessmentEvent]
 	)
 	
+	static var fakeMultipleEventsResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		events: [
+			EventFlow.Event.vaccinationAssessmentEvent,
+			EventFlow.Event.vaccinationEvent,
+			EventFlow.Event.negativeTestEvent,
+			EventFlow.Event.expiredPositiveTestEvent,
+			EventFlow.Event.recoveryEvent
+		]
+	)
+	
 	static var fakeWithV3Identity: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
