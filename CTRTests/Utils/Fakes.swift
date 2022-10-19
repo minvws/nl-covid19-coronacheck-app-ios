@@ -225,6 +225,20 @@ extension EventFlow.EventResultWrapper {
 		events: [EventFlow.Event.vaccinationAssessmentEvent]
 	)
 	
+	static var fakeMultipleEventsResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		events: [
+			EventFlow.Event.vaccinationAssessmentEvent,
+			EventFlow.Event.vaccinationEvent,
+			EventFlow.Event.negativeTestEvent,
+			EventFlow.Event.expiredPositiveTestEvent,
+			EventFlow.Event.recoveryEvent
+		]
+	)
+	
 	static var fakeWithV3Identity: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -1329,6 +1343,26 @@ extension EventGroup {
 						managedContext: context
 					)
 				}
+			}
+		}
+		return eventGroup
+	}
+	
+	static func createDCCEventGroup(dataStoreManager: DataStoreManaging, credential: String, couplingCode: String? = nil) -> EventGroup? {
+
+		var eventGroup: EventGroup?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			if let wallet = WalletModel.createTestWallet(managedContext: context),
+			   let jsonData = try? JSONEncoder().encode(EventFlow.DccEvent(credential: credential, couplingCode: couplingCode)) {
+				eventGroup = EventGroupModel.create(
+					type: EventMode.recovery,
+					providerIdentifier: "DCC",
+					expiryDate: nil,
+					jsonData: jsonData,
+					wallet: wallet,
+					managedContext: context
+				)
 			}
 		}
 		return eventGroup
