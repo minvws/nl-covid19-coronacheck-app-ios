@@ -71,8 +71,8 @@ final class EmptyDashboardImagePlaceholderCardView: BaseView {
 			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.image.width),
 			
 			titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: ViewTraits.Spacing.imageToLabel),
-			titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margins.maxHorizontal),
-			titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margins.maxHorizontal),
+			titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: ViewTraits.Margins.maxHorizontal),
+			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -ViewTraits.Margins.maxHorizontal),
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margins.bottomLabel)
 		])

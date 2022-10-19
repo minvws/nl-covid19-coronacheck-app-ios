@@ -58,7 +58,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 		#if DEBUG
 			if LaunchArgumentsHandler.shouldInjectView() {
 				onInjection { [weak self] instance in
-					guard let self = self else { return }
+					guard let self else { return }
 					// **For iterative UI development only **
 					// The previous instance of self.sceneView is never released (due to
 					// strong bindings from the ViewModel), so on each successive injection

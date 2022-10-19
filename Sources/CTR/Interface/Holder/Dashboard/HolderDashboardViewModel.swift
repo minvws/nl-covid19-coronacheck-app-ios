@@ -289,7 +289,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 
 		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
-			guard let self = self else { return }
+			guard let self else { return }
 			// Disclosure Policy has been updated
 			// - Reset any dismissed banners
 			Current.userSettings.lastDismissedDisclosurePolicy = []
@@ -302,7 +302,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 		
 		configurationAlmostOutOfDateObserverToken = configurationNotificationManager.almostOutOfDateObservatory.append { [weak self] configIsAlmostOutOfDate in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.state.shouldShowConfigurationIsAlmostOutOfDateBanner = configIsAlmostOutOfDate
 		}
 	}
@@ -319,7 +319,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	private func setupQRCardDatasource() {
 		qrcardDatasource.didUpdate = { [weak self] (qrCardDataItems: [QRCard], expiredGreenCards: [ExpiredQR]) in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			DispatchQueue.main.async {
 				var state = self.state
@@ -334,7 +334,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private func setupBlockedEventsDatasource() {
 
 		blockedEventsDatasource.didUpdate = { [weak self] blockedEventItems in
-			guard let self = self else { return }
+			guard let self else { return }
 
 			DispatchQueue.main.async {
 				if blockedEventItems.isNotEmpty && !Current.userSettings.hasShownBlockedEventsAlert {
@@ -349,7 +349,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private func setupFuzzyMatchingRemovedEventsDatasource() {
 
 		mismatchedIdentityDatasource.didUpdate = { [weak self] items in
-			guard let self = self else { return }
+			guard let self else { return }
 
 			DispatchQueue.main.async {
 				self.state.mismatchedIdentityItems = items

@@ -222,8 +222,8 @@ class VerifierStartScanningView: BaseView {
 		NSLayoutConstraint.activate([
 
 			fakeNavigationBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			fakeNavigationBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			fakeNavigationBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			fakeNavigationBar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			fakeNavigationBar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 
 			// Scrollview
 			scrollView.topAnchor.constraint(equalTo: fakeNavigationBar.bottomAnchor),
@@ -244,8 +244,8 @@ class VerifierStartScanningView: BaseView {
 
 			// Footer view
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
 			// ClockDeviationWarningView

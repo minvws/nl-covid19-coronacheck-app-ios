@@ -87,8 +87,8 @@ private extension BottomSheetPresentationController {
 		overlayView.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
 			overlayView.topAnchor.constraint(equalTo: containerView.topAnchor),
-			overlayView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-			overlayView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+			overlayView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			overlayView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 			overlayView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
 		])
 	}

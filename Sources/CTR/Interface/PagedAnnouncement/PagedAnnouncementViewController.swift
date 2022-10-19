@@ -43,7 +43,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 		setupPageController()
 		
 		viewModel.$pages.binding = { [weak self] in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			self.pageViewController.pages = $0.compactMap { page in
 				guard let viewController = self.viewModel.getStep(page) as? PagedAnnouncementItemViewController else { return nil }

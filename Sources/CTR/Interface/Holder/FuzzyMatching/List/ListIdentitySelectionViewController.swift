@@ -16,7 +16,6 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		super.viewDidLoad()
 		setupBinding()
 		setupCallbacks()
-		setupSkipButton()
 		addBackButton()
 	}
 	
@@ -26,10 +25,17 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		viewModel.message.observe { [weak self] in self?.sceneView.header = $0 }
 		viewModel.actionTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryTitle = $0 }
 		viewModel.whyTitle.observe { [weak self] in self?.sceneView.moreButtonTitle = $0 }
-		viewModel.errorMessage.observe { [weak self] in self?.sceneView.errorMessage = $0 }
+		viewModel.errorMessage.observe {[weak self] errorMessage in
+			self?.sceneView.errorMessage = errorMessage
+			if let errorMessage {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					UIAccessibility.post(notification: .announcement, argument: errorMessage)
+				}
+			}
+		}
 	
 		viewModel.identityItems.observe { [weak self] elements in
-			guard let self = self else { return }
+			guard let self else { return }
 			elements.map { rowModel -> IdentityControlView in
 				IdentityControlView.makeView(
 						title: rowModel.name,
@@ -45,6 +51,15 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		viewModel.alert.observe { [weak self] alertContent in
 			guard let alertContent else { return }
 			self?.showAlert(alertContent)
+		}
+		
+		viewModel.showSkipButton.observe { [weak self] in
+			guard let self else { return }
+			if $0 {
+				self.setupSkipButton()
+			} else {
+				self.navigationItem.rightBarButtonItem = nil
+			}
 		}
 	}
 	

@@ -246,7 +246,7 @@ class InputRetrievalCodeViewController: TraitWrappedGenericViewController<InputR
 			okAction: AlertContent.Action(
 				title: okTitle,
 				action: { [weak self] _ in
-					guard let self = self else { return }
+					guard let self else { return }
 					self.sceneView.verificationEntryView.inputField.text = nil
 					self.viewModel.resendVerificationCodeButtonTapped()
 				},

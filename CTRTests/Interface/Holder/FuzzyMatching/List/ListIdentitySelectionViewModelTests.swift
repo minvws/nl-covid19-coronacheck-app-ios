@@ -11,24 +11,27 @@ import Nimble
 
 final class ListIdentitySelectionViewModelTests: XCTestCase {
 
-	var sut: ListIdentitySelectionViewModel!
+	private var sut: ListIdentitySelectionViewModel!
 
-	var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
-	var dataSourceSpy: IdentitySelectionDataSourceSpy!
+	private var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
+	private var dataSourceSpy: IdentitySelectionDataSourceSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 
+		environmentSpies = setupEnvironmentSpies()
 		dataSourceSpy = IdentitySelectionDataSourceSpy()
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
 	}
 	
-	func setupSut() {
+	func setupSut(date: Date = Current.now()) {
 		
 		sut = ListIdentitySelectionViewModel(
 			coordinatorDelegate: coordinatorDelegateSpy,
 			dataSource: dataSourceSpy,
-			matchingBlobIds: []
+			matchingBlobIds: [],
+			date: date
 		)
 	}
 
@@ -42,6 +45,55 @@ final class ListIdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.alert.value) != nil
+	}
+	
+	func test_showSkipButton_noValidCredentials() {
+		
+		// Given
+		
+		// When
+		setupSut()
+		
+		// Then
+		expect(self.sut.showSkipButton.value) == false
+	}
+	
+	func test_showSkipButton_withValidCredentials() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greenCard]
+		
+		// When
+		setupSut()
+		
+		// Then
+		expect(self.sut.showSkipButton.value) == true
+	}
+	
+	func test_showSkipButton_withValidCredentials_30DaysInTheFuture() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greenCard]
+		
+		// When
+		setupSut(date: Date().addingTimeInterval(30 * days))
+		
+		// Then
+		expect(self.sut.showSkipButton.value).toEventually(beFalse())
 	}
 	
 	func test_userWishedToReadMore() {
