@@ -45,6 +45,7 @@ class ListIdentitySelectionViewModel {
 	var errorMessage = Observable<String?>(value: nil)
 	var identityItems = Observable<[IdentityItem]>(value: [])
 	var alert: Observable<AlertContent?> = Observable(value: nil)
+	var showSkipButton = Observable<Bool>(value: true)
 	
 	internal var selectedBlobIds = [String]()
 	internal var matchingBlobIds = [[String]]()
@@ -56,12 +57,21 @@ class ListIdentitySelectionViewModel {
 	init(
 		coordinatorDelegate: FuzzyMatchingCoordinatorDelegate,
 		dataSource: IdentitySelectionDataSourceProtocol,
-		matchingBlobIds: [[String]]) {
+		matchingBlobIds: [[String]],
+		date: Date = Current.now()) {
 		
 		self.coordinatorDelegate = coordinatorDelegate
 		self.dataSource = dataSource
 		self.matchingBlobIds = matchingBlobIds
 		self.populateIdentityObjects()
+		
+		self.showSkipButton.value = {
+			// 4958: Hide skip button when there are no active credentials
+			// (prevents loop of no strippen and mismatched identity when strippen refreshing)
+			return Current.walletManager.listGreenCards()
+				.filter { $0.hasActiveCredentialNowOrInFuture(forDate: date) }
+				.isNotEmpty
+		}()
 	}
 	
 	private func populateIdentityObjects() {

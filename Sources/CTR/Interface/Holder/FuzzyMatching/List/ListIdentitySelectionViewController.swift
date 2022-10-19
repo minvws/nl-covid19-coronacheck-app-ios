@@ -16,7 +16,6 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		super.viewDidLoad()
 		setupBinding()
 		setupCallbacks()
-		setupSkipButton()
 		addBackButton()
 	}
 	
@@ -52,6 +51,15 @@ class ListIdentitySelectionViewController: TraitWrappedGenericViewController<Lis
 		viewModel.alert.observe { [weak self] alertContent in
 			guard let alertContent else { return }
 			self?.showAlert(alertContent)
+		}
+		
+		viewModel.showSkipButton.observe { [weak self] in
+			guard let self else { return }
+			if $0 {
+				self.setupSkipButton()
+			} else {
+				self.navigationItem.rightBarButtonItem = nil
+			}
 		}
 	}
 	
