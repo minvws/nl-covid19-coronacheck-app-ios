@@ -11,8 +11,6 @@ import Transport
 
 class EventGroupModel {
 
-	static let entityName = "EventGroup"
-
 	@discardableResult class func create(
 		type: EventMode,
 		providerIdentifier: String,
@@ -21,10 +19,7 @@ class EventGroupModel {
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) -> EventGroup? {
 
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? EventGroup else {
-			return nil
-		}
-
+		let object = EventGroup(context: managedContext)
 		object.type = type.rawValue
 		object.providerIdentifier = providerIdentifier
 		object.expiryDate = expiryDate

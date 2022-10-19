@@ -10,8 +10,6 @@ import CoreData
 
 class CredentialModel {
 
-	static let entityName = "Credential"
-
 	@discardableResult class func create(
 		data: Data,
 		validFrom: Date,
@@ -20,10 +18,7 @@ class CredentialModel {
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Credential? {
 
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Credential else {
-			return nil
-		}
-
+		let object = Credential(context: managedContext)
 		object.data = data
 		object.version = version
 		object.validFrom = validFrom

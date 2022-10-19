@@ -21,14 +21,9 @@ class WalletModel {
 		label: String,
 		managedContext: NSManagedObjectContext) -> Wallet? {
 
-		if let object = NSEntityDescription.insertNewObject(
-			forEntityName: entityName,
-			into: managedContext) as? Wallet {
-
-			object.label = label
-			return object
-		}
-		return nil
+		let object = Wallet(context: managedContext)
+		object.label = label
+		return object
 	}
 
 	/// List all the wallets

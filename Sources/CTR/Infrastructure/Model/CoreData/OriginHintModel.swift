@@ -10,17 +10,12 @@ import CoreData
 
 class OriginHintModel {
 	
-	static let entityName = "OriginHint"
-	
 	@discardableResult class func create(
 		origin: Origin,
 		hint: String,
 		managedContext: NSManagedObjectContext) -> OriginHint? {
 			
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? OriginHint else {
-			return nil
-		}
-		
+		let object = OriginHint(context: managedContext)
 		object.hint = hint
 		object.origin = origin
 		

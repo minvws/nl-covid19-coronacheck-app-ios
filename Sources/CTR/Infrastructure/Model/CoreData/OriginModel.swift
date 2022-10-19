@@ -67,8 +67,6 @@ enum OriginType: String, Codable, Equatable {
 
 class OriginModel {
 	
-	static let entityName = "Origin"
-	
 	@discardableResult class func create(
 		type: OriginType,
 		eventDate: Date,
@@ -77,11 +75,8 @@ class OriginModel {
 		doseNumber: Int?,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
-			
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? Origin else {
-			return nil
-		}
 		
+		let object = Origin(context: managedContext)
 		object.type = type.rawValue
 		object.eventDate = eventDate
 		object.expirationTime = expirationTime

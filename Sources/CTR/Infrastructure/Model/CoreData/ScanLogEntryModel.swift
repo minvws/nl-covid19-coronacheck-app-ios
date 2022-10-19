@@ -23,10 +23,7 @@ class ScanLogEntryModel {
 		date: Date,
 		managedContext: NSManagedObjectContext) -> ScanLogEntry? {
 
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? ScanLogEntry else {
-			return nil
-		}
-
+		let object = ScanLogEntry(context: managedContext)
 		object.date = date
 		object.mode = mode
 		object.identifier = 0

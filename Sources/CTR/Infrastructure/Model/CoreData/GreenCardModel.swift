@@ -16,17 +16,12 @@ enum GreenCardType: String {
 
 class GreenCardModel {
 
-	static let entityName = "GreenCard"
-
 	@discardableResult class func create(
 		type: GreenCardType,
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) -> GreenCard? {
 
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? GreenCard else {
-			return nil
-		}
-
+		let object = GreenCard(context: managedContext)
 		object.type = type.rawValue
 		object.wallet = wallet
 

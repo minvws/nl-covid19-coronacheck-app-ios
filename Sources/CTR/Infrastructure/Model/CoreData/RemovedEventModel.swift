@@ -25,15 +25,11 @@ class RemovedEventModel {
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) -> RemovedEvent? {
 			
-			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? RemovedEvent else {
-				return nil
-			}
-			
+			let object = RemovedEvent(context: managedContext)
 			object.type = type.rawValue
 			object.eventDate = eventDate
 			object.reason = reason
 			object.wallet = wallet
-			
 			return object
 		}
 }
