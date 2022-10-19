@@ -169,7 +169,7 @@ class WalletModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 				
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -192,12 +192,12 @@ class WalletModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
-			if let wallet = WalletModel.createTestWallet(managedContext: context),
-			   let greenCard = GreenCardModel.create(
-				type: .eu,
-				wallet: wallet,
-				managedContext: context
-			   ) {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				let greenCard = GreenCard(
+					type: .eu,
+					wallet: wallet,
+					managedContext: context
+				)
 				
 				// When
 				wallet.removeFromGreenCards(greenCard)

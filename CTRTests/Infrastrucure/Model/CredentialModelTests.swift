@@ -32,7 +32,7 @@ class CredentialModelTests: XCTestCase {
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let unwrappedJson = json {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -40,7 +40,7 @@ class CredentialModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					credential = CredentialModel.create(
+					credential = Credential(
 						data: unwrappedJson,
 						validFrom: date,
 						expirationTime: date,
@@ -67,7 +67,7 @@ class CredentialModelTests: XCTestCase {
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let json = "test_createTwoCredentials".data(using: .utf8) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -76,14 +76,14 @@ class CredentialModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					CredentialModel.create(
+					Credential(
 						data: json,
 						validFrom: date,
 						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					CredentialModel.create(
+					Credential(
 						data: json,
 						validFrom: date,
 						expirationTime: date,

@@ -548,7 +548,7 @@ extension GreenCardModel {
 		context.performAndWait {
 
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				result = GreenCardModel.create(
+				result = GreenCard(
 					type: type,
 					wallet: wallet,
 					managedContext: context
@@ -556,7 +556,7 @@ extension GreenCardModel {
 				if withValidCredential, let greenCard = result {
 					let now = Date().timeIntervalSince1970 - 200
 					let expiration = now + 3600
-					CredentialModel.create(
+					Credential(
 						data: Data(),
 						validFrom: Date(timeIntervalSince1970: now),
 						expirationTime: Date(timeIntervalSince1970: expiration),

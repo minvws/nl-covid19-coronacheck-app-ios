@@ -16,18 +16,6 @@ enum GreenCardType: String {
 
 class GreenCardModel {
 
-	@discardableResult class func create(
-		type: GreenCardType,
-		wallet: Wallet,
-		managedContext: NSManagedObjectContext) -> GreenCard? {
-
-		let object = GreenCard(context: managedContext)
-		object.type = type.rawValue
-		object.wallet = wallet
-
-		return object
-	}
-
 	class func fetchByIds(objectIDs: [NSManagedObjectID]) -> Result<[GreenCard], Error> {
 
 		var result = [GreenCard]()
@@ -45,6 +33,16 @@ class GreenCardModel {
 }
 
 extension GreenCard {
+	
+	@discardableResult convenience init(
+		type: GreenCardType,
+		wallet: Wallet,
+		managedContext: NSManagedObjectContext) {
+
+		self.init(context: managedContext)
+		self.type = type.rawValue
+		self.wallet = wallet
+	}
 
 	/// Get the type of a greenCard as a GreenCardType
 	/// - Returns: greenCard type

@@ -8,24 +8,22 @@
 import Foundation
 import CoreData
 
-class CredentialModel {
+extension Credential {
 
-	@discardableResult class func create(
+	@discardableResult convenience init(
 		data: Data,
 		validFrom: Date,
 		expirationTime: Date,
 		version: Int32 = 1,
 		greenCard: GreenCard,
-		managedContext: NSManagedObjectContext) -> Credential? {
+		managedContext: NSManagedObjectContext) {
 
-		let object = Credential(context: managedContext)
-		object.data = data
-		object.version = version
-		object.validFrom = validFrom
-		object.expirationTime = expirationTime
-		object.greenCard = greenCard
-
-		return object
+		self.init(context: managedContext)
+		self.data = data
+		self.version = version
+		self.validFrom = validFrom
+		self.expirationTime = expirationTime
+		self.greenCard = greenCard
 	}
 }
 

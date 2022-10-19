@@ -10,24 +10,6 @@ import CoreData
 import Transport
 
 class EventGroupModel {
-
-//	@discardableResult class func create(
-//		type: EventMode,
-//		providerIdentifier: String,
-//		expiryDate: Date?,
-//		jsonData: Data,
-//		wallet: Wallet,
-//		managedContext: NSManagedObjectContext) -> EventGroup? {
-//
-//		let object = EventGroup(context: managedContext)
-//		object.type = type.rawValue
-//		object.providerIdentifier = providerIdentifier
-//		object.expiryDate = expiryDate
-//		object.jsonData = jsonData
-//		object.wallet = wallet
-//
-//		return object
-//	}
 	
 	@discardableResult class func findBy(
 		wallet: Wallet,

@@ -791,7 +791,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -814,7 +814,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let context = Current.dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context

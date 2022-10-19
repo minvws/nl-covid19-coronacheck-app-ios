@@ -31,7 +31,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -57,7 +57,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -83,7 +83,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -109,12 +109,12 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				GreenCardModel.create(
+				GreenCard(
 					type: .domestic,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
-				GreenCardModel.create(
+				GreenCard(
 					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -137,7 +137,7 @@ class GreenCardModelTests: XCTestCase {
 
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let unwrappedJson = json {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -146,7 +146,7 @@ class GreenCardModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					credential = CredentialModel.create(
+					credential = Credential(
 						data: unwrappedJson,
 						validFrom: date,
 						expirationTime: date,
@@ -175,19 +175,19 @@ class GreenCardModelTests: XCTestCase {
 		context.performAndWait {
 
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
-			   let greenCard = GreenCardModel.create(
-				type: .eu,
-				wallet: wallet,
-				managedContext: context
-			   ),
-			   let json = "test_removeCredential".data(using: .utf8),
-			   let credential = CredentialModel.create(
-				data: json,
-				validFrom: date,
-				expirationTime: date,
-				greenCard: greenCard,
-				managedContext: context
-			   ) {
+			   let json = "test_removeCredential".data(using: .utf8) {
+				let greenCard = GreenCard(
+					type: .eu,
+					wallet: wallet,
+					managedContext: context
+				)
+				let credential = Credential(
+					data: json,
+					validFrom: date,
+					expirationTime: date,
+					greenCard: greenCard,
+					managedContext: context
+				)
 
 				// When
 				greenCard.removeFromCredentials(credential)
@@ -209,14 +209,13 @@ class GreenCardModelTests: XCTestCase {
 		context.performAndWait {
 
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
 				)
-
+				
 				if let unwrappedGreenCard = greenCard {
-
 					// When
 					origin = Origin(
 						type: .vaccination,
@@ -248,21 +247,21 @@ class GreenCardModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.createTestWallet(managedContext: context),
-			   let greenCard = GreenCardModel.create(
-				type: .eu,
-				wallet: wallet,
-				managedContext: context
-			   ) {
-			   let origin = Origin(
-				type: .vaccination,
-				eventDate: date,
-				expirationTime: date,
-				validFromDate: date,
-				doseNumber: 1,
-				greenCard: greenCard,
-				managedContext: context
-			   )
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				let greenCard = GreenCard(
+					type: .eu,
+					wallet: wallet,
+					managedContext: context
+				)
+				let origin = Origin(
+					type: .vaccination,
+					eventDate: date,
+					expirationTime: date,
+					validFromDate: date,
+					doseNumber: 1,
+					greenCard: greenCard,
+					managedContext: context
+				)
 
 				// When
 				greenCard.removeFromOrigins(origin)
@@ -285,7 +284,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -312,7 +311,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -320,7 +319,7 @@ class GreenCardModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					credential = CredentialModel.create(
+					credential = Credential(
 						data: json,
 						validFrom: now.addingTimeInterval(1 * days * ago),
 						expirationTime: now.addingTimeInterval(1 * days),
@@ -351,7 +350,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -359,7 +358,7 @@ class GreenCardModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					credential = CredentialModel.create(
+					credential = Credential(
 						data: json,
 						validFrom: now.addingTimeInterval(2 * days * ago),
 						expirationTime: now.addingTimeInterval(1 * days * ago),
@@ -391,7 +390,7 @@ class GreenCardModelTests: XCTestCase {
 			if let unwrappedWallet = wallet {
 
 				// When
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: unwrappedWallet,
 					managedContext: context
@@ -399,14 +398,14 @@ class GreenCardModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					credentialValidFrom10HoursAgo = CredentialModel.create(
+					credentialValidFrom10HoursAgo = Credential(
 						data: json,
 						validFrom: now.addingTimeInterval(10 * hour * ago),
 						expirationTime: now.addingTimeInterval(1 * days),
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					credentialValidFrom5HoursAgo = CredentialModel.create(
+					credentialValidFrom5HoursAgo = Credential(
 						data: json,
 						validFrom: now.addingTimeInterval(5 * hour * ago),
 						expirationTime: now.addingTimeInterval(1 * days),

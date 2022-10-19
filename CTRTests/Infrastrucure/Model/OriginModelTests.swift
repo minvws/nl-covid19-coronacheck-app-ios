@@ -31,7 +31,7 @@ class OriginModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -69,7 +69,7 @@ class OriginModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
