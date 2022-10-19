@@ -40,7 +40,7 @@ class OriginHintModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 					
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
@@ -81,7 +81,7 @@ class OriginHintModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 					
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,

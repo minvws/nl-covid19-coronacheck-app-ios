@@ -218,7 +218,7 @@ class GreenCardModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
@@ -253,8 +253,8 @@ class GreenCardModelTests: XCTestCase {
 				type: .eu,
 				wallet: wallet,
 				managedContext: context
-			   ),
-			   let origin = OriginModel.create(
+			   ) {
+			   let origin = Origin(
 				type: .vaccination,
 				eventDate: date,
 				expirationTime: date,
@@ -262,7 +262,7 @@ class GreenCardModelTests: XCTestCase {
 				doseNumber: 1,
 				greenCard: greenCard,
 				managedContext: context
-			   ) {
+			   )
 
 				// When
 				greenCard.removeFromOrigins(origin)

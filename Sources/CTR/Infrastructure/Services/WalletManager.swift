@@ -443,7 +443,7 @@ class WalletManager: WalletManaging {
 
 		if let type = OriginType(rawValue: remoteOrigin.type) {
 
-			guard let origin = OriginModel.create(
+			let origin = Origin(
 				type: type,
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
@@ -451,16 +451,13 @@ class WalletManager: WalletManaging {
 				doseNumber: remoteOrigin.doseNumber,
 				greenCard: greenCard,
 				managedContext: context
-			) else {
-				return false
-			}
+			)
 			
 			// Store the origin hints
-			var result = true
 			for hint in remoteOrigin.hints {
-				result = result && OriginHintModel.create(origin: origin, hint: hint, managedContext: context) != nil
+				OriginHint(origin: origin, hint: hint, managedContext: context)
 			}
-			return result
+			return true
 
 		} else {
 			return false

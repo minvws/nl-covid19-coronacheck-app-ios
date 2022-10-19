@@ -64,33 +64,28 @@ enum OriginType: String, Codable, Equatable {
 		}
 	}
 }
-
-class OriginModel {
 	
-	@discardableResult class func create(
+extension Origin {
+	
+	@discardableResult convenience init(
 		type: OriginType,
 		eventDate: Date,
 		expirationTime: Date,
 		validFromDate: Date,
 		doseNumber: Int?,
 		greenCard: GreenCard,
-		managedContext: NSManagedObjectContext) -> Origin? {
+		managedContext: NSManagedObjectContext) {
 		
-		let object = Origin(context: managedContext)
-		object.type = type.rawValue
-		object.eventDate = eventDate
-		object.expirationTime = expirationTime
-		object.validFromDate = validFromDate
+		self.init(context: managedContext)
+		self.type = type.rawValue
+		self.eventDate = eventDate
+		self.expirationTime = expirationTime
+		self.validFromDate = validFromDate
 		if let doseNumber = doseNumber {
-			object.doseNumber = doseNumber as NSNumber
+			self.doseNumber = doseNumber as NSNumber
 		}
-		object.greenCard = greenCard
-		
-		return object
+		self.greenCard = greenCard
 	}
-}
-	
-extension Origin {
 	
 	/// Get the hints, strongly typed.
 	func castHints() -> [OriginHint] {

@@ -8,17 +8,15 @@
 import Foundation
 import CoreData
 
-class OriginHintModel {
+extension OriginHint {
 	
-	@discardableResult class func create(
+	@discardableResult convenience init(
 		origin: Origin,
 		hint: String,
-		managedContext: NSManagedObjectContext) -> OriginHint? {
+		managedContext: NSManagedObjectContext) {
 			
-		let object = OriginHint(context: managedContext)
-		object.hint = hint
-		object.origin = origin
-		
-		return object
+		self.init(context: managedContext)
+		self.hint = hint
+		self.origin = origin
 	}
 }

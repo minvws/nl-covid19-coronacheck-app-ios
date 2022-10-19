@@ -39,7 +39,7 @@ class OriginModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
@@ -78,7 +78,7 @@ class OriginModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					OriginModel.create(
+					Origin(
 						type: .recovery,
 						eventDate: date,
 						expirationTime: date,
@@ -87,7 +87,7 @@ class OriginModelTests: XCTestCase {
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					OriginModel.create(
+					Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
