@@ -29,7 +29,7 @@ class WalletModelTests: XCTestCase {
 		context.performAndWait {
 			
 			// When
-			wallet = WalletModel.create(
+			wallet = Wallet(
 				label: "test_createWallet",
 				managedContext: context
 			)
@@ -63,7 +63,7 @@ class WalletModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
-			WalletModel.create(
+			Wallet(
 				label: "test_listWallets_oneWallet",
 				managedContext: context
 			)
@@ -84,11 +84,11 @@ class WalletModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
-			WalletModel.create(
+			Wallet(
 				label: "test_listWallets_twoWallets_first",
 				managedContext: context
 			)
-			WalletModel.create(
+			Wallet(
 				label: "test_listWallets_twoWallets_second",
 				managedContext: context
 			)
@@ -112,7 +112,7 @@ class WalletModelTests: XCTestCase {
 			if let unwrappedWallet = wallet, let json = "test_addEvent".data(using: .utf8) {
 				
 				// When
-				eventGroup = EventGroupModel.create(
+				eventGroup = EventGroup(
 					type: EventMode.recovery,
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
@@ -138,15 +138,15 @@ class WalletModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
-			   let json = "test_removeEvent".data(using: .utf8),
-			   let eventGroup = EventGroupModel.create(
+			   let json = "test_removeEvent".data(using: .utf8) {
+			   let eventGroup = EventGroup(
 				type: EventMode.recovery,
 				providerIdentifier: "CoronaCheck",
 				expiryDate: nil,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
-			   ) {
+			   )
 				
 				// When
 				wallet.removeFromEventGroups(eventGroup)
@@ -260,6 +260,6 @@ extension WalletModel {
 	
 	@discardableResult class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
 		
-		return WalletModel.create(label: "testWallet", managedContext: managedContext)
+		return Wallet(label: "testWallet", managedContext: managedContext)
 	}
 }

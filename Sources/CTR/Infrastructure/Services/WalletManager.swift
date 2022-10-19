@@ -89,7 +89,7 @@ class WalletManager: WalletManaging {
 		context.performAndWait {
 
 			if WalletModel.findBy(label: WalletManager.walletName, managedContext: context) == nil {
-				WalletModel.create(label: WalletManager.walletName, managedContext: context)
+				Wallet(label: WalletManager.walletName, managedContext: context)
 				dataStoreManager.save(context)
 			}
 		}
@@ -117,7 +117,7 @@ class WalletManager: WalletManaging {
 				return
 			}
 			
-			eventGroup = EventGroupModel.create(
+			eventGroup = EventGroup(
 				type: type,
 				providerIdentifier: providerIdentifier,
 				expiryDate: expiryDate,
@@ -164,7 +164,7 @@ class WalletManager: WalletManaging {
 				return
 			}
 			
-			blockedEvent = RemovedEventModel.create(
+			blockedEvent = RemovedEvent(
 				type: type,
 				eventDate: eventDate,
 				reason: reason,

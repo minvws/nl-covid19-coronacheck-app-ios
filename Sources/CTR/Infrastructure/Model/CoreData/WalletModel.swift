@@ -12,20 +12,6 @@ class WalletModel {
 
 	static let entityName = "Wallet"
 
-	/// Create a wallet
-	/// - Parameters:
-	///   - label: the label of the wallet
-	///   - managedContext: the managed object context
-	/// - Returns: optional newly created wallet
-	@discardableResult class func create(
-		label: String,
-		managedContext: NSManagedObjectContext) -> Wallet? {
-
-		let object = Wallet(context: managedContext)
-		object.label = label
-		return object
-	}
-
 	/// List all the wallets
 	/// - Parameter managedContext: the managed object context
 	/// - Returns: a list of all wallets
@@ -60,6 +46,19 @@ class WalletModel {
 }
 
 extension Wallet {
+	
+	/// Create a wallet
+	/// - Parameters:
+	///   - label: the label of the wallet
+	///   - managedContext: the managed object context
+	/// - Returns: optional newly created wallet
+	@discardableResult convenience init(
+		label: String,
+		managedContext: NSManagedObjectContext) {
+
+		self.init(context: managedContext)
+		self.label = label
+	}
 	
 	/// Get the greencards, strongly typed.
 	func castGreenCards() -> [GreenCard]? {

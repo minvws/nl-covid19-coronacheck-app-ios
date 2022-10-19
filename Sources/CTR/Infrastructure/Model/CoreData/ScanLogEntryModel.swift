@@ -8,27 +8,23 @@
 import Foundation
 import CoreData
 
+extension ScanLogEntry {
+
+	@discardableResult convenience init(
+		mode: String,
+		date: Date,
+		managedContext: NSManagedObjectContext) {
+		
+		self.init(context: managedContext)
+		self.date = date
+		self.mode = mode
+		self.identifier = 0
+	}
+}
+
 class ScanLogEntryModel {
 
 	static let entityName = "ScanLogEntry"
-
-	/// Create a scan log entry
-	/// - Parameters:
-	///   - mode: the scanned mode
-	///   - date: the date
-	///   - managedContext: the managed object context
-	/// - Returns: optional newly created scan log entry
-	@discardableResult class func create(
-		mode: String,
-		date: Date,
-		managedContext: NSManagedObjectContext) -> ScanLogEntry? {
-
-		let object = ScanLogEntry(context: managedContext)
-		object.date = date
-		object.mode = mode
-		object.identifier = 0
-		return object
-	}
 
 	/// List all the entries starting from a date
 	/// - Parameters:

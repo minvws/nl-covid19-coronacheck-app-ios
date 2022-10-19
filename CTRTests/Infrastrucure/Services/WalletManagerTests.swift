@@ -54,7 +54,7 @@ class WalletManagerTests: XCTestCase {
 			for element in WalletModel.listAll(managedContext: context) {
 				context.delete(element)
 			}
-			let exitingWallet = WalletModel.create(label: WalletManager.walletName, managedContext: context)
+			let exitingWallet = Wallet(label: WalletManager.walletName, managedContext: context)
 
 			// When
 			sut = WalletManager(dataStoreManager: dataStoreManager)
@@ -489,7 +489,7 @@ class WalletManagerTests: XCTestCase {
 			   let json = "test_removeEventGroup".data(using: .utf8) {
 
 				// When
-				eventGroup = EventGroupModel.create(
+				eventGroup = EventGroup(
 					type: EventMode.test(.commercial),
 					providerIdentifier: "CoronaCheck",
 					expiryDate: nil,
