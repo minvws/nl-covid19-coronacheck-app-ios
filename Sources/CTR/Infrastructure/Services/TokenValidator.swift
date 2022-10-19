@@ -19,7 +19,7 @@ public protocol TokenValidatorProtocol {
 
 public class TokenValidator: TokenValidatorProtocol {
 
-	private let tokenChars: [String.Element]
+	private let luhnCheck: LuhnCheck
 	private let allowedCharacterSet: CharacterSet
 	private let isLuhnCheckEnabled: Bool
 
@@ -29,9 +29,9 @@ public class TokenValidator: TokenValidatorProtocol {
 	///   - isLuhnCheckEnabled: True if we should use the Luhn Check
 	public init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
 
-		self.tokenChars = Array(alphabet)
 		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
 		self.isLuhnCheckEnabled = isLuhnCheckEnabled
+		self.luhnCheck = LuhnCheck(alphabet: alphabet)
 	}
 
 	/// Validate the token
@@ -78,9 +78,43 @@ public class TokenValidator: TokenValidatorProtocol {
 		}
 		
 		let code = codeSplit[1] + codeSplit[2].prefix(1)
-		return luhnModN(code)
+		return luhnCheck.luhnModN(code)
 	}
+}
 
+extension RequestToken {
+	
+	public init?(input: String, tokenValidator: TokenValidatorProtocol) {
+		// Check the validity of the input
+		guard tokenValidator.validate(input) else {
+			return nil
+		}
+		
+		let parts = input.split(separator: "-")
+		guard parts.count >= 2, parts[0].count == 3 else { return nil }
+		
+		let identifierPart = String(parts[0])
+		let tokenPart = String(parts[1])
+		self = RequestToken(
+			token: tokenPart,
+			protocolVersion: type(of: self).highestKnownProtocolVersion,
+			providerIdentifier: identifierPart
+		)
+	}
+}
+
+class LuhnCheck {
+	
+	private let tokenChars: [String.Element]
+
+	/// Initializer
+	/// - Parameters:
+	///   - alphabet: the alphabet to use
+	public init(alphabet: String = "BCFGJLQRSTUVXYZ23456789" ) {
+
+		self.tokenChars = Array(alphabet)
+	}
+	
 	/// Check the luhn mod N checksum
 	/// - Parameter token: the token to check
 	/// - Returns: True if this is a valid token
@@ -107,26 +141,5 @@ public class TokenValidator: TokenValidatorProtocol {
 		}
 		let remainder = sum % numberOfValidInputCharacters
 		return (remainder == 0)
-	}
-}
-
-extension RequestToken {
-	
-	public init?(input: String, tokenValidator: TokenValidatorProtocol) {
-		// Check the validity of the input
-		guard tokenValidator.validate(input) else {
-			return nil
-		}
-		
-		let parts = input.split(separator: "-")
-		guard parts.count >= 2, parts[0].count == 3 else { return nil }
-		
-		let identifierPart = String(parts[0])
-		let tokenPart = String(parts[1])
-		self = RequestToken(
-			token: tokenPart,
-			protocolVersion: type(of: self).highestKnownProtocolVersion,
-			providerIdentifier: identifierPart
-		)
 	}
 }
