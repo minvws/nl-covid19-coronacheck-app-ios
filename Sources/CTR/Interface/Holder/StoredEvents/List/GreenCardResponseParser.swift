@@ -86,7 +86,7 @@ class GreenCardResponseErrorParser {
 							detailedCode: serverResponse?.code
 						)
 						
-						if let matchingBlobIds = serverResponse?.matchingBlobIds,
+						if let matchingBlobIds = serverResponse?.context?.matchingBlobIds,
 							serverResponse?.code == GreenCardResponseError.mismatchedIdentity {
 							 return .mismatchedIdentity(matchingBlobIds: matchingBlobIds)
 						}

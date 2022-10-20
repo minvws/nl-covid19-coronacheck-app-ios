@@ -345,7 +345,7 @@ extension HolderDashboardViewModelTests {
 			error: .credentials(
 				.error(
 					statusCode: 500,
-					response: ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]]),
+					response: ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]])),
 					error: .serverError
 				)
 			)
@@ -384,7 +384,7 @@ extension HolderDashboardViewModelTests {
 			error: .credentials(
 				.error(
 					statusCode: 500,
-					response: ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]]),
+					response: ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]])),
 					error: .serverError
 				)
 			)
