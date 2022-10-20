@@ -11,18 +11,27 @@ public struct ServerResponse: Decodable, Equatable {
 
 	public let status: String
 	public let code: Int
-	public let matchingBlobIds: [[String]]?
+	public let context: ServerResponseContext?
 	
-	init(status: String, code: Int, matchingBlobIds: [[String]]? = nil) {
+	init(status: String, code: Int, context: ServerResponseContext? = nil) {
 		self.status = status
 		self.code = code
-		self.matchingBlobIds = matchingBlobIds
+		self.context = context
 	}
 	
 	enum CodingKeys: String, CodingKey {
 	
 		case status
 		case code
+		case context
+	}
+}
+
+public struct ServerResponseContext: Codable, Equatable {
+	
+	public let matchingBlobIds: [[String]]?
+
+	enum CodingKeys: String, CodingKey {
 		case matchingBlobIds
 	}
 }
