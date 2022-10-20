@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerPrepareIssueTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/prepare_issue"
+	private let path = "/v9/holder/prepare_issue"
 	
 	override func setUp() {
 		

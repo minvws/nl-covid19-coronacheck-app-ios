@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerEventAccessTokenTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/access_tokens"
+	private let path = "/v9/holder/access_tokens"
 	
 	override func setUp() {
 		
