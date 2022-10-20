@@ -8,7 +8,7 @@
 import Foundation
 
 public struct ServerResponse: Decodable, Equatable {
-
+	
 	public let status: String
 	public let code: Int
 	public let context: ServerResponseContext?
@@ -20,7 +20,7 @@ public struct ServerResponse: Decodable, Equatable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
-	
+		
 		case status
 		case code
 		case context
@@ -30,7 +30,7 @@ public struct ServerResponse: Decodable, Equatable {
 public struct ServerResponseContext: Codable, Equatable {
 	
 	public let matchingBlobIds: [[String]]?
-
+	
 	enum CodingKeys: String, CodingKey {
 		case matchingBlobIds
 	}
