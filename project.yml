@@ -147,7 +147,7 @@ targetTemplates:
       - package: IOSSecuritySuite
       - package: Lottie
       - package: RDOModules
-        product: LunhCheck
+        product: LuhnCheck
       - package: RDOModules
         product: QRGenerator
       - package: OpenSSL

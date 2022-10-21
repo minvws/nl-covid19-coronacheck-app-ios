@@ -7,7 +7,7 @@
 
 import Foundation
 import Transport
-import LunhCheck
+import LuhnCheck
 
 public protocol TokenValidatorProtocol {
 
@@ -32,7 +32,7 @@ public class TokenValidator: TokenValidatorProtocol {
 
 		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
 		self.isLuhnCheckEnabled = isLuhnCheckEnabled
-		self.luhnCheck = LuhnCheck(alphabet: alphabet)
+		self.luhnCheck = LuhnCheck(validTokens: alphabet)
 	}
 
 	/// Validate the token
