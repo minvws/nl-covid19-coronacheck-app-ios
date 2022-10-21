@@ -7,6 +7,7 @@
 
 import Foundation
 import Transport
+import LunhCheck
 
 public protocol TokenValidatorProtocol {
 
@@ -27,7 +28,7 @@ public class TokenValidator: TokenValidatorProtocol {
 	/// - Parameters:
 	///   - alphabet: the alphabet to use
 	///   - isLuhnCheckEnabled: True if we should use the Luhn Check
-	public init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
+	public init(alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
 
 		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
 		self.isLuhnCheckEnabled = isLuhnCheckEnabled
