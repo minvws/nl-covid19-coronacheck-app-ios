@@ -22,7 +22,7 @@ packages:
     github: airbnb/lottie-ios
     majorVersion: 3.4.0
   RDOModules:
-    github: Rool/nl-rdo-app-ios-modules
+    github: minvws/nl-rdo-app-ios-modules
     branch: main
   Nimble:
     github: Quick/Nimble
