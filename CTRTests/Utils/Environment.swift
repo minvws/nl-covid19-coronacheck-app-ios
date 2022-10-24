@@ -80,6 +80,11 @@ final class EnvironmentSpies {
 		let spy = GreenCardLoaderSpy()
 		return spy
 	}()
+
+	var identityCheckerSpy: IdentityCheckerSpy = {
+		let spy = IdentityCheckerSpy()
+		return spy
+	}()
 	
 	var jailBreakDetectorSpy: JailBreakProtocolSpy = {
 		let spy = JailBreakProtocolSpy()
@@ -182,6 +187,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
+		identityChecker: spies.identityCheckerSpy,
 		jailBreakDetector: spies.jailBreakDetectorSpy,
 		mappingManager: spies.mappingManagerSpy,
 		networkManager: spies.networkManagerSpy,
