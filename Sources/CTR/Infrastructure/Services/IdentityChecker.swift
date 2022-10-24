@@ -38,7 +38,7 @@ class IdentityChecker: IdentityCheckerProtocol {
 				match = match
 				&& remoteIdentity.getBirthDay() == existingIdentity.getBirthDay()
 				&& remoteIdentity.getBirthMonth() == existingIdentity.getBirthMonth()
-				&& remoteIdentity.getBirthYear() == existingIdentity.getBirthYear()
+//				&& remoteIdentity.getBirthYear() == existingIdentity.getBirthYear()
 			}
 		}
 		if !match {
