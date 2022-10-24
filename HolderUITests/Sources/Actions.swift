@@ -153,27 +153,18 @@ extension BaseTest {
 			XCTFail("The password is empty")
 			return
 		}
-
-		let dutchDialog = safari.textFields["Gebruikersnaam"].waitForExistence(timeout: 3.0)
 		
-		let username = safari.textFields[dutchDialog ? "Gebruikersnaam" : "User Name"]
+		let username = safari.otherElements["SFDialogView"].textFields.firstMatch
 		username.tap()
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
 		
-		let continueButton = safari.buttons["Continue"]
-		if rapidlyEvaluate(timeout: self.loginTimeout, { continueButton.exists }) {
-			continueButton.tap()
-			makeScreenShot(name: "Hide continue button")
-		}
-		
-		let password = safari.secureTextFields[dutchDialog ? "Wachtwoord" : "Password"]
+		let password = safari.otherElements["SFDialogView"].secureTextFields.firstMatch
 		password.tap()
 		password.typeText(authPassword)
 		makeScreenShot(name: "Password typed")
 		
-		let submitAuth = safari.buttons[dutchDialog ? "Log in" : "Log In"]
-		submitAuth.tap()
+		safari.tapButton("Log in")
 		makeScreenShot(name: "Auth submit button")
 	}
 	
