@@ -125,7 +125,7 @@ extension BaseTest {
 		makeScreenShot(name: "Safari is ready")
 		
 		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
-		makeScreenShot(name: "Logged in: " + loggedIn.description)
+		makeScreenShot(name: "Logged in: \(loggedIn.description)")
 		
 		if !loggedIn { loginToServer() }
 		

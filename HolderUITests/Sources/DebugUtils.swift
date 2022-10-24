@@ -12,7 +12,7 @@ extension XCUIElement {
 	func printChildElements() {
 		let debug = """
 			----- BEGIN ELEMENTS -----
-			Parent: \(self.description)
+			Parent: \(self.debugDescription)
 			Buttons: \(self.buttons.elementMap())
 			Static Texts: \(self.staticTexts.elementMap())
 			Text Fields: \(self.textFields.elementMap())
