@@ -138,10 +138,10 @@ extension BaseTest {
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
 		
-		let predicate = NSPredicate(format: "label contains[c] %@", "Open this page in")
-		let elementQuery = safari.webViews.textViews.matching(predicate)
-		let popup = elementQuery.firstMatch.waitForExistence(timeout: 5.0)
-		if popup { safari.webViews.buttons["Open"].tap() }
+		let open = safari.buttons["Open"].waitForExistence(timeout: loginTimeout)
+		if open {
+			safari.tapButton("Open")
+		}
 	}
 	
 	private func loginToServer() {
