@@ -30,7 +30,7 @@ class ListIdentitySelectionView: BaseView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
-		enum Header {
+		enum Message {
 			static let lineHeight: CGFloat = 22
 			static let kerning: CGFloat = -0.41
 		}
@@ -48,9 +48,9 @@ class ListIdentitySelectionView: BaseView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	private let headerLabel: Label = {
+	private let messageLabel: Label = {
 		
-		return Label(body: nil).header().multiline()
+		return Label(body: nil).multiline()
 	}()
 	
 	private let separatorView: UIView = {
@@ -108,7 +108,7 @@ class ListIdentitySelectionView: BaseView {
 		addSubview(scrollView)
 		addSubview(footerButtonView)
 		scrollView.addSubview(titleLabel)
-		scrollView.addSubview(headerLabel)
+		scrollView.addSubview(messageLabel)
 		scrollView.addSubview(separatorView)
 		scrollView.addSubview(selectionStackView)
 		scrollView.addSubview(moreButton)
@@ -134,7 +134,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
 		])
 	}
 	
@@ -143,7 +143,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
@@ -159,8 +159,8 @@ class ListIdentitySelectionView: BaseView {
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			titleLabel.rightAnchor.constraint(
-				equalTo: scrollView.rightAnchor,
+			titleLabel.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
 			titleLabel.widthAnchor.constraint(
@@ -173,19 +173,19 @@ class ListIdentitySelectionView: BaseView {
 	func setupHeaderLabelViewConstraints() {
 		
 		NSLayoutConstraint.activate([
-			headerLabel.topAnchor.constraint(
+			messageLabel.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.titleToHeader
 			),
-			headerLabel.leadingAnchor.constraint(
+			messageLabel.leadingAnchor.constraint(
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			headerLabel.rightAnchor.constraint(
-				equalTo: scrollView.rightAnchor,
+			messageLabel.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
-			headerLabel.widthAnchor.constraint(
+			messageLabel.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
 				constant: -2 * ViewTraits.Margin.edge
 			)
@@ -197,9 +197,9 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			
 			separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			separatorView.rightAnchor.constraint(equalTo: rightAnchor),
+			separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			separatorView.topAnchor.constraint(
-				equalTo: headerLabel.bottomAnchor,
+				equalTo: messageLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.headerToStackview
 			),
 			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.separatorHeight)
@@ -211,7 +211,7 @@ class ListIdentitySelectionView: BaseView {
 		NSLayoutConstraint.activate([
 			selectionStackView.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
 			selectionStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-			selectionStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			selectionStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			selectionStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
 		])
 	}
@@ -227,8 +227,9 @@ class ListIdentitySelectionView: BaseView {
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge
 			),
-			moreButton.rightAnchor.constraint(
-				lessThanOrEqualTo: scrollView.rightAnchor,
+			moreButton.trailingAnchor.constraint(
+				lessThanOrEqualTo: scrollView.trailingAnchor
+				,
 				constant: -ViewTraits.Margin.edge
 			),
 			moreButton.bottomAnchor.constraint(
@@ -256,9 +257,9 @@ class ListIdentitySelectionView: BaseView {
 	
 	var header: String? {
 		didSet {
-			headerLabel.attributedText = header?.setLineHeight(
-				ViewTraits.Header.lineHeight,
-				kerning: ViewTraits.Header.kerning,
+			messageLabel.attributedText = header?.setLineHeight(
+				ViewTraits.Message.lineHeight,
+				kerning: ViewTraits.Message.kerning,
 				textColor: C.black()!)
 		}
 	}

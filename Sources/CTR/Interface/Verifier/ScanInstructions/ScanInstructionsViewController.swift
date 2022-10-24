@@ -61,9 +61,7 @@ class ScanInstructionsViewController: BaseViewController {
 
 		viewModel.$pages.binding = { [weak self] in
 
-			guard let self = self else {
-				return
-			}
+			guard let self else { return }
 			
 			self.pageViewController.pages = $0.enumerated().compactMap { index, page in
 				let viewController = self.viewModel.scanInstructionsViewController(forPage: page)

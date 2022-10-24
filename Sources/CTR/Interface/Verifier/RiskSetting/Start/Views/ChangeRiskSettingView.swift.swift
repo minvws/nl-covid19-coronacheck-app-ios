@@ -78,22 +78,22 @@ final class ChangeRiskSettingView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			topSeparatorView.topAnchor.constraint(equalTo: topAnchor),
-			topSeparatorView.leftAnchor.constraint(equalTo: leftAnchor),
-			topSeparatorView.rightAnchor.constraint(equalTo: rightAnchor),
+			topSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			topSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			topSeparatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Height.separator),
 			
 			titleLabel.topAnchor.constraint(equalTo: topSeparatorView.bottomAnchor,
 											constant: ViewTraits.Margin.vertical),
-			titleLabel.leftAnchor.constraint(equalTo: leftAnchor,
+			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
 											 constant: ViewTraits.Margin.horizontal),
-			titleLabel.rightAnchor.constraint(equalTo: rightAnchor,
+			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
 											  constant: -ViewTraits.Margin.horizontal),
 			
 			subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
 											   constant: ViewTraits.Spacing.labels),
-			subtitleLabel.leftAnchor.constraint(equalTo: leftAnchor,
+			subtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
 												constant: ViewTraits.Margin.horizontal),
-			subtitleLabel.rightAnchor.constraint(equalTo: rightAnchor,
+			subtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
 												 constant: -ViewTraits.Margin.horizontal),
 			
 			changeButton.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor,
@@ -105,8 +105,8 @@ final class ChangeRiskSettingView: BaseView {
 			
 			bottomSeparatorView.topAnchor.constraint(equalTo: changeButton.bottomAnchor,
 													 constant: ViewTraits.Margin.vertical),
-			bottomSeparatorView.leftAnchor.constraint(equalTo: leftAnchor),
-			bottomSeparatorView.rightAnchor.constraint(equalTo: rightAnchor),
+			bottomSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			bottomSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			bottomSeparatorView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			bottomSeparatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Height.separator)
 		])

@@ -87,7 +87,7 @@ extension ListRemoteEventsViewModel {
 
 				secondaryActionTitle: secondaryActionTitle,
 				secondaryAction: secondaryActionTitle != nil ? { [weak self] in
-					guard let self = self else { return }
+					guard let self else { return }
 					guard let body = Strings.somethingIsWrongBody(forEventMode: self.eventMode) else { return }
 					self.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(

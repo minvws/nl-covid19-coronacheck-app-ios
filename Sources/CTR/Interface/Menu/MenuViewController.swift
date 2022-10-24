@@ -25,7 +25,7 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	private func setupBindings() {
 
 		viewModel.$items.binding = { [weak self] items in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.sceneView.stackView.removeArrangedSubviews()
 			
 			items.enumerated().forEach { index, item in

@@ -335,7 +335,7 @@ class HolderCoordinator: SharedCoordinator {
 	func navigateToAboutThisApp() {
 		
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
-			guard let self = self else { return }
+			guard let self else { return }
 			switch outcome {
 				case let .openURL(url, inApp):
 					self.openUrl(url, inApp: inApp)
@@ -493,7 +493,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
 				secondaryAction: { [weak self] in
-					guard let self = self else { return }
+					guard let self else { return }
 					self.navigationController.dismiss(
 						animated: true,
 						completion: self.userWishesToCreateAVaccinationQR

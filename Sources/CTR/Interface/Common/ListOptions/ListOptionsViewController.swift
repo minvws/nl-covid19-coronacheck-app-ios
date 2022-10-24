@@ -46,7 +46,7 @@ class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsVi
 	func setupOptions() {
 		
 		viewModel.optionModels.observe { [weak self] buttons in
-			guard let self = self else { return }
+			guard let self else { return }
 
 			// Remove previously added buttons:
 			self.sceneView.optionStackView.subviews

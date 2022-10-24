@@ -96,9 +96,7 @@ extension ShowQRViewController {
 
 		viewModel.$items.binding = { [weak self] in
 
-			guard let self = self else {
-				return
-			}
+			guard let self else { return }
 
 			self.pageViewController.pages = $0.compactMap { item in
 				return self.viewModel.showQRItemViewController(forItem: item)
@@ -109,9 +107,7 @@ extension ShowQRViewController {
 
 		viewModel.$startingPage.binding = { [weak self] in
 
-			guard let self = self else {
-				return
-			}
+			guard let self else { return }
 				
 			self.pageViewController.startAtIndex($0)
 			self.updateControlVisibility()

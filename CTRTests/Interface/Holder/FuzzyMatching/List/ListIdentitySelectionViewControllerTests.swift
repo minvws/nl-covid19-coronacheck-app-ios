@@ -13,15 +13,17 @@ import ViewControllerPresentationSpy
 
 final class ListIdentitySelectionViewControllerTests: XCTestCase {
 	
-	var sut: ListIdentitySelectionViewController!
-	var window = UIWindow()
+	private var sut: ListIdentitySelectionViewController!
+	private var window = UIWindow()
 
-	var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
-	var dataSourceSpy: IdentitySelectionDataSourceSpy!
+	private var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
+	private var dataSourceSpy: IdentitySelectionDataSourceSpy!
+	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
 
+		environmentSpies = setupEnvironmentSpies()
 		dataSourceSpy = IdentitySelectionDataSourceSpy()
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
 		window = UIWindow()

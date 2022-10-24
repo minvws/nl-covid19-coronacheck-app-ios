@@ -73,8 +73,8 @@ final class VerifiedAccessView: BaseView {
 							   attribute: .centerY,
 							   multiplier: ViewTraits.Position.contentMultiplier,
 							   constant: 0),
-			stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: ViewTraits.Margin.edge),
-			stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -ViewTraits.Margin.edge),
+			stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.Margin.edge),
+			stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.Margin.edge),
 			stackView.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor),
 			stackView.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor),
 			

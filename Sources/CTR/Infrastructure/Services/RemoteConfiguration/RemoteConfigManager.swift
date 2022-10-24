@@ -158,7 +158,7 @@ class RemoteConfigManager: RemoteConfigManaging {
 
 		// Regardless, let's see if there's a new configuration available:
 		networkManager.getRemoteConfiguration { [weak self] (resultWrapper: Result<(RemoteConfiguration, Data, URLResponse), ServerError>) in
-			guard let self = self else { return }
+			guard let self else { return }
 
 			// Note: `handleNetworkResponse` calls completion for us..
 			self.handleNetworkResponse(resultWrapper: resultWrapper, completion: completion)

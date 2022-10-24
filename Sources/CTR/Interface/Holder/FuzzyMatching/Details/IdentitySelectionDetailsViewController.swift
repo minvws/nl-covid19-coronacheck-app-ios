@@ -33,7 +33,7 @@ class IdentitySelectionDetailsViewController: TraitWrappedGenericViewController<
 						)
 						self?.sceneView.addLabelToStackView(label)
 					} else {
-						let label = Label(body: "").multiline().header()
+						let label = Label(body: "").multiline()
 						label.attributedText = element.setLineHeight(
 							IdentitySelectionDetailsView.ViewTraits.Details.lineHeight,
 							kerning: IdentitySelectionDetailsView.ViewTraits.Details.kerning,

@@ -113,8 +113,8 @@ final class RiskSettingInstructionView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
 		])
 	}
 	
@@ -122,8 +122,8 @@ final class RiskSettingInstructionView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
@@ -134,11 +134,11 @@ final class RiskSettingInstructionView: BaseView {
 			titleLabel.topAnchor.constraint(
 				equalTo: scrollView.topAnchor,
 				constant: ViewTraits.Margin.top),
-			titleLabel.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			titleLabel.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge),
-			titleLabel.rightAnchor.constraint(
-				equalTo: scrollView.rightAnchor,
+			titleLabel.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge),
 			titleLabel.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
@@ -152,11 +152,11 @@ final class RiskSettingInstructionView: BaseView {
 			headerLabel.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.titleToHeader),
-			headerLabel.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			headerLabel.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge),
-			headerLabel.rightAnchor.constraint(
-				equalTo: scrollView.rightAnchor,
+			headerLabel.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge),
 			headerLabel.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
@@ -170,11 +170,11 @@ final class RiskSettingInstructionView: BaseView {
 			moreButton.topAnchor.constraint(
 				equalTo: headerLabel.bottomAnchor,
 				constant: ViewTraits.Spacing.headerToMoreButton),
-			moreButton.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			moreButton.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge),
-			moreButton.rightAnchor.constraint(
-				lessThanOrEqualTo: scrollView.rightAnchor,
+			moreButton.trailingAnchor.constraint(
+				lessThanOrEqualTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge)
 		])
 	}
@@ -185,8 +185,8 @@ final class RiskSettingInstructionView: BaseView {
 			riskSettingControlsView.topAnchor.constraint(
 				equalTo: moreButton.bottomAnchor,
 				constant: ViewTraits.Spacing.moreButtonToControls),
-			riskSettingControlsView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			riskSettingControlsView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			riskSettingControlsView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			riskSettingControlsView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 			riskSettingControlsView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
 		])
 	}
@@ -197,11 +197,11 @@ final class RiskSettingInstructionView: BaseView {
 			errorView.topAnchor.constraint(
 				equalTo: riskSettingControlsView.bottomAnchor,
 				constant: ViewTraits.Spacing.controlsToErrorView),
-			errorView.leftAnchor.constraint(
-				equalTo: scrollView.leftAnchor,
+			errorView.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.edge),
-			errorView.rightAnchor.constraint(
-				lessThanOrEqualTo: scrollView.rightAnchor,
+			errorView.trailingAnchor.constraint(
+				lessThanOrEqualTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.edge),
 			errorView.bottomAnchor.constraint(
 				lessThanOrEqualTo: scrollView.bottomAnchor,

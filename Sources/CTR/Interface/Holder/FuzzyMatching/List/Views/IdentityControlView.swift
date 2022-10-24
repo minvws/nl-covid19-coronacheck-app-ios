@@ -126,13 +126,19 @@ class IdentityControlView: BaseView {
 		NSLayoutConstraint.activate([
 			
 			separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			separatorView.rightAnchor.constraint(equalTo: rightAnchor),
+			separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			separatorView.topAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.Size.separatorHeight
 			),
 			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.separatorHeight)
 		])
+	}
+	
+	override func setupAccessibility() {
+		
+		super.setupAccessibility()
+		self.accessibilityElements = [titleLabel, contentLabel, warningLabel, actionButton, selectionButton]
 	}
 	
 	@objc private func actionButtonTapped() {
@@ -160,6 +166,10 @@ class IdentityControlView: BaseView {
 				kerning: ViewTraits.Title.kerning,
 				textColor: C.black()!
 			)
+			if let title {
+				actionButton.accessibilityLabel = L.holder_identitySelection_accessibility_details(title)
+				selectionButton.accessibilityLabel = L.holder_identitySelection_accessibility_select(title)
+			}
 		}
 	}
 	

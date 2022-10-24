@@ -143,12 +143,12 @@ final class PrivacyConsentView: BaseView {
 				equalTo: scrollView.contentView.topAnchor,
 				constant: ViewTraits.margin
 			),
-			stackView.leftAnchor.constraint(
-				equalTo: scrollView.contentView.leftAnchor,
+			stackView.leadingAnchor.constraint(
+				equalTo: scrollView.contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			stackView.rightAnchor.constraint(
-				equalTo: scrollView.contentView.rightAnchor,
+			stackView.trailingAnchor.constraint(
+				equalTo: scrollView.contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 			stackView.widthAnchor.constraint(
@@ -162,8 +162,8 @@ final class PrivacyConsentView: BaseView {
 			),
 
 			// Footer view
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
