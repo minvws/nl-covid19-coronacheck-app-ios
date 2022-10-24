@@ -10,6 +10,7 @@ import UIKit
 import XCTest
 @testable import CTR
 import Nimble
+import QRGenerator
 
 class ShowQRItemViewModelTests: XCTestCase {
 
@@ -109,8 +110,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 	}
 
 	func test_constants() {
-		expect(ShowQRItemViewModel.domesticCorrectionLevel) == "M"
-		expect(ShowQRItemViewModel.internationalCorrectionLevel) == "Q"
+		expect(ShowQRItemViewModel.domesticCorrectionLevel) == CorrectionLevel.medium
+		expect(ShowQRItemViewModel.internationalCorrectionLevel) == CorrectionLevel.quartile
 		expect(ShowQRItemViewModel.screenshotWarningMessageDuration) == 180
 	}
 
