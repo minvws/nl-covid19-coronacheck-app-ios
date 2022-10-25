@@ -25,13 +25,14 @@ final class ListIdentitySelectionViewModelTests: XCTestCase {
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
 	}
 	
-	func setupSut(date: Date = Current.now()) {
+	func setupSut(date: Date = Current.now(), shouldHideSkipButton: Bool = false) {
 		
 		sut = ListIdentitySelectionViewModel(
 			coordinatorDelegate: coordinatorDelegateSpy,
 			dataSource: dataSourceSpy,
 			matchingBlobIds: [],
-			date: date
+			date: date,
+			shouldHideSkipButton: shouldHideSkipButton
 		)
 	}
 
@@ -46,13 +47,24 @@ final class ListIdentitySelectionViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.alert.value) != nil
 	}
-	
+
 	func test_showSkipButton_noValidCredentials() {
 		
 		// Given
 		
 		// When
 		setupSut()
+		
+		// Then
+		expect(self.sut.showSkipButton.value) == false
+	}
+	
+	func test_showSkipButton_noValidCredentials_alwaysHideButton() {
+		
+		// Given
+		
+		// When
+		setupSut(shouldHideSkipButton: true)
 		
 		// Then
 		expect(self.sut.showSkipButton.value) == false
@@ -77,6 +89,25 @@ final class ListIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.sut.showSkipButton.value) == true
 	}
 	
+	func test_showSkipButton_withValidCredentials_alwaysHideButton() throws {
+		
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createFakeGreenCard(
+				dataStoreManager: environmentSpies.dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greenCard]
+		
+		// When
+		setupSut(shouldHideSkipButton: true)
+		
+		// Then
+		expect(self.sut.showSkipButton.value) == false
+	}
+	
 	func test_showSkipButton_withValidCredentials_30DaysInTheFuture() throws {
 		
 		// Given
@@ -90,7 +121,7 @@ final class ListIdentitySelectionViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greenCard]
 		
 		// When
-		setupSut(date: Date().addingTimeInterval(30 * days))
+		setupSut(date: Date().addingTimeInterval(30 * days), shouldHideSkipButton: false)
 		
 		// Then
 		expect(self.sut.showSkipButton.value).toEventually(beFalse())
