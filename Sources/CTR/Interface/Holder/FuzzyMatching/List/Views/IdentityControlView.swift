@@ -235,24 +235,28 @@ class IdentityControlView: BaseView {
 					warning = nil
 					resetSelectionButton()
 					selectionButton.isSelected = true
+					stackView.setCustomSpacing(0, after: actionButton)
 					
 				case .unselected:
 					
 					warning = nil
 					resetSelectionButton()
 					selectionButton.isSelected = false
+					stackView.setCustomSpacing(0, after: actionButton)
 					
 				case .selectionError:
 					
 					warning = nil
 					selectionButton.isSelected = false
 					selectionButton.setImage(I.radioButton24.error(), for: .normal)
+					stackView.setCustomSpacing(0, after: actionButton)
 					
 				case let .warning(warningMessage):
 					
 					warning = warningMessage
 					resetSelectionButton()
 					selectionButton.isSelected = false
+					stackView.setCustomSpacing(ViewTraits.StackView.spacing, after: actionButton)
 			}
 		}
 	}
