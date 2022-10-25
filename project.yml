@@ -21,6 +21,9 @@ packages:
   Lottie:
     github: airbnb/lottie-ios
     majorVersion: 3.4.0
+  RDOModules:
+    github: minvws/nl-rdo-app-ios-modules
+    branch: main
   Nimble:
     github: Quick/Nimble
     majorVersion: 10.0.0
@@ -143,6 +146,10 @@ targetTemplates:
         product: AppAuth
       - package: IOSSecuritySuite
       - package: Lottie
+      - package: RDOModules
+        product: LuhnCheck
+      - package: RDOModules
+        product: QRGenerator
       - package: OpenSSL
       - package: Inject
       - package: Reachability
