@@ -94,9 +94,9 @@ class VerifierStartScanningView: BaseView {
 		return view
 	}()
 	
-	private let headerAnimationView: AnimationView = {
+	private let headerAnimationView: LottieAnimationView = {
 		
-		let view = AnimationView()
+		let view = LottieAnimationView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
 		view.contentMode = .scaleAspectFit
@@ -368,7 +368,7 @@ class VerifierStartScanningView: BaseView {
 			guard oldValue != headerMode else { return }
 			switch headerMode {
 				case .animation(let animationName):
-					headerAnimationView.animation = Lottie.Animation.named(animationName)
+					headerAnimationView.animation = LottieAnimation.named(animationName)
 					headerAnimationView.play()
 				case .image(let image):
 					headerImageView.image = image
