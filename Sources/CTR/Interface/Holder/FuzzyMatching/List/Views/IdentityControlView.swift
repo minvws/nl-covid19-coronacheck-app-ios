@@ -40,6 +40,12 @@ class IdentityControlView: BaseView {
 		return button
 	}()
 	
+	private let selectionAdditionalButton: UIButton = {
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+	
 	private let stackView: UIStackView = {
 		
 		let stackView = UIStackView()
@@ -87,8 +93,16 @@ class IdentityControlView: BaseView {
 		actionButton.contentHorizontalAlignment = .leading
 		
 		selectionButton.addTarget(self, action: #selector(selectionButtonTapped), for: .touchUpInside)
+		selectionAdditionalButton.addTarget(self, action: #selector(selectionButtonTapped), for: .touchUpInside)
 		
 		stackView.embed(in: self, insets: ViewTraits.StackView.insets)
+		
+		stackView.addGestureRecognizer(
+			UITapGestureRecognizer(
+				target: self,
+				action: #selector(selectionButtonTapped)
+			)
+		)
 	}
 	
 	override func setupViewHierarchy() {
@@ -101,6 +115,9 @@ class IdentityControlView: BaseView {
 		stackView.addArrangedSubview(actionButton)
 		stackView.addArrangedSubview(warningLabel)
 		addSubview(separatorView)
+		addSubview(selectionAdditionalButton)
+		
+		bringSubviewToFront(stackView)
 	}
 	
 	override func setupViewConstraints() {
@@ -117,7 +134,12 @@ class IdentityControlView: BaseView {
 			selectionButton.leadingAnchor.constraint(equalTo: leadingAnchor),
 			selectionButton.topAnchor.constraint(equalTo: topAnchor),
 			selectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-			selectionButton.trailingAnchor.constraint(equalTo: stackView.leadingAnchor)
+			selectionButton.trailingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			
+			selectionAdditionalButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			selectionAdditionalButton.topAnchor.constraint(equalTo: topAnchor),
+			selectionAdditionalButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+			selectionAdditionalButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
 		])
 	}
 	
