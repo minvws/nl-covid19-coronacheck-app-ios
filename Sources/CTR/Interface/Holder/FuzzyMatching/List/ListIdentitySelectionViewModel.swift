@@ -67,12 +67,18 @@ class ListIdentitySelectionViewModel {
 		self.populateIdentityObjects()
 		
 		self.showSkipButton.value = {
-			// 4958: Hide skip button when there are no active credentials
+			
+			// US 4985: Hide skip button in add event flow
+			guard !shouldHideSkipButton else {
+				return false
+			}
+			
+			// US 4958: Hide skip button when there are no active credentials
 			// (prevents loop of no strippen and mismatched identity when strippen refreshing)
 			return Current.walletManager.listGreenCards()
 				.filter { $0.hasActiveCredentialNowOrInFuture(forDate: date) }
 				.isNotEmpty
-			|| shouldHideSkipButton
+			|| !shouldHideSkipButton
 		}()
 	}
 	
