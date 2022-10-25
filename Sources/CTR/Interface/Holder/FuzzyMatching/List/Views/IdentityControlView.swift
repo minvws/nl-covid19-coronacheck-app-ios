@@ -57,7 +57,7 @@ class IdentityControlView: BaseView {
 	
 	private let titleLabel: Label = {
 		
-		return Label(bodySemiBold: nil).header().multiline()
+		return Label(bodyMedium: nil).header().multiline()
 	}()
 	
 	private let contentLabel: Label = {
