@@ -50,6 +50,8 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	
 	private weak var delegate: FuzzyMatchingFlowDelegate?
 	
+	private var shouldHideSkipButton = false
+	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -60,12 +62,14 @@ final class FuzzyMatchingCoordinator: Coordinator {
 		navigationController: UINavigationController,
 		matchingBlobIds: [[String]],
 		onboardingFactory: FuzzyMatchingOnboardingFactoryProtocol,
-		delegate: FuzzyMatchingFlowDelegate) {
+		delegate: FuzzyMatchingFlowDelegate,
+		shouldHideSkipButton: Bool = false) {
 		
 		self.navigationController = navigationController
 		self.matchingBlobIds = matchingBlobIds
 		self.factory = onboardingFactory
 		self.delegate = delegate
+		self.shouldHideSkipButton = shouldHideSkipButton
 	}
 	
 	/// Start the scene
@@ -121,7 +125,8 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		let viewModel = ListIdentitySelectionViewModel(
 			coordinatorDelegate: self,
 			dataSource: dataSource,
-			matchingBlobIds: matchingBlobIds
+			matchingBlobIds: matchingBlobIds,
+			shouldHideSkipButton: shouldHideSkipButton
 		)
 		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
 		

@@ -58,7 +58,8 @@ class ListIdentitySelectionViewModel {
 		coordinatorDelegate: FuzzyMatchingCoordinatorDelegate,
 		dataSource: IdentitySelectionDataSourceProtocol,
 		matchingBlobIds: [[String]],
-		date: Date = Current.now()) {
+		date: Date = Current.now(),
+		shouldHideSkipButton: Bool = false) {
 		
 		self.coordinatorDelegate = coordinatorDelegate
 		self.dataSource = dataSource
@@ -71,6 +72,7 @@ class ListIdentitySelectionViewModel {
 			return Current.walletManager.listGreenCards()
 				.filter { $0.hasActiveCredentialNowOrInFuture(forDate: date) }
 				.isNotEmpty
+			|| shouldHideSkipButton
 		}()
 	}
 	
