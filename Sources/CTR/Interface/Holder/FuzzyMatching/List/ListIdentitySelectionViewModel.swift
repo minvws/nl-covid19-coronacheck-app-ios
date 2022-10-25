@@ -78,7 +78,6 @@ class ListIdentitySelectionViewModel {
 			return Current.walletManager.listGreenCards()
 				.filter { $0.hasActiveCredentialNowOrInFuture(forDate: date) }
 				.isNotEmpty
-			|| !shouldHideSkipButton
 		}()
 	}
 	
