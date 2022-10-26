@@ -80,6 +80,12 @@ class SendIdentitySelectionViewModel {
 		matchingBlobIds.forEach { blobIds in
 			if selectedBlobIds != blobIds {
 				blobIds.forEach { uniqueIdentifier in
+					
+					guard !selectedBlobIds.contains(uniqueIdentifier) else {
+						logVerbose("SendIdentitySelectionViewModel - Skipping \(uniqueIdentifier), also present in the selected group.")
+						return
+					}
+					
 					if let wrapper = dataSource.getEventResultWrapper(uniqueIdentifier) {
 						result = result && RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovalReason.mismatchedIdentity).isNotEmpty
 					} else if let euCredentialAttributes = dataSource.getEUCreditialAttributes(uniqueIdentifier) {
