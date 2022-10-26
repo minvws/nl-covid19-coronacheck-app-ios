@@ -156,15 +156,8 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 				self?.userHasFinishedTheFlow()
 			}
 		)
-
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: nil,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		
+		presentContent(content: content, backAction: nil, allowsSwipeBack: false, animated: false)
 	}
 
 	func userHasStoppedTheFlow() {
