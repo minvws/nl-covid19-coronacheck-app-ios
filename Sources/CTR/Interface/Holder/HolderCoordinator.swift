@@ -817,7 +817,10 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	}
 	
 	func finishNewDisclosurePolicy() {
-		removeChildCoordinator()
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is UpdatedDisclosurePolicyCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 	}
 	
 	func handleDisclosurePolicyUpdates() {
@@ -847,12 +850,16 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 	
 	func fuzzyMatchingFlowDidFinish() {
-		removeChildCoordinator()
+		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 		navigateBackToStart()
 	}
 	
 	func fuzzyMatchingFlowDidStop() {
-		removeChildCoordinator()
+		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 		navigateBackToStart()
 	}
 }
