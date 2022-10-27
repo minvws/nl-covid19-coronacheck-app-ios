@@ -56,6 +56,15 @@ class SendIdentitySelectionView: ScrolledStackView {
 			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
+	
+	override func setupAccessibility() {
+		
+		super.setupAccessibility()
+		titleLabel.isAccessibilityElement = false
+		activityIndicatorView.isAccessibilityElement = true
+		activityIndicatorView.accessibilityLabel = L.holder_identitySelection_loading_accessibility()
+		accessibilityElements = [activityIndicatorView]
+	}
 
 	// MARK: Public Access
 
@@ -71,7 +80,7 @@ class SendIdentitySelectionView: ScrolledStackView {
 	
 	var shouldShowLoadingSpinner: Bool = false {
 		didSet {
-			activityIndicatorView.shouldShowLoadingSpinner = shouldShowLoadingSpinner
+			activityIndicatorView.shouldShowLoadingSpinnerWithoutVoiceOver = shouldShowLoadingSpinner
 		}
 	}
 }
