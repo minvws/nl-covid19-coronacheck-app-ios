@@ -56,7 +56,7 @@ class IdentitySelectionDetailsView: BaseView {
 	private let spacer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .purple //  .clear
+		view.backgroundColor = .clear
 		return view
 	}()
 
