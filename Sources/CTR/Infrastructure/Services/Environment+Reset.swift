@@ -26,6 +26,7 @@ extension Environment {
 				walletManager.removeExistingEventGroups()
 				walletManager.removeExistingGreenCards()
 				walletManager.removeExistingBlockedEvents()
+				walletManager.removeExistingMismatchedIdentityEvents()
 			case .verifier:
 				verificationPolicyEnabler.wipePersistedData()
 				verificationPolicyManager.wipePersistedData()
