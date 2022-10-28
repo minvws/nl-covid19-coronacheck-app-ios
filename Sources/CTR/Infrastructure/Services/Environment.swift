@@ -9,6 +9,7 @@ import Foundation
 import Reachability
 import Transport
 import Shared
+import OpenIDConnect
 
 // MARK: - 1: Define the Environment
 

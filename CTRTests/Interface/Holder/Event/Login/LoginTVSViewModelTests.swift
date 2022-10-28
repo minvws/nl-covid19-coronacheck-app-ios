@@ -11,7 +11,7 @@
 @testable import Shared
 import XCTest
 import Nimble
-import AppAuth
+import OpenIDConnect
 
 class AuthenticationViewModelTests: XCTestCase {
 

@@ -6,9 +6,9 @@
 */
 
 import UIKit
-import AppAuth
 import Shared
 import Transport
+import OpenIDConnect
 
 enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)

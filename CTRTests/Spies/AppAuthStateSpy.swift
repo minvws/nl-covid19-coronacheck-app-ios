@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import AppAuth
+import OpenIDConnect
 @testable import CTR
 
 final class AppAuthStateSpy: AppAuthState {

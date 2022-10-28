@@ -6,7 +6,7 @@
 */
 
 import UIKit
-import CryptoKit
+import OpenIDConnect
 
 final class MaxConfig: IssuerConfiguration {
 	
