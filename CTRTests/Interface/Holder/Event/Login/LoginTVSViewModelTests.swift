@@ -134,7 +134,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			authenticationMode: .manyAuthenticationExchange,
-			appAuthState: openIDConnectStateSpy
+			openIDConnectState: openIDConnectStateSpy
 		)
 		openIDConnectStateSpy.stubbedCurrentAuthorizationFlow = nil
 
@@ -152,7 +152,7 @@ class AuthenticationViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			authenticationMode: .manyAuthenticationExchange,
-			appAuthState: openIDConnectStateSpy
+			openIDConnectState: openIDConnectStateSpy
 		)
 		openIDConnectStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
 

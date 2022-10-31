@@ -63,10 +63,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 
 		if let url = URLContexts.first?.url,
-		   let appAuthState = UIApplication.shared.delegate as? OpenIDConnectState,
-		   let authorizationFlow = appAuthState.currentAuthorizationFlow,
+		   let openIDConnectState = UIApplication.shared.delegate as? OpenIDConnectState,
+		   let authorizationFlow = openIDConnectState.currentAuthorizationFlow,
 		   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-			appAuthState.currentAuthorizationFlow = nil
+			openIDConnectState.currentAuthorizationFlow = nil
 		}
 	}
 

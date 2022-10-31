@@ -38,7 +38,7 @@ class AuthenticationViewModel {
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var openIdManager: OpenIDConnectManaging? = Current.openIdManager
 
-	private var appAuthState: OpenIDConnectState?
+	private var openIDConnectState: OpenIDConnectState?
 	private var eventMode: EventMode
 	private let authenticationMode: AuthenticationMode
 	
@@ -50,11 +50,11 @@ class AuthenticationViewModel {
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
 		authenticationMode: AuthenticationMode,
-		appAuthState: OpenIDConnectState? = UIApplication.shared.delegate as? OpenIDConnectState) {
+		openIDConnectState: OpenIDConnectState? = UIApplication.shared.delegate as? OpenIDConnectState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
-		self.appAuthState = appAuthState
+		self.openIDConnectState = openIDConnectState
 		self.authenticationMode = authenticationMode
 
 		content = Content(title: L.holder_fetchRemoteEvents_title())
@@ -185,7 +185,7 @@ extension AuthenticationViewModel {
 	
 	func didBecomeActive() {
 		
-		guard appAuthState?.currentAuthorizationFlow != nil else { return }
+		guard openIDConnectState?.currentAuthorizationFlow != nil else { return }
 		guard authenticationMode == .manyAuthenticationExchange else {
 			// When we receive the didBecomeActive notification:
 			// - For manyAuthenticationExchange that means the user returned to the app, canceling the login
