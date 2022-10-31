@@ -251,7 +251,7 @@ class HolderCoordinator: SharedCoordinator {
 		do {
 			try ObjC.catchException {
 				if let url = returnURL,
-				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
+				   let appAuthState = UIApplication.shared.delegate as? OpenIDConnectState,
 				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
 				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
 					appAuthState.currentAuthorizationFlow = nil

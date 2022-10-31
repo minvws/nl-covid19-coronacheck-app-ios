@@ -19,7 +19,7 @@ class AuthenticationViewModelTests: XCTestCase {
 	private var sut: AuthenticationViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-	private var appAuthStateSpy: AppAuthStateSpy!
+	private var openIDConnectStateSpy: OpenIDConnectStateSpy!
 	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
@@ -27,7 +27,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		appAuthStateSpy = AppAuthStateSpy()
+		openIDConnectStateSpy = OpenIDConnectStateSpy()
 	}
 
 	func test_loadingState_vaccinationMode() {
@@ -134,9 +134,9 @@ class AuthenticationViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			authenticationMode: .manyAuthenticationExchange,
-			appAuthState: appAuthStateSpy
+			appAuthState: openIDConnectStateSpy
 		)
-		appAuthStateSpy.stubbedCurrentAuthorizationFlow = nil
+		openIDConnectStateSpy.stubbedCurrentAuthorizationFlow = nil
 
 		// When
 		sut.didBecomeActive()
@@ -152,9 +152,9 @@ class AuthenticationViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			authenticationMode: .manyAuthenticationExchange,
-			appAuthState: appAuthStateSpy
+			appAuthState: openIDConnectStateSpy
 		)
-		appAuthStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
+		openIDConnectStateSpy.stubbedCurrentAuthorizationFlow = ExternalUserAgentSessionDummy()
 
 		// When
 		sut.didBecomeActive()

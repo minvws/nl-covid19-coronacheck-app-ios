@@ -9,7 +9,7 @@ import Foundation
 import OpenIDConnect
 @testable import CTR
 
-final class AppAuthStateSpy: AppAuthState {
+final class OpenIDConnectStateSpy: OpenIDConnectState {
 
 	var invokedCurrentAuthorizationFlowSetter = false
 	var invokedCurrentAuthorizationFlowSetterCount = 0

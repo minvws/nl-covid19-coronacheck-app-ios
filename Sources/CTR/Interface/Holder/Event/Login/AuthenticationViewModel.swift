@@ -14,7 +14,7 @@ enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)
 	case patientAuthenticationProvider // GGD GHOR Portal (patient authentication provider)
 	
-	var configuration: IssuerConfiguration {
+	var configuration: OpenIDConnectConfiguration {
 		switch self {
 			case .manyAuthenticationExchange:
 				return MaxConfig()
@@ -36,9 +36,9 @@ enum AuthenticationMode {
 class AuthenticationViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
+	private weak var openIdManager: OpenIDConnectManaging? = Current.openIdManager
 
-	private var appAuthState: AppAuthState?
+	private var appAuthState: OpenIDConnectState?
 	private var eventMode: EventMode
 	private let authenticationMode: AuthenticationMode
 	
@@ -50,7 +50,7 @@ class AuthenticationViewModel {
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
 		authenticationMode: AuthenticationMode,
-		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
+		appAuthState: OpenIDConnectState? = UIApplication.shared.delegate as? OpenIDConnectState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
@@ -97,7 +97,7 @@ class AuthenticationViewModel {
 		)
 	}
 	
-	func handleToken(_ token: OpenIdManagerToken) {
+	func handleToken(_ token: OpenIDConnectToken) {
 		
 		switch authenticationMode {
 			case .manyAuthenticationExchange:

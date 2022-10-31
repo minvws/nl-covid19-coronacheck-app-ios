@@ -10,7 +10,7 @@ import OpenIDConnect
 import Shared
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, AppAuthState {
+class AppDelegate: UIResponder, UIApplicationDelegate, OpenIDConnectState {
 	
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
