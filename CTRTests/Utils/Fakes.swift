@@ -1311,7 +1311,7 @@ extension EventGroup {
 		
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				eventGroup = EventGroupModel.create(
+				eventGroup = EventGroup(
 					type: type,
 					providerIdentifier: "CoronaCheck",
 					expiryDate: expiryDate,
@@ -1334,7 +1334,7 @@ extension EventGroup {
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {
-					eventGroup = EventGroupModel.create(
+					eventGroup = EventGroup(
 						type: EventMode.recovery,
 						providerIdentifier: "CoronaCheck",
 						expiryDate: nil,
@@ -1355,7 +1355,7 @@ extension EventGroup {
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let jsonData = try? JSONEncoder().encode(EventFlow.DccEvent(credential: credential, couplingCode: couplingCode)) {
-				eventGroup = EventGroupModel.create(
+				eventGroup = EventGroup(
 					type: EventMode.recovery,
 					providerIdentifier: "DCC",
 					expiryDate: nil,

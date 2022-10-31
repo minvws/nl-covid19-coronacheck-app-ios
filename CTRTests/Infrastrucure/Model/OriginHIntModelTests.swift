@@ -32,7 +32,7 @@ class OriginHintModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -40,7 +40,7 @@ class OriginHintModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 					
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
@@ -51,7 +51,7 @@ class OriginHintModelTests: XCTestCase {
 					)
 					
 					if let unwrappedOrigin = origin {
-						hint = OriginHintModel.create(origin: unwrappedOrigin, hint: "test hint", managedContext: context)
+						hint = OriginHint(origin: unwrappedOrigin, hint: "test hint", managedContext: context)
 					}
 				}
 			}
@@ -73,7 +73,7 @@ class OriginHintModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -81,7 +81,7 @@ class OriginHintModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 					
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
@@ -92,8 +92,8 @@ class OriginHintModelTests: XCTestCase {
 					)
 					
 					if let unwrappedOrigin = origin {
-						OriginHintModel.create(origin: unwrappedOrigin, hint: "hint one", managedContext: context)
-						OriginHintModel.create(origin: unwrappedOrigin, hint: "hint two", managedContext: context)
+						OriginHint(origin: unwrappedOrigin, hint: "hint one", managedContext: context)
+						OriginHint(origin: unwrappedOrigin, hint: "hint two", managedContext: context)
 					}
 				}
 			}

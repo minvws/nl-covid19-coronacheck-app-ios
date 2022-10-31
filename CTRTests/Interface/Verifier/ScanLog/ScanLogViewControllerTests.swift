@@ -64,7 +64,7 @@ class ScanLogViewControllerTests: XCTestCase {
 	func test_oneEntry() {
 		
 		// Given
-		let entry: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry: ScanLogEntry! = ScanLogEntry(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry])
 		
 		var config: RemoteConfiguration = .default
@@ -85,8 +85,8 @@ class ScanLogViewControllerTests: XCTestCase {
 	func test_twoEntries_differentMode() {
 		
 		// Given
-		let entry1: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
-		let entry2: ScanLogEntry! = ScanLogEntryModel.create(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry1: ScanLogEntry! = ScanLogEntry(mode: ScanLogManager.policy3G, date: now.addingTimeInterval(24 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
+		let entry2: ScanLogEntry! = ScanLogEntry(mode: ScanLogManager.policy1G, date: now.addingTimeInterval(22 * minutes * ago), managedContext: environmentSpies.dataStoreManager.managedObjectContext())
 		environmentSpies.scanLogManagerSpy.stubbedGetScanEntriesResult = .success([entry1, entry2])
 		
 		var config: RemoteConfiguration = .default

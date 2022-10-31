@@ -30,7 +30,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		context.performAndWait {
 
 			// When
-			entry = ScanLogEntryModel.create(mode: "test_createEntry", date: date, managedContext: context)
+			entry = ScanLogEntry(mode: "test_createEntry", date: date, managedContext: context)
 		}
 
 		// Then
@@ -81,7 +81,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "1G", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
+			ScanLogEntry(mode: "1G", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
 			if let list = ScanLogEntryModel.listEntriesStartingFrom(date: date, managedContext: context).successValue {
@@ -100,7 +100,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "1G", date: date, managedContext: context)
+			ScanLogEntry(mode: "1G", date: date, managedContext: context)
 
 			// When
 			if let list = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context).successValue {
@@ -119,7 +119,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_list_oneEntry", date: date, managedContext: context)
+			ScanLogEntry(mode: "test_list_oneEntry", date: date, managedContext: context)
 
 			// When
 			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context).successValue ?? []
@@ -138,7 +138,7 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_list_oneEntry", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_list_oneEntry", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
 			list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context).successValue ?? []
@@ -157,8 +157,8 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_listFrom_twoEntries_first", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listFrom_twoEntries_second", date: date, managedContext: context)
+			ScanLogEntry(mode: "test_listFrom_twoEntries_first", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listFrom_twoEntries_second", date: date, managedContext: context)
 
 			// When
 			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 5 * minute), managedContext: context).successValue ?? []
@@ -176,8 +176,8 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_listTo_twoEntries_first", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listTo_twoEntries_second", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listTo_twoEntries_first", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listTo_twoEntries_second", date: date.addingTimeInterval(ago * 5 * seconds), managedContext: context)
 
 			// When
 			list = ScanLogEntryModel.listEntriesUpTo(date: date, managedContext: context).successValue ?? []
@@ -195,9 +195,9 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_listFrom_threeEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listFrom_threeEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listFrom_threeEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listFrom_threeEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listFrom_threeEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listFrom_threeEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
 			// When
 			list = ScanLogEntryModel.listEntriesStartingFrom(date: date.addingTimeInterval(ago * 25 * seconds), managedContext: context).successValue ?? []
 		}
@@ -214,9 +214,9 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_listTo_threeEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listTo_threeEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listTo_threeEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listTo_threeEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listTo_threeEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listTo_threeEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
 			// When
 			list = ScanLogEntryModel.listEntriesUpTo(date: date.addingTimeInterval(ago * 15 * seconds), managedContext: context).successValue ?? []
 		}
@@ -233,9 +233,9 @@ class ScanLogEntryModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			ScanLogEntryModel.create(mode: "test_listEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
-			ScanLogEntryModel.create(mode: "test_listEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listEntries_first", date: date.addingTimeInterval(ago * 30 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listEntries_second", date: date.addingTimeInterval(ago * 20 * seconds), managedContext: context)
+			ScanLogEntry(mode: "test_listEntries_third", date: date.addingTimeInterval(ago * 10 * seconds), managedContext: context)
 			// When
 			list = ScanLogEntryModel.listEntries(managedContext: context).successValue ?? []
 		}
