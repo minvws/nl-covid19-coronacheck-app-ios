@@ -36,9 +36,7 @@ enum AuthenticationMode {
 class AuthenticationViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIDConnectManaging? = Current.openIdManager
-
-	private var openIDConnectState: OpenIDConnectState?
+	private let openIDConnectState: OpenIDConnectState?
 	private var eventMode: EventMode
 	private let authenticationMode: AuthenticationMode
 	
@@ -80,7 +78,7 @@ class AuthenticationViewModel {
 			secondaryAction: nil
 		)
 		
-		openIdManager?.requestAccessToken(
+		Current.openIdManager.requestAccessToken(
 			issuerConfiguration: authenticationMode.configuration,
 			// use the internal browser for pap,
 			// use the external browser for tvs (because the Digid app redirects to external browser)
