@@ -31,7 +31,7 @@ class OriginModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -39,7 +39,7 @@ class OriginModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					origin = OriginModel.create(
+					origin = Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
@@ -69,7 +69,7 @@ class OriginModelTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -78,7 +78,7 @@ class OriginModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					OriginModel.create(
+					Origin(
 						type: .recovery,
 						eventDate: date,
 						expirationTime: date,
@@ -87,7 +87,7 @@ class OriginModelTests: XCTestCase {
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					OriginModel.create(
+					Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,

@@ -26,7 +26,7 @@ class HolderDashboardRemovedEventsDatasource: NSObject, HolderDashboardRemovedEv
 	/// Initializer
 	/// - Parameter reason: The reason of removed events. Currently RemovedEventModel.identityMismatch or RemovedEventModel.blockedEvent
 	init(reason: RemovalReason) {
-		let fetchRequest = NSFetchRequest<RemovedEvent>(entityName: RemovedEventModel.entityName)
+		let fetchRequest = NSFetchRequest<RemovedEvent>(entityName: RemovedEvent.entityName)
 		fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \RemovedEvent.type, ascending: true)]
 		fetchRequest.predicate = NSPredicate(format: "reason == %@", reason.rawValue)
 		

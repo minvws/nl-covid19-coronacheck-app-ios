@@ -10,29 +10,6 @@ import CoreData
 import Transport
 
 class EventGroupModel {
-
-	static let entityName = "EventGroup"
-
-	@discardableResult class func create(
-		type: EventMode,
-		providerIdentifier: String,
-		expiryDate: Date?,
-		jsonData: Data,
-		wallet: Wallet,
-		managedContext: NSManagedObjectContext) -> EventGroup? {
-
-		guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? EventGroup else {
-			return nil
-		}
-
-		object.type = type.rawValue
-		object.providerIdentifier = providerIdentifier
-		object.expiryDate = expiryDate
-		object.jsonData = jsonData
-		object.wallet = wallet
-
-		return object
-	}
 	
 	@discardableResult class func findBy(
 		wallet: Wallet,
@@ -49,6 +26,22 @@ class EventGroupModel {
 }
 
 extension EventGroup {
+	
+	@discardableResult convenience init(
+		type: EventMode,
+		providerIdentifier: String,
+		expiryDate: Date?,
+		jsonData: Data,
+		wallet: Wallet,
+		managedContext: NSManagedObjectContext) {
+
+		self.init(context: managedContext)
+		self.type = type.rawValue
+		self.providerIdentifier = providerIdentifier
+		self.expiryDate = expiryDate
+		self.jsonData = jsonData
+		self.wallet = wallet
+	}
 	
 	func getSignedEvents() -> String? {
 		

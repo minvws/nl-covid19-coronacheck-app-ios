@@ -86,11 +86,11 @@ class ScanLogManager: ScanLogManaging {
 				case .policy1G:
 					mode = ScanLogManager.policy1G
 			}
-			let entry = ScanLogEntryModel.create(mode: mode, date: date, managedContext: context)
+			let entry = ScanLogEntry(mode: mode, date: date, managedContext: context)
 			dataStoreManager.save(context)
 
 			// Update the auto_increment identifier
-			entry?.identifier = entry?.autoId ?? 0
+			entry.identifier = entry.autoId
 			dataStoreManager.save(context)
 		}
 	}

@@ -237,7 +237,7 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {
-					eventGroup = EventGroupModel.create(
+					eventGroup = EventGroup(
 						type: EventMode.recovery,
 						providerIdentifier: "CoronaCheck",
 						expiryDate: nil,
@@ -258,7 +258,7 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let jsonData = try? JSONEncoder().encode(EventFlow.DccEvent(credential: "test", couplingCode: "test")) {
-				eventGroup = EventGroupModel.create(
+				eventGroup = EventGroup(
 					type: EventMode.recovery,
 					providerIdentifier: "DCC",
 					expiryDate: nil,

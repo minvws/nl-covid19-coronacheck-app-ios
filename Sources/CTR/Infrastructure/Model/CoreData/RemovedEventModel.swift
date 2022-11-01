@@ -14,31 +14,23 @@ enum RemovalReason: String {
 	case mismatchedIdentity = "identity_mismatched"
 }
 
-class RemovedEventModel {
+extension RemovedEvent {
 	
 	static let entityName = "RemovedEvent"
 	
-	@discardableResult class func create(
+	convenience init(
 		type: EventMode,
 		eventDate: Date,
 		reason: String,
 		wallet: Wallet,
-		managedContext: NSManagedObjectContext) -> RemovedEvent? {
-			
-			guard let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: managedContext) as? RemovedEvent else {
-				return nil
-			}
-			
-			object.type = type.rawValue
-			object.eventDate = eventDate
-			object.reason = reason
-			object.wallet = wallet
-			
-			return object
-		}
-}
-
-extension RemovedEvent {
+		managedContext: NSManagedObjectContext) {
+		
+		self.init(context: managedContext)
+		self.type = type.rawValue
+		self.eventDate = eventDate
+		self.reason = reason
+		self.wallet = wallet
+	}
 	
 	func delete(context: NSManagedObjectContext) {
 		
