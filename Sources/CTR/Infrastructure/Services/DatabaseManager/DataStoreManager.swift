@@ -34,9 +34,14 @@ protocol DataStoreManaging {
 
 class DataStoreManager: DataStoreManaging {
 
-	enum Error: Swift.Error {
+	enum Error: Swift.Error, CustomNSError {
 		case diskFull
 		case underlying(error: Swift.Error)
+
+		var errorCode: Int {
+			guard case let .underlying(error) = self else { return 0 }
+			return (error as NSError).code
+		}
 	}
 
 	private var storageType: StorageType

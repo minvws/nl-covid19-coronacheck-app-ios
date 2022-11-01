@@ -13,9 +13,9 @@ class SecurityFeaturesView: BaseView {
 	private var animatingLeftToRight = true
 
 	/// The animation view
-	private let animationView: AnimationView = {
+	private let animationView: LottieAnimationView = {
 
-		let view = AnimationView()
+		let view = LottieAnimationView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundBehavior = .pauseAndRestore
 		view.respectAnimationFrameRate = true
