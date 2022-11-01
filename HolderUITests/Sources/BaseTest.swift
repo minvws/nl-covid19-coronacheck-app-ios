@@ -11,7 +11,7 @@ class BaseTest: XCTestCase {
 	
 	let app = XCUIApplication()
 	let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-	let loginTimeout = 3.0
+	let loginTimeout = 10.0
 	
 	var disclosureMode = DisclosureMode.mode0G
 	let ctbInUse = true
