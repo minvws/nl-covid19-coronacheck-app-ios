@@ -47,6 +47,7 @@ platform :ios do
       number_of_retries: 1,
       disable_slide_to_type: true,
       app_identifier: "nl.rijksoverheid.ctr.dev",
+      only_testing: "HolderUISmoketests/VaccinationSmoke/test_vacP1",
       skip_slack: true,
       result_bundle: true
     )
