@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import Transport
+import OpenIDConnect
 
 protocol AppCoordinatorDelegate: AnyObject {
 	
@@ -511,6 +512,8 @@ extension AppCoordinator {
 	
 	private func addObservers() {
 		
+		// Back and foreground
+		
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(onWillResignActiveNotification),
@@ -523,6 +526,9 @@ extension AppCoordinator {
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
+		
+		// Privacy
+		
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(disablePrivacySnapShot),
@@ -535,6 +541,24 @@ extension AppCoordinator {
 			name: Notification.Name.enablePrivacySnapShot,
 			object: nil
 		)
+		
+		// Open ID Connect
+		
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(enablePrivacySnapShot),
+			name: Notification.Name.closingOpenIDConnectBrowser,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(disablePrivacySnapShot),
+			name: Notification.Name.launchingOpenIDConnectBrowser,
+			object: nil
+		)
+		
+		// Disk Full
+		
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(onDiskFullNotification),

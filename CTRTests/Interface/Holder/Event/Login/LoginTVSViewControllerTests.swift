@@ -11,13 +11,13 @@ import XCTest
 @testable import Shared
 import Nimble
 import SnapshotTesting
+import OpenIDConnect
 
 class AuthenticationViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
 	private var sut: AuthenticationViewController!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-	private var appAuthStateSpy: AppAuthStateSpy!
 	private var environmentSpies: EnvironmentSpies!
 	private var viewModel: AuthenticationViewModel!
 	
@@ -29,7 +29,6 @@ class AuthenticationViewControllerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		appAuthStateSpy = AppAuthStateSpy()
 		viewModel = AuthenticationViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
@@ -132,7 +131,7 @@ class AuthenticationViewControllerTests: XCTestCase {
 	}
 }
 
-struct OpenIdManagerIdToken: OpenIdManagerToken {
+struct OpenIdManagerIdToken: OpenIDConnectToken {
 	var idToken: String? = "idToken"
 	var accessToken: String? = "accessToken"
 }

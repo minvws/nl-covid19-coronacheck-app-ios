@@ -7,20 +7,21 @@
 
 import XCTest
 @testable import CTR
+import OpenIDConnect
 
-class OpenIdManagerSpy: OpenIdManaging {
+class OpenIdManagerSpy: OpenIDConnectManaging {
 
 	var invokedRequestAccessToken = false
 	var invokedRequestAccessTokenCount = 0
-	var invokedRequestAccessTokenParameters: (issuerConfiguration: IssuerConfiguration, presentingViewController: UIViewController?)?
-	var invokedRequestAccessTokenParametersList = [(issuerConfiguration: IssuerConfiguration, presentingViewController: UIViewController?)]()
-	var stubbedRequestAccessTokenOnCompletionResult: (OpenIdManagerToken, Void)?
+	var invokedRequestAccessTokenParameters: (issuerConfiguration: OpenIDConnectConfiguration, presentingViewController: UIViewController?)?
+	var invokedRequestAccessTokenParametersList = [(issuerConfiguration: OpenIDConnectConfiguration, presentingViewController: UIViewController?)]()
+	var stubbedRequestAccessTokenOnCompletionResult: (OpenIDConnectToken, Void)?
 	var stubbedRequestAccessTokenOnErrorResult: (Error?, Void)?
 
 	func requestAccessToken(
-		issuerConfiguration: IssuerConfiguration,
+		issuerConfiguration: OpenIDConnectConfiguration,
 		presentingViewController: UIViewController?,
-		onCompletion: @escaping (OpenIdManagerToken) -> Void,
+		onCompletion: @escaping (OpenIDConnectToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 		invokedRequestAccessToken = true
 		invokedRequestAccessTokenCount += 1

@@ -6,7 +6,7 @@
  */
 
 import UIKit
-import AppAuth
+import OpenIDConnect
 import Shared
 import Transport
 
