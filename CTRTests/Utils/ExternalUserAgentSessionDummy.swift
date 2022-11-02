@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import AppAuth
+import OpenIDConnect
 
 final class ExternalUserAgentSessionDummy: NSObject, OIDExternalUserAgentSession {
 	
