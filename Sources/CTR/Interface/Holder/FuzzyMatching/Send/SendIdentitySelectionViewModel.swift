@@ -142,11 +142,7 @@ class SendIdentitySelectionViewModel {
 				isPreferred: true
 			),
 			cancelAction: AlertContent.Action(
-				title: L.generalClose(),
-				action: { [weak self] _ in
-					guard let self else { return }
-					self.coordinatorDelegate?.userHasStoppedTheFlow()
-				}
+				title: L.generalClose()
 			)
 		)
 	}
