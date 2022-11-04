@@ -447,7 +447,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				let dateString = DateFormatter.Format.dayMonthYear.string(from: item.eventDate)
 				return """
 				<p>
-					<b>\(item.type.localized.capitalized)</b>
+					<b>\(item.type.localized.capitalizingFirstLetter())</b>
 					<br />
 					<b>\(localizedDateLabel.capitalizingFirstLetter()): \(dateString)</b>
 				</p>

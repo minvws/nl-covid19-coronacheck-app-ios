@@ -17,7 +17,7 @@ enum OriginType: String, Codable, Equatable {
 	
 	var localized: String {
 		switch self {
-			case .recovery: return L.general_positiveTest()
+			case .recovery: return L.general_recoverycertificate()
 			case .vaccination: return L.general_vaccination()
 			case .test: return L.general_negativeTest()
 			case .vaccinationassessment: return L.general_visitorPass()
