@@ -44,7 +44,7 @@ class SendIdentitySelectionViewModel {
 	
 	func viewDidAppear() {
 		
-		guard matchingBlobIds.count > 1, selectedBlobIds.isNotEmpty else {
+		guard matchingBlobIds.isNotEmpty, selectedBlobIds.isNotEmpty else {
 			displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .removeEventGroups, clientCode: .noSelectionMade))
 			return
 		}
@@ -107,12 +107,12 @@ class SendIdentitySelectionViewModel {
 		
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
-			
+
 			guard let self else { return }
 			switch result {
 				case .success:
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
-					
+
 				case let .failure(greenCardError):
 					let parser = GreenCardResponseErrorParser(flow: ErrorCode.Flow.fuzzyMatching)
 					switch parser.parse(greenCardError) {
@@ -144,8 +144,7 @@ class SendIdentitySelectionViewModel {
 			cancelAction: AlertContent.Action(
 				title: L.generalClose(),
 				action: { [weak self] _ in
-					guard let self else { return }
-					self.coordinatorDelegate?.userHasStoppedTheFlow()
+					self?.coordinatorDelegate?.userWishesToSeeIdentitiyGroups()
 				}
 			)
 		)

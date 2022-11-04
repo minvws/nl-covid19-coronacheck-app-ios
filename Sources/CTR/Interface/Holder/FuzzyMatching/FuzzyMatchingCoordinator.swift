@@ -122,15 +122,20 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesToSeeIdentitiyGroups() {
 		
-		let viewModel = ListIdentitySelectionViewModel(
-			coordinatorDelegate: self,
-			dataSource: dataSource,
-			matchingBlobIds: matchingBlobIds,
-			shouldHideSkipButton: shouldHideSkipButton
-		)
-		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
-		
-		navigationController.pushViewController(viewController, animated: true)
+		if let existingListVC = navigationController.viewControllers.first(where: { $0 is ListIdentitySelectionViewController }) {
+			navigationController.popToViewController(existingListVC, animated: true)
+		} else {
+			
+			let viewModel = ListIdentitySelectionViewModel(
+				coordinatorDelegate: self,
+				dataSource: dataSource,
+				matchingBlobIds: matchingBlobIds,
+				shouldHideSkipButton: shouldHideSkipButton
+			)
+			let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
+			
+			navigationController.pushViewController(viewController, animated: true)
+		}
 	}
 	
 	func userHasSelectedIdentityGroup(selectedBlobIds: [String]) {
