@@ -50,10 +50,10 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.content.body).toEventually(equal( L.holderErrorstateClientMessage("i 1310 000 101")))
 	}
 	
-	func test_viewDidAppear_lessThanTwoMatchingBlobs() {
+	func test_viewDidAppear_emptyMatchingBlobs() {
 		
 		// Given
-		setupSut(matchingBlobIds: [["123"]], selectedBlobIds: ["123"])
+		setupSut(matchingBlobIds: [], selectedBlobIds: ["123"])
 		
 		// When
 		sut.viewDidAppear()
