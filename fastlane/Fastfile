@@ -38,7 +38,7 @@ platform :ios do
   lane :smoketest_ui do
     run_tests(
       app_name: "CTR",
-      device: "iPhone 14",
+      device: "iPhone 13",
       project: "CTR.xcodeproj",
       scheme: "Holder UI Smoketests",
       reinstall_app: true,
@@ -59,7 +59,7 @@ platform :ios do
   lane :test_ui do
     run_tests(
       app_name: "CTR",
-      device: "iPhone 14",
+      device: "iPhone 13",
       project: "CTR.xcodeproj",
       scheme: "Holder UI Tests",
       reinstall_app: true,
