@@ -38,7 +38,7 @@ platform :ios do
   lane :smoketest_ui do
     run_tests(
       app_name: "CTR",
-      device: "iPhone 14",
+      device: "iPhone 13",
       project: "CTR.xcodeproj",
       scheme: "Holder UI Smoketests",
       reinstall_app: true,
@@ -58,7 +58,7 @@ platform :ios do
   lane :test_ui do
     run_tests(
       app_name: "CTR",
-      device: "iPhone 14",
+      device: "iPhone 13",
       project: "CTR.xcodeproj",
       scheme: "Holder UI Tests",
       reinstall_app: true,
@@ -67,6 +67,7 @@ platform :ios do
       number_of_retries: 1,
       disable_slide_to_type: true,
       app_identifier: "nl.rijksoverheid.ctr.dev",
+      skip_testing: "HolderUITests/VaccinationEventMatchingTest,HolderUITests/DifferentCredentialsTest",
       skip_slack: true,
       result_bundle: true
     )

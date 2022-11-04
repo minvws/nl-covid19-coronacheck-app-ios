@@ -26,17 +26,17 @@ extension XCUIElement {
 	
 	func assertExistence() -> XCUIElement {
 		let elementPresent = rapidlyEvaluate(timeout: XCUIElement.timeout) { self.exists }
-		XCTAssertTrue(elementPresent, self.description + " could not be found")
+		XCTAssertTrue(elementPresent, "\(debugDescription) could not be found")
 		return self
 	}
 	
 	func assertNotExistence() {
 		let elementPresent = rapidlyEvaluate(timeout: 1.0) { self.exists }
-		XCTAssertFalse(elementPresent, self.description + " could be found")
+		XCTAssertFalse(elementPresent, "\(debugDescription) could be found")
 	}
 	
 	func tapButton(_ label: String, index: Int = 0) {
-		let predicate = NSPredicate(format: "label contains %@", label)
+		let predicate = NSPredicate(format: "label contains[c] %@", label)
 		let elementQuery = self.descendants(matching: .any).matching(predicate)
 		let element = elementQuery.element(boundBy: index)
 		element.assertExistence().tap()

@@ -125,7 +125,7 @@ extension BaseTest {
 		makeScreenShot(name: "Safari is ready")
 		
 		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
-		makeScreenShot(name: "Logged in: " + loggedIn.description)
+		makeScreenShot(name: "Logged in: \(loggedIn.description)")
 		
 		if !loggedIn { loginToServer() }
 		
@@ -138,10 +138,10 @@ extension BaseTest {
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
 		
-		let predicate = NSPredicate(format: "label contains[c] %@", "Open this page in")
-		let elementQuery = safari.webViews.textViews.matching(predicate)
-		let popup = elementQuery.firstMatch.waitForExistence(timeout: 5.0)
-		if popup { safari.webViews.buttons["Open"].tap() }
+		let open = safari.buttons["Open"].waitForExistence(timeout: loginTimeout)
+		if open {
+			safari.tapButton("Open")
+		}
 	}
 	
 	private func loginToServer() {
@@ -154,24 +154,17 @@ extension BaseTest {
 			return
 		}
 		
-		let username = safari.textFields["User Name"].assertExistence()
+		let username = safari.otherElements["SFDialogView"].textFields.firstMatch
 		username.tap()
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
 		
-		let continueButton = safari.buttons["Continue"]
-		if rapidlyEvaluate(timeout: self.loginTimeout, { continueButton.exists }) {
-			continueButton.tap()
-			makeScreenShot(name: "Hide continue button")
-		}
-		
-		let password = safari.secureTextFields["Password"].assertExistence()
+		let password = safari.otherElements["SFDialogView"].secureTextFields.firstMatch
 		password.tap()
 		password.typeText(authPassword)
 		makeScreenShot(name: "Password typed")
 		
-		let submitAuth = safari.buttons["Log In"].assertExistence()
-		submitAuth.tap()
+		safari.tapButton("Log in")
 		makeScreenShot(name: "Auth submit button")
 	}
 	
