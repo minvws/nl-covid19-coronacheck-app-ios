@@ -79,7 +79,8 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.validity(),
 				imageBackgroundColor: nil,
 				tagline: nil,
-				step: 3
+				step: 3,
+				nextButtonTitle: L.generalNext()
 			)
 		]
 	}
@@ -117,7 +118,8 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.international(),
 				imageBackgroundColor: nil,
 				tagline: nil,
-				step: 4
+				step: 4,
+				nextButtonTitle: L.generalNext()
 			)
 		]
 	}
@@ -131,7 +133,8 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.disclosurePolicy(),
 				imageBackgroundColor: nil,
 				tagline: nil,
-				step: 5
+				step: 5,
+				nextButtonTitle: L.generalNext()
 			)
 		} else if Current.featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
 			return PagedAnnoucementItem(
@@ -140,7 +143,8 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.disclosurePolicy(),
 				imageBackgroundColor: nil,
 				tagline: nil,
-				step: 5
+				step: 5,
+				nextButtonTitle: L.generalNext()
 			)
 		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
 			return PagedAnnoucementItem(
@@ -149,7 +153,8 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				image: I.onboarding.disclosurePolicy(),
 				imageBackgroundColor: nil,
 				tagline: nil,
-				step: 5
+				step: 5,
+				nextButtonTitle: L.generalNext()
 			)
 		}
 		// No disclosure page for zero G
