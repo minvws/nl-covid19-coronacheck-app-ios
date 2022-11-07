@@ -52,6 +52,13 @@ class IdentitySelectionDetailsView: BaseView {
 		stackView.spacing = ViewTraits.Spacing.stackSpacing
 		return stackView
 	}()
+	
+	private let spacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
+	}()
 
 	override func setupViews() {
 
@@ -66,6 +73,7 @@ class IdentitySelectionDetailsView: BaseView {
 		addSubview(titleLabel)
 		addSubview(contentTextView)
 		addSubview(detailsStackView)
+		addSubview(spacer)
 	}
 
 	override func setupViewConstraints() {
@@ -74,6 +82,7 @@ class IdentitySelectionDetailsView: BaseView {
 		setupTitleLabelViewConstraints()
 		setupContentTextViewConstraints()
 		setupDetailsStackViewConstraints()
+		setupSpacerViewConstraints()
 	}
 
 	func setupTitleLabelViewConstraints() {
@@ -137,8 +146,21 @@ class IdentitySelectionDetailsView: BaseView {
 				constant: -2 * ViewTraits.Margin.edge
 			),
 			detailsStackView.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
+				equalTo: spacer.topAnchor,
 				constant: -ViewTraits.Margin.bottom
+			)
+		])
+	}
+	
+	func setupSpacerViewConstraints() {
+		
+		NSLayoutConstraint.activate([
+			spacer.topAnchor.constraint(equalTo: detailsStackView.bottomAnchor),
+			spacer.leadingAnchor.constraint(equalTo: leadingAnchor),
+			spacer.trailingAnchor.constraint(equalTo: trailingAnchor),
+			spacer.bottomAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
+				constant: UIDevice.current.hasNotch ? 0 : -ViewTraits.Margin.bottom
 			)
 		])
 	}

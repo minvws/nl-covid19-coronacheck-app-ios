@@ -54,4 +54,14 @@ class ActivityIndicatorView: BaseView {
 			}
 		}
 	}
+	
+	var shouldShowLoadingSpinnerWithoutVoiceOver: Bool = false {
+		didSet {
+			if shouldShowLoadingSpinnerWithoutVoiceOver {
+				spinner.startAnimating()
+			} else {
+				spinner.stopAnimating()
+			}
+		}
+	}
 }

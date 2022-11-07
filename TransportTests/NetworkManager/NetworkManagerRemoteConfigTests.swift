@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerRemoteConfigTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/config"
+	private let path = "/v9/holder/config"
 	
 	override func setUp() {
 		

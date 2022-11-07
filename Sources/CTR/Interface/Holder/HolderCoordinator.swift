@@ -448,7 +448,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				let dateString = DateFormatter.Format.dayMonthYear.string(from: item.eventDate)
 				return """
 				<p>
-					<b>\(item.type.localized.capitalized)</b>
+					<b>\(item.type.localized.capitalizingFirstLetter())</b>
 					<br />
 					<b>\(localizedDateLabel.capitalizingFirstLetter()): \(dateString)</b>
 				</p>
@@ -818,7 +818,10 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	}
 	
 	func finishNewDisclosurePolicy() {
-		removeChildCoordinator()
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is UpdatedDisclosurePolicyCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 	}
 	
 	func handleDisclosurePolicyUpdates() {
@@ -848,12 +851,16 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 	
 	func fuzzyMatchingFlowDidFinish() {
-		removeChildCoordinator()
+		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 		navigateBackToStart()
 	}
 	
 	func fuzzyMatchingFlowDidStop() {
-		removeChildCoordinator()
+		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 		navigateBackToStart()
 	}
 }

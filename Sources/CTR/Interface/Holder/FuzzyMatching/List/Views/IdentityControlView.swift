@@ -40,6 +40,12 @@ class IdentityControlView: BaseView {
 		return button
 	}()
 	
+	private let selectionAdditionalButton: UIButton = {
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+	
 	private let stackView: UIStackView = {
 		
 		let stackView = UIStackView()
@@ -51,7 +57,7 @@ class IdentityControlView: BaseView {
 	
 	private let titleLabel: Label = {
 		
-		return Label(bodySemiBold: nil).header().multiline()
+		return Label(bodyMedium: nil).header().multiline()
 	}()
 	
 	private let contentLabel: Label = {
@@ -87,8 +93,16 @@ class IdentityControlView: BaseView {
 		actionButton.contentHorizontalAlignment = .leading
 		
 		selectionButton.addTarget(self, action: #selector(selectionButtonTapped), for: .touchUpInside)
+		selectionAdditionalButton.addTarget(self, action: #selector(selectionButtonTapped), for: .touchUpInside)
 		
 		stackView.embed(in: self, insets: ViewTraits.StackView.insets)
+		
+		stackView.addGestureRecognizer(
+			UITapGestureRecognizer(
+				target: self,
+				action: #selector(selectionButtonTapped)
+			)
+		)
 	}
 	
 	override func setupViewHierarchy() {
@@ -101,6 +115,9 @@ class IdentityControlView: BaseView {
 		stackView.addArrangedSubview(actionButton)
 		stackView.addArrangedSubview(warningLabel)
 		addSubview(separatorView)
+		addSubview(selectionAdditionalButton)
+		
+		bringSubviewToFront(stackView)
 	}
 	
 	override func setupViewConstraints() {
@@ -117,7 +134,12 @@ class IdentityControlView: BaseView {
 			selectionButton.leadingAnchor.constraint(equalTo: leadingAnchor),
 			selectionButton.topAnchor.constraint(equalTo: topAnchor),
 			selectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
-			selectionButton.trailingAnchor.constraint(equalTo: stackView.leadingAnchor)
+			selectionButton.trailingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			
+			selectionAdditionalButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			selectionAdditionalButton.topAnchor.constraint(equalTo: topAnchor),
+			selectionAdditionalButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+			selectionAdditionalButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
 		])
 	}
 	
@@ -213,24 +235,28 @@ class IdentityControlView: BaseView {
 					warning = nil
 					resetSelectionButton()
 					selectionButton.isSelected = true
+					stackView.setCustomSpacing(0, after: actionButton)
 					
 				case .unselected:
 					
 					warning = nil
 					resetSelectionButton()
 					selectionButton.isSelected = false
+					stackView.setCustomSpacing(0, after: actionButton)
 					
 				case .selectionError:
 					
 					warning = nil
 					selectionButton.isSelected = false
 					selectionButton.setImage(I.radioButton24.error(), for: .normal)
+					stackView.setCustomSpacing(0, after: actionButton)
 					
 				case let .warning(warningMessage):
 					
 					warning = warningMessage
 					resetSelectionButton()
 					selectionButton.isSelected = false
+					stackView.setCustomSpacing(ViewTraits.StackView.spacing, after: actionButton)
 			}
 		}
 	}
