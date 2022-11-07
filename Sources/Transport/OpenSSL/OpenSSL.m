@@ -394,8 +394,8 @@ errit:
 	BIO_free(signatureBlob); signatureBlob = NULL;
 	BIO_free(contentBlob); contentBlob = NULL;
 	BIO_free(certificateBlob); certificateBlob = NULL;
-	sk_X509_pop_free(signers, X509_free); signers = NULL;
-	X509_free(signingCert); signingCert = NULL;
+	signers = NULL;
+	signingCert = NULL;
 
 	return result;
 }
