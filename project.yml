@@ -289,7 +289,7 @@ targets:
       base:
         APP_FLAVOR: holder
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 4.7.0 # holder
+        MARKETING_VERSION: 4.7.1 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
         TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad
