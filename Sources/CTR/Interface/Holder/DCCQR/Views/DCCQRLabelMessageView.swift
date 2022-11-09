@@ -44,12 +44,12 @@ final class DCCQRLabelMessageView: BaseView, DCCQRLabelViewable {
 		
 		NSLayoutConstraint.activate([
 			labelView.topAnchor.constraint(equalTo: topAnchor),
-			labelView.leftAnchor.constraint(equalTo: leftAnchor),
-			labelView.rightAnchor.constraint(equalTo: rightAnchor),
+			labelView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			labelView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			
 			messageTextView.topAnchor.constraint(equalTo: labelView.bottomAnchor, constant: ViewTraits.spacing),
-			messageTextView.leftAnchor.constraint(equalTo: leftAnchor),
-			messageTextView.rightAnchor.constraint(equalTo: rightAnchor),
+			messageTextView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			messageTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

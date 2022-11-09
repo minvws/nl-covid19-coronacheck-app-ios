@@ -217,7 +217,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 		// Regardless, let's see if there's a new public key file available:
 		networkManager.getPublicKeys { [weak self] (resultWrapper: Result<Data, ServerError>) in
 
-			guard let self = self else { return }
+			guard let self else { return }
 			self.handleNetworkResponse(resultWrapper: resultWrapper, completion: completion)
 			self.isLoading = false
 		}

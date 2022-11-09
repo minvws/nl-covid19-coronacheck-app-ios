@@ -8,8 +8,23 @@
 import Foundation
 
 public struct ServerResponse: Decodable, Equatable {
+
 	public let status: String
 	public let code: Int
+	public let matchingBlobIds: [[String]]?
+	
+	init(status: String, code: Int, matchingBlobIds: [[String]]? = nil) {
+		self.status = status
+		self.code = code
+		self.matchingBlobIds = matchingBlobIds
+	}
+	
+	enum CodingKeys: String, CodingKey {
+	
+		case status
+		case code
+		case matchingBlobIds
+	}
 }
 
 public enum ServerError: Error, Equatable {

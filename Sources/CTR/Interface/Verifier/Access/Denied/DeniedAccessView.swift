@@ -111,13 +111,13 @@ final class DeniedAccessView: BaseView {
 		NSLayoutConstraint.activate([
 			
 			scrollView.topAnchor.constraint(equalTo: topAnchor),
-			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 			
 			stackView.topAnchor.constraint(equalTo: scrollView.contentView.topAnchor),
-			stackView.leftAnchor.constraint(equalTo: scrollView.contentView.leftAnchor, constant: ViewTraits.Margin.horizontal),
-			stackView.rightAnchor.constraint(equalTo: scrollView.contentView.rightAnchor, constant: -ViewTraits.Margin.horizontal),
+			stackView.leadingAnchor.constraint(equalTo: scrollView.contentView.leadingAnchor, constant: ViewTraits.Margin.horizontal),
+			stackView.trailingAnchor.constraint(equalTo: scrollView.contentView.trailingAnchor, constant: -ViewTraits.Margin.horizontal),
 			
 			{
 				let constraint = imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
@@ -126,16 +126,16 @@ final class DeniedAccessView: BaseView {
 			}(),
 			
 			secondaryButton.topAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor, constant: ViewTraits.Spacing.views),
-			secondaryButton.leftAnchor.constraint(equalTo: footerButtonView.buttonStackView.leftAnchor),
-			secondaryButton.rightAnchor.constraint(equalTo: footerButtonView.buttonStackView.rightAnchor),
+			secondaryButton.leadingAnchor.constraint(equalTo: footerButtonView.buttonStackView.leadingAnchor),
+			secondaryButton.trailingAnchor.constraint(equalTo: footerButtonView.buttonStackView.trailingAnchor),
 			secondaryButton.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
 			secondaryButton.bottomAnchor.constraint(equalTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom),
 			secondaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonWidth),
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonHeight),
 						
 			// Footer view
-			footerButtonView.leftAnchor.constraint(equalTo: leftAnchor),
-			footerButtonView.rightAnchor.constraint(equalTo: rightAnchor),
+			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}

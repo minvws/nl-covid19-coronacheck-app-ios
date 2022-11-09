@@ -26,7 +26,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		environmentSpies.cryptoManagerSpy.stubbedGenerateSecretKeyResult = Data()
 		
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
@@ -1765,34 +1764,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
 	
-	func test_identityMismatched() {
-		
-		// Given
-		environmentSpies.identityCheckerSpy.stubbedCompareResult = false
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccination,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: environmentSpies.greenCardLoaderSpy
-		)
-		
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-		
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.sut.alert).toEventuallyNot(beNil())
-		expect(self.sut.alert?.title).toEventually(equal(L.holderEventIdentityAlertTitle()))
-		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderEventIdentityAlertMessage()))
-		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.holderEventIdentityAlertCancel()))
-		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderEventIdentityAlertOk()))
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
-	}
-	
 	func test_duplicateDCC() throws {
 		
 		// Given
@@ -1935,7 +1906,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		})
 
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
@@ -1979,10 +1950,10 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type).toEventually(equal(.vaccination))
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason).toEventually(equal("event_blocked"))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEvent).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type).toEventually(equal(.vaccination))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason).toEventually(equal(RemovalReason.blockedEvent.rawValue))
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
@@ -2025,10 +1996,10 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
 		
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type).toEventually(equal(.vaccination))
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason).toEventually(equal("event_blocked"))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEvent).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type).toEventually(equal(.vaccination))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate).toEventually(equal(DateFormatter.Event.iso8601.date(from: "2021-06-01")))
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason).toEventually(equal(RemovalReason.blockedEvent.rawValue))
 		
 		let feedback: Content? = eventuallyUnwrap(eval: { () -> Content? in
 			if case let ListRemoteEventsViewController.State.feedback(content: feedback) = self.sut.viewState {
@@ -2037,7 +2008,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return nil
 		})
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 590 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
@@ -2230,7 +2201,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {
-					eventGroup = EventGroupModel.create(
+					eventGroup = EventGroup(
 						type: EventMode.recovery,
 						providerIdentifier: "DCC-1234",
 						expiryDate: nil,

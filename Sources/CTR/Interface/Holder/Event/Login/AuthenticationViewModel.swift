@@ -6,15 +6,15 @@
 */
 
 import UIKit
-import AppAuth
 import Shared
 import Transport
+import OpenIDConnect
 
 enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)
 	case patientAuthenticationProvider // GGD GHOR Portal (patient authentication provider)
 	
-	var configuration: IssuerConfiguration {
+	var configuration: OpenIDConnectConfiguration {
 		switch self {
 			case .manyAuthenticationExchange:
 				return MaxConfig()
@@ -36,9 +36,7 @@ enum AuthenticationMode {
 class AuthenticationViewModel {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging? = Current.openIdManager
-
-	private var appAuthState: AppAuthState?
+	private let openIDConnectState: OpenIDConnectState?
 	private var eventMode: EventMode
 	private let authenticationMode: AuthenticationMode
 	
@@ -50,11 +48,11 @@ class AuthenticationViewModel {
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
 		eventMode: EventMode,
 		authenticationMode: AuthenticationMode,
-		appAuthState: AppAuthState? = UIApplication.shared.delegate as? AppAuthState) {
+		openIDConnectState: OpenIDConnectState? = UIApplication.shared.delegate as? OpenIDConnectState) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
-		self.appAuthState = appAuthState
+		self.openIDConnectState = openIDConnectState
 		self.authenticationMode = authenticationMode
 
 		content = Content(title: L.holder_fetchRemoteEvents_title())
@@ -80,7 +78,7 @@ class AuthenticationViewModel {
 			secondaryAction: nil
 		)
 		
-		openIdManager?.requestAccessToken(
+		Current.openIdManager.requestAccessToken(
 			issuerConfiguration: authenticationMode.configuration,
 			// use the internal browser for pap,
 			// use the external browser for tvs (because the Digid app redirects to external browser)
@@ -97,7 +95,7 @@ class AuthenticationViewModel {
 		)
 	}
 	
-	func handleToken(_ token: OpenIdManagerToken) {
+	func handleToken(_ token: OpenIDConnectToken) {
 		
 		switch authenticationMode {
 			case .manyAuthenticationExchange:
@@ -185,7 +183,7 @@ extension AuthenticationViewModel {
 	
 	func didBecomeActive() {
 		
-		guard appAuthState?.currentAuthorizationFlow != nil else { return }
+		guard openIDConnectState?.currentAuthorizationFlow != nil else { return }
 		guard authenticationMode == .manyAuthenticationExchange else {
 			// When we receive the didBecomeActive notification:
 			// - For manyAuthenticationExchange that means the user returned to the app, canceling the login

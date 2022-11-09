@@ -17,17 +17,29 @@ extension Formatter {
 		if let date = dateFormatter.date(from: string) {
 			return date
 		}
+		var incomingDate = string
+		var validFormatOptions: [ISO8601DateFormatter.Options] = []
 		
-		// Try the different options for an iOS8601 date
-		let validFormatOptions: [ISO8601DateFormatter.Options] = [
-			[.withInternetDateTime, .withFractionalSeconds, .withTimeZone],
-			[.withInternetDateTime, .withFractionalSeconds],
-			[.withInternetDateTime, .withTimeZone],
-			[.withInternetDateTime],
-			[.withFullDate, .withTimeZone],
-			[.withFullDate]
-		]
-
+		if #available(iOS 11.2, *) {
+			// Try the different options for an iOS8601 date
+			validFormatOptions = [
+				[.withInternetDateTime, .withFractionalSeconds, .withTimeZone],
+				[.withInternetDateTime, .withFractionalSeconds],
+				[.withInternetDateTime, .withTimeZone],
+				[.withInternetDateTime],
+				[.withFullDate, .withTimeZone],
+				[.withFullDate]
+			]
+		} else {
+			validFormatOptions = [
+				[.withInternetDateTime, .withTimeZone],
+				[.withInternetDateTime],
+				[.withFullDate, .withTimeZone],
+				[.withFullDate]
+			]
+			incomingDate = incomingDate.replacingOccurrences(of: "\\.\\d+", with: "", options: .regularExpression)
+		}
+		
 		let formatter = ISO8601DateFormatter()
 		for formatOptions in validFormatOptions {
 

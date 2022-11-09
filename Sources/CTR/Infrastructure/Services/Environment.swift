@@ -9,6 +9,7 @@ import Foundation
 import Reachability
 import Transport
 import Shared
+import OpenIDConnect
 
 // MARK: - 1: Define the Environment
 
@@ -24,13 +25,12 @@ struct Environment {
 	var disclosurePolicyManager: DisclosurePolicyManaging
 	var featureFlagManager: FeatureFlagManaging
 	var greenCardLoader: GreenCardLoading
-	var identityChecker: IdentityCheckerProtocol
 	var jailBreakDetector: JailBreakProtocol
 	var mappingManager: MappingManaging
 	var networkManager: NetworkManaging
 	var newFeaturesManager: NewFeaturesManaging
 	var onboardingManager: OnboardingManaging
-	var openIdManager: OpenIdManaging
+	var openIdManager: OpenIDConnectManaging
 	var remoteConfigManager: RemoteConfigManaging
 	var verificationPolicyManager: VerificationPolicyManaging
 	var scanLockManager: ScanLockManaging
@@ -52,13 +52,12 @@ struct Environment {
 		disclosurePolicyManager: DisclosurePolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
 		greenCardLoader: GreenCardLoading,
-		identityChecker: IdentityCheckerProtocol,
 		jailBreakDetector: JailBreakProtocol,
 		mappingManager: MappingManaging,
 		networkManager: NetworkManaging,
 		newFeaturesManager: NewFeaturesManaging,
 		onboardingManager: OnboardingManaging,
-		openIdManager: OpenIdManaging,
+		openIdManager: OpenIDConnectManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		verificationPolicyManager: VerificationPolicyManaging,
 		scanLockManager: ScanLockManaging,
@@ -79,7 +78,6 @@ struct Environment {
 		self.disclosurePolicyManager = disclosurePolicyManager
 		self.featureFlagManager = featureFlagManager
 		self.greenCardLoader = greenCardLoader
-		self.identityChecker = identityChecker
 		self.jailBreakDetector = jailBreakDetector
 		self.mappingManager = mappingManager
 		self.networkManager = networkManager
@@ -153,11 +151,10 @@ private let featureFlagManager = FeatureFlagManager(
 	remoteConfigManager: remoteConfigManager
 )
 private let fileStorage = FileStorage()
-private let identityChecker = IdentityChecker()
 private let jailBreakDetector = JailBreakDetector()
 private let mappingManager = MappingManager(remoteConfigManager: remoteConfigManager)
 private let onboardingManager = OnboardingManager(secureUserSettings: secureUserSettings)
-private let openIdManager = OpenIdManager()
+private let openIdManager = OpenIDConnectManager()
 private let networkManager: NetworkManager = {
 	let networkConfiguration: NetworkConfiguration
 	   
@@ -232,7 +229,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		disclosurePolicyManager: disclosurePolicyManager,
 		featureFlagManager: featureFlagManager,
 		greenCardLoader: greenCardLoader,
-		identityChecker: identityChecker,
 		jailBreakDetector: jailBreakDetector,
 		mappingManager: mappingManager,
 		networkManager: networkManager,

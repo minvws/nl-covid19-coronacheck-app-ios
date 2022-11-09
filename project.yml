@@ -6,12 +6,6 @@ name: CTR
 # - Packages:
 
 packages:
-  AppAuth:
-    ## A fork has been used to support both universal links and url schemes
-    ## and fix Xcode compile warnings.
-    ## Forked from: https://github.com/openid/AppAuth-iOS
-    github: GlennChiu/AppAuth-iOS
-    revision: c0507aaff96d95a3c39bd3ca868106185674436f
   Inject: 
     github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
     branch: main
@@ -20,7 +14,10 @@ packages:
     majorVersion: 1.9.5
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.4.0
+    majorVersion: 3.5.0
+  RDOModules:
+    github: minvws/nl-rdo-app-ios-modules
+    branch: main
   Nimble:
     github: Quick/Nimble
     majorVersion: 10.0.0
@@ -139,10 +136,14 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
-      - package: AppAuth
-        product: AppAuth
       - package: IOSSecuritySuite
       - package: Lottie
+      - package: RDOModules
+        product: LuhnCheck
+      - package: RDOModules
+        product: QRGenerator
+      - package: RDOModules
+        product: OpenIDConnect
       - package: OpenSSL
       - package: Inject
       - package: Reachability
@@ -154,6 +155,7 @@ targetTemplates:
       # Frameworks:
       - framework: clcore.xcframework
         embed: false
+      - sdk: libSwiftCoreGraphics.tbd
     settings:
       base:
         CURRENT_PROJECT_VERSION: 1 # needs to be present for project to build locally, but is overwritten by fastlane. No need to change.
@@ -286,7 +288,10 @@ targetTemplates:
     type: bundle.ui-testing
     dependencies:
       - target: Holder
-    
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+
 # - Targets
 
 targets:
@@ -358,7 +363,7 @@ targets:
       base:
         APP_FLAVOR: holder
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 4.8.0 # holder
+        MARKETING_VERSION: 4.9.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
         TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad

@@ -75,7 +75,7 @@ class VaccinationErrorsTest: BaseTest {
 		let person = TestData.vacP2BirthdateJAN01
 		addVaccinationCertificate(for: person.bsn)
 		
-		assertSomethingWentWrong()
+		assertNoVaccinationsAvailable()
 		assertNoCertificateRetrieved()
 	}
 	

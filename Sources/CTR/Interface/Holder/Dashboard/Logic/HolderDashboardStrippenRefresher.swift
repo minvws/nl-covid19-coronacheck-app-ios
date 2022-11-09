@@ -103,13 +103,17 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 				case let error as NetworkError:
 					state.errorOccurenceCount += 1
 					state.loadingState = .failed(error: .networkError(error: error, timestamp: now()))
-
+					
 				// Catch the specific case of a wrapped NetworkError.noInternetConnection and recurse it
-				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
-					 GreenCardLoader.Error.preparingIssue(.error(_, _, let networkError)):
-					endLoadingWithError(error: networkError)
-					return // don't update `state` on this iteration.
-
+				case let GreenCardLoader.Error.credentials(.error(code, serverResponse, networkError)),
+					 let GreenCardLoader.Error.preparingIssue(.error(code, serverResponse, networkError)):
+					
+					if serverResponse?.code == GreenCardResponseError.mismatchedIdentity {
+						state.loadingState = .failed(error: .greencardLoaderError(error: GreenCardLoader.Error.credentials(ServerError.error(statusCode: code, response: serverResponse, error: networkError)) ))
+					} else {
+						endLoadingWithError(error: networkError)
+						return // don't update `state` on this iteration.
+					}
 				case let error as GreenCardLoader.Error:
 					state.errorOccurenceCount += 1
 					state.loadingState = .failed(error: .greencardLoaderError(error: error))
@@ -238,7 +242,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 			case .expired, .expiring:
 				state.beginLoading()
 				greencardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] in
-					guard let self = self else { return }
+					guard let self else { return }
 
 					switch $0 {
 						case .success(let response):
@@ -275,7 +279,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 	private static func processBlockedEvents(fromResponse response: RemoteGreenCards.Response) {
 		
 		// The items which the backend has indicated are blocked (if any):
-		let blockItems = response.blobExpireDates?.filter { $0.reason == "event_blocked" } ?? []
+		let blockItems = response.blobExpireDates?.filter { $0.reason == RemovalReason.blockedEvent.rawValue } ?? []
 		let allEventGroups = Current.walletManager.listEventGroups()
 	
 		guard blockItems.isNotEmpty else { return }
@@ -284,7 +288,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 		// Match blockItems (`blobExpiry`) to relevant eventGroups so that a BlockedEvent can be created & persisted:
 		blockItems.combinedWith(matchingEventGroups: allEventGroups).forEach { blockItem, eventGroup in
-			BlockedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+			RemovedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
 		}
 	}
 
@@ -304,7 +308,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 		validGreenCardsForCurrentWallet
 			.forEach { (greencard: GreenCard) in
-				
+
 				guard let allCredentialsForGreencard: [Credential] = greencard.castCredentials(),
 					  let allOriginsForGreencard = greencard.castOrigins()
 				else { return } // unlikely logical error, greencard should have non-nil origins & credentials arrays (even if empty).
@@ -326,13 +330,13 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 					}
 					return
 				}
-				
+
 				// Filter paper based DCCs, those should not lead to a refresh
 				if greencard.getType() == GreenCardType.eu,
 				   allOriginsForGreencard.hasPaperBasedDCC() {
 					return
 				}
-				
+
 				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
 				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
 
@@ -352,7 +356,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 				guard greencardIsWithinThresholdForRefresh
 				else { return } // There are still plenty of credentials remaining, no need to refresh.
-				
+
 				if daysUntilLastCredentialExpiry <= 0 {
 					expiredGreencards += [greencard]
 				} else {

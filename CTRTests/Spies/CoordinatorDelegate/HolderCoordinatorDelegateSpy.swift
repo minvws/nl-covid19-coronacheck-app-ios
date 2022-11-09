@@ -73,10 +73,10 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeleted = false
 	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount = 0
-	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters: (blockedEventItems: [BlockedEventItem], Void)?
-	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParametersList = [(blockedEventItems: [BlockedEventItem], Void)]()
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters: (blockedEventItems: [RemovedEventItem], Void)?
+	var invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParametersList = [(blockedEventItems: [RemovedEventItem], Void)]()
 
-	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem]) {
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem]) {
 		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeleted = true
 		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount += 1
 		invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedParameters = (blockedEventItems, ())
@@ -129,6 +129,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutGettingTested() {
 		invokedUserWishesMoreInfoAboutGettingTested = true
 		invokedUserWishesMoreInfoAboutGettingTestedCount += 1
+	}
+
+	var invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted = false
+	var invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeletedCount = 0
+	var invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeletedParameters: (items: [RemovedEventItem], Void)?
+	var invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeletedParametersList = [(items: [RemovedEventItem], Void)]()
+
+	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem]) {
+		invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted = true
+		invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeletedCount += 1
+		invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeletedParameters = (items, ())
+		invokedUserWishesMoreInfoAboutMismatchedIdentityEventsBeingDeletedParametersList.append((items, ()))
 	}
 
 	var invokedUserWishesMoreInfoAboutNoTestToken = false
@@ -273,6 +285,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToSeeEventDetailsCount += 1
 		invokedUserWishesToSeeEventDetailsParameters = (title, details)
 		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
+	}
+
+	var invokedUserWishesToStartFuzzyMatchingFlow = false
+	var invokedUserWishesToStartFuzzyMatchingFlowCount = 0
+	var invokedUserWishesToStartFuzzyMatchingFlowParameters: (matchingBlobIds: [[String]], Void)?
+	var invokedUserWishesToStartFuzzyMatchingFlowParametersList = [(matchingBlobIds: [[String]], Void)]()
+
+	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
+		invokedUserWishesToStartFuzzyMatchingFlow = true
+		invokedUserWishesToStartFuzzyMatchingFlowCount += 1
+		invokedUserWishesToStartFuzzyMatchingFlowParameters = (matchingBlobIds, ())
+		invokedUserWishesToStartFuzzyMatchingFlowParametersList.append((matchingBlobIds, ()))
 	}
 
 	var invokedUserWishesToViewQRs = false

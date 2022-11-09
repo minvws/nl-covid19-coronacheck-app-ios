@@ -130,8 +130,8 @@ final class ScanView: BaseView {
 	
 	private func setupMaskLayoutGuideConstraints() {
 		// The maskLayoutGuide pins itself to maskAutoLayoutGuideView, to act as guide for other views aligning to the mask.
-		maskLayoutGuide.leftAnchor.constraint(equalTo: viewfinderView.leftAnchor, constant: 0).isActive = true
-		maskLayoutGuide.rightAnchor.constraint(equalTo: viewfinderView.rightAnchor, constant: 0).isActive = true
+		maskLayoutGuide.leadingAnchor.constraint(equalTo: viewfinderView.leadingAnchor, constant: 0).isActive = true
+		maskLayoutGuide.trailingAnchor.constraint(equalTo: viewfinderView.trailingAnchor, constant: 0).isActive = true
 		maskLayoutGuide.topAnchor.constraint(equalTo: viewfinderView.topAnchor, constant: 0).isActive = true
 		maskLayoutGuide.bottomAnchor.constraint(equalTo: viewfinderView.bottomAnchor, constant: 0).isActive = true
 	}
@@ -144,8 +144,8 @@ final class ScanView: BaseView {
 		viewfinderView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: ViewTraits.viewfinderBottomMargin).isActive = true
 		
 		// Left and Right have a required minimum border (which can grow)
-		viewfinderView.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.viewfinderMinimumHorizontalMargin).isActive = true
-		viewfinderView.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: ViewTraits.viewfinderMinimumHorizontalMargin).isActive = true
+		viewfinderView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: ViewTraits.viewfinderMinimumHorizontalMargin).isActive = true
+		viewfinderView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: ViewTraits.viewfinderMinimumHorizontalMargin).isActive = true
 		
 		// It should always be square:
 		viewfinderView.heightAnchor.constraint(equalTo: viewfinderView.widthAnchor, multiplier: 1).isActive = true
@@ -168,8 +168,8 @@ final class ScanView: BaseView {
 	}
 	
 	private func setupCameraInterruptedConstraints() {
-		cameraInterruptedMessageView.leftAnchor.constraint(equalTo: maskLayoutGuide.leftAnchor, constant: 0).isActive = true
-		cameraInterruptedMessageView.rightAnchor.constraint(equalTo: maskLayoutGuide.rightAnchor, constant: 0).isActive = true
+		cameraInterruptedMessageView.leadingAnchor.constraint(equalTo: maskLayoutGuide.leadingAnchor, constant: 0).isActive = true
+		cameraInterruptedMessageView.trailingAnchor.constraint(equalTo: maskLayoutGuide.trailingAnchor, constant: 0).isActive = true
 		cameraInterruptedMessageView.topAnchor.constraint(equalTo: maskLayoutGuide.topAnchor, constant: 0).isActive = true
 		cameraInterruptedMessageView.bottomAnchor.constraint(equalTo: maskLayoutGuide.bottomAnchor, constant: 0).isActive = true
 	}

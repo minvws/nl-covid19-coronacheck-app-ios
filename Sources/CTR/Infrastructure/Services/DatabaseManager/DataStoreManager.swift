@@ -28,14 +28,20 @@ protocol DataStoreManaging {
 	/// - Parameter context: the context to be saved.
 	func save(_ context: NSManagedObjectContext)
 	
+	@discardableResult
 	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 }
 
 class DataStoreManager: DataStoreManaging {
 
-	enum Error: Swift.Error {
+	enum Error: Swift.Error, CustomNSError {
 		case diskFull
 		case underlying(error: Swift.Error)
+
+		var errorCode: Int {
+			guard case let .underlying(error) = self else { return 0 }
+			return (error as NSError).code
+		}
 	}
 
 	private var storageType: StorageType
@@ -121,6 +127,7 @@ class DataStoreManager: DataStoreManaging {
 		}
 	}
 	
+	@discardableResult
 	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Swift.Error> {
 
 		do {

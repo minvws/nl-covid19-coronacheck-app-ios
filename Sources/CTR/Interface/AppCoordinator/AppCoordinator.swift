@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import Transport
+import OpenIDConnect
 
 protocol AppCoordinatorDelegate: AnyObject {
 	
@@ -499,6 +500,9 @@ extension AppCoordinator {
 	}
 	
 	@objc private func onDiskFullNotification() {
+		// Prevent further notifications, as presenting .diskFull terminates the app
+		NotificationCenter.default.removeObserver(self, name: Notification.Name.diskFull, object: nil)
+		
 		popPresentedViewController {
 			let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
 			viewController.modalPresentationStyle = .fullScreen
@@ -507,6 +511,8 @@ extension AppCoordinator {
 	}
 	
 	private func addObservers() {
+		
+		// Back and foreground
 		
 		NotificationCenter.default.addObserver(
 			self,
@@ -520,6 +526,9 @@ extension AppCoordinator {
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
+		
+		// Privacy
+		
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(disablePrivacySnapShot),
@@ -532,6 +541,24 @@ extension AppCoordinator {
 			name: Notification.Name.enablePrivacySnapShot,
 			object: nil
 		)
+		
+		// Open ID Connect
+		
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(enablePrivacySnapShot),
+			name: Notification.Name.closingOpenIDConnectBrowser,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(disablePrivacySnapShot),
+			name: Notification.Name.launchingOpenIDConnectBrowser,
+			object: nil
+		)
+		
+		// Disk Full
+		
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(onDiskFullNotification),

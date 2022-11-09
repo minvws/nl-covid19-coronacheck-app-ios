@@ -40,11 +40,6 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
-	func assertNoCertificateCouldBeCreatedIn0G() {
-		guard disclosureMode == .mode0G else { return }
-		assertNoCertificateCouldBeCreated()
-	}
-	
 	func assertPositiveTestResultNotValidAnymore() {
 		guard disclosureMode != .mode0G else { return }
 		app.textExists("Positieve testuitslag niet meer geldig")
@@ -52,9 +47,8 @@ extension BaseTest {
 	}
 	
 	func assertCertificateIsOnlyValidInternationally() {
-		guard ctbInUse else { return }
-		guard disclosureMode != .mode0G else { return }
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
+		app.containsValue("Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
 		returnToCertificateOverview()
 	}
 	
@@ -68,8 +62,17 @@ extension BaseTest {
 		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
 	
-	func assertCombinedVaccinationAndRecoveryRetrieval() {
+	func assertHintForInternationalVaccinationAndRecoveryCertificate() {
 		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		app.containsValue("Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
+		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.")
+		returnToCertificateOverview()
+	}
+	
+	func assertHintForVaccinationAndRecoveryCertificate() {
+		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		app.containsValue("Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.")
+		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.")
 		returnToCertificateOverview()
 	}
 	
@@ -85,8 +88,8 @@ extension BaseTest {
 		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
 		app.tapButton("Sluiten")
 	}
-
-	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int) {
+	
+	func assertRetrievedVaccinationDetails(for person: Person, vaccination: Vaccination, position: Int = 0) {
 		app.tapButton("Details", index: position)
 		app.containsText("Naam: " + person.name)
 		app.containsText("Geboortedatum: " + person.birthDate.toString(.written))
@@ -130,6 +133,13 @@ extension BaseTest {
 		guard disclosureMode != .mode0G else { return }
 		tapOnTheNetherlandsTab()
 		app.containsText("Je hebt geen Nederlands \(certificateType.rawValue.lowercased())")
+	}
+	
+	func assertVaccinationAssessmentIncomplete() {
+		guard disclosureMode != .mode0G else { return }
+		tapOnTheNetherlandsTab()
+		app.containsText("Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag")
+		app.containsText("Maak bewijs compleet")
 	}
 	
 	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffsetInDays: Int? = nil, validUntilOffsetInDays: Int? = nil, validUntilDate: String? = nil) {
@@ -183,11 +193,17 @@ extension BaseTest {
 		}
 	}
 	
+	func assertValidDutchAssessmentCertificate(validUntilDate: Date) {
+		guard disclosureMode != .mode0G else { return }
+		tapOnTheNetherlandsTab()
+		card3G().containsText(CertificateType.assessment.rawValue)
+		card3G().containsText("Bezoekersbewijs: geldig tot " + validUntilDate.toString(.recently))
+	}
+	
 	// MARK: - International
 	
 	private func tapOnInternationalTab() {
 		guard disclosureMode != .mode0G else {
-			app.textExists("Mijn bewijzen")
 			return
 		}
 		app.tapButton("Internationaal")
@@ -240,7 +256,11 @@ extension BaseTest {
 	
 	func assertInternationalTest(of negativeTest: NegativeTest) {
 		tapOnInternationalTab()
-		card(of: .test).containsText(negativeTest.internationalEventCertificate)
+		if disclosureMode == .mode0G {
+			card(of: .test).containsText(negativeTest.internationalEventCertificate)
+		} else {
+			card(of: .test).containsText(negativeTest.eventCertificate)
+		}
 		card(of: .test).containsText("Type test: " + negativeTest.testType.rawValue)
 		card(of: .test).containsText("Testdatum: " + negativeTest.eventDate.toString(.recently))
 		card(of: .test).containsText("Bekijk QR")
@@ -260,6 +280,11 @@ extension BaseTest {
 		app.containsText("Wordt automatisch geldig")
 	}
 	
+	func assertAssessmentNotValidInternationally() {
+		tapOnInternationalTab()
+		app.textExists("Je bezoekersbewijs is niet geldig buiten Nederland")
+	}
+	
 	// MARK: - International QR Details
 	
 	func assertInternationalVaccinationQRDetails(for person: TestPerson, vaccinationDateOffsetInDays: Int = -30) {
@@ -270,7 +295,7 @@ extension BaseTest {
 			app.textExists("Dosis " + dose)
 			
 			openQRDetails(for: person)
-			app.textExists("Over je dosis " + dose)
+			app.textExists("Over mijn dosis " + dose)
 			app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: "COVID-19")
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
 			
@@ -292,8 +317,8 @@ extension BaseTest {
 		}
 		
 		openQRDetails(for: person)
-		if let dose {
-			app.textExists("Over je dosis " + dose)
+		if let dose = dose {
+			app.textExists("Over mijn dosis " + dose)
 		}
 		app.labelValuePairExist(label: "Ziekteverwekker / Disease targeted:", value: vaccination.disease)
 		app.labelValuePairExist(label: "Vaccin / Vaccine:", value: vaccination.vaccine.rawValue)
@@ -341,7 +366,7 @@ extension BaseTest {
 		
 		openQRDetails(for: person)
 		app.textExists("Over mijn internationale QR-code")
-		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona)")
+		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona) / negative (no coronavirus)")
 		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
 		closeQRDetails()
 		app.tapButton("Terug")

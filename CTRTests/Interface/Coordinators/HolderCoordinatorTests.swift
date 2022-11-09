@@ -791,7 +791,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -814,7 +814,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let context = Current.dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				greenCard = GreenCardModel.create(
+				greenCard = GreenCard(
 					type: .domestic,
 					wallet: wallet,
 					managedContext: context
@@ -992,5 +992,57 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
+	}
+	
+	func test_userWishesToStartFuzzyMatchingFlow() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [["123"]])
+		
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
+		expect(self.navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
+	}
+	
+	func test_fuzzyMatchingFlowDidStop() {
+		
+		// Given
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		fmCoordinator.userHasStoppedTheFlow()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.navigationSpy.invokedPopToRootViewController) == true
+	}
+	
+	func test_fuzzyMatchingFlowDidFinish() {
+		
+		// Given
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		fmCoordinator.userHasFinishedTheFlow()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopToRootViewController) == true
 	}
 }

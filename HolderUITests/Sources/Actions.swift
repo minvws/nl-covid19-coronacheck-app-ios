@@ -22,15 +22,26 @@ extension BaseTest {
 		waitUntilSpinnerIsGone()
 	}
 	
+	func addVisitorPass() {
+		app.tapButton("Open menu")
+		app.tapButton("Bezoekersbewijs toevoegen")
+		app.tapButton("Volgende")
+	}
+	
 	private func viewQR(of certificate: CertificateType, label: String, hiddenQR: Bool) {
 		card(of: certificate).tapButton(label)
 		if hiddenQR { assertHiddenQR() }
 	}
 	
 	private func assertHiddenQR() {
-		app.containsText("QR-code verborgen")
+		app.containsText("QR-code is verborgen")
+		app.containsText("Wat betekent dit?")
 		app.containsText("Laat toch zien")
-		app.textExists("Deze QR-code heb je waarschijnlijk niet nodig, want je hebt een nieuwere dosis.")
+		app.tapButton("Wat betekent dit?")
+		app.textExists("Verborgen QR-code")
+		app.tapButton("Sluiten")
+		app.tapButton("Laat toch zien")
+		app.textNotExists("QR-code is verborgen")
 	}
 	
 	func viewQRCode(of certificate: CertificateType, hiddenQR: Bool = false) {
@@ -69,13 +80,52 @@ extension BaseTest {
 		retrieveCertificateFromServer(for: bsn)
 	}
 	
+	func addCommercialTestCertificate(for retrievalCode: String? = nil, with verificationCode: String? = nil) {
+		addEvent()
+		app.tapButton("Negatieve test. Uit de test blijkt dat ik geen corona heb")
+		app.tapButton("Andere testlocatie")
+		
+		if let retrievalCode = retrievalCode {
+			let retrievalField = app.textFields["Ophaalcode"]
+			retrievalField.tap()
+			retrievalField.typeText(retrievalCode)
+			app.tapButton("Volgende", index: 1)
+		}
+		
+		if let verificationCode = verificationCode {
+			app.containsText("Verificatiecode")
+			let verificationField = app.textFields["Verificatiecode"]
+			verificationField.tap()
+			verificationField.typeText(verificationCode)
+			app.tapButton("Volgende")
+		}
+	}
+	
+	func addVaccinationAssessment(for approvalCode: String? = nil, with verificationCode: String? = nil) {
+		addVisitorPass()
+		
+		if let approvalCode = approvalCode {
+			let approvalField = app.textFields["Beoordelingscode"]
+			approvalField.tap()
+			approvalField.typeText(approvalCode)
+			app.tapButton("Volgende", index: 1)
+		}
+		
+		if let verificationCode = verificationCode {
+			let verificationField = app.textFields["Verificatiecode"]
+			verificationField.tap()
+			verificationField.typeText(verificationCode)
+			app.tapButton("Volgende")
+		}
+	}
+	
 	private func retrieveCertificateFromServer(for bsn: String) {
 		
 		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
 		makeScreenShot(name: "Safari is ready")
 		
 		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
-		makeScreenShot(name: "Logged in: " + loggedIn.description)
+		makeScreenShot(name: "Logged in: \(loggedIn.description)")
 		
 		if !loggedIn { loginToServer() }
 		
@@ -87,6 +137,11 @@ extension BaseTest {
 		let submit = safari.webViews.staticTexts["Login / Submit"].assertExistence()
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
+		
+		let open = safari.buttons["Open"].waitForExistence(timeout: loginTimeout)
+		if open {
+			safari.tapButton("Open")
+		}
 	}
 	
 	private func loginToServer() {
@@ -99,24 +154,17 @@ extension BaseTest {
 			return
 		}
 		
-		let username = safari.webViews.textFields["User Name"].assertExistence()
+		let username = safari.otherElements["SFDialogView"].textFields.firstMatch
 		username.tap()
 		username.typeText("coronacheck")
 		makeScreenShot(name: "Username typed")
 		
-		let continueButton = safari.buttons["Continue"]
-		if rapidlyEvaluate(timeout: self.loginTimeout, { continueButton.exists }) {
-			continueButton.tap()
-			makeScreenShot(name: "Hide continue button")
-		}
-		
-		let password = safari.webViews.secureTextFields["Password"].assertExistence()
+		let password = safari.otherElements["SFDialogView"].secureTextFields.firstMatch
 		password.tap()
 		password.typeText(authPassword)
 		makeScreenShot(name: "Password typed")
 		
-		let submitAuth = safari.webViews.buttons["Log In"].assertExistence()
-		submitAuth.tap()
+		safari.tapButton("Log in")
 		makeScreenShot(name: "Auth submit button")
 	}
 	

@@ -11,6 +11,7 @@ import CoreData
 import Reachability
 import Shared
 import Transport
+import OpenIDConnect
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -29,13 +30,14 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
-	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem])
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredDomesticVaccination()
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
+	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem])
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
@@ -52,6 +54,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToOpenTheMenu()
 	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
+	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]])
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 }
 
@@ -163,6 +166,17 @@ class HolderCoordinator: SharedCoordinator {
 		
 	}
 	
+	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
+		
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: navigationController,
+			matchingBlobIds: matchingBlobIds,
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: self
+		)
+		startChildCoordinator(fmCoordinator)
+	}
+	
 	// MARK: - Setup Listeners
 	
 	private func setupNotificationListeners() {
@@ -237,10 +251,10 @@ class HolderCoordinator: SharedCoordinator {
 		do {
 			try ObjC.catchException {
 				if let url = returnURL,
-				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
-				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
+				   let openIDConnectState = UIApplication.shared.delegate as? OpenIDConnectState,
+				   let authorizationFlow = openIDConnectState.currentAuthorizationFlow,
 				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-					appAuthState.currentAuthorizationFlow = nil
+					openIDConnectState.currentAuthorizationFlow = nil
 				}
 				result = true
 			}
@@ -262,7 +276,8 @@ class HolderCoordinator: SharedCoordinator {
 				viewModel: HolderDashboardViewModel(
 					coordinator: self,
 					qrcardDatasource: HolderDashboardQRCardDatasource(),
-					blockedEventsDatasource: HolderDashboardBlockedEventsDatasource(),
+					blockedEventsDatasource: HolderDashboardRemovedEventsDatasource(reason: RemovalReason.blockedEvent),
+					mismatchedIdentityDatasource: HolderDashboardRemovedEventsDatasource(reason: RemovalReason.mismatchedIdentity),
 					strippenRefresher: DashboardStrippenRefresher(
 						minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.storedConfiguration.credentialRenewalDays ?? 5,
 						reachability: try? Reachability()
@@ -321,7 +336,7 @@ class HolderCoordinator: SharedCoordinator {
 	func navigateToAboutThisApp() {
 		
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
-			guard let self = self else { return }
+			guard let self else { return }
 			switch outcome {
 				case let .openURL(url, inApp):
 					self.openUrl(url, inApp: inApp)
@@ -395,21 +410,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
-	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [BlockedEventItem]) {
+	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem]) {
 
-		let bulletpoints = blockedEventItems
-			.compactMap { blockedEventItem -> String? in
-				guard let localizedDateLabel = blockedEventItem.type.localizedDateLabel else { return nil }
-				let dateString = DateFormatter.Format.dayMonthYear.string(from: blockedEventItem.eventDate)
-				return """
-				<p>
-					<b>\(blockedEventItem.type.localized.capitalized)</b>
-					<br />
-					<b>\(localizedDateLabel.capitalized): \(dateString)</b>
-				</p>
-				""" }
-			.joined()
-
+		let bulletpoints = compactRemovedEventItems(blockedEventItems)
 		guard bulletpoints.isNotEmpty else { return }
 
 		// I 1280 000 0514
@@ -424,7 +427,36 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
 	}
+	
+	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem]) {
 
+		let bulletpoints = compactRemovedEventItems(items)
+		guard bulletpoints.isNotEmpty else { return }
+		guard let persistentName = Current.secureUserSettings.selectedIdentity else { return }
+
+		let title: String = L.holder_identityRemoved_moreinfo_title()
+		let message: String = L.holder_identityRemoved_moreinfo_body(persistentName, bulletpoints)
+
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+	}
+
+	private func compactRemovedEventItems(_ items: [RemovedEventItem]) -> String {
+		
+		return items
+			.compactMap { item -> String? in
+				guard let localizedDateLabel = item.type.localizedDateLabel else { return nil }
+				let dateString = DateFormatter.Format.dayMonthYear.string(from: item.eventDate)
+				return """
+				<p>
+					<b>\(item.type.localized.capitalized)</b>
+					<br />
+					<b>\(localizedDateLabel.capitalizingFirstLetter()): \(dateString)</b>
+				</p>
+				""" }
+			.joined()
+		
+	}
+	
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
@@ -462,7 +494,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
 				secondaryAction: { [weak self] in
-					guard let self = self else { return }
+					guard let self else { return }
 					self.navigationController.dismiss(
 						animated: true,
 						completion: self.userWishesToCreateAVaccinationQR
@@ -810,6 +842,19 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 		}
 		
 		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
+	}
+}
+
+extension HolderCoordinator: FuzzyMatchingFlowDelegate {
+	
+	func fuzzyMatchingFlowDidFinish() {
+		removeChildCoordinator()
+		navigateBackToStart()
+	}
+	
+	func fuzzyMatchingFlowDidStop() {
+		removeChildCoordinator()
+		navigateBackToStart()
 	}
 }
 

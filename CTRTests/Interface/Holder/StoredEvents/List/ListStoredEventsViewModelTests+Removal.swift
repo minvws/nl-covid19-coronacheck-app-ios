@@ -353,6 +353,32 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1190 000 055")
 	}
 	
+	// MARK: - Mismatching Identity
+	
+	func test_removalVaccination_mismatchedIdentity() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
+		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
+		setupSut()
+		guard case let .listEvents(content: _, groups: groups) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		
+		// When
+		let group = try XCTUnwrap(groups.first)
+		group.action?()
+		sut.alert?.okAction.action?(UIAlertAction())
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToStartFuzzyMatchingFlow).toEventually(beTrue())
+	}
+	
 	// MARK: - No internet
 	
 	func test_removalVaccination_noInternet() throws {
@@ -438,7 +464,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {
-					eventGroup = EventGroupModel.create(
+					eventGroup = EventGroup(
 						type: EventMode.recovery,
 						providerIdentifier: "CoronaCheck",
 						expiryDate: nil,

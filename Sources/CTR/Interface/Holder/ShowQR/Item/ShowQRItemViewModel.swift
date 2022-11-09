@@ -8,6 +8,7 @@
 import UIKit
 import Transport
 import Shared
+import QRGenerator
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	
@@ -22,8 +23,8 @@ class ShowQRItemViewModel {
 	
 	// MARK: - Static
 	
-	static let domesticCorrectionLevel = "M"
-	static let internationalCorrectionLevel = "Q"
+	static let domesticCorrectionLevel = CorrectionLevel.medium
+	static let internationalCorrectionLevel = CorrectionLevel.quartile
 	static let screenshotWarningMessageDuration: TimeInterval = 3 * 60
 	
 	// MARK: - vars
@@ -198,7 +199,7 @@ class ShowQRItemViewModel {
 		screenshotWarningTimer = nil
 		
 		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			let timeRemaining = blockQRUntil.timeIntervalSince(Current.now())
 			

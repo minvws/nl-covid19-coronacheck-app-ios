@@ -6,9 +6,9 @@
 */
 
 import UIKit
-import CryptoKit
+import OpenIDConnect
 
-final class MaxConfig: IssuerConfiguration {
+final class MaxConfig: OpenIDConnectConfiguration {
 	
 	var issuerUrl: URL {
 		return Configuration().getTVSURL()
@@ -23,7 +23,7 @@ final class MaxConfig: IssuerConfiguration {
 	}
 }
 
-final class PapConfig: IssuerConfiguration {
+final class PapConfig: OpenIDConnectConfiguration {
 	
 	var issuerUrl: URL {
 		return Configuration().getPortalURL()

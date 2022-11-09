@@ -121,6 +121,28 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
+	var invokedSelectedIdentitySetter = false
+	var invokedSelectedIdentitySetterCount = 0
+	var invokedSelectedIdentity: String?
+	var invokedSelectedIdentityList = [String?]()
+	var invokedSelectedIdentityGetter = false
+	var invokedSelectedIdentityGetterCount = 0
+	var stubbedSelectedIdentity: String!
+
+	var selectedIdentity: String? {
+		set {
+			invokedSelectedIdentitySetter = true
+			invokedSelectedIdentitySetterCount += 1
+			invokedSelectedIdentity = newValue
+			invokedSelectedIdentityList.append(newValue)
+		}
+		get {
+			invokedSelectedIdentityGetter = true
+			invokedSelectedIdentityGetterCount += 1
+			return stubbedSelectedIdentity
+		}
+	}
+
 	var invokedStoredConfigurationSetter = false
 	var invokedStoredConfigurationSetterCount = 0
 	var invokedStoredConfiguration: RemoteConfiguration?

@@ -122,7 +122,7 @@ extension GreenCard {
 		]
 		
 		// Add Paper based hint
-		OriginHintModel.create(origin: origin, hint: "event_from_dcc", managedContext: dataStoreManager.managedObjectContext())
+		OriginHint(origin: origin, hint: "event_from_dcc", managedContext: dataStoreManager.managedObjectContext())
 
 		greencard.credentials = [
 			Credential.sample(validFrom: 25 * days * ago, expirationTime: 24 * days * ago, dataStoreManager: dataStoreManager)
@@ -142,7 +142,7 @@ extension GreenCard {
 		]
 		
 		// Add Paper based hint
-		OriginHintModel.create(origin: origin, hint: "event_from_dcc", managedContext: dataStoreManager.managedObjectContext())
+		OriginHint(origin: origin, hint: "event_from_dcc", managedContext: dataStoreManager.managedObjectContext())
 
 		greencard.credentials = [
 			Credential.sample(validFrom: 25 * days * ago, expirationTime: 24 * days * fromNow, dataStoreManager: dataStoreManager)
@@ -423,14 +423,14 @@ extension WalletManagerSpy {
 		]
 	}
 	
-	func loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: DataStoreManager) {
+	func loadInternationalPaperbasedExpiringIn24Days(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
 			.sampleInternationalPaperBasedExpiringIn24Days(dataStoreManager: dataStoreManager)
 		]
 	}
 	
-	func loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: DataStoreManager) {
+	func loadInternationalPaperbasedExpiringIn24DaysWithValidCredential(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
 			.sampleInternationalPaperBasedExpiringIn24DaysWithValidCredential(dataStoreManager: dataStoreManager)

@@ -102,7 +102,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEvent) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEvent) == false
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
 	}
 
@@ -121,7 +121,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		greencardResponse.blobExpireDates = [RemoteGreenCards.BlobExpiry(
 			identifier: eventGroup!.uniqueIdentifier,
 			expirationDate: .distantPast,
-			reason: "event_blocked"
+			reason: RemovalReason.blockedEvent.rawValue
 		)]
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(greencardResponse), ())
 		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
@@ -132,9 +132,9 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.type) == .vaccination
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreBlockedEventParameters?.reason) == "event_blocked"
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type) == .vaccination
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason) == RemovalReason.blockedEvent.rawValue
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
@@ -239,6 +239,27 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.loadingState) == .completed
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 2
+	}
+	
+	func test_serverError_mismatchedIdentity() {
+
+		// Arrange `expiring` starting state
+		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
+		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+
+		// Act & Assert
+		sut.load()
+		
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
+		expect(self.sut.state.loadingState) == .failed(error: .greencardLoaderError(error: .credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))))
 	}
 
 	func test_serverResponseDidNotChangeExpiredOrExpiringState() {
@@ -446,9 +467,9 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 	// MARK: - International Paper Based
 	
-	func test_paperbased_withoutValidCredentail_calculates_state_noActionNeeded() {
+	func test_paperbased_withoutValidCredential_calculates_state_noActionNeeded() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24Days(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedExpiringIn24Days(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -465,7 +486,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	
 	func test_paperbased_withValidCredential_calculates_state_noActionNeeded() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadInternationalPaperbasedxpiringIn24DaysWithValidCredential(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalPaperbasedExpiringIn24DaysWithValidCredential(dataStoreManager: environmentSpies.dataStoreManager)
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,

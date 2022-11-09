@@ -78,6 +78,14 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveExistingBlockedEventsCount += 1
 	}
 
+	var invokedRemoveExistingMismatchedIdentityEvents = false
+	var invokedRemoveExistingMismatchedIdentityEventsCount = 0
+
+	func removeExistingMismatchedIdentityEvents() {
+		invokedRemoveExistingMismatchedIdentityEvents = true
+		invokedRemoveExistingMismatchedIdentityEventsCount += 1
+	}
+
 	var invokedStoreDomesticGreenCard = false
 	var invokedStoreDomesticGreenCardCount = 0
 	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)?
@@ -106,18 +114,18 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreEuGreenCardResult
 	}
 
-	var invokedStoreBlockedEvent = false
-	var invokedStoreBlockedEventCount = 0
-	var invokedStoreBlockedEventParameters: (type: EventMode, eventDate: Date, reason: String)?
-	var invokedStoreBlockedEventParametersList = [(type: EventMode, eventDate: Date, reason: String)]()
-	var stubbedStoreBlockedEventResult: BlockedEvent!
+	var invokedStoreRemovedEvent = false
+	var invokedStoreRemovedEventCount = 0
+	var invokedStoreRemovedEventParameters: (type: EventMode, eventDate: Date, reason: String)?
+	var invokedStoreRemovedEventParametersList = [(type: EventMode, eventDate: Date, reason: String)]()
+	var stubbedStoreRemovedEventResult: RemovedEvent!
 
-	func storeBlockedEvent(type: EventMode, eventDate: Date, reason: String) -> BlockedEvent? {
-		invokedStoreBlockedEvent = true
-		invokedStoreBlockedEventCount += 1
-		invokedStoreBlockedEventParameters = (type, eventDate, reason)
-		invokedStoreBlockedEventParametersList.append((type, eventDate, reason))
-		return stubbedStoreBlockedEventResult
+	func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
+		invokedStoreRemovedEvent = true
+		invokedStoreRemovedEventCount += 1
+		invokedStoreRemovedEventParameters = (type, eventDate, reason)
+		invokedStoreRemovedEventParametersList.append((type, eventDate, reason))
+		return stubbedStoreRemovedEventResult
 	}
 
 	var invokedListEventGroups = false

@@ -11,17 +11,17 @@ protocol EventDetailsViewable {
 	
 	var stackView: UIStackView { get }
 	
-	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat)
+	func loadDetails(_ details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat)
 	
 	func updateAccessibilityStatus()
 }
 
 extension EventDetailsViewable {
 	
-	func createLabel(for detail: NSAttributedString) -> AccessibleBodyLabelView {
+	func createLabel(for text: String) -> AccessibleBodyLabelView {
 		
 		let view = AccessibleBodyLabelView()
-		view.label.attributedText = detail
+		view.label.attributedText = NSAttributedString.makeFromHtml(text: text, style: .bodyDark)
 		return view
 	}
 	
@@ -32,7 +32,7 @@ extension EventDetailsViewable {
 		return view
 	}
 	
-	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat) {
+	func loadDetails(_ details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat) {
 		
 		details.forEach {
 			if $0.isSeparator {
