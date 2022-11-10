@@ -19,8 +19,8 @@ class EventGroupCache: EventGroupCacheProtocol {
 	
 	// MARK: - Cache
 	
-	internal var wrapperCache = SyncCache<String, EventFlow.EventResultWrapper>()
-	internal var euCredentialAttributesCache = SyncCache<String, EuCredentialAttributes>()
+	internal var wrapperCache = ThreadSafeCache<String, EventFlow.EventResultWrapper>()
+	internal var euCredentialAttributesCache = ThreadSafeCache<String, EuCredentialAttributes>()
 	
 	func getEventResultWrapper(_ uniqueIdentifier: String) -> EventFlow.EventResultWrapper? {
 		

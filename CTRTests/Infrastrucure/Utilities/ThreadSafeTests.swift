@@ -10,15 +10,15 @@ import XCTest
 import Nimble
 @testable import CTR
 
-class SyncCacheTests: XCTestCase {
+class ThreadSafeCacheTests: XCTestCase {
 	
 	func testInsertAndRecall() {
 		
-		let cache = SyncCache<String, String>()
+		let cache = ThreadSafeCache<String, String>()
 		cache["hello"] = "goodbye"
 		cache["goededag"] = "doie"
 		
 		expect(cache["hello"]) == "goodbye"
-		expect(cache["goededag"]) == "doie"
+		expect(cache["goededag"]) == "doei"
 	}
 }
