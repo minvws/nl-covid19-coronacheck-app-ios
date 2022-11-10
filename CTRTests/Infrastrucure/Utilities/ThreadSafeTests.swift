@@ -16,7 +16,7 @@ class ThreadSafeCacheTests: XCTestCase {
 		
 		let cache = ThreadSafeCache<String, String>()
 		cache["hello"] = "goodbye"
-		cache["goededag"] = "doie"
+		cache["goededag"] = "doei"
 		
 		expect(cache["hello"]) == "goodbye"
 		expect(cache["goededag"]) == "doei"
