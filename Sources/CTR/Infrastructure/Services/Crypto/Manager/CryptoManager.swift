@@ -136,7 +136,7 @@ class CryptoManager: CryptoManaging {
 		return nil
 	}
 	
-	var euCredentialAttributesCache: [Data: EuCredentialAttributes?] = [:]
+	var euCredentialAttributesCache = SyncCache<Data, EuCredentialAttributes?>()
 	
 	/// Read the crypto credential
 	/// - Returns: the crypto attributes
