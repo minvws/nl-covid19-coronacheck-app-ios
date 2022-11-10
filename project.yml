@@ -26,7 +26,7 @@ packages:
     majorVersion: 9.1.0
   OpenSSL:
     github: krzyzanowskim/OpenSSL
-    exactVersion: 1.1.1700
+    exactVersion: 1.1.1900
   BrightFutures:
     github: Thomvis/BrightFutures
     branch: master
