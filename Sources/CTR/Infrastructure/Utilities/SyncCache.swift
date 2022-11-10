@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A basic generic cache which can only be accessed synchronously via a private queue
 final class SyncCache<Key: Hashable, Value> {
 	
 	private var storage: [Key: Value] = [:]
