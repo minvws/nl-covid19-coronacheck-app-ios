@@ -6,34 +6,7 @@
 */
 
 import Foundation
-
-struct SigningCertificate {
-
-	/// The name of the certificate
-	let name: String
-
-	/// The certificate
-	let certificate: String
-
-	/// The required common name
-	var commonName: String?
-
-	/// The required authority Key
-	var authorityKeyIdentifier: Data?
-
-	/// The required subject key
-	let subjectKeyIdentifier: Data?
-
-	/// The serial number
-	let rootSerial: UInt64?
-
-	/// Get the certificate data
-	/// - Returns: the certificate data
-	func getCertificateData() -> Data {
-
-		return Data(certificate.utf8)
-	}
-}
+import HTTPSecurity
 
 struct TrustConfiguration {
 

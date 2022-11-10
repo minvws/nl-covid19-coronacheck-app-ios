@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import HTTPSecurity
 
 public class NetworkManager {
 

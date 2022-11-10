@@ -8,7 +8,7 @@
 import Foundation
 import Security
 import Shared
-import OpenSSL
+import HTTPSecurity
 
 class SecurityCheckerWorker {
 	
@@ -132,7 +132,7 @@ class SecurityCheckerWorker {
 		return false
 	}
 	
-	private let openssl = OpenSSL()
+	private let helper = TLSCertificateHelper()
 	
 	func checkSSL(
 		serverTrust: SecTrust,
@@ -168,7 +168,7 @@ class SecurityCheckerWorker {
 					validFQDN = validFQDN || checkFQDN(serverCert: serverCert, expectedName: hostname)
 					validCommonNameEndsWithTrustedName = validCommonNameEndsWithTrustedName || checkCommonName(name, trustedName: trustedName)
 				}
-				if openssl.validateSubjectAlternativeDNSName(hostname, forCertificateData: serverCert.data) {
+				if helper.validateSubjectAlternativeDNSName(hostname, for: serverCert.data) {
 					validFQDN = true
 					logVerbose("Host matched SAN \(hostname)")
 				}
@@ -208,7 +208,7 @@ class SecurityCheckerWorker {
 	/// - Returns: True if the certificate is in the trusted list.
 	private func checkCertificate(serverCert: Certificate, trustedCertificates: [Data]) -> Bool {
 		
-		for trustedCertificate in trustedCertificates where openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
+		for trustedCertificate in trustedCertificates where helper.compare(serverCert.data, with: trustedCertificate) {
 			return true
 		}
 		return false
