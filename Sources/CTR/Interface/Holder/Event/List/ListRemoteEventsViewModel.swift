@@ -227,7 +227,9 @@ class ListRemoteEventsViewModel {
 				
 				// We've just processed some events with the backend and received `.success`,
 				// therefore none of the `eventsBeingAdded` should no longer be marked as draft:
-				eventsBeingAdded.forEach { $0.update(isDraft: false) }
+				eventsBeingAdded
+					.filter { $0.isDraft }
+					.forEach { $0.update(isDraft: false) }
 			
 				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
 				guard !shouldShowBlockingEndState else {
