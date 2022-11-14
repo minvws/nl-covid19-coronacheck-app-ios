@@ -33,6 +33,7 @@ extension EventGroup {
 		expiryDate: Date?,
 		jsonData: Data,
 		wallet: Wallet,
+		isDraft: Bool,
 		managedContext: NSManagedObjectContext) {
 
 		self.init(context: managedContext)
@@ -41,6 +42,7 @@ extension EventGroup {
 		self.expiryDate = expiryDate
 		self.jsonData = jsonData
 		self.wallet = wallet
+		self.isDraft = isDraft
 	}
 	
 	func getSignedEvents() -> String? {
@@ -60,6 +62,17 @@ extension EventGroup {
 			return nil }
 		
 		return finalJSONString
+	}
+	
+	func update(isDraft: Bool) {
+		guard let managedObjectContext = managedObjectContext else { return }
+		
+		managedObjectContext.performAndWait {
+			
+			self.isDraft = isDraft
+			
+			Current.dataStoreManager.save(managedObjectContext)
+		}
 	}
 	
 }

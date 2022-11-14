@@ -326,7 +326,7 @@ class ListRemoteEventsViewModel {
 			}
 			
 			// Remove any existing events for the uniqueIdentifier -> so we do not have duplicates
-			walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
+			let removedEventGroupCount = walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
 			
 			// Store the event group
 			
@@ -334,7 +334,8 @@ class ListRemoteEventsViewModel {
 				storageMode,
 				providerIdentifier: uniqueIdentifier,
 				jsonData: jsonData,
-				expiryDate: nil
+				expiryDate: nil,
+				isDraft: removedEventGroupCount == 0
 			) else {
 				onCompletion(nil)
 				return
