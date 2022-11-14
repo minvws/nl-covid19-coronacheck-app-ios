@@ -107,6 +107,8 @@ class HolderCoordinator: SharedCoordinator {
 			return
 		}
 		
+		performAppLaunchCleanup()
+		
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -185,6 +187,13 @@ class HolderCoordinator: SharedCoordinator {
 		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.thirdpartyTicketApp = nil
 		}
+	}
+	
+	// MARK: - App Launch Cleanup
+	
+	func performAppLaunchCleanup() {
+		
+		Current.walletManager.removeDraftEventGroups()
 	}
 	
 	// MARK: - Universal Links
