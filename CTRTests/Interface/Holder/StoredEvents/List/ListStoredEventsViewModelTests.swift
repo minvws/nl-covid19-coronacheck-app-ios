@@ -458,6 +458,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
+						isDraft: false,
 						managedContext: context
 					)
 				}
@@ -479,6 +480,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: jsonData,
 					wallet: wallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}

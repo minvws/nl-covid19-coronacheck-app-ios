@@ -243,6 +243,7 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
+						isDraft: true,
 						managedContext: context
 					)
 				}
@@ -264,6 +265,7 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: jsonData,
 					wallet: wallet,
+					isDraft: true,
 					managedContext: context
 				)
 			}

@@ -2236,6 +2236,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
+						isDraft: false,
 						managedContext: context
 					)
 				}
