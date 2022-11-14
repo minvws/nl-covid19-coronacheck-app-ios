@@ -33,7 +33,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 
 		// Assert
 		expect(wasUpdated) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExpiredGreenCards) == true
 	}
 
 	func test_fetching_removes_expired_greencards() {
