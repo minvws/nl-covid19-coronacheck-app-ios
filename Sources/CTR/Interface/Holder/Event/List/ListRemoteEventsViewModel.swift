@@ -257,6 +257,7 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case let .customError(title: title, message: message):
+						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
 						displayError(title: title, message: message)
 						
 					case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
