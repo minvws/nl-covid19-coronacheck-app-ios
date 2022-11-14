@@ -29,6 +29,9 @@ protocol WalletManaging: AnyObject {
 
 	func fetchSignedEvents() -> [String]
 
+	/// Deletes any EventGroups marked as `draft=true`
+	func removeDraftEventGroups()
+	
 	/// Remove any existing event groups for the type and provider identifier
 	/// - Parameters:
 	///   - type: the type of event group
@@ -157,6 +160,19 @@ class WalletManager: WalletManaging {
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		
 		dataStoreManager.delete(objectID)
+	}
+
+	/// Deletes any EventGroups marked as `draft=true`
+	func removeDraftEventGroups() {
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.isDraft {
+				context.delete(eventGroup)
+			}
+		}
 	}
 	
 	@discardableResult func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
