@@ -194,6 +194,7 @@ class HolderCoordinator: SharedCoordinator {
 	func performAppLaunchCleanup() {
 		
 		Current.walletManager.removeDraftEventGroups()
+		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
 	}
 	
 	// MARK: - Universal Links
