@@ -242,7 +242,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 			case .expired, .expiring:
 				state.beginLoading()
 				greencardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] in
-					guard let self else { return }
+				 	guard let self else { return }
 
 					switch $0 {
 						case .success(let response):
