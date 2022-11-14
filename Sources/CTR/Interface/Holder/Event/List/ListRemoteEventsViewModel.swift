@@ -252,6 +252,7 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
+						Current.walletManager.removeExistingGreenCards()
 						showEventError()
 						shouldPrimaryButtonBeEnabled = true
 						
