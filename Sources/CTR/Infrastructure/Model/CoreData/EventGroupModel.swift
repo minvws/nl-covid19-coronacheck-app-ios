@@ -73,7 +73,7 @@ extension EventGroup {
 			
 			Current.dataStoreManager.save(managedObjectContext)
 		}
-	} 
+	}
 }
 
 extension EventGroup {

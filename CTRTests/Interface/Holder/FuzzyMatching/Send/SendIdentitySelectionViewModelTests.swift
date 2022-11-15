@@ -92,6 +92,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeSuccess).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 	}
 	
 	func test_viewDidAppear_greenCardLoader_noInternet() throws {
@@ -109,6 +110,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.sut.alert.value?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert.value?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 	
 	func test_viewDidAppear_greenCardLoader_errorFailedToSaveGreenCards() {
@@ -126,6 +128,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentError).toEventually(beTrue())
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1390 000 055")
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 	}
 	
 	func test_viewDidAppear_greenCardLoader_error_primaryAction() {
@@ -144,6 +147,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserHasStoppedTheFlow).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 	}
 	
 	func test_viewDidAppear_greenCardLoader_errorFuzzyMatching() {
@@ -161,5 +165,6 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedRestartFlow).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 }
