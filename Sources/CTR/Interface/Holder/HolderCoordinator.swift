@@ -101,14 +101,14 @@ class HolderCoordinator: SharedCoordinator {
 	
 	// Designated starter method
 	override func start() {
+
+		performAppLaunchCleanup()
 		
 		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			navigateToDashboard(replacingWindowRootViewController: true)
 			return
 		}
-		
-		performAppLaunchCleanup()
-		
+				
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
