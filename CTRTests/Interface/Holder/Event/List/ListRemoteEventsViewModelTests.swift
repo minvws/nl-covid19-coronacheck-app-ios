@@ -755,6 +755,60 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
+	func test_makeQR_saveEventGroupNoError_storingNewEvent_isDraft() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 0
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEventGroupParameters?.isDraft) == true
+		
+		// should not be any drafts left 
+	}
+
+	func test_makeQR_saveEventGroupNoError_overwritingExistingNewEvent_isNotDraft() throws {
+		
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
+			greenCardLoader: greenCardLoader
+		)
+		
+		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 1
+		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
+		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+		
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+		
+		// When
+		content.primaryAction?()
+		
+		expect(self.environmentSpies.walletManagerSpy.invokedStoreEventGroupParameters?.isDraft) == false
+	}
+	
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidResponse() throws {
 
 		// Given
@@ -1173,6 +1227,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalRetry()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() throws {
@@ -1386,6 +1441,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beFalse())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups).toEventually(beTrue())
 
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorTitle()))
@@ -1898,6 +1955,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Arrange
 		
 		let fakeEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		
+		// Save context to order to generate predictable unique identifier:
+		let context = environmentSpies.dataStoreManager.managedObjectContext()
+		environmentSpies.dataStoreManager.save(context)
+		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeEventGroup
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeEventGroup]
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
@@ -1949,6 +2011,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		let fakeExistingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
 		let fakeIncomingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		
+		// Save context to order to generate predictable unique identifier:
+		let context = environmentSpies.dataStoreManager.managedObjectContext()
+		environmentSpies.dataStoreManager.save(context)
+		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeIncomingEventGroup
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeExistingEventGroup, fakeIncomingEventGroup]
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
@@ -1995,6 +2062,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		
 		let fakeExistingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
 		let fakeIncomingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
+		
+		// Save context to order to generate predictable unique identifier:
+		let context = environmentSpies.dataStoreManager.managedObjectContext()
+		environmentSpies.dataStoreManager.save(context)
+		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeIncomingEventGroup
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeExistingEventGroup, fakeIncomingEventGroup]
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true

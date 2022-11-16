@@ -224,13 +224,13 @@ class ListRemoteEventsViewModel {
 		
 		switch result {
 			case let .success(response):
-				
+			
 				// We've just processed some events with the backend and received `.success`,
 				// therefore none of the `eventsBeingAdded` should no longer be marked as draft:
 				eventsBeingAdded
 					.filter { $0.isDraft }
 					.forEach { $0.update(isDraft: false) }
-			
+				
 				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
 				guard !shouldShowBlockingEndState else {
 					self.shouldPrimaryButtonBeEnabled = true
@@ -256,6 +256,8 @@ class ListRemoteEventsViewModel {
 						
 					case .noSignedEvents:
 						Current.walletManager.removeExistingGreenCards()
+						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
+					
 						showEventError()
 						shouldPrimaryButtonBeEnabled = true
 						
@@ -298,7 +300,7 @@ class ListRemoteEventsViewModel {
 		let shouldShowBlockingEndState = blockItems.combinedWith(matchingEventGroups: eventsBeingAdded).isNotEmpty
 		return shouldShowBlockingEndState
 	}
-
+	
 	// MARK: - Store events
 
 	private func storeEvent(
@@ -338,7 +340,6 @@ class ListRemoteEventsViewModel {
 			let removedEventGroupCount = walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
 			
 			// Store the event group
-			
 			guard let eventGroup = walletManager.storeEventGroup(
 				storageMode,
 				providerIdentifier: uniqueIdentifier,
