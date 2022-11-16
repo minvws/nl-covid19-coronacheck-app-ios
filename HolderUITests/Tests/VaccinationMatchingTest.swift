@@ -243,10 +243,6 @@ class VaccinationMatchingTest: BaseTest {
 		assertReplacedVaccination(for: person)
 	}
 	
-	func loadRemovedPersonWithDifferentNameAgain() {
-		// Setup person was removed on not matching name
-	}
-	
 	// MARK: private functions
 	
 	private func retrieveCertificate(for person: Person) {
