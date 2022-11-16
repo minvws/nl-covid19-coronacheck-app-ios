@@ -331,6 +331,8 @@ targets:
     platform: iOS
     type: bundle.unit-test
     dependencies:
+      - package: RDOModules
+        product: HTTPSecurity
       - package: Nimble
       - package: OHHTTPStubs
         product: OHHTTPStubsSwift

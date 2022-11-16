@@ -9,6 +9,7 @@
 @testable import Shared
 import XCTest
 import Nimble
+@testable import HTTPSecurity
 
 class SecurityCheckerWorkerTests: XCTestCase {
 	
@@ -207,7 +208,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 	func getCertificate(_ fileName: String, fileExtension: String = ".pem") throws -> SecCertificate? {
 		
 		let certificateData = try getCertificateData(fileName)
-		let certificate = sut.certificateFromPEM(certificateAsPemData: certificateData)
+		let certificate = AppTransportSecurityChecker().certificateFromPEM(certificateAsPemData: certificateData)
 		return certificate
 	}
 	
