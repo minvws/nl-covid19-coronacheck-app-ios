@@ -50,10 +50,10 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.content.body).toEventually(equal( L.holderErrorstateClientMessage("i 1310 000 101")))
 	}
 	
-	func test_viewDidAppear_lessThanTwoMatchingBlobs() {
+	func test_viewDidAppear_emptyMatchingBlobs() {
 		
 		// Given
-		setupSut(matchingBlobIds: [["123"]], selectedBlobIds: ["123"])
+		setupSut(matchingBlobIds: [], selectedBlobIds: ["123"])
 		
 		// When
 		sut.viewDidAppear()
@@ -152,7 +152,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		setupSut(matchingBlobIds: [["123"], ["456"]], selectedBlobIds: ["123"])
 		dataSourceSpy.stubbedGetIdentityResult = EventFlow.Identity(infix: "van", firstName: "Tester", lastName: "Test", birthDateString: "2022-10-12")
 		environmentSpies.secureUserSettingsSpy.stubbedSelectedIdentity = "van Test, Tester"
-		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		let serverResponse = ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]]))
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
 		

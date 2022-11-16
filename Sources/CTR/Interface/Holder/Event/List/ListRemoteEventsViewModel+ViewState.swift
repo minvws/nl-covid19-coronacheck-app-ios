@@ -433,10 +433,14 @@ extension ListRemoteEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
+			
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? recovery.firstPositiveTestDate
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
 			details: [
+				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
 				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
 			],
@@ -460,10 +464,14 @@ extension ListRemoteEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
+			
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
+			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
 			details: [
+				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
 				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
 			],

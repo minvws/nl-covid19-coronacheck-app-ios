@@ -50,6 +50,8 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	
 	private weak var delegate: FuzzyMatchingFlowDelegate?
 	
+	private var shouldHideSkipButton = false
+	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -60,12 +62,14 @@ final class FuzzyMatchingCoordinator: Coordinator {
 		navigationController: UINavigationController,
 		matchingBlobIds: [[String]],
 		onboardingFactory: FuzzyMatchingOnboardingFactoryProtocol,
-		delegate: FuzzyMatchingFlowDelegate) {
+		delegate: FuzzyMatchingFlowDelegate,
+		shouldHideSkipButton: Bool = false) {
 		
 		self.navigationController = navigationController
 		self.matchingBlobIds = matchingBlobIds
 		self.factory = onboardingFactory
 		self.delegate = delegate
+		self.shouldHideSkipButton = shouldHideSkipButton
 	}
 	
 	/// Start the scene
@@ -118,14 +122,20 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesToSeeIdentitiyGroups() {
 		
-		let viewModel = ListIdentitySelectionViewModel(
-			coordinatorDelegate: self,
-			dataSource: dataSource,
-			matchingBlobIds: matchingBlobIds
-		)
-		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
-		
-		navigationController.pushViewController(viewController, animated: true)
+		if let existingListVC = navigationController.viewControllers.first(where: { $0 is ListIdentitySelectionViewController }) {
+			navigationController.popToViewController(existingListVC, animated: true)
+		} else {
+			
+			let viewModel = ListIdentitySelectionViewModel(
+				coordinatorDelegate: self,
+				dataSource: dataSource,
+				matchingBlobIds: matchingBlobIds,
+				shouldHideSkipButton: shouldHideSkipButton
+			)
+			let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
+			
+			navigationController.pushViewController(viewController, animated: true)
+		}
 	}
 	
 	func userHasSelectedIdentityGroup(selectedBlobIds: [String]) {
@@ -151,15 +161,8 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 				self?.userHasFinishedTheFlow()
 			}
 		)
-
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: nil,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		
+		presentContent(content: content, backAction: nil, allowsSwipeBack: false, animated: false)
 	}
 
 	func userHasStoppedTheFlow() {
