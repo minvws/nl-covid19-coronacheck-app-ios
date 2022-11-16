@@ -124,10 +124,11 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		// When
-		sut.removeExistingEventGroups(type: .vaccination, providerIdentifier: "CoronaCheck")
+		let result = sut.removeExistingEventGroups(type: .vaccination, providerIdentifier: "CoronaCheck")
 
 		// Then
 		expect(wallet?.eventGroups).to(beEmpty())
+		expect(result) == 1
 	}
 
 	func test_removeExistingEventGroups_otherProviderIdentifier() {
