@@ -30,7 +30,7 @@ class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 		
 		context.performAndWait {
 			
-			blockedEvent = RemovedEventModel.create(
+			blockedEvent = RemovedEvent(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: RemovalReason.blockedEvent.rawValue,
@@ -62,7 +62,7 @@ class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 		
 		context.performAndWait {
 			
-			blockedEvent = RemovedEventModel.create(
+			blockedEvent = RemovedEvent(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: RemovalReason.mismatchedIdentity.rawValue,
@@ -99,7 +99,7 @@ class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 		
 		context.performAndWait {
 			
-			blockedEvent = RemovedEventModel.create(
+			blockedEvent = RemovedEvent(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: RemovalReason.blockedEvent.rawValue,

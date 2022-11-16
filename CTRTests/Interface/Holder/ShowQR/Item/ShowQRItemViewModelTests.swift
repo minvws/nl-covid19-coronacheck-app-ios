@@ -10,6 +10,7 @@ import UIKit
 import XCTest
 @testable import CTR
 import Nimble
+import QRGenerator
 
 class ShowQRItemViewModelTests: XCTestCase {
 
@@ -109,8 +110,8 @@ class ShowQRItemViewModelTests: XCTestCase {
 	}
 
 	func test_constants() {
-		expect(ShowQRItemViewModel.domesticCorrectionLevel) == "M"
-		expect(ShowQRItemViewModel.internationalCorrectionLevel) == "Q"
+		expect(ShowQRItemViewModel.domesticCorrectionLevel) == CorrectionLevel.medium
+		expect(ShowQRItemViewModel.internationalCorrectionLevel) == CorrectionLevel.quartile
 		expect(ShowQRItemViewModel.screenshotWarningMessageDuration) == 180
 	}
 
@@ -548,7 +549,7 @@ extension GreenCardModel {
 		context.performAndWait {
 
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
-				result = GreenCardModel.create(
+				result = GreenCard(
 					type: type,
 					wallet: wallet,
 					managedContext: context
@@ -556,7 +557,7 @@ extension GreenCardModel {
 				if withValidCredential, let greenCard = result {
 					let now = Date().timeIntervalSince1970 - 200
 					let expiration = now + 3600
-					CredentialModel.create(
+					Credential(
 						data: Data(),
 						validFrom: Date(timeIntervalSince1970: now),
 						expirationTime: Date(timeIntervalSince1970: expiration),
@@ -567,7 +568,7 @@ extension GreenCardModel {
 				if let type = originType, let greenCard = result {
 					let now = Date().timeIntervalSince1970 - 200
 					let expiration = now + 3600
-					OriginModel.create(
+					Origin(
 						type: type,
 						eventDate: Date(timeIntervalSince1970: now),
 						expirationTime: Date(timeIntervalSince1970: expiration),

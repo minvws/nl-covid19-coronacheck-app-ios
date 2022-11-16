@@ -17,7 +17,7 @@ struct SecurityAnimation: Equatable {
 	var loopMode: LottieLoopMode = .loop
 
 	/// The Lottie Animation
-	var animation: Animation?
+	var animation: LottieAnimation?
 
 	/// Initializer
 	/// - Parameters:
@@ -26,7 +26,7 @@ struct SecurityAnimation: Equatable {
 	init(name: String, fileName: String) {
 
 		self.name = name
-		self.animation = Animation.named(fileName)
+		self.animation = LottieAnimation.named(fileName)
 	}
 
 	/// Equality

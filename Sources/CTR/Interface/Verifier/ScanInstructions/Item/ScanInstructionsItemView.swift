@@ -25,9 +25,9 @@ class ScanInstructionsItemView: ScrolledStackView {
 		static let marginBeneathImage: CGFloat = 18
 	}
 	
-	private let animationView: AnimationView = {
+	private let animationView: LottieAnimationView = {
 		
-		let view = AnimationView()
+		let view = LottieAnimationView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
 		view.respectAnimationFrameRate = true
@@ -129,7 +129,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 	var animationName: String? {
 		didSet {
 			guard let animationName = animationName else { return }
-			animationView.animation = Animation.named(animationName)
+			animationView.animation = LottieAnimation.named(animationName)
 		}
 	}
 

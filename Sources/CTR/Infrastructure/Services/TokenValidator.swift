@@ -7,6 +7,7 @@
 
 import Foundation
 import Transport
+import LuhnCheck
 
 public protocol TokenValidatorProtocol {
 
@@ -19,7 +20,7 @@ public protocol TokenValidatorProtocol {
 
 public class TokenValidator: TokenValidatorProtocol {
 
-	private let tokenChars: [String.Element]
+	private let luhnCheck: LuhnCheck
 	private let allowedCharacterSet: CharacterSet
 	private let isLuhnCheckEnabled: Bool
 
@@ -27,11 +28,11 @@ public class TokenValidator: TokenValidatorProtocol {
 	/// - Parameters:
 	///   - alphabet: the alphabet to use
 	///   - isLuhnCheckEnabled: True if we should use the Luhn Check
-	public init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
+	public init(alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
 
-		self.tokenChars = Array(alphabet)
 		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
 		self.isLuhnCheckEnabled = isLuhnCheckEnabled
+		self.luhnCheck = LuhnCheck(validTokens: alphabet)
 	}
 
 	/// Validate the token
@@ -78,35 +79,7 @@ public class TokenValidator: TokenValidatorProtocol {
 		}
 		
 		let code = codeSplit[1] + codeSplit[2].prefix(1)
-		return luhnModN(code)
-	}
-
-	/// Check the luhn mod N checksum
-	/// - Parameter token: the token to check
-	/// - Returns: True if this is a valid token
-	func luhnModN(_ token: String) -> Bool {
-
-		// for more detail,
-		// see https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
-
-		let tokenArray = Array(token)
-		var factor = 1
-		var sum = 0
-		let numberOfValidInputCharacters = tokenChars.count
-		var index = token.count - 1
-		while index >= 0 {
-			guard let codePoint = tokenChars.firstIndex(of: tokenArray[index]) else {
-				// codePoint not in tokenChars. Fail.
-				return false
-			}
-			var addend = factor * codePoint
-			factor = (factor == 2) ? 1 : 2
-			addend = (addend / numberOfValidInputCharacters) + (addend % numberOfValidInputCharacters)
-			sum += addend
-			index -= 1
-		}
-		let remainder = sum % numberOfValidInputCharacters
-		return (remainder == 0)
+		return luhnCheck.luhnModN(code)
 	}
 }
 

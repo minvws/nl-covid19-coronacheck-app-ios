@@ -2230,7 +2230,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {
-					eventGroup = EventGroupModel.create(
+					eventGroup = EventGroup(
 						type: EventMode.recovery,
 						providerIdentifier: "DCC-1234",
 						expiryDate: nil,

@@ -9,6 +9,7 @@ import Foundation
 import Reachability
 import Transport
 import Shared
+import OpenIDConnect
 
 // MARK: - 1: Define the Environment
 
@@ -30,7 +31,7 @@ struct Environment {
 	var networkManager: NetworkManaging
 	var newFeaturesManager: NewFeaturesManaging
 	var onboardingManager: OnboardingManaging
-	var openIdManager: OpenIdManaging
+	var openIdManager: OpenIDConnectManaging
 	var remoteConfigManager: RemoteConfigManaging
 	var verificationPolicyManager: VerificationPolicyManaging
 	var scanLockManager: ScanLockManaging
@@ -58,7 +59,7 @@ struct Environment {
 		networkManager: NetworkManaging,
 		newFeaturesManager: NewFeaturesManaging,
 		onboardingManager: OnboardingManaging,
-		openIdManager: OpenIdManaging,
+		openIdManager: OpenIDConnectManaging,
 		remoteConfigManager: RemoteConfigManaging,
 		verificationPolicyManager: VerificationPolicyManaging,
 		scanLockManager: ScanLockManaging,
@@ -157,7 +158,7 @@ private let identityChecker = IdentityChecker()
 private let jailBreakDetector = JailBreakDetector()
 private let mappingManager = MappingManager(remoteConfigManager: remoteConfigManager)
 private let onboardingManager = OnboardingManager(secureUserSettings: secureUserSettings)
-private let openIdManager = OpenIdManager()
+private let openIdManager = OpenIDConnectManager()
 private let networkManager: NetworkManager = {
 	let networkConfiguration: NetworkConfiguration
 	   

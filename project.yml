@@ -6,12 +6,6 @@ name: CTR
 # - Packages:
 
 packages:
-  AppAuth:
-    ## A fork has been used to support both universal links and url schemes
-    ## and fix Xcode compile warnings.
-    ## Forked from: https://github.com/openid/AppAuth-iOS
-    github: GlennChiu/AppAuth-iOS
-    revision: c0507aaff96d95a3c39bd3ca868106185674436f
   Inject: 
     github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
     branch: main
@@ -20,7 +14,10 @@ packages:
     majorVersion: 1.9.5
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.4.0
+    majorVersion: 3.5.0
+  RDOModules:
+    github: minvws/nl-rdo-app-ios-modules
+    branch: main
   Nimble:
     github: Quick/Nimble
     majorVersion: 10.0.0
@@ -139,10 +136,14 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
-      - package: AppAuth
-        product: AppAuth
       - package: IOSSecuritySuite
       - package: Lottie
+      - package: RDOModules
+        product: LuhnCheck
+      - package: RDOModules
+        product: QRGenerator
+      - package: RDOModules
+        product: OpenIDConnect
       - package: OpenSSL
       - package: Inject
       - package: Reachability

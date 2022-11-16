@@ -11,6 +11,7 @@ import CoreData
 import Reachability
 import Shared
 import Transport
+import OpenIDConnect
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -250,10 +251,10 @@ class HolderCoordinator: SharedCoordinator {
 		do {
 			try ObjC.catchException {
 				if let url = returnURL,
-				   let appAuthState = UIApplication.shared.delegate as? AppAuthState,
-				   let authorizationFlow = appAuthState.currentAuthorizationFlow,
+				   let openIDConnectState = UIApplication.shared.delegate as? OpenIDConnectState,
+				   let authorizationFlow = openIDConnectState.currentAuthorizationFlow,
 				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-					appAuthState.currentAuthorizationFlow = nil
+					openIDConnectState.currentAuthorizationFlow = nil
 				}
 				result = true
 			}
