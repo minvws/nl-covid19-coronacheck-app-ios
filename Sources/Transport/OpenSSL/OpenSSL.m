@@ -273,39 +273,42 @@ errit:
 	X509_STORE *store = NULL;
 	X509 *signingCert = NULL;
 	int cnt = 0;
-
-	if (NULL == (signatureBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
+	
+	if (NULL == (signatureBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length))) {
 		EXITOUT("invalid signatureBlob");
-
-	if (NULL == (contentBlob = BIO_new_mem_buf(contentData.bytes, (int)contentData.length)))
+	}
+	if (NULL == (contentBlob = BIO_new_mem_buf(contentData.bytes, (int)contentData.length))) {
 		EXITOUT("invalid contentBlob");
-
-	if (NULL == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
+	}
+	if (NULL == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length))) {
 		EXITOUT("invalid certificateBlob");
-
-	if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
+	}
+	if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length))) {
 		EXITOUT("Could not create cms Blob");
-
+	}
 	@try {
 		cms = d2i_CMS_bio(cmsBlob, NULL);
-		if (NULL == cms)
+		if (NULL == cms) {
 			EXITOUT("Could not create CMS structure from PKCS#7");
+		}
 	} @catch (NSException *exception) {
 		EXITOUT("d2i_CMS_bio crashed");
 	} @finally {}
 
-	if ((NULL == (store = X509_STORE_new())))
+	if ((NULL == (store = X509_STORE_new()))) {
 		EXITOUT("store");
+	}
 
 #ifdef __DEBUG
 	fprintf(stderr, "Chain:\n");
 #endif
 	for(X509 *cert = NULL;;cnt++) {
-		if (NULL == (cert = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
+		if (NULL == (cert = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL))) {
 			break;
-
-		if (X509_STORE_add_cert(store, cert) != 1)
+		}
+		if (X509_STORE_add_cert(store, cert) != 1) {
 			EXITOUT("Could not add cert %d to chain.",1+cnt);
+		}
 
 #ifdef __DEBUG
 		fprintf(stderr,"#%d\t",cnt+1);
@@ -315,21 +318,21 @@ errit:
 	};
 	ERR_clear_error(); // as we have a feof() bio read error.
 
-	if (cnt == 0)
+	if (cnt == 0) {
 		EXITOUT("no trust chain of any length");
-
-	if (NULL == (verifyParameters = X509_VERIFY_PARAM_new()))
+	}
+	if (NULL == (verifyParameters = X509_VERIFY_PARAM_new())) {
 		EXITOUT("Could create verifyParameters");
-
-	if (X509_VERIFY_PARAM_set_flags(verifyParameters, X509_V_FLAG_CRL_CHECK_ALL | X509_V_FLAG_POLICY_CHECK) != 1)
+	}
+	if (X509_VERIFY_PARAM_set_flags(verifyParameters, X509_V_FLAG_CRL_CHECK_ALL | X509_V_FLAG_POLICY_CHECK) != 1) {
 		EXITOUT("Could not set CRL/Policy check on verifyParameters");
-
-	if (X509_VERIFY_PARAM_set_purpose(verifyParameters, X509_PURPOSE_ANY) != 1)
+	}
+	if (X509_VERIFY_PARAM_set_purpose(verifyParameters, X509_PURPOSE_ANY) != 1) {
 		EXITOUT("Could not set purpose on verifyParameters");
-
-	if (X509_STORE_set1_param(store, verifyParameters) != 1)
+	}
+	if (X509_STORE_set1_param(store, verifyParameters) != 1) {
 		EXITOUT("Could not set verifyParameters on the store");
-
+	}
 	// It appears that the PKCS7 family of OpenSSL does not support all the forms
 	// of paddings; including PSS padding (which is the SOGIS recommendation).
 	// So we use the more modern CMS family of functions.
@@ -357,11 +360,14 @@ errit:
 	// a (successful) CMS_verify. So we only look at the actual signer after having
 	// verified the signature.
 	//
-	if (NULL == (signers = CMS_get0_signers(cms)))
+	if (NULL == (signers = CMS_get0_signers(cms))) {
 		EXITOUT("No signers in CMS signatureBlob");
+	}
 
-	if (sk_X509_num(signers) != 1)
+	if (sk_X509_num(signers) != 1) {
+		sk_X509_pop_free(signers, X509_free);
 		EXITOUT("Not exactly one signer in PCKS#7 signatureBlob");
+	}
 
 	signingCert = sk_X509_value(signers, 0);
 
@@ -370,15 +376,21 @@ errit:
 	print_certificate(signingCert);
 #endif
 
-	if (expectedAuthorityKeyIdentifierDataOrNil.length)
+	if (expectedAuthorityKeyIdentifierDataOrNil.length) {
 		if (![self validateAuthorityKeyIdentifierData: expectedAuthorityKeyIdentifierDataOrNil
-								   signingCertificate: signingCert])
+								   signingCertificate: signingCert]) {
+			sk_X509_pop_free(signers, X509_free);
+			X509_free(signingCert);
 			EXITOUT("invalid isAuthorityKeyIdentifierValid");
-
+		}
+	}
 	if (requiredCommonNameContentOrNil.length) {
 		if (![self validateCommonNameForCertificate: signingCert
-									requiredContent: requiredCommonNameContentOrNil])
+									requiredContent: requiredCommonNameContentOrNil]) {
+			sk_X509_pop_free(signers, X509_free);
+			X509_free(signingCert);
 			EXITOUT("invalid isCommonNameValid");
+		}
 	}
 
 #ifdef __DEBUG
@@ -394,8 +406,8 @@ errit:
 	BIO_free(signatureBlob); signatureBlob = NULL;
 	BIO_free(contentBlob); contentBlob = NULL;
 	BIO_free(certificateBlob); certificateBlob = NULL;
-	sk_X509_pop_free(signers, X509_free); signers = NULL;
-	X509_free(signingCert); signingCert = NULL;
+	signers = NULL;
+	signingCert = NULL;
 
 	return result;
 }

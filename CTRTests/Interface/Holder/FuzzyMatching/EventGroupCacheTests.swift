@@ -33,7 +33,7 @@ final class EventGroupCacheTests: XCTestCase {
 		
 		// Then
 		expect(wrapper) == nil
-		expect(self.sut.wrapperCache).to(beEmpty())
+		expect(self.sut.wrapperCache.values).to(beEmpty())
 	}
 	
 	func test_getEventResultWrapper_withEvent() throws {
@@ -53,7 +53,7 @@ final class EventGroupCacheTests: XCTestCase {
 		// Then
 		expect(wrapper) == EventFlow.EventResultWrapper.fakeBoosterResultWrapper
 		expect(self.environmentalSpies.walletManagerSpy.invokedListEventGroups) == true
-		expect(self.sut.wrapperCache).to(haveCount(1))
+		expect(self.sut.wrapperCache.values).to(haveCount(1))
 	}
 	
 	func test_getEventResultWrapper_withEvent_fromCache() throws {
@@ -73,7 +73,7 @@ final class EventGroupCacheTests: XCTestCase {
 		// Then
 		expect(wrapper) == EventFlow.EventResultWrapper.fakeBoosterResultWrapper
 		expect(self.environmentalSpies.walletManagerSpy.invokedListEventGroups) == false
-		expect(self.sut.wrapperCache).to(haveCount(1))
+		expect(self.sut.wrapperCache.values).to(haveCount(1))
 	}
 	
 	func test_getEUCreditialAttributes_noEvent() {
@@ -85,7 +85,7 @@ final class EventGroupCacheTests: XCTestCase {
 		
 		// Then
 		expect(wrapper) == nil
-		expect(self.sut.euCredentialAttributesCache).to(beEmpty())
+		expect(self.sut.euCredentialAttributesCache.values).to(beEmpty())
 	}
 	
 	func test_ggetEUCreditialAttributes_withEvent() throws {
@@ -108,7 +108,7 @@ final class EventGroupCacheTests: XCTestCase {
 		expect(wrapper) == EuCredentialAttributes.fakeVaccination()
 		expect(self.environmentalSpies.walletManagerSpy.invokedListEventGroups) == true
 		expect(self.environmentalSpies.cryptoManagerSpy.invokedReadEuCredentials) == true
-		expect(self.sut.euCredentialAttributesCache).to(haveCount(1))
+		expect(self.sut.euCredentialAttributesCache.values).to(haveCount(1))
 	}
 	
 	func test_ggetEUCreditialAttributes_withEvent_fromCache() throws {
@@ -131,7 +131,7 @@ final class EventGroupCacheTests: XCTestCase {
 		expect(wrapper) == EuCredentialAttributes.fakeVaccination()
 		expect(self.environmentalSpies.walletManagerSpy.invokedListEventGroups) == false
 		expect(self.environmentalSpies.cryptoManagerSpy.invokedReadEuCredentials) == false
-		expect(self.sut.euCredentialAttributesCache).to(haveCount(1))
+		expect(self.sut.euCredentialAttributesCache.values).to(haveCount(1))
 	}
 	
 }
