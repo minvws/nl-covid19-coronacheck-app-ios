@@ -41,8 +41,6 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		// Clear existing timer:
 		reloadTimer?.invalidate()
 		reloadTimer = nil
-
-		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
 		
 		let expiredGreenCards: [ExpiredQR] = removeExpiredGreenCards()
 		let cards: [HolderDashboardViewModel.QRCard] = fetchMyQRCards()

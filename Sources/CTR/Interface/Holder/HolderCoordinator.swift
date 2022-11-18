@@ -101,12 +101,14 @@ class HolderCoordinator: SharedCoordinator {
 	
 	// Designated starter method
 	override func start() {
+
+		performAppLaunchCleanup()
 		
 		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			navigateToDashboard(replacingWindowRootViewController: true)
 			return
 		}
-		
+				
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -185,6 +187,14 @@ class HolderCoordinator: SharedCoordinator {
 		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.thirdpartyTicketApp = nil
 		}
+	}
+	
+	// MARK: - App Launch Cleanup
+	
+	func performAppLaunchCleanup() {
+		
+		Current.walletManager.removeDraftEventGroups()
+		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
 	}
 	
 	// MARK: - Universal Links

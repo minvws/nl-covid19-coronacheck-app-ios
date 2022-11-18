@@ -109,8 +109,17 @@ class SendIdentitySelectionViewModel {
 			// Result<RemoteGreenCards.Response, Error>
 
 			guard let self else { return }
+			
+			var removesDraftEventGroups = false
+			defer {
+				if removesDraftEventGroups {
+					Current.walletManager.removeDraftEventGroups() // possibly this flow was preceeded with the regular ListRemoteEvents path, which creates draft events that should be cleaned up.
+				}
+			}
+			
 			switch result {
 				case .success:
+					removesDraftEventGroups = true
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
 
 				case let .failure(greenCardError):
@@ -119,8 +128,10 @@ class SendIdentitySelectionViewModel {
 						case .noInternet:
 							self.displayNoInternet()
 						case .noSignedEvents:
+							Current.walletManager.removeExistingGreenCards()
 							self.displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .signer, clientCode: .noEventsToSendToTheSigner))
 						case let .customError(title: title, message: message):
+							removesDraftEventGroups = true
 							self.displayError(title: title, message: message)
 						case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
 							self.coordinatorDelegate?.restartFlow(matchingBlobIds: matchingBlobIds)

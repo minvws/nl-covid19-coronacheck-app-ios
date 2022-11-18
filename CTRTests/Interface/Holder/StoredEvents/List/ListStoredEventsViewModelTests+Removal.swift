@@ -470,6 +470,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
+						isDraft: false,
 						managedContext: context
 					)
 				}

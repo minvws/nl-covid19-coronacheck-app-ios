@@ -16,19 +16,20 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?, isDraft: Bool)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?, isDraft: Bool)]()
 	var stubbedStoreEventGroupResult: EventGroup!
 
 	func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> EventGroup? {
+		expiryDate: Date?,
+		isDraft: Bool) -> EventGroup? {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
-		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, expiryDate)
-		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, expiryDate))
+		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, expiryDate, isDraft)
+		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, expiryDate, isDraft))
 		return stubbedStoreEventGroupResult
 	}
 
@@ -42,16 +43,26 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedFetchSignedEventsResult
 	}
 
+	var invokedRemoveDraftEventGroups = false
+	var invokedRemoveDraftEventGroupsCount = 0
+
+	func removeDraftEventGroups() {
+		invokedRemoveDraftEventGroups = true
+		invokedRemoveDraftEventGroupsCount += 1
+	}
+
 	var invokedRemoveExistingEventGroupsType = false
 	var invokedRemoveExistingEventGroupsTypeCount = 0
 	var invokedRemoveExistingEventGroupsTypeParameters: (type: EventMode, providerIdentifier: String)?
 	var invokedRemoveExistingEventGroupsTypeParametersList = [(type: EventMode, providerIdentifier: String)]()
+	var stubbedRemoveExistingEventGroupsTypeResult: Int! = 0
 
-	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
+	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) -> Int {
 		invokedRemoveExistingEventGroupsType = true
 		invokedRemoveExistingEventGroupsTypeCount += 1
 		invokedRemoveExistingEventGroupsTypeParameters = (type, providerIdentifier)
 		invokedRemoveExistingEventGroupsTypeParametersList.append((type, providerIdentifier))
+		return stubbedRemoveExistingEventGroupsTypeResult
 	}
 
 	var invokedRemoveExistingEventGroups = false

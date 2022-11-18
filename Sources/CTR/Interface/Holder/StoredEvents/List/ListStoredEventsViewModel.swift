@@ -315,7 +315,7 @@ class ListStoredEventsViewModel {
 	}
 	
 	private func handleCoreDataError() {
-		
+	
 		let errorCode = ErrorCode(flow: .clearEvents, step: .removeEventGroups, clientCode: .coreDataFetchError)
 		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
