@@ -12,7 +12,7 @@ import HTTPSecurity
 
 class SecurityCheckerWorker {
 	
-	private let helper = TLSCertificateHelper()
+	private let helper = TLSValidator()
 	private let appTransportSecurityChecker = AppTransportSecurityChecker()
 	
 	func checkSSL(
