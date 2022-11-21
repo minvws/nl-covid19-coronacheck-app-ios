@@ -7,7 +7,7 @@
 TMPDIR=${TMPDIR:-/tmp}
 set -e
 
-OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1o/bin/openssl}
+OPENSSL=${OPENSSL:-/opt/homebrew/Cellar/openssl\@1.1/1.1.1s/bin/openssl}
 JSON=${1:-example.json}
 
 S=0
@@ -59,17 +59,17 @@ rm ext.cnf.$$
 cat client.key client.pub > client.crt
 rm client.key client.pub 9.pem 9.key
 
-CA_B64=$(base64 0.pem)
-JSON_B64=$(base64 "$JSON")
+CA_B64=$(base64 -i 0.pem)
+JSON_B64=$(base64 -i "$JSON")
 
 # We avoid using echo (shell and /bin echo behave differently) as to 
 # get control over the trialing carriage return.
 
 SIG_B64=$($OPENSSL cms -in "$JSON" -sign -outform DER -signer client.crt -certfile chain.pem -binary  -keyopt rsa_padding_mode:pss | base64)
 
-KEYID=$(openssl x509 -in client.crt -ext authorityKeyIdentifier -noout | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g')
+#KEYID=$(openssl x509 -in client.crt -ext authorityKeyIdentifier -noout | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g')
 
-echo "trusted=\"$CA_B64\";"
-echo "keyid=[$KEYID];"
-echo "payload=\"$JSON_B64\";"
-echo "signature=\"$SIG_B64\";"
+echo "trusted=\"$CA_B64\";\n"
+echo "keyid=[$KEYID];\n"
+echo "payload=\"$JSON_B64\";\n"
+#echo "signature=\"$SIG_B64\";"
