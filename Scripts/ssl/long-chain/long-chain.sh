@@ -67,9 +67,9 @@ JSON_B64=$(base64 -i "$JSON")
 
 SIG_B64=$($OPENSSL cms -in "$JSON" -sign -outform DER -signer client.crt -certfile chain.pem -binary  -keyopt rsa_padding_mode:pss | base64)
 
-#KEYID=$(openssl x509 -in client.crt -ext authorityKeyIdentifier -noout | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g')
+KEYID=$($OPENSSL x509 -in client.crt -noout -ext authorityKeyIdentifier | sed -e 's/.*Identifier://' -e 's/keyid/0x04, 0x14/g' -e 's/:/, 0x/g')
 
 echo "trusted=\"$CA_B64\";\n"
 echo "keyid=[$KEYID];\n"
 echo "payload=\"$JSON_B64\";\n"
-#echo "signature=\"$SIG_B64\";"
+echo "signature=\"$SIG_B64\";"
