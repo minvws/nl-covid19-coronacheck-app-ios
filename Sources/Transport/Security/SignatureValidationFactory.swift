@@ -46,6 +46,6 @@ public struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 				}
 			}
 		}
-		return CMSSignatureValidator( trustedSigners: trustedSigners)
+		return CMSSignatureValidator(trustedSigners: trustedSigners)
 	}
 }
