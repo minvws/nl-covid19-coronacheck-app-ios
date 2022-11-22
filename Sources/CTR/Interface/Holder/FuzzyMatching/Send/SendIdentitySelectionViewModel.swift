@@ -119,7 +119,11 @@ class SendIdentitySelectionViewModel {
 			
 			switch result {
 				case .success:
-					removesDraftEventGroups = true
+					// Signer says OK. Mark all events as non draft.
+					Current.walletManager.listEventGroups()
+						.filter { $0.isDraft }
+						.forEach { $0.update(isDraft: false) }
+					
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
 
 				case let .failure(greenCardError):

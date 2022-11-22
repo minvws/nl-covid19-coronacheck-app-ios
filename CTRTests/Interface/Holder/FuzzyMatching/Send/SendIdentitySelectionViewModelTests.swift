@@ -92,7 +92,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeSuccess).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 	
 	func test_viewDidAppear_greenCardLoader_noInternet() throws {
