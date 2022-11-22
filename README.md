@@ -184,7 +184,7 @@ The Android and iOS apps share a core library, written in Go, which is responsib
 
 ## Development
 
-#### Build Requirements
+### Build Requirements
 
 To build and develop the app you need:
 
@@ -192,7 +192,7 @@ To build and develop the app you need:
 - Xcode Command Line tools (Specifically "Make").
 - [Homebrew](https://brew.sh/)
 
-#### Getting started
+### Getting started
 
 The Xcode project file ([CTR.xcodeproj](CTR.xcodeproj)) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on [project.yml](/.project.yml). 
 
@@ -209,7 +209,7 @@ It will run `bundle install` to setup your [Ruby dependencies](./Gemfile) such a
 
 Lastly, it will generate and open the Xcode Project for you.
 
-#### Continuous Integration & reproducible builds
+### Continuous Integration & reproducible builds
 
 In order to facilitate CI and reproducible builds, this codebase can be built using Github Actions.
 
@@ -228,8 +228,6 @@ The app uses a few mainstream iOS architectural concepts throughout:
 `HolderDashboardViewController/ViewModel` drive the dashboard, displaying the QR cards and entrypoint to the menu etc.
 
 `StrippenRefresher` periodically refills the [Strip Card](https://github.com/minvws/nl-covid19-coronacheck-app-coordination/blob/main/architecture/Privacy%20Preserving%20Green%20Card.md#the-strip-card-model).
-
-#### Theming, Strings, Fonts and Images 
 
 #### Localized Strings
 
