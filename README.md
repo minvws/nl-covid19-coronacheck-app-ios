@@ -237,9 +237,15 @@ Localization is managed in a [lokalise](https://lokalise.com) project.
 
 .`strings` files can be downloaded from lokalise using command `make download_translations`. 
 
-A build script combines the separate downloaded Holder and Verifier `.strings` files together (issuing a build warning if there are duplicate keys), and then R.swift generates a static Swift representation of each key (see `R.generated`). This makes sure we don't make errors in the string's name.
+The Lokalise CLI (which this triggers) downloads separate `.strings` and `.stringsdict` files for the Holder and Verifier projects. 
 
-Each value has some basic validation to ensure it contains - if any - valid HTML. (see `Scripts/strings_checker.swift`)
+We pipe these assets through R.swift as a build phase to create a static list of translated strings, and for convenience (keys shared between both projects are created in the Holder project) we first merge the Holder and Verifier assets together, before the R.swift step runs. This is done by the [merge_localizations.sh](Scripts/merge_localizations.sh) script. This script also issues a warning if any duplicate keys are detected after this merge (i.e. if a key appeared in both Holder and Verifier, indicating a clash).
+
+Many strings contain HTML tags for basic markup (`<b>`, `<i>`, `<ul>` etc). It was found that it was easy for a copy-writer to make a mistake inputting these HTML tags in their CMS web interface, and if these mistakes were undetected then it could make labels render strangely in the app at runtime. 
+
+To combat that, [a very basic HTML syntax validator](Scripts/strings_checker.swift) was written which outputs at build time warnings about the common mistakes that it checks for, for example:
+
+> Closing a tag <a> which doesn’t match the last opened tag <b>
 
 #### Colors, Images
 
