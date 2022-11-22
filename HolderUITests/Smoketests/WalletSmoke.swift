@@ -46,11 +46,11 @@ class WalletSmoke: BaseTest {
 	}
 	
 	func test_replaceSetup() {
-		let setup = TestData.vacP2DifferentSetupSituation
+		let setup = TestData.setupForMatching
 		addVaccinationCertificate(for: setup.bsn)
 		addRetrievedCertificateToApp()
 		
-		let person = TestData.vacJ1DifferentEverythingReplaces
+		let person = TestData.differentBirthdateDifferentName
 		addVaccinationCertificate(for: person.bsn)
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
