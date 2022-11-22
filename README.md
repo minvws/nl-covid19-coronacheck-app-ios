@@ -233,7 +233,7 @@ The app uses a few mainstream iOS architectural concepts throughout:
 
 Localization is managed in a [lokalise](https://lokalise.com) project.
 
-.`strings` files can be downloaded from lokalise using command `make download_translations`. 
+Localisation assets can be downloaded from lokalise using the command `make download_translations`. 
 
 The Lokalise CLI (which this triggers) downloads separate `.strings` and `.stringsdict` files for the Holder and Verifier projects. 
 
