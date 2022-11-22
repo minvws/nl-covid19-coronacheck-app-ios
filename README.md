@@ -243,7 +243,7 @@ Many strings contain HTML tags for basic markup (`<b>`, `<i>`, `<ul>` etc). It w
 
 To combat that, [a very basic HTML syntax validator](Scripts/strings_checker.swift) was written which outputs at build time warnings about the common mistakes that it checks for, for example:
 
-> Closing a tag <a> which doesn’t match the last opened tag <b>
+> Closing a tag `<a>` which doesn’t match the last opened tag `<b>`
 
 #### Colors, Images
 
