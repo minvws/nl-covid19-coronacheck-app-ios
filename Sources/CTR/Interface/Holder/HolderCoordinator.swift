@@ -775,14 +775,14 @@ extension HolderCoordinator: EventFlowDelegate {
 	
 	func eventFlowDidComplete() {
 		
-		/// The user completed the event flow. Go back to the dashboard.
+		// The user completed the event flow. Go back to the dashboard.
 		removeChildCoordinator()
 		navigateToDashboard()
 	}
 	
 	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
 		
-		/// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
+		// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
 		removeChildCoordinator()
 		navigationController.popToRootViewController(animated: false)
 		userWishesToCreateAVisitorPass()
@@ -790,7 +790,7 @@ extension HolderCoordinator: EventFlowDelegate {
 	
 	func eventFlowDidCancel() {
 		
-		/// The user cancelled the event flow.
+		// The user cancelled the event flow.
 		removeChildCoordinator()
 		logInfo("HolderCoordinator: eventFlowDidCancel")
 	}

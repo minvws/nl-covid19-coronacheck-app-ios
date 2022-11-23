@@ -289,8 +289,8 @@ class AppCoordinator: Coordinator {
 					.thirdPartyTicketApp,
 					.tvsAuth,
 					.thirdPartyScannerApp:
-				/// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
-				/// the universal link was received. So hold onto it here, for when it is ready.
+				// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
+				// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
 				return true
 		}
@@ -453,7 +453,7 @@ extension AppCoordinator {
 			return
 		}
 		
-		/// Show the snapshot (logo) view to hide sensitive data
+		// Show the snapshot (logo) view to hide sensitive data
 		if #available(iOS 13.0, *) {
 			guard let windowScene = window.windowScene else {
 				return

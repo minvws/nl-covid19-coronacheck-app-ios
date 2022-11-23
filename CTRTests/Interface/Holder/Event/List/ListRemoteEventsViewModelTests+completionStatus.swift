@@ -26,8 +26,8 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 
-		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
-		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
+		// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
+		// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
 		greenCardLoader = GreenCardLoader(
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
