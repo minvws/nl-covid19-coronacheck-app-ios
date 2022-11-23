@@ -36,7 +36,8 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
-
+  Shared:
+    path: ./Packages/Shared
 
 # - Attributes:
 
@@ -293,19 +294,6 @@ targetTemplates:
 # - Targets
 
 targets:
-  Shared:
-    templates: 
-      - Standard_Signing
-      - Standard_BaseSettings
-    platform: iOS
-    type: framework
-    sources:
-      - path: Sources/Shared
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.shared
-    info:
-      path: Sources/Shared/Shared-Info.plist
 
   Transport:
     templates: 
@@ -345,8 +333,8 @@ targets:
 
   Holder:
     dependencies:
-      - target: Shared
       - target: Transport
+      - package: Shared
     templates:
       - Standard_iOS
       - Standard_Signing
@@ -423,8 +411,8 @@ targets:
 
   Verifier:
     dependencies:
-      - target: Shared
       - target: Transport
+      - package: Shared
     templates:
       - Standard_iOS
       - Standard_Signing
