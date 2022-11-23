@@ -11,7 +11,6 @@ import Nimble
 @testable import Transport
 @testable import Shared
 
-// swiftlint:disable type_body_length
 class PaperProofCheckModelTests: XCTestCase {
 	
 	var sut: PaperProofCheckViewModel!
