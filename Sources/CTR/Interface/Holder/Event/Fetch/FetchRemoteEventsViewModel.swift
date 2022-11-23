@@ -10,7 +10,6 @@ import BrightFutures
 import Transport
 import Shared
 
-// swiftlint:disable type_body_length
 final class FetchRemoteEventsViewModel {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
