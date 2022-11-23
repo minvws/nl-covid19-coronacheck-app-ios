@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 import Nimble
@@ -17,22 +17,25 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 	private var sut: ListStoredEventsViewModel!
 	private var coordinatorSpy: HolderCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
-
+	
 	override func setUp() {
-
+		
 		super.setUp()
-
+		
 		environmentSpies = setupEnvironmentSpies()
-
+		
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 	}
-
+	
 	func setupSut() {
 		
 		sut = ListStoredEventsViewModel(coordinator: coordinatorSpy)
 	}
-	
-	// MARK: - Removal
+}
+
+// MARK: - Removal
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removal_alertDialog() throws {
 		
@@ -54,9 +57,12 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.sut.alert?.title) == L.holder_storedEvent_alert_removeEvents_title()
 		expect(self.sut.alert?.subTitle) == L.holder_storedEvent_alert_removeEvents_message()
 	}
-	
-	// MARK: - Database Error
+}
 
+// MARK: - Database Error
+
+extension ListStoredEventsViewModelRemovalTests {
+	
 	func test_removalVaccination_databaseError() throws {
 		
 		// Given
@@ -80,8 +86,11 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1110 000 062")
 	}
-	
-	// MARK: - prepare issue
+}
+
+// MARK: - prepare issue
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_failedToParsePrepareIssue() throws {
 		
@@ -202,8 +211,11 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1170 000 004")
 	}
-	
-	// MARK: - Commit Message
+}
+
+// MARK: - Commit Message
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_failedToGenerateCommitmentMessage() throws {
 		
@@ -229,7 +241,10 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1170 000 054")
 	}
 	
-	// MARK: - Signer
+}
+// MARK: - Signer
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_signer_invalidSignature() throws {
 		
@@ -326,8 +341,11 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.generalErrorServerUnreachableErrorCode("i 1180 000 004")
 	}
-	
-	// MARK: - Save GreenCards
+}
+
+// MARK: - Save GreenCards
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_failedToSaveGreenCards() throws {
 		
@@ -352,8 +370,11 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
 		expect(self.coordinatorSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1190 000 055")
 	}
-	
-	// MARK: - Mismatching Identity
+}
+
+// MARK: - Mismatching Identity
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_mismatchedIdentity() throws {
 		
@@ -378,8 +399,11 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedUserWishesToStartFuzzyMatchingFlow).toEventually(beTrue())
 	}
-	
-	// MARK: - No internet
+}
+
+// MARK: - No internet
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_noInternet() throws {
 		
@@ -404,8 +428,11 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
 	}
-	
-	// MARK: - Success
+}
+
+// MARK: - Success
+
+extension ListStoredEventsViewModelRemovalTests {
 	
 	func test_removalVaccination_success() throws {
 		
@@ -451,14 +478,17 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 	}
-	
-	// MARK: - Helpers
-	
-	private func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
+}
 
+// MARK: - Helpers
+
+extension ListStoredEventsViewModelRemovalTests {
+	
+	func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
+		
 		var eventGroup: EventGroup?
 		if let payloadData = try? JSONEncoder().encode(wrapper) {
-		   let base64String = payloadData.base64EncodedString()
+			let base64String = payloadData.base64EncodedString()
 			let signedResponse = SignedResponse(payload: base64String, signature: "does not matter for this test")
 			let context = environmentSpies.dataStoreManager.managedObjectContext()
 			context.performAndWait {

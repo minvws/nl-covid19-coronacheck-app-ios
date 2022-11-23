@@ -47,7 +47,7 @@ class NetworkManagerEventTests: XCTestCase {
 	// MARK: Pre flight errors
 	
 	func test_fetchEvents_noUrl() {
-
+		
 		// Given
 		let noEventsUrlprovider = EventFlow.EventProvider(
 			identifier: "CC",
@@ -61,11 +61,11 @@ class NetworkManagerEventTests: XCTestCase {
 			usages: [.vaccination],
 			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: noEventsUrlprovider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.provider(provider: "CC", statusCode: nil, response: nil, error: .invalidRequest)
@@ -101,21 +101,21 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	// MARK: Network errors
-
+	
 	func test_fetchEvents_noInternet() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
@@ -123,18 +123,18 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_serverBusy() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			return HTTPStubsResponse(data: Data(), statusCode: 429, headers: nil)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: 429, response: nil, error: .serverBusy)
@@ -142,19 +142,19 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_timeOut() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.timedOut.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
@@ -162,19 +162,19 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_invalidHost() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cannotFindHost.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
@@ -182,19 +182,19 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_networkConnectionLost() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.networkConnectionLost.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
@@ -202,19 +202,19 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_cancelled() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
@@ -222,19 +222,19 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_unknownError() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			let notConnectedError = NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue)
 			return HTTPStubsResponse(error: notConnectedError)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
@@ -242,11 +242,15 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
+	
+}
 
-	// MARK: Signed Response Checks
+// MARK: Signed Response Checks
 
+extension NetworkManagerEventTests {
+	
 	func test_fetchEvents_unsignedResponse() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -286,11 +290,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
@@ -298,9 +302,9 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_signedResponse_signatureNotBase64() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -313,11 +317,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)
@@ -325,9 +329,9 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_signedResponse_payloadNotBase64() {
-
+		
 		// Given
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
@@ -340,11 +344,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)
@@ -352,9 +356,9 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_signedResponse_invalidSignature() {
-
+		
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -365,7 +369,7 @@ class NetworkManagerEventTests: XCTestCase {
 			signatureValidationFactory: signatureValidationFactorySpy,
 			dataTLSCertificates: { [] }
 		)
-
+		
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -377,11 +381,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)
@@ -389,9 +393,9 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_signedResponse_invalidContent() {
-
+		
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -402,7 +406,7 @@ class NetworkManagerEventTests: XCTestCase {
 			signatureValidationFactory: signatureValidationFactorySpy,
 			dataTLSCertificates: { [] }
 		)
-
+		
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -414,11 +418,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isFailure) == true
 				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
@@ -426,9 +430,9 @@ class NetworkManagerEventTests: XCTestCase {
 			}
 		}
 	}
-
+	
 	func test_fetchEvents_validContent() throws {
-
+		
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -439,7 +443,7 @@ class NetworkManagerEventTests: XCTestCase {
 			signatureValidationFactory: signatureValidationFactorySpy,
 			dataTLSCertificates: { [] }
 		)
-
+		
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -451,11 +455,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isSuccess) == true
 				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true
@@ -469,7 +473,7 @@ class NetworkManagerEventTests: XCTestCase {
 	}
 	
 	func test_fetchEvents_validContent_verificationRequired() throws {
-
+		
 		// Given
 		let signatureValidationFactorySpy = SignatureValidationFactorySpy()
 		let signatureValidationSpy = SignatureValidationSpy()
@@ -480,7 +484,7 @@ class NetworkManagerEventTests: XCTestCase {
 			signatureValidationFactory: signatureValidationFactorySpy,
 			dataTLSCertificates: { [] }
 		)
-
+		
 		stub(condition: isPath(path)) { _ in
 			// Return valid tokens
 			return HTTPStubsResponse(
@@ -492,11 +496,11 @@ class NetworkManagerEventTests: XCTestCase {
 				headers: nil
 			)
 		}
-
+		
 		// When
 		waitUntil { done in
 			self.sut.fetchEvents(provider: self.provider) { result in
-
+				
 				// Then
 				expect(result.isSuccess) == true
 				expect(result.successValue?.0 is EventFlow.EventResultWrapper) == true

@@ -11,7 +11,7 @@ import XCTest
 import Nimble
 
 class HolderDashboardDatasourceTests: XCTestCase {
-
+	
 	/// Subject under test
 	var sut: HolderDashboardQRCardDatasource!
 	private var environmentSpies: EnvironmentSpies!
@@ -20,31 +20,31 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 	}
-
+	
 	func test_settingDidUpdateCallbackTriggersReloadWithCallback() {
 		// Arrange
 		sut = HolderDashboardQRCardDatasource()
-
+		
 		// Act
 		var wasUpdated: Bool = false
 		sut.didUpdate = { qrCards, expiredQRs in
 			wasUpdated = true
 		}
-
+		
 		// Assert
 		expect(wasUpdated) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExpiredGreenCards) == true
 	}
-
+	
 	func test_fetching_removes_expired_greencards() {
 		// Arrange
 		_ = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.walletManagerSpy.stubbedRemoveExpiredGreenCardsResult = [
 			(greencardType: "domestic", originType: "vaccination")
 		]
-
+		
 		sut = HolderDashboardQRCardDatasource()
-
+		
 		// Act
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -52,25 +52,25 @@ class HolderDashboardDatasourceTests: XCTestCase {
 			cards = $0
 			expiredQRs = $1
 		}
-
+		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExpiredGreenCards) == true
 		expect(expiredQRs.count) == 1
 		expect(expiredQRs.first?.type) == .vaccination
 		expect(cards.count) == 0
 	}
-
+	
 	func test_fetching_removes_expired_multiple_greencards() {
-
+		
 		// Arrange
 		_ = GreenCard.sampleInternationalMultipleExpiredDCC(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.walletManagerSpy.stubbedRemoveExpiredGreenCardsResult = [
 			(greencardType: "eu", originType: "vaccination"),
 			(greencardType: "eu", originType: "vaccination")
 		]
-
+		
 		sut = HolderDashboardQRCardDatasource()
-
+		
 		// Act
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
@@ -78,7 +78,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 			cards = $0
 			expiredQRs = $1
 		}
-
+		
 		// Assert
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExpiredGreenCards) == true
 		expect(expiredQRs.count) == 2
@@ -88,30 +88,30 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(expiredQRs.last?.region) == .europeanUnion
 		expect(cards.count) == 0
 	}
-
+	
 	func test_fetching_fetchesExpiringDomesticGreencard() {
 		// Arrange
 		let greencard = GreenCard.sampleDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
-
+		
 		// Act
 		sut = HolderDashboardQRCardDatasource()
-
+		
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0
 			expiredQRs = $1
 		}
-
+		
 		// Assert
 		expect(expiredQRs).to(beEmpty())
-
+		
 		guard let qrcard = cards.first, case .netherlands = qrcard.region, let firstGreencard = qrcard.greencards.first
 		else { fail(); return }
-
+		
 		expect(firstGreencard.id) == greencard.objectID
-
+		
 		expect(firstGreencard.origins.count) == 1
 		expect(firstGreencard.origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
 		expect(firstGreencard.origins.first!.expirationTime) == now.addingTimeInterval(30 * days * fromNow)
@@ -122,30 +122,30 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(qrcard.shouldShowErrorBeneathCard) == false
 		expect(qrcard.evaluateEnabledState(now)) == true
 	}
-
+	
 	func test_fetching_expiredWithMoreToFetchDomesticGreencard() {
 		// Arrange
 		let greencard = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = [greencard]
-
+		
 		// Act
 		sut = HolderDashboardQRCardDatasource()
-
+		
 		var cards = [HolderDashboardViewModel.QRCard]()
 		var expiredQRs = [HolderDashboardQRCardDatasource.ExpiredQR]()
 		sut.didUpdate = {
 			cards = $0
 			expiredQRs = $1
 		}
-
+		
 		// Assert
 		expect(expiredQRs).to(beEmpty())
-
+		
 		guard let qrcard = cards.first, case .netherlands = qrcard.region, let firstGreencard = qrcard.greencards.first
 		else { fail(); return }
-
+		
 		expect(firstGreencard.id) == greencard.objectID
-
+		
 		expect(firstGreencard.origins.count) == 1
 		expect(firstGreencard.origins.first!.eventDate) == now.addingTimeInterval(8 * days * ago)
 		expect(firstGreencard.origins.first!.expirationTime) == now.addingTimeInterval(30 * days * fromNow)
@@ -156,6 +156,11 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(qrcard.shouldShowErrorBeneathCard) == true
 		expect(qrcard.evaluateEnabledState(now)) == false
 	}
+}
+
+// MARK: Grouping
+
+extension HolderDashboardDatasourceTests {
 
 	func test_fetching_domestic_origins_are_grouped_into_one_card() {
 		// Arrange

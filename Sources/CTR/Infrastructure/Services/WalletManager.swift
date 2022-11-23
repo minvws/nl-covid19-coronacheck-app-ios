@@ -10,71 +10,6 @@ import CoreData
 import Transport
 import Shared
 
-protocol WalletManaging: AnyObject {
-
-	/// Store an event group
-	/// - Parameters:
-	///   - type: the event type (vaccination, recovery, test)
-	///   - providerIdentifier: the identifier of the provider
-	///   - jsonData: the json  data of the original signed event or dcc
-	///   - expiryDate: when will this eventgroup expire?
-	///   - isDraft: has the event been confirmed by the signer? If not, `draft = true`.
-	/// - Returns: Object if stored
-	func storeEventGroup(
-		_ type: EventMode,
-		providerIdentifier: String,
-		jsonData: Data,
-		expiryDate: Date?,
-		isDraft: Bool) -> EventGroup?
-
-	func fetchSignedEvents() -> [String]
-
-	/// Deletes any EventGroups marked as `draft=true`
-	func removeDraftEventGroups()
-	
-	/// Remove any existing event groups for the type and provider identifier
-	/// - Parameters:
-	///   - type: the type of event group
-	///   - providerIdentifier: the identifier of the the provider
-	/// - Returns: Number of event groups removed
-	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) -> Int
-
-	/// Remove any existing event groups
-	func removeExistingEventGroups()
-
-	func removeExistingGreenCards()
-	
-	func removeExistingBlockedEvents()
-	
-	func removeExistingMismatchedIdentityEvents()
-
-	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
-
-	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
-	
-	@discardableResult
-	func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent?
-
-	/// List all the event groups
-	/// - Returns: all the event groups
-	func listEventGroups() -> [EventGroup]
-
-	func listGreenCards() -> [GreenCard]
-
-	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)]
-
-	/// Expire event groups that are no longer valid
-	/// - Parameter forDate: Current date
-	func expireEventGroups(forDate: Date)
-	
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error>
-
-	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
-	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
-	
-	func updateEventGroup(identifier: String, expiryDate: Date)
-}
-
 class WalletManager: WalletManaging {
 
 	static let walletName = "main"
@@ -100,7 +35,295 @@ class WalletManager: WalletManaging {
 			}
 		}
 	}
+	
+	/// Expire event groups that are no longer valid
+	/// - Parameter forDate: Current date
+	func expireEventGroups(forDate: Date) {
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
+					logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
+					context.delete(eventGroup)
+				}
+			}
+		}
+	}
+	
+	func fetchSignedEvents() -> [String] {
 
+		var signedEvents = [String]()
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() {
+				if let jsonString = eventGroup.getSignedEvents() {
+					signedEvents.append(jsonString)
+				}
+			}
+		}
+		return signedEvents
+	}
+
+	func listGreenCards() -> [GreenCard] {
+
+		var result = [GreenCard]()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let greenCards = wallet.castGreenCards() {
+				result = greenCards
+			}
+		}
+		return result
+	}
+
+	/// List all the event groups
+	/// - Returns: all the event groups
+	func listEventGroups() -> [EventGroup] {
+
+		var result = [EventGroup]()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			result = wallet.castEventGroups()
+		}
+		return result
+	}
+
+	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
+	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType originType: OriginType? = nil) -> [GreenCard] {
+		var result = [GreenCard]()
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+				  let allGreenCards = wallet.castGreenCards()
+			else { return }
+
+			for greenCard in allGreenCards {
+				guard let origins = greenCard.castOrigins() else { break }
+
+				let hasValidRemainingOrigins = origins.contains(where: { origin in
+					guard let expirationTime = origin.expirationTime,
+						  expirationTime > now
+					else { return false }
+
+					// Optional extra check:
+					if let originType {
+						return origin.type == originType.rawValue
+					}
+
+					return true
+				})
+
+				if hasValidRemainingOrigins {
+					result += [greenCard]
+				}
+			}
+		}
+
+		return result
+	}
+	
+	func updateEventGroup(identifier: String, expiryDate: Date) {
+		
+		logDebug("WalletManager: Should update eventGroup \(identifier) with expiry \(expiryDate)")
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+		
+			wallet.castEventGroups().forEach { eventGroup in
+				if String(eventGroup.uniqueIdentifier) == identifier {
+					eventGroup.expiryDate = expiryDate
+				}
+			}
+			dataStoreManager.save(context)
+		}
+	}
+}
+
+// MARK: Storing
+
+extension WalletManager {
+	
+	func storeDomesticGreenCard(_ remoteDomesticGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
+		
+		if remoteDomesticGreenCard.origins.isEmpty {
+			return false
+		}
+		
+		var result = true
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+				
+				let greenCard = GreenCard(type: .domestic, wallet: wallet, managedContext: context)
+				for remoteOrigin in remoteDomesticGreenCard.origins {
+					result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
+				}
+				if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
+					switch convertToDomesticCredentials(cryptoManager: cryptoManager, data: data) {
+						case .failure:
+							result = false
+						case let .success(domesticCredentials):
+							for domesticCredential in domesticCredentials {
+								result = result && storeDomesticCredential(domesticCredential, greenCard: greenCard, context: context)
+							}
+					}
+				}
+			} else {
+				result = false
+			}
+			if result {
+				dataStoreManager.save(context)
+			}
+		}
+		return result
+	}
+	
+	/// Store a credential in CoreData from a Domestic Credential
+	/// - Parameters:
+	///   - domesticCredential: the domestic credential
+	///   - greenCard: the green card
+	///   - context: the managed object context
+	/// - Returns: True if storing was successful
+	private func storeDomesticCredential(_ domesticCredential: DomesticCredential, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
+		
+		if let version = Int32(domesticCredential.attributes.credentialVersion),
+		   let validFromTimeInterval = TimeInterval(domesticCredential.attributes.validFrom),
+		   let validHoursInt = Int( domesticCredential.attributes.validForHours),
+		   let data = domesticCredential.credential {
+			
+			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
+			if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
+				
+				Credential(
+					data: data,
+					validFrom: validFromDate,
+					expirationTime: expireDate,
+					version: version,
+					greenCard: greenCard,
+					managedContext: context)
+			}
+		}
+		return true
+	}
+	
+	private func convertToDomesticCredentials(cryptoManager: CryptoManaging, data: Data) -> Result<[DomesticCredential], Error> {
+		
+		let createCredentialResult = cryptoManager.createCredential(data)
+		switch createCredentialResult {
+			case let .success(credentials):
+				do {
+					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
+					logVerbose("object: \(objects)")
+					return .success(objects)
+				} catch {
+					logError("Error Deserializing: \(error)")
+					return .failure(error)
+				}
+			case let .failure(error):
+				return .failure(error)
+		}
+	}
+	
+	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
+		
+		var result = true
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+				let greenCard = GreenCard(type: .eu, wallet: wallet, managedContext: context)
+				// Origins
+				for remoteOrigin in remoteEuGreenCard.origins {
+					result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
+				}
+				// Credential (DCC has 1 credential)
+				let data = Data(remoteEuGreenCard.credential.utf8)
+				if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
+					Credential(
+						data: data,
+						validFrom: Date(timeIntervalSince1970: 0), // DCC are always immediately valid
+						expirationTime: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime),
+						version: Int32(euCredentialAttributes.credentialVersion),
+						greenCard: greenCard,
+						managedContext: context)
+				} else {
+					result = false
+				}
+			}
+			if result {
+				dataStoreManager.save(context)
+			}
+		}
+		return result
+	}
+	
+	private func storeOrigin(remoteOrigin: RemoteGreenCards.Origin, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
+		
+		if let type = OriginType(rawValue: remoteOrigin.type) {
+			
+			let origin = Origin(
+				type: type,
+				eventDate: remoteOrigin.eventTime,
+				expirationTime: remoteOrigin.expirationTime,
+				validFromDate: remoteOrigin.validFrom,
+				doseNumber: remoteOrigin.doseNumber,
+				greenCard: greenCard,
+				managedContext: context
+			)
+			
+			// Store the origin hints
+			for hint in remoteOrigin.hints {
+				OriginHint(origin: origin, hint: hint, managedContext: context)
+			}
+			return true
+			
+		} else {
+			return false
+		}
+	}
+	
+	@discardableResult func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
+
+		var blockedEvent: RemovedEvent?
+		let context = dataStoreManager.managedObjectContext()
+		
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
+				return
+			}
+			
+			blockedEvent = RemovedEvent(
+				type: type,
+				eventDate: eventDate,
+				reason: reason,
+				wallet: wallet,
+				managedContext: context
+			)
+			dataStoreManager.save(context)
+		}
+		
+		return blockedEvent
+	}
+	
 	/// Store an event group
 	/// - Parameters:
 	///   - type: the event type (vaccination, recovery, test)
@@ -138,24 +361,11 @@ class WalletManager: WalletManaging {
 		}
 		return eventGroup
 	}
-	
-	/// Expire event groups that are no longer valid
-	/// - Parameter forDate: Current date
-	func expireEventGroups(forDate: Date) {
-		
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-			
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
-			
-			for eventGroup in wallet.castEventGroups() {
-				if let expiryDate = eventGroup.expiryDate, expiryDate < forDate {
-					logInfo("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type)) \(String(describing: eventGroup.expiryDate))")
-					context.delete(eventGroup)
-				}
-			}
-		}
-	}
+}
+
+// MARK: - Removing
+
+extension WalletManager {
 	
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		
@@ -175,48 +385,6 @@ class WalletManager: WalletManaging {
 		}
 	}
 	
-	@discardableResult func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
-
-		var blockedEvent: RemovedEvent?
-		let context = dataStoreManager.managedObjectContext()
-		
-		context.performAndWait {
-			
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else {
-				return
-			}
-			
-			blockedEvent = RemovedEvent(
-				type: type,
-				eventDate: eventDate,
-				reason: reason,
-				wallet: wallet,
-				managedContext: context
-			)
-			dataStoreManager.save(context)
-		}
-		
-		return blockedEvent
-	}
-
-	func fetchSignedEvents() -> [String] {
-
-		var signedEvents = [String]()
-
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-			
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
-			
-			for eventGroup in wallet.castEventGroups() {
-				if let jsonString = eventGroup.getSignedEvents() {
-					signedEvents.append(jsonString)
-				}
-			}
-		}
-		return signedEvents
-	}
-
 	/// Remove any existing event groups for the type and provider identifier
 	/// - Parameters:
 	///   - type: the type of event group
@@ -341,228 +509,5 @@ class WalletManager: WalletManaging {
 		}
 
 		return deletedGreenCardTypes
-	}
-
-	func storeDomesticGreenCard(_ remoteDomesticGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
-
-		if remoteDomesticGreenCard.origins.isEmpty {
-			return false
-		}
-
-		var result = true
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				let greenCard = GreenCard(type: .domestic, wallet: wallet, managedContext: context)
-				for remoteOrigin in remoteDomesticGreenCard.origins {
-					result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
-				}
-				if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
-					switch convertToDomesticCredentials(cryptoManager: cryptoManager, data: data) {
-						case .failure:
-							result = false
-						case let .success(domesticCredentials):
-							for domesticCredential in domesticCredentials {
-								result = result && storeDomesticCredential(domesticCredential, greenCard: greenCard, context: context)
-							}
-					}
-				}
-			} else {
-				result = false
-			}
-			if result {
-				dataStoreManager.save(context)
-			}
-		}
-		return result
-	}
-
-	/// Store a credential in CoreData from a Domestic Credential
-	/// - Parameters:
-	///   - domesticCredential: the domestic credential
-	///   - greenCard: the green card
-	///   - context: the managed object context
-	/// - Returns: True if storing was successful
-	private func storeDomesticCredential(_ domesticCredential: DomesticCredential, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
-
-		if let version = Int32(domesticCredential.attributes.credentialVersion),
-		   let validFromTimeInterval = TimeInterval(domesticCredential.attributes.validFrom),
-		   let validHoursInt = Int( domesticCredential.attributes.validForHours),
-		   let data = domesticCredential.credential {
-
-			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
-			if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
-
-				Credential(
-					data: data,
-					validFrom: validFromDate,
-					expirationTime: expireDate,
-					version: version,
-					greenCard: greenCard,
-					managedContext: context)
-			}
-		}
-		return true
-	}
-
-	private func convertToDomesticCredentials(cryptoManager: CryptoManaging, data: Data) -> Result<[DomesticCredential], Error> {
-
-		let createCredentialResult = cryptoManager.createCredential(data)
-		switch createCredentialResult {
-			case let .success(credentials):
-				do {
-					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
-					logVerbose("object: \(objects)")
-					return .success(objects)
-				} catch {
-					logError("Error Deserializing: \(error)")
-					return .failure(error)
-				}
-			case let .failure(error):
-				return .failure(error)
-		}
-	}
-
-	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
-
-		var result = true
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				let greenCard = GreenCard(type: .eu, wallet: wallet, managedContext: context)
-				// Origins
-				for remoteOrigin in remoteEuGreenCard.origins {
-					result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
-				}
-				// Credential (DCC has 1 credential)
-				let data = Data(remoteEuGreenCard.credential.utf8)
-				if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
-					Credential(
-						data: data,
-						validFrom: Date(timeIntervalSince1970: 0), // DCC are always immediately valid
-						expirationTime: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime),
-						version: Int32(euCredentialAttributes.credentialVersion),
-						greenCard: greenCard,
-						managedContext: context)
-				} else {
-					result = false
-				}
-			}
-			if result {
-				dataStoreManager.save(context)
-			}
-		}
-		return result
-	}
-
-	private func storeOrigin(remoteOrigin: RemoteGreenCards.Origin, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
-
-		if let type = OriginType(rawValue: remoteOrigin.type) {
-
-			let origin = Origin(
-				type: type,
-				eventDate: remoteOrigin.eventTime,
-				expirationTime: remoteOrigin.expirationTime,
-				validFromDate: remoteOrigin.validFrom,
-				doseNumber: remoteOrigin.doseNumber,
-				greenCard: greenCard,
-				managedContext: context
-			)
-			
-			// Store the origin hints
-			for hint in remoteOrigin.hints {
-				OriginHint(origin: origin, hint: hint, managedContext: context)
-			}
-			return true
-
-		} else {
-			return false
-		}
-	}
-
-	func listGreenCards() -> [GreenCard] {
-
-		var result = [GreenCard]()
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let greenCards = wallet.castGreenCards() {
-				result = greenCards
-			}
-		}
-		return result
-	}
-
-	/// List all the event groups
-	/// - Returns: all the event groups
-	func listEventGroups() -> [EventGroup] {
-
-		var result = [EventGroup]()
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
-			
-			result = wallet.castEventGroups()
-		}
-		return result
-	}
-
-	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
-	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType originType: OriginType? = nil) -> [GreenCard] {
-		var result = [GreenCard]()
-
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-				  let allGreenCards = wallet.castGreenCards()
-			else { return }
-
-			for greenCard in allGreenCards {
-				guard let origins = greenCard.castOrigins() else { break }
-
-				let hasValidRemainingOrigins = origins.contains(where: { origin in
-					guard let expirationTime = origin.expirationTime,
-						  expirationTime > now
-					else { return false }
-
-					// Optional extra check:
-					if let originType {
-						return origin.type == originType.rawValue
-					}
-
-					return true
-				})
-
-				if hasValidRemainingOrigins {
-					result += [greenCard]
-				}
-			}
-		}
-
-		return result
-	}
-	
-	func updateEventGroup(identifier: String, expiryDate: Date) {
-		
-		logDebug("WalletManager: Should update eventGroup \(identifier) with expiry \(expiryDate)")
-		
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-
-			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
-		
-			wallet.castEventGroups().forEach { eventGroup in
-				if String(eventGroup.uniqueIdentifier) == identifier {
-					eventGroup.expiryDate = expiryDate
-				}
-			}
-			dataStoreManager.save(context)
-		}
 	}
 }

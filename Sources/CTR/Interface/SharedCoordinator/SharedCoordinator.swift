@@ -95,7 +95,7 @@ extension SharedCoordinator {
 		newFeaturesManager.factory = newFeaturesFactory
 
 		if onboardingManager.needsOnboarding {
-			/// Start with the onboarding
+			// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,

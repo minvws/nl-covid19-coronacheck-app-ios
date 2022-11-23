@@ -13,21 +13,21 @@ import Nimble
 
 // swiftlint:disable:next type_name
 class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
-
+	
 	/// Subject under test
 	private var sut: ListRemoteEventsViewModel!
 	private var environmentSpies: EnvironmentSpies!
 	private var greenCardLoader: GreenCardLoader!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
-
+	
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-
-		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
-		/// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
+		
+		// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
+		// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
 		greenCardLoader = GreenCardLoader(
 			networkManager: environmentSpies.networkManagerSpy,
 			cryptoManager: environmentSpies.cryptoManagerSpy,
@@ -35,7 +35,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
 	}
-
+	
 	func setupSut() {
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -44,9 +44,9 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 	}
-
+	
 	func test_vaccinationrow_completionStatus_unknown() {
-
+		
 		// Given
 		let remoteEvent = remoteVaccinationEvent(
 			completedByMedicalStatement: nil,
@@ -60,12 +60,12 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			remoteEvents: [remoteEvent],
 			greenCardLoader: greenCardLoader
 		)
-
+		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
 			return
 		}
-
+		
 		// When
 		rows.first?.action?()
 		// Then
@@ -85,7 +85,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 	}
 	
 	func test_vaccinationrow_completionStatus_unknown_withCompletionReason() {
-
+		
 		// Given
 		let remoteEvent = remoteVaccinationEvent(
 			completedByMedicalStatement: nil,
@@ -99,17 +99,17 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			remoteEvents: [remoteEvent],
 			greenCardLoader: greenCardLoader
 		)
-
+		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
 			return
 		}
-
+		
 		// When
 		rows.first?.action?()
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-
+		
 		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
@@ -122,9 +122,14 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		expect(title) == L.holderEventAboutTitle()
 		expect(completionReason.value) == nil
 	}
+}
+
+// MARK: Status Inomplete
+
+extension ListRemoteEventsViewModelCompletionStatusTests {
 	
 	func test_vaccinationrow_completionStatus_incomplete_withMedicalStatement() {
-
+		
 		// Given
 		let remoteEvent = remoteVaccinationEvent(
 			completedByMedicalStatement: false,
@@ -138,17 +143,17 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			remoteEvents: [remoteEvent],
 			greenCardLoader: greenCardLoader
 		)
-
+		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
 			return
 		}
-
+		
 		// When
 		rows.first?.action?()
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-
+		
 		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
@@ -163,7 +168,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withPersonalStatement() {
-
+		
 		// Given
 		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: false, completionReason: nil)
 		
@@ -173,17 +178,17 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			remoteEvents: [remoteEvent],
 			greenCardLoader: greenCardLoader
 		)
-
+		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
 			return
 		}
-
+		
 		// When
 		rows.first?.action?()
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-
+		
 		guard case let .showEventDetails(title, details, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
@@ -196,6 +201,11 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		expect(title) == L.holderEventAboutTitle()
 		expect(completionReason.value) == nil
 	}
+}
+
+// MARK: Status Complete
+
+extension ListRemoteEventsViewModelCompletionStatusTests {
 	
 	func test_vaccinationrow_completionStatus_complete_noReason() {
 
@@ -396,8 +406,11 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 		expect(title) == L.holderEventAboutTitle()
 		expect(completionReason.value) == completionStatus
 	}
-	
-	// MARK: Helper
+}
+
+// MARK: Helper
+
+extension ListRemoteEventsViewModelCompletionStatusTests {
 	
 	func remoteVaccinationEvent(
 		completedByMedicalStatement: Bool?,
