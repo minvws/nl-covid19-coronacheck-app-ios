@@ -6,7 +6,7 @@
  */
 
 import Foundation
-
+// swiftlint:disable type_name
 protocol VaccinationAssessmentNotificationManagerProtocol {
 	
 	func hasVaccinationAssessmentEventButNoOrigin(now: Date) -> Bool

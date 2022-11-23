@@ -7,6 +7,7 @@
 
 import UIKit
 
+// swiftlint:disable type_name
 protocol PagedAnnouncementItemViewControllerDelegate: AnyObject {
 	
 	/// Delegates the onAccessibilityScroll event

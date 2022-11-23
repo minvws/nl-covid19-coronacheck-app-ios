@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 
+// swiftlint:disable type_name
 protocol HolderDashboardRemovedEventsDatasourceProtocol: AnyObject {
 	var didUpdate: (([RemovedEventItem]) -> Void)? { get set }
 }
