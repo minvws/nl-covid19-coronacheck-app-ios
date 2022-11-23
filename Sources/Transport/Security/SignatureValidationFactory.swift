@@ -33,10 +33,10 @@ public struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 		
 		if case let .provider(provider) = strategy {
 			trustedSigners = []
-			let helper = CMSCertificateHelper()
+			let certificateParser = CertificateParser()
 			for cmsCertificate in provider.getCMSCertificates() {
-				if let commonName = helper.getCommonName(for: cmsCertificate),
-				   let authKey = helper.getAuthorityKeyIdentifier(for: cmsCertificate) {
+				if let commonName = certificateParser.getCommonName(for: cmsCertificate),
+				   let authKey = certificateParser.getAuthorityKeyIdentifier(for: cmsCertificate) {
 					for trustedCert in [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate] {
 						var copy = trustedCert
 						copy.authorityKeyIdentifier = authKey
