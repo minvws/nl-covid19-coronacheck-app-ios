@@ -8,14 +8,15 @@
 import XCTest
 import Nimble
 @testable import Transport
+@testable import HTTPSecurity
 
 class SignatureValidationFactoryTests: XCTestCase {
-	
+
 	override func setUp() {
-		
+
 		super.setUp()
 	}
-	
+
 	// MARK: Strategy none
 
 	func test_securityCheckerNone_validate() {

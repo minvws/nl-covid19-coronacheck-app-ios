@@ -5,7 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-@testable import Transport
+import Foundation
+@testable import HTTPSecurity
 
 class SignatureValidationSpy: SignatureValidation {
 

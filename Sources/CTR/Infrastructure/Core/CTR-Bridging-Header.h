@@ -10,4 +10,3 @@
 //
 
 #import "ObjC.h"
-#import "Transport-objc-bridging-header.h"

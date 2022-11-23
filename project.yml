@@ -24,9 +24,6 @@ packages:
   OHHTTPStubs:
     github: AliSoftware/OHHTTPStubs
     majorVersion: 9.1.0
-  OpenSSL:
-    github: krzyzanowskim/OpenSSL
-    exactVersion: 1.1.1900
   BrightFutures:
     github: Thomvis/BrightFutures
     branch: master
@@ -144,7 +141,8 @@ targetTemplates:
         product: QRGenerator
       - package: RDOModules
         product: OpenIDConnect
-      - package: OpenSSL
+      - package: RDOModules
+        product: HTTPSecurity
       - package: Inject
       - package: Reachability
         product: Reachability
@@ -318,14 +316,14 @@ targets:
     sources:
       - path: Sources/Transport
     dependencies:
-      - package: OpenSSL
+      - package: RDOModules
+        product: HTTPSecurity
       - target: Shared
       - package: BrightFutures
         product: BrightFutures
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.transport
-        SWIFT_OBJC_BRIDGING_HEADER: Sources/Transport/Transport-objc-bridging-header.h
     info:
       path: Sources/Transport/Transport-Info.plist
 
@@ -333,6 +331,8 @@ targets:
     platform: iOS
     type: bundle.unit-test
     dependencies:
+      - package: RDOModules
+        product: HTTPSecurity
       - package: Nimble
       - package: OHHTTPStubs
         product: OHHTTPStubsSwift

@@ -6,6 +6,7 @@
  */
 
 @testable import Transport
+@testable import HTTPSecurity
 
 class SignatureValidationFactorySpy: SignatureValidationFactoryProtocol {
 
