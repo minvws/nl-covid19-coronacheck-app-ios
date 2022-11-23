@@ -21,6 +21,7 @@ class OpenSSLChainTests: XCTestCase {
 		sut = OpenSSL()
 	}
 
+	// swiftlint:disable function_body_length
 	func needs_fixing_expired_DSTRootCAX3_test_fake_chain() {
 
 		guard let realRoot = try? Data(contentsOf: testBundle.url(forResource: "ca", withExtension: ".real")!) else { XCTFail("could not load"); return }
