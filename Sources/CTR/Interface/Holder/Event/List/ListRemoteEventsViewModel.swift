@@ -117,11 +117,18 @@ class ListRemoteEventsViewModel {
 	// MARK: Sign the events
 
 	internal func userWantsToMakeQR() {
-		
-		storeAndSign()
+
+		if Current.identityChecker.compare(eventGroups: walletManager.listEventGroups(), with: remoteEvents) {
+			storeAndSign(replaceExistingEventGroups: false)
+		} else {
+			showIdentityMismatch {
+				// Replace the stored eventgroups
+				self.storeAndSign(replaceExistingEventGroups: true)
+			}
+		}
 	}
 
-	private func storeAndSign() {
+	private func storeAndSign(replaceExistingEventGroups: Bool) {
 
 		// US 4664: Prevent duplicate scanned dcc.
 		guard !(eventMode == .paperflow && doRemoteEventsContainExistingPaperProofs()) else {
@@ -144,7 +151,8 @@ class ListRemoteEventsViewModel {
 			}
 		}
 		
-		storeEvent { newlyStoredEventGroups in
+		storeEvent(
+			replaceExistingEventGroups: replaceExistingEventGroups) { newlyStoredEventGroups in
 
 			guard let newlyStoredEventGroups = newlyStoredEventGroups else {
 				self.progressIndicationCounter.decrement()
@@ -216,7 +224,13 @@ class ListRemoteEventsViewModel {
 		
 		switch result {
 			case let .success(response):
-	
+			
+				// We've just processed some events with the backend and received `.success`,
+				// therefore none of the `eventsBeingAdded` should no longer be marked as draft:
+				eventsBeingAdded
+					.filter { $0.isDraft }
+					.forEach { $0.update(isDraft: false) }
+				
 				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
 				guard !shouldShowBlockingEndState else {
 					self.shouldPrimaryButtonBeEnabled = true
@@ -233,6 +247,7 @@ class ListRemoteEventsViewModel {
 				}
 				
 			case let .failure(greenCardError):
+				
 				let parser = GreenCardResponseErrorParser(flow: eventMode.flow)
 				switch parser.parse(greenCardError) {
 					case .noInternet:
@@ -240,10 +255,14 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
+						Current.walletManager.removeExistingGreenCards()
+						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
+					
 						showEventError()
 						shouldPrimaryButtonBeEnabled = true
 						
 					case let .customError(title: title, message: message):
+						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
 						displayError(title: title, message: message)
 						
 					case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
@@ -281,11 +300,17 @@ class ListRemoteEventsViewModel {
 		let shouldShowBlockingEndState = blockItems.combinedWith(matchingEventGroups: eventsBeingAdded).isNotEmpty
 		return shouldShowBlockingEndState
 	}
-
+	
 	// MARK: - Store events
 
 	private func storeEvent(
+		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping ([EventGroup]?) -> Void) {
+
+		if replaceExistingEventGroups {
+			// Replace when there is a identity mismatch
+			walletManager.removeExistingEventGroups()
+		}
 
 		// We can not store empty remoteEvents without an event. (happens with .pending)
 		// ZZZ sometimes returns an empty array of events in the combined flow.
@@ -312,15 +337,15 @@ class ListRemoteEventsViewModel {
 			}
 			
 			// Remove any existing events for the uniqueIdentifier -> so we do not have duplicates
-			walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
+			let removedEventGroupCount = walletManager.removeExistingEventGroups(type: storageMode, providerIdentifier: uniqueIdentifier)
 			
 			// Store the event group
-			
 			guard let eventGroup = walletManager.storeEventGroup(
 				storageMode,
 				providerIdentifier: uniqueIdentifier,
 				jsonData: jsonData,
-				expiryDate: nil
+				expiryDate: nil,
+				isDraft: removedEventGroupCount == 0
 			) else {
 				onCompletion(nil)
 				return

@@ -301,6 +301,10 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
+"holder.event.identity.alert.cancel" = "Stop";
+"holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
+"holder.event.identity.alert.ok" = "Replace";
+"holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
@@ -650,6 +654,7 @@
 "holder_identitySelection_details_scannedPaperProof" = "Scanned certificate";
 "holder_identitySelection_error_makeAChoice" = "Please make a choice first";
 "holder_identitySelection_error_willBeRemoved" = "This one will be removed";
+"holder_identitySelection_loading_accessibility" = "Your details are being updated";
 "holder_identitySelection_loading_title" = "Updating details";
 "holder_identitySelection_message" = "Please check in the details which vaccinations or test results are connected to your preferred name.";
 "holder_identitySelection_skipAlert_action" = "Yes, skip";

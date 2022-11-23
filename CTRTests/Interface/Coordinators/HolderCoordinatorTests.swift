@@ -34,6 +34,15 @@ class HolderCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 
+	func testRunsDatabaseCleanupOnStart() {
+		// When
+		sut.start()
+
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
+	}
+	
 	func testStartNewFeatures() {
 
 		// Given

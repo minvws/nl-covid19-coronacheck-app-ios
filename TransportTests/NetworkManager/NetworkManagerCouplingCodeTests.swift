@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerCouplingCodeTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/coupling"
+	private let path = "/v9/holder/coupling"
 	
 	override func setUp() {
 		

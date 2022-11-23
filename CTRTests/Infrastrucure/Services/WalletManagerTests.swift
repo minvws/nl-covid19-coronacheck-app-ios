@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 
 @testable import CTR
 @testable import Transport
@@ -76,11 +76,38 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// Then
 		expect(eventGroup) != nil
+		expect(wallet?.eventGroups).to(haveCount(1))
+	}
+	
+	func test_removeDraftEventGroups() {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data(),
+			expiryDate: nil,
+			isDraft: false
+		)
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CoronaCheck",
+			jsonData: Data(),
+			expiryDate: nil,
+			isDraft: true
+		)
+
+		// When
+		sut.removeDraftEventGroups()
+
+		// Then
+		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		expect(wallet?.eventGroups).to(haveCount(1))
 	}
 
@@ -92,14 +119,16 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
-		sut.removeExistingEventGroups(type: .vaccination, providerIdentifier: "CoronaCheck")
+		let result = sut.removeExistingEventGroups(type: .vaccination, providerIdentifier: "CoronaCheck")
 
 		// Then
 		expect(wallet?.eventGroups).to(beEmpty())
+		expect(result) == 1
 	}
 
 	func test_removeExistingEventGroups_otherProviderIdentifier() {
@@ -110,7 +139,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -128,7 +158,8 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -146,19 +177,22 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GGD",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -175,19 +209,22 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "Other Provider",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GGD",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -215,7 +252,8 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("WRONG".utf8),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -232,7 +270,8 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("{\"payload\": \"test\"}".utf8),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -251,13 +290,15 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("{\"payload\": \"test\"}".utf8),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data("{\"payload\": \"vaccination\"}".utf8),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 
 		// When
@@ -288,7 +329,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * days)
+			expiryDate: now.addingTimeInterval(10 * days),
+			isDraft: false
 		)
 
 		// When
@@ -305,7 +347,8 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		// When
@@ -322,14 +365,16 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CC",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		// When
@@ -346,28 +391,32 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.vaccinationassessment,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		// When
@@ -384,21 +433,24 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		// When
@@ -415,21 +467,24 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours)
+			expiryDate: now.addingTimeInterval(10 * hours),
+			isDraft: false
 		)
 
 		// When
@@ -446,28 +501,32 @@ class WalletManagerTests: XCTestCase {
 			.vaccination,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.recovery,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		sut.storeEventGroup(
 			.vaccinationassessment,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago)
+			expiryDate: now.addingTimeInterval(10 * hours * ago),
+			isDraft: false
 		)
 
 		// When
@@ -495,6 +554,7 @@ class WalletManagerTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}
@@ -740,7 +800,8 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		let autoId = try XCTUnwrap(self.sut.listEventGroups().first?.uniqueIdentifier)
 		
@@ -759,7 +820,8 @@ class WalletManagerTests: XCTestCase {
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
 			jsonData: Data(),
-			expiryDate: nil
+			expiryDate: nil,
+			isDraft: false
 		)
 		
 		// When

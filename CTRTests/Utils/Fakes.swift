@@ -1317,6 +1317,7 @@ extension EventGroup {
 					expiryDate: expiryDate,
 					jsonData: jsonData,
 					wallet: wallet,
+					isDraft: true,
 					managedContext: context
 				)
 			}
@@ -1340,6 +1341,7 @@ extension EventGroup {
 						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
+						isDraft: true,
 						managedContext: context
 					)
 				}
@@ -1361,6 +1363,7 @@ extension EventGroup {
 					expiryDate: nil,
 					jsonData: jsonData,
 					wallet: wallet,
+					isDraft: true,
 					managedContext: context
 				)
 			}

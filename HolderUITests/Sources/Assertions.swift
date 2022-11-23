@@ -16,6 +16,19 @@ extension BaseTest {
 		assertNoInternationalCertificate()
 	}
 	
+	func assertRemovedCertificates(events: [Event]) {
+		app.textExists("Mijn bewijzen")
+		let message = "Je gegevens zijn bijgewerkt. Mogelijk zijn daardoor bewijzen weg."
+		let notification = app.otherElements.containing(.staticText, identifier: message).allElementsBoundByIndex.last
+		notification?.tapButton("Lees meer")
+		
+		app.textExists("Bijgewerkte gegevens")
+		for event in events {
+			app.containsText(event.type.rawValue)
+			app.containsValue(event.eventDate.toString(.written))
+		}
+	}
+	
 	// MARK: - Certificate retrieval
 	
 	private func returnToCertificateOverview() {
@@ -55,11 +68,6 @@ extension BaseTest {
 	func assertNoTestresultIsAvailable() {
 		app.textExists("Geen testuitslag beschikbaar")
 		returnToCertificateOverview()
-	}
-	
-	func replaceExistingCertificate(_ replace: Bool) {
-		app.textExists("Wil je je bewijs vervangen?")
-		app.tapButton(replace ? "Vervang" : "Stoppen")
 	}
 	
 	func assertHintForInternationalVaccinationAndRecoveryCertificate() {

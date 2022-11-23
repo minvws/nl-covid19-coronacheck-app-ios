@@ -248,12 +248,12 @@ class ListStoredEventsViewModel {
 	
 	private func getRowFromRecoveryDCC(_ recovery: EuCredentialAttributes.RecoveryEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
-		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? recovery.firstPositiveTestDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
-			details: formattedVaccinationDate,
+			details: formattedTestDate,
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -265,12 +265,12 @@ class ListStoredEventsViewModel {
 	
 	private func getRowFromNegativeTestDCC(_ test: EuCredentialAttributes.TestEntry, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
 		
-		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_negativeTest().capitalizingFirstLetter(),
-			details: formattedVaccinationDate,
+			details: formattedTestDate,
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_negativeTest().capitalizingFirstLetter(),
@@ -315,7 +315,7 @@ class ListStoredEventsViewModel {
 	}
 	
 	private func handleCoreDataError() {
-		
+	
 		let errorCode = ErrorCode(flow: .clearEvents, step: .removeEventGroups, clientCode: .coreDataFetchError)
 		displayError(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}

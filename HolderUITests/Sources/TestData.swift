@@ -115,15 +115,24 @@ final class TestData {
 	static let vacP2BirthdateJAN01 = TestPerson(bsn: "999991231", birthDate: "1960-JAN-01") // 2 pfizer birthdate JAN-01
 	static let vacP2Birthdate0101 = TestPerson(bsn: "999991243", birthDate: "19600101") // 2 pfizer birthdate 0101
 	
-	// Vaccinations - event matching
-	static let vacP2DifferentSetupSituation = TestPerson(bsn: "999993562", name: "van Geer, Corrie", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // 2 pfizer setup situation
-	static let vacJ1DifferentFirstNameMerges = TestPerson(bsn: "999991255", name: "van Geer, Pieter", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // 1 janssen different first name, merges with setup
-	static let vacJ1DifferentLastNameMerges = TestPerson(bsn: "999991267", name: "de Heuvel, Corrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // 1 janssen different last name, merges with setup
-	static let vacJ1DifferentFullNameReplaces = TestPerson(bsn: "999992156", name: "de Heuvel, Pieter", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name, replaces setup
-	static let vacJ1DifferentBirthDayCanReplace = TestPerson(bsn: "899991279", birthDate: "1960-01-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth day, can replace setup
-	static let vacJ1DifferentBirthMonthCanReplace = TestPerson(bsn: "999993021", birthDate: "1960-02-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different birth month, can replace setup
-	static let vacJ1DifferentBirthYearMerges = TestPerson(bsn: "899991292", birthDate: "1970-01-01", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // 1 janssen different birth year, merges with setup
-	static let vacJ1DifferentEverythingReplaces = TestPerson(bsn: "999991723", name: "de Heuvel, Pieter", birthDate: "1970-02-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // 1 janssen different full name and birthdate, replaces setup
+	// Vaccinations - matching
+	static let setupForMatching = TestPerson(bsn: "999993562", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // setup situation
+
+	static let identicalBirthdateIdenticalName = TestPerson(bsn: "999991255", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // matching birthdate, name matches 100%, merges
+	static let identicalBirthdateMatchingName = TestPerson(bsn: "999991267", name: "van Gool, Berrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // matching birthdate, name matches >75%, merges
+	static let identicalBirthdateDifferentFirstName = TestPerson(bsn: "999992156", name: "van Gool, Borry", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // matching birthdate, first name matches <75%, can replace setup
+	static let identicalBirthdateDifferentLastName = TestPerson(bsn: "999993021", name: "de Gael, Berrie", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // matching birthdate, last name matches <75%, can replace setup
+	static let identicalBirthdateDifferentFirstNameInitial = TestPerson(bsn: "999991723", name: "van Geer, Xorrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // matching birthdate, only first name initial different, merges
+	static let identicalBirthdateDifferentLastNameInitial = TestPerson(bsn: "999994098", name: "van Xeer, Corrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // matching birthdate, only last name initial different, merges
+	static let differentBirthDay = TestPerson(bsn: "999994104", name: "van Geer, Corrie", birthDate: "1960-01-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // different birth day, can replace setup
+	static let differentBirthMonth = TestPerson(bsn: "999994116", name: "van Geer, Corrie", birthDate: "1960-02-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // different birth month, can replace setup
+	static let differentBirthYeardateIdenticalName = TestPerson(bsn: "999994128", name: "van Geer, Corrie", birthDate: "1970-01-01", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // different birth year, name matches 100%, merges
+	static let differentBirthYeardateMatchingName = TestPerson(bsn: "999994141", name: "van Gool, Berrie", birthDate: "1970-01-01", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // different birth year, name matches >75%, merges
+	static let differentBirthYeardateDifferentFirstName = TestPerson(bsn: "999994153", name: "van Gool, Borry", birthDate: "1970-01-01", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // different birth year, first name matches <75%, can replace setup
+	static let differentBirthYeardateDifferentLastName = TestPerson(bsn: "999994165", name: "de Gael, Berrie", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // different birth year, last name matches <75%, can replace setup
+	static let differentBirthYeardateDifferentFirstNameInitial = TestPerson(bsn: "999994177", name: "van Geer, Xorrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // different birth year, only first name initial different, merges
+	static let differentBirthYeardateDifferentLastNameInitial = TestPerson(bsn: "999994189", name: "van Xeer, Corrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // different birth year, only last name initial different, merges
+	static let differentBirthdateDifferentName = TestPerson(bsn: "999994190", name: "de Heuvel, Pieter", birthDate: "1970-02-02", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // different full name and birthdate, can replace setup
 	
 	// Vaccinations - around 18
 	static let around18Is17y8mWithP2LastDose1M = TestPerson(bsn: "999993422", birthDate: "2004-08-01", dose: 2, doseIntl: ["1/2", "2/2"], vacFrom: -16) // 2 pfizer, 4 months before 18, last dose 1 month ago

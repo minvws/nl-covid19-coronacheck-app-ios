@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerPublicKeysTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/public_keys"
+	private let path = "/v9/holder/public_keys"
 	
 	override func setUp() {
 		

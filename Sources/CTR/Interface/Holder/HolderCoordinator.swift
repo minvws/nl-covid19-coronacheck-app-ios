@@ -101,12 +101,14 @@ class HolderCoordinator: SharedCoordinator {
 	
 	// Designated starter method
 	override func start() {
+
+		performAppLaunchCleanup()
 		
 		if LaunchArgumentsHandler.shouldSkipOnboarding() {
 			navigateToDashboard(replacingWindowRootViewController: true)
 			return
 		}
-		
+				
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
 			newFeaturesFactory: HolderNewFeaturesFactory()
@@ -185,6 +187,14 @@ class HolderCoordinator: SharedCoordinator {
 		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
 			self?.thirdpartyTicketApp = nil
 		}
+	}
+	
+	// MARK: - App Launch Cleanup
+	
+	func performAppLaunchCleanup() {
+		
+		Current.walletManager.removeDraftEventGroups()
+		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
 	}
 	
 	// MARK: - Universal Links
@@ -448,7 +458,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				let dateString = DateFormatter.Format.dayMonthYear.string(from: item.eventDate)
 				return """
 				<p>
-					<b>\(item.type.localized.capitalized)</b>
+					<b>\(item.type.localized.capitalizingFirstLetter())</b>
 					<br />
 					<b>\(localizedDateLabel.capitalizingFirstLetter()): \(dateString)</b>
 				</p>
@@ -818,7 +828,10 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 	}
 	
 	func finishNewDisclosurePolicy() {
-		removeChildCoordinator()
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is UpdatedDisclosurePolicyCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 	}
 	
 	func handleDisclosurePolicyUpdates() {
@@ -848,12 +861,16 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 	
 	func fuzzyMatchingFlowDidFinish() {
-		removeChildCoordinator()
+		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 		navigateBackToStart()
 	}
 	
 	func fuzzyMatchingFlowDidStop() {
-		removeChildCoordinator()
+		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 		navigateBackToStart()
 	}
 }

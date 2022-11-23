@@ -57,6 +57,11 @@ extension BaseTest {
 		if hidden { assertHiddenQR() }
 	}
 	
+	func backToOverview() {
+		app.textExists("Internationale QR")
+		app.tapButton("Terug")
+	}
+	
 	func addVaccinationCertificate(for bsn: String, combinedWithPositiveTest: Bool = false) {
 		addEvent()
 		app.tapButton("Vaccinatie. Ik heb een (booster)vaccinatie gehad")
@@ -138,7 +143,7 @@ extension BaseTest {
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
 		
-		let open = safari.buttons["Open"].waitForExistence(timeout: loginTimeout)
+		let open = safari.buttons["Open"].waitForExistence(timeout: 1.0)
 		if open {
 			safari.tapButton("Open")
 		}
@@ -181,7 +186,28 @@ extension BaseTest {
 		let element = app.descendants(matching: .activityIndicator).firstMatch
 		let predicate = NSPredicate(format: "exists == false")
 		self.expectation(for: predicate, evaluatedWith: element, handler: nil)
-		self.waitForExpectations(timeout: self.loginTimeout, handler: nil)
+		self.waitForExpectations(timeout: 2.0, handler: nil)
+	}
+	
+	func replaceExistingCertificate(_ replace: Bool) {
+		app.textExists("Wil je je bewijs vervangen?")
+		app.tapButton(replace ? "Vervang" : "Stoppen")
+	}
+	
+	func chooseToKeepNameOf(_ person: Person) {
+		app.textExists("Je naam is niet hetzelfde geschreven")
+		app.tapButton("Volgende")
+		app.textExists("Kies straks één naam")
+		app.tapButton("Volgende")
+		app.textExists("Laat andere namen herschrijven")
+		app.tapButton("Volgende")
+		
+		app.textExists("Welke naam kies je?")
+		app.tapButton(person.name)
+		app.tapButton("Keuze opslaan")
+		
+		app.textExists("Dank! Je gegevens zijn bijgewerkt")
+		app.tapButton("Naar mijn bewijzen")
 	}
 	
 	func viewWallet() {

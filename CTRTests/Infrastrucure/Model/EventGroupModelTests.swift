@@ -40,6 +40,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: date,
 					jsonData: unwrappedJson,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}
@@ -71,6 +72,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 				EventGroup(
@@ -79,6 +81,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}
@@ -105,6 +108,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 				EventGroup(
@@ -113,6 +117,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}
@@ -145,6 +150,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 				EventGroup(
@@ -153,6 +159,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}
@@ -185,6 +192,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 				
@@ -194,6 +202,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 
@@ -228,6 +237,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 				
@@ -237,6 +247,7 @@ class EventGroupModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 

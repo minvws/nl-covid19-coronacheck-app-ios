@@ -18,20 +18,26 @@ protocol WalletManaging: AnyObject {
 	///   - providerIdentifier: the identifier of the provider
 	///   - jsonData: the json  data of the original signed event or dcc
 	///   - expiryDate: when will this eventgroup expire?
+	///   - isDraft: has the event been confirmed by the signer? If not, `draft = true`.
 	/// - Returns: Object if stored
 	func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> EventGroup?
+		expiryDate: Date?,
+		isDraft: Bool) -> EventGroup?
 
 	func fetchSignedEvents() -> [String]
 
+	/// Deletes any EventGroups marked as `draft=true`
+	func removeDraftEventGroups()
+	
 	/// Remove any existing event groups for the type and provider identifier
 	/// - Parameters:
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
-	func removeExistingEventGroups(type: EventMode, providerIdentifier: String)
+	/// - Returns: Number of event groups removed
+	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) -> Int
 
 	/// Remove any existing event groups
 	func removeExistingEventGroups()
@@ -106,7 +112,9 @@ class WalletManager: WalletManaging {
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
-		expiryDate: Date?) -> EventGroup? {
+		expiryDate: Date?,
+		isDraft: Bool
+	) -> EventGroup? {
 
 		var eventGroup: EventGroup?
 
@@ -123,6 +131,7 @@ class WalletManager: WalletManaging {
 				expiryDate: expiryDate,
 				jsonData: jsonData,
 				wallet: wallet,
+				isDraft: isDraft,
 				managedContext: context
 			)
 			dataStoreManager.save(context)
@@ -151,6 +160,19 @@ class WalletManager: WalletManaging {
 	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		
 		dataStoreManager.delete(objectID)
+	}
+
+	/// Deletes any EventGroups marked as `draft=true`
+	func removeDraftEventGroups() {
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.isDraft {
+				context.delete(eventGroup)
+			}
+		}
 	}
 	
 	@discardableResult func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
@@ -199,8 +221,10 @@ class WalletManager: WalletManaging {
 	/// - Parameters:
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
-	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
+	@discardableResult
+	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) -> Int {
 		
+		var removedCount = 0
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			
@@ -209,9 +233,11 @@ class WalletManager: WalletManaging {
 			for eventGroup in wallet.castEventGroups() where eventGroup.providerIdentifier?.lowercased() == providerIdentifier.lowercased() && eventGroup.type == type.rawValue {
 				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 				context.delete(eventGroup)
+				removedCount += 1
 			}
 			dataStoreManager.save(context)
 		}
+		return removedCount
 	}
 
 	/// Remove any existing event groups

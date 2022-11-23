@@ -23,6 +23,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 
 		/// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.

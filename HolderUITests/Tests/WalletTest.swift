@@ -73,13 +73,13 @@ class WalletTest: BaseTest {
 	}
 	
 	func test_keepSetup() {
-		let setup = TestData.vacP2DifferentSetupSituation
+		let setup = TestData.setupForMatching
 		addVaccinationCertificate(for: setup.bsn)
 		let vac0 = storeRetrievedCertificateDetails(atIndex: 0)
 		let vac1 = storeRetrievedCertificateDetails(atIndex: 1)
 		addRetrievedCertificateToApp()
 		
-		let person = TestData.vacJ1DifferentEverythingReplaces
+		let person = TestData.differentBirthdateDifferentName
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		replaceExistingCertificate(false)

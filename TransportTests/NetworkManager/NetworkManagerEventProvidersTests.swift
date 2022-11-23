@@ -14,7 +14,7 @@ import OHHTTPStubsSwift
 class NetworkManagerEventProvidersTests: XCTestCase {
 	
 	private var sut: NetworkManager!
-	private let path = "/v8/holder/config_providers"
+	private let path = "/v9/holder/config_providers"
 	
 	override func setUp() {
 		

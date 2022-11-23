@@ -77,10 +77,10 @@ open class Event {
 		self.couplingCode = couplingCode
 	}
 	
-	enum EventType {
-		case vaccination
-		case positiveTest
-		case negativeTest
+	enum EventType: String {
+		case vaccination = "Vaccinatie"
+		case positiveTest = "Positieve test"
+		case negativeTest = "Negatieve test"
 	}
 	
 	enum Country {

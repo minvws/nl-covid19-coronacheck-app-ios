@@ -361,7 +361,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
 		environmentSpies.walletManagerSpy.stubbedRemoveEventGroupResult = .success(())
-		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		let serverResponse = ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]]))
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
 		setupSut()
@@ -470,6 +470,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 						expiryDate: nil,
 						jsonData: jsonData,
 						wallet: wallet,
+						isDraft: false,
 						managedContext: context
 					)
 				}

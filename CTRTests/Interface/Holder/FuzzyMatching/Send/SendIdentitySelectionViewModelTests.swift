@@ -50,10 +50,10 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.content.body).toEventually(equal( L.holderErrorstateClientMessage("i 1310 000 101")))
 	}
 	
-	func test_viewDidAppear_lessThanTwoMatchingBlobs() {
+	func test_viewDidAppear_emptyMatchingBlobs() {
 		
 		// Given
-		setupSut(matchingBlobIds: [["123"]], selectedBlobIds: ["123"])
+		setupSut(matchingBlobIds: [], selectedBlobIds: ["123"])
 		
 		// When
 		sut.viewDidAppear()
@@ -92,6 +92,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeSuccess).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 	
 	func test_viewDidAppear_greenCardLoader_noInternet() throws {
@@ -109,6 +110,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentError).toEventually(beFalse())
 		expect(self.sut.alert.value?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert.value?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 	
 	func test_viewDidAppear_greenCardLoader_errorFailedToSaveGreenCards() {
@@ -126,6 +128,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedPresentError).toEventually(beTrue())
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.0.title) == L.holderErrorstateTitle()
 		expect(self.coordinatorDelegateSpy.invokedPresentErrorParameters?.0.body) == L.holderErrorstateClientMessage("i 1390 000 055")
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 	}
 	
 	func test_viewDidAppear_greenCardLoader_error_primaryAction() {
@@ -144,6 +147,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserHasStoppedTheFlow).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 	}
 	
 	func test_viewDidAppear_greenCardLoader_errorFuzzyMatching() {
@@ -152,7 +156,7 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		setupSut(matchingBlobIds: [["123"], ["456"]], selectedBlobIds: ["123"])
 		dataSourceSpy.stubbedGetIdentityResult = EventFlow.Identity(infix: "van", firstName: "Tester", lastName: "Test", birthDateString: "2022-10-12")
 		environmentSpies.secureUserSettingsSpy.stubbedSelectedIdentity = "van Test, Tester"
-		let serverResponse = ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]])
+		let serverResponse = ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]]))
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
 		
@@ -161,5 +165,6 @@ final class SendIdentitySelectionViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedRestartFlow).toEventually(beTrue())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
 	}
 }
