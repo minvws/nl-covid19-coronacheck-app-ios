@@ -82,6 +82,41 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
 		expect(self.sut.state.loadingState) == .idle
 	}
+	
+	// MARK: Helper
+	
+	let validGreenCardResponse = RemoteGreenCards.Response(
+		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin(
+					type: "vaccination",
+					eventTime: Date(),
+					expirationTime: Date().addingTimeInterval(60 * days * fromNow),
+					validFrom: Date(),
+					doseNumber: 1,
+					hints: []
+				)
+			],
+			createCredentialMessages: "validGreenCardResponse"
+		),
+		euGreenCards: [
+			RemoteGreenCards.EuGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date().addingTimeInterval(60 * days * fromNow),
+						validFrom: Date(),
+						doseNumber: nil,
+						hints: []
+					)
+				],
+				credential: "validGreenCardResponse"
+			)
+		],
+		blobExpireDates: [],
+		hints: []
+	)
 }
 
 // MARK: - Test loading
@@ -481,41 +516,4 @@ extension HolderDashboardStrippenRefresherTests {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
 		expect(self.sut.state.loadingState) == .idle
 	}
-}
-
-// MARK: - helpers
-extension HolderDashboardStrippenRefresherTests {
-	
-	let validGreenCardResponse = RemoteGreenCards.Response(
-		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-			origins: [
-				RemoteGreenCards.Origin(
-					type: "vaccination",
-					eventTime: Date(),
-					expirationTime: Date().addingTimeInterval(60 * days * fromNow),
-					validFrom: Date(),
-					doseNumber: 1,
-					hints: []
-				)
-			],
-			createCredentialMessages: "validGreenCardResponse"
-		),
-		euGreenCards: [
-			RemoteGreenCards.EuGreenCard(
-				origins: [
-					RemoteGreenCards.Origin(
-						type: "vaccination",
-						eventTime: Date(),
-						expirationTime: Date().addingTimeInterval(60 * days * fromNow),
-						validFrom: Date(),
-						doseNumber: nil,
-						hints: []
-					)
-				],
-				credential: "validGreenCardResponse"
-			)
-		],
-		blobExpireDates: [],
-		hints: []
-	)
 }
