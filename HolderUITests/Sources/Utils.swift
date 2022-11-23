@@ -18,7 +18,7 @@ extension BaseTest {
 	private func formatDate(of date: Date, withYear: Bool, withDay: Bool, short: Bool) -> String {
 		let formatter = DateFormatter()
 		var dateFormat = "d MMMM"
-		if withYear { dateFormat = dateFormat + " yyyy" }
+		if withYear { dateFormat += " yyyy" }
 		if withDay { dateFormat = "EEEE " + dateFormat }
 		if short { dateFormat = "dd-MM-yyyy" }
 		formatter.dateFormat = dateFormat
