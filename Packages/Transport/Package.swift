@@ -42,7 +42,7 @@ let package = Package(
 				.product(name: "BrightFutures", package: "BrightFutures"),
 				.product(name: "Nimble", package: "Nimble"),
 				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-				.product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs"),
+				.product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
 			]
 		)
 	]
