@@ -25,7 +25,7 @@ protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutWhy()
 
-	func userWishesToSeeIdentitiyGroups()
+	func userWishesToSeeIdentityGroups()
 	
 	func userWishesToSeeIdentitySelectionDetails(_ identitySelectionDetails: IdentitySelectionDetails)
 	
@@ -120,7 +120,7 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 	
-	func userWishesToSeeIdentitiyGroups() {
+	func userWishesToSeeIdentityGroups() {
 		
 		if let existingListVC = navigationController.viewControllers.first(where: { $0 is ListIdentitySelectionViewController }) {
 			navigationController.popToViewController(existingListVC, animated: true)
@@ -215,6 +215,6 @@ extension FuzzyMatchingCoordinator: PagedAnnouncementDelegate {
 	func didFinishPagedAnnouncement() {
 		
 		// Onboarding is done. Continue with the identity groups overview
-		userWishesToSeeIdentitiyGroups()
+		userWishesToSeeIdentityGroups()
 	}
 }
