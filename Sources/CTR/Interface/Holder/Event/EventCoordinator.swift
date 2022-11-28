@@ -531,7 +531,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			matchingBlobIds: matchingBlobIds,
 			onboardingFactory: FuzzyMatchingOnboardingFactory(),
 			delegate: self,
-			shouldHideSkipButton: true
+			shouldHideSkipButton: true,
+			shouldAllowBackNavigationToExitFlow: true
 		)
 		startChildCoordinator(fmCoordinator)
 	}
