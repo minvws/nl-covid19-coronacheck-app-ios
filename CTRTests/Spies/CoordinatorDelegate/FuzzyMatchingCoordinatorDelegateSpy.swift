@@ -46,12 +46,12 @@ final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegat
 		invokedUserWishesMoreInfoAboutWhyCount += 1
 	}
 
-	var invokeduserWishesToSeeIdentityGroups = false
-	var invokeduserWishesToSeeIdentityGroupsCount = 0
+	var invokedUserWishesToSeeIdentityGroups = false
+	var invokedUserWishesToSeeIdentityGroupsCount = 0
 
 	func userWishesToSeeIdentityGroups() {
-		invokeduserWishesToSeeIdentityGroups = true
-		invokeduserWishesToSeeIdentityGroupsCount += 1
+		invokedUserWishesToSeeIdentityGroups = true
+		invokedUserWishesToSeeIdentityGroupsCount += 1
 	}
 
 	var invokedUserWishesToSeeIdentitySelectionDetails = false
