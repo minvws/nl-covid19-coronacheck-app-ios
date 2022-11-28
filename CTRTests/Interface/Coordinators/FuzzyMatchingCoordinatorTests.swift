@@ -305,6 +305,14 @@ class FuzzyMatchingFlowSpy: FuzzyMatchingFlowDelegate {
 		invokedFuzzyMatchingFlowDidFinish = true
 		invokedFuzzyMatchingFlowDidFinishCount += 1
 	}
+
+	var invokedFuzzyMatchingUserBackedOutOfFlow = false
+	var invokedFuzzyMatchingUserBackedOutOfFlowCount = 0
+
+	func fuzzyMatchingUserBackedOutOfFlow() {
+		invokedFuzzyMatchingUserBackedOutOfFlow = true
+		invokedFuzzyMatchingUserBackedOutOfFlowCount += 1
+	}
 }
 
 class FuzzyMatchingOnboardingFactorySpy: FuzzyMatchingOnboardingFactoryProtocol {

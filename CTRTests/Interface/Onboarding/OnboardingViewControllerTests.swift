@@ -183,7 +183,7 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// When
-		sut.backbuttonTapped()
+		sut.previousPageButtonTapped()
 
 		// Then
 		XCTAssertFalse(delegateSpy.invokedDidFinishPagedAnnouncement, "Method should not be called")
