@@ -18,6 +18,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the start of the holder flow
 	func navigateBackToStart()
 	
+	func handleMismatchedIdentityError(matchingBlobIds: [[String]])
+	
 	func openUrl(_ url: URL, inApp: Bool)
 	
 	func presentError(content: Content, backAction: (() -> Void)?)
@@ -54,7 +56,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToOpenTheMenu()
 	func userWishesToSeeEventDetails(_ title: String, details: [EventDetails])
-	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]])
 	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 }
 
@@ -168,7 +169,7 @@ class HolderCoordinator: SharedCoordinator {
 		
 	}
 	
-	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
+	func handleMismatchedIdentityError(matchingBlobIds: [[String]]) {
 		
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: navigationController,
