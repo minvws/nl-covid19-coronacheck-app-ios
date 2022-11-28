@@ -17,5 +17,4 @@ class NavigationController: UINavigationController {
 			return topViewController?.preferredStatusBarStyle ?? .default
 		}
 	}
-
 }

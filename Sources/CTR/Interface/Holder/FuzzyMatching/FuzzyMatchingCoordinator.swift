@@ -13,6 +13,8 @@ protocol FuzzyMatchingFlowDelegate: AnyObject {
 	func fuzzyMatchingFlowDidStop()
 
 	func fuzzyMatchingFlowDidFinish()
+	
+	func fuzzyMatchingUserBackedOutOfFlow() 
 }
 
 protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
@@ -106,9 +108,14 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 			),
 			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextPageButton: true
+			allowsNextPageButton: true,
+			backButtonAction: navigationController.viewControllers.isEmpty ? nil : { [weak self] in
+				guard let self = self else { return }
+				self.navigationController.popViewController(animated: true, completion: {
+					self.delegate?.fuzzyMatchingUserBackedOutOfFlow()
+				})
+			}
 		)
-		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

@@ -860,6 +860,11 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 
 extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 	
+	func fuzzyMatchingUserBackedOutOfFlow() {
+		// Isn't known to be possible, but just in case.. 
+		fuzzyMatchingFlowDidStop()
+	}
+	
 	func fuzzyMatchingFlowDidFinish() {
 		if let childCoordinator = childCoordinators.first(where: { $0 is FuzzyMatchingCoordinator }) {
 			removeChildCoordinator(childCoordinator)
