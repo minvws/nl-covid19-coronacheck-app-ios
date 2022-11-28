@@ -267,9 +267,9 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: true,
 				shouldShowWithVWSRibbon: false
 			),
-			allowsBackButton: true,
+			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextButton: true
+			allowsNextPageButton: true
 		)
 		
 		self.navigationSpy.viewControllers = [

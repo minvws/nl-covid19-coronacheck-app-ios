@@ -54,9 +54,9 @@ class UpdatedDisclosurePolicyCoordinator: Coordinator {
 				itemsShouldShowWithFullWidthHeaderImage: true,
 				shouldShowWithVWSRibbon: false
 			),
-			allowsBackButton: multipaneMode,
+			allowsPreviousPageButton: multipaneMode,
 			allowsCloseButton: !multipaneMode,
-			allowsNextButton: true
+			allowsNextPageButton: true
 		)
 		
 		let modalNavigationController = UINavigationController(rootViewController: viewController)

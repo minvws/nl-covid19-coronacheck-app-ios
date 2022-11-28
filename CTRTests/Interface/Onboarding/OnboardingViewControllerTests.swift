@@ -51,9 +51,9 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: false,
 				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false,
+			allowsPreviousPageButton: false,
 			allowsCloseButton: false,
-			allowsNextButton: false
+			allowsNextPageButton: false
 		)
 		window = UIWindow()
 	}
@@ -101,9 +101,9 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: false,
 				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false,
+			allowsPreviousPageButton: false,
 			allowsCloseButton: false,
-			allowsNextButton: false
+			allowsNextPageButton: false
 		)
 		
 		loadView()
@@ -126,9 +126,9 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: false,
 				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: true,
+			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextButton: false
+			allowsNextPageButton: false
 		)
 		loadView()
 
@@ -150,9 +150,9 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: false,
 				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false,
+			allowsPreviousPageButton: false,
 			allowsCloseButton: false,
-			allowsNextButton: false
+			allowsNextPageButton: false
 		)
 		loadView()
 		sut.primaryButtonTapped()
@@ -175,9 +175,9 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: false,
 				shouldShowWithVWSRibbon: true
 			),
-			allowsBackButton: false,
+			allowsPreviousPageButton: false,
 			allowsCloseButton: false,
-			allowsNextButton: false
+			allowsNextPageButton: false
 		)
 		loadView()
 		sut.primaryButtonTapped()

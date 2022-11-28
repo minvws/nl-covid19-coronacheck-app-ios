@@ -15,17 +15,17 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
 	
-	let allowsBackButton: Bool
+	let allowsPreviousPageButton: Bool
 	let allowsCloseButton: Bool
-	let allowsNextButton: Bool
+	let allowsNextPageButton: Bool
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool, allowsNextButton: Bool) {
+	init(viewModel: PagedAnnouncementViewModel, allowsPreviousPageButton: Bool, allowsCloseButton: Bool, allowsNextPageButton: Bool) {
 		
-		self.allowsBackButton = allowsBackButton
+		self.allowsPreviousPageButton = allowsPreviousPageButton
 		self.allowsCloseButton = allowsCloseButton
-		self.allowsNextButton = allowsNextButton
+		self.allowsNextPageButton = allowsNextPageButton
 		
 		super.init(
 			sceneView: PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon),
@@ -33,7 +33,6 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 		)
 	}
 	
-	// the back button
 	private var backButton: UIBarButtonItem?
 	
 	override func viewDidLoad() {
@@ -60,8 +59,8 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		
-		if allowsBackButton {
-			setupBackButton()
+		if allowsPreviousPageButton {
+			setupPreviousPageButton()
 			setupTranslucentNavigationBar()
 			navigationController?.isNavigationBarHidden = false
 		} else if allowsCloseButton {
@@ -72,22 +71,22 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 			navigationController?.isNavigationBarHidden = true
 		}
 		
-		sceneView.primaryButton.isHidden = !allowsNextButton
+		sceneView.primaryButton.isHidden = !allowsNextPageButton
 	}
 	
-	/// Create a custom back button so we can catch the tap on the back button.
-	private func setupBackButton() {
+	/// Create a custom previous-page button so we can catch the tap on the back button.
+	private func setupPreviousPageButton() {
 
 		// Create a button with a back arrow
 		let config = UIBarButtonItem.Configuration(target: self,
-												   action: #selector(backbuttonTapped),
+												   action: #selector(previousPageButtonTapped),
 												   content: .image(I.backArrow()),
 												   accessibilityIdentifier: "BackButton",
 												   accessibilityLabel: L.generalBack())
 		backButton = .create(config)
 	}
 	
-	@objc func backbuttonTapped() {
+	@objc func previousPageButtonTapped() {
 		
 		// Move to the previous page
 		pageViewController.previousPage()
@@ -173,7 +172,7 @@ extension PagedAnnouncementViewController: PagedAnnouncementItemViewControllerDe
 	/// Enables swipe to navigate behaviour for assistive technologies
 	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
 		if direction == .right {
-			backbuttonTapped()
+			previousPageButtonTapped()
 			return true
 		} else if direction == .left {
 			primaryButtonTapped()

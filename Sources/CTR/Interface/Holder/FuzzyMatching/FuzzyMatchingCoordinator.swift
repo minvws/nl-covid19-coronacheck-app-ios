@@ -104,9 +104,9 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 				itemsShouldShowWithFullWidthHeaderImage: true,
 				shouldShowWithVWSRibbon: false
 			),
-			allowsBackButton: true,
+			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextButton: true
+			allowsNextPageButton: true
 		)
 		
 		navigationController.pushViewController(viewController, animated: true)

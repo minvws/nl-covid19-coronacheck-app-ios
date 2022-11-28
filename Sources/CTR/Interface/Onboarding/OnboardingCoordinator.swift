@@ -68,9 +68,9 @@ class OnboardingCoordinator: Coordinator {
 		)
 		let viewController = PagedAnnouncementViewController(
 			viewModel: viewModel,
-			allowsBackButton: true,
+			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextButton: true
+			allowsNextPageButton: true
 		)
 		navigationController.viewControllers = [viewController]
 		navigationController.view.window?.replaceRootViewController(with: navigationController)
