@@ -168,13 +168,13 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		
 		// Given
 		let policy = SecPolicyCreateSSL(true, "holder-api.coronacheck.nl" as CFString)
-		let chain = [try getCertificate("certRealLeaf")]
+		let chain = [try getCertificate("holder-api.coronacheck.nl-expired")]
 		
 		var optionalServerTrust: SecTrust?
 		XCTAssert(noErr == SecTrustCreateWithCertificates(chain as CFArray, policy, &optionalServerTrust))
 		let serverTrust = try XCTUnwrap(optionalServerTrust)
 		
-		let trustedServerCertificate = try getCertificateData("certRealLeaf")
+		let trustedServerCertificate = try getCertificateData("holder-api.coronacheck.nl-expired")
 		var result = true
 		
 		// When
@@ -198,9 +198,8 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		// getting the chain certificates:
 		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
 		let realChain = [
-			try getCertificate("Staat der Nederlanden EV Root CA"),
-			try getCertificate("Staat der Nederlanden Domein Server CA 2020"),
-			try getCertificate("KPN PKIoverheid Server CA 2020")
+			try getCertificate("QuoVadis Root CA 2 G3"),
+			try getCertificate("QuoVadis Europe EV SSL CA G1")
 		]
 		return realChain
 	}
