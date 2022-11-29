@@ -45,10 +45,7 @@ let package = Package(
 				.product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
 			],
 			resources: [
-				Resource.process("holder-api.coronacheck.nl.pem"),
-				Resource.process("QuoVadis Root CA 2 G3.pem"),
-				Resource.process("QuoVadis Europe EV SSL CA G1.pem"),
-				Resource.process("holder-api.coronacheck.nl-expired.pem")
+				Resource.process("Resources")
 			]
 		)
 	]
