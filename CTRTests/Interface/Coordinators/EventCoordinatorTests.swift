@@ -937,4 +937,23 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
+	
+	func test_fuzzyMatchingUserBackedOutOfFlow() throws {
+		
+		// Given
+		let fmCoordinator = FuzzyMatchingCoordinator(
+			navigationController: sut.navigationController,
+			matchingBlobIds: [[]],
+			onboardingFactory: FuzzyMatchingOnboardingFactory(),
+			delegate: sut
+		)
+		sut.childCoordinators = [fmCoordinator]
+		
+		// When
+		sut.fuzzyMatchingUserBackedOutOfFlow()
+
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
+	}
 }

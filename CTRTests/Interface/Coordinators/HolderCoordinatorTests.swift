@@ -1003,12 +1003,12 @@ class HolderCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 	
-	func test_userWishesToStartFuzzyMatchingFlow() {
+	func test_handleMismatchedIdentityError() {
 		
 		// Given
 		
 		// When
-		sut.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [["123"]])
+		sut.handleMismatchedIdentityError(matchingBlobIds: [["123"]])
 		
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(1))

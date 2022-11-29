@@ -267,9 +267,9 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 				itemsShouldShowWithFullWidthHeaderImage: true,
 				shouldShowWithVWSRibbon: false
 			),
-			allowsBackButton: true,
+			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextButton: true
+			allowsNextPageButton: true
 		)
 		
 		self.navigationSpy.viewControllers = [
@@ -304,6 +304,14 @@ class FuzzyMatchingFlowSpy: FuzzyMatchingFlowDelegate {
 	func fuzzyMatchingFlowDidFinish() {
 		invokedFuzzyMatchingFlowDidFinish = true
 		invokedFuzzyMatchingFlowDidFinishCount += 1
+	}
+
+	var invokedFuzzyMatchingUserBackedOutOfFlow = false
+	var invokedFuzzyMatchingUserBackedOutOfFlowCount = 0
+
+	func fuzzyMatchingUserBackedOutOfFlow() {
+		invokedFuzzyMatchingUserBackedOutOfFlow = true
+		invokedFuzzyMatchingUserBackedOutOfFlowCount += 1
 	}
 }
 

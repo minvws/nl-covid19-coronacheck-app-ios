@@ -159,7 +159,7 @@ class SendIdentitySelectionViewModel {
 			cancelAction: AlertContent.Action(
 				title: L.generalClose(),
 				action: { [weak self] _ in
-					self?.coordinatorDelegate?.userWishesToSeeIdentitiyGroups()
+					self?.coordinatorDelegate?.userWishesToSeeIdentityGroups()
 				}
 			)
 		)

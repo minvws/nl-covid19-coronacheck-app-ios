@@ -58,9 +58,9 @@ class NewFeaturesCoordinator: Coordinator {
 					itemsShouldShowWithFullWidthHeaderImage: true,
 					shouldShowWithVWSRibbon: false
 				),
-				allowsBackButton: false,
+				allowsPreviousPageButton: false,
 				allowsCloseButton: pagedAnnouncementItems.count == 1,
-				allowsNextButton: true
+				allowsNextPageButton: true
 			)
 			navigationController.viewControllers = [viewController]
 			navigationController.view.window?.replaceRootViewController(with: navigationController)
