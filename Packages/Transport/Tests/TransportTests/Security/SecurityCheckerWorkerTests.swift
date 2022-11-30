@@ -14,7 +14,7 @@ import Nimble
 class SecurityCheckerWorkerTests: XCTestCase {
 	
 	var sut = SecurityCheckerWorker()
-	let testBundle = Bundle(for: SecurityCheckerWorkerTests.self)
+	let testBundle = Bundle.module
 	
 	override func setUp() {
 		
