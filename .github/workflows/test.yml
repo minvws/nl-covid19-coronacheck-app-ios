@@ -12,50 +12,54 @@ env:
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
 jobs:
-  swiftlint:
-    runs-on: macos-12
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # swiftlint:
+  #   runs-on: macos-12
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+  #     - name: Setup Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         bundler-cache: true
           
-      - name: Run SwiftLint 
-        run: |
-          make run_swiftlint
+  #     - name: Run SwiftLint 
+  #       run: |
+  #         make run_swiftlint
 
   test:
     runs-on: macos-12
     timeout-minutes: 30
-    needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
+    #needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
-      - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
-        # 🧐 when changing below, don't forget to also change the device name in the Fastfile too: 
-        run: | 
-          xcrun simctl boot "iPhone 14" || true
+      # - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
+      #   # 🧐 when changing below, don't forget to also change the device name in the Fastfile too: 
+      #   run: | 
+      #     xcrun simctl boot "iPhone 14" || true
       
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      # - name: Setup Ruby
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     bundler-cache: true
       
-      - name: Setup CI environment
-        run: |
-          make ci
+      # - name: Setup CI environment
+      #   run: |
+      #     make ci
 
       - name: Checkout LFS resources
         run: |
           git lfs pull
           git checkout .
 
-      - name: Build and test
-        env:
-          SLACK_URL: ${{ secrets.SLACK_URL }}
+      - name: Compile Go library dependency
         run: |
-          bundle exec fastlane ios test_ci
+          Scripts/fetch_ctcl.sh
+
+      # - name: Build and test
+      #   env:
+      #     SLACK_URL: ${{ secrets.SLACK_URL }}
+      #   run: |
+      #     bundle exec fastlane ios test_ci
