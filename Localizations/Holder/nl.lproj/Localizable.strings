@@ -88,7 +88,7 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Meer:";
-"holder.about.text" = "<p>CoronaCheck is ontwikkeld om de samenleving beetje bij beetje veilig te openen in tijden van corona.</p><p>Met de app kun je een coronabewijs maken van je vaccinatie, negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Laat deze scannen voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
+"holder.about.text" = "Met de CoronaCheck app kun je een digitaal coronabewijs maken. Je kunt een bewijs maken van een vaccinatie of negatieve testuitslag. Wanneer je corona hebt gehad kun je een herstelbewijs maken. Je coronabewijs heeft een QR-code. Ga je naar het buitenland? Check vooraf op Nederland Wereldwijd of je de QR-code kunt gebruiken.";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>";
