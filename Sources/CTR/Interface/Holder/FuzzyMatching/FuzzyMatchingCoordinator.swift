@@ -13,6 +13,8 @@ protocol FuzzyMatchingFlowDelegate: AnyObject {
 	func fuzzyMatchingFlowDidStop()
 
 	func fuzzyMatchingFlowDidFinish()
+	
+	func fuzzyMatchingUserBackedOutOfFlow()
 }
 
 protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
@@ -25,7 +27,7 @@ protocol FuzzyMatchingCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutWhy()
 
-	func userWishesToSeeIdentitiyGroups()
+	func userWishesToSeeIdentityGroups()
 	
 	func userWishesToSeeIdentitySelectionDetails(_ identitySelectionDetails: IdentitySelectionDetails)
 	
@@ -40,15 +42,19 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	
 	var childCoordinators: [Coordinator] = []
 	
-	var navigationController: UINavigationController
+	let navigationController: UINavigationController
 	
-	var factory: FuzzyMatchingOnboardingFactoryProtocol
+	let factory: FuzzyMatchingOnboardingFactoryProtocol
 	
-	var dataSource: IdentitySelectionDataSourceProtocol = IdentitySelectionDataSource(cache: EventGroupCache())
+	let dataSource: IdentitySelectionDataSourceProtocol = IdentitySelectionDataSource(cache: EventGroupCache())
 	
 	var matchingBlobIds = [[String]]()
 	
+	let shouldAllowBackNavigationToExitFlow: Bool
+	
 	private weak var delegate: FuzzyMatchingFlowDelegate?
+	
+	private let shouldHideSkipButton: Bool
 	
 	/// Initializer
 	/// - Parameters:
@@ -56,16 +62,21 @@ final class FuzzyMatchingCoordinator: Coordinator {
 	///   - matchingBlobIds: an array of an array of blob IDs with a matching identity
 	///   - onboardingFactory: the onboarding content factory
 	///   - delegate: the fuzzy matching flow delegate
+	///   - shouldAllowBackNavigationToExitFlow: whether this flow can be exited by tapping the "back" button in navbar
 	init(
 		navigationController: UINavigationController,
 		matchingBlobIds: [[String]],
 		onboardingFactory: FuzzyMatchingOnboardingFactoryProtocol,
-		delegate: FuzzyMatchingFlowDelegate) {
+		delegate: FuzzyMatchingFlowDelegate,
+		shouldHideSkipButton: Bool = false,
+		shouldAllowBackNavigationToExitFlow: Bool = false) {
 		
 		self.navigationController = navigationController
 		self.matchingBlobIds = matchingBlobIds
 		self.factory = onboardingFactory
 		self.delegate = delegate
+		self.shouldHideSkipButton = shouldHideSkipButton
+		self.shouldAllowBackNavigationToExitFlow = shouldAllowBackNavigationToExitFlow
 	}
 	
 	/// Start the scene
@@ -93,6 +104,13 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	
 	func userWishesToSeeOnboarding() {
 		
+		let backNavigationAction: () -> Void = { [weak self] in
+			guard let self = self else { return }
+			self.navigationController.popViewController(animated: true, completion: {
+				self.delegate?.fuzzyMatchingUserBackedOutOfFlow()
+			})
+		}
+		
 		let viewController = PagedAnnouncementViewController(
 			viewModel: PagedAnnouncementViewModel(
 				delegate: self,
@@ -100,11 +118,13 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 				itemsShouldShowWithFullWidthHeaderImage: true,
 				shouldShowWithVWSRibbon: false
 			),
-			allowsBackButton: true,
+			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
-			allowsNextButton: true
+			allowsNextPageButton: true,
+			backButtonAction: navigationController.viewControllers.isNotEmpty && shouldAllowBackNavigationToExitFlow
+				? backNavigationAction
+				: nil
 		)
-		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
@@ -116,16 +136,22 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 		presentAsBottomSheet(viewController)
 	}
 	
-	func userWishesToSeeIdentitiyGroups() {
+	func userWishesToSeeIdentityGroups() {
 		
-		let viewModel = ListIdentitySelectionViewModel(
-			coordinatorDelegate: self,
-			dataSource: dataSource,
-			matchingBlobIds: matchingBlobIds
-		)
-		let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
-		
-		navigationController.pushViewController(viewController, animated: true)
+		if let existingListVC = navigationController.viewControllers.first(where: { $0 is ListIdentitySelectionViewController }) {
+			navigationController.popToViewController(existingListVC, animated: true)
+		} else {
+			
+			let viewModel = ListIdentitySelectionViewModel(
+				coordinatorDelegate: self,
+				dataSource: dataSource,
+				matchingBlobIds: matchingBlobIds,
+				shouldHideSkipButton: shouldHideSkipButton
+			)
+			let viewController = ListIdentitySelectionViewController(viewModel: viewModel)
+			
+			navigationController.pushViewController(viewController, animated: true)
+		}
 	}
 	
 	func userHasSelectedIdentityGroup(selectedBlobIds: [String]) {
@@ -151,15 +177,8 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 				self?.userHasFinishedTheFlow()
 			}
 		)
-
-		let viewController = ContentViewController(
-			viewModel: ContentViewModel(
-				content: content,
-				backAction: nil,
-				allowsSwipeBack: false
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
+		
+		presentContent(content: content, backAction: nil, allowsSwipeBack: false, animated: false)
 	}
 
 	func userHasStoppedTheFlow() {
@@ -212,6 +231,6 @@ extension FuzzyMatchingCoordinator: PagedAnnouncementDelegate {
 	func didFinishPagedAnnouncement() {
 		
 		// Onboarding is done. Continue with the identity groups overview
-		userWishesToSeeIdentitiyGroups()
+		userWishesToSeeIdentityGroups()
 	}
 }

@@ -15,17 +15,22 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	/// Disable swiping to launch screen
 	override var enableSwipeBack: Bool { false }
 	
-	let allowsBackButton: Bool
+	var showsBackButton: Bool {
+		backButtonAction != nil
+	}
+	let backButtonAction: (() -> Void)?
+	let allowsPreviousPageButton: Bool
 	let allowsCloseButton: Bool
-	let allowsNextButton: Bool
+	let allowsNextPageButton: Bool
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsBackButton: Bool, allowsCloseButton: Bool, allowsNextButton: Bool) {
+	init(viewModel: PagedAnnouncementViewModel, allowsPreviousPageButton: Bool, allowsCloseButton: Bool, allowsNextPageButton: Bool, backButtonAction: (() -> Void)? = nil) {
 		
-		self.allowsBackButton = allowsBackButton
+		self.backButtonAction = backButtonAction
+		self.allowsPreviousPageButton = allowsPreviousPageButton
 		self.allowsCloseButton = allowsCloseButton
-		self.allowsNextButton = allowsNextButton
+		self.allowsNextPageButton = allowsNextPageButton
 		
 		super.init(
 			sceneView: PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon),
@@ -33,8 +38,8 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 		)
 	}
 	
-	// the back button
 	private var backButton: UIBarButtonItem?
+	private var previousPageButton: UIBarButtonItem?
 	
 	override func viewDidLoad() {
 		
@@ -59,9 +64,17 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
-		
-		if allowsBackButton {
-			setupBackButton()
+ 
+		if allowsPreviousPageButton || showsBackButton {
+			if allowsPreviousPageButton {
+				setupPreviousPageButton()
+			}
+			if showsBackButton {
+				setupBackButton()
+			}
+
+			updateLeftNavbarButton(forPageIndex: 0)
+			
 			setupTranslucentNavigationBar()
 			navigationController?.isNavigationBarHidden = false
 		} else if allowsCloseButton {
@@ -72,26 +85,42 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 			navigationController?.isNavigationBarHidden = true
 		}
 		
-		sceneView.primaryButton.isHidden = !allowsNextButton
+		sceneView.primaryButton.isHidden = !allowsNextPageButton
 	}
 	
-	/// Create a custom back button so we can catch the tap on the back button.
+	/// Create a custom previous-page button so we can catch the tap on the back button.
+	private func setupPreviousPageButton() {
+
+		// Create a button with a back arrow
+		let config = UIBarButtonItem.Configuration(target: self,
+												   action: #selector(previousPageButtonTapped),
+												   content: .image(I.backArrow()),
+												   accessibilityIdentifier: "BackButton",
+												   accessibilityLabel: L.generalBack())
+		previousPageButton = .create(config)
+	}
+	
 	private func setupBackButton() {
 
 		// Create a button with a back arrow
 		let config = UIBarButtonItem.Configuration(target: self,
-												   action: #selector(backbuttonTapped),
+												   action: #selector(backButtonTapped),
 												   content: .image(I.backArrow()),
 												   accessibilityIdentifier: "BackButton",
 												   accessibilityLabel: L.generalBack())
-		backButton = .create(config)
+		navigationItem.backBarButtonItem = .create(config)
 	}
 	
-	@objc func backbuttonTapped() {
+	@objc func previousPageButtonTapped() {
 		
 		// Move to the previous page
 		pageViewController.previousPage()
 		sceneView.primaryButton.isEnabled = true
+	}
+	
+	@objc func backButtonTapped() {
+		
+		backButtonAction?()
 	}
 	
 	@objc func closeButtonTapped() {
@@ -126,6 +155,15 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 			pageViewController.nextPage()
 		}
 	}
+	
+	func updateLeftNavbarButton(forPageIndex index: Int) {
+		
+		if index == 0 && showsBackButton {
+			navigationItem.leftBarButtonItem = navigationItem.backBarButtonItem
+		} else {
+			navigationItem.leftBarButtonItem = index > 0 ? previousPageButton : nil
+		}
+	}
 }
 
 private extension PagedAnnouncementViewController {
@@ -148,7 +186,7 @@ extension PagedAnnouncementViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.update(for: index)
-		navigationItem.leftBarButtonItem = index > 0 ? backButton : nil
+		updateLeftNavbarButton(forPageIndex: index)
 		updateFooterView(for: index)
 		
 		// Announce ribbon view when going back to the first page
@@ -173,7 +211,7 @@ extension PagedAnnouncementViewController: PagedAnnouncementItemViewControllerDe
 	/// Enables swipe to navigate behaviour for assistive technologies
 	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
 		if direction == .right {
-			backbuttonTapped()
+			previousPageButtonTapped()
 			return true
 		} else if direction == .left {
 			primaryButtonTapped()

@@ -15,7 +15,7 @@ func eventuallyUnwrap<T>(eval: @escaping () -> T?) -> T? {
 		guard let val = eval() else { return .failed(reason: "Could not unwrap") }
 		unwrapped = val
 		return .succeeded
-	}.toEventually(succeed())
+	}.toEventually(succeed(), timeout: .seconds(2))
 	
 	return unwrapped
 }

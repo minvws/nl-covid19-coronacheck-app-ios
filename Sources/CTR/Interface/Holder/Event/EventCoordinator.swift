@@ -530,7 +530,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			navigationController: navigationController,
 			matchingBlobIds: matchingBlobIds,
 			onboardingFactory: FuzzyMatchingOnboardingFactory(),
-			delegate: self
+			delegate: self,
+			shouldHideSkipButton: true,
+			shouldAllowBackNavigationToExitFlow: true
 		)
 		startChildCoordinator(fmCoordinator)
 	}
@@ -585,6 +587,14 @@ extension EventCoordinator: UINavigationControllerDelegate {
 // MARK: - FuzzyMatchingFlowDelegate
 
 extension EventCoordinator: FuzzyMatchingFlowDelegate {
+	
+	func fuzzyMatchingUserBackedOutOfFlow() {
+
+		guard let coordinator = childCoordinators.last, coordinator is FuzzyMatchingCoordinator else { return }
+		removeChildCoordinator(coordinator)
+		
+		Current.walletManager.removeDraftEventGroups()
+	}
 	
 	func fuzzyMatchingFlowDidStop() {
 		

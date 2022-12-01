@@ -116,7 +116,7 @@ class AboutThisAppView: ScrolledStackView {
 
 	func createMenuStackView(title: String) -> UIStackView {
 
-		/// The stack view for the menu items
+		// The stack view for the menu items
 		let menuOptionStackView: UIStackView = {
 
 			let view = UIStackView()

@@ -345,7 +345,7 @@ extension HolderDashboardViewModelTests {
 			error: .credentials(
 				.error(
 					statusCode: 500,
-					response: ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]]),
+					response: ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]])),
 					error: .serverError
 				)
 			)
@@ -374,7 +374,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
 
 		expect(self.sut.currentlyPresentedAlert.value) == nil
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToStartFuzzyMatchingFlow) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedHandleMismatchedIdentityError) == true
 	}
 	
 	func test_strippenkaart_mismatchedIdentity_expired_shouldInvokeFuzzyMatchingFlow() {
@@ -384,7 +384,7 @@ extension HolderDashboardViewModelTests {
 			error: .credentials(
 				.error(
 					statusCode: 500,
-					response: ServerResponse(status: "error", code: 99790, matchingBlobIds: [["123"]]),
+					response: ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]])),
 					error: .serverError
 				)
 			)
@@ -413,7 +413,7 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards.value[1]).toEventually(beEmptyStatePlaceholderImage())
 
 		expect(self.sut.currentlyPresentedAlert.value) == nil
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToStartFuzzyMatchingFlow) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedHandleMismatchedIdentityError) == true
 	}
 
 	func test_strippen_expired_serverError_firstTime_shouldDisplayErrorWithRetry() {

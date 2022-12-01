@@ -186,9 +186,9 @@ final class LaunchStateManager: LaunchStateManaging {
 	/// - Parameter urlResponse: the url response from the config call
 	private func updateServerDate(_ urlResponse: URLResponse) {
 		
-		/// Fish for the server Date in the network response, and use that to maintain
-		/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
-		/// beyond a permitted time interval.
+		// Fish for the server Date in the network response, and use that to maintain
+		// a clockDeviationManager to check if the delta between the serverTime and the localTime is
+		// beyond a permitted time interval.
 		guard let httpResponse = urlResponse as? HTTPURLResponse,
 			  let serverDateString = httpResponse.allHeaderFields["Date"] as? String else { return }
 		

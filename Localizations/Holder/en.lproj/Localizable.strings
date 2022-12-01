@@ -88,7 +88,7 @@
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "More:";
-"holder.about.text" = "<p>CoronaCheck is created to reopen society step by step during the coronavirus outbreak.</p><p>You can use this app to create a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass contains a QR code. Have it scanned for access to places or activities or to travel.</p>";
+"holder.about.text" = "You can use the CoronaCheck app to create a digital coronavirus certificate. You can use a vaccination or a negative test result to create a certificate. If you've had coronavirus, you can create a recovery certificate. Your certificate contains a QR code. Are you travelling abroad? Before departure, please check Netherlands Worldwide to see if you can use the QR code.";
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
 "holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate.</p><b>1. Choose your certificate</b><p> You can create a vaccination certificate, a test certificate or a recovery certificate.</p><b>2. Automatically retrieve data</b><p>The app directly retrieves the data of your vaccination, test result or recovery.</p><b>3. QR codes are ready</b><p>The app generates a QR code for the Netherlands and one for other countries.</p>";
@@ -301,6 +301,10 @@
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
+"holder.event.identity.alert.cancel" = "Stop";
+"holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
+"holder.event.identity.alert.ok" = "Replace";
+"holder.event.identity.alert.title" = "Want to replace your certificate?";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
@@ -650,6 +654,7 @@
 "holder_identitySelection_details_scannedPaperProof" = "Scanned certificate";
 "holder_identitySelection_error_makeAChoice" = "Please make a choice first";
 "holder_identitySelection_error_willBeRemoved" = "This one will be removed";
+"holder_identitySelection_loading_accessibility" = "Your details are being updated";
 "holder_identitySelection_loading_title" = "Updating details";
 "holder_identitySelection_message" = "Please check in the details which vaccinations or test results are connected to your preferred name.";
 "holder_identitySelection_skipAlert_action" = "Yes, skip";

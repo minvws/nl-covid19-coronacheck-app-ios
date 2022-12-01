@@ -243,7 +243,7 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol {
 	/// Reset to default
 	func wipePersistedData() {
 
-		/// Remove existing files
+		// Remove existing files
 		if fileStorage.fileExists(CryptoLibUtility.File.publicKeys.name) {
 			fileStorage.remove(CryptoLibUtility.File.publicKeys.name)
 			userSettings.issuerKeysFetchedTimestamp = nil

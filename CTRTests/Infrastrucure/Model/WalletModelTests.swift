@@ -118,6 +118,7 @@ class WalletModelTests: XCTestCase {
 					expiryDate: nil,
 					jsonData: json,
 					wallet: unwrappedWallet,
+					isDraft: false,
 					managedContext: context
 				)
 			}
@@ -145,6 +146,7 @@ class WalletModelTests: XCTestCase {
 				expiryDate: nil,
 				jsonData: json,
 				wallet: wallet,
+				isDraft: false,
 				managedContext: context
 			   )
 				

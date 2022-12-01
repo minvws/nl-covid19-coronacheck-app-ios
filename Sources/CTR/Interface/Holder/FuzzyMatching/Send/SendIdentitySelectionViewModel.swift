@@ -44,7 +44,7 @@ class SendIdentitySelectionViewModel {
 	
 	func viewDidAppear() {
 		
-		guard matchingBlobIds.count > 1, selectedBlobIds.isNotEmpty else {
+		guard matchingBlobIds.isNotEmpty, selectedBlobIds.isNotEmpty else {
 			displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .removeEventGroups, clientCode: .noSelectionMade))
 			return
 		}
@@ -80,6 +80,12 @@ class SendIdentitySelectionViewModel {
 		matchingBlobIds.forEach { blobIds in
 			if selectedBlobIds != blobIds {
 				blobIds.forEach { uniqueIdentifier in
+					
+					guard !selectedBlobIds.contains(uniqueIdentifier) else {
+						logVerbose("SendIdentitySelectionViewModel - Skipping \(uniqueIdentifier), also present in the selected group.")
+						return
+					}
+					
 					if let wrapper = dataSource.getEventResultWrapper(uniqueIdentifier) {
 						result = result && RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovalReason.mismatchedIdentity).isNotEmpty
 					} else if let euCredentialAttributes = dataSource.getEUCreditialAttributes(uniqueIdentifier) {
@@ -101,20 +107,35 @@ class SendIdentitySelectionViewModel {
 		
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
-			
+
 			guard let self else { return }
+			
+			var removesDraftEventGroups = false
+			defer {
+				if removesDraftEventGroups {
+					Current.walletManager.removeDraftEventGroups() // possibly this flow was preceeded with the regular ListRemoteEvents path, which creates draft events that should be cleaned up.
+				}
+			}
+			
 			switch result {
 				case .success:
-					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
+					// Signer says OK. Mark all events as non draft.
+					Current.walletManager.listEventGroups()
+						.filter { $0.isDraft }
+						.forEach { $0.update(isDraft: false) }
 					
+					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
+
 				case let .failure(greenCardError):
 					let parser = GreenCardResponseErrorParser(flow: ErrorCode.Flow.fuzzyMatching)
 					switch parser.parse(greenCardError) {
 						case .noInternet:
 							self.displayNoInternet()
 						case .noSignedEvents:
+							Current.walletManager.removeExistingGreenCards()
 							self.displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .signer, clientCode: .noEventsToSendToTheSigner))
 						case let .customError(title: title, message: message):
+							removesDraftEventGroups = true
 							self.displayError(title: title, message: message)
 						case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
 							self.coordinatorDelegate?.restartFlow(matchingBlobIds: matchingBlobIds)
@@ -138,8 +159,7 @@ class SendIdentitySelectionViewModel {
 			cancelAction: AlertContent.Action(
 				title: L.generalClose(),
 				action: { [weak self] _ in
-					guard let self else { return }
-					self.coordinatorDelegate?.userHasStoppedTheFlow()
+					self?.coordinatorDelegate?.userWishesToSeeIdentityGroups()
 				}
 			)
 		)

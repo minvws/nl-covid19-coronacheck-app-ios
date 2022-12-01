@@ -12,7 +12,7 @@ import Nimble
 @testable import Shared
 
 class PaperProofCheckModelTests: XCTestCase {
-
+	
 	var sut: PaperProofCheckViewModel!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
@@ -22,21 +22,26 @@ class PaperProofCheckModelTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 	}
+}
 
+// MARK: Success
+
+extension PaperProofCheckModelTests {
+	
 	func test_success_accepted_wrongDCC() {
-
+		
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
+		(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
-
+		
 		// When
 		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
 		)
-
+		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert) == nil
@@ -50,49 +55,49 @@ class PaperProofCheckModelTests: XCTestCase {
 			fail("Invalid state")
 		}
 	}
-
+	
 	func test_success_accepted_correctDCC() {
-
+		
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
+		(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: EventFlow.Identity.fakeIdentity,
 			status: .complete
 		)
-
+		
 		// When
 		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
 		)
-
+		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == true
 		expect(self.sut.alert) == nil
 	}
-
+	
 	func test_success_blocked() {
-
+		
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
+		(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
-
+		
 		// When
 		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
 		)
-
+		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert) == nil
-
+		
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccBlockedTitle()
 			expect(content.body) == L.holderCheckdccBlockedMessage()
@@ -100,21 +105,21 @@ class PaperProofCheckModelTests: XCTestCase {
 			fail("Invalid state")
 		}
 	}
-
+	
 	func test_success_expired_wrongDCC() {
-
+		
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
+		(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
-
+		
 		// When
 		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
 		)
-
+		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert) == nil
@@ -130,47 +135,47 @@ class PaperProofCheckModelTests: XCTestCase {
 	}
 	
 	func test_success_expired_correctDCC() {
-
+		
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
+		(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: EventFlow.Identity.fakeIdentity,
 			status: .complete
 		)
-
+		
 		// When
 		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
 		)
-
+		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == true
 		expect(self.sut.alert) == nil
 	}
-
+	
 	func test_success_rejected() {
-
+		
 		// Given
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
+		(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 		environmentSpies.couplingManagerSpy.stubbedConvertResult = nil
-
+		
 		// When
 		sut = PaperProofCheckViewModel(
 			coordinator: coordinatorDelegateSpy,
 			scannedDcc: "test",
 			couplingCode: "test"
 		)
-
+		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert) == nil
-
+		
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderCheckdccRejectedTitle()
 			expect(content.body) == L.holderCheckdccRejectedMessage()
@@ -178,7 +183,12 @@ class PaperProofCheckModelTests: XCTestCase {
 			fail("Invalid state")
 		}
 	}
+}
 
+// MARK: Failure
+
+extension PaperProofCheckModelTests {
+	
 	func test_failure_serverBusy() {
 
 		// Given
