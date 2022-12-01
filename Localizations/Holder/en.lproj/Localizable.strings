@@ -88,7 +88,7 @@
 "holder.about.link" = "Read the privacy statement here";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "More:";
-"holder.about.text" = "<p>CoronaCheck is created to reopen society step by step during the coronavirus outbreak.</p><p>You can use this app to create a coronavirus pass from your vaccination, negative test result or if you've had coronavirus and are recovered. Your coronavirus pass contains a QR code. Have it scanned for access to places or activities or to travel.</p>";
+"holder.about.text" = "You can use the CoronaCheck app to create a digital coronavirus certificate. You can use a vaccination or a negative test result to create a certificate. If you've had coronavirus, you can create a recovery certificate. Your certificate contains a QR code. Are you travelling abroad? Before departure, please check Netherlands Worldwide to see if you can use the QR code.";
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
 "holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate.</p><b>1. Choose your certificate</b><p> You can create a vaccination certificate, a test certificate or a recovery certificate.</p><b>2. Automatically retrieve data</b><p>The app directly retrieves the data of your vaccination, test result or recovery.</p><b>3. QR codes are ready</b><p>The app generates a QR code for the Netherlands and one for other countries.</p>";

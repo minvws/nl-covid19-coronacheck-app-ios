@@ -207,7 +207,7 @@ It will use [Homebrew](https://brew.sh) to install [these tools](./Brewfile), an
 
 It will run `bundle install` to setup your [Ruby dependencies](./Gemfile) such as [fastlane](https://fastlane.tools).
 
-Lastly, it will generate and open the Xcode Project for you.
+Lastly, it will generate and open the Xcode Project for you. You should run the `Holder Dev` scheme targetting a simulator to get started..
 
 ### Continuous Integration & reproducible builds
 

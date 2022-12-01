@@ -267,6 +267,7 @@ class ListRemoteEventsViewModel {
 						
 					case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
 						coordinator?.listEventsScreenDidFinish(.mismatchedIdentity(matchingBlobIds: matchingBlobIds))
+						self.shouldPrimaryButtonBeEnabled = true // it's possible to navigate back here for a retry.
 				}
 		}
 	}

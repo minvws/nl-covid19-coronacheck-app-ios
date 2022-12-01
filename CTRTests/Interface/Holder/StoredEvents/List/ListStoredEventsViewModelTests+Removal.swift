@@ -397,7 +397,7 @@ extension ListStoredEventsViewModelRemovalTests {
 		sut.alert?.okAction.action?(UIAlertAction())
 		
 		// Then
-		expect(self.coordinatorSpy.invokedUserWishesToStartFuzzyMatchingFlow).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedHandleMismatchedIdentityError).toEventually(beTrue())
 	}
 }
 

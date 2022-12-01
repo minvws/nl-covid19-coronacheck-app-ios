@@ -19,6 +19,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedNavigateBackToStartCount += 1
 	}
 
+	var invokedHandleMismatchedIdentityError = false
+	var invokedHandleMismatchedIdentityErrorCount = 0
+	var invokedHandleMismatchedIdentityErrorParameters: (matchingBlobIds: [[String]], Void)?
+	var invokedHandleMismatchedIdentityErrorParametersList = [(matchingBlobIds: [[String]], Void)]()
+
+	func handleMismatchedIdentityError(matchingBlobIds: [[String]]) {
+		invokedHandleMismatchedIdentityError = true
+		invokedHandleMismatchedIdentityErrorCount += 1
+		invokedHandleMismatchedIdentityErrorParameters = (matchingBlobIds, ())
+		invokedHandleMismatchedIdentityErrorParametersList.append((matchingBlobIds, ()))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
@@ -285,18 +297,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToSeeEventDetailsCount += 1
 		invokedUserWishesToSeeEventDetailsParameters = (title, details)
 		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
-	}
-
-	var invokedUserWishesToStartFuzzyMatchingFlow = false
-	var invokedUserWishesToStartFuzzyMatchingFlowCount = 0
-	var invokedUserWishesToStartFuzzyMatchingFlowParameters: (matchingBlobIds: [[String]], Void)?
-	var invokedUserWishesToStartFuzzyMatchingFlowParametersList = [(matchingBlobIds: [[String]], Void)]()
-
-	func userWishesToStartFuzzyMatchingFlow(matchingBlobIds: [[String]]) {
-		invokedUserWishesToStartFuzzyMatchingFlow = true
-		invokedUserWishesToStartFuzzyMatchingFlowCount += 1
-		invokedUserWishesToStartFuzzyMatchingFlowParameters = (matchingBlobIds, ())
-		invokedUserWishesToStartFuzzyMatchingFlowParametersList.append((matchingBlobIds, ()))
 	}
 
 	var invokedUserWishesToViewQRs = false

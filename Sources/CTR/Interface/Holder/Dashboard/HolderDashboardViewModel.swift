@@ -504,7 +504,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		if case let DashboardStrippenRefresher.Error.greencardLoaderError(error: GreenCardLoader.Error.credentials(.error(_, response, _))) = error {
 			if let matchingBlobIds = response?.context?.matchingBlobIds,
 			   response?.code == GreenCardResponseError.mismatchedIdentity {
-				coordinator?.userWishesToStartFuzzyMatchingFlow(matchingBlobIds: matchingBlobIds)
+				coordinator?.handleMismatchedIdentityError(matchingBlobIds: matchingBlobIds)
 			}
 		}
 	}
