@@ -2,7 +2,7 @@
 
 export PATH=$PATH:~/go/bin
 set -eux
-git clone git@github.com:minvws/nl-covid19-coronacheck-mobile-core.git tmp-clcore
+git clone https://github.com/minvws/nl-covid19-coronacheck-mobile-core.git tmp-clcore
 cd tmp-clcore
 git checkout v0.4.5
 git submodule init
