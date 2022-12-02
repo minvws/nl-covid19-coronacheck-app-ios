@@ -52,7 +52,7 @@ runs:
     - name: Archive mobile core dependency
       uses: actions/upload-artifact@v3
       with:
-        name: mobilecore
+        name: clcore.xcframework
         path: |
           clcore.xcframework
         retention-days: 2
