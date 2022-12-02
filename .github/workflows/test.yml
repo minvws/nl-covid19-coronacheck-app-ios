@@ -54,49 +54,16 @@ jobs:
           git lfs pull
           git checkout .
       
-      - name: Checkout Mobile Core
-        run: |
-          git clone https://github.com/minvws/nl-covid19-coronacheck-mobile-core.git tmp-clcore
-          cd tmp-clcore
-          git checkout v0.4.5
-          cd ..
+      - name: Build mobile core
+        uses: ./.github/actions/build-core
 
-      - name: Get mobile core version
-        id: version
-        run: |
-          echo VERSION=`git rev-parse HEAD` >> $GITHUB_OUTPUT
-          echo GO_VERSION="`cat go.mod | grep "go 1." | sed 's/ //g'`" >> $GITHUB_OUTPUT
-        working-directory: tmp-clcore
-        shell: bash
-
-      - name: Restore mobile core from cache
-        id: corecache
-        uses: actions/cache@v3
+      - name: Archive mobile core dependency
+        uses: actions/upload-artifact@v3
         with:
+          name: mobilecore
           path: |
             clcore.xcframework
-          key: clcore-xcframework-${{ steps.version.outputs.VERSION }}-${{ steps.version.outputs.GO_VERSION }}
-
-      - name: Setup go
-        if: steps.corecache.outputs.cache-hit != 'true'
-        uses: actions/setup-go@v3.4.0
-        with:
-          go-version-file: 'tmp-clcore/go.mod'
-        
-      - name: Compile Go library dependency
-        if: steps.corecache.outputs.cache-hit != 'true'
-        working-directory: tmp-clcore
-        run: |
-          git submodule init
-          git submodule update
-          go mod download golang.org/x/mobile
-          go install golang.org/x/mobile/cmd/gomobile@latest
-          gomobile init
-          gomobile bind -target ios,iossimulator -o clcore.xcframework -iosversion 11.0 github.com/minvws/nl-covid19-coronacheck-mobile-core
-          cd ../
-          rm -rf clcore.xcframework
-          cp -R tmp-clcore/clcore.xcframework .
-          rm -rf tmp-clcore
+          retention-days: 2
           
       - name: Build and test
         env:
