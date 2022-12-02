@@ -57,7 +57,7 @@ enum EventDetailsVaccination: EventDetailable {
 			case .dateOfBirth: return L.holderEventAboutVaccinationDateofbirth()
 			case .pathogen: return L.holderEventAboutVaccinationPathogen()
 			case .vaccineBrand: return L.holderEventAboutVaccinationBrand()
-			case .vaccineProductname: return "Productnaam:"
+			case .vaccineProductname: return L.holder_event_aboutVaccination_productName()
 			case .vaccineType: return L.holderEventAboutVaccinationType()
 			case .vaccineManufacturer: return L.holderEventAboutVaccinationManufacturer()
 			case .dosage: return L.holderEventAboutVaccinationDosage()
