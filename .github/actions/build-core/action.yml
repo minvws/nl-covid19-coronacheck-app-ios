@@ -48,3 +48,11 @@ runs:
         rm -rf clcore.xcframework
         cp -R tmp-clcore/clcore.xcframework .
         rm -rf tmp-clcore
+
+    - name: Archive mobile core dependency
+      uses: actions/upload-artifact@v3
+      with:
+        name: mobilecore
+        path: |
+          clcore.xcframework
+        retention-days: 2

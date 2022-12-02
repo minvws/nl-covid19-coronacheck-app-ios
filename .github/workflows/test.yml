@@ -56,14 +56,6 @@ jobs:
       
       - name: Build mobile core
         uses: ./.github/actions/build-core
-
-      - name: Archive mobile core dependency
-        uses: actions/upload-artifact@v3
-        with:
-          name: mobilecore
-          path: |
-            clcore.xcframework
-          retention-days: 2
           
       - name: Build and test
         env:
