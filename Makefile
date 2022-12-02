@@ -1,4 +1,4 @@
-dev: install_dev_deps install_githooks generate_project open_project
+dev: install_dev_deps install_githooks generate_project open_project compile_mobilecore
 ci: install_ci_deps generate_project
 
 # -- setup environment --
@@ -35,6 +35,9 @@ generate_project:
 
 open_project: 
 	open CTR.xcodeproj
+
+compile_mobilecore: 
+	Scripts/fetch_ctcl.sh
 
 # -- linting -- 
 
