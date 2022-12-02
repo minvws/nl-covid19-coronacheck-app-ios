@@ -40,6 +40,9 @@ jobs:
           git lfs pull
           git checkout .
 
+      - name: Build mobile core
+        uses: ./.github/actions/build-core
+
       - name: Build and test
         env:
           ACCEPTANCE_BASIC_AUTH_PASSWORD: ${{ secrets.ACCEPTANCE_BASIC_AUTH_PASSWORD }}
