@@ -145,13 +145,16 @@ class VaccinationDetailsGenerator {
 		let provider: String = mappingManager.getProviderIdentifierMapping(providerIdentifier) ?? providerIdentifier
 
 		var vaccinName: String?
+		var vaccineDisplayName: String?
 		var vaccineType: String?
 		var vaccineManufacturer: String?
 		if let hpkCode = event.vaccination?.hpkCode, !hpkCode.isEmpty {
 			let hpkData = mappingManager.getHpkData(hpkCode)
+			logInfo("hpkData: \(String(describing: hpkData))")
 			vaccinName = mappingManager.getVaccinationBrand(hpkData?.medicalProduct)
 			vaccineType = mappingManager.getVaccinationType(hpkData?.vaccineOrProphylaxis)
 			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData?.marketingAuthorizationHolder)
+			vaccineDisplayName = hpkData?.displayName
 		}
 
 		if vaccinName == nil, let brand = event.vaccination?.brand {
@@ -179,6 +182,7 @@ class VaccinationDetailsGenerator {
 			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
 			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
+			EventDetails(field: EventDetailsVaccination.vaccineProductname, value: vaccineDisplayName),
 			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
 			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
 			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
