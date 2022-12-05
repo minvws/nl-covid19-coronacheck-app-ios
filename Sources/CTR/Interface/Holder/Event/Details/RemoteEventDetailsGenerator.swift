@@ -175,27 +175,24 @@ class VaccinationDetailsGenerator {
 		
 		let country = mappingManager.getDisplayCountry(event.vaccination?.country ?? "")
 		
-		var details = [
-			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
-			EventDetails(field: EventDetailsVaccination.name, value: identity.fullName),
-			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
-			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
-			EventDetails(field: EventDetailsVaccination.vaccineProductname, value: vaccineDisplayName),
-			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
-			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
-			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
-			EventDetails(field: EventDetailsVaccination.completionReason, value: event.vaccination?.completionStatus),
-			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
-			EventDetails(field: EventDetailsVaccination.country, value: country),
-			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)
-		]
-		return details.filter { details in
-			if case EventDetailsVaccination.vaccineProductname = details.field {
-				return vaccineDisplayName != nil
-			}
-			return true
+		var details = [EventDetails]()
+		details += [EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil)]
+		details += [EventDetails(field: EventDetailsVaccination.name, value: identity.fullName)]
+		details += [EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate)]
+		details += [EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue())]
+		details += [EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName)]
+		if vaccineDisplayName != nil {
+			details += [EventDetails(field: EventDetailsVaccination.vaccineProductname, value: vaccineDisplayName)]
 		}
+		details += [EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType)]
+		details += [EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer)]
+		details += [EventDetails(field: EventDetailsVaccination.dosage, value: dosage)]
+		details += [EventDetails(field: EventDetailsVaccination.completionReason, value: event.vaccination?.completionStatus)]
+		details += [EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate)]
+		details += [EventDetails(field: EventDetailsVaccination.country, value: country)]
+		details += [EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)]
+		
+		return details
 	}
 }
 
