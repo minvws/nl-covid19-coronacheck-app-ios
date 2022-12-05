@@ -30,6 +30,8 @@ homebrew_ci_imagemagick: # only needed for specific context & takes time, so not
 # -- generate -- 
 
 generate_project: 
+	touch Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
+	touch Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings
 	xcodegen  --spec project.yml
 
 open_project: 

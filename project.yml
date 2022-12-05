@@ -341,10 +341,6 @@ targets:
           - "CTR/Configuration/verifier-Info.plist"
       - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
         optional: true
-      - path: Sources/CTR/Infrastructure/Resources/Localization/nl.lproj
-        optional: true
-      - path: Sources/CTR/Infrastructure/Resources/Localization/en.lproj
-        optional: true
         
     settings:
       base:
@@ -423,10 +419,6 @@ targets:
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
       - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
-        optional: true
-      - path: Sources/CTR/Infrastructure/Resources/Localization/nl.lproj
-        optional: true
-      - path: Sources/CTR/Infrastructure/Resources/Localization/en.lproj
         optional: true
     settings:
       base:
