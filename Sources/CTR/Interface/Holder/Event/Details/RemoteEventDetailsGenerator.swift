@@ -133,9 +133,9 @@ class DCCTestDetailsGenerator {
 class VaccinationDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String) -> [EventDetails] {
-
+		
 		let mappingManager: MappingManaging = Current.mappingManager
-
+		
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
@@ -143,7 +143,7 @@ class VaccinationDetailsGenerator {
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(providerIdentifier) ?? providerIdentifier
-
+		
 		var vaccinName: String?
 		var vaccineDisplayName: String?
 		var vaccineType: String?
@@ -155,7 +155,7 @@ class VaccinationDetailsGenerator {
 			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData.marketingAuthorizationHolder)
 			vaccineDisplayName = hpkData.displayName
 		}
-
+		
 		if vaccinName == nil, let brand = event.vaccination?.brand {
 			vaccinName = mappingManager.getVaccinationBrand(brand)
 		}
@@ -166,21 +166,22 @@ class VaccinationDetailsGenerator {
 			vaccineManufacturer = mappingManager.getVaccinationManufacturer(event.vaccination?.manufacturer)
 			?? event.vaccination?.manufacturer
 		}
-
+		
 		var dosage: String?
 		if let doseNumber = event.vaccination?.doseNumber,
 		   let totalDose = event.vaccination?.totalDoses {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
-
+		
 		let country = mappingManager.getDisplayCountry(event.vaccination?.country ?? "")
-
+		
 		var details = [
 			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
 			EventDetails(field: EventDetailsVaccination.name, value: identity.fullName),
 			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
 			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
+			EventDetails(field: EventDetailsVaccination.vaccineProductname, value: vaccineDisplayName),
 			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
 			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
 			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
@@ -189,10 +190,12 @@ class VaccinationDetailsGenerator {
 			EventDetails(field: EventDetailsVaccination.country, value: country),
 			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)
 		]
-		if vaccineDisplayName != nil {
-			details.insert(EventDetails(field: EventDetailsVaccination.vaccineProductname, value: vaccineDisplayName), at: 5)
+		return details.filter { details in
+			if case EventDetailsVaccination.vaccineProductname = details.field {
+				return vaccineDisplayName != nil
+			}
+			return true
 		}
-		return details
 	}
 }
 
