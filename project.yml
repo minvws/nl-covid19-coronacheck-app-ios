@@ -59,6 +59,7 @@ fileGroups:
   - project.yml
   - Localizations
   - .github
+  - Scripts
 
 # - Project Level settings:
 
@@ -216,12 +217,37 @@ targetTemplates:
         UIUserInterfaceStyle: Light
         UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
-      - name: Merge Localizations
+      - name: Merge Localizations EN
+        inputFiles: 
+          - $(SRCROOT)/Localizations/Holder/en.lproj/Localizable.strings
+          - $(SRCROOT)/Localizations/Verifier/en.lproj/Localizable.strings
+        outputFiles:
+          - $(SRCROOT)/Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings
         basedOnDependencyAnalysis: true
         script: |
           Scripts/merge_localizations.sh
-      - name: Validate HTML in Localization files
+      - name: Merge Localizations NL
+        inputFiles: 
+          - $(SRCROOT)/Localizations/Holder/nl.lproj/Localizable.strings
+          - $(SRCROOT)/Localizations/Verifier/nl.lproj/Localizable.strings
+        outputFiles:
+          - $(SRCROOT)/Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
         basedOnDependencyAnalysis: true
+        script: |
+          Scripts/merge_localizations.sh
+      - name: Copy Pluralized Localizations into place
+        inputFiles: 
+          - $(SRCROOT)/Localizations/Holder/en.lproj/Localizable.stringsdict
+          - $(SRCROOT)/Localizations/Holder/nl.lproj/Localizable.stringsdict
+        outputFiles:
+          - $(SRCROOT)/Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.stringsdict
+          - $(SRCROOT)/Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.stringsdict
+        basedOnDependencyAnalysis: true
+        script: |
+          cp $SCRIPT_INPUT_FILE_0 $SCRIPT_OUTPUT_FILE_0
+          cp $SCRIPT_INPUT_FILE_1 $SCRIPT_OUTPUT_FILE_1
+      - name: Validate HTML in Localization files
+        basedOnDependencyAnalysis: false
         script: |
           TEMP_DIR=`mktemp -d`
 
@@ -253,7 +279,7 @@ targetTemplates:
         outputFiles:
           - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
-        basedOnDependencyAnalysis: true
+        basedOnDependencyAnalysis: false
         script: |
 
           # Determine path of Swiftlint. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
@@ -315,6 +341,7 @@ targets:
           - "CTR/Configuration/verifier-Info.plist"
       - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
         optional: true
+        
     settings:
       base:
         APP_FLAVOR: holder
