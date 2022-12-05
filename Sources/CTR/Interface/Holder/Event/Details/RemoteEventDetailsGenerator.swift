@@ -148,12 +148,12 @@ class VaccinationDetailsGenerator {
 		var vaccineDisplayName: String?
 		var vaccineType: String?
 		var vaccineManufacturer: String?
-		if let hpkCode = event.vaccination?.hpkCode, !hpkCode.isEmpty {
-			let hpkData = mappingManager.getHpkData(hpkCode)
-			vaccinName = mappingManager.getVaccinationBrand(hpkData?.medicalProduct)
-			vaccineType = mappingManager.getVaccinationType(hpkData?.vaccineOrProphylaxis)
-			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData?.marketingAuthorizationHolder)
-			vaccineDisplayName = hpkData?.displayName
+		if let hpkCode = event.vaccination?.hpkCode,
+		   let hpkData = mappingManager.getHpkData(hpkCode) {
+			vaccinName = mappingManager.getVaccinationBrand(hpkData.medicalProduct)
+			vaccineType = mappingManager.getVaccinationType(hpkData.vaccineOrProphylaxis)
+			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData.marketingAuthorizationHolder)
+			vaccineDisplayName = hpkData.displayName
 		}
 
 		if vaccinName == nil, let brand = event.vaccination?.brand {
