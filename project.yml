@@ -96,7 +96,7 @@ targetTemplates:
         ENABLE_BITCODE: false # because it's deprecated
       configs:
         Development:
-          NETWORK_CONFIGURATION: TEST
+          NETWORK_CONFIGURATION: DEV
           VALIDATE_PRODUCT: NO
           LOG_LEVEL: debug
           OTHER_LDFLAGS: -Xlinker -interposable -weak_framework SwiftUI # all for Inject
