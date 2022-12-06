@@ -13,20 +13,21 @@ class OpenIdManagerSpy: OpenIDConnectManaging {
 
 	var invokedRequestAccessToken = false
 	var invokedRequestAccessTokenCount = 0
-	var invokedRequestAccessTokenParameters: (issuerConfiguration: OpenIDConnectConfiguration, presentingViewController: UIViewController?)?
-	var invokedRequestAccessTokenParametersList = [(issuerConfiguration: OpenIDConnectConfiguration, presentingViewController: UIViewController?)]()
+	var invokedRequestAccessTokenParameters: (issuerConfiguration: OpenIDConnectConfiguration, presentingViewController: UIViewController?, openIDConnectState: OpenIDConnectState?)?
+	var invokedRequestAccessTokenParametersList = [(issuerConfiguration: OpenIDConnectConfiguration, presentingViewController: UIViewController?, openIDConnectState: OpenIDConnectState?)]()
 	var stubbedRequestAccessTokenOnCompletionResult: (OpenIDConnectToken, Void)?
 	var stubbedRequestAccessTokenOnErrorResult: (Error?, Void)?
 
 	func requestAccessToken(
 		issuerConfiguration: OpenIDConnectConfiguration,
 		presentingViewController: UIViewController?,
+		openIDConnectState: OpenIDConnectState?,
 		onCompletion: @escaping (OpenIDConnectToken) -> Void,
 		onError: @escaping (Error?) -> Void) {
 		invokedRequestAccessToken = true
 		invokedRequestAccessTokenCount += 1
-		invokedRequestAccessTokenParameters = (issuerConfiguration, presentingViewController)
-		invokedRequestAccessTokenParametersList.append((issuerConfiguration, presentingViewController))
+		invokedRequestAccessTokenParameters = (issuerConfiguration, presentingViewController, openIDConnectState)
+		invokedRequestAccessTokenParametersList.append((issuerConfiguration, presentingViewController, openIDConnectState))
 		if let result = stubbedRequestAccessTokenOnCompletionResult {
 			onCompletion(result.0)
 		}
