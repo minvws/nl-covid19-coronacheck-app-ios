@@ -129,6 +129,44 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[11].value) == "1234"
 	}
 	
+	func testVaccinationDetailsGenerator_withHPKCode() {
+
+		// Given
+		let identity = EventFlow.Identity.fakeIdentity
+		let event = EventFlow.Event.vaccinationEventWithHPKCode
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		environmentSpies.mappingManagerSpy.stubbedGetHpkDataResult = HPKData(
+			code: "1234",
+			name: "Test",
+			displayName: "Vaccination Product Name",
+			vaccineOrProphylaxis: "vp",
+			medicalProduct: "mp",
+			marketingAuthorizationHolder: "ma"
+		)
+
+		// When
+		let details = VaccinationDetailsGenerator.getDetails(identity: identity, event: event, providerIdentifier: "CC")
+
+		// Then
+		expect(details).to(haveCount(13))
+		expect(details[0].value) == nil
+		expect(details[1].value) == "Check, Corona"
+		expect(details[2].value) == "16 mei 1980"
+		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
+		expect(details[4].value) == "Pfizer (Comirnaty)"
+		expect(details[5].value) == "Vaccination Product Name"
+		expect(details[6].value) == "SARS-CoV-2 mRNA vaccine"
+		expect(details[7].value) == "Biontech"
+		expect(details[8].value) == "1 van 2"
+		expect(details[9].value) == nil
+		expect(details[10].value) == "16 mei 2021"
+		expect(details[11].value) == "NL"
+		expect(details[12].value) == "1234"
+	}
+	
 	func testVaccinationAssessmentDetailsGenerator() {
 		
 		// Given

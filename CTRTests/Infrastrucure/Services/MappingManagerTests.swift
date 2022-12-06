@@ -468,7 +468,14 @@ class MappingManagerTests: XCTestCase {
 		
 		// Given
 		remoteConfigManagerSpy.stubbedStoredConfiguration.hpkCodes = [
-			HPKData(code: "Test", name: "Test Corona Check", vp: "vp", mp: "mp", ma: "ma")
+			HPKData(
+				code: "Test",
+				name: "Test Corona Check",
+				displayName: "DisplayName",
+				vaccineOrProphylaxis: "vp",
+				medicalProduct: "mp",
+				marketingAuthorizationHolder: "ma"
+			)
 		]
 		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
 		
@@ -478,16 +485,23 @@ class MappingManagerTests: XCTestCase {
 		// Then
 		expect(mapped?.name) == "Test Corona Check"
 		expect(mapped?.code) == "Test"
-		expect(mapped?.vp) == "vp"
-		expect(mapped?.mp) == "mp"
-		expect(mapped?.ma) == "ma"
+		expect(mapped?.vaccineOrProphylaxis) == "vp"
+		expect(mapped?.medicalProduct) == "mp"
+		expect(mapped?.marketingAuthorizationHolder) == "ma"
 	}
 	
 	func test_getHpkData_missingMapping() {
 		
 		// Given
 		remoteConfigManagerSpy.stubbedStoredConfiguration.hpkCodes = [
-			HPKData(code: "Test", name: "Test Corona Check", vp: "vp", mp: "mp", ma: "ma")
+			HPKData(
+				code: "Test",
+				name: "Test Corona Check",
+				displayName: "DisplayName",
+				vaccineOrProphylaxis: "vp",
+				medicalProduct: "mp",
+				marketingAuthorizationHolder: "ma"
+			)
 		]
 		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
 		
