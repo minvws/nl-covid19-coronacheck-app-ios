@@ -53,7 +53,10 @@ jobs:
         run: |
           git lfs pull
           git checkout .
-
+      
+      - name: Build mobile core
+        uses: ./.github/actions/build-core
+          
       - name: Build and test
         env:
           SLACK_URL: ${{ secrets.SLACK_URL }}

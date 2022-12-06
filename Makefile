@@ -1,4 +1,4 @@
-dev: install_dev_deps install_githooks generate_project open_project
+dev: install_dev_deps install_githooks generate_project open_project compile_mobilecore
 ci: install_ci_deps generate_project
 
 # -- setup environment --
@@ -30,11 +30,15 @@ homebrew_ci_imagemagick: # only needed for specific context & takes time, so not
 # -- generate -- 
 
 generate_project: 
-	Scripts/merge_localizations.sh
+	touch Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
+	touch Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings
 	xcodegen  --spec project.yml
 
 open_project: 
 	open CTR.xcodeproj
+
+compile_mobilecore: 
+	Scripts/fetch_ctcl.sh
 
 # -- linting -- 
 

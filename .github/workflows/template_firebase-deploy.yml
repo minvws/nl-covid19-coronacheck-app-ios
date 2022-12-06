@@ -56,6 +56,14 @@ jobs:
     - name: Setup CI environment
       run: |
         make ci
+
+    - name: Checkout LFS resources
+      run: |
+        git lfs pull
+        git checkout .
+
+    - name: Build mobile core
+      uses: ./.github/actions/build-core
     
     - name: Setup Imagemagick for icon overlays
       run: |
