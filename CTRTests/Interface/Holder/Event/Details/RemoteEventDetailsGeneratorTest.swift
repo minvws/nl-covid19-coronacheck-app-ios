@@ -105,7 +105,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationEvent
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -119,7 +119,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
-		expect(details[4].value) == "Pfizer (Comirnaty)"
+		expect(details[4].value) == "Comirnaty (Pfizer)"
 		expect(details[5].value) == "SARS-CoV-2 mRNA vaccine"
 		expect(details[6].value) == "Biontech"
 		expect(details[7].value) == "1 van 2"
@@ -173,7 +173,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let dccVaccination = EuCredentialAttributes.Vaccination.vaccination
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -188,7 +188,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
-		expect(details[4].value) == "Pfizer (Comirnaty)"
+		expect(details[4].value) == "Comirnaty (Pfizer)"
 		expect(details[5].value) == "SARS-CoV-2 mRNA vaccine"
 		expect(details[6].value) == "Biontech"
 		expect(details[7].value) == "2 van 2"
