@@ -45,7 +45,7 @@ final class RemoteEventDetailsViewModel {
 			if let value = $0.value, !value.isEmpty {
 				field += " <b>\(value)</b>"
 			}
-			return (field, $0.field.hasLineBreak, $0.field.isSeparator)
+			return (field, $0.field.isFollowedByLineBreak, $0.field.isSeparator)
 		}
 		
 		if hideBodyForScreenCapture {
