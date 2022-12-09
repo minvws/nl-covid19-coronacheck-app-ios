@@ -1640,6 +1640,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_dashboard_intro_domestic_only1Gaccess = Rswift.StringResource(key: "holder_dashboard_intro_domestic_only1Gaccess", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: <p>Met de CoronaCheck app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>
+      ///
+      /// Locales: en, nl
+      static let holderAboutText = Rswift.StringResource(key: "holder.about.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: <p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe (booster)vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href="https://coronacheck.nl/wegwijzer">Wegwijzer</a>.</p>
       ///
       /// Locales: en, nl
@@ -3628,10 +3632,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let general_menu = Rswift.StringResource(key: "general_menu", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Met de CoronaCheck app kun je een digitaal coronabewijs maken. Je kunt een bewijs maken van je vaccinatie(s), negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Ga je naar het buitenland? Check vooraf op Nederland Wereldwijd of je de QR-code kunt gebruiken.
-      ///
-      /// Locales: en, nl
-      static let holderAboutText = Rswift.StringResource(key: "holder.about.text", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Met deze app controleer je het coronabewijs van je bezoekers. Zo kun je jouw locatie veilig open houden.
       ///
       /// Locales: en, nl
@@ -6684,6 +6684,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder_dashboard_intro_domestic_only1Gaccess", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: <p>Met de CoronaCheck app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>
+      ///
+      /// Locales: en, nl
+      static func holderAboutText(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder.about.text", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder.about.text"
+        }
+
+        return NSLocalizedString("holder.about.text", bundle: bundle, comment: "")
       }
 
       /// nl translation: <p>Met de vaccinatie(s) die je nu in de app hebt toegevoegd, krijg je geen Nederlands vaccinatiebewijs.</p><p>Voeg een nieuwe (booster)vaccinatie of test toe om een Nederlands bewijs te krijgen.</p><p>Kijk voor meer informatie op de <a href="https://coronacheck.nl/wegwijzer">Wegwijzer</a>.</p>
@@ -14227,21 +14242,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("general_menu", bundle: bundle, comment: "")
-      }
-
-      /// nl translation: Met de CoronaCheck app kun je een digitaal coronabewijs maken. Je kunt een bewijs maken van je vaccinatie(s), negatieve testuitslag of als je corona hebt gehad en bent hersteld. Je coronabewijs heeft een QR-code. Ga je naar het buitenland? Check vooraf op Nederland Wereldwijd of je de QR-code kunt gebruiken.
-      ///
-      /// Locales: en, nl
-      static func holderAboutText(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder.about.text", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder.about.text"
-        }
-
-        return NSLocalizedString("holder.about.text", bundle: bundle, comment: "")
       }
 
       /// nl translation: Met deze app controleer je het coronabewijs van je bezoekers. Zo kun je jouw locatie veilig open houden.
