@@ -34,6 +34,9 @@ class NegativeTestDetailsGenerator {
 			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
 		}
 
+		// Country tested in
+		let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry)
+		
 		return [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
@@ -42,9 +45,10 @@ class NegativeTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.testName, value: testName),
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage()),
-			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
+			EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn),
+			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique) 
 		]
 	}
 }
@@ -73,7 +77,7 @@ class PositiveTestDetailsGenerator {
 		if mappingManager.isRatTest(event.positiveTest?.type) {
 			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
 		}
-
+		
 		// Country tested in
 		let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry)
 
