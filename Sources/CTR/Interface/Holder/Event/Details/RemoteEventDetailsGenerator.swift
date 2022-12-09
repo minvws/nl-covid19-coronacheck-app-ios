@@ -66,7 +66,7 @@ class PositiveTestDetailsGenerator {
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
 
 		// Manufacturer
-		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.negativeTest?.manufacturer ?? "")
+		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.positiveTest?.manufacturer ?? "")
 
 		// Test name
 		var testName: String? = event.positiveTest?.name
