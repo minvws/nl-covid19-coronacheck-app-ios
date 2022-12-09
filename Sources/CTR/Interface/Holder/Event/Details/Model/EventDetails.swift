@@ -147,7 +147,7 @@ enum EventDetailsTest: EventDetailable {
 			case .facility: return L.holderEventAboutTestFacility()
 			case .manufacturer: return L.holderEventAboutTestManufacturer()
 			case .uniqueIdentifer: return L.holderEventAboutTestIdentifier()
-			case .countryTestedIn: return L.holderEventAboutTestCountrytestedin()
+			case .countryTestedIn: return L.holder_event_about_test_countrytestedin()
 		}
 	}
 	
