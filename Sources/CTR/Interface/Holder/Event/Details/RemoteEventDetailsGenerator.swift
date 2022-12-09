@@ -20,7 +20,7 @@ class NegativeTestDetailsGenerator {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (event.negativeTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.negativeTest?.type) ?? (event.negativeTest?.type ?? "")
