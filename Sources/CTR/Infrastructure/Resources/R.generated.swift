@@ -5128,14 +5128,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderDashboardQrMinuteLong = Rswift.StringResource(key: "holder.dashboard.qr.minute.long", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: negatief (geen corona) / negative (no coronavirus)
-      ///
-      /// Locales: en, nl
-      static let holderShowqrEuAboutTestNegative = Rswift.StringResource(key: "holder.showqr.eu.about.test.negative", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: negatief (geen coronavirus vastgesteld)
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutTestNegativeSingleLanguage = Rswift.StringResource(key: "holder.showqr.eu.about.test.negative.singleLanguage", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)
+      ///
+      /// Locales: en, nl
+      static let holderShowqrEuAboutTestNegative = Rswift.StringResource(key: "holder.showqr.eu.about.test.negative", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: nu
       ///
       /// Locales: en, nl
@@ -19886,21 +19886,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.dashboard.qr.minute.long", bundle: bundle, comment: "")
       }
 
-      /// nl translation: negatief (geen corona) / negative (no coronavirus)
-      ///
-      /// Locales: en, nl
-      static func holderShowqrEuAboutTestNegative(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder.showqr.eu.about.test.negative", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder.showqr.eu.about.test.negative"
-        }
-
-        return NSLocalizedString("holder.showqr.eu.about.test.negative", bundle: bundle, comment: "")
-      }
-
       /// nl translation: negatief (geen coronavirus vastgesteld)
       ///
       /// Locales: en, nl
@@ -19914,6 +19899,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder.showqr.eu.about.test.negative.singleLanguage", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)
+      ///
+      /// Locales: en, nl
+      static func holderShowqrEuAboutTestNegative(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder.showqr.eu.about.test.negative", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder.showqr.eu.about.test.negative"
+        }
+
+        return NSLocalizedString("holder.showqr.eu.about.test.negative", bundle: bundle, comment: "")
       }
 
       /// nl translation: nu

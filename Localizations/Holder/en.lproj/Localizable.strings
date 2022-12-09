@@ -389,7 +389,7 @@
 "holder.showqr.eu.about.test.issuer" = "Certificate issuer:";
 "holder.showqr.eu.about.test.manufacturer" = "Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Name:";
-"holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
+"holder.showqr.eu.about.test.negative" = "negative (no coronavirus detected)";
 "holder.showqr.eu.about.test.negative.singleLanguage" = "negative (no coronavirus detected)";
 "holder.showqr.eu.about.test.pathogen" = "Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
