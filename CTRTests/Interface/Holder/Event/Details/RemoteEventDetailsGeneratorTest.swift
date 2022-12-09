@@ -32,17 +32,18 @@ class EventDetailsGeneratorTest: XCTestCase {
 		let details = NegativeTestDetailsGenerator.getDetails(identity: identity, event: event)
 
 		// Then
-		expect(details).to(haveCount(10))
+		expect(details).to(haveCount(11))
 		expect(details[0].value) == nil
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "Sneltest (RAT)"
 		expect(details[4].value) == "Antigen Test"
-		expect(details[5].value) == "donderdag 1 juli 15:42"
-		expect(details[6].value) == "negatief (geen corona)"
-		expect(details[7].value) == "GGD XL Factory"
-		expect(details[8].value) == "testNegativeTestGenerator"
-		expect(details[9].value) == "1234"
+		expect(details[5].value) == "donderdag 1 juli 2021 15:42"
+		expect(details[6].value) == "negatief (geen coronavirus vastgesteld)"
+		expect(details[7].value) == "testNegativeTestGenerator"
+		expect(details[8].value) == "GGD XL Factory"
+		expect(details[9].value) == ""
+		expect(details[10].value) == "1234"
 	}
 
 	func testPositiveTestDetailsGenerator() {
@@ -57,7 +58,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		let details = PositiveTestDetailsGenerator.getDetails(identity: identity, event: event)
 
 		// Then
-		expect(details).to(haveCount(10))
+		expect(details).to(haveCount(11))
 		expect(details[0].value) == nil
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
@@ -65,9 +66,10 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[4].value) == "Antigen Test"
 		expect(details[5].value) == "donderdag 1 juli 2021 17:49"
 		expect(details[6].value) == L.holderShowqrEuAboutTestPostive()
-		expect(details[7].value) == "GGD XL Factory"
-		expect(details[8].value) == "testPositiveTestGenerator"
-		expect(details[9].value) == "1234"
+		expect(details[7].value) == "testPositiveTestGenerator"
+		expect(details[8].value) == "GGD XL Factory"
+		expect(details[9].value) == ""
+		expect(details[10].value) == "1234"
 	}
 
 	func testDCCNegativeTestDetailsGenerator() {
@@ -92,7 +94,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[4].value) == "Sneltest (RAT)"
 		expect(details[5].value) == "fake negativeTest"
 		expect(details[6].value) == "woensdag 17 november 16:00"
-		expect(details[7].value) == "negatief (geen corona)"
+		expect(details[7].value) == "negatief (geen coronavirus vastgesteld)"
 		expect(details[8].value) == ""
 		expect(details[9].value) == "testDCCNegativeTestGenerator"
 		expect(details[10].value) == "NL"

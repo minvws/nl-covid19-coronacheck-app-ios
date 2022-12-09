@@ -48,7 +48,7 @@ class NegativeTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
 			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
 			EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique) 
+			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
 		]
 	}
 }

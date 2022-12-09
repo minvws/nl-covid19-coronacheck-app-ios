@@ -21,7 +21,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		
 		environmentSpies = setupEnvironmentSpies()
 		window = UIWindow()
 	}
