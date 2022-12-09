@@ -66,6 +66,6 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == "Title Positive Test"
 		expect(self.sut.footer) == "Footer Positive Test"
-		expect(self.sut.details).to(haveCount(10))
+		expect(self.sut.details).to(haveCount(11))
 	}
 }

@@ -376,6 +376,7 @@ public struct EventFlow {
 		public let type: String?
 		public let name: String?
 		public let manufacturer: String?
+		public let country: String?
 
 		public enum CodingKeys: String, CodingKey {
 
@@ -386,6 +387,7 @@ public struct EventFlow {
 			case type
 			case name
 			case manufacturer
+			case country
 		}
 
 		/// Get the date for this event
