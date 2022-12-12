@@ -28,7 +28,7 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationEvent
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -66,6 +66,6 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == "Title Positive Test"
 		expect(self.sut.footer) == "Footer Positive Test"
-		expect(self.sut.details).to(haveCount(10))
+		expect(self.sut.details).to(haveCount(11))
 	}
 }

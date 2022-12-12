@@ -21,7 +21,7 @@ protocol EventDetailable {
 	var displayTitle: String { get }
 	
 	/// Show additional line break after field
-	var hasLineBreak: Bool { get }
+	var isFollowedByLineBreak: Bool { get }
 
 	/// Show a separator line
 	var isSeparator: Bool { get }
@@ -69,7 +69,7 @@ enum EventDetailsVaccination: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
 			default: return false
@@ -108,7 +108,7 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
 			default: return false
@@ -131,6 +131,7 @@ enum EventDetailsTest: EventDetailable {
 	case facility
 	case manufacturer
 	case uniqueIdentifer
+	case countryTestedIn
 	
 	var isRequired: Bool {
 		return true
@@ -148,12 +149,13 @@ enum EventDetailsTest: EventDetailable {
 			case .facility: return L.holderEventAboutTestFacility()
 			case .manufacturer: return L.holderEventAboutTestManufacturer()
 			case .uniqueIdentifer: return L.holderEventAboutTestIdentifier()
+			case .countryTestedIn: return L.holder_event_about_test_countrytestedin()
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .manufacturer, .uniqueIdentifer: return true
+			case .subtitle, .dateOfBirth, .countryTestedIn: return true
 			default: return false
 		}
 	}
@@ -188,7 +190,7 @@ enum EventDetailsRecovery: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth, .uniqueIdentifer: return true
 			default: return false
@@ -238,7 +240,7 @@ enum EventDetailsDCCVaccination: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
 			default: return false
@@ -287,7 +289,7 @@ enum EventDetailsDCCTest: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
 			default: return false
@@ -330,7 +332,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isFollowedByLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
 			default: return false
@@ -348,7 +350,7 @@ extension EventDetails: Equatable {
 		return
 			lhs.field.displayTitle == rhs.field.displayTitle &&
 			lhs.field.isRequired == rhs.field.isRequired &&
-			lhs.field.hasLineBreak == rhs.field.hasLineBreak &&
+			lhs.field.isFollowedByLineBreak == rhs.field.isFollowedByLineBreak &&
 			lhs.field.isSeparator == rhs.field.isSeparator &&
 			lhs.value == rhs.value
 	}

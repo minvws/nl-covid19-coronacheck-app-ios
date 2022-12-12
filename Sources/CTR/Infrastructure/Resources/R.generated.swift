@@ -1250,7 +1250,7 @@ struct R: Rswift.Validatable {
       fileprivate init() {}
     }
 
-    /// This `R.string.localizable` struct is generated, and contains static references to 982 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 984 localization keys.
     struct localizable {
       /// nl translation: %#@format@
       ///
@@ -2252,6 +2252,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderVaccinationErrorMessageCode = Rswift.StringResource(key: "holder.vaccination.error.message.code", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: De volgende gegevens staan in je bewijs:
+      ///
+      /// Locales: en, nl
+      static let holder_dccDetails_subtitle = Rswift.StringResource(key: "holder_dccDetails_subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: De volgende gegevens van je vaccinatie zijn opgehaald bij %@:
+      ///
+      /// Locales: en, nl
+      static let holderEventAboutVaccinationSubtitle = Rswift.StringResource(key: "holder.event.about.vaccination.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: De volgende gegevens zijn opgehaald bij de testlocatie:
       ///
       /// Locales: en, nl
@@ -2348,14 +2356,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_identitySelection_details_body = Rswift.StringResource(key: "holder_identitySelection_details_body", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Deze gegevens staan in je bewijs:
-      ///
-      /// Locales: en, nl
-      static let holder_dccDetails_subtitle = Rswift.StringResource(key: "holder_dccDetails_subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Deze gegevens van je vaccinatie zijn opgehaald bij %@:
-      ///
-      /// Locales: en, nl
-      static let holderEventAboutVaccinationSubtitle = Rswift.StringResource(key: "holder.event.about.vaccination.subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Deze gegevens verwijderen?
       ///
       /// Locales: en, nl
@@ -2856,11 +2856,11 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_listRemoteEvents_paperflow_title = Rswift.StringResource(key: "holder_listRemoteEvents_paperflow_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Getest in / Member state of test:
+      /// nl translation: Getest in / Tested in:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutRecoveryCountry = Rswift.StringResource(key: "holder.showqr.eu.about.recovery.country", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Getest in / Member state of test:
+      /// nl translation: Getest in / Tested in:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutTestCountry = Rswift.StringResource(key: "holder.showqr.eu.about.test.country", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -2872,11 +2872,19 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderDccTestCountry = Rswift.StringResource(key: "holder.dcc.test.country", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Getest in:
+      ///
+      /// Locales: en, nl
+      static let holder_event_about_recovery_countrytestedin = Rswift.StringResource(key: "holder_event_about_recovery_countrytestedin", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Getest in:
+      ///
+      /// Locales: en, nl
+      static let holder_event_about_test_countrytestedin = Rswift.StringResource(key: "holder_event_about_test_countrytestedin", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Gevaccineerd in (land):
       ///
       /// Locales: en, nl
       static let holder_event_vaccination_assessment_about_country = Rswift.StringResource(key: "holder_event_vaccination_assessment_about_country", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Gevaccineerd in / Member state of vaccination:
+      /// nl translation: Gevaccineerd in / Vaccinated in:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutVaccinationCountry = Rswift.StringResource(key: "holder.showqr.eu.about.vaccination.country", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -4024,22 +4032,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let general_unrecoverableError_sendCrashReport_action = Rswift.StringResource(key: "general_unrecoverableError_sendCrashReport_action", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Producent / Test manufacturer:
-      ///
-      /// Locales: en, nl
-      static let holderShowqrEuAboutTestManufacturer = Rswift.StringResource(key: "holder.showqr.eu.about.test.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Producent / Vaccine manufacturer:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutVaccinationManufacturer = Rswift.StringResource(key: "holder.showqr.eu.about.vaccination.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Producent:
-      ///
-      /// Locales: en, nl
-      static let holderDccVaccinationManufacturer = Rswift.StringResource(key: "holder.dcc.vaccination.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Producent:
-      ///
-      /// Locales: en, nl
-      static let holderEventAboutVaccinationManufacturer = Rswift.StringResource(key: "holder.event.about.vaccination.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Productnaam:
       ///
       /// Locales: en, nl
@@ -4308,7 +4304,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let generalTestdate = Rswift.StringResource(key: "general.testdate", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Testdatum / Test date:
+      /// nl translation: Testdatum / Test date*:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutRecoveryDate = Rswift.StringResource(key: "holder.showqr.eu.about.recovery.date", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -4336,7 +4332,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_listRemoteEvents_listElement_testDate = Rswift.StringResource(key: "holder_listRemoteEvents_listElement_testDate", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Testlocatie / Testing centre:
+      /// nl translation: Testlocatie / Test location:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutTestFacility = Rswift.StringResource(key: "holder.showqr.eu.about.test.facility", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -4360,6 +4356,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderEventAboutTestTestname = Rswift.StringResource(key: "holder.event.about.test.testname", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Testproducent / Test manufacturer:
+      ///
+      /// Locales: en, nl
+      static let holderShowqrEuAboutTestManufacturer = Rswift.StringResource(key: "holder.showqr.eu.about.test.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Testproducent:
       ///
       /// Locales: en, nl
@@ -4448,7 +4448,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderEventAboutTestType = Rswift.StringResource(key: "holder.event.about.test.type", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Type vaccin / Vaccine medicinal product:
+      /// nl translation: Type vaccin / Vaccine type:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutVaccinationType = Rswift.StringResource(key: "holder.showqr.eu.about.vaccination.type", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -4568,7 +4568,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let generalVaccinationdate = Rswift.StringResource(key: "general.vaccinationdate", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Vaccinatiedatum / Date of vaccination*:
+      /// nl translation: Vaccinatiedatum / Vaccination date*:
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutVaccinationDate = Rswift.StringResource(key: "holder.showqr.eu.about.vaccination.date", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -4584,6 +4584,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_listRemoteEvents_listElement_vaccinationDate = Rswift.StringResource(key: "holder_listRemoteEvents_listElement_vaccinationDate", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Vaccinproducent:
+      ///
+      /// Locales: en, nl
+      static let holderDccVaccinationManufacturer = Rswift.StringResource(key: "holder.dcc.vaccination.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Vaccinproducent:
+      ///
+      /// Locales: en, nl
+      static let holderEventAboutVaccinationManufacturer = Rswift.StringResource(key: "holder.event.about.vaccination.manufacturer", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Veilig op reis met je bewijs
       ///
       /// Locales: en, nl
@@ -5120,11 +5128,11 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderDashboardQrMinuteLong = Rswift.StringResource(key: "holder.dashboard.qr.minute.long", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: negatief (geen corona)
+      /// nl translation: negatief (geen coronavirus vastgesteld)
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutTestNegativeSingleLanguage = Rswift.StringResource(key: "holder.showqr.eu.about.test.negative.singleLanguage", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: negatief (geen corona) / negative (no coronavirus)
+      /// nl translation: negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutTestNegative = Rswift.StringResource(key: "holder.showqr.eu.about.test.negative", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -5140,7 +5148,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let generalPaperflow = Rswift.StringResource(key: "general.paperflow", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: positief (corona)
+      /// nl translation: positief (coronavirus vastgesteld)
       ///
       /// Locales: en, nl
       static let holderShowqrEuAboutTestPostive = Rswift.StringResource(key: "holder.showqr.eu.about.test.postive", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
@@ -9025,6 +9033,38 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
+      /// nl translation: De volgende gegevens staan in je bewijs:
+      ///
+      /// Locales: en, nl
+      static func holder_dccDetails_subtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_dccDetails_subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_dccDetails_subtitle"
+        }
+
+        return NSLocalizedString("holder_dccDetails_subtitle", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: De volgende gegevens van je vaccinatie zijn opgehaald bij %@:
+      ///
+      /// Locales: en, nl
+      static func holderEventAboutVaccinationSubtitle(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("holder.event.about.vaccination.subtitle", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder.event.about.vaccination.subtitle"
+        }
+
+        let format = NSLocalizedString("holder.event.about.vaccination.subtitle", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
       /// nl translation: De volgende gegevens zijn opgehaald bij de testlocatie:
       ///
       /// Locales: en, nl
@@ -9386,38 +9426,6 @@ struct R: Rswift.Validatable {
         }
 
         let format = NSLocalizedString("holder_identitySelection_details_body", bundle: bundle, comment: "")
-        return String(format: format, locale: locale, value1)
-      }
-
-      /// nl translation: Deze gegevens staan in je bewijs:
-      ///
-      /// Locales: en, nl
-      static func holder_dccDetails_subtitle(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder_dccDetails_subtitle", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder_dccDetails_subtitle"
-        }
-
-        return NSLocalizedString("holder_dccDetails_subtitle", bundle: bundle, comment: "")
-      }
-
-      /// nl translation: Deze gegevens van je vaccinatie zijn opgehaald bij %@:
-      ///
-      /// Locales: en, nl
-      static func holderEventAboutVaccinationSubtitle(_ value1: String, preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          let format = NSLocalizedString("holder.event.about.vaccination.subtitle", bundle: hostingBundle, comment: "")
-          return String(format: format, locale: applicationLocale, value1)
-        }
-
-        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder.event.about.vaccination.subtitle"
-        }
-
-        let format = NSLocalizedString("holder.event.about.vaccination.subtitle", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
       }
 
@@ -11308,7 +11316,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder_listRemoteEvents_paperflow_title", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Getest in / Member state of test:
+      /// nl translation: Getest in / Tested in:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutRecoveryCountry(preferredLanguages: [String]? = nil) -> String {
@@ -11323,7 +11331,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.showqr.eu.about.recovery.country", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Getest in / Member state of test:
+      /// nl translation: Getest in / Tested in:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutTestCountry(preferredLanguages: [String]? = nil) -> String {
@@ -11368,6 +11376,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.dcc.test.country", bundle: bundle, comment: "")
       }
 
+      /// nl translation: Getest in:
+      ///
+      /// Locales: en, nl
+      static func holder_event_about_recovery_countrytestedin(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_event_about_recovery_countrytestedin", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_event_about_recovery_countrytestedin"
+        }
+
+        return NSLocalizedString("holder_event_about_recovery_countrytestedin", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Getest in:
+      ///
+      /// Locales: en, nl
+      static func holder_event_about_test_countrytestedin(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_event_about_test_countrytestedin", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_event_about_test_countrytestedin"
+        }
+
+        return NSLocalizedString("holder_event_about_test_countrytestedin", bundle: bundle, comment: "")
+      }
+
       /// nl translation: Gevaccineerd in (land):
       ///
       /// Locales: en, nl
@@ -11383,7 +11421,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder_event_vaccination_assessment_about_country", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Gevaccineerd in / Member state of vaccination:
+      /// nl translation: Gevaccineerd in / Vaccinated in:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutVaccinationCountry(preferredLanguages: [String]? = nil) -> String {
@@ -15726,21 +15764,6 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("general_unrecoverableError_sendCrashReport_action", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Producent / Test manufacturer:
-      ///
-      /// Locales: en, nl
-      static func holderShowqrEuAboutTestManufacturer(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder.showqr.eu.about.test.manufacturer", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder.showqr.eu.about.test.manufacturer"
-        }
-
-        return NSLocalizedString("holder.showqr.eu.about.test.manufacturer", bundle: bundle, comment: "")
-      }
-
       /// nl translation: Producent / Vaccine manufacturer:
       ///
       /// Locales: en, nl
@@ -15754,36 +15777,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder.showqr.eu.about.vaccination.manufacturer", bundle: bundle, comment: "")
-      }
-
-      /// nl translation: Producent:
-      ///
-      /// Locales: en, nl
-      static func holderDccVaccinationManufacturer(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder.dcc.vaccination.manufacturer", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder.dcc.vaccination.manufacturer"
-        }
-
-        return NSLocalizedString("holder.dcc.vaccination.manufacturer", bundle: bundle, comment: "")
-      }
-
-      /// nl translation: Producent:
-      ///
-      /// Locales: en, nl
-      static func holderEventAboutVaccinationManufacturer(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder.event.about.vaccination.manufacturer", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder.event.about.vaccination.manufacturer"
-        }
-
-        return NSLocalizedString("holder.event.about.vaccination.manufacturer", bundle: bundle, comment: "")
       }
 
       /// nl translation: Productnaam:
@@ -16795,7 +16788,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("general.testdate", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Testdatum / Test date:
+      /// nl translation: Testdatum / Test date*:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutRecoveryDate(preferredLanguages: [String]? = nil) -> String {
@@ -16902,7 +16895,7 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
-      /// nl translation: Testlocatie / Testing centre:
+      /// nl translation: Testlocatie / Test location:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutTestFacility(preferredLanguages: [String]? = nil) -> String {
@@ -16990,6 +16983,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder.event.about.test.testname", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Testproducent / Test manufacturer:
+      ///
+      /// Locales: en, nl
+      static func holderShowqrEuAboutTestManufacturer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder.showqr.eu.about.test.manufacturer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder.showqr.eu.about.test.manufacturer"
+        }
+
+        return NSLocalizedString("holder.showqr.eu.about.test.manufacturer", bundle: bundle, comment: "")
       }
 
       /// nl translation: Testproducent:
@@ -17322,7 +17330,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.event.about.test.type", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Type vaccin / Vaccine medicinal product:
+      /// nl translation: Type vaccin / Vaccine type:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutVaccinationType(preferredLanguages: [String]? = nil) -> String {
@@ -17776,7 +17784,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("general.vaccinationdate", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Vaccinatiedatum / Date of vaccination*:
+      /// nl translation: Vaccinatiedatum / Vaccination date*:
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutVaccinationDate(preferredLanguages: [String]? = nil) -> String {
@@ -17836,6 +17844,36 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("holder_listRemoteEvents_listElement_vaccinationDate", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// nl translation: Vaccinproducent:
+      ///
+      /// Locales: en, nl
+      static func holderDccVaccinationManufacturer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder.dcc.vaccination.manufacturer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder.dcc.vaccination.manufacturer"
+        }
+
+        return NSLocalizedString("holder.dcc.vaccination.manufacturer", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Vaccinproducent:
+      ///
+      /// Locales: en, nl
+      static func holderEventAboutVaccinationManufacturer(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder.event.about.vaccination.manufacturer", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder.event.about.vaccination.manufacturer"
+        }
+
+        return NSLocalizedString("holder.event.about.vaccination.manufacturer", bundle: bundle, comment: "")
       }
 
       /// nl translation: Veilig op reis met je bewijs
@@ -19848,7 +19886,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.dashboard.qr.minute.long", bundle: bundle, comment: "")
       }
 
-      /// nl translation: negatief (geen corona)
+      /// nl translation: negatief (geen coronavirus vastgesteld)
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutTestNegativeSingleLanguage(preferredLanguages: [String]? = nil) -> String {
@@ -19863,7 +19901,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.showqr.eu.about.test.negative.singleLanguage", bundle: bundle, comment: "")
       }
 
-      /// nl translation: negatief (geen corona) / negative (no coronavirus)
+      /// nl translation: negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutTestNegative(preferredLanguages: [String]? = nil) -> String {
@@ -19923,7 +19961,7 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("general.paperflow", bundle: bundle, comment: "")
       }
 
-      /// nl translation: positief (corona)
+      /// nl translation: positief (coronavirus vastgesteld)
       ///
       /// Locales: en, nl
       static func holderShowqrEuAboutTestPostive(preferredLanguages: [String]? = nil) -> String {

@@ -191,7 +191,7 @@
 "holder.dcc.list.action" = "Add certificate";
 "holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
-"holder.dcc.recovery.country" = "Member state of test:";
+"holder.dcc.recovery.country" = "Tested in:";
 "holder.dcc.recovery.date" = "Test date:";
 "holder.dcc.recovery.dateofbirth" = "Date of birth:";
 "holder.dcc.recovery.details.title" = "Details";
@@ -202,11 +202,11 @@
 "holder.dcc.recovery.pathogenvalue" = "COVID-19";
 "holder.dcc.recovery.validfrom" = "Valid from:";
 "holder.dcc.recovery.validuntil" = "Valid to:";
-"holder.dcc.test.country" = "Member state of test:";
+"holder.dcc.test.country" = "Tested in:";
 "holder.dcc.test.date" = "Test date:";
 "holder.dcc.test.dateofbirth" = "Date of birth:";
 "holder.dcc.test.details.title" = "Details";
-"holder.dcc.test.facility" = "Testing centre:";
+"holder.dcc.test.facility" = "Test location:";
 "holder.dcc.test.footer" = "<p><b>Are your details incorrect?</b><br />Please contact the healthcare provider who vaccinated or tested you. This can be the GGD, your general practitioner or doctor. They can help you change these details.</p>";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 "holder.dcc.test.manufacturer" = "Test manufacturer:";
@@ -217,8 +217,8 @@
 "holder.dcc.test.testname" = "Test name:";
 "holder.dcc.test.type" = "Type of test:";
 "holder.dcc.vaccination.brand" = "Vaccine:";
-"holder.dcc.vaccination.country" = "Member state of vaccination:";
-"holder.dcc.vaccination.date" = "Date of vaccination:";
+"holder.dcc.vaccination.country" = "Vaccinated in:";
+"holder.dcc.vaccination.date" = "Vaccination date:";
 "holder.dcc.vaccination.dateofbirth" = "Date of birth:";
 "holder.dcc.vaccination.details.title" = "Details";
 "holder.dcc.vaccination.dosage" = "Number in series of doses:";
@@ -227,9 +227,9 @@
 "holder.dcc.vaccination.list.title" = "Vaccination certificate dose %@/%@";
 "holder.dcc.vaccination.manufacturer" = "Vaccine manufacturer:";
 "holder.dcc.vaccination.name" = "Name:";
-"holder.dcc.vaccination.pathogen" = "Pathogen:";
+"holder.dcc.vaccination.pathogen" = "Disease targeted:";
 "holder.dcc.vaccination.pathogenvalue" = "COVID-19";
-"holder.dcc.vaccination.type" = "Vaccine medicinal product:";
+"holder.dcc.vaccination.type" = "Vaccine type:";
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
 "holder.dcctokenentry.error.emptycode" = "Please enter a letter combination first";
@@ -271,7 +271,7 @@
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
 "holder.event.about.recovery.name" = "Name:";
 /* MARK: - Recovery Event */
-"holder.event.about.recovery.subtitle" = "The following details were retrieved at the test location:";
+"holder.event.about.recovery.subtitle" = "The following details were retrieved from the test location:";
 "holder.event.about.recovery.validfrom" = "Valid from:";
 "holder.event.about.recovery.validuntil" = "Valid until:";
 "holder.event.about.test.date" = "Test date:";
@@ -282,20 +282,20 @@
 "holder.event.about.test.name" = "Name:";
 "holder.event.about.test.result" = "Test result:";
 /* MARK: - Test Event */
-"holder.event.about.test.subtitle" = "The following details were retrieved at the test location:";
+"holder.event.about.test.subtitle" = "The following details were retrieved from the test location:";
 "holder.event.about.test.testname" = "Test name:";
 "holder.event.about.test.type" = "Test type:";
 "holder.event.about.title" = "Details";
 "holder.event.about.vaccination.brand" = "Vaccine:";
 "holder.event.about.vaccination.completionreason" = "Is this the last dose of your vaccination?";
-"holder.event.about.vaccination.country" = "Member state of vaccination:";
+"holder.event.about.vaccination.country" = "Vaccinated in:";
 "holder.event.about.vaccination.date" = "Vaccination date:";
 "holder.event.about.vaccination.dateofbirth" = "Date of birth:";
 "holder.event.about.vaccination.dosage" = "Dose:";
 "holder.event.about.vaccination.identifier" = "Unique vaccination identifier:";
 "holder.event.about.vaccination.manufacturer" = "Vaccine manufacturer:";
 "holder.event.about.vaccination.name" = "Name:";
-"holder.event.about.vaccination.pathogen" = "Pathogen:";
+"holder.event.about.vaccination.pathogen" = "Disease targeted:";
 "holder.event.about.vaccination.pathogenvalue" = "COVID-19";
 /* MARK: - Vaccination Event */
 "holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
@@ -367,8 +367,8 @@
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal information. While it states that your certificate is valid, it doesn't specify if you've been tested, recovered or vaccinated.</p><p>The QR code also contains the first letter of your first and last name and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
-"holder.showqr.eu.about.recovery.country" = "Member state of test:";
-"holder.showqr.eu.about.recovery.date" = "Test date:";
+"holder.showqr.eu.about.recovery.country" = "Tested in:";
+"holder.showqr.eu.about.recovery.date" = "Test date*:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.recovery.description" = "These details are in your international QR code:";
@@ -379,28 +379,28 @@
 "holder.showqr.eu.about.recovery.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.recovery.validfrom" = "Valid from*:";
 "holder.showqr.eu.about.recovery.validuntil" = "Valid to*:";
-"holder.showqr.eu.about.test.country" = "Member state of test:";
+"holder.showqr.eu.about.test.country" = "Tested in:";
 "holder.showqr.eu.about.test.date" = "Test date:";
 "holder.showqr.eu.about.test.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.test.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.test.description" = "These details are in your international QR code:";
-"holder.showqr.eu.about.test.facility" = "Testing centre:";
+"holder.showqr.eu.about.test.facility" = "Test location:";
 "holder.showqr.eu.about.test.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.test.issuer" = "Certificate issuer:";
 "holder.showqr.eu.about.test.manufacturer" = "Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Name:";
-"holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
-"holder.showqr.eu.about.test.negative.singleLanguage" = "negative (no coronavirus)";
+"holder.showqr.eu.about.test.negative" = "negative (no coronavirus detected)";
+"holder.showqr.eu.about.test.negative.singleLanguage" = "negative (no coronavirus detected)";
 "holder.showqr.eu.about.test.pathogen" = "Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
-"holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
+"holder.showqr.eu.about.test.postive" = "positive (coronavirus detected)";
 "holder.showqr.eu.about.test.result" = "Test result:";
 "holder.showqr.eu.about.test.testname" = "Test name:";
 "holder.showqr.eu.about.test.type" = "Type of test:";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.brand" = "Vaccine:";
-"holder.showqr.eu.about.vaccination.country" = "Member state of vaccination:";
-"holder.showqr.eu.about.vaccination.date" = "Date of vaccination*:";
+"holder.showqr.eu.about.vaccination.country" = "Vaccinated in:";
+"holder.showqr.eu.about.vaccination.date" = "Vaccination date*:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Date noted in day-month-year";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Date of birth*:";
 "holder.showqr.eu.about.vaccination.description" = "These details are in your international QR code:";
@@ -412,7 +412,7 @@
 "holder.showqr.eu.about.vaccination.pathogen" = "Disease targeted:";
 "holder.showqr.eu.about.vaccination.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.vaccination.title" = "About my dose %@/%@";
-"holder.showqr.eu.about.vaccination.type" = "Vaccine medicinal product:";
+"holder.showqr.eu.about.vaccination.type" = "Vaccine type:";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "holder.showqr.eu.title" = "International QR";
 "holder.showqr.nextbutton" = "Next QR code";
@@ -604,7 +604,7 @@
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
-"holder_dccDetails_subtitle" = "These details are in your certificate:";
+"holder_dccDetails_subtitle" = "The following details are in your certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_dcc_issuer" = "Certificate issuer:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
@@ -613,6 +613,8 @@
 "holder_endOfLife_errorMessage" = "Can't open website.";
 "holder_endOfLife_title" = "App not in use";
 "holder_event_aboutVaccination_productName" = "Product name:";
+"holder_event_about_recovery_countrytestedin" = "Tested in:";
+"holder_event_about_test_countrytestedin" = "Tested in:";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Your negative test result was successfully added. Add your vaccination approval to complete your visitor pass.</p><p>To this end, you've received an approval code from the desk that reviewed your vaccination. You’ve received this code on paper.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Complete certificate";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negative test result added";
