@@ -14,7 +14,7 @@ final class RemoteEventDetailsViewModel {
 	/// The title of the information page
 	@Bindable private(set) var title: String
 	
-	@Bindable private(set) var details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)]
+	@Bindable private(set) var details: [(detail: String, hasExtraPrecedingLineBreak: Bool, hasExtraFollowingLineBreak: Bool, isSeparator: Bool)]
 
 	@Bindable private(set) var footer: String?
 
@@ -36,7 +36,7 @@ final class RemoteEventDetailsViewModel {
 			guard $0.field.isRequired || $0.value?.isEmpty == false else {
 
 				if $0.field.isSeparator {
-					return (String(), false, true)
+					return (String(), false, false, true)
 				}
 				return nil
 			}
@@ -45,7 +45,7 @@ final class RemoteEventDetailsViewModel {
 			if let value = $0.value, !value.isEmpty {
 				field += " <b>\(value)</b>"
 			}
-			return (field, $0.field.isFollowedByLineBreak, $0.field.isSeparator)
+			return (field, $0.field.isPrecededByLineBreak, $0.field.isFollowedByLineBreak, $0.field.isSeparator)
 		}
 		
 		if hideBodyForScreenCapture {
