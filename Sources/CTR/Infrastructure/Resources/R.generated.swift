@@ -2252,10 +2252,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderVaccinationErrorMessageCode = Rswift.StringResource(key: "holder.vaccination.error.message.code", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: De volgende gegevens staan in je bewijs:
-      ///
-      /// Locales: en, nl
-      static let holder_dccDetails_subtitle = Rswift.StringResource(key: "holder_dccDetails_subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: De volgende gegevens van je vaccinatie zijn opgehaald bij %@:
       ///
       /// Locales: en, nl
@@ -2356,6 +2352,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_identitySelection_details_body = Rswift.StringResource(key: "holder_identitySelection_details_body", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Deze gegevens staan in je bewijs:
+      ///
+      /// Locales: en, nl
+      static let holder_dccDetails_subtitle = Rswift.StringResource(key: "holder_dccDetails_subtitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Deze gegevens verwijderen?
       ///
       /// Locales: en, nl
@@ -9033,21 +9033,6 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
-      /// nl translation: De volgende gegevens staan in je bewijs:
-      ///
-      /// Locales: en, nl
-      static func holder_dccDetails_subtitle(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("holder_dccDetails_subtitle", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "holder_dccDetails_subtitle"
-        }
-
-        return NSLocalizedString("holder_dccDetails_subtitle", bundle: bundle, comment: "")
-      }
-
       /// nl translation: De volgende gegevens van je vaccinatie zijn opgehaald bij %@:
       ///
       /// Locales: en, nl
@@ -9427,6 +9412,21 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("holder_identitySelection_details_body", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
+      }
+
+      /// nl translation: Deze gegevens staan in je bewijs:
+      ///
+      /// Locales: en, nl
+      static func holder_dccDetails_subtitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_dccDetails_subtitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_dccDetails_subtitle"
+        }
+
+        return NSLocalizedString("holder_dccDetails_subtitle", bundle: bundle, comment: "")
       }
 
       /// nl translation: Deze gegevens verwijderen?
