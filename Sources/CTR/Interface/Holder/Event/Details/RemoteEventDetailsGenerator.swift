@@ -34,10 +34,7 @@ class NegativeTestDetailsGenerator {
 			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
 		}
 
-		// Country tested in
-		let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry)
-		
-		return [
+		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
@@ -46,10 +43,17 @@ class NegativeTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage()),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
-			EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility)
 		]
+		
+		// Optional: Country Tested In
+		if let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry) {
+			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
+		}
+		
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		
+		return results
 	}
 }
 
@@ -78,10 +82,7 @@ class PositiveTestDetailsGenerator {
 			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
 		}
 		
-		// Country tested in
-		let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry)
-
-		return [
+		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
@@ -90,10 +91,17 @@ class PositiveTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility),
-			EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility)
 		]
+		
+		// Optional: Country Tested In
+		if let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry) {
+			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
+		}
+		
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		
+		return results
 	}
 }
 
