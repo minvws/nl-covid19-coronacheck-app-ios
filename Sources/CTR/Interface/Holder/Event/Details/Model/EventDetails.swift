@@ -399,6 +399,7 @@ extension EventDetails: Equatable {
 			lhs.field.displayTitle == rhs.field.displayTitle &&
 			lhs.field.isRequired == rhs.field.isRequired &&
 			lhs.field.isPrecededByLineBreak == rhs.field.isPrecededByLineBreak &&
+			lhs.field.isFollowedByLineBreak == rhs.field.isFollowedByLineBreak &&
 			lhs.field.isSeparator == rhs.field.isSeparator &&
 			lhs.value == rhs.value
 	}
