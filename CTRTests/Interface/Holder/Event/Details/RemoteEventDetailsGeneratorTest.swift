@@ -32,7 +32,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		let details = NegativeTestDetailsGenerator.getDetails(identity: identity, event: event)
 
 		// Then
-		expect(details).to(haveCount(11))
+		expect(details).to(haveCount(10))
 		expect(details[0].value) == nil
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
@@ -42,8 +42,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[6].value) == "negatief (geen coronavirus vastgesteld)"
 		expect(details[7].value) == "testNegativeTestGenerator"
 		expect(details[8].value) == "GGD XL Factory"
-		expect(details[9].value) == ""
-		expect(details[10].value) == "1234"
+		expect(details[9].value) == "1234"
 	}
 
 	func testPositiveTestDetailsGenerator() {
@@ -58,7 +57,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		let details = PositiveTestDetailsGenerator.getDetails(identity: identity, event: event)
 
 		// Then
-		expect(details).to(haveCount(11))
+		expect(details).to(haveCount(10))
 		expect(details[0].value) == nil
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
@@ -68,8 +67,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[6].value) == L.holderShowqrEuAboutTestPostive()
 		expect(details[7].value) == "testPositiveTestGenerator"
 		expect(details[8].value) == "GGD XL Factory"
-		expect(details[9].value) == ""
-		expect(details[10].value) == "1234"
+		expect(details[9].value) == "1234"
 	}
 
 	func testDCCNegativeTestDetailsGenerator() {
