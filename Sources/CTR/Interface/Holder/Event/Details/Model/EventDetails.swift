@@ -153,7 +153,7 @@ enum EventDetailsTest: EventDetailable {
 	
 	var isFollowedByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .countryTestedIn: return true
+		case .subtitle, .dateOfBirth, .countryTestedIn, .facility: return true
 			default: return false
 		}
 	}
