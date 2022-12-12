@@ -7,6 +7,10 @@ on:
       - main
       - 'release/*'
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   firebase-deploy-holder-acc:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private' && (contains(github.event.ref, 'release/holder-') || contains(github.event.ref, 'refs/heads/main'))
