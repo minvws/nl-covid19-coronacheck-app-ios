@@ -153,6 +153,14 @@ extension EventFlow.EventResultWrapper {
 		events: [EventFlow.Event.vaccinationEvent]
 	)
 	
+	static var fakeVaccinationResultWrapperOtherProvider = EventFlow.EventResultWrapper(
+		providerIdentifier: "GGD",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.fakeIdentity,
+		status: .complete,
+		events: [EventFlow.Event.vaccinationEvent]
+	)
+	
 	static var fakeBoosterResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -1381,6 +1389,13 @@ struct FakeRemoteEvent {
 	static var fakeRemoteEventVaccination: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
+			signedResponse: SignedResponse.fakeResponse
+		)
+	}
+	
+	static var fakeRemoteEventVaccinationOtherProvider: RemoteEvent {
+		RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapperOtherProvider,
 			signedResponse: SignedResponse.fakeResponse
 		)
 	}
