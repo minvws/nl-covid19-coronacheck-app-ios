@@ -20,9 +20,12 @@ protocol EventDetailable {
 	/// The display title of the field
 	var displayTitle: String { get }
 	
+	/// Show additional line break before field
+	var isPrecededByLineBreak: Bool { get }
+
 	/// Show additional line break after field
 	var isFollowedByLineBreak: Bool { get }
-
+	
 	/// Show a separator line
 	var isSeparator: Bool { get }
 }
@@ -67,11 +70,18 @@ enum EventDetailsVaccination: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
+			case .name, .pathogen, .uniqueIdentifer: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .uniqueIdentifer = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -106,11 +116,18 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
+			case .name, .uniqueIdentifer, .date: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .uniqueIdentifer = self {
+			return true
+		}
+		return false
 	}
 	
 	var isSeparator: Bool {
@@ -128,8 +145,8 @@ enum EventDetailsTest: EventDetailable {
 	case result
 	case facility
 	case manufacturer
-	case uniqueIdentifer
 	case countryTestedIn
+	case uniqueIdentifer
 	
 	var isRequired: Bool {
 		return true
@@ -151,13 +168,18 @@ enum EventDetailsTest: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-		case .subtitle, .dateOfBirth, .countryTestedIn, .facility: return true
+			case .name, .testType, .uniqueIdentifer: return true
 			default: return false
 		}
 	}
 
+	var isFollowedByLineBreak: Bool {
+
+		return false
+	}
+	
 	var isSeparator: Bool {
 		return false
 	}
@@ -188,13 +210,20 @@ enum EventDetailsRecovery: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .uniqueIdentifer: return true
+			case .name, .date: return true
 			default: return false
 		}
 	}
-
+	
+	var isFollowedByLineBreak: Bool {
+		if case .uniqueIdentifer = self {
+			return true
+		}
+		return false
+	}
+	
 	var isSeparator: Bool {
 		return false
 	}
@@ -238,11 +267,18 @@ enum EventDetailsDCCVaccination: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
+			case .name, .pathogen, .certificateIdentifier: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .certificateIdentifier = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -287,11 +323,18 @@ enum EventDetailsDCCTest: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
+			case .name, .pathogen, .certificateIdentifier: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .certificateIdentifier = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -330,11 +373,18 @@ enum EventDetailsDCCRecovery: EventDetailable {
 		}
 	}
 	
-	var isFollowedByLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
+			case .name, .pathogen, .date, .validFrom: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .certificateIdentifier = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -348,7 +398,7 @@ extension EventDetails: Equatable {
 		return
 			lhs.field.displayTitle == rhs.field.displayTitle &&
 			lhs.field.isRequired == rhs.field.isRequired &&
-			lhs.field.isFollowedByLineBreak == rhs.field.isFollowedByLineBreak &&
+			lhs.field.isPrecededByLineBreak == rhs.field.isPrecededByLineBreak &&
 			lhs.field.isSeparator == rhs.field.isSeparator &&
 			lhs.value == rhs.value
 	}
