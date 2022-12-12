@@ -1,5 +1,11 @@
 name: sigrid-pullrequest
+
 on: [pull_request, workflow_dispatch]
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   sigridci:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
