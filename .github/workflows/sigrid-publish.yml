@@ -5,7 +5,7 @@ on:
       - "main"
 
 concurrency:
-  group: build-${{ github.ref }}
+  group: build-sigrid-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
