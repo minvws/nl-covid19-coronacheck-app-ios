@@ -25,7 +25,7 @@ public struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 		}
 #endif
 		// Default for .config
-		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate]
+		var trustedSigners = [TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate]
 		
 		if case SecurityStrategy.data = strategy {
 			trustedSigners = []
@@ -37,7 +37,7 @@ public struct SignatureValidationFactory: SignatureValidationFactoryProtocol {
 			for cmsCertificate in provider.getCMSCertificates() {
 				if let commonName = certificateParser.getCommonName(for: cmsCertificate),
 				   let authKey = certificateParser.getAuthorityKeyIdentifier(for: cmsCertificate) {
-					for trustedCert in [TrustConfiguration.sdNEVRootCACertificate, TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate] {
+					for trustedCert in [TrustConfiguration.sdNRootCAG3Certificate, TrustConfiguration.sdNPrivateRootCertificate] {
 						var copy = trustedCert
 						copy.authorityKeyIdentifier = authKey
 						copy.commonName = commonName
