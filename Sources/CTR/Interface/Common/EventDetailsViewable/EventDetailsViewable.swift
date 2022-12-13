@@ -11,7 +11,7 @@ protocol EventDetailsViewable {
 	
 	var stackView: UIStackView { get }
 	
-	func loadDetails(_ details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat)
+	func loadDetails(_ details: [(detail: String, hasExtraPrecedingLineBreak: Bool, hasExtraFollowingLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat)
 	
 	func updateAccessibilityStatus()
 }
@@ -32,7 +32,9 @@ extension EventDetailsViewable {
 		return view
 	}
 	
-	func loadDetails(_ details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat) {
+	func loadDetails(_ details: [(detail: String, hasExtraPrecedingLineBreak: Bool, hasExtraFollowingLineBreak: Bool, isSeparator: Bool)], spacing: CGFloat) {
+		
+		var previousLabel: AccessibleBodyLabelView?
 		
 		details.forEach {
 			if $0.isSeparator {
@@ -48,11 +50,18 @@ extension EventDetailsViewable {
 				stackView.setCustomSpacing(spacing, after: lineView)
 			} else {
 				let label = createLabel(for: $0.detail)
+
+				if $0.hasExtraPrecedingLineBreak, let previousLabel {
+					stackView.setCustomSpacing(spacing, after: previousLabel)
+				}
+				
 				stackView.addArrangedSubview(label)
 				
-				if $0.hasExtraLineBreak {
+				if $0.hasExtraFollowingLineBreak {
 					stackView.setCustomSpacing(spacing, after: label)
 				}
+				
+				previousLabel = label
 			}
 		}
 	}
