@@ -20,7 +20,7 @@ class NegativeTestDetailsGenerator {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (event.negativeTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.negativeTest?.type) ?? (event.negativeTest?.type ?? "")
@@ -34,7 +34,7 @@ class NegativeTestDetailsGenerator {
 			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
 		}
 
-		return [
+		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
@@ -42,10 +42,18 @@ class NegativeTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.testName, value: testName),
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage()),
-			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility)
 		]
+		
+		// Optional: Country Tested In
+		if let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
+		}
+		
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		
+		return results
 	}
 }
 
@@ -66,15 +74,15 @@ class PositiveTestDetailsGenerator {
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
 
 		// Manufacturer
-		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.negativeTest?.manufacturer ?? "")
+		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.positiveTest?.manufacturer ?? "")
 
 		// Test name
 		var testName: String? = event.positiveTest?.name
 		if mappingManager.isRatTest(event.positiveTest?.type) {
 			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
 		}
-
-		return [
+		
+		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
@@ -82,10 +90,18 @@ class PositiveTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.testName, value: testName),
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
-			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility)
 		]
+		
+		// Optional: Country Tested In
+		if let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
+		}
+		
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		
+		return results
 	}
 }
 

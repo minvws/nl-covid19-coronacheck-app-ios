@@ -985,7 +985,8 @@ extension EventFlow.Event {
 				facility: "GGD XL Factory",
 				type: "LP217198-3",
 				name: "Antigen Test",
-				manufacturer: "1213"
+				manufacturer: "1213",
+				country: "NL"
 			),
 			positiveTest: nil,
 			recovery: nil,
@@ -1008,7 +1009,8 @@ extension EventFlow.Event {
 				facility: "GGD XL Factory",
 				type: "LP217198-3",
 				name: "Antigen Test",
-				manufacturer: "1213"
+				manufacturer: "1213",
+				country: "NL"
 			),
 			recovery: nil,
 			dccEvent: nil,
@@ -1030,7 +1032,8 @@ extension EventFlow.Event {
 				facility: "GGD XL Factory",
 				type: "LP217198-3",
 				name: "Antigen Test",
-				manufacturer: "1213"
+				manufacturer: "1213",
+				country: "NL"
 			),
 			recovery: nil,
 			dccEvent: nil,

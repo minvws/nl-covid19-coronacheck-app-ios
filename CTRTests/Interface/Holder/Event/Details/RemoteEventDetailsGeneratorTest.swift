@@ -38,10 +38,10 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == "Sneltest (RAT)"
 		expect(details[4].value) == "Antigen Test"
-		expect(details[5].value) == "donderdag 1 juli 15:42"
-		expect(details[6].value) == "negatief (geen corona)"
-		expect(details[7].value) == "GGD XL Factory"
-		expect(details[8].value) == "testNegativeTestGenerator"
+		expect(details[5].value) == "donderdag 1 juli 2021 15:42"
+		expect(details[6].value) == "negatief (geen coronavirus vastgesteld)"
+		expect(details[7].value) == "testNegativeTestGenerator"
+		expect(details[8].value) == "GGD XL Factory"
 		expect(details[9].value) == "1234"
 	}
 
@@ -65,8 +65,8 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[4].value) == "Antigen Test"
 		expect(details[5].value) == "donderdag 1 juli 2021 17:49"
 		expect(details[6].value) == L.holderShowqrEuAboutTestPostive()
-		expect(details[7].value) == "GGD XL Factory"
-		expect(details[8].value) == "testPositiveTestGenerator"
+		expect(details[7].value) == "testPositiveTestGenerator"
+		expect(details[8].value) == "GGD XL Factory"
 		expect(details[9].value) == "1234"
 	}
 
@@ -92,7 +92,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[4].value) == "Sneltest (RAT)"
 		expect(details[5].value) == "fake negativeTest"
 		expect(details[6].value) == "woensdag 17 november 16:00"
-		expect(details[7].value) == "negatief (geen corona)"
+		expect(details[7].value) == "negatief (geen coronavirus vastgesteld)"
 		expect(details[8].value) == ""
 		expect(details[9].value) == "testDCCNegativeTestGenerator"
 		expect(details[10].value) == "NL"
@@ -105,7 +105,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationEvent
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -119,7 +119,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
-		expect(details[4].value) == "Pfizer (Comirnaty)"
+		expect(details[4].value) == "Comirnaty (Pfizer)"
 		expect(details[5].value) == "SARS-CoV-2 mRNA vaccine"
 		expect(details[6].value) == "Biontech"
 		expect(details[7].value) == "1 van 2"
@@ -173,7 +173,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let dccVaccination = EuCredentialAttributes.Vaccination.vaccination
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -188,7 +188,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[1].value) == "Check, Corona"
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderEventAboutVaccinationPathogenvalue()
-		expect(details[4].value) == "Pfizer (Comirnaty)"
+		expect(details[4].value) == "Comirnaty (Pfizer)"
 		expect(details[5].value) == "SARS-CoV-2 mRNA vaccine"
 		expect(details[6].value) == "Biontech"
 		expect(details[7].value) == "2 van 2"

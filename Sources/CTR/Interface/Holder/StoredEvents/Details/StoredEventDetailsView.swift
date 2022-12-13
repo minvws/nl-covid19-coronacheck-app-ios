@@ -60,7 +60,7 @@ final class StoredEventDetailsView: ScrolledStackView, EventDetailsViewable {
 	}
 	
 	/// Tuple with attributed string detail value and if extra linebreak is needed
-	var details: [(detail: String, hasExtraLineBreak: Bool, isSeparator: Bool)]? {
+	var details: [(detail: String, hasExtraPrecedingLineBreak: Bool, hasExtraFollowingLineBreak: Bool, isSeparator: Bool)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details, spacing: ViewTraits.spacing)
