@@ -116,7 +116,7 @@ class DCCTestDetailsGenerator {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? test.sampleDate
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? (test.typeOfTest)
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
@@ -137,8 +137,8 @@ class DCCTestDetailsGenerator {
 			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
 			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
 			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
-			EventDetails(field: EventDetailsDCCTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsDCCTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			EventDetails(field: EventDetailsDCCTest.country, value: mappingManager.getDisplayCountry(test.country)),
 			EventDetails(field: EventDetailsDCCTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer, country: test.country)),
 			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)

@@ -215,7 +215,7 @@
 "holder.dcc.test.pathogenvalue" = "COVID-19";
 "holder.dcc.test.result" = "Test result:";
 "holder.dcc.test.testname" = "Test name:";
-"holder.dcc.test.type" = "Type of test:";
+"holder.dcc.test.type" = "Test type:";
 "holder.dcc.vaccination.brand" = "Vaccine:";
 "holder.dcc.vaccination.country" = "Vaccinated in:";
 "holder.dcc.vaccination.date" = "Vaccination date:";
@@ -604,7 +604,7 @@
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
-"holder_dccDetails_subtitle" = "These details are in your certificate:";
+"holder_dccDetails_subtitle" = "The following details are in your certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_dcc_issuer" = "Certificate issuer:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
@@ -874,8 +874,7 @@
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
 "visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code on paper from the desk that reviewed your vaccination. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
-"visitorpass_token_next" = "Next";
-"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
+"visitorpass_token_next" = "Next";"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "general_menu" = "Menu ";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";

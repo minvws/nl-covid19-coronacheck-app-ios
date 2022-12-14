@@ -91,10 +91,10 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[3].value) == L.holderDccTestPathogenvalue()
 		expect(details[4].value) == "Sneltest (RAT)"
 		expect(details[5].value) == "fake negativeTest"
-		expect(details[6].value) == "woensdag 17 november 16:00"
+		expect(details[6].value) == "woensdag 17 november 2021 16:00"
 		expect(details[7].value) == "negatief (geen coronavirus vastgesteld)"
-		expect(details[8].value) == ""
-		expect(details[9].value) == "testDCCNegativeTestGenerator"
+		expect(details[8].value) == "testDCCNegativeTestGenerator"
+		expect(details[9].value) == ""
 		expect(details[10].value) == "NL"
 		expect(details[11].value) == "Facility approved by the State of The Netherlands"
 		expect(details[12].value) == "1234"
