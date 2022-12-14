@@ -20,7 +20,7 @@ class NegativeTestDetailsGenerator {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (event.negativeTest?.sampleDateString ?? "")
 
 		// Type
 		let testType = mappingManager.getTestType(event.negativeTest?.type) ?? (event.negativeTest?.type ?? "")
@@ -34,7 +34,7 @@ class NegativeTestDetailsGenerator {
 			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
 		}
 
-		return [
+		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
@@ -42,10 +42,18 @@ class NegativeTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.testName, value: testName),
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage()),
-			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility)
 		]
+		
+		// Optional: Country Tested In
+		if let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
+		}
+		
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		
+		return results
 	}
 }
 
@@ -66,15 +74,15 @@ class PositiveTestDetailsGenerator {
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
 
 		// Manufacturer
-		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.negativeTest?.manufacturer ?? "")
+		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.positiveTest?.manufacturer ?? "")
 
 		// Test name
 		var testName: String? = event.positiveTest?.name
 		if mappingManager.isRatTest(event.positiveTest?.type) {
 			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
 		}
-
-		return [
+		
+		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
@@ -82,10 +90,18 @@ class PositiveTestDetailsGenerator {
 			EventDetails(field: EventDetailsTest.testName, value: testName),
 			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
-			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility)
 		]
+		
+		// Optional: Country Tested In
+		if let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
+		}
+		
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		
+		return results
 	}
 }
 
@@ -133,9 +149,9 @@ class DCCTestDetailsGenerator {
 class VaccinationDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String) -> [EventDetails] {
-
+		
 		let mappingManager: MappingManaging = Current.mappingManager
-
+		
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
@@ -143,17 +159,19 @@ class VaccinationDetailsGenerator {
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(providerIdentifier) ?? providerIdentifier
-
+		
 		var vaccinName: String?
+		var vaccineDisplayName: String?
 		var vaccineType: String?
 		var vaccineManufacturer: String?
-		if let hpkCode = event.vaccination?.hpkCode, !hpkCode.isEmpty {
-			let hpkData = mappingManager.getHpkData(hpkCode)
-			vaccinName = mappingManager.getVaccinationBrand(hpkData?.mp)
-			vaccineType = mappingManager.getVaccinationType(hpkData?.vp)
-			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData?.ma)
+		if let hpkCode = event.vaccination?.hpkCode,
+		   let hpkData = mappingManager.getHpkData(hpkCode) {
+			vaccinName = mappingManager.getVaccinationBrand(hpkData.medicalProduct)
+			vaccineType = mappingManager.getVaccinationType(hpkData.vaccineOrProphylaxis)
+			vaccineManufacturer = mappingManager.getVaccinationManufacturer(hpkData.marketingAuthorizationHolder)
+			vaccineDisplayName = hpkData.displayName
 		}
-
+		
 		if vaccinName == nil, let brand = event.vaccination?.brand {
 			vaccinName = mappingManager.getVaccinationBrand(brand)
 		}
@@ -164,29 +182,33 @@ class VaccinationDetailsGenerator {
 			vaccineManufacturer = mappingManager.getVaccinationManufacturer(event.vaccination?.manufacturer)
 			?? event.vaccination?.manufacturer
 		}
-
+		
 		var dosage: String?
 		if let doseNumber = event.vaccination?.doseNumber,
 		   let totalDose = event.vaccination?.totalDoses {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
-
+		
 		let country = mappingManager.getDisplayCountry(event.vaccination?.country ?? "")
-
-		return [
-			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
-			EventDetails(field: EventDetailsVaccination.name, value: identity.fullName),
-			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
-			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
-			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
-			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
-			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
-			EventDetails(field: EventDetailsVaccination.completionReason, value: event.vaccination?.completionStatus),
-			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
-			EventDetails(field: EventDetailsVaccination.country, value: country),
-			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)
-		]
+		
+		var details = [EventDetails]()
+		details += [EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil)]
+		details += [EventDetails(field: EventDetailsVaccination.name, value: identity.fullName)]
+		details += [EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate)]
+		details += [EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue())]
+		details += [EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName)]
+		if vaccineDisplayName != nil {
+			details += [EventDetails(field: EventDetailsVaccination.vaccineProductname, value: vaccineDisplayName)]
+		}
+		details += [EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType)]
+		details += [EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer)]
+		details += [EventDetails(field: EventDetailsVaccination.dosage, value: dosage)]
+		details += [EventDetails(field: EventDetailsVaccination.completionReason, value: event.vaccination?.completionStatus)]
+		details += [EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate)]
+		details += [EventDetails(field: EventDetailsVaccination.country, value: country)]
+		details += [EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)]
+		
+		return details
 	}
 }
 

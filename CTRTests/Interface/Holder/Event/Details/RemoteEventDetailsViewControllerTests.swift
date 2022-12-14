@@ -21,7 +21,6 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		
 		environmentSpies = setupEnvironmentSpies()
 		window = UIWindow()
 	}
@@ -166,7 +165,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationEvent
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -193,7 +192,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let event = EventFlow.Event.vaccinationEvent
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
@@ -222,7 +221,7 @@ class RemoteEventDetailsViewControllerTests: XCTestCase {
 		// Given
 		let identity = EventFlow.Identity.fakeIdentity
 		let dccVaccination = EuCredentialAttributes.Vaccination.vaccination
-		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Pfizer (Comirnaty)"
+		environmentSpies.mappingManagerSpy.stubbedGetVaccinationBrandResult = "Comirnaty (Pfizer)"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationTypeResult = "SARS-CoV-2 mRNA vaccine"
 		environmentSpies.mappingManagerSpy.stubbedGetVaccinationManufacturerResult = "Biontech"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"

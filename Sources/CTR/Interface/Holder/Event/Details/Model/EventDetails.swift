@@ -20,9 +20,12 @@ protocol EventDetailable {
 	/// The display title of the field
 	var displayTitle: String { get }
 	
-	/// Show additional line break after field
-	var hasLineBreak: Bool { get }
+	/// Show additional line break before field
+	var isPrecededByLineBreak: Bool { get }
 
+	/// Show additional line break after field
+	var isFollowedByLineBreak: Bool { get }
+	
 	/// Show a separator line
 	var isSeparator: Bool { get }
 }
@@ -33,6 +36,7 @@ enum EventDetailsVaccination: EventDetailable {
 	case dateOfBirth
 	case pathogen
 	case vaccineBrand
+	case vaccineProductname
 	case vaccineType
 	case vaccineManufacturer
 	case dosage
@@ -56,6 +60,7 @@ enum EventDetailsVaccination: EventDetailable {
 			case .dateOfBirth: return L.holderEventAboutVaccinationDateofbirth()
 			case .pathogen: return L.holderEventAboutVaccinationPathogen()
 			case .vaccineBrand: return L.holderEventAboutVaccinationBrand()
+			case .vaccineProductname: return L.holder_event_aboutVaccination_productName()
 			case .vaccineType: return L.holderEventAboutVaccinationType()
 			case .vaccineManufacturer: return L.holderEventAboutVaccinationManufacturer()
 			case .dosage: return L.holderEventAboutVaccinationDosage()
@@ -67,11 +72,18 @@ enum EventDetailsVaccination: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
+			case .name, .pathogen, .uniqueIdentifer: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .uniqueIdentifer = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -106,11 +118,18 @@ enum EventDetailsVaccinationAssessment: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .country, .uniqueIdentifer: return true
+			case .name, .uniqueIdentifer, .date: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .uniqueIdentifer = self {
+			return true
+		}
+		return false
 	}
 	
 	var isSeparator: Bool {
@@ -128,6 +147,7 @@ enum EventDetailsTest: EventDetailable {
 	case result
 	case facility
 	case manufacturer
+	case countryTestedIn
 	case uniqueIdentifer
 	
 	var isRequired: Bool {
@@ -146,16 +166,22 @@ enum EventDetailsTest: EventDetailable {
 			case .facility: return L.holderEventAboutTestFacility()
 			case .manufacturer: return L.holderEventAboutTestManufacturer()
 			case .uniqueIdentifer: return L.holderEventAboutTestIdentifier()
+			case .countryTestedIn: return L.holder_event_about_test_countrytestedin()
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .manufacturer, .uniqueIdentifer: return true
+			case .name, .testType, .uniqueIdentifer: return true
 			default: return false
 		}
 	}
 
+	var isFollowedByLineBreak: Bool {
+
+		return false
+	}
+	
 	var isSeparator: Bool {
 		return false
 	}
@@ -186,13 +212,20 @@ enum EventDetailsRecovery: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .uniqueIdentifer: return true
+			case .name, .date: return true
 			default: return false
 		}
 	}
-
+	
+	var isFollowedByLineBreak: Bool {
+		if case .uniqueIdentifer = self {
+			return true
+		}
+		return false
+	}
+	
 	var isSeparator: Bool {
 		return false
 	}
@@ -236,11 +269,18 @@ enum EventDetailsDCCVaccination: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
+			case .name, .pathogen, .certificateIdentifier: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .certificateIdentifier = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -285,11 +325,18 @@ enum EventDetailsDCCTest: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
+			case .name, .pathogen, .certificateIdentifier: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .certificateIdentifier = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -328,11 +375,18 @@ enum EventDetailsDCCRecovery: EventDetailable {
 		}
 	}
 	
-	var hasLineBreak: Bool {
+	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .subtitle, .dateOfBirth, .issuer, .certificateIdentifier: return true
+			case .name, .pathogen, .date, .validFrom: return true
 			default: return false
 		}
+	}
+	
+	var isFollowedByLineBreak: Bool {
+		if case .certificateIdentifier = self {
+			return true
+		}
+		return false
 	}
 
 	var isSeparator: Bool {
@@ -346,7 +400,8 @@ extension EventDetails: Equatable {
 		return
 			lhs.field.displayTitle == rhs.field.displayTitle &&
 			lhs.field.isRequired == rhs.field.isRequired &&
-			lhs.field.hasLineBreak == rhs.field.hasLineBreak &&
+			lhs.field.isPrecededByLineBreak == rhs.field.isPrecededByLineBreak &&
+			lhs.field.isFollowedByLineBreak == rhs.field.isFollowedByLineBreak &&
 			lhs.field.isSeparator == rhs.field.isSeparator &&
 			lhs.value == rhs.value
 	}

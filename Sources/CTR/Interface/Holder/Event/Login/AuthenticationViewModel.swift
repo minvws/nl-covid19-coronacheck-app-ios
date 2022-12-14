@@ -83,6 +83,7 @@ class AuthenticationViewModel {
 			// use the internal browser for pap,
 			// use the external browser for tvs (because the Digid app redirects to external browser)
 			presentingViewController: authenticationMode == .patientAuthenticationProvider ? presentingViewController : nil,
+			openIDConnectState: openIDConnectState,
 			onCompletion: { token in
 				
 				self.shouldShowProgress = false

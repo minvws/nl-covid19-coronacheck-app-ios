@@ -13,14 +13,27 @@ public struct HPKData: Codable, Equatable {
 	
 	public let name: String
 	
+	public let displayName: String?
+	
 	/// euVaccinationTypes lookup
-	public let vp: String
+	public let vaccineOrProphylaxis: String
 	
 	/// euBrands lookup
-	public let mp: String
+	public let medicalProduct: String
 	
 	/// euManufacturers lookup
-	public let ma: String
+	public let marketingAuthorizationHolder: String
+	
+	/// Key mapping
+	enum CodingKeys: String, CodingKey {
+		
+		case code
+		case name
+		case displayName
+		case vaccineOrProphylaxis = "vp"
+		case medicalProduct = "mp"
+		case marketingAuthorizationHolder = "ma"
+	}
 }
 
 public struct Mapping: Codable, Equatable {

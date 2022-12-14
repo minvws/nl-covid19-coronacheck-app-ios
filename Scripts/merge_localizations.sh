@@ -1,21 +1,9 @@
+cat $SCRIPT_INPUT_FILE_0 > $SCRIPT_OUTPUT_FILE_0
+cat $SCRIPT_INPUT_FILE_1 >> $SCRIPT_OUTPUT_FILE_0
 
-## localizations: 
-array=( "nl" "en" )
+# Count duplicate lines
+DUPLICATE_LINE_COUNT=$(sort $SCRIPT_OUTPUT_FILE_0 | sed '/\/\*/d' | sed '/^$/d' | uniq -d | wc -l | xargs)
 
-for i in "${array[@]}"
-do
-    COMBINED_PATH="Sources/CTR/Infrastructure/Resources/Localization/${i}.lproj/Localizable.strings"
-	PLURAL_PATH="Sources/CTR/Infrastructure/Resources/Localization/${i}.lproj/Localizable.stringsdict"
-
-    cat Localizations/Holder/$i.lproj/Localizable.strings > $COMBINED_PATH
-	cat Localizations/Holder/$i.lproj/Localizable.stringsdict > $PLURAL_PATH
-    cat Localizations/Verifier/$i.lproj/Localizable.strings >> $COMBINED_PATH
-	#cat Localizations/Verifier/$i.lproj/Localizable.stringsdict >> $PLURAL_PATH
-
-    # Count duplicate lines
-    DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | sed '/^$/d' | uniq -d | wc -l | xargs)
-
-    if (( $DUPLICATE_LINE_COUNT != 0 )); then
-    echo "warning: The ${i} localized copy has ${DUPLICATE_LINE_COUNT} duplicate keys"
-    fi
-done
+if (( $DUPLICATE_LINE_COUNT != 0 )); then
+echo "warning: The ${SCRIPT_OUTPUT_FILE_0} localized copy has ${DUPLICATE_LINE_COUNT} duplicate keys"
+fi

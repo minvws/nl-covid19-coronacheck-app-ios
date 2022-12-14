@@ -88,7 +88,7 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Meer:";
-"holder.about.text" = "Met de CoronaCheck app kun je een digitaal coronabewijs maken. Je kunt een bewijs maken van een vaccinatie of negatieve testuitslag. Wanneer je corona hebt gehad kun je een herstelbewijs maken. Je coronabewijs heeft een QR-code. Ga je naar het buitenland? Check vooraf op Nederland Wereldwijd of je de QR-code kunt gebruiken.";
+"holder.about.text" = "<p>Met de CoronaCheck app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>";
@@ -225,7 +225,7 @@
 "holder.dcc.vaccination.footer" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
 "holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
 "holder.dcc.vaccination.list.title" = "Vaccinatiebewijs dosis %@/%@";
-"holder.dcc.vaccination.manufacturer" = "Producent:";
+"holder.dcc.vaccination.manufacturer" = "Vaccinproducent:";
 "holder.dcc.vaccination.name" = "Naam:";
 "holder.dcc.vaccination.pathogen" = "Ziekteverwekker:";
 "holder.dcc.vaccination.pathogenvalue" = "COVID-19";
@@ -293,12 +293,12 @@
 "holder.event.about.vaccination.dateofbirth" = "Geboortedatum:";
 "holder.event.about.vaccination.dosage" = "Dosis:";
 "holder.event.about.vaccination.identifier" = "Uniek vaccinatienummer:";
-"holder.event.about.vaccination.manufacturer" = "Producent:";
+"holder.event.about.vaccination.manufacturer" = "Vaccinproducent:";
 "holder.event.about.vaccination.name" = "Naam:";
 "holder.event.about.vaccination.pathogen" = "Ziekteverwekker:";
 "holder.event.about.vaccination.pathogenvalue" = "COVID-19";
 /* MARK: - Vaccination Event */
-"holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald bij %@:";
+"holder.event.about.vaccination.subtitle" = "De volgende gegevens van je vaccinatie zijn opgehaald bij %@:";
 "holder.event.about.vaccination.type" = "Type vaccin:";
 "holder.event.details" = "Details";
 "holder.event.identity.alert.cancel" = "Stoppen";
@@ -367,8 +367,8 @@
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. Er staat wel dat je een geldig bewijs hebt, maar niet of je een test hebt gedaan, hersteld of gevaccineerd bent.</p><p>In de QR-code staat ook de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
-"holder.showqr.eu.about.recovery.country" = "Getest in / Member state of test:";
-"holder.showqr.eu.about.recovery.date" = "Testdatum / Test date:";
+"holder.showqr.eu.about.recovery.country" = "Getest in / Tested in:";
+"holder.showqr.eu.about.recovery.date" = "Testdatum / Test date*:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.recovery.dateofbirth" = "Geboortedatum / Date of birth*:";
 "holder.showqr.eu.about.recovery.description" = "In jouw internationale QR-code staan de volgende gegevens:";
@@ -379,28 +379,28 @@
 "holder.showqr.eu.about.recovery.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.recovery.validfrom" = "Geldig vanaf / Valid from*:";
 "holder.showqr.eu.about.recovery.validuntil" = "Geldig tot / Valid to*:";
-"holder.showqr.eu.about.test.country" = "Getest in / Member state of test:";
+"holder.showqr.eu.about.test.country" = "Getest in / Tested in:";
 "holder.showqr.eu.about.test.date" = "Testdatum / Test date:";
 "holder.showqr.eu.about.test.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.test.dateofbirth" = "Geboortedatum / Date of birth*:";
 "holder.showqr.eu.about.test.description" = "In jouw internationale QR-code staan de volgende gegevens:";
-"holder.showqr.eu.about.test.facility" = "Testlocatie / Testing centre:";
+"holder.showqr.eu.about.test.facility" = "Testlocatie / Test location:";
 "holder.showqr.eu.about.test.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.test.issuer" = "Afgever certificaat / Certificate issuer:";
-"holder.showqr.eu.about.test.manufacturer" = "Producent / Test manufacturer:";
+"holder.showqr.eu.about.test.manufacturer" = "Testproducent / Test manufacturer:";
 "holder.showqr.eu.about.test.name" = "Naam / Name:";
-"holder.showqr.eu.about.test.negative" = "negatief (geen corona) / negative (no coronavirus)";
-"holder.showqr.eu.about.test.negative.singleLanguage" = "negatief (geen corona)";
+"holder.showqr.eu.about.test.negative" = "negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)";
+"holder.showqr.eu.about.test.negative.singleLanguage" = "negatief (geen coronavirus vastgesteld)";
 "holder.showqr.eu.about.test.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.test.pathogenvalue" = "COVID-19";
-"holder.showqr.eu.about.test.postive" = "positief (corona)";
+"holder.showqr.eu.about.test.postive" = "positief (coronavirus vastgesteld)";
 "holder.showqr.eu.about.test.result" = "Testuitslag / Test result:";
 "holder.showqr.eu.about.test.testname" = "Testnaam / Test name:";
 "holder.showqr.eu.about.test.type" = "Type test / Type of test:";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.brand" = "Vaccin / Vaccine:";
-"holder.showqr.eu.about.vaccination.country" = "Gevaccineerd in / Member state of vaccination:";
-"holder.showqr.eu.about.vaccination.date" = "Vaccinatiedatum / Date of vaccination*:";
+"holder.showqr.eu.about.vaccination.country" = "Gevaccineerd in / Vaccinated in:";
+"holder.showqr.eu.about.vaccination.date" = "Vaccinatiedatum / Vaccination date*:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.vaccination.dateofbirth" = "Geboortedatum / Date of birth*:";
 "holder.showqr.eu.about.vaccination.description" = "In jouw internationale QR-code staan de volgende gegevens:";
@@ -412,7 +412,7 @@
 "holder.showqr.eu.about.vaccination.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.vaccination.pathogenvalue" = "COVID-19";
 "holder.showqr.eu.about.vaccination.title" = "Over mijn dosis %@/%@";
-"holder.showqr.eu.about.vaccination.type" = "Type vaccin / Vaccine medicinal product:";
+"holder.showqr.eu.about.vaccination.type" = "Type vaccin / Vaccine type:";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "holder.showqr.eu.title" = "Internationale QR";
 "holder.showqr.nextbutton" = "Volgende QR-code";
@@ -612,6 +612,9 @@
 "holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
+"holder_event_aboutVaccination_productName" = "Productnaam:";
+"holder_event_about_recovery_countrytestedin" = "Getest in:";
+"holder_event_about_test_countrytestedin" = "Getest in:";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_body" = "<p>Je negatieve testuitslag is succesvol toegevoegd. Maak je bezoekersbewijs compleet met je vaccinatiebeoordeling.</p><p>Hiervoor heb je een beoordelingscode gekregen van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen.</p>";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete" = "Maak bewijs compleet";
 "holder_event_negativeTestEndstate_addVaccinationAssessment_title" = "Negatieve testuitslag toegevoegd";
