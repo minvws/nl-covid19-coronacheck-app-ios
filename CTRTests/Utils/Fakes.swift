@@ -1067,6 +1067,32 @@ extension EventFlow.Event {
 		)
 	}
 	
+	static var vaccinationEventWithHPKCode: EventFlow.Event {
+		EventFlow.Event(
+			type: "vaccination",
+			unique: "1234",
+			isSpecimen: true,
+			vaccination: EventFlow.VaccinationEvent(
+				dateString: "2021-05-16",
+				hpkCode: "1234",
+				type: nil,
+				manufacturer: "ORG-100030215",
+				brand: "EU/1/20/1528",
+				doseNumber: 1,
+				totalDoses: 2,
+				country: "NLD",
+				completedByMedicalStatement: nil,
+				completedByPersonalStatement: nil,
+				completionReason: nil
+			),
+			negativeTest: nil,
+			positiveTest: nil,
+			recovery: nil,
+			dccEvent: nil,
+			vaccinationAssessment: nil
+		)
+	}
+	
 	static var boosterEvent: EventFlow.Event {
 		EventFlow.Event(
 			type: "vaccination",
