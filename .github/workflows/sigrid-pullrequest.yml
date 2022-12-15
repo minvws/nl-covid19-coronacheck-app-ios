@@ -3,7 +3,7 @@ name: sigrid-pullrequest
 on: [pull_request, workflow_dispatch]
 
 concurrency:
-  group: build-${{ github.event.pull_request.number || github.ref }}
+  group: build-sigrid-pullrequest-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
