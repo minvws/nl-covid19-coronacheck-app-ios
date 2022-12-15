@@ -172,12 +172,11 @@ extension ListRemoteEventsViewModel {
 		sortedDataSource = filterDuplicateVaccinationEvents(sortedDataSource)
 		sortedDataSource = filterDuplicateTests(sortedDataSource)
 
+		var combinedEventsThatMustBeSkipped = [EventFlow.Event]()
 		var rows = [ListRemoteEventsViewController.Row]()
-		var counter = 0
 
-		while counter <= sortedDataSource.count - 1 {
-			let currentRow = sortedDataSource[counter]
-
+		sortedDataSource.forEach { currentRow in
+			
 			if currentRow.event.hasRecovery {
 				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
 			} else if currentRow.event.hasVaccinationAssessment {
@@ -185,27 +184,26 @@ extension ListRemoteEventsViewModel {
 			} else if currentRow.event.hasPositiveTest {
 				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
 			} else if currentRow.event.hasVaccination {
-
-				if counter < sortedDataSource.count - 1,
-				   let currentVaccinationEvent = currentRow.event.vaccination,
-				   let nextVaccinationEvent = sortedDataSource[counter + 1].event.vaccination {
-					let nextRow = sortedDataSource[counter + 1]
-
-					if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
-						if currentRow.providerIdentifier != nextRow.providerIdentifier {
-							logVerbose("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
-							rows.append(getRowFromVaccinationEvent(dataRow: currentRow, combineWith: nextRow))
-							counter += 1
+				// is the event already been used?
+				if !combinedEventsThatMustBeSkipped.contains(currentRow.event),
+				   let vaccination = currentRow.event.vaccination {
+					var similarTuples = [EventDataTuple]()
+					// loop over all events to find similar vaccinations
+					dataSource
+						.filter { $0.event.hasVaccination }
+						.forEach { tuple in
+						if let tupleVaccination = tuple.event.vaccination,
+						   // if the vaccinations are similar (same HPKCode, same date, same manufacturer)
+						   vaccination.doesMatchEvent(tupleVaccination),
+						   // exclude ourself.
+						   currentRow.providerIdentifier != tuple.providerIdentifier {
+							combinedEventsThatMustBeSkipped.append(tuple.event)
+							similarTuples.append(tuple)
 						}
-					} else {
-						logVerbose("not Matching vaccinations")
-						rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
 					}
-				} else {
-					// Next row is not an vaccination
-					logVerbose("nextRow is not a vaccination")
-					rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
+					rows.append(getRowFromVaccinationEvent(dataRow: currentRow, combineWith: similarTuples))
 				}
+
 			} else if currentRow.event.hasNegativeTest {
 				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
 			} else if currentRow.event.hasPaperCertificate {
@@ -221,7 +219,6 @@ extension ListRemoteEventsViewModel {
 					}
 				}
 			}
-			counter += 1
 		}
 		return rows
 	}
@@ -254,7 +251,7 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
-	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, combineWith: EventDataTuple? = nil) -> ListRemoteEventsViewController.Row {
+	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, combineWith otherEventTuples: [EventDataTuple] = []) -> ListRemoteEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -263,6 +260,7 @@ extension ListRemoteEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
+		logDebug("provider: \(provider) for \(dataRow.providerIdentifier)")
 
 		var details = VaccinationDetailsGenerator.getDetails(
 			identity: dataRow.identity,
@@ -277,19 +275,23 @@ extension ListRemoteEventsViewModel {
 			L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
 		]
 		
-		if let nextRow = combineWith {
-			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
-			listDetails.append(L.holder_listRemoteEvents_listElement_retrievedFrom_plural(provider, otherProviderString))
-			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
-			details += VaccinationDetailsGenerator.getDetails(
-				identity: nextRow.identity,
-				event: nextRow.event,
-				providerIdentifier: nextRow.providerIdentifier
-			)
-		} else {
-			listDetails.append(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
+		var retrievedFrom = L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
+		if otherEventTuples.isNotEmpty {
+			otherEventTuples.forEach { otherEventTuple in
+				// Data retrieved from provider A and otherProvider B (and....)
+				let otherProviderString: String = mappingManager.getProviderIdentifierMapping(otherEventTuple.providerIdentifier) ?? otherEventTuple.providerIdentifier
+				retrievedFrom += " \(L.general_and()) \(otherProviderString)"
+				// Event data for the detail view
+				details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
+				details += VaccinationDetailsGenerator.getDetails(
+					identity: otherEventTuple.identity,
+					event: otherEventTuple.event,
+					providerIdentifier: otherEventTuple.providerIdentifier
+				)
+			}
 		}
-
+		listDetails.append(retrievedFrom)
+		
 		return ListRemoteEventsViewController.Row(
 			title: title,
 			details: listDetails,

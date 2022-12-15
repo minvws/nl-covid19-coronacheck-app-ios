@@ -545,6 +545,66 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(rows).to(haveCount(2))
 	}
 	
+	func test_sixSimilarEvents_withHPKCode_twoRows() {
+
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				// Shot 1 in july, duplicate at GGD
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				// Shot 2 in august, duplicate at RIVM
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+	
+	func test_sixSimilarEvents_withDuplicates_withHPKCode_twoRows() {
+
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				// Shot 1 in july, duplicate at GGD
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				// Shot 2 in august, duplicate at RIVM
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+	
 	// MARK: - Error States -
 
 	func test_makeQR_invalidMode() throws {
