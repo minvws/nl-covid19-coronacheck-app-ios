@@ -47,7 +47,7 @@ class NegativeTestDetailsGenerator {
 		]
 		
 		// Optional: Country Tested In
-		if let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+		if let countryTestedIn = (event.negativeTest?.country ?? "NL").map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
 			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
 		}
 		
@@ -95,7 +95,7 @@ class PositiveTestDetailsGenerator {
 		]
 		
 		// Optional: Country Tested In
-		if let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+		if let countryTestedIn = (event.positiveTest?.country ?? "NL").map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
 			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
 		}
 		
