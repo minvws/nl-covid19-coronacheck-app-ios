@@ -85,11 +85,13 @@ class EventDetailsGeneratorTest: XCTestCase {
 		let dccTest = EuCredentialAttributes.TestEntry.negativeTest
 		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "testDCCNegativeTestGenerator"
 		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
+		environmentSpies.mappingManagerSpy.stubbedIsRatTestResult = true
+		environmentSpies.mappingManagerSpy.stubbedGetTestNameResult = "Fancy Rapid Test"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
 		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
 
 		// When
-		let details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
+		var details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
 
 		// Then
 		expect(details).to(haveCount(13))
@@ -98,7 +100,7 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[2].value) == "16 mei 1980"
 		expect(details[3].value) == L.holderDccTestPathogenvalue()
 		expect(details[4].value) == "Sneltest (RAT)"
-		expect(details[5].value) == "fake negativeTest"
+		expect(details[5].value) == "Fancy Rapid Test"
 		expect(details[6].value) == "woensdag 17 november 2021 16:00"
 		expect(details[7].value) == "negatief (geen coronavirus vastgesteld)"
 		expect(details[8].value) == "testDCCNegativeTestGenerator"
@@ -106,6 +108,48 @@ class EventDetailsGeneratorTest: XCTestCase {
 		expect(details[10].value) == "NL"
 		expect(details[11].value) == "Facility approved by the State of The Netherlands"
 		expect(details[12].value) == "1234"
+		
+		// If it's no longer a RAT test:
+		environmentSpies.mappingManagerSpy.stubbedIsRatTestResult = false
+		details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
+		expect(details[5].value) == "fake negativeTest"
+	}
+
+	func testDCCPositiveTestDetailsGenerator() {
+
+		// Given
+		let identity = EventFlow.Identity.fakeIdentity
+		let dccTest = EuCredentialAttributes.TestEntry.positiveTest
+		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "testDCCPositiveTestDetailsGenerator"
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
+		environmentSpies.mappingManagerSpy.stubbedIsRatTestResult = true
+		environmentSpies.mappingManagerSpy.stubbedGetTestNameResult = "Fancy Rapid Test"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
+		environmentSpies.mappingManagerSpy.stubbedGetDisplayIssuerResult = "Facility approved by the State of The Netherlands"
+
+		// When
+		var details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
+
+		// Then
+		expect(details).to(haveCount(13))
+		expect(details[0].value) == nil
+		expect(details[1].value) == "Check, Corona"
+		expect(details[2].value) == "16 mei 1980"
+		expect(details[3].value) == L.holderDccTestPathogenvalue()
+		expect(details[4].value) == "Sneltest (RAT)"
+		expect(details[5].value) == "Fancy Rapid Test"
+		expect(details[6].value) == "woensdag 17 november 2021 16:00"
+		expect(details[7].value) == "positief (coronavirus vastgesteld)"
+		expect(details[8].value) == "testDCCPositiveTestDetailsGenerator"
+		expect(details[9].value) == ""
+		expect(details[10].value) == "NL"
+		expect(details[11].value) == "Facility approved by the State of The Netherlands"
+		expect(details[12].value) == "1234"
+		
+		// If it's no longer a RAT test:
+		environmentSpies.mappingManagerSpy.stubbedIsRatTestResult = false
+		details = DCCTestDetailsGenerator.getDetails(identity: identity, test: dccTest)
+		expect(details[5].value) == "fake positiveTest"
 	}
 
 	func testVaccinationDetailsGenerator() {
