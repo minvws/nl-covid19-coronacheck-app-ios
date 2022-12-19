@@ -25,6 +25,7 @@ class DccValidVac1of2DE: BaseTest {
 	func test_validVac1of2DE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
+		proceedToOverview()
 		
 		addScannedQR()
 		
@@ -54,6 +55,7 @@ class DccValidVac2of2DE: BaseTest {
 	func test_validVac2of2DE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
+		proceedToOverview()
 		
 		addScannedQR()
 		
@@ -83,6 +85,7 @@ class DccValidVac3of3DE: BaseTest {
 	func test_validVac3of3DE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
+		proceedToOverview()
 		
 		addScannedQR()
 		
@@ -110,7 +113,8 @@ class DccExpiredVac1of2DE: BaseTest {
 	
 	func test_expiredVac1of2DE() {
 		addScannedQR()
-		assertSomethingWentWrong()
+		proceedToOverview()
+		assertInternationalVaccination(of: vaccination, dose: "1/2")
 	}
 }
 
@@ -126,7 +130,8 @@ class DccExpiredVac2of2DE: BaseTest {
 	
 	func test_expiredVac2of2DE() {
 		addScannedQR()
-		assertSomethingWentWrong()
+		proceedToOverview()
+		assertInternationalVaccination(of: vaccination, dose: "2/2")
 	}
 }
 
@@ -142,7 +147,7 @@ class DccExpiredVac3of3DE: BaseTest {
 	
 	func test_expiredVac3of3DE() {
 		addScannedQR()
-		assertSomethingWentWrong()
+		assertInternationalVaccination(of: vaccination, dose: "3/3")
 	}
 }
 
@@ -164,11 +169,13 @@ class DccValidRecDE: BaseTest {
 	func test_validRecDE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
+		proceedToOverview()
 		
 		addScannedQR()
 		
-		assertInternationalRecovery(of: positiveTest)
-		assertInternationalRecoveryQR(for: positiveTest)
+		assertPositiveTestResultNotValidAnymore()
+//		assertInternationalRecovery(of: positiveTest)
+//		assertInternationalRecoveryQR(for: positiveTest)
 	}
 }
 
@@ -184,7 +191,7 @@ class DccExpiredRecDE: BaseTest {
 	
 	func test_expiredRecDE() {
 		addScannedQR()
-		assertSomethingWentWrong()
+		assertPositiveTestResultNotValidAnymore()
 	}
 }
 
@@ -202,10 +209,10 @@ class DccValidNegDE: BaseTest {
 	func test_validVac1of2DE() {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-
+		
 		addScannedQR()
 
-		assertSomethingWentWrong(error: "i 580 000 500 99785")
+		assertSomethingWentWrong(error: "i 580 000 400 99785")
 	}
 }
 
@@ -221,6 +228,6 @@ class DccExpiredNegDE: BaseTest {
 	
 	func test_validVac1of2DE() {
 		addScannedQR()
-		assertSomethingWentWrong(error: "i 580 000 500 99799")
+		assertNoCertificateCouldBeCreated(error: "i 580 000 0512")
 	}
 }

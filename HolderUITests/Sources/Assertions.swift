@@ -48,8 +48,11 @@ extension BaseTest {
 		returnToCertificateOverview()
 	}
 	
-	func assertNoCertificateCouldBeCreated() {
+	func assertNoCertificateCouldBeCreated(error: String = "") {
 		app.textExists("We kunnen geen bewijs maken")
+		if !error.isEmpty {
+			app.containsValue(error)
+		}
 		returnToCertificateOverview()
 	}
 	

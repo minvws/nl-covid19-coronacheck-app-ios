@@ -28,6 +28,10 @@ extension BaseTest {
 		app.tapButton("Volgende")
 	}
 	
+	func proceedToOverview() {
+		app.tapButton("Naar mijn bewijzen")
+	}
+	
 	private func viewQR(of certificate: CertificateType, label: String, hiddenQR: Bool) {
 		card(of: certificate).tapButton(label)
 		if hiddenQR { assertHiddenQR() }
