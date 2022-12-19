@@ -29,11 +29,15 @@ class NegativeTestDetailsGenerator {
 		let manufacturer = mappingManager.getTestManufacturer(event.negativeTest?.manufacturer) ?? (event.negativeTest?.manufacturer ?? "")
 
 		// Test name
-		var testName: String? = event.negativeTest?.name
-		if mappingManager.isRatTest(event.negativeTest?.type) {
-			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
-		}
-
+		let testName: String? = {
+			guard mappingManager.isRatTest(event.negativeTest?.type),
+				  let mappedTestName = mappingManager.getTestName(event.negativeTest?.manufacturer)
+			else {
+				return event.negativeTest?.name
+			}
+			return mappedTestName
+		}()
+		
 		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
@@ -77,10 +81,14 @@ class PositiveTestDetailsGenerator {
 		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.positiveTest?.manufacturer ?? "")
 
 		// Test name
-		var testName: String? = event.positiveTest?.name
-		if mappingManager.isRatTest(event.positiveTest?.type) {
-			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
-		}
+		let testName: String? = {
+			guard mappingManager.isRatTest(event.positiveTest?.type),
+				  let mappedTestName = mappingManager.getTestName(event.positiveTest?.manufacturer)
+			else {
+				return event.positiveTest?.name
+			}
+			return mappedTestName
+		}()
 		
 		var results = [
 			EventDetails(field: EventDetailsTest.subtitle, value: nil),
@@ -109,6 +117,25 @@ class DCCTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry) -> [EventDetails] {
 
+		enum TestResult {
+			case positive, negative
+			
+			var localized: String {
+				switch self {
+					case .positive: return L.holderShowqrEuAboutTestPostive()
+					case .negative: return L.holderShowqrEuAboutTestNegativeSingleLanguage()
+				}
+			}
+			
+			init?(string: String) {
+				switch string {
+					case "260415000": self = .negative
+					case "260373001": self = .positive
+					default: return nil
+				}
+			}
+		}
+		
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
@@ -120,23 +147,26 @@ class DCCTestDetailsGenerator {
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? (test.typeOfTest)
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
-
-		let testResult: String
-		switch test.testResult {
-			case "260415000": testResult = L.holderShowqrEuAboutTestNegativeSingleLanguage()
-			case "260373001": testResult = L.holderShowqrEuAboutTestPostive()
-			default: testResult = ""
-		}
-
+		let testResult: TestResult? = TestResult(string: test.testResult)
+		
+		let testName: String? = {
+			guard mappingManager.isRatTest(test.typeOfTest),
+				  let mappedTestName = mappingManager.getTestName(test.marketingAuthorizationHolder)
+			else {
+				return test.name
+			}
+			return mappedTestName
+		}()
+		
 		return [
 			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsDCCTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsDCCTest.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsDCCTest.pathogen, value: L.holderDccTestPathogenvalue()),
 			EventDetails(field: EventDetailsDCCTest.testType, value: testType),
-			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
+			EventDetails(field: EventDetailsDCCTest.testName, value: testName),
 			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
-			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
+			EventDetails(field: EventDetailsDCCTest.result, value: testResult?.localized ?? ""),
 			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
 			EventDetails(field: EventDetailsDCCTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			EventDetails(field: EventDetailsDCCTest.country, value: mappingManager.getDisplayCountry(test.country)),

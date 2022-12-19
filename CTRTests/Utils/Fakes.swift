@@ -1224,6 +1224,21 @@ extension EuCredentialAttributes.TestEntry {
 			typeOfTest: "LP217198-3"
 		)
 	}
+
+	static var positiveTest: EuCredentialAttributes.TestEntry {
+		EuCredentialAttributes.TestEntry(
+			certificateIdentifier: "1234",
+			country: "NL",
+			diseaseAgentTargeted: "840539006",
+			issuer: "Ministry of Health Welfare and Sport",
+			marketingAuthorizationHolder: "1213",
+			name: "fake positiveTest",
+			sampleDate: "2021-11-17T16:00:00+01:00",
+			testResult: "260373001",
+			testCenter: "Facility approved by the State of The Netherlands",
+			typeOfTest: "LP217198-3"
+		)
+	}
 }
 
 extension EuCredentialAttributes.Vaccination {
