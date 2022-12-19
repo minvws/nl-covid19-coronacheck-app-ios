@@ -16,6 +16,7 @@ let package = Package(
 		// .package(url: /* package url */, from: "1.0.0"),
 		.package(name: "Shared", path: "../Shared"),
 		.package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
+			path: "../../../nl-rdo-app-ios-modules-private"
 		.package(url: "https://github.com/Thomvis/BrightFutures", branch: "master"),
 		
 		// testing:

@@ -24,7 +24,7 @@ class Tokentest: BaseTest {
 		app.containsText("Naam: " + fullName)
 		app.containsText("Geboortedatum: " + birthDate.toString(.written))
 		app.containsText("Testdatum: " + testDate.toString(.recently))
-		app.containsText("Testuitslag: negatief (geen corona)")
+		app.containsText("Testuitslag: negatief (geen coronavirus vastgesteld)")
 		app.tapButton("Sluiten")
 		
 		app.tapButton("Maak bewijs")
@@ -42,7 +42,7 @@ class Tokentest: BaseTest {
 		app.containsText("Naam: " + fullName)
 		app.containsText("Geboortedatum: " + birthDate.toString(.written))
 		app.containsText("Testdatum: " + testDate.toString(.recently))
-		app.containsText("Testuitslag: negatief (geen corona)")
+		app.containsText("Testuitslag: negatief (geen coronavirus vastgesteld)")
 		app.tapButton("Sluiten")
 		
 		app.tapButton("Maak bewijs")
