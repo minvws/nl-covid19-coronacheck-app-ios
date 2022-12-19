@@ -31,7 +31,7 @@ extension BaseTest {
 	
 	// MARK: - Certificate retrieval
 	
-	private func returnToCertificateOverview() {
+	func returnToCertificateOverview() {
 		app.tapButton("Naar mijn bewijzen")
 	}
 	
@@ -308,7 +308,7 @@ extension BaseTest {
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: spreadDose(dose))
 			
 			let vacDate = formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index), short: true)
-			app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vacDate)
+			app.labelValuePairExist(label: "Vaccinatiedatum / Vaccination date*:", value: vacDate)
 			
 			closeQRDetails()
 			
@@ -333,8 +333,8 @@ extension BaseTest {
 		if let dose {
 			app.labelValuePairExist(label: "Dosis / Number in series of doses:", value: dose.map { String($0) }.joined(separator: " "))
 		}
-		app.labelValuePairExist(label: "Vaccinatiedatum / Date of vaccination*:", value: vaccination.eventDate.toString(.dutch))
-		app.labelValuePairExist(label: "Gevaccineerd in / Member state of vaccination:", value: vaccination.countryInternational)
+		app.labelValuePairExist(label: "Vaccinatiedatum / Vaccination date*:", value: vaccination.eventDate.toString(.dutch))
+		app.labelValuePairExist(label: "Gevaccineerd in / Vaccinated in:", value: vaccination.countryInternational)
 		
 		closeQRDetails()
 	}
@@ -374,7 +374,7 @@ extension BaseTest {
 		
 		openQRDetails(for: person)
 		app.textExists("Over mijn internationale QR-code")
-		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen corona) / negative (no coronavirus)")
+		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)")
 		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
 		closeQRDetails()
 		app.tapButton("Terug")

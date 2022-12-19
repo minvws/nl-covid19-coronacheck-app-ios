@@ -121,9 +121,9 @@ final class Vaccination: Event {
 	}
 	
 	enum VaccineType: String {
-		case pfizer = "Pfizer (Comirnaty)"
+		case pfizer = "Comirnaty (Pfizer)"
 		case moderna = "Moderna"
-		case janssen = "Janssen (COVID-19 Vaccin Janssen)"
+		case janssen = "Jcovden (Janssen)"
 	}
 }
 
