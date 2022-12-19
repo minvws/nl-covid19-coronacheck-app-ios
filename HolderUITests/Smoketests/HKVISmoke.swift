@@ -18,7 +18,7 @@ class DccValidVac2of2NL: BaseTest {
 	
 	func test_validVac2of2NL() {
 		addScannedQR()
-		
+		proceedToOverview()
 		assertInternationalVaccination(of: vaccination, dose: "2/2")
 		
 		viewQRCode(of: .vaccination)
