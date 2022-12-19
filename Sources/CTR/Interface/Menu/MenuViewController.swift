@@ -16,7 +16,6 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		title = L.general_menu()
 		
 		setupBindings()
 		addBackButton(customAction: nil)
@@ -24,6 +23,10 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	
 	private func setupBindings() {
 
+		viewModel.$title.binding = { [weak self] title in
+			self?.title = title
+		}
+		
 		viewModel.$items.binding = { [weak self] items in
 			guard let self else { return }
 			self.sceneView.stackView.removeArrangedSubviews()

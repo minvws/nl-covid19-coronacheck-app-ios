@@ -11,9 +11,11 @@ import UIKit
 class MenuViewModel {
 	typealias Item = MenuViewController.Item
 	
+	@Bindable var title: String
 	@Bindable var items: [Item]
 	
-	init(items: [Item]) {
+	init(title: String = L.general_menu(), items: [Item]) {
+		self.title = title
 		self.items = items
 	}
 }
