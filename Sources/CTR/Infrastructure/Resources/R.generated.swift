@@ -455,7 +455,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 38 images.
+  /// This `R.image` struct is generated, and contains static references to 39 images.
   struct image {
     /// Image `BackArrow`.
     static let backArrow = Rswift.ImageResource(bundle: R.hostingBundle, name: "BackArrow")
@@ -531,6 +531,8 @@ struct R: Rswift.Validatable {
     static let icon_menu_howitworks = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_howitworks")
     /// Image `icon_menu_risklevel`.
     static let icon_menu_risklevel = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_risklevel")
+    /// Image `icon_menu_storeddata`.
+    static let icon_menu_storeddata = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_storeddata")
     /// Image `menuChevron`.
     static let menuChevron = Rswift.ImageResource(bundle: R.hostingBundle, name: "menuChevron")
 
@@ -790,6 +792,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "icon_menu_risklevel", bundle: ..., traitCollection: ...)`
     static func icon_menu_risklevel(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_menu_risklevel, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "icon_menu_storeddata", bundle: ..., traitCollection: ...)`
+    static func icon_menu_storeddata(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_menu_storeddata, compatibleWith: traitCollection)
     }
     #endif
 
