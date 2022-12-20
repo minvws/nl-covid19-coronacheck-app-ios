@@ -165,9 +165,24 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 			navigationItem.leftBarButtonItem = .create(config)
 		}
 	
-	/// Add a back button to the navigation bar.
-	/// - Parameters:
-	///   - customAction: The custom action for back navigation
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+		return true
+	}
+}
+
+/// A generic viewcontroller,which on iPad automagically applies side insets.
+/// V: The view to use for the scene, must be a (subclass of) baseview
+/// M: The class to use as viewModel
+class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V, M> {
+	
+	override func loadView() {
+		
+		view = TraitWrapper(_sceneViewInstance())
+	}
+}
+
+extension UIViewController {
+	
 	func addBackButton(
 		customAction: Selector? = nil) {
 			
@@ -188,20 +203,5 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	
 	@objc func onBack() {
 		navigationController?.popViewController(animated: true)
-	}
-	
-	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-		return true
-	}
-}
-
-/// A generic viewcontroller,which on iPad automagically applies side insets.
-/// V: The view to use for the scene, must be a (subclass of) baseview
-/// M: The class to use as viewModel
-class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V, M> {
-	
-	override func loadView() {
-		
-		view = TraitWrapper(_sceneViewInstance())
 	}
 }

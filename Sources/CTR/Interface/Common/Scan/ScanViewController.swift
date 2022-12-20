@@ -324,13 +324,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 	}
 }
 
-extension ScanViewController {
-	
-	@objc func onBack() {
-		navigationController?.popViewController(animated: true)
-	}
-}
-
 extension ScanViewController: UIGestureRecognizerDelegate {
 
 	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {

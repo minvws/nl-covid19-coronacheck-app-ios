@@ -67,27 +67,6 @@ class PaperProofScanViewController: ScanViewController {
 		addBackButton()
 	}
 	
-	/// Add a back button to the navigation bar.
-	/// - Parameters:
-	///   - customAction: The custom action for back navigation
-	func addBackButton(
-		customAction: Selector? = nil) {
-
-		var action = #selector(onBack)
-		if let customAction {
-			action = customAction
-		}
-		
-		let config = UIBarButtonItem.Configuration(
-			target: self,
-			action: action,
-			content: .image(I.backArrow()),
-			accessibilityIdentifier: "BackButton",
-			accessibilityLabel: L.generalBack()
-		)
-		navigationItem.leftBarButtonItem = .create(config)
-	}
-	
 	override func found(code: String) {
 
 		viewModel.parseQRMessage(code)
