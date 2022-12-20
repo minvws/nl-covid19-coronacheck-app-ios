@@ -15,8 +15,8 @@ class VisitorPassTest: BaseTest {
 		try super.setUpWithError()
 	}
 	
-	let assessmentDate = Date("2022-09-27")
-	let vaccinationAssessment = "ZZZ-47Z2Q8FZ3VL3QQ-92"
+	let assessmentDate = Date("2022-12-19")
+	let vaccinationAssessment = "ZZZ-B5RSQF8V6Z52U2-F2"
 	let vaccinationAssessmentToken = "333333"
 	let negativeTest = "ZZZ-QB858FYFT7ZLUU-72"
 	let negativeTestToken = "123456"

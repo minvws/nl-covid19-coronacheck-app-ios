@@ -67,7 +67,7 @@ class PositiveOthersTest: BaseTest {
 		let person = TestData.posBreathalyzerP1
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertPositiveTestResultNotValidAnymore()
+		assertNoCertificateCouldBeCreated(error: "i 380 000 0511")
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()

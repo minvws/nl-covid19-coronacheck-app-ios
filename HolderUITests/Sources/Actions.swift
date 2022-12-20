@@ -28,6 +28,10 @@ extension BaseTest {
 		app.tapButton("Volgende")
 	}
 	
+	func proceedToOverview() {
+		app.tapButton("Naar mijn bewijzen")
+	}
+	
 	private func viewQR(of certificate: CertificateType, label: String, hiddenQR: Bool) {
 		card(of: certificate).tapButton(label)
 		if hiddenQR { assertHiddenQR() }
@@ -143,7 +147,7 @@ extension BaseTest {
 		submit.tap()
 		makeScreenShot(name: "BSN submit button")
 		
-		let open = safari.buttons["Open"].waitForExistence(timeout: 1.0)
+		let open = safari.buttons["Open"].waitForExistence(timeout: 5.0)
 		if open {
 			safari.tapButton("Open")
 		}
