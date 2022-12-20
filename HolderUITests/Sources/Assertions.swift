@@ -31,21 +31,17 @@ extension BaseTest {
 	
 	// MARK: - Certificate retrieval
 	
-	func returnToCertificateOverview() {
-		app.tapButton("Naar mijn bewijzen")
-	}
-	
 	func assertSomethingWentWrong(error: String = "") {
 		app.textExists("Sorry, er gaat iets mis")
 		if !error.isEmpty {
 			app.containsValue(error)
 		}
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertNoVaccinationsAvailable() {
 		app.textExists("Geen vaccinaties beschikbaar")
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertNoCertificateCouldBeCreated(error: String = "") {
@@ -53,38 +49,38 @@ extension BaseTest {
 		if !error.isEmpty {
 			app.containsValue(error)
 		}
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertPositiveTestResultNotValidAnymore() {
 		guard disclosureMode != .mode0G else { return }
 		app.textExists("Positieve testuitslag niet meer geldig")
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertCertificateIsOnlyValidInternationally() {
 		app.textExists("Er is alleen een internationaal bewijs gemaakt")
 		app.containsValue("Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertNoTestresultIsAvailable() {
 		app.textExists("Geen testuitslag beschikbaar")
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertHintForInternationalVaccinationAndRecoveryCertificate() {
 		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
 		app.containsValue("Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
 		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.")
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertHintForVaccinationAndRecoveryCertificate() {
 		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
 		app.containsValue("Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.")
 		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.")
-		returnToCertificateOverview()
+		proceedToOverview()
 	}
 	
 	func assertRetrievedCertificate(for person: TestPerson) {

@@ -174,8 +174,6 @@ class DccValidRecDE: BaseTest {
 		addScannedQR()
 		
 		assertPositiveTestResultNotValidAnymore()
-//		assertInternationalRecovery(of: positiveTest)
-//		assertInternationalRecoveryQR(for: positiveTest)
 	}
 }
 
