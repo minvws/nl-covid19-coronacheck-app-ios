@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AboutThisAppView: ScrolledStackView {
+final class AboutThisAppView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -26,7 +26,7 @@ class AboutThisAppView: ScrolledStackView {
 
 		enum StackView {
 			static let topMargin: CGFloat = 40
-			static let bottomMargin: CGFloat = 32
+			static let bottomMargin: CGFloat = 40
 		}
 	}
 
@@ -47,14 +47,15 @@ class AboutThisAppView: ScrolledStackView {
 		return view
 	}()
 
-	private let appVersionLabel: Label = {
-
-		return Label(subhead: nil).multiline()
+	private let resetButton: Button = {
+		return Button(title: "App resetten..", style: .roundedRedBorder)
 	}()
 
-	private let configVersionLabel: Label = {
-
-		return Label(subhead: nil).multiline()
+	private let resetButtonStackView: UIStackView = {
+		let testStackView = UIStackView()
+		testStackView.alignment = .center
+		testStackView.axis = .vertical
+		return testStackView
 	}()
 
 	/// setup the views
@@ -63,24 +64,27 @@ class AboutThisAppView: ScrolledStackView {
 		super.setupViews()
 		backgroundColor = C.white()
 		stackView.distribution = .fill
-		appVersionLabel.textColor = C.grey1()
-		configVersionLabel.textColor = C.grey1()
+		
+		resetButton.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
 	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-
+		
 		stackView.addArrangedSubview(messageTextView)
 		stackView.setCustomSpacing(ViewTraits.StackView.topMargin, after: messageTextView)
 		stackView.addArrangedSubview(menuStackView)
 		stackView.setCustomSpacing(ViewTraits.StackView.bottomMargin, after: menuStackView)
-		stackView.addArrangedSubview(appVersionLabel)
-		stackView.setCustomSpacing(ViewTraits.Footer.spacing, after: appVersionLabel)
-		stackView.addArrangedSubview(configVersionLabel)
+		stackView.addArrangedSubview(resetButtonStackView)
+		resetButtonStackView.addArrangedSubview(resetButton)
 	}
 
+	@objc private func didTapReset() {
+		resetButtonTapHandler?()
+	}
+	
 	// MARK: Public Access
 
 	/// The message
@@ -89,28 +93,6 @@ class AboutThisAppView: ScrolledStackView {
 			NSAttributedString.makeFromHtml(text: message, style: .bodyDark) {
 				self.messageTextView.attributedText = $0
 			}
-		}
-	}
-
-	/// The app version
-	var appVersion: String? {
-		didSet {
-			appVersionLabel.attributedText = appVersion?.setLineHeight(
-				ViewTraits.Footer.lineHeight,
-				kerning: ViewTraits.Footer.kerning,
-				textColor: C.grey1()!
-			)
-		}
-	}
-
-	/// The config version
-	var configVersion: String? {
-		didSet {
-			configVersionLabel.attributedText = configVersion?.setLineHeight(
-				ViewTraits.Footer.lineHeight,
-				kerning: ViewTraits.Footer.kerning,
-				textColor: C.grey1()!
-			)
 		}
 	}
 
@@ -136,4 +118,6 @@ class AboutThisAppView: ScrolledStackView {
 
 		return menuOptionStackView
 	}
+	
+	var resetButtonTapHandler: (() -> Void)?
 }

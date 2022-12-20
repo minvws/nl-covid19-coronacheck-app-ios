@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisAppView, AboutThisAppViewModel> {
+final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisAppView, AboutThisAppViewModel> {
 
 	override func viewDidLoad() {
 
@@ -15,8 +15,6 @@ class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisApp
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$appVersion.binding = { [weak self] in self?.sceneView.appVersion = $0 }
-		viewModel.$configVersion.binding = { [weak self] in self?.sceneView.configVersion = $0 }
 		viewModel.$alert.binding = { [weak self] alertContent in
 			guard let alertContent else { return }
 			self?.showAlert(alertContent)
@@ -24,6 +22,10 @@ class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisApp
 
 		addBackButton(customAction: nil)
 		setupMenuOptions()
+		
+		sceneView.resetButtonTapHandler = { [weak viewModel] in
+			viewModel?.didTapResetApp()
+		}
 	}
 
 	private func setupMenuOptions() {
