@@ -18,15 +18,14 @@ final class AboutThisAppView: ScrolledStackView {
 			static let spacing: CGFloat = 8
 		}
 
-		enum Footer {
-			static let lineHeight: CGFloat = 18
-			static let kerning: CGFloat = -0.24
-			static let spacing: CGFloat = 24
-		}
-
 		enum StackView {
 			static let topMargin: CGFloat = 40
 			static let bottomMargin: CGFloat = 40
+		}
+		
+		enum ResetButton {
+			static let heightOfButton: CGFloat = 50
+			static let verticalMargin: CGFloat = 48
 		}
 	}
 
@@ -57,7 +56,7 @@ final class AboutThisAppView: ScrolledStackView {
 		testStackView.axis = .vertical
 		return testStackView
 	}()
-
+	
 	/// setup the views
 	override func setupViews() {
 
@@ -77,10 +76,35 @@ final class AboutThisAppView: ScrolledStackView {
 		stackView.setCustomSpacing(ViewTraits.StackView.topMargin, after: messageTextView)
 		stackView.addArrangedSubview(menuStackView)
 		stackView.setCustomSpacing(ViewTraits.StackView.bottomMargin, after: menuStackView)
-		stackView.addArrangedSubview(resetButtonStackView)
+		
 		resetButtonStackView.addArrangedSubview(resetButton)
+		addSubview(resetButtonStackView)
 	}
 
+	override func setupViewConstraints() {
+		
+		super.setupViewConstraints()
+
+		/// Setup resetButtonStackView:
+		resetButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+		resetButtonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+		resetButtonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+		resetButtonStackView.heightAnchor.constraint(equalToConstant: ViewTraits.ResetButton.heightOfButton).isActive = true
+		
+		// Pin to the bottom of the screen, unless scrollview goes off bottom of screen, in which case pin
+		//  to the bottom of the scrollview contents (with a nice rubber-band effect)
+		
+		let pinUpwardsToScrollViewContents = resetButtonStackView.topAnchor.constraint(greaterThanOrEqualTo: menuStackView.bottomAnchor, constant: ViewTraits.ResetButton.verticalMargin)
+		pinUpwardsToScrollViewContents.priority = .defaultLow
+		pinUpwardsToScrollViewContents.isActive = true
+		
+		let pinDownwardsToScreenBottom = resetButtonStackView.topAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: -(ViewTraits.ResetButton.verticalMargin + ViewTraits.ResetButton.heightOfButton))
+		pinDownwardsToScreenBottom.priority = .required
+		pinDownwardsToScreenBottom.isActive = true
+		
+		scrollView.contentInset = .bottom(ViewTraits.ResetButton.verticalMargin + ViewTraits.ResetButton.heightOfButton)
+	}
+	
 	@objc private func didTapReset() {
 		resetButtonTapHandler?()
 	}
@@ -109,12 +133,6 @@ final class AboutThisAppView: ScrolledStackView {
 			view.spacing = 0
 			return view
 		}()
-
-		// Title Label
-		let label = Label(caption1SemiBold: nil).multiline().header()
-		label.attributedText = title.setLineHeight(ViewTraits.ListHeader.lineHeight)
-		menuOptionStackView.addArrangedSubview(label)
-		menuOptionStackView.setCustomSpacing(ViewTraits.ListHeader.spacing, after: label)
 
 		return menuOptionStackView
 	}
