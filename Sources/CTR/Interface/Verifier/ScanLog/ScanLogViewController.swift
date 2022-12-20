@@ -7,31 +7,9 @@
 
 import UIKit
 
-class ScanLogViewController: BaseViewController {
-
-	private let viewModel: ScanLogViewModel
-
-	let sceneView = ScanLogView()
+class ScanLogViewController: GenericViewController<ScanLogView, ScanLogViewModel> {
 
 	override var enableSwipeBack: Bool { true }
-
-	init(viewModel: ScanLogViewModel) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
 
 	override func viewDidLoad() {
 
