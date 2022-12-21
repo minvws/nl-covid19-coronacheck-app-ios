@@ -2,10 +2,28 @@ import XCTest
 @testable import Shared
 
 final class SharedTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Shared().text, "Hello, World!")
-    }
+
+	func test_fullStringVersion_singleDigit() {
+		
+		// Given
+		let value = "1"
+		
+		// When
+		let result = value.fullVersionString()
+		
+		// Then
+		XCTAssertEqual(result, "1.0.0")
+	}
+	
+	func test_fullStringVersion_twoDigits() {
+		
+		// Given
+		let value = "2.1"
+		
+		// When
+		let result = value.fullVersionString()
+		
+		// Then
+		XCTAssertEqual(result, "2.1.0")
+	}
 }
