@@ -510,7 +510,7 @@ schemes:
       targets:
         - package: Shared/SharedTests
           randomExecutionOrder: true
-          parallelizable: true
+          parallelizable: false
         - package: Transport/TransportTests
           randomExecutionOrder: true
           parallelizable: false
