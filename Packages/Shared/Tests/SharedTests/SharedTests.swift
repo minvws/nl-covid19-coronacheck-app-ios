@@ -38,49 +38,65 @@ final class SharedTests: XCTestCase {
 	
 	// MARK: - Collection
 	
-	func test_array_isNotEmpty() {
+	func test_array_isNotEmpty_notEmpty() {
 		
 		// Given
 		let values = ["🦠"]
 		
+		// When
+		let isNotEmpty = values.isNotEmpty
+		let isEmpty = values.isEmpty
+		
 		// Then
-		XCTAssertTrue(values.isNotEmpty)
-		XCTAssertFalse(values.isEmpty)
+		XCTAssertTrue(isNotEmpty)
+		XCTAssertFalse(isEmpty)
 	}
 	
-	func test_array_isEmpty() {
+	func test_array_isNotEmpty_isEmpty() {
 		
 		// Given
 		let values: [String] = []
 		
+		// When
+		let isNotEmpty = values.isNotEmpty
+		let isEmpty = values.isEmpty
+		
 		// Then
-		XCTAssertFalse(values.isNotEmpty)
-		XCTAssertTrue(values.isEmpty)
+		XCTAssertFalse(isNotEmpty)
+		XCTAssertTrue(isEmpty)
 	}
 	
-	func test_string_isNotEmpty() {
+	func test_string_isNotEmpty_notEmpty() {
 		
 		// Given
 		let value = ["🦠"]
 		
+		// When
+		let isNotEmpty = value.isNotEmpty
+		let isEmpty = value.isEmpty
+		
 		// Then
-		XCTAssertTrue(value.isNotEmpty)
-		XCTAssertFalse(value.isEmpty)
+		XCTAssertTrue(isNotEmpty)
+		XCTAssertFalse(isEmpty)
 	}
 	
-	func test_string_isEmpty() {
+	func test_string_isNotEmpty_isEmpty() {
 		
 		// Given
 		let value = ""
 		
+		// When
+		let isNotEmpty = value.isNotEmpty
+		let isEmpty = value.isEmpty
+		
 		// Then
-		XCTAssertFalse(value.isNotEmpty)
-		XCTAssertTrue(value.isEmpty)
+		XCTAssertFalse(isNotEmpty)
+		XCTAssertTrue(isEmpty)
 	}
 	
 	// MARK: - Result
 	
-	func test_isSuccess() {
+	func test_result_isSuccess() {
 		
 		// Given
 		let result: Result<String, Error> = .success("Test")
@@ -98,7 +114,7 @@ final class SharedTests: XCTestCase {
 		XCTAssertNil(failureErrror)
 	}
 	
-	func test_isFailure() {
+	func test_result_isFailure() {
 		
 		// Given
 		let error = NSError(domain: NSURLErrorDomain, code: URLError.notConnectedToInternet.rawValue)
