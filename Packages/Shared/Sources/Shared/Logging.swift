@@ -41,7 +41,7 @@ private enum LoggingLevel: String, Comparable {
 }
 
 private let loggingLevel: LoggingLevel = {
-	guard !ProcessInfo.processInfo.isTesting else { return .off }
+	guard !ProcessInfo.processInfo.isUnitTesting else { return .off }
 	guard let string = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String else { return .off }
 	return LoggingLevel(rawValue: string) ?? .off
 }()

@@ -45,7 +45,7 @@ public extension NSAttributedString {
 
 	static func makeFromHtml(text: String?, style: HTMLStyle, completion: @escaping (NSAttributedString) -> Void) {
 
-		guard !ProcessInfo.processInfo.isTesting else {
+		guard !ProcessInfo.processInfo.isUnitTesting else {
 			completion(NSAttributedString(string: text ?? ""))
 			return
 		}
@@ -58,7 +58,7 @@ public extension NSAttributedString {
 	
 	static func makeFromHtml(text: String?, style: HTMLStyle) -> NSAttributedString {
 
-		guard !ProcessInfo.processInfo.isTesting else {
+		guard !ProcessInfo.processInfo.isUnitTesting else {
 			return NSAttributedString(string: text ?? "")
 		}
 

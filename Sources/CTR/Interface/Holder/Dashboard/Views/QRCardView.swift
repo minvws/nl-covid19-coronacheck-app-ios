@@ -439,7 +439,7 @@ class QRCardView: BaseView {
 
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
-		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		guard !ProcessInfo.processInfo.isUnitTesting else { return } // for better snapshot reliability
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 
@@ -454,7 +454,7 @@ class QRCardView: BaseView {
 	}
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
-		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		guard !ProcessInfo.processInfo.isUnitTesting else { return } // for better snapshot reliability
 		
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
