@@ -59,13 +59,11 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(sut.message) == L.holderAboutText()
 		expect(sut.menu).to(haveCount(2))
 		expect(sut.menu[0].key) == L.holderAboutReadmore()
-		expect(sut.menu[0].value).to(haveCount(6))
+		expect(sut.menu[0].value).to(haveCount(4))
 		expect(sut.menu[0].value[0].identifier) == .privacyStatement
-		expect(sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
+		expect(sut.menu[0].value[1].identifier) == .accessibility
 		expect(sut.menu[0].value[2].identifier) == .colophon
-		expect(sut.menu[0].value[3].identifier) == .storedEvents
-		expect(sut.menu[0].value[4].identifier) == .reset
-		expect(sut.menu[0].value[5].identifier) == .deeplink
+		expect(sut.menu[0].value[3].identifier) == .deeplink
 		
 		expect(sut.menu[1].value[0].identifier) == .useNoDisclosurePolicy
 		expect(sut.menu[1].value[1].identifier) == .use1GDisclosurePolicy
@@ -315,26 +313,6 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(outcomes).to(beEmpty())
 	}
 	
-	func test_menuOptionSelected_storedEvents_forHolder() {
-		
-		// Given
-		var outcomes = [AboutThisAppViewModel.Outcome]()
-		let sut = AboutThisAppViewModel(
-			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
-			flavor: AppFlavor.holder,
-			outcomeHandler: { outcome in
-				outcomes.append(outcome)
-			}
-		)
-		
-		// When
-		sut.menuOptionSelected(.storedEvents)
-		
-		// Then
-		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == .userWishesToSeeStoredEvents
-	}
-	
 	func test_menuOptionSelected_deeplink_forHolder() {
 
 		// Given
@@ -369,7 +347,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		)
 
 		// When
-		sut.wipePersistedData()
+		sut.didTapResetApp()
+		sut.alert?.okAction.action?(UIAlertAction())
 
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
@@ -400,7 +379,8 @@ class AboutThisAppViewModelTests: XCTestCase {
 		)
 
 		// When
-		sut.wipePersistedData()
+		sut.didTapResetApp()
+		sut.alert?.okAction.action?(UIAlertAction())
 
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false

@@ -36,7 +36,7 @@ class MenuViewControllerTests: XCTestCase {
 		sut = MenuViewController(
 			viewModel: MenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "test_singleItem", subTitle: nil, icon: I.icon_menu_add()!, action: { })
+					MenuViewModel.Item.row(title: "test_singleItem", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
@@ -54,7 +54,7 @@ class MenuViewControllerTests: XCTestCase {
 		sut = MenuViewController(
 			viewModel: MenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "test_singleItem", subTitle: "subTitle", icon: I.icon_menu_add()!, action: { })
+					MenuViewModel.Item.row(title: "test_singleItem", subTitle: "subTitle", icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
@@ -72,8 +72,8 @@ class MenuViewControllerTests: XCTestCase {
 		sut = MenuViewController(
 			viewModel: MenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, action: { }),
-					MenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, action: { })
+					MenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { }),
+					MenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
@@ -91,9 +91,9 @@ class MenuViewControllerTests: XCTestCase {
 		sut = MenuViewController(
 			viewModel: MenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, action: { }),
+					MenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { }),
 					MenuViewModel.Item.sectionBreak,
-					MenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, action: { })
+					MenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)

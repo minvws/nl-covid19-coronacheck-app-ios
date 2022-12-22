@@ -61,10 +61,9 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(7))
+			.to(haveCount(4))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(6))
-		expect(self.sut.sceneView.appVersion) != nil
+			.to(haveCount(5))
 
 		sut.assertImage()
 	}
@@ -91,10 +90,9 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(5))
+			.to(haveCount(4))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(2))
-		expect(self.sut.sceneView.appVersion) != nil
+			.to(haveCount(1))
 		
 		sut.assertImage()
 	}
@@ -120,8 +118,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(1))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(5))
-		expect(self.sut.sceneView.appVersion) != nil
+			.to(haveCount(4))
 		
 		sut.assertImage()
 	}
@@ -141,7 +138,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
 		
 		// Then
 		alertVerifier.verify(
@@ -153,28 +150,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 				.cancel(L.general_cancel())
 			]
 		)
-	}
-
-	func test_resetData_holder() throws {
-		
-		// Given
-		let alertVerifier = AlertVerifier()
-		loadView()
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[5] as? SimpleDisclosureButton)?.primaryButtonTapped()
-		
-		// When
-		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
-		
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
-		expect(self.environmentSpies.remoteConfigManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.onboardingManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.newFeaturesManagerSpy.invokedWipePersistedData) == true
-		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
-		expect(self.outcomes).to(haveCount(1))
-		expect(self.outcomes[0]) == .coordinatorShouldRestart
 	}
 	
 	func test_resetData_verifier() throws {
@@ -190,7 +165,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
 		loadView()
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
 		
 		// When
 		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
@@ -205,18 +180,5 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.environmentSpies.userSettingsSpy.invokedWipePersistedData) == true
 		expect(self.outcomes).to(haveCount(1))
 		expect(self.outcomes[0]) == .coordinatorShouldRestart
-	}
-	
-	func test_storedEventsOptionTapped_forHolder() {
-		
-		// Given
-		loadView()
-		
-		// When
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[4] as? SimpleDisclosureButton)?.primaryButtonTapped()
-		
-		// Then
-		expect(self.outcomes).to(haveCount(1))
-		expect(self.outcomes[0]) == .userWishesToSeeStoredEvents
 	}
 }
