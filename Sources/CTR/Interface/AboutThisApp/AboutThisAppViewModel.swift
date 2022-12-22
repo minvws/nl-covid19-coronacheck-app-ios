@@ -184,7 +184,6 @@ class AboutThisAppViewModel {
 		}
 	}
 
-
 	private func openPrivacyPage() {
 
 		switch flavor {

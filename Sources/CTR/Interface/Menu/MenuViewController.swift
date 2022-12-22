@@ -10,7 +10,7 @@ import UIKit
 class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	
 	enum Item {
-		case row(title: String, subTitle: String?, icon: UIImage, action: () -> Void )
+		case row(title: String, subTitle: String?, icon: UIImage, overrideColor: UIColor?, action: () -> Void)
 		case sectionBreak
 	}
 	
@@ -33,11 +33,12 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 			
 			items.enumerated().forEach { index, item in
 				switch item {
-					case let .row(title, subTitle, icon, action):
+					case let .row(title, subTitle, icon, overrideColor, action):
 					
 						let row = MenuRowView()
 						row.title = title
 						row.icon = icon
+						row.overrideColor = overrideColor
 						row.action = action
 						row.shouldShowBottomBorder = {
 							// Check if the next item is `case .row`. If so, show a bottom border on this row.
