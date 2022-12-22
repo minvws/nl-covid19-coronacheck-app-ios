@@ -281,8 +281,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 					self.userWishesToOpenScanLog()
 				case .coordinatorShouldRestart:
 					self.restart()
-				case .userWishesToSeeStoredEvents:
-					break // - for holdercoordinator
 			}
 		}
 		let viewController = AboutThisAppViewController(viewModel: viewModel)

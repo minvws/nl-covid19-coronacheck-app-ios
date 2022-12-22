@@ -353,13 +353,12 @@ class HolderCoordinator: SharedCoordinator {
 					self.openUrl(url, inApp: inApp)
 				case .coordinatorShouldRestart:
 					self.restart()
-				case .userWishesToSeeStoredEvents:
-					self.userWishesToSeeStoredEvents()
 				case .userWishesToOpenScanLog:
 					break // - for VerifierCoordinator
 			}
 		}
 		let viewController = AboutThisAppViewController(viewModel: viewModel)
+
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
