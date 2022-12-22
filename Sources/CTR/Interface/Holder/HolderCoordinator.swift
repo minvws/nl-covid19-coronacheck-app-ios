@@ -358,7 +358,7 @@ class HolderCoordinator: SharedCoordinator {
 			}
 		}
 		let viewController = AboutThisAppViewController(viewModel: viewModel)
-
+		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
@@ -686,39 +686,65 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.navigateToAddVisitorPass()
 		})
 		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, action: { [weak self] in
-			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
-			self?.openUrl(faqUrl, inApp: true)
-		})
+		let itemStoredData: MenuViewModel.Item = .row(title: L.holder_menu_storedEvents(), subTitle: nil, icon: I.icon_menu_storeddata()!) { [weak self] in
+			self?.userWishesToSeeStoredEvents()
+		}
 		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
-			self?.navigateToAboutThisApp()
-		})
-		
+		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!) { [weak self] in
+			self?.userWishesToSeeHelpAndInfoMenu()
+		}
+
 		let items: [MenuViewModel.Item] = {
 			
 			if Current.featureFlagManager.isVisitorPassEnabled() {
 				return [
 					itemAddCertificate,
-					.sectionBreak,
 					itemAddPaperCertificate,
 					itemAddVisitorPass,
 					.sectionBreak,
-					itemFAQ,
-					itemAboutThisApp
+					itemStoredData,
+					itemHelpAndInfo
 				]
 			} else {
 				return [
 					itemAddCertificate,
 					itemAddPaperCertificate,
 					.sectionBreak,
-					itemFAQ,
-					itemAboutThisApp
+					itemStoredData,
+					itemHelpAndInfo
 				]
 			}
 		}()
 		
 		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeHelpAndInfoMenu() {
+		
+		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, action: { [weak self] in
+			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
+			self?.openUrl(faqUrl, inApp: true)
+		})
+		
+		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_faq()!) { [weak self] in
+			//
+		}
+ 
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
+			self?.navigateToAboutThisApp()
+		})
+		
+		let items: [MenuViewModel.Item] = {
+			return [
+				itemFAQ,
+				itemHelpdesk,
+				.sectionBreak,
+				itemAboutThisApp
+			]
+		}()
+		
+		let viewController = MenuViewController(viewModel: MenuViewModel(title: L.holder_menu_helpInfo(), items: items))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
