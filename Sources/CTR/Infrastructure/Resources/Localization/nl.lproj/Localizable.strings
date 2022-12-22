@@ -645,6 +645,15 @@
 "holder_fuzzyMatching_onboarding_thirdPage_title" = "Laat andere namen herschrijven";
 "holder_fuzzyMatching_why_body" = "<p>Je naam moet bij alle vaccinaties, testuitslagen en bewijzen in de app op dezelfde manier zijn geschreven. Anders ziet CoronaCheck het als van verschillende personen. Kies daarom één naam.</p><p>Alleen de vaccinaties en testuitslagen bij de naam die je kiest blijven bewaard. De rest wordt verwijderd. Wil je die vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad.</p><p>Als je naam is aangepast, kun je zelf de vaccinaties en testuitslagen opnieuw toevoegen aan de app.</p>";
 "holder_fuzzyMatching_why_title" = "Waarom moet ik één naam kiezen?";
+"holder_helpInfo_helpdesk" = "Helpdesk";
+"holder_helpInfo_title" = "Hulp & Informatie";
+"holder_helpdesk_appVersion" = "App versie:";
+"holder_helpdesk_configuration" = "Configuratie:";
+"holder_helpdesk_contact_message" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b>Op 0800-1421 (gratis). Of als je vanuit het buitenland belt: +31 70 750 37 20.</p><p>Telefonisch bereikbaar van maandag t/m zondag 08:00 - 20:00 uur.</p><p><b>Of stuur een e-mail naar:</b><br />helpdesk@coronacheck.nl</p>";
+"holder_helpdesk_contact_title" = "Contact";
+"holder_helpdesk_support_message" = "Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:";
+"holder_helpdesk_support_title" = "Ondersteuning";
+"holder_helpdesk_title" = "Helpdesk";
 "holder_identityRemoved_banner_button_readmore" = "Lees meer";
 "holder_identityRemoved_banner_title" = "Je gegevens zijn bijgewerkt. Mogelijk zijn daardoor bewijzen weg.";
 "holder_identityRemoved_moreinfo_body" = "<p>Alleen vaccinatie- en testgegevens die bij de naam horen die je hebt gekozen zijn bewaard (<b>%@</b>).</p><p>De onderstaande gegevens zijn verwijderd uit de app:</p>%@<p>Wil je vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad. Voeg ze daarna zelf opnieuw toe aan de app.</p>";
@@ -722,6 +731,7 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
+"holder_menu_helpInfo" = "Hulp & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 "holder_menu_paperproof_subTitle" = "(Papieren) bewijs toevoegen";
 "holder_menu_paperproof_title" = "Coronabewijs inscannen";
@@ -932,8 +942,8 @@
 /* MARK: - Verifier Menu */
 "verifier.menu.dashboard" = "Scan QR-codes";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
-"verifier.menu.scaninstructions" = "Hoe het werkt";
-"verifier.menu.support" = "Support";
+"verifier.menu.scaninstructions" = "Zo werkt scannen";
+"verifier.menu.support" = "Meestgestelde vragen";
 "verifier.onboarding.message.safely" = "Met deze app controleer je het coronabewijs van je bezoekers. Zo kun je jouw locatie veilig open houden.";
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Jouw locatie veilig open";

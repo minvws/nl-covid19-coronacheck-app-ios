@@ -47,7 +47,7 @@ final class AboutThisAppView: ScrolledStackView {
 	}()
 
 	private let resetButton: Button = {
-		return Button(title: "App resetten..", style: .roundedRedBorder)
+		return Button(title: L.holder_menu_resetApp(), style: .roundedRedBorder)
 	}()
 
 	private let resetButtonStackView: UIStackView = {
