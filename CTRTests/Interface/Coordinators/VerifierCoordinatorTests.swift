@@ -408,21 +408,6 @@ class VerifierCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	func test_navigateToAboutThisApp_userWishesToSeeStoredEvents() throws {
-		
-		// Given
-		sut.navigateToAboutThisApp()
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
-		
-		// When
-		viewModel.outcomeHandler(.userWishesToSeeStoredEvents) // Should not be handled by the Verifier Coordinator
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
 	func test_navigateToAboutThisApp_userWishesToOpenScanLog() throws {
 		
 		// Given

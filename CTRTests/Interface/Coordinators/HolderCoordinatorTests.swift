@@ -428,22 +428,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	func test_navigateToAboutThisApp_userWishesToSeeStoredEvents() throws {
-		
-		// Given
-		sut.navigateToAboutThisApp()
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
-		
-		// When
-		viewModel.outcomeHandler(.userWishesToSeeStoredEvents)
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 2
-		expect(self.navigationSpy.viewControllers.last is ListStoredEventsViewController).toEventually(beTrue())
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
 	func test_navigateToAboutThisApp_userWishesToOpenScanLog() throws {
 		
 		// Given

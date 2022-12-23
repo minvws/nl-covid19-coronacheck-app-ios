@@ -353,13 +353,12 @@ class HolderCoordinator: SharedCoordinator {
 					self.openUrl(url, inApp: inApp)
 				case .coordinatorShouldRestart:
 					self.restart()
-				case .userWishesToSeeStoredEvents:
-					self.userWishesToSeeStoredEvents()
 				case .userWishesToOpenScanLog:
 					break // - for VerifierCoordinator
 			}
 		}
 		let viewController = AboutThisAppViewController(viewModel: viewModel)
+		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
@@ -675,51 +674,74 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, action: { [weak self] in
+		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil) { [weak self] in
 			self?.navigateToChooseQRCodeType()
-		})
+		}
 		
-		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holder_menu_paperproof_title(), subTitle: L.holder_menu_paperproof_subTitle(), icon: I.icon_menu_addpapercertificate()!, action: { [weak self] in
+		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holder_menu_paperproof_title(), subTitle: L.holder_menu_paperproof_subTitle(), icon: I.icon_menu_addpapercertificate()!, overrideColor: nil) { [weak self] in
 			self?.navigateToAddPaperProof()
-		})
+		}
 		
-		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, action: { [weak self] in
+		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, overrideColor: nil) { [weak self] in
 			self?.navigateToAddVisitorPass()
-		})
+		}
 		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, action: { [weak self] in
-			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
-			self?.openUrl(faqUrl, inApp: true)
-		})
+		let itemStoredData: MenuViewModel.Item = .row(title: L.holder_menu_storedEvents(), subTitle: nil, icon: I.icon_menu_storeddata()!, overrideColor: nil) { [weak self] in
+			self?.userWishesToSeeStoredEvents()
+		}
 		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, action: { [weak self] in
-			self?.navigateToAboutThisApp()
-		})
+		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: nil) { [weak self] in
+			self?.userWishesToSeeHelpAndInfoMenu()
+		}
 		
-		let items: [MenuViewModel.Item] = {
-			
-			if Current.featureFlagManager.isVisitorPassEnabled() {
-				return [
-					itemAddCertificate,
-					.sectionBreak,
-					itemAddPaperCertificate,
-					itemAddVisitorPass,
-					.sectionBreak,
-					itemFAQ,
-					itemAboutThisApp
-				]
-			} else {
-				return [
-					itemAddCertificate,
-					itemAddPaperCertificate,
-					.sectionBreak,
-					itemFAQ,
-					itemAboutThisApp
-				]
-			}
-		}()
+		let debugItemResetApp: MenuViewModel.Item = .row(title: L.holder_menu_resetApp(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: C.ccError()) { [weak self] in
+			Current.wipePersistedData(flavor: .holder)
+			self?.restart()
+		}
+		
+		var items = [MenuViewModel.Item]()
+		items += [itemAddCertificate]
+		items += [itemAddPaperCertificate]
+		if Current.featureFlagManager.isVisitorPassEnabled() {
+			items += [itemAddVisitorPass]
+		}
+		
+		items += [.sectionBreak]
+		items += [itemStoredData]
+		items += [itemHelpAndInfo]
+		
+		if Configuration().getEnvironment() != "production" {
+			items += [.sectionBreak]
+			items += [debugItemResetApp]
+		}
 		
 		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeHelpAndInfoMenu() {
+		
+		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak self] in
+			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
+			self?.openUrl(faqUrl, inApp: true)
+		}
+		
+		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) {}
+ 
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: nil) { [weak self] in
+			self?.navigateToAboutThisApp()
+		}
+		
+		let items: [MenuViewModel.Item] = {
+			return [
+				itemFAQ,
+				itemHelpdesk,
+				.sectionBreak,
+				itemAboutThisApp
+			]
+		}()
+		
+		let viewController = MenuViewController(viewModel: MenuViewModel(title: L.holder_menu_helpInfo(), items: items))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	

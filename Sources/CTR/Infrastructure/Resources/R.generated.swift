@@ -455,7 +455,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 38 images.
+  /// This `R.image` struct is generated, and contains static references to 39 images.
   struct image {
     /// Image `BackArrow`.
     static let backArrow = Rswift.ImageResource(bundle: R.hostingBundle, name: "BackArrow")
@@ -531,6 +531,8 @@ struct R: Rswift.Validatable {
     static let icon_menu_howitworks = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_howitworks")
     /// Image `icon_menu_risklevel`.
     static let icon_menu_risklevel = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_risklevel")
+    /// Image `icon_menu_storeddata`.
+    static let icon_menu_storeddata = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_storeddata")
     /// Image `menuChevron`.
     static let menuChevron = Rswift.ImageResource(bundle: R.hostingBundle, name: "menuChevron")
 
@@ -790,6 +792,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "icon_menu_risklevel", bundle: ..., traitCollection: ...)`
     static func icon_menu_risklevel(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_menu_risklevel, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "icon_menu_storeddata", bundle: ..., traitCollection: ...)`
+    static func icon_menu_storeddata(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_menu_storeddata, compatibleWith: traitCollection)
     }
     #endif
 
@@ -1250,7 +1259,7 @@ struct R: Rswift.Validatable {
       fileprivate init() {}
     }
 
-    /// This `R.string.localizable` struct is generated, and contains static references to 984 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 994 localization keys.
     struct localizable {
       /// nl translation: %#@format@
       ///
@@ -1436,6 +1445,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_dashboard_empty_domestic_3Gand1Gaccess_message = Rswift.StringResource(key: "holder_dashboard_empty_domestic_3Gand1Gaccess_message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: <p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b>Op 0800-1421 (gratis). Of als je vanuit het buitenland belt: +31 70 750 37 20.</p><p>Telefonisch bereikbaar van maandag t/m zondag 08:00 - 20:00 uur.</p><p><b>Of stuur een e-mail naar:</b><br />helpdesk@coronacheck.nl</p>
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_contact_message = Rswift.StringResource(key: "holder_helpdesk_contact_message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: <p>Check vooraf of je een bewijs voor <a href="https://coronacheck.nl/toegangsregels/3g-1g-toegang">3G- of 1G toegang</a> nodig hebt. Laat ook je identiteitsbewijs zien.</p>
       ///
       /// Locales: en, nl
@@ -1900,6 +1913,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let verifierLaunchVersion = Rswift.StringResource(key: "verifier.launch.version", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: App versie:
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_appVersion = Rswift.StringResource(key: "holder_helpdesk_appVersion", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Begin opnieuw
       ///
       /// Locales: en, nl
@@ -2112,6 +2129,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let generalMenuConfigVersion = Rswift.StringResource(key: "general.menu.configVersion", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Configuratie:
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_configuration = Rswift.StringResource(key: "holder_helpdesk_configuration", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Contact
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_contact_title = Rswift.StringResource(key: "holder_helpdesk_contact_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Controle klaar
       ///
       /// Locales: en, nl
@@ -2968,6 +2993,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_checkForBSN_title = Rswift.StringResource(key: "holder_checkForBSN_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Helpdesk
+      ///
+      /// Locales: en, nl
+      static let holder_helpInfo_helpdesk = Rswift.StringResource(key: "holder_helpInfo_helpdesk", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Helpdesk
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_title = Rswift.StringResource(key: "holder_helpdesk_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Het bewijs dat je probeert toe te voegen staat al in de app. Je hoeft het niet nog een keer te scannen.
       ///
       /// Locales: en, nl
@@ -3032,10 +3065,14 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_storedEvents_button_handleData = Rswift.StringResource(key: "holder_storedEvents_button_handleData", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Hoe het werkt
+      /// nl translation: Hulp & Info
       ///
       /// Locales: en, nl
-      static let verifierMenuScaninstructions = Rswift.StringResource(key: "verifier.menu.scaninstructions", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      static let holder_menu_helpInfo = Rswift.StringResource(key: "holder_menu_helpInfo", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Hulp & Informatie
+      ///
+      /// Locales: en, nl
+      static let holder_helpInfo_title = Rswift.StringResource(key: "holder_helpInfo_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Identificatiegegevens: %@
       ///
       /// Locales: en, nl
@@ -3636,6 +3673,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderMenuFaq = Rswift.StringResource(key: "holder.menu.faq", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Meestgestelde vragen
+      ///
+      /// Locales: en, nl
+      static let verifierMenuSupport = Rswift.StringResource(key: "verifier.menu.support", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Menu 
       ///
       /// Locales: en, nl
@@ -3868,6 +3909,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let appstatus_diskfull_body = Rswift.StringResource(key: "appstatus_diskfull_body", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Ondersteuning
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_support_title = Rswift.StringResource(key: "holder_helpdesk_support_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Ongeldige gegevens verwijderd
       ///
       /// Locales: en, nl
@@ -4272,10 +4317,6 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton = Rswift.StringResource(key: "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: Support
-      ///
-      /// Locales: en, nl
-      static let verifierMenuSupport = Rswift.StringResource(key: "verifier.menu.support", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Te vaak geprobeerd
       ///
       /// Locales: en, nl
@@ -4812,6 +4853,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holder_fuzzyMatching_why_title = Rswift.StringResource(key: "holder_fuzzyMatching_why_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:
+      ///
+      /// Locales: en, nl
+      static let holder_helpdesk_support_message = Rswift.StringResource(key: "holder_helpdesk_support_message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Wat betekent dit?
       ///
       /// Locales: en, nl
@@ -4972,6 +5017,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderConsentTitle = Rswift.StringResource(key: "holder.consent.title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Zo werkt scannen
+      ///
+      /// Locales: en, nl
+      static let verifierMenuScaninstructions = Rswift.StringResource(key: "verifier.menu.scaninstructions", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
       /// nl translation: Zonder akkoord met de bijgewerkte voorwaarden heb je geen toegang tot de CoronaCheck-app.
       ///
       /// Locales: en, nl
@@ -5903,6 +5952,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder_dashboard_empty_domestic_3Gand1Gaccess_message", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: <p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b>Op 0800-1421 (gratis). Of als je vanuit het buitenland belt: +31 70 750 37 20.</p><p>Telefonisch bereikbaar van maandag t/m zondag 08:00 - 20:00 uur.</p><p><b>Of stuur een e-mail naar:</b><br />helpdesk@coronacheck.nl</p>
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_contact_message(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_contact_message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_contact_message"
+        }
+
+        return NSLocalizedString("holder_helpdesk_contact_message", bundle: bundle, comment: "")
       }
 
       /// nl translation: <p>Check vooraf of je een bewijs voor <a href="https://coronacheck.nl/toegangsregels/3g-1g-toegang">3G- of 1G toegang</a> nodig hebt. Laat ook je identiteitsbewijs zien.</p>
@@ -7693,6 +7757,21 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1, value2)
       }
 
+      /// nl translation: App versie:
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_appVersion(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_appVersion", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_appVersion"
+        }
+
+        return NSLocalizedString("holder_helpdesk_appVersion", bundle: bundle, comment: "")
+      }
+
       /// nl translation: Begin opnieuw
       ///
       /// Locales: en, nl
@@ -8494,6 +8573,36 @@ struct R: Rswift.Validatable {
 
         let format = NSLocalizedString("general.menu.configVersion", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1, value2)
+      }
+
+      /// nl translation: Configuratie:
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_configuration(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_configuration", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_configuration"
+        }
+
+        return NSLocalizedString("holder_helpdesk_configuration", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Contact
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_contact_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_contact_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_contact_title"
+        }
+
+        return NSLocalizedString("holder_helpdesk_contact_title", bundle: bundle, comment: "")
       }
 
       /// nl translation: Controle klaar
@@ -11736,6 +11845,36 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder_checkForBSN_title", bundle: bundle, comment: "")
       }
 
+      /// nl translation: Helpdesk
+      ///
+      /// Locales: en, nl
+      static func holder_helpInfo_helpdesk(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpInfo_helpdesk", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpInfo_helpdesk"
+        }
+
+        return NSLocalizedString("holder_helpInfo_helpdesk", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Helpdesk
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_title"
+        }
+
+        return NSLocalizedString("holder_helpdesk_title", bundle: bundle, comment: "")
+      }
+
       /// nl translation: Het bewijs dat je probeert toe te voegen staat al in de app. Je hoeft het niet nog een keer te scannen.
       ///
       /// Locales: en, nl
@@ -11978,19 +12117,34 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder_storedEvents_button_handleData", bundle: bundle, comment: "")
       }
 
-      /// nl translation: Hoe het werkt
+      /// nl translation: Hulp & Info
       ///
       /// Locales: en, nl
-      static func verifierMenuScaninstructions(preferredLanguages: [String]? = nil) -> String {
+      static func holder_menu_helpInfo(preferredLanguages: [String]? = nil) -> String {
         guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("verifier.menu.scaninstructions", bundle: hostingBundle, comment: "")
+          return NSLocalizedString("holder_menu_helpInfo", bundle: hostingBundle, comment: "")
         }
 
         guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "verifier.menu.scaninstructions"
+          return "holder_menu_helpInfo"
         }
 
-        return NSLocalizedString("verifier.menu.scaninstructions", bundle: bundle, comment: "")
+        return NSLocalizedString("holder_menu_helpInfo", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Hulp & Informatie
+      ///
+      /// Locales: en, nl
+      static func holder_helpInfo_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpInfo_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpInfo_title"
+        }
+
+        return NSLocalizedString("holder_helpInfo_title", bundle: bundle, comment: "")
       }
 
       /// nl translation: Identificatiegegevens: %@
@@ -14267,6 +14421,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder.menu.faq", bundle: bundle, comment: "")
       }
 
+      /// nl translation: Meestgestelde vragen
+      ///
+      /// Locales: en, nl
+      static func verifierMenuSupport(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("verifier.menu.support", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "verifier.menu.support"
+        }
+
+        return NSLocalizedString("verifier.menu.support", bundle: bundle, comment: "")
+      }
+
       /// nl translation: Menu 
       ///
       /// Locales: en, nl
@@ -15139,6 +15308,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("appstatus_diskfull_body", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Ondersteuning
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_support_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_support_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_support_title"
+        }
+
+        return NSLocalizedString("holder_helpdesk_support_title", bundle: bundle, comment: "")
       }
 
       /// nl translation: Ongeldige gegevens verwijderd
@@ -16664,21 +16848,6 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton", bundle: bundle, comment: "")
-      }
-
-      /// nl translation: Support
-      ///
-      /// Locales: en, nl
-      static func verifierMenuSupport(preferredLanguages: [String]? = nil) -> String {
-        guard let preferredLanguages = preferredLanguages else {
-          return NSLocalizedString("verifier.menu.support", bundle: hostingBundle, comment: "")
-        }
-
-        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
-          return "verifier.menu.support"
-        }
-
-        return NSLocalizedString("verifier.menu.support", bundle: bundle, comment: "")
       }
 
       /// nl translation: Te vaak geprobeerd
@@ -18701,6 +18870,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("holder_fuzzyMatching_why_title", bundle: bundle, comment: "")
       }
 
+      /// nl translation: Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:
+      ///
+      /// Locales: en, nl
+      static func holder_helpdesk_support_message(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("holder_helpdesk_support_message", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "holder_helpdesk_support_message"
+        }
+
+        return NSLocalizedString("holder_helpdesk_support_message", bundle: bundle, comment: "")
+      }
+
       /// nl translation: Wat betekent dit?
       ///
       /// Locales: en, nl
@@ -19299,6 +19483,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("holder.consent.title", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Zo werkt scannen
+      ///
+      /// Locales: en, nl
+      static func verifierMenuScaninstructions(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("verifier.menu.scaninstructions", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "verifier.menu.scaninstructions"
+        }
+
+        return NSLocalizedString("verifier.menu.scaninstructions", bundle: bundle, comment: "")
       }
 
       /// nl translation: Zonder akkoord met de bijgewerkte voorwaarden heb je geen toegang tot de CoronaCheck-app.

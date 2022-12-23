@@ -11,20 +11,31 @@ import UIKit
 class Button: TappableButton {
 	
 	enum ButtonType {
-		/// Rounded, blue background, white text
-		case roundedBlue
+		
 		/// Used for the QRCardView ShowQR Button
 		case narrowRoundedBlue
+
+		/// Rounded, blue background, white text
+		case roundedBlue
+				
 		/// Rounded, white background, dark text
 		case roundedWhite
+		
 		/// Rounded, clear background, dark border
 		case roundedClear
+		
 		/// Rounded, white background, blue text, blue border
 		case roundedBlueBorder
+
+		/// Rounded, white background, blue text, blue border
+		case roundedRedBorder
+		
 		/// Rounded, white background, black text, black border
 		case roundedBlackBorder
+		
 		/// Text only, blue text
 		case textLabelBlue
+		
 		/// Rounded, blue background, white text, right image with label in center
 		case roundedBlueImage
 		
@@ -34,6 +45,8 @@ class Button: TappableButton {
 					return isEnabled ? C.primaryBlue()! : C.grey5()!
 				case .roundedWhite, .roundedBlueBorder, .roundedBlackBorder:
 					return isEnabled ? C.white()! : C.grey2()!
+				case .roundedRedBorder:
+					return C.white()!
 				case .roundedClear, .textLabelBlue:
 					return .clear
 			}
@@ -51,6 +64,8 @@ class Button: TappableButton {
 					return isEnabled ? C.primaryBlue()! : C.grey2()!
 				case .roundedBlueBorder:
 					return isEnabled ? C.primaryBlue()! : C.grey2()!
+				case .roundedRedBorder:
+					return isEnabled ? C.ccError()! : C.ccError()!.withAlphaComponent(0.4)
 			}
 		}
 		
@@ -67,6 +82,7 @@ class Button: TappableButton {
 				case .roundedBlue: return .topBottom(10) + .leftRight(56)
 				case .narrowRoundedBlue: return .topBottom(10) + .leftRight(32)
 				case .roundedBlueImage: return .topBottom(15) + .left(56) + .right(66)
+				case .roundedRedBorder: return .topBottom(15) + .leftRight(56)
 				default: return .topBottom(10) + .leftRight(32)
 			}
 		}
@@ -82,6 +98,8 @@ class Button: TappableButton {
 			switch self {
 				case .roundedBlueBorder:
 					return isEnabled ? C.primaryBlue()! : C.grey2()!
+				case .roundedRedBorder:
+					return isEnabled ? C.ccError()! : C.ccError()!.withAlphaComponent(0.4)
 				case .roundedBlackBorder:
 					return C.black()!
 				default:
@@ -91,8 +109,13 @@ class Button: TappableButton {
 		
 		var borderWidth: CGFloat {
 			switch self {
-				case .roundedClear, .roundedBlueBorder, .roundedBlackBorder: return 1
-				default: return 0
+				case .roundedClear,
+					.roundedBlueBorder,
+					.roundedBlackBorder,
+					.roundedRedBorder:
+					return 1
+				default:
+					return 0
 			}
 		}
 		

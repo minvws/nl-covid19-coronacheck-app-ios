@@ -13,7 +13,7 @@ class ListStoredEventsView: ScrolledStackView {
 	private struct ViewTraits {
 		
 		enum TopView {
-			static let inset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 24, right: 20)
+			static let inset: UIEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 24, right: 20)
 		}
 
 		enum Title {

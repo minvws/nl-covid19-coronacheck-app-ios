@@ -10,13 +10,12 @@ import UIKit
 class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	
 	enum Item {
-		case row(title: String, subTitle: String?, icon: UIImage, action: () -> Void )
+		case row(title: String, subTitle: String?, icon: UIImage, overrideColor: UIColor?, action: () -> Void)
 		case sectionBreak
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		title = L.general_menu()
 		
 		setupBindings()
 		addBackButton(customAction: nil)
@@ -24,17 +23,22 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	
 	private func setupBindings() {
 
+		viewModel.$title.binding = { [weak self] title in
+			self?.title = title
+		}
+		
 		viewModel.$items.binding = { [weak self] items in
 			guard let self else { return }
 			self.sceneView.stackView.removeArrangedSubviews()
 			
 			items.enumerated().forEach { index, item in
 				switch item {
-					case let .row(title, subTitle, icon, action):
+					case let .row(title, subTitle, icon, overrideColor, action):
 					
 						let row = MenuRowView()
 						row.title = title
 						row.icon = icon
+						row.overrideColor = overrideColor
 						row.action = action
 						row.shouldShowBottomBorder = {
 							// Check if the next item is `case .row`. If so, show a bottom border on this row.

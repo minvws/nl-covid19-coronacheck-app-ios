@@ -645,6 +645,15 @@
 "holder_fuzzyMatching_onboarding_thirdPage_title" = "Have other names rewritten";
 "holder_fuzzyMatching_why_body" = "<p>Your name must be written the same way on all vaccinations, test results and certificates in the app. Otherwise, CoronaCheck will think of them as belonging to different people. Therefore, please choose one name.</p><p>Only vaccinations and test results connected to the name you choose will be saved. The others will be deleted. Do you want to retrieve those vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test.</p><p>As soon as your name is adjusted, you can add the vaccinations and test results to the app again.</p>";
 "holder_fuzzyMatching_why_title" = "Why do I have to choose one name?";
+"holder_helpInfo_helpdesk" = "Helpdesk";
+"holder_helpInfo_title" = "Help & Information";
+"holder_helpdesk_appVersion" = "App version:";
+"holder_helpdesk_configuration" = "Configuration:";
+"holder_helpdesk_contact_message" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b>0800-1421 (free). Or, if you are calling from abroad: +31 70 750 37 20.</p><p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an e-mail to:</b><br />helpdesk@coronacheck.nl</p>";
+"holder_helpdesk_contact_title" = "Contact";
+"holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
+"holder_helpdesk_support_title" = "Support";
+"holder_helpdesk_title" = "Helpdesk";
 "holder_identityRemoved_banner_button_readmore" = "Read more";
 "holder_identityRemoved_banner_title" = "Your details were updated. Certificates may have been removed as a result.";
 "holder_identityRemoved_moreinfo_body" = "<p>Only vaccination and test details connected to the name you chose were saved (<b>%@</b>).</p><p>The details below have been removed from the app:</p>%@<p>Do you want to retrieve your vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test. You can add them to the app again after.</p>";
@@ -722,6 +731,7 @@
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
+"holder_menu_helpInfo" = "Help & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 "holder_menu_paperproof_subTitle" = "Add (paper) certificate";
 "holder_menu_paperproof_title" = "Scan to add certificate";
@@ -932,8 +942,8 @@
 /* MARK: - Verifier Menu */
 "verifier.menu.dashboard" = "Scan QR codes";
 "verifier.menu.privacy" = "Acceptable use policy";
-"verifier.menu.scaninstructions" = "How it works";
-"verifier.menu.support" = "Support";
+"verifier.menu.scaninstructions" = "How to scan";
+"verifier.menu.support" = "Frequently asked questions";
 "verifier.onboarding.message.safely" = "You can use this app to check your visitors' coronavirus passes. This way your location can stay open safely.";
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Safely opening your location";

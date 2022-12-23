@@ -19,8 +19,6 @@ enum AboutThisAppMenuIdentifier: String {
 
 	case reset
 	
-	case storedEvents
-	
 	case deeplink
 
 	case scanlog
@@ -46,7 +44,6 @@ class AboutThisAppViewModel {
 
 	enum Outcome: Equatable {
 		case openURL(_: URL, inApp: Bool)
-		case userWishesToSeeStoredEvents
 		case userWishesToOpenScanLog
 		case coordinatorShouldRestart
 	}
@@ -101,15 +98,45 @@ class AboutThisAppViewModel {
 			setupMenuVerifier()
 		}
 	}
+
+	func menuOptionSelected(_ identifier: AboutThisAppMenuIdentifier) {
+		
+		switch identifier {
+			case .privacyStatement:
+				openPrivacyPage()
+			case .accessibility:
+				openAccessibilityPage()
+			case .colophon:
+				openUrlString(L.holderUrlColophon())
+			case .reset:
+				didTapResetApp()
+			case .deeplink:
+				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+			case .scanlog:
+				openScanLog()
+			case .useNoDisclosurePolicy:
+				setDisclosurePolicy(["0G"], message: "New policy: No policy")
+			case .use1GDisclosurePolicy:
+				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag], message: "New policy: 1G")
+			case .use3GDisclosurePolicy:
+				setDisclosurePolicy([DisclosurePolicy.policy3G.featureFlag], message: "New policy: 3G")
+			case .use1GAnd3GDisclosurePolicy:
+				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag, DisclosurePolicy.policy3G.featureFlag], message: "New policy: 1G + 3G")
+			case .useConfigDisclosurePolicy:
+				setDisclosurePolicy([], message: "New policy: use the config")
+		}
+	}
+	
+	func didTapResetApp() {
+		showClearDataAlert()
+	}
 	
 	private func setupMenuHolder() {
 
 		var list: [AboutThisAppMenuOption] = [
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()),
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
-			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon()),
-			AboutThisAppMenuOption(identifier: .storedEvents, name: L.holder_menu_storedEvents()),
-			AboutThisAppMenuOption(identifier: .reset, name: L.holder_menu_resetApp())
+			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
 		if Configuration().getEnvironment() != "production" {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
@@ -157,36 +184,6 @@ class AboutThisAppViewModel {
 		}
 	}
 
-	func menuOptionSelected(_ identifier: AboutThisAppMenuIdentifier) {
-
-		switch identifier {
-			case .privacyStatement:
-				openPrivacyPage()
-			case .accessibility:
-				openAccessibilityPage()
-			case .colophon:
-				openUrlString(L.holderUrlColophon())
-			case .reset:
-				showClearDataAlert()
-			case .storedEvents:
-				outcomeHandler(.userWishesToSeeStoredEvents)
-			case .deeplink:
-				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
-			case .scanlog:
-				openScanLog()
-			case .useNoDisclosurePolicy:
-				setDisclosurePolicy(["0G"], message: "New policy: No policy")
-			case .use1GDisclosurePolicy:
-				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag], message: "New policy: 1G")
-			case .use3GDisclosurePolicy:
-				setDisclosurePolicy([DisclosurePolicy.policy3G.featureFlag], message: "New policy: 3G")
-			case .use1GAnd3GDisclosurePolicy:
-				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag, DisclosurePolicy.policy3G.featureFlag], message: "New policy: 1G + 3G")
-			case .useConfigDisclosurePolicy:
-				setDisclosurePolicy([], message: "New policy: use the config")
-		}
-	}
-
 	private func openPrivacyPage() {
 
 		switch flavor {
@@ -230,13 +227,13 @@ class AboutThisAppViewModel {
 		)
 	}
 
-	func wipePersistedData() {
+	private func wipePersistedData() {
 
 		Current.wipePersistedData(flavor: flavor)
 		outcomeHandler(.coordinatorShouldRestart)
 	}
 
-	func openScanLog() {
+	private func openScanLog() {
 
 		outcomeHandler(.userWishesToOpenScanLog)
 	}
