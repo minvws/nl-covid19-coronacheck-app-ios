@@ -30,7 +30,7 @@
 "general.list.accessibility.start" = "Start of list";
 "general.loading" = "Loading";
 /* Configuratie ABC123, 13-10-2021 00:00 */
-"general.menu.configVersion" = "Configuration %@, %@";
+"general.menu.configVersion" = "%@, %@";
 "general.menu.open" = "Open menu";
 "general.menu.version" = "App version %@ (%@)";
 "general.netherlands" = "The Netherlands";
@@ -317,7 +317,7 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
-"holder.launch.version" = "App version %@ (build %@)";
+"holder.launch.version" = "%@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in with your DigiD";
 "holder.location.ggd.title" = "GGD";
 "holder.location.message" = "Does the test point out you don't have coronavirus? Then you can use the test result to create a certificate. Please specify where you were tested.";
@@ -649,7 +649,9 @@
 "holder_helpInfo_title" = "Help & Information";
 "holder_helpdesk_appVersion" = "App version:";
 "holder_helpdesk_configuration" = "Configuration:";
-"holder_helpdesk_contact_message" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b>0800-1421 (free). Or, if you are calling from abroad: +31 70 750 37 20.</p><p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an e-mail to:</b><br />helpdesk@coronacheck.nl</p>";
+"holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br /><a href=\"tel:0800-1421\">0800-1421</a> (free).</p>";
+"holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
+"holder_helpdesk_contact_message_line3" = "<p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an e-mail to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
 "holder_helpdesk_support_title" = "Support";
