@@ -65,7 +65,6 @@ class HelpdeskViewControllerTests: XCTestCase {
 		
 		sut = HelpdeskViewController(viewModel: viewModel)
 		
-		
 		// When
 		loadView()
 		
