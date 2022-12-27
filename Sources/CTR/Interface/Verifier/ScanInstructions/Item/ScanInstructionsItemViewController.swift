@@ -14,41 +14,15 @@ protocol ScanInstructionsItemViewControllerDelegate: AnyObject {
     func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
 }
 
-class ScanInstructionsItemViewController: BaseViewController {
+class ScanInstructionsItemViewController: GenericViewController<ScanInstructionsItemView, ScanInstructionsItemViewModel> {
 	
-	/// The model
-	private let viewModel: ScanInstructionsItemViewModel
+	/// The delegate
+	weak var delegate: ScanInstructionsItemViewControllerDelegate?
 	
-	/// The view
-	let sceneView = ScanInstructionsItemView()
-    
-    /// The delegate
-    weak var delegate: ScanInstructionsItemViewControllerDelegate?
-	
-	/// Initializer
-	/// - Parameter viewModel: view model
-	init(viewModel: ScanInstructionsItemViewModel) {
-		
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
+	/// Use accessibility scroll event to navigate.
+	override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		return delegate?.onAccessibilityScroll(direction) ?? false
 	}
-	
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	override func loadView() {
-		
-		view = sceneView
-	}
-    
-    /// Use accessibility scroll event to navigate.
-    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        return delegate?.onAccessibilityScroll(direction) ?? false
-    }
 	
 	override func viewDidLoad() {
 		

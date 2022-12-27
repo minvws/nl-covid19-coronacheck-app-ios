@@ -7,32 +7,9 @@
 
 import UIKit
 
-final class RiskSettingStartViewController: BaseViewController {
-	
-	private let viewModel: RiskSettingStartViewModel
-
-	let sceneView = RiskSettingStartView()
+final class RiskSettingStartViewController: GenericViewController<RiskSettingStartView, RiskSettingStartViewModel> {
 	
 	override var enableSwipeBack: Bool { true }
-	
-	init(viewModel: RiskSettingStartViewModel) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	
-	override func loadView() {
-
-		view = sceneView
-	}
 	
 	override func viewDidLoad() {
 		

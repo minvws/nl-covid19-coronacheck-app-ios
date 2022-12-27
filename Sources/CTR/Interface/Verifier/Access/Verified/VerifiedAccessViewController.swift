@@ -7,32 +7,9 @@
 
 import UIKit
 
-final class VerifiedAccessViewController: BaseViewController {
+final class VerifiedAccessViewController: GenericViewController<VerifiedAccessView, VerifiedAccessViewModel> {
 	
 	override var enableSwipeBack: Bool { false }
-	
-	private let viewModel: VerifiedAccessViewModel
-
-	let sceneView = VerifiedAccessView()
-
-	init(viewModel: VerifiedAccessViewModel) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	
-	override func loadView() {
-
-		view = sceneView
-	}
 
 	override func viewDidLoad() {
 
