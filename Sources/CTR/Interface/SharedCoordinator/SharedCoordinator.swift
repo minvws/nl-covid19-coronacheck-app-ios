@@ -154,8 +154,8 @@ extension SharedCoordinator: OpenUrlProtocol {
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		var shouldOpenInApp = inApp
-		if url.scheme == "tel" || url.scheme == "itms-apps" {
-			// Do not open phone numbers or appstore links in app, doesn't work & will crash.
+		if !(url.scheme == "http" || url.scheme == "https") {
+			// Other URL schemes can't be opened in SFSafariViewController, - it doesn't work & will crash.
 			shouldOpenInApp = false
 		}
 
