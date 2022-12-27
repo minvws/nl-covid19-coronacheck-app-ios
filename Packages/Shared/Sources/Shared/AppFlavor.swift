@@ -7,16 +7,16 @@
 
 import Foundation
 
-/// The Application flavor, used to determine if we are a holder or a verifier
+/// The Application flavor, used to determine if we are the CoronaCheck or the CoronaCheck Scanner app.
 public enum AppFlavor: String {
 	
-	/// We are a holder
+	/// We are the CoronaCheck app (holder of the QRs)
 	case holder
 	
-	/// We are a verifier
+	/// We are the CoronaCheck Scanner app (verifing the QRs)
 	case verifier
 	
-	/// The flavor of the app
+	/// The flavor of the app, defaults to holder
 	public static var flavor: AppFlavor {
 		
 		if let value = Bundle.main.infoDictionary?["APP_FLAVOR"] as? String,

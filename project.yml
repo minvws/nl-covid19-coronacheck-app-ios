@@ -508,6 +508,9 @@ schemes:
         "-shouldInjectView": true
     test:
       targets:
+        - package: Shared/SharedTests
+          randomExecutionOrder: true
+          parallelizable: false
         - package: Transport/TransportTests
           randomExecutionOrder: true
           parallelizable: false
