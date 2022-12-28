@@ -185,7 +185,6 @@ class AppStatusViewControllerTests: XCTestCase {
 	}
 
 	func test_noInternet() {
-
 		// Given
 		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
 		sut = AppStatusViewController(viewModel: viewModel)

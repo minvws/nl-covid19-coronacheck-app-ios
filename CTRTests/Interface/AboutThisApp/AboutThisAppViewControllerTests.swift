@@ -29,7 +29,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 
 		outcomes = [AboutThisAppViewModel.Outcome]()
 		let viewModel = AboutThisAppViewModel(
-			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)
@@ -73,7 +72,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		let viewModel = AboutThisAppViewModel(
-			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				self.outcomes.append(outcome)
@@ -101,7 +99,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
-			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)
@@ -127,7 +124,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
-			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)
@@ -156,7 +152,6 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
-			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)

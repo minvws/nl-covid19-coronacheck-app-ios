@@ -12,6 +12,7 @@ import Reachability
 import Shared
 import Transport
 import OpenIDConnect
+import Inject
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -346,7 +347,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func navigateToAboutThisApp() {
 		
-		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
+		let viewModel = AboutThisAppViewModel(flavor: AppFlavor.flavor) { [weak self] outcome in
 			guard let self else { return }
 			switch outcome {
 				case let .openURL(url, inApp):
@@ -726,7 +727,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.openUrl(faqUrl, inApp: true)
 		}
 		
-		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) {}
+		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak self] in
+			self?.userWishesToSeeHelpdesk()
+		}
  
 		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: nil) { [weak self] in
 			self?.navigateToAboutThisApp()
@@ -763,6 +766,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = ListStoredEventsViewController(
 			viewModel: ListStoredEventsViewModel(coordinator: self)
 		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeHelpdesk() {
+		
+		let viewController = Inject.ViewControllerHost({
+			let viewController = HelpdeskViewController(viewModel: HelpdeskViewModel(
+				flavor: AppFlavor.flavor,
+				versionSupplier: self.versionSupplier,
+				urlHandler: { [weak self] url in
+					self?.openUrl(url, inApp: true)
+				}
+			))
+			return viewController
+		}())
+		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
