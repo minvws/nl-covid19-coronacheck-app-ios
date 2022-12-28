@@ -66,7 +66,7 @@ final class HelpdeskView: ScrolledStackView {
 		
 	private let dividerView: UIView = {
 		let view = UIView()
-		view.backgroundColor = C.grey3()?.withAlphaComponent(0.75)
+		view.backgroundColor = C.grey3a()
 		return view
 	}()
 		

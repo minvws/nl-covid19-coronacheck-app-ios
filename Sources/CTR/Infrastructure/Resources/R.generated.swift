@@ -88,7 +88,7 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
 
-  /// This `R.color` struct is generated, and contains static references to 19 colors.
+  /// This `R.color` struct is generated, and contains static references to 20 colors.
   struct color {
     /// Color `Black`.
     static let black = Rswift.ColorResource(bundle: R.hostingBundle, name: "Black")
@@ -104,6 +104,8 @@ struct R: Rswift.Validatable {
     static let grey2 = Rswift.ColorResource(bundle: R.hostingBundle, name: "Grey2")
     /// Color `Grey3`.
     static let grey3 = Rswift.ColorResource(bundle: R.hostingBundle, name: "Grey3")
+    /// Color `Grey3a`.
+    static let grey3a = Rswift.ColorResource(bundle: R.hostingBundle, name: "Grey3a")
     /// Color `Grey4`.
     static let grey4 = Rswift.ColorResource(bundle: R.hostingBundle, name: "Grey4")
     /// Color `Grey5`.
@@ -189,6 +191,15 @@ struct R: Rswift.Validatable {
     @available(iOS 11.0, *)
     static func grey3(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
       return UIKit.UIColor(resource: R.color.grey3, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIColor(named: "Grey3a", bundle: ..., traitCollection: ...)`
+    @available(tvOS 11.0, *)
+    @available(iOS 11.0, *)
+    static func grey3a(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIColor? {
+      return UIKit.UIColor(resource: R.color.grey3a, compatibleWith: traitCollection)
     }
     #endif
 
@@ -353,6 +364,14 @@ struct R: Rswift.Validatable {
     @available(watchOSApplicationExtension 4.0, *)
     static func grey3(_: Void = ()) -> UIKit.UIColor? {
       return UIKit.UIColor(named: R.color.grey3.name)
+    }
+    #endif
+
+    #if os(watchOS)
+    /// `UIColor(named: "Grey3a", bundle: ..., traitCollection: ...)`
+    @available(watchOSApplicationExtension 4.0, *)
+    static func grey3a(_: Void = ()) -> UIKit.UIColor? {
+      return UIKit.UIColor(named: R.color.grey3a.name)
     }
     #endif
 
