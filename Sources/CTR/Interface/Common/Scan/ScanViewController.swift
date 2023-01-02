@@ -38,6 +38,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 	// MARK: View lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		navigationItem.largeTitleDisplayMode = .never
 
 		navigationControllerTeardown = { [weak self] in
 			// Reset navigation title color			

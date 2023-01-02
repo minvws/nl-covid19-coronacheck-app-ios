@@ -20,12 +20,11 @@ extension UIViewController {
 			NSAttributedString.Key.font: Fonts.title1Montserrat
 		]
 		
-		if #available(iOS 13.0, *) {
+		if #available(iOS 15.0, *) {
 			let appearance = UINavigationBarAppearance()
 			appearance.configureWithTransparentBackground()
 			appearance.titleTextAttributes = titleTextAttributes
 			appearance.largeTitleTextAttributes = largeTitleTextAttributes
-			appearance.backgroundColor = .white
 			appearance.shadowColor = .clear
 			navigationController?.navigationBar.standardAppearance = appearance
 			navigationController?.navigationBar.compactAppearance = appearance
