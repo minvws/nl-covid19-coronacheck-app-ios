@@ -19,7 +19,6 @@ class HelpdeskViewController: TraitWrappedGenericViewController<HelpdeskView, He
 	
 	func setupBindings() {
 
-		sceneView.title = L.holder_helpdesk_title()
 		sceneView.contactSubtitle = L.holder_helpdesk_contact_title()
 		sceneView.contactMessage1 = L.holder_helpdesk_contact_message_line1()
 		sceneView.contactMessage2 = L.holder_helpdesk_contact_message_line2()
