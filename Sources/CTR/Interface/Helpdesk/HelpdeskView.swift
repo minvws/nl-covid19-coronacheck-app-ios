@@ -21,11 +21,6 @@ final class HelpdeskView: ScrolledStackView {
 			static let kerning: CGFloat = -0.26
 		}
 	}
-	
-	private let titleLabel: Label = {
-
-		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
 		
 	private let contactSubtitleLabel: Label = {
 
@@ -110,8 +105,6 @@ final class HelpdeskView: ScrolledStackView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		stackView.addArrangedSubview(titleLabel)
-		
 		stackView.addArrangedSubview(contactSubtitleLabel)
 		
 		contactMessageStackView.addArrangedSubview(contactMessageTextView1)
@@ -140,15 +133,6 @@ final class HelpdeskView: ScrolledStackView {
 	}
 	
 	// MARK: Public Access
-
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.Title.lineHeight,
-				kerning: ViewTraits.Title.kerning
-			)
-		}
-	}
 	
 	var contactSubtitle: String? {
 		didSet {

@@ -8,18 +8,22 @@
 import UIKit
 
 class HelpdeskViewController: TraitWrappedGenericViewController<HelpdeskView, HelpdeskViewModel> {
-
+	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
+		// The animation is squiffy otherwise
+		if #available(iOS 15.0, *) {
+			navigationItem.largeTitleDisplayMode = .always
+		}
+		title = L.holder_helpdesk_title()
+		
 		setupBindings()
 		addBackButton()
 	}
 	
 	func setupBindings() {
 
-		sceneView.title = L.holder_helpdesk_title()
 		sceneView.contactSubtitle = L.holder_helpdesk_contact_title()
 		sceneView.contactMessage1 = L.holder_helpdesk_contact_message_line1()
 		sceneView.contactMessage2 = L.holder_helpdesk_contact_message_line2()

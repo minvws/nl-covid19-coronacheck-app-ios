@@ -9,6 +9,11 @@ import UIKit
 
 class NavigationController: UINavigationController {
 
+	convenience init() {
+		self.init(nibName: nil, bundle: nil)
+		navigationBar.prefersLargeTitles = true
+	}
+	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 
 		if #available(iOS 13.0, *) {

@@ -15,12 +15,19 @@ extension UIViewController {
 			NSAttributedString.Key.foregroundColor: C.black()!,
 			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
 		]
+		let largeTitleTextAttributes = [
+			NSAttributedString.Key.foregroundColor: C.black()!,
+			NSAttributedString.Key.font: Fonts.title1Montserrat
+		]
 		
 		if #available(iOS 15.0, *) {
 			let appearance = UINavigationBarAppearance()
 			appearance.configureWithTransparentBackground()
 			appearance.titleTextAttributes = titleTextAttributes
+			appearance.largeTitleTextAttributes = largeTitleTextAttributes
+			appearance.shadowColor = .clear
 			navigationController?.navigationBar.standardAppearance = appearance
+			navigationController?.navigationBar.compactAppearance = appearance
 			navigationController?.navigationBar.scrollEdgeAppearance = appearance
 		} else {
 			navigationController?.navigationBar.isTranslucent = true

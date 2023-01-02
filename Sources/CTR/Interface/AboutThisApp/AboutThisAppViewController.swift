@@ -12,6 +12,11 @@ final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutT
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		// The animation is squiffy otherwise
+		if #available(iOS 15.0, *) {
+			navigationItem.largeTitleDisplayMode = .always
+		}
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
@@ -27,7 +32,7 @@ final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutT
 			viewModel?.didTapResetApp()
 		}
 	}
-
+	
 	private func setupMenuOptions() {
 
 		for menu in viewModel.menu {

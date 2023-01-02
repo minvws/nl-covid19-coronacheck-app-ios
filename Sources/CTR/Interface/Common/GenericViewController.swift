@@ -111,6 +111,8 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 		
 		super.viewDidLoad()
 		
+		navigationItem.largeTitleDisplayMode = .never // overriding in subclass is okay.
+		
 		if #available(iOS 13.0, *) {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
