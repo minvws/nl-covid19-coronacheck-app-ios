@@ -8,11 +8,13 @@
 import UIKit
 
 class HelpdeskViewController: TraitWrappedGenericViewController<HelpdeskView, HelpdeskViewModel> {
-
+	
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-
+		navigationItem.largeTitleDisplayMode = .always
+		title = L.holder_helpdesk_title()
+		
 		setupBindings()
 		addBackButton()
 	}
