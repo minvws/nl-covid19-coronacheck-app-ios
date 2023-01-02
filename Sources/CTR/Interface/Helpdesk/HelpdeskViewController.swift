@@ -12,7 +12,10 @@ class HelpdeskViewController: TraitWrappedGenericViewController<HelpdeskView, He
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-		navigationItem.largeTitleDisplayMode = .always
+		// The animation is squiffy otherwise
+		if #available(iOS 15.0, *) {
+			navigationItem.largeTitleDisplayMode = .always
+		}
 		title = L.holder_helpdesk_title()
 		
 		setupBindings()
