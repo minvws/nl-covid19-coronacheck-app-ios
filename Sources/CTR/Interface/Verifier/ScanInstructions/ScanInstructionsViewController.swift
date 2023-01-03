@@ -100,7 +100,7 @@ class ScanInstructionsViewController: GenericViewController<ScanInstructionsView
 		
 		viewModel.finishScanInstructions()
 	}
-    
+	
 	/// Setup the page controller
 	private func setupPageController() {
 		
@@ -153,18 +153,18 @@ extension ScanInstructionsViewController: PageViewControllerDelegate {
 // MARK: - ScanInstructionsItemViewControllerDelegate
 
 extension ScanInstructionsViewController: ScanInstructionsItemViewControllerDelegate {
-    
-    /// Enables swipe to navigate behaviour for assistive technologies
-    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        if direction == .right {
-            backButtonTapped()
-            return true
-        } else if direction == .left {
-            primaryButtonTapped()
-            return true
-        }
-        return false
-    }
+	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		if direction == .right {
+			backButtonTapped()
+			return true
+		} else if direction == .left {
+			primaryButtonTapped()
+			return true
+		}
+		return false
+	}
 }
 
 // MARK: - PageControlDelegate

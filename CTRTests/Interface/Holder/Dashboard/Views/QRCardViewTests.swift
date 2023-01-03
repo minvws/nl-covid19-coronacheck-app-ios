@@ -208,7 +208,7 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
-        sut.assertImage(precision: 0.90)
+		sut.assertImage(precision: 0.90)
 	}
 
 	func testStackAppearance_level3() {

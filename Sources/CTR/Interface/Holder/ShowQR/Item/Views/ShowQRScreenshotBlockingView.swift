@@ -43,7 +43,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 																					alignment: .center)
 		label.setContentHuggingPriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
-        label.header()
+		label.header()
 
 		return label
 	}()

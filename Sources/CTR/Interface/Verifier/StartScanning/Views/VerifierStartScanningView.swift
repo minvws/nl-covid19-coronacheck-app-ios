@@ -116,7 +116,7 @@ class VerifierStartScanningView: BaseView {
 
 	private let titleLabel: Label = {
 
-        return Label(title1: nil, montserrat: true).multiline().header()
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	private let contentTextView: TextView = {

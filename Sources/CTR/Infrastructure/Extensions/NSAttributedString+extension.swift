@@ -245,31 +245,31 @@ extension NSMutableParagraphStyle {
 		minimumLineHeight = lineHeight * UIContentSizeCategory.currentSizeMultiplier
 	}
 }
-    
-public extension NSMutableAttributedString {
 
-    /// Trims white space and new line at the start and end
+public extension NSMutableAttributedString {
+	
+	/// Trims white space and new line at the start and end
 	func trim() {
 		let characterSet = CharacterSet.whitespacesAndNewlines.inverted
 		
 		// Trim start:
 		let startRange = string.rangeOfCharacter(from: characterSet)
 		guard let startLocation = startRange?.lowerBound else { return }
-
+		
 		let frontTrimRange = NSRange(string.startIndex..<startLocation, in: string)
 		replaceCharacters(in: frontTrimRange, with: "")
 		
 		// Trim end:
 		let endRange = string.rangeOfCharacter(from: characterSet, options: .backwards)
 		guard let endLocation = endRange?.upperBound else { return }
-
+		
 		let endTrimRange = NSRange(endLocation ..< string.endIndex, in: string)
 		replaceCharacters(in: endTrimRange, with: "")
 	}
-
-    /// Strip bullets (<li>) so that they're not read out loud
-    func stripParagraphStyle() {
+	
+	/// Strip bullets (<li>) so that they're not read out loud
+	func stripParagraphStyle() {
 		
 		removeAttribute(.paragraphStyle, range: NSRange(location: 0, length: length))
-    }
+	}
 }

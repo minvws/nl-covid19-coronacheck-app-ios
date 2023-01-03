@@ -51,8 +51,8 @@ class AppStatusView: ScrolledStackWithButtonView {
 
 	/// The title label
 	let titleLabel: Label = {
-
-        return Label(title1: nil, montserrat: true).multiline().header()
+		
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label

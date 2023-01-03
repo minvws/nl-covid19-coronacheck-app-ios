@@ -205,7 +205,7 @@ final class PrivacyConsentView: BaseView {
 	/// - Parameter text: the privacy text
 	func addPrivacyItem(_ text: String, number: Int, total: Int) {
 
-        let textView = TextView(htmlText: text)
+		let textView = TextView(htmlText: text)
 		var accessibiliyHint = ""
 		if number == 1 {
 			accessibiliyHint = L.generalListAccessibilityStart()

@@ -9,16 +9,16 @@ import XCTest
 import CoreFoundation
 
 class RapidlyEvaluateTests: XCTestCase {
-
-    func testPassingImmediately() throws {
+	
+	func testPassingImmediately() throws {
 		
 		let result = rapidlyEvaluate {
 			true
 		}
 		
 		XCTAssertTrue(result)
-    }
-    
+	}
+	
 	func testPassingEventually() throws {
 		
 		let until = Date(timeIntervalSinceNow: 1)
@@ -28,8 +28,8 @@ class RapidlyEvaluateTests: XCTestCase {
 		}
 		
 		XCTAssertTrue(result)
-    }
-    
+	}
+	
 	func testFailingWithTimeout() throws {
 		
 		let until = Date(timeIntervalSinceNow: 2)
@@ -39,5 +39,5 @@ class RapidlyEvaluateTests: XCTestCase {
 		}
 		
 		XCTAssertFalse(result)
-    }
+	}
 }

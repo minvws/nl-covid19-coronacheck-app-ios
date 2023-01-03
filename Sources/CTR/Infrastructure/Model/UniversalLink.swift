@@ -65,5 +65,5 @@ enum UniversalLink: Equatable {
 				return nil
 			}
 		}
-    }
+	}
 }

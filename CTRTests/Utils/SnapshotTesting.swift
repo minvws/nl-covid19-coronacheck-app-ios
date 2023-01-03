@@ -69,12 +69,12 @@ internal extension UIView {
 private extension UIScreen {
 	/// All tests must be run on an iPhone 13-sized Simulator due to differing pixel density issues,
 	/// see issue: https://github.com/pointfreeco/swift-snapshot-testing/issues/174
-    func assertSimulatorIsAllowedForSnapshotTesting() {
-        precondition(
-            bounds.size.width.isEqual(to: 390) && bounds.size.height.isEqual(to: 844),
-            "😯📲 Failure: You must run the snapshot tests on an iPhone 14-sized simulator due to this reason: https://github.com/pointfreeco/swift-snapshot-testing/issues/174\nCurrent size: \(bounds.size)"
-        )
-    }
+	func assertSimulatorIsAllowedForSnapshotTesting() {
+		precondition(
+			bounds.size.width.isEqual(to: 390) && bounds.size.height.isEqual(to: 844),
+			"😯📲 Failure: You must run the snapshot tests on an iPhone 14-sized simulator due to this reason: https://github.com/pointfreeco/swift-snapshot-testing/issues/174\nCurrent size: \(bounds.size)"
+		)
+	}
 }
 
 private extension UIViewController {
