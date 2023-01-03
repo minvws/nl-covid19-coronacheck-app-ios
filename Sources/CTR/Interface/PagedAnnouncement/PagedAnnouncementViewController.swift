@@ -127,7 +127,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 		
 		viewModel.closeButtonTapped()
 	}
-    
+	
 	/// Setup the page controller
 	private func setupPageController() {
 		

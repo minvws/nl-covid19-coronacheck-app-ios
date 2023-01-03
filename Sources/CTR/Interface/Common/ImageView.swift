@@ -8,25 +8,25 @@
 import UIKit
 
 class ImageView: UIImageView {
-    
-    init(imageName: String, highlightedImageName: String? = nil) {
-        super.init(image: UIImage(named: imageName))
-        
-        if let highlightedImageName {
-            highlightedImage = UIImage(named: highlightedImageName)
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    @discardableResult
-    func asIcon() -> Self {
-        contentMode = .center
-        setContentHuggingPriority(.required, for: .horizontal)
-        tintColor = C.primaryBlue()
-        return self
-    }
-    
+	
+	init(imageName: String, highlightedImageName: String? = nil) {
+		super.init(image: UIImage(named: imageName))
+		
+		if let highlightedImageName {
+			highlightedImage = UIImage(named: highlightedImageName)
+		}
+	}
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+	
+	@discardableResult
+	func asIcon() -> Self {
+		contentMode = .center
+		setContentHuggingPriority(.required, for: .horizontal)
+		tintColor = C.primaryBlue()
+		return self
+	}
+	
 }

@@ -8,41 +8,41 @@
 import Foundation
 
 @propertyWrapper struct UserDefaults<T: Codable> {
-
-    let key: String
-    let defaultValue: T
-    
-    init(wrappedValue: T, key: String) {
-
-        self.key = key
-        self.defaultValue = wrappedValue
-    }
-    
-    init(key: String, defaultValue: T) {
-
-        self.key = key
-        self.defaultValue = defaultValue
-    }
-    
-    // JSONDecoder/Encoder doesn't like fragments
-    private struct Wrapped: Codable {
+	
+	let key: String
+	let defaultValue: T
+	
+	init(wrappedValue: T, key: String) {
 		
-        let value: T
-    }
-    
-    var wrappedValue: T {
-        get {
-            guard let data = Foundation.UserDefaults.standard.object(forKey: key) as? Data else {
-                return defaultValue
-            }
-            
-            let wrapped = try? JSONDecoder().decode(Wrapped.self, from: data)
-            return wrapped?.value ?? defaultValue
-        }
-        set {
-            let data = try? JSONEncoder().encode(Wrapped(value: newValue))
-            
-            Foundation.UserDefaults.standard.set(data, forKey: key)
-        }
-    }
+		self.key = key
+		self.defaultValue = wrappedValue
+	}
+	
+	init(key: String, defaultValue: T) {
+		
+		self.key = key
+		self.defaultValue = defaultValue
+	}
+	
+	// JSONDecoder/Encoder doesn't like fragments
+	private struct Wrapped: Codable {
+		
+		let value: T
+	}
+	
+	var wrappedValue: T {
+		get {
+			guard let data = Foundation.UserDefaults.standard.object(forKey: key) as? Data else {
+				return defaultValue
+			}
+			
+			let wrapped = try? JSONDecoder().decode(Wrapped.self, from: data)
+			return wrapped?.value ?? defaultValue
+		}
+		set {
+			let data = try? JSONEncoder().encode(Wrapped(value: newValue))
+			
+			Foundation.UserDefaults.standard.set(data, forKey: key)
+		}
+	}
 }
