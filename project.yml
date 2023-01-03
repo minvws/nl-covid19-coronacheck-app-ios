@@ -14,7 +14,7 @@ packages:
     majorVersion: 1.9.5
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.5.0
+    majorVersion: 4.0.1
   RDOModules:
     github: minvws/nl-rdo-app-ios-modules
     branch: main
