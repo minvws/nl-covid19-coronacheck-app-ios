@@ -18,14 +18,11 @@ class AppStatusView: ScrolledStackWithButtonView {
 		// Margins
 		static let labelSpacing: CGFloat = 24
 		static let imageToLabelSpacing: CGFloat = 43
+		static let bottomStackViewMargin: CGFloat = 20
 		
 		enum Title {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
-		}
-		enum Message {
-			static let lineHeight: CGFloat = 22
-			static let kerning: CGFloat = -0.41
 		}
 	}
 
@@ -54,21 +51,15 @@ class AppStatusView: ScrolledStackWithButtonView {
 		
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
+	
+	let contentTextView: TextView = {
 
-	/// The message label
-	let messageLabel: Label = {
-
-		return Label(body: nil).multiline()
-	}()
-
-	private let topSpacer: UIView = {
-		let view = UIView()
+		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
 		return view
 	}()
 
-	private let spacer: UIView = {
+	private let topSpacer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = .clear
@@ -88,12 +79,11 @@ class AppStatusView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 
 		bottomStackView.addArrangedSubview(titleLabel)
-		bottomStackView.addArrangedSubview(messageLabel)
+		bottomStackView.addArrangedSubview(contentTextView)
 
 		stackView.addArrangedSubview(topSpacer)
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
-		stackView.addArrangedSubview(spacer)
 		
 		stackView.setCustomSpacing(ViewTraits.imageToLabelSpacing, after: imageView)
 	}
@@ -105,12 +95,18 @@ class AppStatusView: ScrolledStackWithButtonView {
 
 		NSLayoutConstraint.activate([
 
-			// Spacer
-			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor),
-
 			topSpacer.heightAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.heightAnchor,
 				multiplier: ViewTraits.topSpacerHeightMultiplier
+			),
+			
+			bottomStackView.leadingAnchor.constraint(
+				equalTo: stackView.leadingAnchor,
+				constant: ViewTraits.bottomStackViewMargin
+			),
+			bottomStackView.trailingAnchor.constraint(
+				equalTo: stackView.trailingAnchor,
+				constant: -ViewTraits.bottomStackViewMargin
 			)
 		])
 	}
@@ -131,14 +127,13 @@ class AppStatusView: ScrolledStackWithButtonView {
 	/// The onboarding message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(
-				ViewTraits.Message.lineHeight,
-				alignment: .center,
-				kerning: ViewTraits.Message.kerning
+			contentTextView.attributedText = .makeFromHtml(
+				text: message,
+				style: NSAttributedString.HTMLStyle(font: Fonts.body, textColor: C.black()!, alignment: .center)
 			)
 		}
 	}
-
+	
 	/// The onboarding mage
 	var image: UIImage? {
 		didSet {

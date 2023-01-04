@@ -330,8 +330,12 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(errors: [ServerError]) {
 		// For now, show internet required.
 		// Todo: add error state.
-		logError("Showing Internet required, while we got: \(errors)")
-		showInternetRequired()
+//		logError("Showing Internet required, while we got: \(errors)")
+//		showInternetRequired()
+		
+		
+		let viewModel = LaunchErrorViewModel()
+		displayAppStatus(with: viewModel)
 	}
 	
 	func updateIsRequired(appStoreUrl: URL) {
