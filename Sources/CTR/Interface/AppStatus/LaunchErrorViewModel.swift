@@ -17,16 +17,18 @@ class LaunchErrorViewModel: AppStatusViewModel {
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 	
 	private let urlHandler: (URL) -> Void
+	private let closeHandler: () -> Void
 	
-	init(urlHandler: @escaping (URL) -> Void) {
+	init(errorCodes: [ErrorCode], urlHandler: @escaping (URL) -> Void, closeHandler: @escaping () -> Void) {
 		
+		self.closeHandler = closeHandler
 		self.urlHandler = urlHandler
-		self.message = Observable(value: L.appstatus_launchError_body("i 123 000 123"))
+		self.message = Observable(value: L.appstatus_launchError_body(ErrorCode.flatten(errorCodes)))
 	}
 	
 	func actionButtonTapped() {
 		
-		exit(0)
+		closeHandler()
 	}
 	
 	func userDidTapURL(url: URL) {

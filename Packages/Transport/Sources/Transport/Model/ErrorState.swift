@@ -8,7 +8,7 @@
 import Foundation
 
 public struct ErrorCode: CustomStringConvertible {
-
+	
 	public struct Flow {
 		public init(value: String) {
 			self.value = value
@@ -16,7 +16,7 @@ public struct ErrorCode: CustomStringConvertible {
 		
 		var value: String
 	}
-
+	
 	public struct Step {
 		public init(value: String) {
 			self.value = value
@@ -24,7 +24,7 @@ public struct ErrorCode: CustomStringConvertible {
 		
 		var value: String
 	}
-
+	
 	public struct ClientCode: Equatable {
 		public init(value: String) {
 			self.value = value
@@ -32,13 +32,13 @@ public struct ErrorCode: CustomStringConvertible {
 		
 		var value: String
 	}
-
+	
 	public var flow: String
 	public var step: String
 	public var provider: String?
 	public var errorCode: String // (the client code)
 	public var detailedCode: Int?
-
+	
 	public init(flow: Flow, step: Step, provider: String? = nil, errorCode: String, detailedCode: Int? = nil) {
 		self.flow = flow.value
 		self.step = step.value
@@ -46,7 +46,7 @@ public struct ErrorCode: CustomStringConvertible {
 		self.errorCode = errorCode
 		self.detailedCode = detailedCode
 	}
-
+	
 	public init(flow: Flow, step: Step, provider: String? = nil, clientCode: ClientCode, detailedCode: Int? = nil) {
 		self.flow = flow.value
 		self.step = step.value
@@ -54,7 +54,7 @@ public struct ErrorCode: CustomStringConvertible {
 		self.errorCode = clientCode.value
 		self.detailedCode = detailedCode
 	}
-
+	
 	public var description: String {
 		// s/xyy/ppp/hhh/bbbbbb (system / flow.step / provider / errorcode / detailederrorcode)
 		var result = "i \(flow)\(step)"
@@ -64,6 +64,45 @@ public struct ErrorCode: CustomStringConvertible {
 			result += " \(detailedCode)"
 		}
 		return result
+	}
+}
+
+extension ErrorCode {
+	
+	public static func flatten(_ errorCodes: [ErrorCode]) -> String {
+
+		let lineBreak = "<br />"
+		let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+		return String(errorString)
+	}
+	
+	public static func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> [ErrorCode] {
+
+		let errorCodes: [ErrorCode] = serverErrors.map { serverError in
+			return convert(serverError, for: flowCode, step: step)
+		}
+		return errorCodes
+	}
+
+	public static func convert(_ serverError: ServerError, for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> ErrorCode {
+
+		switch serverError {
+			case let ServerError.error(statusCode, serverResponse, networkError):
+				return ErrorCode(
+					flow: flowCode,
+					step: step,
+					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
+					detailedCode: serverResponse?.code
+				)
+			case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
+				return ErrorCode(
+					flow: flowCode,
+					step: step,
+					provider: provider,
+					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
+					detailedCode: serverResponse?.code
+				)
+		}
 	}
 }
 

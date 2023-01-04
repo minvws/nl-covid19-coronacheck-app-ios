@@ -24,6 +24,9 @@ class AppStatusView: ScrolledStackWithButtonView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
+		enum BottomStackView {
+			static let insets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+		}
 	}
 
 	/// The image view
@@ -93,20 +96,13 @@ class AppStatusView: ScrolledStackWithButtonView {
 
 		super.setupViewConstraints()
 
+		bottomStackView.insets(ViewTraits.BottomStackView.insets)
+		
 		NSLayoutConstraint.activate([
 
 			topSpacer.heightAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.heightAnchor,
 				multiplier: ViewTraits.topSpacerHeightMultiplier
-			),
-			
-			bottomStackView.leadingAnchor.constraint(
-				equalTo: stackView.leadingAnchor,
-				constant: ViewTraits.bottomStackViewMargin
-			),
-			bottomStackView.trailingAnchor.constraint(
-				equalTo: stackView.trailingAnchor,
-				constant: -ViewTraits.bottomStackViewMargin
 			)
 		])
 	}
