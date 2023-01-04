@@ -259,41 +259,35 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: false
         script: |
-          # Determine path of Rswift. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
-          if [ -f "/opt/homebrew/bin/rswift" ]; then
-            RSWIFT_PATH=/opt/homebrew/bin/rswift
-          elif which rswift >/dev/null; then
-            RSWIFT_PATH=rswift
-          fi
+          export PATH="$PATH:/opt/homebrew/bin" # for M1 macs
 
-          OUTPUT=`$RSWIFT_PATH generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
+          if mint list | grep -q 'R.swift'; then
+            OUTPUT=`mint run R.swift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
-          # forbid TestFlight release if there are missing translations:
-          if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
-            echo "error: Testflight deploys cannot contain missing translations:"
-            echo $OUTPUT
-            exit 1
+            # forbid TestFlight release if there are missing translations:
+            if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
+              echo "error: Testflight deploys cannot contain missing translations:"
+              echo $OUTPUT
+              exit 1
+            else
+              echo $OUTPUT
+            fi
           else
-            echo $OUTPUT
+            echo "error: R.swift not installed; run 'make dev' to install dependencies"
+            return -1
           fi
+
         outputFiles:
           - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
         basedOnDependencyAnalysis: false
         script: |
+          export PATH="$PATH:/opt/homebrew/bin" # for M1 macs
 
-          # Determine path of Swiftlint. For M1 homebrew installs, it's at a location that isn't in Xcode's $PATH
-          if [ -f "/opt/homebrew/bin/swiftlint" ]; then
-            SWIFTLINT_PATH=/opt/homebrew/bin/swiftlint
-          elif which swiftlint >/dev/null; then
-            SWIFTLINT_PATH=swiftlint
-          fi
-
-          # Call Swiftlint:
-          if [ -z ${SWIFTLINT_PATH+x} ]; then
-            echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
+          if mint list | grep -q 'SwiftLint'; then
+            mint run swiftlint --quiet --config=./.swiftlint.yml
           else
-            $SWIFTLINT_PATH --quiet --config=./.swiftlint.yml
+            echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
 
   Standard_UnitTesting:
