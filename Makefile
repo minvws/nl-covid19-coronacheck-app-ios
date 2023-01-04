@@ -3,7 +3,7 @@ ci: install_ci_deps generate_project
 
 # -- setup environment --
 
-install_dev_deps: homebrew_dev bundler
+install_dev_deps: homebrew_dev bundler mint_dev
 	@echo "All dev dependencies are installed"
 
 install_ci_deps: homebrew_ci
@@ -20,6 +20,9 @@ ifeq (, $(shell which brew))
 $(error "You must install homebrew on your system before setup can continue. Visit: https://brew.sh to get started with that.")
 endif
 	@brew bundle --file Brewfile
+
+mint_dev:
+	@mint bootstrap
 
 homebrew_ci:
 	@brew bundle --file Brewfile_CI
