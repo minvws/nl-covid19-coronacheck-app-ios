@@ -126,7 +126,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
-			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
+			errors: [ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)],
+			steps: [.configuration]
 		)
 		expect(self.sut.alert) == nil
 	}
@@ -152,7 +153,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
-			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
+			errors: [ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)],
+			steps: [.publicKeys]
 		)
 		expect(self.sut.alert) == nil
 	}
@@ -179,8 +181,9 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedUpdate) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.serverError(
-			[ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection),
-			 ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)]
+			errors: [ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection),
+			 ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)],
+			steps: [.configuration, .publicKeys]
 		)
 		expect(self.sut.alert) == nil
 	}
