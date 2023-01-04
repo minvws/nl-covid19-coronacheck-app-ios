@@ -16,16 +16,21 @@ class LaunchErrorViewModel: AppStatusViewModel {
 	var image = Observable<UIImage?>(value: I.launchError())
 	var alert: Observable<AlertContent?> = Observable(value: nil)
 	
-	init() {
-		message = Observable(value: L.appstatus_launchError_body("i 123 000 123"))
+	private let urlHandler: (URL) -> Void
+	
+	init(urlHandler: @escaping (URL) -> Void) {
 		
-		
-//		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { _ in
-//			exit(0)
-//		}
+		self.urlHandler = urlHandler
+		self.message = Observable(value: L.appstatus_launchError_body("i 123 000 123"))
 	}
 	
 	func actionButtonTapped() {
+		
 		exit(0)
+	}
+	
+	func userDidTapURL(url: URL) {
+		
+		urlHandler(url)
 	}
 }

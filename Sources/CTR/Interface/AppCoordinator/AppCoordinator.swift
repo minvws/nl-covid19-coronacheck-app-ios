@@ -333,8 +333,9 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 //		logError("Showing Internet required, while we got: \(errors)")
 //		showInternetRequired()
 		
-		
-		let viewModel = LaunchErrorViewModel()
+		let viewModel = LaunchErrorViewModel { [weak self] url in
+			self?.openUrl(url, inApp: true)
+		}
 		displayAppStatus(with: viewModel)
 	}
 	

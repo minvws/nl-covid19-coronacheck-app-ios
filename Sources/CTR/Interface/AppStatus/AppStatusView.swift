@@ -152,4 +152,12 @@ class AppStatusView: ScrolledStackWithButtonView {
 
 		imageView.isHidden = false
 	}
+	
+	var urlTapHander: ((URL) -> Void)? {
+		didSet {
+			contentTextView.linkTouchedHandler = { [weak self] url in
+				self?.urlTapHander?(url)
+			}
+		}
+	}
 }
