@@ -25,7 +25,7 @@ protocol LaunchStateManagerDelegate: AnyObject {
 
 	func cryptoLibDidNotInitialize()
 		
-	func errorWhileLoading(errors: [ServerError])
+	func errorWhileLoading(errors: [ServerError], steps: [ErrorCode.Step])
 		
 	func updateIsRequired(appStoreUrl: URL)
 	
@@ -75,9 +75,9 @@ final class LaunchStateManager: LaunchStateManaging {
 			switch state {
 				case .finished, .withinTTL:
 					self.startApplication()
-				case .serverError(let serviceErrors):
+				case let .serverError(serviceErrors, steps):
 					if !self.applicationHasStarted {
-						self.delegate?.errorWhileLoading(errors: serviceErrors)
+						self.delegate?.errorWhileLoading(errors: serviceErrors, steps: steps)
 					}
 			}
 		}
@@ -162,7 +162,7 @@ final class LaunchStateManager: LaunchStateManaging {
 					
 					switch configValidity {
 						case .neverFetched, .refreshNeeded:
-							self.delegate?.errorWhileLoading(errors: [error])
+							self.delegate?.errorWhileLoading(errors: [error], steps: [.configuration])
 						case .withinTTL, .withinMinimalInterval:
 							// We are within the TTL. Nothing to do.
 							break

@@ -1501,7 +1501,7 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderDashboardConfigIsAlmostOutOfDatePageMessage = Rswift.StringResource(key: "holder.dashboard.configIsAlmostOutOfDate.page.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
-      /// nl translation: <p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href="tel:0800-1421">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode</b><br /> %@ </p>
+      /// nl translation: <p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href="tel:0800-1421">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br /> %@ </p>
       ///
       /// Locales: nl
       static let appstatus_launchError_body = Rswift.StringResource(key: "appstatus_launchError_body", tableName: "Localizable", bundle: R.hostingBundle, locales: ["nl"], comment: nil)
@@ -6113,7 +6113,7 @@ struct R: Rswift.Validatable {
         return String(format: format, locale: locale, value1)
       }
 
-      /// nl translation: <p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href="tel:0800-1421">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode</b><br /> %@ </p>
+      /// nl translation: <p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href="tel:0800-1421">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br /> %@ </p>
       ///
       /// Locales: nl
       static func appstatus_launchError_body(_ value1: String, preferredLanguages: [String]? = nil) -> String {

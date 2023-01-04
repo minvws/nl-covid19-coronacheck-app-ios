@@ -331,9 +331,9 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		showCryptoLibNotInitializedError()
 	}
 	
-	func errorWhileLoading(errors: [ServerError]) {
+	func errorWhileLoading(errors: [ServerError], steps: [ErrorCode.Step]) {
 		
-		let errorCodes = ErrorCode.mapServerErrors(errors, for: .onboarding, step: .configuration)
+		let errorCodes = ErrorCode.mapServerErrors(errors, for: .onboarding, steps: steps)
 		let viewModel = LaunchErrorViewModel(errorCodes: errorCodes) { [weak self] url in
 			self?.openUrl(url, inApp: true)
 		} closeHandler: {
