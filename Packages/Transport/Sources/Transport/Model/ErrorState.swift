@@ -84,14 +84,10 @@ extension ErrorCode {
 		return errorCodes
 	}
 	
-	public static func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, steps: [ErrorCode.Step]) -> [ErrorCode] {
-
-		guard serverErrors.count == steps.count else {
-			return []
-		}
+	public static func mapServerErrors(_ errorTuples: [(ServerError, ErrorCode.Step)], for flowCode: ErrorCode.Flow) -> [ErrorCode] {
 		
-		let errorCodes: [ErrorCode] = serverErrors.enumerated().map { index, serverError in
-			return convert(serverError, for: flowCode, step: steps[index])
+		let errorCodes: [ErrorCode] = errorTuples.map {serverError, step in
+			return convert(serverError, for: flowCode, step: step)
 		}
 		return errorCodes
 	}

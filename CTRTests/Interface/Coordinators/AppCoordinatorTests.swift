@@ -115,8 +115,10 @@ class AppCoordinatorTests: XCTestCase {
 
 		// Given
 		let state = LaunchState.serverError(
-			errors: [ServerError.error(statusCode: 500, response: nil, error: .serverError)],
-			steps: [.configuration]
+			[
+				(error: ServerError.error(statusCode: 500, response: nil, error: .serverError),
+				 step: .configuration)
+			]
 		)
 		let viewControllerSpy = ViewControllerSpy()
 		sut.window.rootViewController = viewControllerSpy

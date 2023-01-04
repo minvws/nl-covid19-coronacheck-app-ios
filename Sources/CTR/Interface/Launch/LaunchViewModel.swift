@@ -84,12 +84,12 @@ class LaunchViewModel {
 			switch (configStatus, issuerPublicKeysStatus) {
 				case (.withinTTL, .withinTTL):
 					self.coordinator?.handleLaunchState(.withinTTL)
-					
-				case let (.serverError(lhsError, lhsSteps), .serverError(rhsError, rhsSteps)):
-					self.coordinator?.handleLaunchState(LaunchState.serverError(errors: lhsError + rhsError, steps: lhsSteps + rhsSteps))
-					
-				case let (.serverError(error, steps), _), let (_, .serverError(error, steps)):
-					self.coordinator?.handleLaunchState(.serverError(errors: error, steps: steps))
+
+				case let (.serverError(lhsTuple), .serverError(rhsTuple)):
+					self.coordinator?.handleLaunchState(LaunchState.serverError(lhsTuple + rhsTuple))
+
+				case let (.serverError(tuple), _), let (_, .serverError(tuple)):
+					self.coordinator?.handleLaunchState(.serverError(tuple))
 					
 				case (.finished, .finished), (.finished, .withinTTL), (.withinTTL, .finished):
 					self.coordinator?.handleLaunchState(.finished)
@@ -123,7 +123,7 @@ class LaunchViewModel {
 
 					case let .failure(error):
 						logError("Error getting the remote config: \(error)")
-						completion(.serverError(errors: [error], steps: [.configuration]))
+						completion(.serverError([(error: error, step: .configuration)]))
 				}
 			})
 	}
@@ -148,7 +148,7 @@ class LaunchViewModel {
 
 					case let .failure(error):
 						logError("Error getting the issuers public keys: \(error)")
-						completion(.serverError(errors: [error], steps: [.publicKeys]))
+						completion(.serverError([(error: error, step: .publicKeys)]))
 				}
 			}
 		)

@@ -15,7 +15,7 @@ enum LaunchState: Equatable {
 	case finished
 
 	/// We encountered a server error
-	case serverError(errors: [ServerError], steps: [ErrorCode.Step])
+	case serverError([(error: ServerError, step: ErrorCode.Step)])
 
 	/// the previous fetch is still valid
 	case withinTTL
