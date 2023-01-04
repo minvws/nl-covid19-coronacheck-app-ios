@@ -9,9 +9,9 @@ import UIKit
 
 // swiftlint:disable type_name
 protocol ScanInstructionsItemViewControllerDelegate: AnyObject {
-    
-    /// Delegates the onAccessibilityScroll event
-    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
+	
+	/// Delegates the onAccessibilityScroll event
+	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
 }
 
 class ScanInstructionsItemViewController: GenericViewController<ScanInstructionsItemView, ScanInstructionsItemViewModel> {

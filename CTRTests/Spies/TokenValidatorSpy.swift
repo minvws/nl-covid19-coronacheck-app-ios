@@ -11,18 +11,18 @@ import Foundation
 @testable import Shared
 
 class TokenValidatorSpy: TokenValidatorProtocol {
-
-    var invokedValidate = false
-    var invokedValidateCount = 0
-    var invokedValidateParameters: (token: String, Void)?
-    var invokedValidateParametersList = [(token: String, Void)]()
-    var stubbedValidateResult: Bool! = false
-
-    func validate(_ token: String) -> Bool {
-        invokedValidate = true
-        invokedValidateCount += 1
-        invokedValidateParameters = (token, ())
-        invokedValidateParametersList.append((token, ()))
-        return stubbedValidateResult
-    }
+	
+	var invokedValidate = false
+	var invokedValidateCount = 0
+	var invokedValidateParameters: (token: String, Void)?
+	var invokedValidateParametersList = [(token: String, Void)]()
+	var stubbedValidateResult: Bool! = false
+	
+	func validate(_ token: String) -> Bool {
+		invokedValidate = true
+		invokedValidateCount += 1
+		invokedValidateParameters = (token, ())
+		invokedValidateParametersList.append((token, ()))
+		return stubbedValidateResult
+	}
 }

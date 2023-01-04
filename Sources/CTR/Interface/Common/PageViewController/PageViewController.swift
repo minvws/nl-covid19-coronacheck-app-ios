@@ -88,16 +88,16 @@ extension PageViewController: UIPageViewControllerDataSource {
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 		guard let pages = pages, let index = pages.firstIndex(of: viewController) else { return nil }
-        let updatedIndex = index - 1
-        guard updatedIndex >= 0 else { return nil }
+		let updatedIndex = index - 1
+		guard updatedIndex >= 0 else { return nil }
 		return pages[updatedIndex]
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 		guard let pages = pages, let index = pages.firstIndex(of: viewController) else { return nil }
-        let updatedIndex = index + 1
-        guard updatedIndex < pages.count else { return nil }
-        return pages[updatedIndex]
+		let updatedIndex = index + 1
+		guard updatedIndex < pages.count else { return nil }
+		return pages[updatedIndex]
 	}
 }
 

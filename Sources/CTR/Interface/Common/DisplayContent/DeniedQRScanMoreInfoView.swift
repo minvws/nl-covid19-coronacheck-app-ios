@@ -23,7 +23,7 @@ final class DeniedQRScanMoreInfoView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-        return Label(title1: nil, montserrat: true).multiline().header()
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The stackview for the content

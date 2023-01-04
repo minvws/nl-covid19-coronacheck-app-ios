@@ -67,11 +67,11 @@ final class BottomSheetModalViewController: UIViewController, BottomSheetScrolla
 		super.viewSafeAreaInsetsDidChange()
 		scrollView.contentInset.bottom = view.safeAreaInsets.bottom
 	}
-    
-    override func accessibilityPerformEscape() -> Bool {
-        dismissModal()
-        return true
-    }
+	
+	override func accessibilityPerformEscape() -> Bool {
+		dismissModal()
+		return true
+	}
 	
 	/// Set preferredContentSize, used by UIPresentationController
 	/// - Parameter frame: The frame used to calculate the size

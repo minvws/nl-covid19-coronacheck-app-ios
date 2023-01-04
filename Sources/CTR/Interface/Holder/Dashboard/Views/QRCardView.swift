@@ -62,7 +62,7 @@ class QRCardView: BaseView {
 	}()
 
 	private let titleLabel: Label = {
-        let label = Label(title3: nil, montserrat: true).multiline().header()
+		let label = Label(title3: nil, montserrat: true).multiline().header()
 		label.accessibilityIdentifier = "titleLabel"
 		return label
 	}()
@@ -412,17 +412,17 @@ class QRCardView: BaseView {
 
 			verticalLabelsStackView.addArrangedSubview(expiryLabel)
 		}
-        
-        // Group accessibility labels together for two reasons:
-        // 1. Fix focus order issues caused by frequently removing and adding subviews
-        // 2. Clearer for users to hear all information at once
-        let groupedAccessibilityLabel = verticalLabelsStackView.arrangedSubviews.compactMap { arrangedView in
-            arrangedView.accessibilityLabel
-        }.joined(separator: " ")
-        verticalLabelsStackView.isAccessibilityElement = true
-        verticalLabelsStackView.shouldGroupAccessibilityChildren = true
-        verticalLabelsStackView.accessibilityLabel = groupedAccessibilityLabel
-        
+		
+		// Group accessibility labels together for two reasons:
+		// 1. Fix focus order issues caused by frequently removing and adding subviews
+		// 2. Clearer for users to hear all information at once
+		let groupedAccessibilityLabel = verticalLabelsStackView.arrangedSubviews.compactMap { arrangedView in
+			arrangedView.accessibilityLabel
+		}.joined(separator: " ")
+		verticalLabelsStackView.isAccessibilityElement = true
+		verticalLabelsStackView.shouldGroupAccessibilityChildren = true
+		verticalLabelsStackView.accessibilityLabel = groupedAccessibilityLabel
+		
 		verticalLabelsStackView.setNeedsLayout()
 	}
 
