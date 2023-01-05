@@ -57,4 +57,22 @@ class LaunchErrorViewModelTests: XCTestCase {
 		// Then
 		expect(actionButtonTapped) == true
 	}
+	
+	func test_urlHandler() throws {
+		
+		// Given
+		var urlHandlerCalled = false
+		sut = LaunchErrorViewModel(
+			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
+			urlHandler: { _ in urlHandlerCalled = true },
+			closeHandler: { }
+		)
+		let url = try XCTUnwrap(URL(string: "https://apple.com"))
+		
+		// When
+		sut.userDidTapURL(url: url)
+		
+		// Then
+		expect(urlHandlerCalled) == true
+	}
 }
