@@ -474,7 +474,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
-  /// This `R.image` struct is generated, and contains static references to 39 images.
+  /// This `R.image` struct is generated, and contains static references to 40 images.
   struct image {
     /// Image `BackArrow`.
     static let backArrow = Rswift.ImageResource(bundle: R.hostingBundle, name: "BackArrow")
@@ -510,6 +510,8 @@ struct R: Rswift.Validatable {
     static let health = Rswift.ImageResource(bundle: R.hostingBundle, name: "Health")
     /// Image `HolderAppLaunchIcon`.
     static let holderAppLaunchIcon = Rswift.ImageResource(bundle: R.hostingBundle, name: "HolderAppLaunchIcon")
+    /// Image `LaunchError`.
+    static let launchError = Rswift.ImageResource(bundle: R.hostingBundle, name: "LaunchError")
     /// Image `NoInternet`.
     static let noInternet = Rswift.ImageResource(bundle: R.hostingBundle, name: "NoInternet")
     /// Image `PageIndicatorBack`.
@@ -671,6 +673,13 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "HolderAppLaunchIcon", bundle: ..., traitCollection: ...)`
     static func holderAppLaunchIcon(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.holderAppLaunchIcon, compatibleWith: traitCollection)
+    }
+    #endif
+
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "LaunchError", bundle: ..., traitCollection: ...)`
+    static func launchError(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.launchError, compatibleWith: traitCollection)
     }
     #endif
 
@@ -1278,7 +1287,7 @@ struct R: Rswift.Validatable {
       fileprivate init() {}
     }
 
-    /// This `R.string.localizable` struct is generated, and contains static references to 996 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 999 localization keys.
     struct localizable {
       /// nl translation: %#@format@
       ///
@@ -1492,6 +1501,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let holderDashboardConfigIsAlmostOutOfDatePageMessage = Rswift.StringResource(key: "holder.dashboard.configIsAlmostOutOfDate.page.message", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: <p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href="tel:0800-1421">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br /> %@ </p>
+      ///
+      /// Locales: nl
+      static let appstatus_launchError_body = Rswift.StringResource(key: "appstatus_launchError_body", tableName: "Localizable", bundle: R.hostingBundle, locales: ["nl"], comment: nil)
       /// nl translation: <p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>
       ///
       /// Locales: en, nl
@@ -2540,6 +2553,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let generalListAccessibilityEnd = Rswift.StringResource(key: "general.list.accessibility.end", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Er gaat iets mis
+      ///
+      /// Locales: nl
+      static let appstatus_launchError_title = Rswift.StringResource(key: "appstatus_launchError_title", tableName: "Localizable", bundle: R.hostingBundle, locales: ["nl"], comment: nil)
       /// nl translation: Er gaat iets mis. Sluit CoronaCheck helemaal af en start de app opnieuw op.
       ///
       /// Locales: en, nl
@@ -4252,6 +4269,10 @@ struct R: Rswift.Validatable {
       ///
       /// Locales: en, nl
       static let appstatus_diskfull_button = Rswift.StringResource(key: "appstatus_diskfull_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "nl"], comment: nil)
+      /// nl translation: Sluit de app
+      ///
+      /// Locales: nl
+      static let appstatus_launchError_button = Rswift.StringResource(key: "appstatus_launchError_button", tableName: "Localizable", bundle: R.hostingBundle, locales: ["nl"], comment: nil)
       /// nl translation: Sluiten
       ///
       /// Locales: en, nl
@@ -6089,6 +6110,23 @@ struct R: Rswift.Validatable {
         }
 
         let format = NSLocalizedString("holder.dashboard.configIsAlmostOutOfDate.page.message", bundle: bundle, comment: "")
+        return String(format: format, locale: locale, value1)
+      }
+
+      /// nl translation: <p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href="tel:0800-1421">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br /> %@ </p>
+      ///
+      /// Locales: nl
+      static func appstatus_launchError_body(_ value1: String, preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          let format = NSLocalizedString("appstatus_launchError_body", bundle: hostingBundle, comment: "")
+          return String(format: format, locale: applicationLocale, value1)
+        }
+
+        guard let (locale, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "appstatus_launchError_body"
+        }
+
+        let format = NSLocalizedString("appstatus_launchError_body", bundle: bundle, comment: "")
         return String(format: format, locale: locale, value1)
       }
 
@@ -10094,6 +10132,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("general.list.accessibility.end", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Er gaat iets mis
+      ///
+      /// Locales: nl
+      static func appstatus_launchError_title(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("appstatus_launchError_title", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "appstatus_launchError_title"
+        }
+
+        return NSLocalizedString("appstatus_launchError_title", bundle: bundle, comment: "")
       }
 
       /// nl translation: Er gaat iets mis. Sluit CoronaCheck helemaal af en start de app opnieuw op.
@@ -16558,6 +16611,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("appstatus_diskfull_button", bundle: bundle, comment: "")
+      }
+
+      /// nl translation: Sluit de app
+      ///
+      /// Locales: nl
+      static func appstatus_launchError_button(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("appstatus_launchError_button", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "appstatus_launchError_button"
+        }
+
+        return NSLocalizedString("appstatus_launchError_button", bundle: bundle, comment: "")
       }
 
       /// nl translation: Sluiten
