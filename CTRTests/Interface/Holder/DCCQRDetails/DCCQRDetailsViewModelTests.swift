@@ -262,6 +262,28 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[0].value) == "Corona, Check"
 	}
 	
+	func test_emptyValue_shouldBeFiltered() {
+		
+		// Given
+		
+		// When
+		sut = DCCQRDetailsViewModel(
+			coordinator: coordinatorSpy,
+			title: "title",
+			description: "body",
+			details: [
+				DCCQRDetails(field: DCCQRDetailsTest.name, value: "Corona, Check"),
+				DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: "")
+			],
+			dateInformation: "information"
+		)
+		
+		// THen
+		expect(self.sut.details).to(haveCount(1))
+		expect(self.sut.details[0].field) == "Naam / Name:"
+		expect(self.sut.details[0].value) == "Corona, Check"
+	}
+	
 	func test_openUrl_shouldOpenUrl() throws {
 
 		// Given
