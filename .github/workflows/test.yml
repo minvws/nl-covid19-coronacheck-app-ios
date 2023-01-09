@@ -16,6 +16,14 @@ env:
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
 jobs:
+
+  swiftlint:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Workaround
+         run: |
+           echo "Github doesnt let you remove a job, causes future iterations to hang waiting on a phantom. TODO."
+
   test:
     runs-on: macos-12
     timeout-minutes: 30
