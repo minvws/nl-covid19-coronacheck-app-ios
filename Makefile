@@ -66,6 +66,15 @@ install_githooks_xcodegen:
 install_githooks_gitlfs:
 	@git lfs install --force
 
+# -- Sync with Public Repo -- 
+
+sync-repo:
+ifeq (, $(shell which mint))
+$(error "You must install `mint` on your system before setup can continue. Run `make dev` to install it with homebrew.")
+endif
+	@mint bootstrap
+	@repotools sync-repo --public-github-path minvws/nl-covid19-coronacheck-app-ios --private-github-path minvws/nl-covid19-coronacheck-app-ios-private    --matching-tags-pattern "Holder-" --matching-tags-pattern "Verifier-"  --excluding-tag-pattern \\-RC .
+
 # -- Lokalize: -- 
 # Create an API key here: https://app.lokalise.com/profile
 # add export LOKALISE_API_KEY="--your value here--" to your ~/.zshrc file
