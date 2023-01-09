@@ -377,7 +377,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var isPrecededByLineBreak: Bool {
 		switch self {
-			case .name, .pathogen, .date, .validFrom: return true
+			case .name, .pathogen, .date, .validFrom, .certificateIdentifier: return true
 			default: return false
 		}
 	}
