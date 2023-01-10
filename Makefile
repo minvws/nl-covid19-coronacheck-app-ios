@@ -32,7 +32,10 @@ endif
 # -- -- SPM
 
 mint:
-	@mint bootstrap
+	@mint bootstrap --mintfile ./Mintfile
+
+mint_ci:
+	@mint bootstrap --mintfile ./Mintfile_CI
 
 # -- -- Generate MobileCore framework -- 
 
@@ -68,7 +71,7 @@ install_githooks_gitlfs:
 
 # -- Sync with Public Repo -- 
 
-sync-repo:
+sync_repo:
 	@mint bootstrap
 	@repotools sync-repo --public-github-path minvws/nl-covid19-coronacheck-app-ios --private-github-path minvws/nl-covid19-coronacheck-app-ios-private    --matching-tags-pattern "Holder-" --matching-tags-pattern "Verifier-"  --excluding-tag-pattern \\-RC .
 
