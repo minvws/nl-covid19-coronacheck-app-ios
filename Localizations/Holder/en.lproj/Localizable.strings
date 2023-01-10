@@ -298,7 +298,7 @@
 "holder.event.about.vaccination.pathogen" = "Disease targeted:";
 "holder.event.about.vaccination.pathogenvalue" = "COVID-19";
 /* MARK: - Vaccination Event */
-"holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
+"holder.event.about.vaccination.subtitle" = "The following details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
 "holder.event.identity.alert.cancel" = "Stop";
