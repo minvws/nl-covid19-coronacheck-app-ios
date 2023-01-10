@@ -53,9 +53,12 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Setup CI environment
+    - name: Setup Homebrew
       run: |
-        make ci
+        make homebrew_ci
+
+    - name: Build mint dependencies
+      uses: ./.github/actions/build-mint
 
     - name: Checkout LFS resources
       run: |
@@ -64,7 +67,11 @@ jobs:
 
     - name: Build mobile core
       uses: ./.github/actions/build-core
-    
+
+    - name: Generate project
+      run: |
+        make generate_project
+
     - name: Setup Imagemagick for icon overlays
       run: |
         make homebrew_ci_imagemagick

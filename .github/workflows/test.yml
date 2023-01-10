@@ -16,25 +16,17 @@ env:
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
   
 jobs:
-  swiftlint:
-    runs-on: macos-12
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          
-      - name: Run SwiftLint 
-        run: |
-          make run_swiftlint
+  swiftlint:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Workaround
+         run: |
+           echo "Github doesnt let you remove a job, causes future iterations to hang waiting on a phantom. TODO."
 
   test:
     runs-on: macos-12
-    timeout-minutes: 30
-    needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
+    timeout-minutes: 60
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
         # 🧐 when changing below, don't forget to also change the device name in the Fastfile too: 
@@ -44,23 +36,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      
-      - name: Setup CI environment
+      - name: Setup Homebrew
         run: |
-          make ci
+          make homebrew_ci
+
+      - name: Build mint dependencies
+        uses: ./.github/actions/build-mint
+      
+      - name: Run SwiftLint 
+        run: |
+          make run_swiftlint
 
       - name: Checkout LFS resources
         run: |
           git lfs pull
           git checkout .
-      
+
       - name: Build mobile core
         uses: ./.github/actions/build-core
-          
+
+      - name: Generate project
+        run: |
+          make generate_project
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+                
       - name: Build and test
         env:
           SLACK_URL: ${{ secrets.SLACK_URL }}
