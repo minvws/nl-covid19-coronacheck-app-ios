@@ -32,7 +32,7 @@
 /* Configuratie ABC123, 13-10-2021 00:00 */
 "general.menu.configVersion" = "%@, %@";
 "general.menu.open" = "Open menu";
-"general.menu.version" = "App versie %@ (%@)";
+"general.menu.version" = "App-versie %@ (%@)";
 "general.netherlands" = "Nederland";
 "general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
 "general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
@@ -88,7 +88,7 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Meer:";
-"holder.about.text" = "<p>Met de CoronaCheck app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
+"holder.about.text" = "<p>Met de CoronaCheck-app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>";
@@ -647,7 +647,7 @@
 "holder_fuzzyMatching_why_title" = "Waarom moet ik één naam kiezen?";
 "holder_helpInfo_helpdesk" = "Helpdesk";
 "holder_helpInfo_title" = "Hulp & Informatie";
-"holder_helpdesk_appVersion" = "App versie:";
+"holder_helpdesk_appVersion" = "App-versie:";
 "holder_helpdesk_configuration" = "Configuratie:";
 "holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op <a href=\"tel:0800-1421\">0800-1421</a> (gratis).</p>";
 "holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
@@ -886,7 +886,8 @@
 "visitorpass_token_error_unknown_provider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
-"visitorpass_token_next" = "Volgende";"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"visitorpass_token_next" = "Volgende";
+"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "general_menu" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
