@@ -9,12 +9,10 @@ runs:
       uses: actions/cache@v3
       with:
         path: ~/.mint
-        key: mintfile-build-cache-${{ hashFiles('**/Mintfile') }}
+        key: mintfile-build-cache-${{ hashFiles('**/Mintfile_CI') }}
 
     - name: Setup Mint
       if: steps.mintcache.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        pwd
-        ls -la
-        make mint
+        make mint_ci
