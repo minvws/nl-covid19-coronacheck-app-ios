@@ -277,7 +277,7 @@
 "holder.event.about.test.date" = "Test date:";
 "holder.event.about.test.dateofbirth" = "Date of birth:";
 "holder.event.about.test.facility" = "Test location:";
-"holder.event.about.test.identifier" = "Unique certificate identifier:";
+"holder.event.about.test.identifier" = "Unique test identifier:";
 "holder.event.about.test.manufacturer" = "Test manufacturer:";
 "holder.event.about.test.name" = "Name:";
 "holder.event.about.test.result" = "Test result:";
