@@ -727,11 +727,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.openUrl(faqUrl, inApp: true)
 		}
 		
-		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak self] in
+		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak self] in
 			self?.userWishesToSeeHelpdesk()
 		}
  
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: nil) { [weak self] in
+		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_phone()!, overrideColor: nil) { [weak self] in
 			self?.navigateToAboutThisApp()
 		}
 		
@@ -744,7 +744,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			]
 		}()
 		
-		let viewController = MenuViewController(viewModel: MenuViewModel(title: L.holder_menu_helpInfo(), items: items))
+		let viewController = MenuViewController(viewModel: MenuViewModel(title: L.holder_helpInfo_title(), items: items))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
