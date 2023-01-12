@@ -552,6 +552,8 @@ struct R: Rswift.Validatable {
     static let icon_menu_risklevel = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_risklevel")
     /// Image `icon_menu_storeddata`.
     static let icon_menu_storeddata = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_storeddata")
+    /// Image `icon_menu_warning`.
+	static let icon_menu_warning = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_warning")
     /// Image `menuChevron`.
     static let menuChevron = Rswift.ImageResource(bundle: R.hostingBundle, name: "menuChevron")
 
@@ -821,6 +823,13 @@ struct R: Rswift.Validatable {
     }
     #endif
 
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "icon_menu_warning", bundle: ..., traitCollection: ...)`
+    static func icon_menu_warning(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+        return UIKit.UIImage(resource: R.image.icon_menu_warning, compatibleWith: traitCollection)
+    }
+    #endif
+	  
     #if os(iOS) || os(tvOS)
     /// `UIImage(named: "menuChevron", bundle: ..., traitCollection: ...)`
     static func menuChevron(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {

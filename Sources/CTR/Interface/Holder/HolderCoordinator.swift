@@ -695,7 +695,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.userWishesToSeeHelpAndInfoMenu()
 		}
 		
-		let debugItemResetApp: MenuViewModel.Item = .row(title: L.holder_menu_resetApp(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: C.ccError()) { [weak self] in
+		let debugItemResetApp: MenuViewModel.Item = .row(title: L.holder_menu_resetApp(), subTitle: nil, icon: I.icon_menu_warning()!, overrideColor: C.ccError()) { [weak self] in
 			Current.wipePersistedData(flavor: .holder)
 			self?.restart()
 		}
