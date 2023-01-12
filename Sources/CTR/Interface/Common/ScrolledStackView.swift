@@ -86,7 +86,6 @@ class ScrolledStackView: BaseView {
 			
 			// Content view
 			scrollViewContent.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: stackViewInset.left),
-			scrollViewContent.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -stackViewInset.right),
 			scrollViewContent.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: stackViewInset.top),
 			scrollViewContent.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -stackViewInset.bottom),
 			scrollViewContent.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
