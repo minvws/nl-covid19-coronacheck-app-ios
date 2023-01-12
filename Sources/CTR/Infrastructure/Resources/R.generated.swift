@@ -542,12 +542,16 @@ struct R: Rswift.Validatable {
     static let icon_menu_addpapercertificate = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_addpapercertificate")
     /// Image `icon_menu_addvisitorpass`.
     static let icon_menu_addvisitorpass = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_addvisitorpass")
+    /// Image `icon_menu_call`.
+    static let icon_menu_call = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_call")
     /// Image `icon_menu_faq`.
     static let icon_menu_faq = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_faq")
     /// Image `icon_menu_hamburger`.
     static let icon_menu_hamburger = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_hamburger")
     /// Image `icon_menu_howitworks`.
     static let icon_menu_howitworks = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_howitworks")
+    /// Image `icon_menu_phone`.
+    static let icon_menu_phone = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_phone")
     /// Image `icon_menu_risklevel`.
     static let icon_menu_risklevel = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_menu_risklevel")
     /// Image `icon_menu_storeddata`.
@@ -789,6 +793,13 @@ struct R: Rswift.Validatable {
     #endif
 
     #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "icon_menu_call", bundle: ..., traitCollection: ...)`
+    static func icon_menu_call(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_menu_call, compatibleWith: traitCollection)
+    }
+    #endif
+	  
+    #if os(iOS) || os(tvOS)
     /// `UIImage(named: "icon_menu_faq", bundle: ..., traitCollection: ...)`
     static func icon_menu_faq(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_menu_faq, compatibleWith: traitCollection)
@@ -809,6 +820,13 @@ struct R: Rswift.Validatable {
     }
     #endif
 
+    #if os(iOS) || os(tvOS)
+    /// `UIImage(named: "icon_menu_phone", bundle: ..., traitCollection: ...)`
+    static func icon_menu_phone(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_menu_phone, compatibleWith: traitCollection)
+    }
+    #endif
+	  
     #if os(iOS) || os(tvOS)
     /// `UIImage(named: "icon_menu_risklevel", bundle: ..., traitCollection: ...)`
     static func icon_menu_risklevel(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
