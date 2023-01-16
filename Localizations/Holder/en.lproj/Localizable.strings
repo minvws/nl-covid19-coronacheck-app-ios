@@ -298,7 +298,7 @@
 "holder.event.about.vaccination.pathogen" = "Disease targeted:";
 "holder.event.about.vaccination.pathogenvalue" = "COVID-19";
 /* MARK: - Vaccination Event */
-"holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
+"holder.event.about.vaccination.subtitle" = "The following details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
 "holder.event.identity.alert.cancel" = "Stop";
@@ -651,7 +651,7 @@
 "holder_helpdesk_configuration" = "Configuration:";
 "holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br /><a href=\"tel:0800-1421\">0800-1421</a> (free).</p>";
 "holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an e-mail to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line3" = "<p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
 "holder_helpdesk_support_title" = "Support";

@@ -50,7 +50,7 @@ class ScrolledStackView: BaseView {
 	}()
 	
 	/// Content view to get proper size in scroll view
-	let contentScrollView: UIView = {
+	let scrollViewContent: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
@@ -60,8 +60,8 @@ class ScrolledStackView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		stackView.embed(in: contentScrollView)
-		scrollView.addSubview(contentScrollView)
+		stackView.embed(in: scrollViewContent)
+		scrollView.addSubview(scrollViewContent)
 		addSubview(scrollView)
 	}
 
@@ -85,15 +85,14 @@ class ScrolledStackView: BaseView {
 			}(),
 			
 			// Content view
-			contentScrollView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: stackViewInset.left),
-			contentScrollView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -stackViewInset.right),
-			contentScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: stackViewInset.top),
-			contentScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -stackViewInset.bottom),
-			contentScrollView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
+			scrollViewContent.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: stackViewInset.left),
+			scrollViewContent.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: stackViewInset.top),
+			scrollViewContent.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -stackViewInset.bottom),
+			scrollViewContent.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
 			
 			// StackView
-			stackView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
-			stackView.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor)
+			stackView.widthAnchor.constraint(equalTo: scrollViewContent.widthAnchor),
+			stackView.centerXAnchor.constraint(equalTo: scrollViewContent.centerXAnchor)
 		])
 	}
 }

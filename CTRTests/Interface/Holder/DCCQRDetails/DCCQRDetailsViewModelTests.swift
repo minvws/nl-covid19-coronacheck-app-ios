@@ -158,7 +158,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[3].value) == "Test"
 		expect(self.sut.details[4].field) == "Type vaccin / Vaccine type:"
 		expect(self.sut.details[4].value) == "test"
-		expect(self.sut.details[5].field) == "Producent / Vaccine manufacturer:"
+		expect(self.sut.details[5].field) == "Vaccinproducent / Vaccine manufacturer:"
 		expect(self.sut.details[5].value) == "Test"
 		expect(self.sut.details[6].field) == "Dosis / Number in series of doses:"
 		expect(self.sut.details[6].value) == "2 / 2"
@@ -223,7 +223,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[3].value) == "Test"
 		expect(self.sut.details[4].field) == "Type vaccin / Vaccine type:"
 		expect(self.sut.details[4].value) == "test"
-		expect(self.sut.details[5].field) == "Producent / Vaccine manufacturer:"
+		expect(self.sut.details[5].field) == "Vaccinproducent / Vaccine manufacturer:"
 		expect(self.sut.details[5].value) == "Test"
 		expect(self.sut.details[6].field) == "Dosis / Number in series of doses:"
 		expect(self.sut.details[6].value) == "3 / 2"
@@ -252,6 +252,28 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 			details: [
 				DCCQRDetails(field: DCCQRDetailsTest.name, value: "Corona, Check"),
 				DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: nil)
+			],
+			dateInformation: "information"
+		)
+		
+		// THen
+		expect(self.sut.details).to(haveCount(1))
+		expect(self.sut.details[0].field) == "Naam / Name:"
+		expect(self.sut.details[0].value) == "Corona, Check"
+	}
+	
+	func test_emptyValue_shouldBeFiltered() {
+		
+		// Given
+		
+		// When
+		sut = DCCQRDetailsViewModel(
+			coordinator: coordinatorSpy,
+			title: "title",
+			description: "body",
+			details: [
+				DCCQRDetails(field: DCCQRDetailsTest.name, value: "Corona, Check"),
+				DCCQRDetails(field: DCCQRDetailsTest.pathogen, value: "")
 			],
 			dateInformation: "information"
 		)

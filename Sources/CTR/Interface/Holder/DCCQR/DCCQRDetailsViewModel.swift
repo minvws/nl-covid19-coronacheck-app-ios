@@ -38,7 +38,7 @@ final class DCCQRDetailsViewModel {
 		self.dateInformation = dateInformation
 		self.details = details.compactMap {
 			
-			guard let value = $0.value else {
+			guard let value = $0.value, value.isNotEmpty else {
 				return nil
 			}
 			return (field: $0.field.displayTitle, value: value, dosageMessage: $0.dosageMessage)
