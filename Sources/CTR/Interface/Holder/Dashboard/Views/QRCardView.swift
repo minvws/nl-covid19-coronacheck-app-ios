@@ -62,7 +62,7 @@ class QRCardView: BaseView {
 	}()
 
 	private let titleLabel: Label = {
-        let label = Label(title3: nil, montserrat: true).multiline().header()
+		let label = Label(title3: nil, montserrat: true).multiline().header()
 		label.accessibilityIdentifier = "titleLabel"
 		return label
 	}()
@@ -412,17 +412,17 @@ class QRCardView: BaseView {
 
 			verticalLabelsStackView.addArrangedSubview(expiryLabel)
 		}
-        
-        // Group accessibility labels together for two reasons:
-        // 1. Fix focus order issues caused by frequently removing and adding subviews
-        // 2. Clearer for users to hear all information at once
-        let groupedAccessibilityLabel = verticalLabelsStackView.arrangedSubviews.compactMap { arrangedView in
-            arrangedView.accessibilityLabel
-        }.joined(separator: " ")
-        verticalLabelsStackView.isAccessibilityElement = true
-        verticalLabelsStackView.shouldGroupAccessibilityChildren = true
-        verticalLabelsStackView.accessibilityLabel = groupedAccessibilityLabel
-        
+		
+		// Group accessibility labels together for two reasons:
+		// 1. Fix focus order issues caused by frequently removing and adding subviews
+		// 2. Clearer for users to hear all information at once
+		let groupedAccessibilityLabel = verticalLabelsStackView.arrangedSubviews.compactMap { arrangedView in
+			arrangedView.accessibilityLabel
+		}.joined(separator: " ")
+		verticalLabelsStackView.isAccessibilityElement = true
+		verticalLabelsStackView.shouldGroupAccessibilityChildren = true
+		verticalLabelsStackView.accessibilityLabel = groupedAccessibilityLabel
+		
 		verticalLabelsStackView.setNeedsLayout()
 	}
 
@@ -439,7 +439,7 @@ class QRCardView: BaseView {
 
 	/// Create the shadow around a view
 	private func createShadow(view: UIView, hasSquashedViews: Bool) {
-		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		guard !ProcessInfo.processInfo.isUnitTesting else { return } // for better snapshot reliability
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor
 
@@ -454,7 +454,7 @@ class QRCardView: BaseView {
 	}
 
 	private func createShadow(view: UIView, forSquashedViewIndex squashedViewIndex: Int, forTotalSquashedViewCount totalSquashedViewCount: Int) {
-		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		guard !ProcessInfo.processInfo.isUnitTesting else { return } // for better snapshot reliability
 		
 		// Shadow
 		view.layer.shadowColor = C.shadow()?.cgColor

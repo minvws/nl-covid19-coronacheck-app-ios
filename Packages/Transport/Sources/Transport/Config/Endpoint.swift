@@ -11,13 +11,13 @@ import Shared
 struct Path {
 
 	/// The path components
-    let components: [String]
-
+	let components: [String]
+	
 	/// Initalizer
 	/// - Parameter components: the path components
-    init(components: String...) {
-        self.components = Array(components)
-    }
+	init(components: String...) {
+		self.components = Array(components)
+	}
 }
 
 struct Endpoint {

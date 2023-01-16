@@ -32,17 +32,22 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
 		.lightContent
 	}
+	
+	private let captureQueue = DispatchQueue(label: "nl.coronacheck.capturesession.\(UUID().uuidString)")
 
 	// MARK: View lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		navigationItem.largeTitleDisplayMode = .never
 
 		navigationControllerTeardown = { [weak self] in
 			// Reset navigation title color			
 			self?.overrideNavigationBarTitleColor(with: C.black()!)
 		}
 		
-		setupScan()
+		captureQueue.async {
+			self.setupScan()
+		}
 		
 		if ScanView.shouldAllowCameraRotationForCurrentDevice {
 			NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: OperationQueue.main) { _ in
@@ -134,8 +139,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 			cameraView.layer.addSublayer(previewLayer)
 		}
 		
-		if captureSession?.isRunning == false {
-			captureSession.startRunning()
+		captureQueue.async {
+			if self.captureSession?.isRunning == false {
+				self.captureSession.startRunning()
+			}
 		}
 		
 		updateCameraPreviewFrame()
@@ -168,8 +175,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 
-		if !Platform.isSimulator, captureSession?.isRunning == true {
-			captureSession.stopRunning()
+		captureQueue.async {
+			if !Platform.isSimulator, self.captureSession?.isRunning == true {
+				self.captureSession.stopRunning()
+			}
 		}
 
 		navigationControllerTeardown?()
@@ -219,8 +228,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 		didOutput metadataObjects: [AVMetadataObject],
 		from connection: AVCaptureConnection) {
 
-		captureSession.stopRunning()
-
+		captureQueue.async {
+			self.captureSession.stopRunning()
+		}
 		if let metadataObject = metadataObjects.first {
 			guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
 			guard let stringValue = readableObject.stringValue else { return }
@@ -300,7 +310,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 	
 	/// Resume scanning after being stopped
 	func resumeScanning() {
-		captureSession.startRunning()
+		captureQueue.async {
+			self.captureSession.startRunning()
+		}
 	}
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -310,13 +322,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 			self.view.layoutIfNeeded()
 			self.updateCameraPreviewFrame()
 		}
-	}
-}
-
-extension ScanViewController {
-	
-	@objc func onBack() {
-		navigationController?.popViewController(animated: true)
 	}
 }
 

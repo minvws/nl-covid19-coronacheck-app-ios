@@ -8,6 +8,7 @@
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
+import Transport
 import Nimble
 import SnapshotTesting
 
@@ -185,7 +186,6 @@ class AppStatusViewControllerTests: XCTestCase {
 	}
 
 	func test_noInternet() {
-
 		// Given
 		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
 		sut = AppStatusViewController(viewModel: viewModel)
@@ -198,6 +198,27 @@ class AppStatusViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.internetRequiredText()
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.internetRequiredButton()
 		expect(self.sut.sceneView.image) == I.noInternet()
+		
+		sut.assertImage()
+	}
+	
+	func test_launchError() {
+		// Given
+		let viewModel = LaunchErrorViewModel(
+			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
+			urlHandler: { _ in },
+			closeHandler: {}
+		)
+		sut = AppStatusViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.appstatus_launchError_title()
+		expect(self.sut.sceneView.message) == L.appstatus_launchError_body("i 010 000 123")
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.appstatus_launchError_button()
+		expect(self.sut.sceneView.image) == I.launchError()
 
 		sut.assertImage()
 	}

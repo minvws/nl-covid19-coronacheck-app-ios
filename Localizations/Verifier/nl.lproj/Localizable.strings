@@ -56,8 +56,8 @@
 /* MARK: - Verifier Menu */
 "verifier.menu.dashboard" = "Scan QR-codes";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
-"verifier.menu.scaninstructions" = "Hoe het werkt";
-"verifier.menu.support" = "Support";
+"verifier.menu.scaninstructions" = "Zo werkt scannen";
+"verifier.menu.support" = "Meestgestelde vragen";
 "verifier.onboarding.message.safely" = "Met deze app controleer je het coronabewijs van je bezoekers. Zo kun je jouw locatie veilig open houden.";
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Jouw locatie veilig open";

@@ -16,4 +16,13 @@ protocol AppStatusViewModel {
 	var alert: Observable<AlertContent?> { get }
 	
 	func actionButtonTapped()
+	
+	func userDidTapURL(url: URL)
+}
+
+extension AppStatusViewModel {
+	
+	func userDidTapURL(url: URL) {
+		// Do nothing
+	}
 }

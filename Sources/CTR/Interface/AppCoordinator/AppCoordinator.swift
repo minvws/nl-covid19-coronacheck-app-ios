@@ -295,6 +295,10 @@ class AppCoordinator: Coordinator {
 				return true
 		}
 	}
+	
+	func closeTheApp() {
+		exit(0)
+	}
 }
 
 // MARK: - LaunchStateDelegate
@@ -327,11 +331,16 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		showCryptoLibNotInitializedError()
 	}
 	
-	func errorWhileLoading(errors: [ServerError]) {
-		// For now, show internet required.
-		// Todo: add error state.
-		logError("Showing Internet required, while we got: \(errors)")
-		showInternetRequired()
+	func errorWhileLoading(_ errorTuples: [(error: ServerError, step: ErrorCode.Step)]) {
+		
+		let errorCodes = ErrorCode.mapServerErrors(errorTuples, for: .onboarding)
+		let viewModel = LaunchErrorViewModel(errorCodes: errorCodes) { [weak self] url in
+			self?.openUrl(url, inApp: true)
+		} closeHandler: {
+			self.closeTheApp()
+		}
+
+		displayAppStatus(with: viewModel)
 	}
 	
 	func updateIsRequired(appStoreUrl: URL) {

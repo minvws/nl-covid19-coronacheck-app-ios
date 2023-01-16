@@ -1,6 +1,9 @@
 "appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol is werkt CoronaCheck niet. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag is vol";
+"appstatus_launchError_body" = "<p>De app kan momenteel niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href=\"tel:0800-1421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br /> %@ </p>";
+"appstatus_launchError_button" = "Sluit de app";
+"appstatus_launchError_title" = "Er gaat iets mis";
 "general.add" = "Toevoegen";
 "general.back" = "Terug";
 /* MARK: - General */
@@ -30,9 +33,9 @@
 "general.list.accessibility.start" = "Begin van lijst.";
 "general.loading" = "Bezig met laden";
 /* Configuratie ABC123, 13-10-2021 00:00 */
-"general.menu.configVersion" = "Configuratie %@, %@";
+"general.menu.configVersion" = "%@, %@";
 "general.menu.open" = "Open menu";
-"general.menu.version" = "App versie %@ (%@)";
+"general.menu.version" = "App-versie %@ (%@)";
 "general.netherlands" = "Nederland";
 "general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
 "general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
@@ -88,7 +91,7 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 /* Koptekst in de over de app pagina */
 "holder.about.readmore" = "Meer:";
-"holder.about.text" = "<p>Met de CoronaCheck app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
+"holder.about.text" = "<p>Met de CoronaCheck-app kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent. Je kunt een digitaal coronabewijs maken van je vaccinatie(s), maar ook van een positieve of negatieve testuitslag.</p><p>Je bewijs heeft een QR-code. Die kan gescand worden voor toegang tot plekken of activiteiten, of om mee te reizen.</p>";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p><b>1. Kies het soort bewijs</b><p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p><b>2. Automatisch gegevens ophalen</b><p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p><b>3. QR-codes staan klaar</b><p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale.</p>";
@@ -208,7 +211,7 @@
 "holder.dcc.test.details.title" = "Details";
 "holder.dcc.test.facility" = "Testlocatie:";
 "holder.dcc.test.footer" = "<p><b>Kloppen er gegevens niet?</b><br />Neem contact op met de zorgverlener waar je bent gevaccineerd of getest. Dat kan de GGD, je huisarts of arts van een zorginstelling zijn. Zij kunnen je helpen je gegevens aan te passen.</p>";
-"holder.dcc.test.identifier" = "Uniek testnummer:";
+"holder.dcc.test.identifier" = "Uniek certificaatnummer:";
 "holder.dcc.test.manufacturer" = "Testproducent:";
 "holder.dcc.test.name" = "Naam:";
 "holder.dcc.test.pathogen" = "Ziekteverwekker:";
@@ -317,7 +320,7 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.launch.text" = "We starten de app voor je op...";
-"holder.launch.version" = "App versie %@ (build %@)";
+"holder.launch.version" = "%@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in met je DigiD";
 "holder.location.ggd.title" = "GGD";
 "holder.location.message" = "Blijkt uit de test dat je geen corona hebt? Dan kun je van de testuitslag een bewijs maken. Geef aan waar je getest bent.";
@@ -407,7 +410,7 @@
 "holder.showqr.eu.about.vaccination.dosage" = "Dosis / Number in series of doses:";
 "holder.showqr.eu.about.vaccination.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.issuer" = "Afgever certificaat / Certificate issuer:";
-"holder.showqr.eu.about.vaccination.manufacturer" = "Producent / Vaccine manufacturer:";
+"holder.showqr.eu.about.vaccination.manufacturer" = "Vaccinproducent / Vaccine manufacturer:";
 "holder.showqr.eu.about.vaccination.name" = "Naam / Name:";
 "holder.showqr.eu.about.vaccination.pathogen" = "Ziekteverwekker / Disease targeted:";
 "holder.showqr.eu.about.vaccination.pathogenvalue" = "COVID-19";
@@ -604,7 +607,7 @@
 "holder_dashboard_visitorpassexpired_title" = "Verlopen bezoekersbewijs";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Maak bewijs compleet";
 "holder_dashboard_visitorpassincompletebanner_title" = "Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag";
-"holder_dccDetails_subtitle" = "Deze gegevens staan in je bewijs:";
+"holder_dccDetails_subtitle" = "De volgende gegevens staan in je bewijs:";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_dcc_issuer" = "Afgever certificaat:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
@@ -645,6 +648,17 @@
 "holder_fuzzyMatching_onboarding_thirdPage_title" = "Laat andere namen herschrijven";
 "holder_fuzzyMatching_why_body" = "<p>Je naam moet bij alle vaccinaties, testuitslagen en bewijzen in de app op dezelfde manier zijn geschreven. Anders ziet CoronaCheck het als van verschillende personen. Kies daarom één naam.</p><p>Alleen de vaccinaties en testuitslagen bij de naam die je kiest blijven bewaard. De rest wordt verwijderd. Wil je die vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad.</p><p>Als je naam is aangepast, kun je zelf de vaccinaties en testuitslagen opnieuw toevoegen aan de app.</p>";
 "holder_fuzzyMatching_why_title" = "Waarom moet ik één naam kiezen?";
+"holder_helpInfo_helpdesk" = "Helpdesk";
+"holder_helpInfo_title" = "Hulp & Informatie";
+"holder_helpdesk_appVersion" = "App-versie:";
+"holder_helpdesk_configuration" = "Configuratie:";
+"holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op <a href=\"tel:0800-1421\">0800-1421</a> (gratis).</p>";
+"holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
+"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van maandag t/m vrijdag 08:00 - 18:00 uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_title" = "Contact";
+"holder_helpdesk_support_message" = "Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:";
+"holder_helpdesk_support_title" = "Ondersteuning";
+"holder_helpdesk_title" = "Helpdesk";
 "holder_identityRemoved_banner_button_readmore" = "Lees meer";
 "holder_identityRemoved_banner_title" = "Je gegevens zijn bijgewerkt. Mogelijk zijn daardoor bewijzen weg.";
 "holder_identityRemoved_moreinfo_body" = "<p>Alleen vaccinatie- en testgegevens die bij de naam horen die je hebt gekozen zijn bewaard (<b>%@</b>).</p><p>De onderstaande gegevens zijn verwijderd uit de app:</p>%@<p>Wil je vaccinaties of testuitslagen terug? Laat je naam herschrijven door de plek waar je die vaccinatie of test hebt gehad. Voeg ze daarna zelf opnieuw toe aan de app.</p>";
@@ -722,6 +736,7 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "Als de gegevens kloppen kun je jouw vaccinatiebeoordeling toevoegen aan de app.";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
+"holder_menu_helpInfo" = "Hulp & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 "holder_menu_paperproof_subTitle" = "(Papieren) bewijs toevoegen";
 "holder_menu_paperproof_title" = "Coronabewijs inscannen";

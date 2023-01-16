@@ -36,14 +36,14 @@ class ScanLogEntryView: BaseView {
 
 	/// The title label
 	private let riskLabel: Label = {
-
-        return Label(bodyBold: nil).multiline()
+		
+		return Label(bodyBold: nil).multiline()
 	}()
-
+	
 	/// The time text
 	private let timeLabel: Label = {
-
-        return Label(subhead: nil).multiline()
+		
+		return Label(subhead: nil).multiline()
 	}()
 
 	/// The message  label

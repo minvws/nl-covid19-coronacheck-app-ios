@@ -30,7 +30,7 @@
 "general.list.accessibility.start" = "Start of list";
 "general.loading" = "Loading";
 /* Configuratie ABC123, 13-10-2021 00:00 */
-"general.menu.configVersion" = "Configuration %@, %@";
+"general.menu.configVersion" = "%@, %@";
 "general.menu.open" = "Open menu";
 "general.menu.version" = "App version %@ (%@)";
 "general.netherlands" = "The Netherlands";
@@ -215,7 +215,7 @@
 "holder.dcc.test.pathogenvalue" = "COVID-19";
 "holder.dcc.test.result" = "Test result:";
 "holder.dcc.test.testname" = "Test name:";
-"holder.dcc.test.type" = "Type of test:";
+"holder.dcc.test.type" = "Test type:";
 "holder.dcc.vaccination.brand" = "Vaccine:";
 "holder.dcc.vaccination.country" = "Vaccinated in:";
 "holder.dcc.vaccination.date" = "Vaccination date:";
@@ -277,7 +277,7 @@
 "holder.event.about.test.date" = "Test date:";
 "holder.event.about.test.dateofbirth" = "Date of birth:";
 "holder.event.about.test.facility" = "Test location:";
-"holder.event.about.test.identifier" = "Unique certificate identifier:";
+"holder.event.about.test.identifier" = "Unique test identifier:";
 "holder.event.about.test.manufacturer" = "Test manufacturer:";
 "holder.event.about.test.name" = "Name:";
 "holder.event.about.test.result" = "Test result:";
@@ -298,7 +298,7 @@
 "holder.event.about.vaccination.pathogen" = "Disease targeted:";
 "holder.event.about.vaccination.pathogenvalue" = "COVID-19";
 /* MARK: - Vaccination Event */
-"holder.event.about.vaccination.subtitle" = "These details about your vaccination were retrieved from %@:";
+"holder.event.about.vaccination.subtitle" = "The following details about your vaccination were retrieved from %@:";
 "holder.event.about.vaccination.type" = "Vaccine type:";
 "holder.event.details" = "Details";
 "holder.event.identity.alert.cancel" = "Stop";
@@ -317,7 +317,7 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.incompletedutchvaccination.title" = "No Dutch vaccination certificate";
 "holder.launch.text" = "We're starting the app...";
-"holder.launch.version" = "App version %@ (build %@)";
+"holder.launch.version" = "%@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in with your DigiD";
 "holder.location.ggd.title" = "GGD";
 "holder.location.message" = "Does the test point out you don't have coronavirus? Then you can use the test result to create a certificate. Please specify where you were tested.";
@@ -604,7 +604,7 @@
 "holder_dashboard_visitorpassexpired_title" = "Expired visitor pass";
 "holder_dashboard_visitorpassincompletebanner_button_makecomplete" = "Complete visitor pass";
 "holder_dashboard_visitorpassincompletebanner_title" = "Your vaccination approval has been added. Complete your visitor pass with your negative test result";
-"holder_dccDetails_subtitle" = "These details are in your certificate:";
+"holder_dccDetails_subtitle" = "The following details are in your certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_dcc_issuer" = "Certificate issuer:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/not-in-use";
@@ -645,6 +645,17 @@
 "holder_fuzzyMatching_onboarding_thirdPage_title" = "Have other names rewritten";
 "holder_fuzzyMatching_why_body" = "<p>Your name must be written the same way on all vaccinations, test results and certificates in the app. Otherwise, CoronaCheck will think of them as belonging to different people. Therefore, please choose one name.</p><p>Only vaccinations and test results connected to the name you choose will be saved. The others will be deleted. Do you want to retrieve those vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test.</p><p>As soon as your name is adjusted, you can add the vaccinations and test results to the app again.</p>";
 "holder_fuzzyMatching_why_title" = "Why do I have to choose one name?";
+"holder_helpInfo_helpdesk" = "Helpdesk";
+"holder_helpInfo_title" = "Help & Information";
+"holder_helpdesk_appVersion" = "App version:";
+"holder_helpdesk_configuration" = "Configuration:";
+"holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br /><a href=\"tel:0800-1421\">0800-1421</a> (free).</p>";
+"holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
+"holder_helpdesk_contact_message_line3" = "<p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_title" = "Contact";
+"holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
+"holder_helpdesk_support_title" = "Support";
+"holder_helpdesk_title" = "Helpdesk";
 "holder_identityRemoved_banner_button_readmore" = "Read more";
 "holder_identityRemoved_banner_title" = "Your details were updated. Certificates may have been removed as a result.";
 "holder_identityRemoved_moreinfo_body" = "<p>Only vaccination and test details connected to the name you chose were saved (<b>%@</b>).</p><p>The details below have been removed from the app:</p>%@<p>Do you want to retrieve your vaccinations or test results? Have your name rewritten by the place where you received this vaccination or test. You can add them to the app again after.</p>";
@@ -722,6 +733,7 @@
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
+"holder_menu_helpInfo" = "Help & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 "holder_menu_paperproof_subTitle" = "Add (paper) certificate";
 "holder_menu_paperproof_title" = "Scan to add certificate";

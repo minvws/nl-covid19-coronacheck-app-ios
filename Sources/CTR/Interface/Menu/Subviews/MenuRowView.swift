@@ -206,6 +206,15 @@ final class MenuRowView: UIControl {
 		}
 	}
 	
+	var overrideColor: UIColor? {
+		didSet {
+			guard let overrideColor else { return }
+			iconImageView.image = iconImageView.image?.withRenderingMode(.alwaysTemplate)
+			iconImageView.tintColor = overrideColor
+			titleLabel.textColor = overrideColor
+		}
+	}
+	
 	var action: (() -> Void)?
 	
 	var shouldShowBottomBorder: Bool = false {

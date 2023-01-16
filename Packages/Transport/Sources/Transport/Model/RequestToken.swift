@@ -10,9 +10,9 @@ import Foundation
 /// The request token to fetch a test result form a commercial tester
 public struct RequestToken: Codable, Equatable {
 
-    /// The current highest known protocol version
-    /// 1.0: Checksum
-    /// 2.0: Initials + Birthday/month
+	/// The current highest known protocol version
+	/// 1.0: Checksum
+	/// 2.0: Initials + Birthday/month
 	public static let highestKnownProtocolVersion = "3.0"
 
 	/// The request token

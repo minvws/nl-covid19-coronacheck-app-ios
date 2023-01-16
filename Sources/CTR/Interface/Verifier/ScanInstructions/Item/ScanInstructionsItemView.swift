@@ -56,12 +56,12 @@ class ScanInstructionsItemView: ScrolledStackView {
 
 	private let titleLabel: Label = {
 		
-        return Label(title1: nil, montserrat: true).multiline().header()
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
 	let messageTextView: TextView = {
 		
-        return TextView()
+		return TextView()
 	}()
 	
 	override func setupViews() {

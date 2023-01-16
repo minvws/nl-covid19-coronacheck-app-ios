@@ -38,54 +38,92 @@ class VaccinationMatchingTest: BaseTest {
 	func test_identicalBirthdateDifferentFirstName_keepOriginalName() {
 		let person = Person(bsn: "999992156", name: "van Gool, Borry")
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(setupPerson)
 		
-		assertSetupVaccination()
-		assertNewVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(setupPerson)
+		 
+		 assertSetupVaccination()
+		 assertNewVaccinationRemoved()
+		 */
+		
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_identicalBirthdateDifferentFirstName_replaceOriginalName() {
 		let person = Person(bsn: "999992156", name: "van Gool, Borry")
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(person)
 		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(person)
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
+		 */
+		
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_identicalBirthdateDifferentLastName_keepOriginalName() {
 		let person = Person(bsn: "999993021", name: "de Gael, Berrie")
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(setupPerson)
 		
-		assertSetupVaccination()
-		assertNewVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(setupPerson)
+		 
+		 assertSetupVaccination()
+		 assertNewVaccinationRemoved()
+		 */
+		
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_identicalBirthdateDifferentLastName_replaceOriginalName() {
 		let person = Person(bsn: "999993021", name: "de Gael, Berrie")
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(person)
 		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(person)
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
+		 */
+		
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_identicalBirthdateDifferentLastName_reloadAndKeepSetup() {
 		let person = Person(bsn: "999993021", name: "de Gael, Berrie")
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(person)
 		
-		retrieveCertificate(for: setupPerson)
-		chooseToKeepNameOf(setupPerson)
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(person)
+		 
+		 retrieveCertificate(for: setupPerson)
+		 chooseToKeepNameOf(setupPerson)
+		 
+		 assertSetupVaccination()
+		 assertNewVaccinationRemoved()
+		 */
 		
-		assertSetupVaccination()
-		assertNewVaccinationRemoved()
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_identicalBirthdateDifferentLastName_reloadAndIgnoreSetup() {
 		let person = Person(bsn: "999993021", name: "de Gael, Berrie")
 		retrieveCertificate(for: person)
+		
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
 		chooseToKeepNameOf(person)
 		
 		retrieveCertificate(for: setupPerson)
@@ -93,6 +131,10 @@ class VaccinationMatchingTest: BaseTest {
 		
 		assertReplacedVaccination(for: person)
 		assertSetupVaccinationRemoved()
+		 */
+		
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_identicalBirthdateDifferentFirstNameInitial() {
@@ -180,37 +222,58 @@ class VaccinationMatchingTest: BaseTest {
 	func test_differentBirthYeardateDifferentFirstName_keepOriginalName() {
 		let person = Person(bsn: "999994153", name: "van Gool, Borry", birthDate: Date("1970-01-01"))
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(setupPerson)
-		
-		assertSetupVaccination()
-		assertNewVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(setupPerson)
+		 
+		 assertSetupVaccination()
+		 assertNewVaccinationRemoved()
+		 */
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_differentBirthYeardateDifferentFirstName_replaceOriginalName() {
 		let person = Person(bsn: "999994153", name: "van Gool, Borry", birthDate: Date("1970-01-01"))
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(person)
-		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(person)
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
+		 */
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_differentBirthYeardateDifferentLastName_keepOriginalName() {
 		let person = Person(bsn: "999994165", name: "de Gael, Berrie", birthDate: Date("1970-01-01"))
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(setupPerson)
-		
-		assertSetupVaccination()
-		assertNewVaccinationRemoved()
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(setupPerson)
+		 
+		 assertSetupVaccination()
+		 assertNewVaccinationRemoved()
+		 
+		 */
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_differentBirthYeardateDifferentLastName_replaceOriginalName() {
 		let person = Person(bsn: "999994165", name: "de Gael, Berrie", birthDate: Date("1970-01-01"))
 		retrieveCertificate(for: person)
-		chooseToKeepNameOf(person)
+		// Temp disabled as the signer does not use fuzzy matching
+		/*
+		 chooseToKeepNameOf(person)
 		
 		assertReplacedVaccination(for: person)
 		assertSetupVaccinationRemoved()
+		 */
+		// Default back to initial match result
+		assertMergedVaccinations(for: person)
 	}
 	
 	func test_differentBirthYeardateDifferentFirstNameInitial() {

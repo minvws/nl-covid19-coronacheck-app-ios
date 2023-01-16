@@ -28,13 +28,15 @@ public extension NSAttributedString {
 		let lineHeight: CGFloat
 		let kern: CGFloat
 		let paragraphSpacing: CGFloat
+		let alignment: NSTextAlignment
 
-		init(font: UIFont, textColor: UIColor, lineHeight: CGFloat = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8) {
+		init(font: UIFont, textColor: UIColor, lineHeight: CGFloat = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8, alignment: NSTextAlignment = .natural) {
 			self.font = font
 			self.textColor = textColor
 			self.lineHeight = lineHeight
 			self.kern = kern
 			self.paragraphSpacing = paragraphSpacing
+			self.alignment = alignment
 		}
 
 		static var bodyDark: HTMLStyle = HTMLStyle(font: Fonts.body, textColor: C.black()!)
@@ -45,7 +47,7 @@ public extension NSAttributedString {
 
 	static func makeFromHtml(text: String?, style: HTMLStyle, completion: @escaping (NSAttributedString) -> Void) {
 
-		guard !ProcessInfo.processInfo.isTesting else {
+		guard !ProcessInfo.processInfo.isUnitTesting else {
 			completion(NSAttributedString(string: text ?? ""))
 			return
 		}
@@ -58,7 +60,7 @@ public extension NSAttributedString {
 	
 	static func makeFromHtml(text: String?, style: HTMLStyle) -> NSAttributedString {
 
-		guard !ProcessInfo.processInfo.isTesting else {
+		guard !ProcessInfo.processInfo.isUnitTesting else {
 			return NSAttributedString(string: text ?? "")
 		}
 
@@ -118,7 +120,7 @@ public extension NSAttributedString {
 	private static func createAttributes(style: HTMLStyle) -> [Key: Any] {
 
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.alignment = .natural
+		paragraphStyle.alignment = style.alignment
 		paragraphStyle.paragraphSpacing = style.paragraphSpacing
 		paragraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
 
@@ -245,31 +247,31 @@ extension NSMutableParagraphStyle {
 		minimumLineHeight = lineHeight * UIContentSizeCategory.currentSizeMultiplier
 	}
 }
-    
-public extension NSMutableAttributedString {
 
-    /// Trims white space and new line at the start and end
+public extension NSMutableAttributedString {
+	
+	/// Trims white space and new line at the start and end
 	func trim() {
 		let characterSet = CharacterSet.whitespacesAndNewlines.inverted
 		
 		// Trim start:
 		let startRange = string.rangeOfCharacter(from: characterSet)
 		guard let startLocation = startRange?.lowerBound else { return }
-
+		
 		let frontTrimRange = NSRange(string.startIndex..<startLocation, in: string)
 		replaceCharacters(in: frontTrimRange, with: "")
 		
 		// Trim end:
 		let endRange = string.rangeOfCharacter(from: characterSet, options: .backwards)
 		guard let endLocation = endRange?.upperBound else { return }
-
+		
 		let endTrimRange = NSRange(endLocation ..< string.endIndex, in: string)
 		replaceCharacters(in: endTrimRange, with: "")
 	}
-
-    /// Strip bullets (<li>) so that they're not read out loud
-    func stripParagraphStyle() {
+	
+	/// Strip bullets (<li>) so that they're not read out loud
+	func stripParagraphStyle() {
 		
 		removeAttribute(.paragraphStyle, range: NSRange(location: 0, length: length))
-    }
+	}
 }

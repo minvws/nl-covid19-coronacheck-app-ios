@@ -152,7 +152,7 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 	return .init(
 		lines: [
 			"\(L.generalTesttype().capitalizingFirstLetter()): \(testType)",
-            "\(L.generalTestdate().capitalizingFirstLetter()): \(formatter.string(from: validFrom))"
+			"\(L.generalTestdate().capitalizingFirstLetter()): \(formatter.string(from: validFrom))"
 		],
 		kind: .current
 	)
@@ -262,22 +262,22 @@ private func validityText_hasBegun_domestic_test(expirationTime: Date) -> Holder
 }
 
 private func validityText_hasBegun_domestic_recovery(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
-
-    let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
-    let formatter = DateFormatter.Format.dayMonthYear
-    let dateString = formatter.string(from: expirationTime)
-
-    let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
-    let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
-    return .init(
-        lines: [titleString, valueString],
-        kind: .current
-    )
+	
+	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+	let formatter = DateFormatter.Format.dayMonthYear
+	let dateString = formatter.string(from: expirationTime)
+	
+	let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		lines: [titleString, valueString],
+		kind: .current
+	)
 }
 
 private func validityText_hasBegun_eu_recovery(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
-    let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding().capitalizingFirstLetter()
+	let prefix = L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding().capitalizingFirstLetter()
 	let formatter = DateFormatter.Format.dayMonthYear
 	let dateString = formatter.string(from: expirationTime)
 
@@ -289,23 +289,23 @@ private func validityText_hasBegun_eu_recovery(expirationTime: Date) -> HolderDa
 }
 
 private func validityText_hasNotYetBegun_domestic_recovery(validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
-
-    let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
+	
+	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom()
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: validFrom)
-    let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
-
-    let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
-    let valueString = "\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
-    return .init(
-        // geldig vanaf 17 juli t/m 11 mei 2022
-        lines: [titleString, valueString],
-        kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-    )
+	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
+	
+	let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+	let valueString = "\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		// geldig vanaf 17 juli t/m 11 mei 2022
+		lines: [titleString, valueString],
+		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+	)
 }
 
 private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 
-    let prefix = L.holderDashboardQrValidityDatePrefixValidFrom().capitalizingFirstLetter()
+	let prefix = L.holderDashboardQrValidityDatePrefixValidFrom().capitalizingFirstLetter()
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: validFrom)
 	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
 

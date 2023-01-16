@@ -29,29 +29,36 @@ class NegativeTestDetailsGenerator {
 		let manufacturer = mappingManager.getTestManufacturer(event.negativeTest?.manufacturer) ?? (event.negativeTest?.manufacturer ?? "")
 
 		// Test name
-		var testName: String? = event.negativeTest?.name
-		if mappingManager.isRatTest(event.negativeTest?.type) {
-			testName = mappingManager.getTestName(event.negativeTest?.manufacturer) ?? event.negativeTest?.name
+		let testName: String? = {
+			guard mappingManager.isRatTest(event.negativeTest?.type),
+				  let mappedTestName = mappingManager.getTestName(event.negativeTest?.manufacturer)
+			else {
+				return event.negativeTest?.name
+			}
+			return mappedTestName
+		}()
+		
+		var results = [EventDetails]()
+		results += [EventDetails(field: EventDetailsTest.subtitle, value: nil)]
+		results += [EventDetails(field: EventDetailsTest.name, value: identity.fullName)]
+		results += [EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate)]
+		results += [EventDetails(field: EventDetailsTest.testType, value: testType)]
+		if let testName, testName.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.testName, value: testName)]
 		}
-
-		var results = [
-			EventDetails(field: EventDetailsTest.subtitle, value: nil),
-			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
-			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsTest.testType, value: testType),
-			EventDetails(field: EventDetailsTest.testName, value: testName),
-			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
-			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage()),
-			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility)
-		]
+		results += [EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate)]
+		results += [EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegativeSingleLanguage())]
+		if manufacturer.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer)]
+		}
+		results += [EventDetails(field: EventDetailsTest.facility, value: event.negativeTest?.facility)]
 		
 		// Optional: Country Tested In
-		if let countryTestedIn = event.negativeTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+		if let countryTestedIn = (event.negativeTest?.country ?? "NL").map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
 			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
 		}
 		
-		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.nonBreakingUnique)]
 		
 		return results
 	}
@@ -60,46 +67,53 @@ class NegativeTestDetailsGenerator {
 class PositiveTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
-
+		
 		let mappingManager: MappingManaging = Current.mappingManager
-
+		
 		let formattedBirthDate: String = identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
 		let formattedTestLongDate: String = event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (event.positiveTest?.sampleDateString ?? "")
-
+		
 		// Type
 		let testType = mappingManager.getTestType(event.positiveTest?.type) ?? (event.positiveTest?.type ?? "")
-
+		
 		// Manufacturer
 		let manufacturer = mappingManager.getTestManufacturer(event.positiveTest?.manufacturer) ?? (event.positiveTest?.manufacturer ?? "")
-
-		// Test name
-		var testName: String? = event.positiveTest?.name
-		if mappingManager.isRatTest(event.positiveTest?.type) {
-			testName = mappingManager.getTestName(event.positiveTest?.manufacturer) ?? event.positiveTest?.name
-		}
 		
-		var results = [
-			EventDetails(field: EventDetailsTest.subtitle, value: nil),
-			EventDetails(field: EventDetailsTest.name, value: identity.fullName),
-			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
-			EventDetails(field: EventDetailsTest.testType, value: testType),
-			EventDetails(field: EventDetailsTest.testName, value: testName),
-			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
-			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
-			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility)
-		]
+		// Test name
+		let testName: String? = {
+			guard mappingManager.isRatTest(event.positiveTest?.type),
+				  let mappedTestName = mappingManager.getTestName(event.positiveTest?.manufacturer)
+			else {
+				return event.positiveTest?.name
+			}
+			return mappedTestName
+		}()
+		
+		var results = [EventDetails]()
+		results += [EventDetails(field: EventDetailsTest.subtitle, value: nil)]
+		results += [EventDetails(field: EventDetailsTest.name, value: identity.fullName)]
+		results += [EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate)]
+		results += [EventDetails(field: EventDetailsTest.testType, value: testType)]
+		if let testName, testName.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.testName, value: testName)]
+		}
+		results += [EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate)]
+		results += [EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive())]
+		if manufacturer.isNotEmpty {
+			results += [EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer)]
+		}
+		results += [EventDetails(field: EventDetailsTest.facility, value: event.positiveTest?.facility)]
 		
 		// Optional: Country Tested In
-		if let countryTestedIn = event.positiveTest?.country.map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
+		if let countryTestedIn = (event.positiveTest?.country ?? "NL").map(mappingManager.getDisplayCountry), countryTestedIn.isNotEmpty {
 			results += [EventDetails(field: EventDetailsTest.countryTestedIn, value: countryTestedIn)]
 		}
 		
-		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.unique)]
+		results += [EventDetails(field: EventDetailsTest.uniqueIdentifer, value: event.nonBreakingUnique)]
 		
 		return results
 	}
@@ -109,6 +123,25 @@ class DCCTestDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, test: EuCredentialAttributes.TestEntry) -> [EventDetails] {
 
+		enum TestResult {
+			case positive, negative
+			
+			var localized: String {
+				switch self {
+					case .positive: return L.holderShowqrEuAboutTestPostive()
+					case .negative: return L.holderShowqrEuAboutTestNegativeSingleLanguage()
+				}
+			}
+			
+			init?(string: String) {
+				switch string {
+					case "260415000": self = .negative
+					case "260373001": self = .positive
+					default: return nil
+				}
+			}
+		}
+		
 		let mappingManager: MappingManaging = Current.mappingManager
 
 		let formattedBirthDate: String = identity.birthDateString
@@ -116,32 +149,35 @@ class DCCTestDetailsGenerator {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? test.sampleDate
 
 		let testType = mappingManager.getTestType(test.typeOfTest) ?? (test.typeOfTest)
 		let manufacturer = mappingManager.getTestManufacturer(test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
-
-		let testResult: String
-		switch test.testResult {
-			case "260415000": testResult = L.holderShowqrEuAboutTestNegativeSingleLanguage()
-			case "260373001": testResult = L.holderShowqrEuAboutTestPostive()
-			default: testResult = ""
-		}
-
+		let testResult: TestResult? = TestResult(string: test.testResult)
+		
+		let testName: String? = {
+			guard mappingManager.isRatTest(test.typeOfTest),
+				  let mappedTestName = mappingManager.getTestName(test.marketingAuthorizationHolder)
+			else {
+				return test.name
+			}
+			return mappedTestName
+		}()
+		
 		return [
 			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
 			EventDetails(field: EventDetailsDCCTest.name, value: identity.fullName),
 			EventDetails(field: EventDetailsDCCTest.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsDCCTest.pathogen, value: L.holderDccTestPathogenvalue()),
 			EventDetails(field: EventDetailsDCCTest.testType, value: testType),
-			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
+			EventDetails(field: EventDetailsDCCTest.testName, value: testName),
 			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
-			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
-			EventDetails(field: EventDetailsDCCTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
+			EventDetails(field: EventDetailsDCCTest.result, value: testResult?.localized ?? ""),
 			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsDCCTest.facility, value: mappingManager.getDisplayFacility(test.testCenter)),
 			EventDetails(field: EventDetailsDCCTest.country, value: mappingManager.getDisplayCountry(test.country)),
 			EventDetails(field: EventDetailsDCCTest.issuer, value: mappingManager.getDisplayIssuer(test.issuer, country: test.country)),
-			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)
+			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.nonBreakingCertificateIdentifier)
 		]
 	}
 }
@@ -206,7 +242,7 @@ class VaccinationDetailsGenerator {
 		details += [EventDetails(field: EventDetailsVaccination.completionReason, value: event.vaccination?.completionStatus)]
 		details += [EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate)]
 		details += [EventDetails(field: EventDetailsVaccination.country, value: country)]
-		details += [EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.unique)]
+		details += [EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: event.nonBreakingUnique)]
 		
 		return details
 	}
@@ -248,7 +284,7 @@ class DCCVaccinationDetailsGenerator {
 			EventDetails(field: EventDetailsDCCVaccination.date, value: formattedVaccinationDate),
 			EventDetails(field: EventDetailsDCCVaccination.country, value: mappingManager.getDisplayCountry(vaccination.country)),
 			EventDetails(field: EventDetailsDCCVaccination.issuer, value: mappingManager.getDisplayIssuer(vaccination.issuer, country: vaccination.country)),
-			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.certificateIdentifier)
+			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.nonBreakingCertificateIdentifier)
 		]
 	}
 }
@@ -277,7 +313,7 @@ class VaccinationAssessementDetailsGenerator {
 		if country != "" {
 			list.append(EventDetails(field: EventDetailsVaccinationAssessment.country, value: country))
 		}
-		list.append(EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.unique))
+		list.append(EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.nonBreakingUnique))
 		return list
 	}
 }
@@ -306,7 +342,7 @@ class RecoveryDetailsGenerator {
 			EventDetails(field: EventDetailsRecovery.date, value: formattedShortTestDate),
 			EventDetails(field: EventDetailsRecovery.validFrom, value: formattedShortValidFromDate),
 			EventDetails(field: EventDetailsRecovery.validUntil, value: formattedShortValidUntilDate),
-			EventDetails(field: EventDetailsRecovery.uniqueIdentifer, value: event.unique)
+			EventDetails(field: EventDetailsRecovery.uniqueIdentifer, value: event.nonBreakingUnique)
 		]
 	}
 }
@@ -336,10 +372,12 @@ class DCCRecoveryDetailsGenerator {
 			EventDetails(field: EventDetailsDCCRecovery.issuer, value: mappingManager.getDisplayIssuer(recovery.issuer, country: recovery.country)),
 			EventDetails(field: EventDetailsDCCRecovery.validFrom, value: formattedValidFromDate),
 			EventDetails(field: EventDetailsDCCRecovery.validUntil, value: formattedValidUntilDate),
-			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.certificateIdentifier)
+			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.nonBreakingCertificateIdentifier)
 		]
 	}
 }
+
+// MARK: - completion status
 
 private extension EventFlow.VaccinationEvent {
 
@@ -360,5 +398,38 @@ private extension EventFlow.VaccinationEvent {
 			default:
 				return L.holder_eventdetails_vaccinationStatus_complete()
 		}
+	}
+}
+
+// MARK: - Non breaking Unique / Identifier
+
+extension EventFlow.Event {
+	
+	public var nonBreakingUnique: String? {
+		if let unique {
+			return unique.replacingOccurrences(of: "-", with: "\u{2011}")
+		}
+		return nil
+	}
+}
+
+extension EuCredentialAttributes.Vaccination {
+	
+	public var nonBreakingCertificateIdentifier: String {
+		return certificateIdentifier.replacingOccurrences(of: "-", with: "\u{2011}")
+	}
+}
+
+extension EuCredentialAttributes.RecoveryEntry {
+	
+	public var nonBreakingCertificateIdentifier: String {
+		return certificateIdentifier.replacingOccurrences(of: "-", with: "\u{2011}")
+	}
+}
+
+extension EuCredentialAttributes.TestEntry {
+	
+	public var nonBreakingCertificateIdentifier: String {
+		return certificateIdentifier.replacingOccurrences(of: "-", with: "\u{2011}")
 	}
 }

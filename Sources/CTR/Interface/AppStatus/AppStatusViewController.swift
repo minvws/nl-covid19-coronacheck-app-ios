@@ -26,6 +26,10 @@ class AppStatusViewController: GenericViewController<AppStatusView, AppStatusVie
 			self?.showAlert(alertContent)
 		}
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.actionButtonTapped() }
+		
+		sceneView.urlTapHander = { [weak self] in
+			self?.viewModel.userDidTapURL(url: $0)
+		}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

@@ -50,7 +50,7 @@ class AddCertificateCardView: BaseView {
 	}
 
 	private func createShadow() {
-		guard !ProcessInfo.processInfo.isTesting else { return } // for better snapshot reliability
+		guard !ProcessInfo.processInfo.isUnitTesting else { return } // for better snapshot reliability
 		
 		// Shadow
 		layer.shadowColor = C.shadow()?.cgColor

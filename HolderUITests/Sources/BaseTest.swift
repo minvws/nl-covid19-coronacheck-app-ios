@@ -11,7 +11,7 @@ class BaseTest: XCTestCase {
 	
 	let app = XCUIApplication()
 	let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-	let loginTimeout = 10.0
+	let loginTimeout = 15.0
 	
 	var disclosureMode = DisclosureMode.mode0G
 	let ctbInUse = true
@@ -25,6 +25,7 @@ class BaseTest: XCTestCase {
 		app.launchArguments.append(disclosureMode.rawValue)
 		app.launch()
 		XCTAssertTrue(app.waitForExistence(timeout: loginTimeout), "App did not start")
+		XCTAssertTrue(app.staticTexts["Mijn bewijzen"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
 		
 		continueAfterFailure = false
 	}

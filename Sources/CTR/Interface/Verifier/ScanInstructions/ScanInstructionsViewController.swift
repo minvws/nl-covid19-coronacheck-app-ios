@@ -7,10 +7,8 @@
 
 import UIKit
 
-class ScanInstructionsViewController: BaseViewController {
-	let sceneView = ScanInstructionsView()
+class ScanInstructionsViewController: GenericViewController<ScanInstructionsView, ScanInstructionsViewModel> {
 
-	private let viewModel: ScanInstructionsViewModel
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 
 	private let skipButton: TappableButton = {
@@ -30,26 +28,6 @@ class ScanInstructionsViewController: BaseViewController {
 		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
-
-	/// Initializer
-	/// - Parameter viewModel: view model
-	init(viewModel: ScanInstructionsViewModel) {
-		
-		self.viewModel = viewModel
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	/// Required initialzer
-	/// - Parameter coder: the code
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	// MARK: View lifecycle
-	override func loadView() {
-		
-		view = sceneView
-	}
 	
 	override func viewDidLoad() {
 		
@@ -122,7 +100,7 @@ class ScanInstructionsViewController: BaseViewController {
 		
 		viewModel.finishScanInstructions()
 	}
-    
+	
 	/// Setup the page controller
 	private func setupPageController() {
 		
@@ -175,18 +153,18 @@ extension ScanInstructionsViewController: PageViewControllerDelegate {
 // MARK: - ScanInstructionsItemViewControllerDelegate
 
 extension ScanInstructionsViewController: ScanInstructionsItemViewControllerDelegate {
-    
-    /// Enables swipe to navigate behaviour for assistive technologies
-    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
-        if direction == .right {
-            backButtonTapped()
-            return true
-        } else if direction == .left {
-            primaryButtonTapped()
-            return true
-        }
-        return false
-    }
+	
+	/// Enables swipe to navigate behaviour for assistive technologies
+	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+		if direction == .right {
+			backButtonTapped()
+			return true
+		} else if direction == .left {
+			primaryButtonTapped()
+			return true
+		}
+		return false
+	}
 }
 
 // MARK: - PageControlDelegate

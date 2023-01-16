@@ -1,7 +1,7 @@
-tap "lokalise/cli-2"
-brew "swiftlint"
-brew "xcodegen"
 brew "git-lfs"
-brew "rswift"
-brew "lokalise2"
+brew "mint"
+
 cask "peripheryapp/periphery/periphery"
+
+tap "lokalise/cli-2"
+brew "lokalise2"

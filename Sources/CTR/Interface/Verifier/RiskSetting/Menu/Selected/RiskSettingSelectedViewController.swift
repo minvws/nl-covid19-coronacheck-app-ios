@@ -7,29 +7,7 @@
 
 import UIKit
 
-final class RiskSettingSelectedViewController: BaseViewController {
-	
-	private let viewModel: RiskSettingSelectedViewModel
-
-	let sceneView = RiskSettingSelectedView()
-
-	init(viewModel: RiskSettingSelectedViewModel) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
+final class RiskSettingSelectedViewController: GenericViewController<RiskSettingSelectedView, RiskSettingSelectedViewModel> {
 
 	override func viewDidLoad() {
 
