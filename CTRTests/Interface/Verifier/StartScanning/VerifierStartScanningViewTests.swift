@@ -7,17 +7,19 @@
 
 import XCTest
 import Nimble
+import Lottie
 @testable import CTR
 import SnapshotTesting
 
 class VerifierStartScanningViewTests: XCTestCase {
 	var sut: VerifierStartScanningView!
-
+	
 	override func setUp() {
 		super.setUp()
+		LottieConfiguration.shared.renderingEngine = .mainThread
 		sut = VerifierStartScanningView()
 	}
-
+	
 	func test_headerImage() {
 		// Arrange
 		sut.headerMode = .image(I.scanner.scanStart3GPolicy()!)
@@ -29,12 +31,23 @@ class VerifierStartScanningViewTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image(precision: 0.98))
 	}
 
-	func test_headerAnimation() {
+	func test_headerAnimation_switch_to_blue() {
 		// Arrange
 		sut.headerMode = .animation("switch_to_blue_animation")
 		
 		// Act
 
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 400, height: 700)
+		assertSnapshot(matching: sut, as: .image)
+	}
+	
+	func test_headerAnimation_switch_to_green() {
+		// Arrange
+		sut.headerMode = .animation("switch_to_green_animation")
+		
+		// Act
+		
 		// Assert
 		sut.frame = CGRect(x: 0, y: 0, width: 400, height: 700)
 		assertSnapshot(matching: sut, as: .image)

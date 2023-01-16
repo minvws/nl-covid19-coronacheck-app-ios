@@ -132,4 +132,68 @@ final class SharedTests: XCTestCase {
 		XCTAssertNil(successValue)
 		XCTAssertNotNil(failureErrror)
 	}
+	
+	// MARK: - String + Data
+	
+	func test_string_sha256() {
+		
+		// Given
+		let string = "test_string_sha256"
+		
+		// When
+		let sha256 = string.sha256
+		
+		// Then
+		XCTAssertEqual(sha256, "b39dc4c3d9eedc35b66703dd90bb1cdb9b73eb563ba25ab55e6f0714f8a4f849")
+	}
+	
+	func test_string_base64Decoded() {
+	
+		// Given
+		let string = "dGVzdF9zdHJpbmdfYmFzZTY0RGVjb2RlZA=="
+		
+		// When
+		let decoded = string.base64Decoded()
+		
+		// Then
+		XCTAssertEqual(decoded, "test_string_base64Decoded")
+	}
+	
+	func test_data_sha256() {
+		
+		// Given
+		let string = "test_data_sha256"
+		let data = Data(string.utf8)
+		
+		// When
+		let sha256 = data.sha256
+		let sha256String = sha256.compactMap { String(format: "%02x", $0) }.joined()
+		
+		// Then
+		XCTAssertEqual(sha256String, "a2aee26c63bb88e0c3cab3fc0d20f01f634c814b7757f2dccb1090a796aba1a7")
+	}
+	
+	func test_string_bytes() {
+		
+		// Given
+		let string = "test_string_bytes"
+		
+		// When
+		let bytes = string.bytes
+		
+		// Then
+		XCTAssertEqual(bytes, [116, 101, 115, 116, 95, 115, 116, 114, 105, 110, 103, 95, 98, 121, 116, 101, 115])
+	}
+	
+	func test_string_bytes_empty() {
+		
+		// Given
+		let string = ""
+		
+		// When
+		let bytes = string.bytes
+		
+		// Then
+		XCTAssertEqual(bytes, [])
+	}
 }

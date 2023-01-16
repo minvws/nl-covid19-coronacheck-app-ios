@@ -125,7 +125,7 @@ final class FetchRemoteEventsViewModel {
 				displayServerUnreachable()
 
 			case (true, _, true): // No results and >=1 network had an error
-				let errorCodes = mapServerErrors(serverErrors, for: eventMode.flow, step: step)
+				let errorCodes = ErrorCode.mapServerErrors(serverErrors, for: eventMode.flow, step: step)
 				displayErrorCodeForUnomiAndEvent(errorCodes)
 
 			case (false, true, _), // Some results and >=1 network was busy (5.5.3)
@@ -154,7 +154,7 @@ final class FetchRemoteEventsViewModel {
 			nextAction: { someEventsMightBeMissing in
 				if hasNoResults && !unomiServerErrors.isEmpty {
 					logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
-					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
+					let errorCodes = ErrorCode.mapServerErrors(unomiServerErrors, for: self.eventMode.flow, step: .unomi)
 					self.displayErrorCodeForUnomiAndEvent(errorCodes)
 				} else {
 					self.coordinator?.fetchEventsScreenDidFinish(
@@ -212,7 +212,7 @@ final class FetchRemoteEventsViewModel {
 			return fetchEventAccessTokens(token: token)
 				.onFailure { [self] serverError in
 					logError("Error getting access tokens: \(serverError)")
-					errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .accessTokens))
+					errorCodes.append(ErrorCode.convert(serverError, for: eventMode.flow, step: .accessTokens))
 					serverErrors.append(serverError)
 				}
 		}()
@@ -220,7 +220,7 @@ final class FetchRemoteEventsViewModel {
 		fetchEventProviders()
 			.onFailure { [self] serverError in
 				logError("Error getting event providers: \(serverError)")
-				errorCodes.append(self.convert(serverError, for: eventMode.flow, step: .providers))
+				errorCodes.append(ErrorCode.convert(serverError, for: eventMode.flow, step: .providers))
 				serverErrors.append(serverError)
 			}
 			.map { [self] providers in
@@ -504,36 +504,6 @@ extension FetchRemoteEventsViewModel {
 
 private extension FetchRemoteEventsViewModel {
 
-	func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> [ErrorCode] {
-
-		let errorCodes: [ErrorCode] = serverErrors.map { serverError in
-
-			return convert(serverError, for: flowCode, step: step)
-		}
-		return errorCodes
-	}
-
-	private func convert(_ serverError: ServerError, for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> ErrorCode {
-
-		switch serverError {
-			case let ServerError.error(statusCode, serverResponse, networkError):
-				return ErrorCode(
-					flow: flowCode,
-					step: step,
-					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
-					detailedCode: serverResponse?.code
-				)
-			case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
-				return ErrorCode(
-					flow: flowCode,
-					step: step,
-					provider: provider,
-					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
-					detailedCode: serverResponse?.code
-				)
-		}
-	}
-
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		// No BSN
@@ -640,7 +610,7 @@ private extension FetchRemoteEventsViewModel {
 
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			body: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
+			body: L.generalErrorServerUnreachableErrorCode(ErrorCode.flatten(errorCodes)),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -661,7 +631,7 @@ private extension FetchRemoteEventsViewModel {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			body: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
+			body: L.generalNetworkwasbusyErrorcode(ErrorCode.flatten(errorCodes)),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -670,13 +640,6 @@ private extension FetchRemoteEventsViewModel {
 			secondaryAction: nil
 		)
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
-	}
-
-	private func flattenErrorCodes(_ errorCodes: [ErrorCode]) -> String {
-
-		let lineBreak = "<br />"
-		let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
-		return String(errorString)
 	}
 
 	func displayErrorCodeForAccessTokenAndProviders(_ errorCodes: [ErrorCode]) {
@@ -690,7 +653,7 @@ private extension FetchRemoteEventsViewModel {
 				subTitle = L.holderErrorstateServerMessage("\(errorCodes[0])")
 			}
 		} else {
-			subTitle = L.holderErrorstateServerMessages(flattenErrorCodes(errorCodes))
+			subTitle = L.holderErrorstateServerMessages(ErrorCode.flatten(errorCodes))
 		}
 
 		displayErrorCode(subTitle: subTitle)

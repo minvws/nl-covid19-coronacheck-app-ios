@@ -8,6 +8,7 @@
 import Foundation
 import XCTest
 import Nimble
+import Lottie
 @testable import CTR
 import SnapshotTesting
 
@@ -19,6 +20,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
+		LottieConfiguration.shared.renderingEngine = .mainThread
 		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
 	}

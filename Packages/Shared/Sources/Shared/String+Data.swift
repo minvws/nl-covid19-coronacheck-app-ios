@@ -56,7 +56,6 @@ public extension Data {
 		
 		return Data(hash)
 	}
-	
 }
 
 public extension String {

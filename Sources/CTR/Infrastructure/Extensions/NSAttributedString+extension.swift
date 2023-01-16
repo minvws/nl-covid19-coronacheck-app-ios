@@ -28,13 +28,15 @@ public extension NSAttributedString {
 		let lineHeight: CGFloat
 		let kern: CGFloat
 		let paragraphSpacing: CGFloat
+		let alignment: NSTextAlignment
 
-		init(font: UIFont, textColor: UIColor, lineHeight: CGFloat = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8) {
+		init(font: UIFont, textColor: UIColor, lineHeight: CGFloat = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8, alignment: NSTextAlignment = .natural) {
 			self.font = font
 			self.textColor = textColor
 			self.lineHeight = lineHeight
 			self.kern = kern
 			self.paragraphSpacing = paragraphSpacing
+			self.alignment = alignment
 		}
 
 		static var bodyDark: HTMLStyle = HTMLStyle(font: Fonts.body, textColor: C.black()!)
@@ -118,7 +120,7 @@ public extension NSAttributedString {
 	private static func createAttributes(style: HTMLStyle) -> [Key: Any] {
 
 		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.alignment = .natural
+		paragraphStyle.alignment = style.alignment
 		paragraphStyle.paragraphSpacing = style.paragraphSpacing
 		paragraphStyle.minimumLineHeightAdjustedForContentSize(style.lineHeight)
 
