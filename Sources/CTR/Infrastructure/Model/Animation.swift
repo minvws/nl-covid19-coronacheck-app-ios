@@ -7,6 +7,7 @@
 
 import Foundation
 import Lottie
+import Shared
 
 struct SecurityAnimation: Equatable {
 
@@ -26,7 +27,7 @@ struct SecurityAnimation: Equatable {
 	init(name: String, fileName: String) {
 
 		self.name = name
-		self.animation = LottieAnimation.named(fileName)
+		self.animation = LottieAnimation.named(fileName, bundle: R.bundle)
 	}
 
 	/// Equality

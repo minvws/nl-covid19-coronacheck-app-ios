@@ -130,7 +130,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 	var animationName: String? {
 		didSet {
 			guard let animationName = animationName else { return }
-			animationView.animation = LottieAnimation.named(animationName)
+			animationView.animation = LottieAnimation.named("Animations/" + animationName, bundle: Shared.R.bundle)
 		}
 	}
 

@@ -370,7 +370,7 @@ class VerifierStartScanningView: BaseView {
 			guard oldValue != headerMode else { return }
 			switch headerMode {
 				case .animation(let animationName):
-					headerAnimationView.animation = LottieAnimation.named(animationName)
+					headerAnimationView.animation = LottieAnimation.named("Animations/" + animationName, bundle: Shared.R.bundle)
 					headerAnimationView.play()
 				case .image(let image):
 					headerImageView.image = image
