@@ -45,8 +45,6 @@ compile_mobilecore:
 # -- -- Generate Xcode project -- 
 
 generate_project: 
-	touch Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
-	touch Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings
 	mint run xcodegen  --spec project.yml
 
 open_project: 
