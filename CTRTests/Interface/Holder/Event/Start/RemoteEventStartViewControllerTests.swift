@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import SnapshotTesting
+import Shared
 
 class RemoteEventStartViewControllerTests: XCTestCase {
 

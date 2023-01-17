@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 class ScanInstructionsViewController: GenericViewController<ScanInstructionsView, ScanInstructionsViewModel> {
 

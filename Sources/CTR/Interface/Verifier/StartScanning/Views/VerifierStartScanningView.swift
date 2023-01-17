@@ -7,6 +7,7 @@
 
 import UIKit
 import Lottie
+import Shared
 
 // swiftlint:disable type_body_length
 class VerifierStartScanningView: BaseView {

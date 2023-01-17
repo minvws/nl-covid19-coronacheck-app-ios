@@ -11,6 +11,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import QRGenerator
+import Shared
 
 class ShowQRItemViewModelTests: XCTestCase {
 

@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Shared
 
 class PagedAnnouncementDelegateSpy: PagedAnnouncementDelegate {
 

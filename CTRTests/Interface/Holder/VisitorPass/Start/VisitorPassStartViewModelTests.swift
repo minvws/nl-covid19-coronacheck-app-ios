@@ -8,6 +8,7 @@
 import XCTest
 import Nimble
 @testable import CTR
+import Shared
 
 final class VisitorPassStartViewModelTests: XCTestCase {
 	

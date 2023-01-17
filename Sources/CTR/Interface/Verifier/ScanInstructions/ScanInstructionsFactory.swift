@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 enum ScanInstructionsStep: CaseIterable {
 	case scanQR, checkTheDetails, checkOnlyTheVisibleData, greenScreenIsAccess, verificationPoliciyAccess, redScreenNowWhat

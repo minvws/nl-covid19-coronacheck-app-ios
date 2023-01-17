@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 /// Styled subclass of UITextView that can handle (simple) html.
 /// Auto expands to fit its content.
