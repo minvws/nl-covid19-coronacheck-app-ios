@@ -222,7 +222,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		}
 		
 		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak self] in
-//			self?.userWishesToSeeHelpdesk()
+			self?.userWishesToSeeHelpdesk()
 		}
 		
 		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.verifierMenuAbout(), subTitle: nil, icon: I.icon_menu_phone()!, overrideColor: nil) { [weak self] in
@@ -238,6 +238,20 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		items += [.sectionBreak, itemAboutThisApp]
 		
 		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
+		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userWishesToSeeHelpdesk() {
+		
+		let viewController = HelpdeskViewController(
+			viewModel: HelpdeskViewModel(
+				flavor: AppFlavor.flavor,
+				versionSupplier: self.versionSupplier,
+				urlHandler: { [weak self] url in
+					self?.openUrl(url, inApp: true)
+				}
+			)
+		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
