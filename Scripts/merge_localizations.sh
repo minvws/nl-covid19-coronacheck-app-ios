@@ -14,7 +14,7 @@ do
     cat tmp/localization_downloads/Holder/$i.lproj/Localizable.strings > $COMBINED_PATH
 	cat tmp/localization_downloads/Holder/$i.lproj/Localizable.stringsdict > $PLURAL_PATH
     cat tmp/localization_downloads/Verifier/$i.lproj/Localizable.strings >> $COMBINED_PATH
-	#cat Localizations/Verifier/$i.lproj/Localizable.stringsdict >> $PLURAL_PATH
+	# cat tmp/localization_downloads/Verifier/$i.lproj/Localizable.stringsdict >> $PLURAL_PATH # appending doesn't work with XML.. 
 
     # Count duplicate lines
     DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | sed '/^$/d' | uniq -d | wc -l | xargs)

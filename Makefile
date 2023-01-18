@@ -85,9 +85,12 @@ download_translations:
 	@lokalise2 file download --token ${LOKALISE_API_KEY} --project-id "5229025261717f4fcb81c1.73606773" --format strings --unzip-to tmp/localization_downloads/Holder --export-empty-as skip --original-filenames false
 # Verifier: 
 	@lokalise2 file download --token ${LOKALISE_API_KEY} --project-id "243601816196631318a279.00348152" --format strings --unzip-to tmp/localization_downloads/Verifier --export-empty-as skip --original-filenames false
-	Scripts/merge_localizations.sh
-	rm -rf "tmp/localization_downloads"
-
+# Merge Verifier and Holder into one file for each NL and EN: 
+	@Scripts/merge_localizations.sh
+# Check the HTML within the strings:
+	@Scripts/check_html_in_strings.sh
+# Cleanup:
+	@rm -rf "tmp/localization_downloads"
 # -- Periphery --
 
 scan_unused_code:
