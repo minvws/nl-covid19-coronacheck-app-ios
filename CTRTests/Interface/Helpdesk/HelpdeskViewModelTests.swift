@@ -28,7 +28,7 @@ class HelpdeskViewModelTests: XCTestCase {
 		
 		// Assert
 		expect(sut.configVersion) == "hereisa, 15-07-2021 17:02"
-		expect(sut.appVersion) == "App versie verifier (build 1.2.3)"
+		expect(sut.appVersion) == "verifier (build 1.2.3)"
 	}
 	
 	func test_configVersion_forHolder() {
