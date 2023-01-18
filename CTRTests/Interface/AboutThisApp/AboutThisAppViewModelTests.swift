@@ -57,18 +57,18 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(sut.title) == L.holderAboutTitle()
 		expect(sut.message) == L.holderAboutText()
 		expect(sut.menu).to(haveCount(2))
-		expect(sut.menu[0].key) == L.holderAboutReadmore()
-		expect(sut.menu[0].value).to(haveCount(4))
-		expect(sut.menu[0].value[0].identifier) == .privacyStatement
-		expect(sut.menu[0].value[1].identifier) == .accessibility
-		expect(sut.menu[0].value[2].identifier) == .colophon
-		expect(sut.menu[0].value[3].identifier) == .deeplink
+		expect(sut.menu[0].title) == nil
+		expect(sut.menu[0].options).to(haveCount(4))
+		expect(sut.menu[0].options[0].identifier) == .privacyStatement
+		expect(sut.menu[0].options[1].identifier) == .accessibility
+		expect(sut.menu[0].options[2].identifier) == .colophon
+		expect(sut.menu[0].options[3].identifier) == .deeplink
 		
-		expect(sut.menu[1].value[0].identifier) == .useNoDisclosurePolicy
-		expect(sut.menu[1].value[1].identifier) == .use1GDisclosurePolicy
-		expect(sut.menu[1].value[2].identifier) == .use3GDisclosurePolicy
-		expect(sut.menu[1].value[3].identifier) == .use1GAnd3GDisclosurePolicy
-		expect(sut.menu[1].value[4].identifier) == .useConfigDisclosurePolicy
+		expect(sut.menu[1].options[0].identifier) == .useNoDisclosurePolicy
+		expect(sut.menu[1].options[1].identifier) == .use1GDisclosurePolicy
+		expect(sut.menu[1].options[2].identifier) == .use3GDisclosurePolicy
+		expect(sut.menu[1].options[3].identifier) == .use1GAnd3GDisclosurePolicy
+		expect(sut.menu[1].options[4].identifier) == .useConfigDisclosurePolicy
 		
 		expect(outcomes).to(beEmpty())
 	}
@@ -90,16 +90,15 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(sut.title) == L.verifierAboutTitle()
 		expect(sut.message) == L.verifierAboutText()
 		expect(sut.menu).to(haveCount(2))
-		expect(sut.menu[0].key) == L.verifierAboutReadmore()
-		expect(sut.menu[0].value).to(haveCount(4))
-		expect(sut.menu[0].value[0].identifier) == .privacyStatement
-		expect(sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
-		expect(sut.menu[0].value[2].identifier) == .colophon
-		expect(sut.menu[0].value[3].identifier) == .reset
+		expect(sut.menu[0].title) == nil
+		expect(sut.menu[0].options).to(haveCount(3))
+		expect(sut.menu[0].options[0].identifier) == .privacyStatement
+		expect(sut.menu[0].options[1].identifier) == AboutThisAppMenuIdentifier.accessibility
+		expect(sut.menu[0].options[2].identifier) == .colophon
 		
-		expect(sut.menu[1].key) == L.verifier_about_this_app_law_enforcement()
-		expect(sut.menu[1].value).to(haveCount(1))
-		expect(sut.menu[1].value[0].identifier) == .scanlog
+		expect(sut.menu[1].title) == L.verifier_about_this_app_law_enforcement()
+		expect(sut.menu[1].options).to(haveCount(1))
+		expect(sut.menu[1].options[0].identifier) == .scanlog
 		expect(outcomes).to(beEmpty())
 	}
 	
@@ -119,12 +118,11 @@ class AboutThisAppViewModelTests: XCTestCase {
 		expect(sut.title) == L.verifierAboutTitle()
 		expect(sut.message) == L.verifierAboutText()
 		expect(sut.menu).to(haveCount(1))
-		expect(sut.menu[0].key) == L.verifierAboutReadmore()
-		expect(sut.menu[0].value).to(haveCount(4))
-		expect(sut.menu[0].value[0].identifier) == .privacyStatement
-		expect(sut.menu[0].value[1].identifier) == AboutThisAppMenuIdentifier.accessibility
-		expect(sut.menu[0].value[2].identifier) == .colophon
-		expect(sut.menu[0].value[3].identifier) == .reset
+		expect(sut.menu[0].title) == nil
+		expect(sut.menu[0].options).to(haveCount(3))
+		expect(sut.menu[0].options[0].identifier) == .privacyStatement
+		expect(sut.menu[0].options[1].identifier) == AboutThisAppMenuIdentifier.accessibility
+		expect(sut.menu[0].options[2].identifier) == .colophon
 		expect(outcomes).to(beEmpty())
 	}
 	

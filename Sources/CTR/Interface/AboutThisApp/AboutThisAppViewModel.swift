@@ -40,6 +40,12 @@ struct AboutThisAppMenuOption {
 	let name: String
 }
 
+struct AboutThisAppMenuSection {
+	
+	let title: String?
+	let options: [AboutThisAppMenuOption]
+}
+
 class AboutThisAppViewModel {
 
 	enum Outcome: Equatable {
@@ -56,7 +62,7 @@ class AboutThisAppViewModel {
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var alert: AlertContent?
-	@Bindable private(set) var menu: KeyValuePairs<String, [AboutThisAppMenuOption]> = [:]
+	@Bindable private(set) var menu: [AboutThisAppMenuSection] = []
 
 	// MARK: - Initializer
 
@@ -124,7 +130,7 @@ class AboutThisAppViewModel {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 		
-		let bottomList: [AboutThisAppMenuOption] = [
+		let disclosureOptions: [AboutThisAppMenuOption] = [
 			AboutThisAppMenuOption(identifier: .useNoDisclosurePolicy, name: "Use no Disclosure policy"),
 			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclosure policy"),
 			AboutThisAppMenuOption(identifier: .use3GDisclosurePolicy, name: "Use 3G Disclosure policy"),
@@ -134,34 +140,31 @@ class AboutThisAppViewModel {
 		
 		if Configuration().getEnvironment() != "production" {
 			menu = [
-				L.holderAboutReadmore(): list,
-				"Disclosure Policy": bottomList
+				AboutThisAppMenuSection(title: nil, options: list),
+				AboutThisAppMenuSection(title: "Disclosure Policy", options: disclosureOptions)
 			]
 		} else {
-			menu = [L.holderAboutReadmore(): list]
+			menu = [AboutThisAppMenuSection(title: nil, options: list)]
 		}
 	}
 
 	private func setupMenuVerifier() {
 
-		var topList: [AboutThisAppMenuOption] = [
+		let list: [AboutThisAppMenuOption] = [
 			AboutThisAppMenuOption(identifier: .privacyStatement, name: L.verifierMenuPrivacy()),
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
-		if Configuration().getEnvironment() != "production" {
-			topList.append(AboutThisAppMenuOption(identifier: .reset, name: L.holder_menu_resetApp()))
-		}
 		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
 			menu = [
-				L.verifierAboutReadmore(): topList,
-				L.verifier_about_this_app_law_enforcement(): [
+				AboutThisAppMenuSection(title: nil, options: list),
+				AboutThisAppMenuSection(title: L.verifier_about_this_app_law_enforcement(), options: [
 					AboutThisAppMenuOption(identifier: .scanlog, name: L.verifier_about_this_app_scan_log())
-				]
+				])
 			]
 		} else {
 			menu = [
-				L.verifierAboutReadmore(): topList
+				AboutThisAppMenuSection(title: nil, options: list)
 			]
 		}
 	}
