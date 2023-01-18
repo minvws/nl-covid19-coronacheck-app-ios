@@ -691,7 +691,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.userWishesToSeeStoredEvents()
 		}
 		
-		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: nil) { [weak self] in
+		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak self] in
 			self?.userWishesToSeeHelpAndInfoMenu()
 		}
 		
