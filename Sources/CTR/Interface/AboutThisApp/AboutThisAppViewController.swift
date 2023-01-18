@@ -35,9 +35,9 @@ final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutT
 	
 	private func setupMenuOptions() {
 
-		for menu in viewModel.menu {
-			let stackView = sceneView.createMenuStackView(title: menu.key)
-			for item in menu.value {
+		for section in viewModel.menu {
+			let stackView = sceneView.createMenuStackView(title: section.title)
+			for item in section.options {
 
 				let button = SimpleDisclosureButton.makeButton(
 					title: item.name,

@@ -49,7 +49,7 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Wat kan ik doen?";
 "verifier.launch.text" = "We starten de app voor je op...";
-"verifier.launch.version" = "App versie %@ (build %@)";
+"verifier.launch.version" = "%@ (build %@)";
 "verifier.menu.about" = "Over deze app";
 /* Menu item voor Toegankelijkheid */
 "verifier.menu.accessibility" = "Toegankelijkheid";
