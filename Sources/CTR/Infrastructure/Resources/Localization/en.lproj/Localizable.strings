@@ -1,7 +1,7 @@
 "appstatus_diskfull_body" = "Because your phone’s storage is full, CoronaCheck doesn't work. Please free up space on your phone and reopen CoronaCheck.";
 "appstatus_diskfull_button" = "Close CoronaCheck";
 "appstatus_diskfull_title" = "Your storage is full";
-"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via <a href=\"tel:0800-1421\">0800-1421</a> and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
+"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via %@ and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
 "appstatus_launchError_button" = "Close the app";
 "appstatus_launchError_title" = "Something went wrong";
 "general.add" = "Add";
@@ -889,7 +889,8 @@
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
 "visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code on paper from the desk that reviewed your vaccination. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
-"visitorpass_token_next" = "Next";"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
+"visitorpass_token_next" = "Next";
+"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "general_menu" = "Menu ";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";

@@ -14,11 +14,14 @@ class LaunchErrorViewModelTests: XCTestCase {
 	
 	// MARK: Subject under test
 	var sut: AppStatusViewModel!
+	private var contactInfoSpy: ContactInfoSpy!
 	
 	// MARK: Test lifecycle
 	
 	override func setUp() {
 		
+		contactInfoSpy = ContactInfoSpy()
+		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel: 0800-1421\">0800-1421</a>"
 		super.setUp()
 	}
 	
@@ -28,6 +31,7 @@ class LaunchErrorViewModelTests: XCTestCase {
 		
 		// Given
 		sut = LaunchErrorViewModel(
+			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in },
 			closeHandler: {}
@@ -39,6 +43,7 @@ class LaunchErrorViewModelTests: XCTestCase {
 		expect(self.sut.message.value) == L.appstatus_launchError_body("i 010 000 123")
 		expect(self.sut.actionTitle.value) == L.appstatus_launchError_button()
 		expect(self.sut.image.value) == I.launchError()
+		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
 	}
 	
 	func test_actionButtonTapped() {
@@ -46,6 +51,7 @@ class LaunchErrorViewModelTests: XCTestCase {
 		// Given
 		var actionButtonTapped = false
 		sut = LaunchErrorViewModel(
+			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in },
 			closeHandler: { actionButtonTapped = true }
@@ -63,6 +69,7 @@ class LaunchErrorViewModelTests: XCTestCase {
 		// Given
 		var urlHandlerCalled = false
 		sut = LaunchErrorViewModel(
+			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in urlHandlerCalled = true },
 			closeHandler: { }

@@ -17,6 +17,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: AppStatusViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
+	private var contactInfoSpy: ContactInfoSpy!
 
 	var window = UIWindow()
 
@@ -24,6 +25,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	override func setUpWithError() throws {
 		
 		appCoordinatorSpy = AppCoordinatorSpy()
+		contactInfoSpy = ContactInfoSpy()
 		window = UIWindow()
 		try super.setUpWithError()
 	}
@@ -203,8 +205,11 @@ class AppStatusViewControllerTests: XCTestCase {
 	}
 	
 	func test_launchError() {
+		
 		// Given
+		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel: 0800-1421\">0800-1421</a>"
 		let viewModel = LaunchErrorViewModel(
+			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in },
 			closeHandler: {}

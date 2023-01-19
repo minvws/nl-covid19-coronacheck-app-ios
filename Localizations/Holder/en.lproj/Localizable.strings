@@ -1,7 +1,7 @@
 "appstatus_diskfull_body" = "Because your phone’s storage is full, CoronaCheck doesn't work. Please free up space on your phone and reopen CoronaCheck.";
 "appstatus_diskfull_button" = "Close CoronaCheck";
 "appstatus_diskfull_title" = "Your storage is full";
-"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via <a href=\"tel:0800-1421\">0800-1421</a> and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
+"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via %@ and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
 "appstatus_launchError_button" = "Close the app";
 "appstatus_launchError_title" = "Something went wrong";
 "general.add" = "Add";
