@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Shared
 
 class ObservableTests: XCTestCase {
 	

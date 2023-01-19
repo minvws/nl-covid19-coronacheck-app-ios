@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
 
-	static var shortMonths: [String] {
+	public static var shortMonths: [String] {
 
 		return [
 			L.holderTestresultsJanuary(),

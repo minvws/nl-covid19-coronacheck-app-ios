@@ -8,12 +8,12 @@
 import Foundation
 
 /// A basic generic cache which can only be accessed synchronously via a private queue
-final class ThreadSafeCache<Key: Hashable, Value> {
+final public class ThreadSafeCache<Key: Hashable, Value> {
 	
 	private var storage: [Key: Value] = [:]
 	private let queue = DispatchQueue(label: "nl.coronacheck.threadsafe.\(UUID().uuidString)")
 	
-	subscript(key: Key) -> Value? {
+	public subscript(key: Key) -> Value? {
 		get {
 			queue.sync {
 				storage[key]
@@ -26,7 +26,9 @@ final class ThreadSafeCache<Key: Hashable, Value> {
 		}
 	}
 	
-	var values: [Key: Value] {
+	public var values: [Key: Value] {
 		return storage
 	}
+	
+	public init() { }
 }
