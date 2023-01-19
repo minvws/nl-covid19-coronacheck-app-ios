@@ -9,6 +9,7 @@
 import UIKit
 import Transport
 import Shared
+import ReusableViews
 
 enum InputRetrievalCodeMode {
 	case negativeTest

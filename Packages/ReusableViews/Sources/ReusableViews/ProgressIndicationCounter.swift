@@ -8,11 +8,11 @@
 import Foundation
 
 /// Thread-safe way of tracking ProgressIndication by incrementing/decrementing an integer
-final class ProgressIndicationCounter {
+final public class ProgressIndicationCounter {
 
 	private let shouldShowProgressIndicationCallback: (Bool) -> Void
 
-	init(_ shouldShowProgressIndicationCallback: @escaping (Bool) -> Void) {
+	public init(_ shouldShowProgressIndicationCallback: @escaping (Bool) -> Void) {
 		self.shouldShowProgressIndicationCallback = shouldShowProgressIndicationCallback
 	}
 
@@ -24,7 +24,7 @@ final class ProgressIndicationCounter {
 	}
 
 	/// Inverts `isActive`
-	var isInactive: Bool {
+	public var isInactive: Bool {
 		return !isActive
 	}
 
@@ -38,13 +38,13 @@ final class ProgressIndicationCounter {
 		}
 	}
 
-	func increment() {
+	public func increment() {
 		objc_sync_enter(self)
 		defer { objc_sync_exit(self) }
 		counter += 1
 	}
 
-	func decrement() {
+	public func decrement() {
 		objc_sync_enter(self)
 		defer { objc_sync_exit(self) }
 

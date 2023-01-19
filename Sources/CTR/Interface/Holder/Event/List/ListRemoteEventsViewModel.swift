@@ -8,6 +8,7 @@
 import Foundation
 import Transport
 import Shared
+import ReusableViews
 
 class ListRemoteEventsViewModel {
 
