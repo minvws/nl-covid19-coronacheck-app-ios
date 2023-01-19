@@ -14,7 +14,7 @@ let package = Package(
 	],
 	dependencies: [
 		// Dependencies declare other packages that this package depends on.
-		.package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0)),
+		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
 		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.0.0")
 	],
 	targets: [
