@@ -37,8 +37,8 @@ final class RiskSettingControl: UIControl {
 	}
 	
 	private let iconImageView: UIImageView = {
-		let imageView = ImageView(imageName: I.radioButton.normal.name,
-								  highlightedImageName: I.radioButton.selected.name)
+		
+		let imageView = UIImageView(image: I.radioButton.normal(), highlightedImage: I.radioButton.selected())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		return imageView
 	}()
