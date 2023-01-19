@@ -58,7 +58,7 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.sut.details[1].value) == "01-06-2021"
 		expect(self.sut.details[2].field) == "Ziekteverwekker / Disease targeted:"
 		expect(self.sut.details[2].value) == "COVID-19"
-		expect(self.sut.details[3].field) == "Type test / Type of test:"
+		expect(self.sut.details[3].field) == "Type test / Test type:"
 		expect(self.sut.details[3].value) == "LP217198-3"
 		expect(self.sut.details[4].field) == "Testnaam / Test name:"
 		expect(self.sut.details[4].value) == "fake negativeTest"
