@@ -701,7 +701,7 @@
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Je positieve test kon wel meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We konden geen herstelbewijs maken";
-"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>Dit bewijs is ongeldig verklaard. Daarom kun je het niet aan de app toevoegen.</p><p>Probeer een geldig bewijs toe te voegen, of bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>Dit bewijs is ongeldig verklaard. Daarom kun je het niet aan de app toevoegen.</p><p>Probeer een geldig bewijs toe te voegen, of bel de CoronaCheck helpdesk op %@ en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateNoValidCertificate_title" = "Geen geldig bewijs";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>Van je opgehaalde gegevens is een herstelbewijs gemaakt.</p><p>Je positieve test kon ook meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "Er is een herstelbewijs gemaakt";

@@ -19,6 +19,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 	private var environmentSpies: EnvironmentSpies!
 	private var greenCardLoader: GreenCardLoader!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
+	private var contactInfoSpy: ContactInfoSpy!
 	
 	override func setUp() {
 		super.setUp()
@@ -34,6 +35,7 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			walletManager: environmentSpies.walletManagerSpy,
 			secureUserSettings: environmentSpies.secureUserSettingsSpy
 		)
+		contactInfoSpy = ContactInfoSpy()
 	}
 	
 	func setupSut() {
@@ -41,7 +43,8 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 	}
 	
@@ -58,7 +61,8 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -97,7 +101,8 @@ class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -141,7 +146,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -176,7 +182,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -221,7 +228,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -261,7 +269,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -301,7 +310,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -341,7 +351,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -381,7 +392,8 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {

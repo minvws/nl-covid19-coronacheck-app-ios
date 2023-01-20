@@ -21,7 +21,7 @@ class LaunchErrorViewModelTests: XCTestCase {
 	override func setUp() {
 		
 		contactInfoSpy = ContactInfoSpy()
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel: 0800-1421\">0800-1421</a>"
+		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		super.setUp()
 	}
 	
@@ -40,7 +40,7 @@ class LaunchErrorViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title.value) == L.appstatus_launchError_title()
-		expect(self.sut.message.value) == L.appstatus_launchError_body("i 010 000 123")
+		expect(self.sut.message.value) == L.appstatus_launchError_body(contactInfoSpy.stubbedPhoneNumberLink, "i 010 000 123")
 		expect(self.sut.actionTitle.value) == L.appstatus_launchError_button()
 		expect(self.sut.image.value) == I.launchError()
 		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true

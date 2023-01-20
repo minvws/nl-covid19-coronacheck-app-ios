@@ -405,9 +405,6 @@ extension NetworkManager: NetworkManaging {
 	/// Get the public keys
 	/// - Parameter completion: completion handler
 	public func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
-
-//		completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
-//		return
 		
 		guard let url = networkConfiguration.publicKeysUrl, let urlRequest = URLRequest(url: url, timeOutInterval: 10.0) else {
 			logError("NetworkManager - getPublicKeys: invalid request")

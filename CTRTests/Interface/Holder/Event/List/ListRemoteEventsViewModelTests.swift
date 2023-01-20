@@ -20,6 +20,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var greenCardLoader: GreenCardLoader!
 	private var environmentSpies: EnvironmentSpies!
+	private var contactInfoSpy: ContactInfoSpy!
 	
 	override func setUp() {
 
@@ -39,6 +40,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		)
  
 		coordinatorSpy = EventCoordinatorDelegateSpy()
+		contactInfoSpy = ContactInfoSpy()
+		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 	}
 
 	func setupSut() {
@@ -46,7 +49,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 	}
 	
@@ -123,7 +127,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
+			
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -150,7 +156,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -178,7 +185,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -206,7 +214,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationAndPositiveTest,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPositiveTest],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -234,7 +243,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .test(.ggd),
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -262,7 +272,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -291,7 +302,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -312,7 +324,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -336,7 +349,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01")],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -359,7 +373,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(vaccinationDate: "2021-08-01"),
 				remoteVaccinationEvent(vaccinationDate: "2021-08-03")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -382,7 +397,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(vaccinationDate: "2021-08-01"),
 				remoteVaccinationEvent(vaccinationDate: "2021-08-01")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -405,7 +421,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -430,7 +447,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -453,7 +471,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-01"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-01")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -476,7 +495,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -503,7 +523,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -532,7 +553,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -561,7 +583,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -592,7 +615,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
 				remoteVaccinationEvent(providerIdentifier: "ZZZ", vaccinationDate: "2021-08-02", hpkCode: "2924528")
 			],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		// When
@@ -614,7 +638,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -635,7 +660,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
@@ -673,7 +699,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventRecovery],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
@@ -711,7 +738,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .test(.commercial),
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
@@ -748,7 +776,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .test(.ggd),
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventNegativeTest],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
@@ -785,7 +814,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
@@ -822,7 +852,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 0
@@ -850,7 +881,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 1
@@ -876,7 +908,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -916,7 +949,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -958,7 +992,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1000,7 +1035,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1039,7 +1075,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1081,7 +1118,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1123,7 +1161,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1167,7 +1206,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1211,7 +1251,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1255,7 +1296,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1297,7 +1339,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1342,7 +1385,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1387,7 +1431,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1432,7 +1477,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1477,7 +1523,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1518,7 +1565,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1566,7 +1614,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1614,7 +1663,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1656,7 +1706,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1698,7 +1749,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
@@ -1750,7 +1802,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1793,7 +1846,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1836,7 +1890,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1871,7 +1926,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			eventMode: .vaccination,
 			remoteEvents: [],
 			eventsMightBeMissing: true,
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 
 		expect(self.sut.alert).toEventuallyNot(beNil())
@@ -1890,7 +1946,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: environmentSpies.greenCardLoaderSpy
+			greenCardLoader: environmentSpies.greenCardLoaderSpy,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -1921,7 +1978,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -1968,7 +2026,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
@@ -2035,7 +2094,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2057,7 +2117,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		})
 
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body(
+			"<a href=\"tel:TEST\">TEST</a>", "i 580 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
@@ -2091,7 +2152,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2142,7 +2204,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
@@ -2169,7 +2232,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return nil
 		})
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body(
+			"<a href=\"tel:TEST\">TEST</a>", "i 580 000 0514")
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
@@ -2185,7 +2249,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .test(.ggd),
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2206,7 +2271,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationAndPositiveTest,
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2227,7 +2293,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2248,7 +2315,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .recovery,
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {
@@ -2269,7 +2337,8 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccinationassessment,
 			remoteEvents: [],
-			greenCardLoader: greenCardLoader
+			greenCardLoader: greenCardLoader,
+			contactInfo: contactInfoSpy
 		)
 		
 		guard case let .feedback(content: feedback) = sut.viewState else {

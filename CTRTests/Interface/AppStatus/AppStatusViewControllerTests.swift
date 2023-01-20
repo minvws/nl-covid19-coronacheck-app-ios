@@ -207,7 +207,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_launchError() {
 		
 		// Given
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel: 0800-1421\">0800-1421</a>"
+		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		let viewModel = LaunchErrorViewModel(
 			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
@@ -215,16 +215,17 @@ class AppStatusViewControllerTests: XCTestCase {
 			closeHandler: {}
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
-
+		
 		// When
 		loadView()
-
+		
 		// Then
 		expect(self.sut.sceneView.title) == L.appstatus_launchError_title()
-		expect(self.sut.sceneView.message) == L.appstatus_launchError_body("i 010 000 123")
+		expect(self.sut.sceneView.message) == L.appstatus_launchError_body(
+			contactInfoSpy.stubbedPhoneNumberLink, "i 010 000 123")
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.appstatus_launchError_button()
 		expect(self.sut.sceneView.image) == I.launchError()
-
+		
 		sut.assertImage()
 	}
 }
