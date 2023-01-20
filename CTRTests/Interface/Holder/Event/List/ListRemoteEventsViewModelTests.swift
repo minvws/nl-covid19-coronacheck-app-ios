@@ -2119,6 +2119,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
 		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body(
 			"<a href=\"tel:TEST\">TEST</a>", "i 580 000 0514")
+		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
@@ -2234,6 +2235,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
 		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body(
 			"<a href=\"tel:TEST\">TEST</a>", "i 580 000 0514")
+		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`

@@ -24,6 +24,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	var environmentSpies: EnvironmentSpies!
+	var contactInfoSpy: ContactInfoSpy!
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -54,6 +55,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = Observatory.create().0
 		vaccinationAssessmentNotificationManagerSpy = VaccinationAssessmentNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
+		contactInfoSpy = ContactInfoSpy()
 	}
 
 	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0", activeDisclosurePolicies: [DisclosurePolicy] = [.policy3G]) -> HolderDashboardViewModel {

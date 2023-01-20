@@ -225,6 +225,7 @@ class AppStatusViewControllerTests: XCTestCase {
 			contactInfoSpy.stubbedPhoneNumberLink, "i 010 000 123")
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.appstatus_launchError_button()
 		expect(self.sut.sceneView.image) == I.launchError()
+		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
 		
 		sut.assertImage()
 	}

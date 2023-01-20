@@ -44,6 +44,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_mutliplefailures_shouldShowHelpDeskErrorBeneathCard() {
 		
 		// Arrange
+		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		let qrCards = [
@@ -72,7 +73,8 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.domesticCards.value).toEventually(haveCount(4))
 		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard())
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
-			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk()
+			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("<a href=\"tel:TEST\">TEST</a>")
+			expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
 		}))
 	}
 	

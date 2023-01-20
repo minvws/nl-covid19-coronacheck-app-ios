@@ -182,7 +182,7 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (i 075) door.</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op %@ (gratis) en geef de foutcode (i 075) door.</p>";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-codes te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
