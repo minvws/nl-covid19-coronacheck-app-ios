@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol ContactInformationProviderProtocol {
+protocol ContactInformationProtocol {
 	
 	var phoneNumberLink: String { get }
 }
 
-struct ContactInformationProvider: ContactInformationProviderProtocol {
+struct ContactInformationProvider: ContactInformationProtocol {
 	
 	var phoneNumberLink: String
 	

@@ -17,7 +17,7 @@ struct Environment {
 	var now: () -> Date
 	var appInstalledSinceManager: AppInstalledSinceManaging
 	var clockDeviationManager: ClockDeviationManaging
-	var contactInformationProvider: ContactInformationProviderProtocol
+	var contactInformationProvider: ContactInformationProtocol
 	var couplingManager: CouplingManaging
 	var cryptoLibUtility: CryptoLibUtilityProtocol
 	var cryptoManager: CryptoManaging
@@ -46,7 +46,7 @@ struct Environment {
 		now: @escaping () -> Date,
 		appInstalledSinceManager: AppInstalledSinceManaging,
 		clockDeviationManager: ClockDeviationManaging,
-		contactInformationProvider: ContactInformationProviderProtocol,
+		contactInformationProvider: ContactInformationProtocol,
 		couplingManager: CouplingManaging,
 		cryptoLibUtility: CryptoLibUtilityProtocol,
 		cryptoManager: CryptoManaging,
