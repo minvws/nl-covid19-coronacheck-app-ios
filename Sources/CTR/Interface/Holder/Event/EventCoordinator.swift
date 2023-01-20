@@ -254,8 +254,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 				originalMode: originalMode,
 				remoteEvents: remoteEvents,
 				eventsMightBeMissing: eventsMightBeMissing,
-				greenCardLoader: Current.greenCardLoader,
-				contactInfo: ContactInfo()
+				greenCardLoader: Current.greenCardLoader
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)

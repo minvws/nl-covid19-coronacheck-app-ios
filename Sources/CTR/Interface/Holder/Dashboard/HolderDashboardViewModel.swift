@@ -473,7 +473,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				checkForMismatchedIdentityError(error: error)
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
-				? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(ContactInfo().phoneNumberLink)
+				? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(Current.contactInformationProvider.phoneNumberLink)
 					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 
 			case let (.failed(error), .expiring, _):

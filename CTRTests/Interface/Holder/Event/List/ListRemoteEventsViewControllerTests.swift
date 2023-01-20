@@ -19,7 +19,6 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var greenCardLoader: GreenCardLoader!
 	private var environmentSpies: EnvironmentSpies!
-	private var contactInfoSpy: ContactInfoSpy!
 
 	var window = UIWindow()
 
@@ -38,7 +37,6 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 		)
 		
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		contactInfoSpy = ContactInfoSpy()
 		window = UIWindow()
 	}
 
@@ -54,8 +52,7 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: eventMode,
 			remoteEvents: remoteEvents,
-			greenCardLoader: greenCardLoader,
-			contactInfo: contactInfoSpy
+			greenCardLoader: greenCardLoader
 		)
 		sut = ListRemoteEventsViewController(viewModel: viewModel)
 	}

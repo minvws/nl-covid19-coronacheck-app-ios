@@ -17,7 +17,6 @@ class ListRemoteEventsViewModel {
 	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging? = Current.cryptoManager
 	let mappingManager: MappingManaging = Current.mappingManager
-	let contactInfo: ContactInfoProtocol
 	
 	var eventMode: EventMode
 	var originalEventMode: EventMode?
@@ -48,8 +47,7 @@ class ListRemoteEventsViewModel {
 		originalMode: EventMode? = nil,
 		remoteEvents: [RemoteEvent],
 		eventsMightBeMissing: Bool = false,
-		greenCardLoader: GreenCardLoading,
-		contactInfo: ContactInfoProtocol
+		greenCardLoader: GreenCardLoading
 	) {
 
 		self.coordinator = coordinator
@@ -57,7 +55,6 @@ class ListRemoteEventsViewModel {
 		self.eventMode = eventMode
 		self.originalEventMode = originalMode
 		self.remoteEvents = remoteEvents
-		self.contactInfo = contactInfo
 		
 		viewState = .loading(content: Content(title: Strings.title(forEventMode: eventMode)))
 

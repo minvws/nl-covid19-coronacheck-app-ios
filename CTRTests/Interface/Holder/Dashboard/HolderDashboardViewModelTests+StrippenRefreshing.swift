@@ -455,7 +455,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_expired_serverError_secondTime_shouldDisplayErrorWithHelpdesk() {
 		// Arrange
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
@@ -488,7 +488,7 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
 			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("<a href=\"tel:TEST\">TEST</a>")
-			expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
+			expect(self.environmentSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		}))
 	}
 
@@ -548,7 +548,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_domestic_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
 		// Arrange
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
@@ -581,13 +581,13 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.domesticCards.value[2]).toEventually(beDomesticQRCard(test: { _, _, _, _, _, _, _, error in
 			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("<a href=\"tel:TEST\">TEST</a>")
-			expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
+			expect(self.environmentSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		}))
 	}
 
 	func test_strippen_international_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
 		// Arrange
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
@@ -620,7 +620,7 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.internationalCards.value[1]).toEventually(beEuropeanUnionQRCard(test: { _, _, _, _, _, _, error in
 			expect(error?.message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("<a href=\"tel:TEST\">TEST</a>")
-			expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
+			expect(self.environmentSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		}))
 	}
 

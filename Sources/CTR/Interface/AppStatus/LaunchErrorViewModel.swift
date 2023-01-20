@@ -20,7 +20,6 @@ class LaunchErrorViewModel: AppStatusViewModel {
 	private let closeHandler: () -> Void
 	
 	init(
-		contactInfo: ContactInfoProtocol,
 		errorCodes: [ErrorCode],
 		urlHandler: @escaping (URL) -> Void,
 		closeHandler: @escaping () -> Void) {
@@ -29,7 +28,7 @@ class LaunchErrorViewModel: AppStatusViewModel {
 		self.urlHandler = urlHandler
 		self.message = Observable(
 			value: L.appstatus_launchError_body(
-				contactInfo.phoneNumberLink,
+				Current.contactInformationProvider.phoneNumberLink,
 				ErrorCode.flatten(errorCodes)
 			)
 		)

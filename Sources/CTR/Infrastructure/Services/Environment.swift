@@ -17,6 +17,7 @@ struct Environment {
 	var now: () -> Date
 	var appInstalledSinceManager: AppInstalledSinceManaging
 	var clockDeviationManager: ClockDeviationManaging
+	var contactInformationProvider: ContactInformationProviderProtocol
 	var couplingManager: CouplingManaging
 	var cryptoLibUtility: CryptoLibUtilityProtocol
 	var cryptoManager: CryptoManaging
@@ -45,6 +46,7 @@ struct Environment {
 		now: @escaping () -> Date,
 		appInstalledSinceManager: AppInstalledSinceManaging,
 		clockDeviationManager: ClockDeviationManaging,
+		contactInformationProvider: ContactInformationProviderProtocol,
 		couplingManager: CouplingManaging,
 		cryptoLibUtility: CryptoLibUtilityProtocol,
 		cryptoManager: CryptoManaging,
@@ -72,6 +74,7 @@ struct Environment {
 		self.now = now
 		self.appInstalledSinceManager = appInstalledSinceManager
 		self.clockDeviationManager = clockDeviationManager
+		self.contactInformationProvider = contactInformationProvider
 		self.couplingManager = couplingManager
 		self.cryptoLibUtility = cryptoLibUtility
 		self.cryptoManager = cryptoManager
@@ -138,6 +141,7 @@ private let clockDeviationManager = ClockDeviationManager(
 	currentSystemUptime: ClockDeviationManager.currentSystemUptime,
 	now: now
 )
+private let contactInformationProvider = ContactInformationProvider()
 private let couplingManager = CouplingManager(cryptoManager: cryptoManager, networkManager: networkManager)
 private let cryptoManager = CryptoManager(
 	cryptoLibUtility: cryptoLibUtility,
@@ -225,6 +229,7 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		now: now,
 		appInstalledSinceManager: appInstalledSinceManager,
 		clockDeviationManager: clockDeviationManager,
+		contactInformationProvider: contactInformationProvider,
 		couplingManager: couplingManager,
 		cryptoLibUtility: cryptoLibUtility,
 		cryptoManager: cryptoManager,

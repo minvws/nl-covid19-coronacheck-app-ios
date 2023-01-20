@@ -14,14 +14,14 @@ class LaunchErrorViewModelTests: XCTestCase {
 	
 	// MARK: Subject under test
 	var sut: AppStatusViewModel!
-	private var contactInfoSpy: ContactInfoSpy!
+	private var environmentalSpies: EnvironmentSpies!
 	
 	// MARK: Test lifecycle
 	
 	override func setUp() {
 		
-		contactInfoSpy = ContactInfoSpy()
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
+		environmentalSpies = setupEnvironmentSpies()
+		environmentalSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		super.setUp()
 	}
 	
@@ -31,7 +31,6 @@ class LaunchErrorViewModelTests: XCTestCase {
 		
 		// Given
 		sut = LaunchErrorViewModel(
-			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in },
 			closeHandler: {}
@@ -40,10 +39,11 @@ class LaunchErrorViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title.value) == L.appstatus_launchError_title()
-		expect(self.sut.message.value) == L.appstatus_launchError_body(contactInfoSpy.stubbedPhoneNumberLink, "i 010 000 123")
+		expect(self.sut.message.value) == L.appstatus_launchError_body("<a href=\"tel:TEST\">TEST</a>", "i 010 000 123")
+		expect(self.environmentalSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		expect(self.sut.actionTitle.value) == L.appstatus_launchError_button()
 		expect(self.sut.image.value) == I.launchError()
-		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
+		expect(self.environmentalSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 	}
 	
 	func test_actionButtonTapped() {
@@ -51,7 +51,6 @@ class LaunchErrorViewModelTests: XCTestCase {
 		// Given
 		var actionButtonTapped = false
 		sut = LaunchErrorViewModel(
-			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in },
 			closeHandler: { actionButtonTapped = true }
@@ -69,7 +68,6 @@ class LaunchErrorViewModelTests: XCTestCase {
 		// Given
 		var urlHandlerCalled = false
 		sut = LaunchErrorViewModel(
-			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in urlHandlerCalled = true },
 			closeHandler: { }

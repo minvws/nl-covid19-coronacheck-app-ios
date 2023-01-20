@@ -17,7 +17,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	// MARK: Subject under test
 	private var sut: AppStatusViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
-	private var contactInfoSpy: ContactInfoSpy!
+	private var environmentalSpies: EnvironmentSpies!
 
 	var window = UIWindow()
 
@@ -25,7 +25,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	override func setUpWithError() throws {
 		
 		appCoordinatorSpy = AppCoordinatorSpy()
-		contactInfoSpy = ContactInfoSpy()
+		environmentalSpies = setupEnvironmentSpies()
 		window = UIWindow()
 		try super.setUpWithError()
 	}
@@ -207,9 +207,8 @@ class AppStatusViewControllerTests: XCTestCase {
 	func test_launchError() {
 		
 		// Given
-		contactInfoSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
+		environmentalSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		let viewModel = LaunchErrorViewModel(
-			contactInfo: contactInfoSpy,
 			errorCodes: [ErrorCode(flow: .onboarding, step: .configuration, errorCode: "123")],
 			urlHandler: { _ in },
 			closeHandler: {}
@@ -222,10 +221,11 @@ class AppStatusViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.title) == L.appstatus_launchError_title()
 		expect(self.sut.sceneView.message) == L.appstatus_launchError_body(
-			contactInfoSpy.stubbedPhoneNumberLink, "i 010 000 123")
+			"<a href=\"tel:TEST\">TEST</a>", "i 010 000 123")
+		expect(self.environmentalSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.appstatus_launchError_button()
 		expect(self.sut.sceneView.image) == I.launchError()
-		expect(self.contactInfoSpy.invokedPhoneNumberLinkGetter) == true
+		expect(self.environmentalSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		
 		sut.assertImage()
 	}

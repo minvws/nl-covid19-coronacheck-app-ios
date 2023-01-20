@@ -334,7 +334,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(_ errorTuples: [(error: ServerError, step: ErrorCode.Step)]) {
 		
 		let errorCodes = ErrorCode.mapServerErrors(errorTuples, for: .onboarding)
-		let viewModel = LaunchErrorViewModel(contactInfo: ContactInfo(), errorCodes: errorCodes) { [weak self] url in
+		let viewModel = LaunchErrorViewModel(errorCodes: errorCodes) { [weak self] url in
 			self?.openUrl(url, inApp: true)
 		} closeHandler: {
 			self.closeTheApp()

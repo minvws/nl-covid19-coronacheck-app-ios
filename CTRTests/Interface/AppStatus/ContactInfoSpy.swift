@@ -7,7 +7,7 @@
 
 @testable import CTR
 
-class ContactInfoSpy: ContactInfoProtocol {
+class ContactInformationProviderSpy: ContactInformationProviderProtocol {
 
 	var invokedPhoneNumberLinkGetter = false
 	var invokedPhoneNumberLinkGetterCount = 0
