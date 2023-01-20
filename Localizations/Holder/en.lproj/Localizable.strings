@@ -689,7 +689,7 @@
 "holder_invaliddetailsremoved_alert_title" = "Invalid details removed";
 "holder_invaliddetailsremoved_banner_button_readmore" = "Read more";
 "holder_invaliddetailsremoved_banner_title" = "Details have been removed from the app.";
-"holder_invaliddetailsremoved_moreinfo_body" = "<p>Some of your details were declared invalid. They have therefore been removed from the app. It concerns the following details:</p>%@<p>Certificates may have been removed from the app as well. Please add a valid vaccination or test to retrieve certificates again.</p><p>Do you have questions about this? Please contact the CoronaCheck helpdesk via <a href=\"tel:08001421\">0800-1421</a> and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
+"holder_invaliddetailsremoved_moreinfo_body" = "<p>Some of your details were declared invalid. They have therefore been removed from the app. It concerns the following details:</p>%@<p>Certificates may have been removed from the app as well. Please add a valid vaccination or test to retrieve certificates again.</p><p>Do you have questions about this? Please contact the CoronaCheck helpdesk via %@ and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
 "holder_invaliddetailsremoved_moreinfo_title" = "Removed details";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We can't create a certificate";

@@ -689,7 +689,7 @@
 "holder_invaliddetailsremoved_alert_title" = "Ongeldige gegevens verwijderd";
 "holder_invaliddetailsremoved_banner_button_readmore" = "Lees meer";
 "holder_invaliddetailsremoved_banner_title" = "Er zijn gegevens uit de app verwijderd.";
-"holder_invaliddetailsremoved_moreinfo_body" = "<p>Er zijn gegevens van jou ongeldig verklaard. Daarom zijn deze uit de app verwijderd. Het gaat om de volgende gegevens:</p>%@<p>Mogelijk zijn hierdoor ook bewijzen uit de app verwijderd. Voeg een geldige vaccinatie of test toe om bewijzen weer terug te halen.</p><p>Heb je vragen? Bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_invaliddetailsremoved_moreinfo_body" = "<p>Er zijn gegevens van jou ongeldig verklaard. Daarom zijn deze uit de app verwijderd. Het gaat om de volgende gegevens:</p>%@<p>Mogelijk zijn hierdoor ook bewijzen uit de app verwijderd. Voeg een geldige vaccinatie of test toe om bewijzen weer terug te halen.</p><p>Heb je vragen? Bel de CoronaCheck helpdesk op %@ en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_invaliddetailsremoved_moreinfo_title" = "Verwijderde gegevens";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
