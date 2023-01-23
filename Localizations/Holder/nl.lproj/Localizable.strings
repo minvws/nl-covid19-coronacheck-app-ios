@@ -652,9 +652,9 @@
 "holder_helpInfo_title" = "Hulp & Informatie";
 "holder_helpdesk_appVersion" = "App-versie:";
 "holder_helpdesk_configuration" = "Configuratie:";
-"holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op <a href=\"tel:0800-1421\">0800-1421</a> (gratis).</p>";
-"holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van maandag t/m vrijdag 08:00 - 18:00 uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op %@ (gratis).</p>";
+"holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: %@.</p>";
+"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van %@ t/m %@ %@ - %@ uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:";
 "holder_helpdesk_support_title" = "Ondersteuning";

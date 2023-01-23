@@ -25,7 +25,12 @@ class HelpdeskViewControllerTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
-
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberAbroadLink = "<a href=\"tel:TEST 2\">TEST 2</a>"
+		environmentSpies.contactInformationSpy.stubbedStartDay = "maandag"
+		environmentSpies.contactInformationSpy.stubbedEndDay = "vrijdag"
+		environmentSpies.contactInformationSpy.stubbedStartDay = "08:00"
+		environmentSpies.contactInformationSpy.stubbedStartDay = "18:00"
 		window = UIWindow()
 	}
 	
