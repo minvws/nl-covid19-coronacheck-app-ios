@@ -24,6 +24,7 @@ excluded:
   - Packages/*/Package.swift
   - Vendor
   - Sources/CTR/Infrastructure/Resources/R.generated.swift
+  - Packages/*/.build
 force_cast: warning
 force_try:
   severity: warning
