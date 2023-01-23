@@ -46,7 +46,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 		_rootView = sceneViewInstance
 		_sceneViewInstance = { sceneViewInstance }
 	
-		super.init(nibName: nil, bundle: nil) 
+		super.init(nibName: nil, bundle: nil)
 	}
 	
 	/// Required initialzer
