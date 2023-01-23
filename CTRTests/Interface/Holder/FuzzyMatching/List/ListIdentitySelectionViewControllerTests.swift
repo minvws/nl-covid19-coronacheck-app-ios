@@ -10,6 +10,7 @@ import Nimble
 import SnapshotTesting
 import ViewControllerPresentationSpy
 @testable import CTR
+import Shared
 
 final class ListIdentitySelectionViewControllerTests: XCTestCase {
 	

@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 import ViewControllerPresentationSpy
 @testable import CTR
+import Shared
 
 class VerifierScanViewControllerTests: XCTestCase {
 

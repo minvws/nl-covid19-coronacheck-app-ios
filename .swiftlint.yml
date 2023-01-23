@@ -20,6 +20,8 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
 excluded:
   - Pods
+  - Packages/*/.build
+  - Packages/*/Package.swift
   - Vendor
   - Sources/CTR/Infrastructure/Resources/R.generated.swift
   - Packages/*/.build

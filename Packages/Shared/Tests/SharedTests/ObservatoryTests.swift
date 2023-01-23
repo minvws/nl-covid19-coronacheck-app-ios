@@ -7,8 +7,8 @@
 
 import Foundation
 import XCTest
-@testable import CTR
 import Nimble
+@testable import Shared
 
 class ObservatoryTests: XCTestCase {
 	typealias Value = String

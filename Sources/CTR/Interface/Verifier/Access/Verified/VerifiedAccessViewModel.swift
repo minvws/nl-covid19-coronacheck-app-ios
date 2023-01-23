@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 /// The access options
 enum VerifiedAccess: Equatable {

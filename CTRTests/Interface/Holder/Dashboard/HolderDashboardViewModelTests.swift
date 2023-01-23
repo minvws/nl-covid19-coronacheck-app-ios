@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import CoreData
+import Shared
 
 class HolderDashboardViewModelTests: XCTestCase {
 

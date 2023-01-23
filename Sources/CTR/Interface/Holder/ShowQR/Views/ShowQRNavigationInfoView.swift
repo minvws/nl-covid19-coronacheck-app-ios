@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 /// Component is to get left to right accessibility VoiceOver focus order
 final class ShowQRNavigationInfoView: BaseView {

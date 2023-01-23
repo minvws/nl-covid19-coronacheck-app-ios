@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import CTR
+import Shared
 
 final class TestModalViewModel {
 	

@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 final class PrivacyConsentView: BaseView {
 
@@ -216,7 +217,7 @@ final class PrivacyConsentView: BaseView {
 		}
 		textView.accessibilityHint = accessibiliyHint
 		
-		let imageView = ImageView(imageName: I.onboarding.privacyItem.name).asIcon()
+		let imageView = UIImageView(image: I.onboarding.privacyItem()).asIcon()
 		imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
 		
 		let stack = HStack(

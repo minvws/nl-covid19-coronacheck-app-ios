@@ -11,6 +11,7 @@ import ViewControllerPresentationSpy
 import Transport
 import Nimble
 import SnapshotTesting
+import Shared
 
 class AppStatusViewControllerTests: XCTestCase {
 

@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 typealias QRCard = HolderDashboardViewModel.QRCard
 

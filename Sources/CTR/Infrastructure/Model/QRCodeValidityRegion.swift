@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 // Remove this - see QRCard.Region
 enum QRCodeValidityRegion: String, Codable, Equatable {

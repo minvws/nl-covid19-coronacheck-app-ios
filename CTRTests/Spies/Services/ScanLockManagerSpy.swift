@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import CTR
+import Shared
 
 extension ScanLockManagerSpy {
 	static var configScanLockDuration: TimeInterval {

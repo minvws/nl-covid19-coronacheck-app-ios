@@ -10,6 +10,7 @@ import XCTest
 import SnapshotTesting
 import CoreData
 import Nimble
+import Shared
 @testable import CTR
 
 class HolderDashboardViewControllerTests: XCTestCase {

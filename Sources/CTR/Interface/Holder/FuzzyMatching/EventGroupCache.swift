@@ -7,6 +7,7 @@
 
 import Foundation
 import Transport
+import Shared
 
 protocol EventGroupCacheProtocol {
 	

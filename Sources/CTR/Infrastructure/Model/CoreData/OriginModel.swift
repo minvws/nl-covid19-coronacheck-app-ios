@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Shared
 
 enum OriginType: String, Codable, Equatable {
 

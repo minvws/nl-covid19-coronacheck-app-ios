@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 /// Styled UILabel subclass providing convenience initialization for each text style support in the Theme
 class Label: UILabel {

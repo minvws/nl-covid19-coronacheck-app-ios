@@ -7,15 +7,15 @@
 
 import Foundation
 
-class KeychainItem<T: Codable> {
+public class KeychainItem<T: Codable> {
 
-	enum KeychainError: Error {
+	public enum KeychainError: Error {
 		case notFound
 		case unexpectedData
 		case unhandledError(status: OSStatus)
 	}
 
-	var value: T? {
+	public var value: T? {
 		get {
 			return try? read()
 		}
@@ -25,7 +25,7 @@ class KeychainItem<T: Codable> {
 		}
 	}
 
-	var exists: Bool {
+	public var exists: Bool {
 		
 		queue.sync {
 			var query = baseQuery()
@@ -53,13 +53,13 @@ class KeychainItem<T: Codable> {
 	private let name: String
 	private let service: String?
 
-	init(name: String, service: String?) {
+	public init(name: String, service: String?) {
 
 		self.name = name
 		self.service = service
 	}
 
-	func clearData() {
+	public func clearData() {
 
 		value = nil
 	}
@@ -175,9 +175,9 @@ class KeychainItem<T: Codable> {
 }
 
 // MARK: - Cached Variant
-class CachedKeychainItem<T: Codable>: KeychainItem<T> {
+public class CachedKeychainItem<T: Codable>: KeychainItem<T> {
 
-	override var value: T? {
+	public override var value: T? {
 		get {
 			cachedValue = cachedValue ?? (try? read())
 			return cachedValue
@@ -193,12 +193,12 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
 }
 
 // MARK: - Property Wrapper
-@propertyWrapper struct Keychain<T: Codable> {
+@propertyWrapper public struct Keychain<T: Codable> {
 
-	let projectedValue: CachedKeychainItem<T>
+	public let projectedValue: CachedKeychainItem<T>
 	private let defaultValue: T
 
-	init(wrappedValue: T, name: String, service: String? = nil, clearOnReinstall: Bool = false) {
+	public init(wrappedValue: T, name: String, service: String? = nil, clearOnReinstall: Bool = false) {
 
 		projectedValue = .init(name: name, service: service)
 		self.defaultValue = wrappedValue
@@ -213,11 +213,11 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
 		}
 	}
 
-	init(name: String, service: String? = nil, clearOnReinstall: Bool = false, defaultValue: T) {
+	public init(name: String, service: String? = nil, clearOnReinstall: Bool = false, defaultValue: T) {
 		self.init(wrappedValue: defaultValue, name: name, service: service, clearOnReinstall: clearOnReinstall)
 	}
 
-	var wrappedValue: T {
+	public var wrappedValue: T {
 		get {
 			projectedValue.value ?? defaultValue
 		}

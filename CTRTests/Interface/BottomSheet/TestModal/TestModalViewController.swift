@@ -7,6 +7,7 @@
 
 import UIKit
 @testable import CTR
+import Shared
 
 final class TestModalViewController: GenericViewController<TestModalView, TestModalViewModel> {
 		
