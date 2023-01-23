@@ -6,9 +6,6 @@ name: CTR
 # - Packages:
 
 packages:
-  Inject: 
-    github: krzysztofzablocki/Inject # only in debug mode. Compiles as a no-op in release https://github.com/krzysztofzablocki/Inject/blob/main/Sources/Inject/Integrations/Hosts.swift
-    branch: main
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.9.5
@@ -100,7 +97,6 @@ targetTemplates:
           NETWORK_CONFIGURATION: DEV
           VALIDATE_PRODUCT: NO
           LOG_LEVEL: debug
-          OTHER_LDFLAGS: -Xlinker -interposable -weak_framework SwiftUI # all for Inject
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
@@ -147,7 +143,6 @@ targetTemplates:
         product: OpenIDConnect
       - package: RDOModules
         product: HTTPSecurity
-      - package: Inject
       - package: Reachability
         product: Reachability
       - package: RSwiftLibrary
@@ -559,8 +554,6 @@ schemes:
       configEnvironment: Development
     run:
       language: nl
-      commandLineArguments:
-        "-shouldInjectView": true
     test:
       targets:
         - package: Shared/SharedTests
