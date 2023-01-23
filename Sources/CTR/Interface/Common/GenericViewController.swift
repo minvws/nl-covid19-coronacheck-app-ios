@@ -6,7 +6,6 @@
  */
 
 import UIKit
-import Inject
 import Shared
 
 /// A generic viewcontroller
@@ -42,40 +41,12 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	init(sceneView: @autoclosure @escaping () -> V = { V() }(), viewModel: M) {
 		
 		self.viewModel = viewModel
-		
-		#if DEBUG
-			let host: _InjectableViewHost = Inject.ViewHost(sceneView())
-			_rootView = host
-			_sceneViewInstance = { host.instance }
-		#else
-			let sceneViewInstance: V = sceneView()
-			_rootView = sceneViewInstance
-			_sceneViewInstance = { sceneViewInstance }
-		#endif
- 
-		super.init(nibName: nil, bundle: nil)
-		
-		#if DEBUG
-			if LaunchArgumentsHandler.shouldInjectView() {
-				onInjection { [weak self] instance in
-					guard let self else { return }
-					// **For iterative UI development only **
-					// The previous instance of self.sceneView is never released (due to
-					// strong bindings from the ViewModel), so on each successive injection
-					// a new sceneView instance will be created, without releasing the old one.
-					// Therefore there is an an obvious memory leak during development.
-					//
-					// Other bugs related to having registered multiple observers can also be expected.
-					
-					// The updated `host.instance` value is only available after `onInjection`
-					// completes, so need to jump to next runloop:
-					DispatchQueue.main.async {
-						self.viewDidLoad()
-						logDebug("♻️ ♻️ ♻️ Re-Injected View at \(type(of: self)) ♻️ ♻️ ♻️ ")
-					}
-				}
-			}
-		#endif
+	
+		let sceneViewInstance: V = sceneView()
+		_rootView = sceneViewInstance
+		_sceneViewInstance = { sceneViewInstance }
+	
+		super.init(nibName: nil, bundle: nil) 
 	}
 	
 	/// Required initialzer
