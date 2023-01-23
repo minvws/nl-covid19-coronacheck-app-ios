@@ -559,8 +559,6 @@ schemes:
       configEnvironment: Development
     run:
       language: nl
-      commandLineArguments:
-        "-shouldInjectView": true
     test:
       targets:
         - package: Shared/SharedTests
