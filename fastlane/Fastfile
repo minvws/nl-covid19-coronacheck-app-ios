@@ -28,7 +28,8 @@ platform :ios do
       scheme: "Holder Dev",
       reinstall_app: true,
       app_identifier: "nl.rijksoverheid.ctr.dev",
-      skip_slack: true
+      skip_slack: true,
+      xcargs: "-skipPackagePluginValidation"
     )
   end
 
@@ -48,7 +49,8 @@ platform :ios do
       disable_slide_to_type: true,
       app_identifier: "nl.rijksoverheid.ctr.dev",
       skip_slack: true,
-      result_bundle: true
+      result_bundle: true,
+      xcargs: "-skipPackagePluginValidation"
     )
   end
 
@@ -69,7 +71,8 @@ platform :ios do
       app_identifier: "nl.rijksoverheid.ctr.dev",
       skip_testing: "HolderUITests/VaccinationEventMatchingTest,HolderUITests/DifferentCredentialsTest",
       skip_slack: true,
-      result_bundle: true
+      result_bundle: true,
+      xcargs: "-skipPackagePluginValidation"
     )
   end
 
@@ -140,7 +143,8 @@ platform :ios do
          provisioningProfiles: {
            bundleid => provisioningprofilename
          }
-       }
+       },
+       xcargs: "-skipPackagePluginValidation"
      )
 
      upload_to_testflight(skip_submission: true)
@@ -285,7 +289,8 @@ platform :ios do
         provisioningProfiles: {
           bundleid => provisioningprofilename
         }
-      }
+      },
+      xcargs: "-skipPackagePluginValidation"
     )
 
     # It's useful to see the originating git branch in Firebase release notes:

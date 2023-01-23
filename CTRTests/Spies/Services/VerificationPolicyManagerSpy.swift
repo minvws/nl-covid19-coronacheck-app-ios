@@ -6,6 +6,7 @@
 */
 
 import XCTest
+import Shared
 @testable import CTR
 
 class VerificationPolicyManagerSpy: VerificationPolicyManaging {

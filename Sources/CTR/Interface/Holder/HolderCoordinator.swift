@@ -12,7 +12,6 @@ import Reachability
 import Shared
 import Transport
 import OpenIDConnect
-import Inject
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -772,16 +771,13 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToSeeHelpdesk() {
 		
-		let viewController = Inject.ViewControllerHost({
-			let viewController = HelpdeskViewController(viewModel: HelpdeskViewModel(
-				flavor: AppFlavor.flavor,
-				versionSupplier: self.versionSupplier,
-				urlHandler: { [weak self] url in
-					self?.openUrl(url, inApp: true)
-				}
-			))
-			return viewController
-		}())
+		let viewController = HelpdeskViewController(viewModel: HelpdeskViewModel(
+			flavor: AppFlavor.flavor,
+			versionSupplier: self.versionSupplier,
+			urlHandler: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			}
+		))
 		
 		navigationController.pushViewController(viewController, animated: true)
 	}

@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 /// A styled UIButton subclass
 class Button: TappableButton {

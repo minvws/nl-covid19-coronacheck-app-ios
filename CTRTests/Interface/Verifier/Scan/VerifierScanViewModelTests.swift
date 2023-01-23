@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Clcore
 import Nimble
+import Shared
 
 class VerifierScanViewModelTests: XCTestCase {
 	

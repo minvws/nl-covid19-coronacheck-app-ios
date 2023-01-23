@@ -8,6 +8,7 @@
 import Nimble
 import XCTest
 import SnapshotTesting
+import Shared
 
 @testable import CTR
 

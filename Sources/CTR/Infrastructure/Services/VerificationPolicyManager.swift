@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 protocol VerificationPolicyManaging: AnyObject {
 	var state: VerificationPolicy? { get }

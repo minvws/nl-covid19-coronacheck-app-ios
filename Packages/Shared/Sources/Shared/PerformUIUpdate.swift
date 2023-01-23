@@ -11,7 +11,7 @@ import Foundation
 /// on the main thread it executes immediately.
 ///
 /// This is useful during tests: https://www.swiftbysundell.com/articles/reducing-flakiness-in-swift-tests/#jumping-queues
-func performUIUpdate(using closure: @escaping () -> Void) {
+public func performUIUpdate(using closure: @escaping () -> Void) {
 	// If we are already on the main thread, execute the closure directly
 	if Thread.isMainThread {
 		closure()

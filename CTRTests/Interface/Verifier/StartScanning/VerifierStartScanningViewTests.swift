@@ -10,6 +10,7 @@ import Nimble
 import Lottie
 @testable import CTR
 import SnapshotTesting
+import Shared
 
 class VerifierStartScanningViewTests: XCTestCase {
 	var sut: VerifierStartScanningView!

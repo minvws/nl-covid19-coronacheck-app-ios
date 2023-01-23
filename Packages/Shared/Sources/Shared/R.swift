@@ -5,7 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-// swiftlint:disable type_name
-typealias L = R.string.localizable
-typealias I = R.image
-typealias C = R.color
+// swiftlint:disable identifier_name
+
+public let L = R.string.localizable
+public let I = R.image
+public let C = R.color

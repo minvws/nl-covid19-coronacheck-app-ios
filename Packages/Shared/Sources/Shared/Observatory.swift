@@ -9,10 +9,10 @@ import Foundation
 
 /// 🔭
 /// Mechanism for registering for external state change notifications
-class Observatory<T> {
+public class Observatory<T> {
 	
 	// MARK: - Types -
-	typealias ObserverToken = UUID
+	public typealias ObserverToken = UUID
 
 	// MARK: - Static
 	
@@ -20,7 +20,7 @@ class Observatory<T> {
 	/// to publish updates to registered observers.
 	/// (this allows `notifyObservers()` itself to stay private)
 	///
-	static func create() -> (Observatory<T>, (T) -> Void) {
+	public static func create() -> (Observatory<T>, (T) -> Void) {
 		let observatory = Observatory<T>()
 		let updateCallback = observatory.notifyObservers
 		return (observatory, updateCallback)
@@ -38,17 +38,17 @@ class Observatory<T> {
 	
 	/// Be careful to use weak references to your observers within the closure, and
 	/// to unregister your observer using the returned `ObserverToken`.
-	func append(observer: @escaping (T) -> Void) -> ObserverToken {
+	public func append(observer: @escaping (T) -> Void) -> ObserverToken {
 		let newToken = ObserverToken()
 		observers[newToken] = observer
 		return newToken
 	}
 
-	func remove(observerToken token: ObserverToken) {
+	public func remove(observerToken token: ObserverToken) {
 		observers[token] = nil
 	}
 
-	func removeAll() {
+	public func removeAll() {
 		observers = [:]
 	}
 	

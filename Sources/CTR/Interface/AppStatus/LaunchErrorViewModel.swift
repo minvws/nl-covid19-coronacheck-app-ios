@@ -7,6 +7,7 @@
 
 import UIKit
 import Transport
+import Shared
 
 class LaunchErrorViewModel: AppStatusViewModel {
 	

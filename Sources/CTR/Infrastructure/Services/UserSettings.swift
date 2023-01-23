@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 protocol UserSettingsProtocol: AnyObject {
 
@@ -47,59 +48,61 @@ protocol UserSettingsProtocol: AnyObject {
 
 class UserSettings: UserSettingsProtocol {
 
-	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
+	init() {}
+	
+	@Shared.UserDefaults(key: "scanInstructionShown", defaultValue: false)
 	var scanInstructionShown: Bool
 
-	@UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
+	@Shared.UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
 	var jailbreakWarningShown: Bool
 
-	@UserDefaults(key: "dashboardRegionToggleValue")
+	@Shared.UserDefaults(key: "dashboardRegionToggleValue")
 	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic
 
-	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
+	@Shared.UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
 	var configFetchedTimestamp: TimeInterval?
 
-	@UserDefaults(key: "configFetchedHash", defaultValue: nil)
+	@Shared.UserDefaults(key: "configFetchedHash", defaultValue: nil)
 	var configFetchedHash: String?
 
-	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
+	@Shared.UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
 	var issuerKeysFetchedTimestamp: TimeInterval?
 
-	@UserDefaults(key: "lastScreenshotTime", defaultValue: nil)
+	@Shared.UserDefaults(key: "lastScreenshotTime", defaultValue: nil)
 	var lastScreenshotTime: Date?
 
-	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
+	@Shared.UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval?
 
-	@UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
+	@Shared.UserDefaults(key: "lastSeenRecommendedUpdate", defaultValue: nil)
 	var lastSeenRecommendedUpdate: String?
 	
-	@UserDefaults(key: "lastSuccessfulCompletionOfAddCertificateFlowDate", defaultValue: nil)
+	@Shared.UserDefaults(key: "lastSuccessfulCompletionOfAddCertificateFlowDate", defaultValue: nil)
 	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date?
 
-	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
+	@Shared.UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
 	var deviceAuthenticationWarningShown: Bool
 	
-	@UserDefaults(key: "configVerificationPolicies")
+	@Shared.UserDefaults(key: "configVerificationPolicies")
 	var configVerificationPolicies: [VerificationPolicy] = []
 	
-	@UserDefaults(key: "policyInformationShown", defaultValue: false)
+	@Shared.UserDefaults(key: "policyInformationShown", defaultValue: false)
 	var policyInformationShown: Bool
 
-	@UserDefaults(key: "lastDismissedDisclosurePolicy")
+	@Shared.UserDefaults(key: "lastDismissedDisclosurePolicy")
 	var lastDismissedDisclosurePolicy: [DisclosurePolicy] = []
 
-	@UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
+	@Shared.UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
 	var hasDismissedZeroGPolicy: Bool = false
 	
-	@UserDefaults(key: "overrideDisclosurePolicies")
+	@Shared.UserDefaults(key: "overrideDisclosurePolicies")
 	var overrideDisclosurePolicies: [String] = []
 	
-	@UserDefaults(key: "lastKnownConfigDisclosurePolicy")
+	@Shared.UserDefaults(key: "lastKnownConfigDisclosurePolicy")
 	var lastKnownConfigDisclosurePolicy: [String] = ["3G"]
 	
 	// The alert which tells the user that one of their certificates has been blocked:
-	@UserDefaults(key: "hasShownBlockedEventsAlert")
+	@Shared.UserDefaults(key: "hasShownBlockedEventsAlert")
 	var hasShownBlockedEventsAlert: Bool = false
 }
 

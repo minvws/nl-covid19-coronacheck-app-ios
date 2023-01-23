@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 /// A grey full width button with a title, sub title and a disclosure icon
 class DisclosureSubtitleButton: BaseView {

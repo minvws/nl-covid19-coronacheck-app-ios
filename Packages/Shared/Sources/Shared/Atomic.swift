@@ -12,19 +12,19 @@ import Foundation
 // - https://www.vadimbulavin.com/swift-atomic-properties-with-property-wrappers/
 
 @propertyWrapper
-class Atomic<Value> {
+public class Atomic<Value> {
 	
 	/// Serial Queue
 	private let queue = DispatchQueue(label: "nl.coronacheck.atomicserialqueue.\(UUID().uuidString)")
 	private var value: Value
 	
-	var didSet: ((Atomic<Value>) -> Void)?
+	public var didSet: ((Atomic<Value>) -> Void)?
 	
-	var projectedValue: Atomic<Value> {
+	public var projectedValue: Atomic<Value> {
 		return self
 	}
 	
-	var wrappedValue: Value {
+	public var wrappedValue: Value {
 		get {
 			return queue.sync { value }
 		}
@@ -35,11 +35,11 @@ class Atomic<Value> {
 		}
 	}
 	
-	init(wrappedValue: Value) {
+	public init(wrappedValue: Value) {
 		self.value = wrappedValue
 	}
 	
-	func mutate(_ mutation: (inout Value) -> Void) {
+	public func mutate(_ mutation: (inout Value) -> Void) {
 		
 		queue.sync {
 			mutation(&value)

@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 extension String {
 	func components(separatedBy separators: [some StringProtocol]) -> [String] {

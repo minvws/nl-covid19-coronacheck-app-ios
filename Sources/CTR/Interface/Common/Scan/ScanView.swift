@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 protocol HasScanView {
 	var scanView: ScanView { get }

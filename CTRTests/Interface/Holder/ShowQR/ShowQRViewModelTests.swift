@@ -10,6 +10,7 @@ import UIKit
 import XCTest
 @testable import CTR
 import Nimble
+import Shared
 
 class ShowQRViewModelTests: XCTestCase {
 

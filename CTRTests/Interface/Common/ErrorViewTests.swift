@@ -9,6 +9,7 @@ import Foundation
 import XCTest
 import SnapshotTesting
 @testable import CTR
+import Shared
 
 class ErrorViewTests: XCTestCase {
 

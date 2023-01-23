@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 class MenuViewModel {
 	typealias Item = MenuViewController.Item

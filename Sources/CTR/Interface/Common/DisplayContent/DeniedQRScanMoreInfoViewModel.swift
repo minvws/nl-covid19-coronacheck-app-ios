@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+
 typealias DisplayContent = (text: String, customSpacing: CGFloat)
 
 class DeniedQRScanMoreInfoViewModel {

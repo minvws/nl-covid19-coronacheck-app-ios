@@ -7,18 +7,18 @@
 
 import Foundation
 
-@propertyWrapper struct UserDefaults<T: Codable> {
+@propertyWrapper public struct UserDefaults<T: Codable> {
 	
-	let key: String
-	let defaultValue: T
+	public let key: String
+	public let defaultValue: T
 	
-	init(wrappedValue: T, key: String) {
+	public init(wrappedValue: T, key: String) {
 		
 		self.key = key
 		self.defaultValue = wrappedValue
 	}
 	
-	init(key: String, defaultValue: T) {
+	public init(key: String, defaultValue: T) {
 		
 		self.key = key
 		self.defaultValue = defaultValue
@@ -30,7 +30,7 @@ import Foundation
 		let value: T
 	}
 	
-	var wrappedValue: T {
+	public var wrappedValue: T {
 		get {
 			guard let data = Foundation.UserDefaults.standard.object(forKey: key) as? Data else {
 				return defaultValue
