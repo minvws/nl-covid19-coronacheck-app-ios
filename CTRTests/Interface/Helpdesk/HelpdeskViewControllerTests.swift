@@ -29,8 +29,8 @@ class HelpdeskViewControllerTests: XCTestCase {
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberAbroadLink = "<a href=\"tel:TEST 2\">TEST 2</a>"
 		environmentSpies.contactInformationSpy.stubbedStartDay = "maandag"
 		environmentSpies.contactInformationSpy.stubbedEndDay = "vrijdag"
-		environmentSpies.contactInformationSpy.stubbedStartDay = "08:00"
-		environmentSpies.contactInformationSpy.stubbedStartDay = "18:00"
+		environmentSpies.contactInformationSpy.stubbedStartHour = "08:00"
+		environmentSpies.contactInformationSpy.stubbedEndHour = "18:00"
 		window = UIWindow()
 	}
 	

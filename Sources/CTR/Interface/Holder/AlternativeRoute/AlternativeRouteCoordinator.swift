@@ -97,7 +97,14 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		
 		displayContent(
 			title: L.holder_contactCoronaCheckHelpdesk_title(),
-			message: L.holder_contactCoronaCheckHelpdesk_message()
+			message: L.holder_contactCoronaCheckHelpdesk_message(
+				Current.contactInformationProvider.startDay,
+				Current.contactInformationProvider.endDay,
+				Current.contactInformationProvider.startHour,
+				Current.contactInformationProvider.endHour,
+				Current.contactInformationProvider.phoneNumberLink,
+				Current.contactInformationProvider.phoneNumberAbroadLink
+			)
 		)
 	}
 	
