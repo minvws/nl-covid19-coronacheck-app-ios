@@ -374,7 +374,7 @@ extension BaseTest {
 		openQRDetails(for: person)
 		app.textExists("Over mijn internationale QR-code")
 		app.labelValuePairExist(label: "Testuitslag / Test result:", value: "negatief (geen coronavirus vastgesteld) / negative (no coronavirus detected)")
-		app.labelValuePairExist(label: "Type test / Type of test:", value: testType.rawValue)
+		app.labelValuePairExist(label: "Type test / Test type:", value: testType.rawValue)
 		closeQRDetails()
 		app.tapButton("Terug")
 	}
