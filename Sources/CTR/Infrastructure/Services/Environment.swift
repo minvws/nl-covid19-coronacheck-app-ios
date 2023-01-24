@@ -141,7 +141,9 @@ private let clockDeviationManager = ClockDeviationManager(
 	currentSystemUptime: ClockDeviationManager.currentSystemUptime,
 	now: now
 )
-private let contactInformationProvider = ContactInformationProvider()
+private let contactInformationProvider = ContactInformationProvider(
+	remoteConfigManager: remoteConfigManager
+)
 private let couplingManager = CouplingManager(cryptoManager: cryptoManager, networkManager: networkManager)
 private let cryptoManager = CryptoManager(
 	cryptoLibUtility: cryptoLibUtility,

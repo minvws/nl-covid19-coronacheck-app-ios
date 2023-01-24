@@ -36,6 +36,27 @@ public struct HPKData: Codable, Equatable {
 	}
 }
 
+public struct ContactInformation: Codable, Equatable {
+	
+	public let phoneNumber: String?
+	public let phoneNumberAbroad: String?
+	public let startDay: Int?
+	public let startHour: String?
+	public let endDay: Int?
+	public let endHour: String?
+	
+	/// Key mapping
+	enum CodingKeys: String, CodingKey {
+		
+		case phoneNumber
+		case phoneNumberAbroad
+		case startDay
+		case startHour
+		case endDay
+		case endHour
+	}
+}
+
 public struct Mapping: Codable, Equatable {
 
 	public let code: String
@@ -137,6 +158,8 @@ public struct RemoteConfiguration: Codable, Equatable {
 	public var disclosurePolicies: [String]?
 	
 	public var backendTLSCertificates: [String]?
+	
+	public var contactInformation: ContactInformation?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -175,6 +198,7 @@ public struct RemoteConfiguration: Codable, Equatable {
 		case disclosurePolicies = "disclosurePolicies"
 		case backendTLSCertificates = "backendTLSCertificates"
 		case providerIdentifiers = "providerIdentifiers"
+		case contactInformation = "contactInformation"
 	}
 	
 	init(minVersion: String) {

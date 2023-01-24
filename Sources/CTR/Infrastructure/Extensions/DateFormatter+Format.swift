@@ -73,6 +73,14 @@ extension DateFormatter.Format {
 	static let time = {
 		DateFormatter(format: "HH:mm")
 	}()
+	
+	/// e.g. `09:54 AM
+	static let localizedTime = {
+		let formatter = DateFormatter()
+		formatter.dateStyle = .none
+		formatter.timeStyle = .short
+		return formatter
+	}()
 }
 
 extension DateFormatter.Header {
