@@ -655,7 +655,7 @@
 "holder_helpdesk_configuration_value" = "%@, %@";
 "holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br />%@ (free).</p>";
 "holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: %@.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Open from %@ till %@, between %@. - %@.</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line3" = "<p>Open from %@ till %@, between %@ - %@</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
 "holder_helpdesk_support_title" = "Support";
@@ -890,7 +890,8 @@
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
 "visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code on paper from the desk that reviewed your vaccination. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
-"visitorpass_token_next" = "Next";"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
+"visitorpass_token_next" = "Next";
+"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "general_menu" = "Menu ";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";

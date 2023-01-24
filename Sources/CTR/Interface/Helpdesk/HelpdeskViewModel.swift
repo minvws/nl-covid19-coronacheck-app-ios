@@ -12,6 +12,9 @@ class HelpdeskViewModel {
 	
 	@Bindable private(set) var appVersion: String
 	@Bindable private(set) var configVersion: String?
+	@Bindable private(set) var messageLine1: String
+	@Bindable private(set) var messageLine2: String
+	@Bindable private(set) var messageLine3: String
 	
 	private let urlHandler: (URL) -> Void
 	
@@ -30,6 +33,16 @@ class HelpdeskViewModel {
 		}()
 		
 		self.urlHandler = urlHandler
+		
+		// Dynamic Contact Information
+		messageLine1 = L.holder_helpdesk_contact_message_line1(Current.contactInformationProvider.phoneNumberLink)
+		messageLine2 = L.holder_helpdesk_contact_message_line2(Current.contactInformationProvider.phoneNumberAbroadLink)
+		messageLine3 = L.holder_helpdesk_contact_message_line3(
+			Current.contactInformationProvider.startDay,
+			Current.contactInformationProvider.endDay,
+			Current.contactInformationProvider.startHour,
+			Current.contactInformationProvider.endHour
+		)
 	}
 	
 	func userDidTapURL(url: URL) {

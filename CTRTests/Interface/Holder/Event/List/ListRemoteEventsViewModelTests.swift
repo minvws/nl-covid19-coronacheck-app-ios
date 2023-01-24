@@ -28,6 +28,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.identityCheckerSpy.stubbedCompareResult = true
 		environmentSpies.cryptoManagerSpy.stubbedGenerateSecretKeyResult = Data()
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		
 		// Not using a GreenCardLoader Spy here - this is okay because all its dependencies are already spies.
 		// Once GreenCardLoader has full code coverage, this can be replaced with a spy.
@@ -124,6 +125,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
+			
 		)
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
@@ -2057,7 +2059,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		})
 
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body(
+			"<a href=\"tel:TEST\">TEST</a>", "i 580 000 0514")
+		expect(self.environmentSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
@@ -2169,7 +2173,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			return nil
 		})
 		expect(feedback?.title) == L.holder_listRemoteEvents_endStateNoValidCertificate_title()
-		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body("i 580 000 0514")
+		expect(feedback?.body) == L.holder_listRemoteEvents_endStateNoValidCertificate_body(
+			"<a href=\"tel:TEST\">TEST</a>", "i 580 000 0514")
+		expect(self.environmentSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		expect(feedback?.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback?.secondaryActionTitle) == nil
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`

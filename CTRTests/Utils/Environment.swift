@@ -31,6 +31,11 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
+	var contactInformationSpy: ContactInformationProviderSpy = {
+		let spy = ContactInformationProviderSpy()
+		return spy
+	}()
+	
 	var couplingManagerSpy: CouplingManagerSpy = {
 		let spy = CouplingManagerSpy()
 		return spy
@@ -179,6 +184,7 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		now: { now },
 		appInstalledSinceManager: spies.appInstalledSinceManagerSpy,
 		clockDeviationManager: spies.clockDeviationManagerSpy,
+		contactInformationProvider: spies.contactInformationSpy,
 		couplingManager: spies.couplingManagerSpy,
 		cryptoLibUtility: spies.cryptoLibUtilitySpy,
 		cryptoManager: spies.cryptoManagerSpy,

@@ -890,7 +890,8 @@
 "visitorpass_token_error_unknown_provider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
-"visitorpass_token_next" = "Volgende";"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"visitorpass_token_next" = "Volgende";
+"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "general_menu" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";

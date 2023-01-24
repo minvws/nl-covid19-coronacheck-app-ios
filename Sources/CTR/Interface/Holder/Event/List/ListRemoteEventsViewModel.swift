@@ -17,7 +17,7 @@ class ListRemoteEventsViewModel {
 	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging? = Current.cryptoManager
 	let mappingManager: MappingManaging = Current.mappingManager
-
+	
 	var eventMode: EventMode
 	var originalEventMode: EventMode?
 	var remoteEvents: [RemoteEvent] // these are the events we are adding in this flow.

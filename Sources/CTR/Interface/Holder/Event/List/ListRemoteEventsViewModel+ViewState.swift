@@ -260,8 +260,7 @@ extension ListRemoteEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
-		logDebug("provider: \(provider) for \(dataRow.providerIdentifier)")
-
+		
 		var details = VaccinationDetailsGenerator.getDetails(
 			identity: dataRow.identity,
 			event: dataRow.event,
