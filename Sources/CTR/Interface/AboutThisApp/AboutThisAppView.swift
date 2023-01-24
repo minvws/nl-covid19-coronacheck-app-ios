@@ -62,7 +62,6 @@ final class AboutThisAppView: ScrolledStackView {
 		return Label(subhead: nil).multiline()
 	}()
 
-
 	private let configVersionLabel: Label = {
 
 		return Label(subhead: nil).multiline()
@@ -73,7 +72,7 @@ final class AboutThisAppView: ScrolledStackView {
 		testStackView.alignment = .center
 		testStackView.axis = .vertical
 		return testStackView
-	}()	
+	}()
 
 	/// setup the views
 	override func setupViews() {
