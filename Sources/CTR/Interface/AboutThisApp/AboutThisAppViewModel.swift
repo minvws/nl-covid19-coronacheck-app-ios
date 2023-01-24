@@ -84,10 +84,8 @@ class AboutThisAppViewModel {
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
 
-		appVersion = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-
+		appVersion = L.aboutthisapp_appversion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+		
 		configVersion = {
 			guard let timestamp = Current.userSettings.configFetchedTimestamp,
 				  let hash = Current.userSettings.configFetchedHash
@@ -95,7 +93,7 @@ class AboutThisAppViewModel {
 
 			let dateString = DateFormatter.Format.numericDateWithTime.string(from: Date(timeIntervalSince1970: timestamp))
 
-			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
+			return L.aboutthisapp_configversion(String(hash.prefix(7)), dateString)
 		}()
 
 		if flavor == .holder {
