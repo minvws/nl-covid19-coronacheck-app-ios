@@ -48,6 +48,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder
 		) { outcome in
 			outcomes.append(outcome)
@@ -81,6 +82,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// When
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.verifier
 		) { outcome in
 			outcomes.append(outcome)
@@ -109,6 +111,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// When
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.verifier
 		) { outcome in
 			outcomes.append(outcome)
@@ -131,6 +134,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { outcome in
 				outcomes += [outcome]
@@ -151,6 +155,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -171,6 +176,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -191,6 +197,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -210,6 +217,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -230,6 +238,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -249,6 +258,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -269,6 +279,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -289,6 +300,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -320,6 +332,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Given
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)
@@ -349,6 +362,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		
 		var outcomes = [AboutThisAppViewModel.Outcome]()
 		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				outcomes.append(outcome)

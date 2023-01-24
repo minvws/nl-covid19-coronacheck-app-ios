@@ -1,3 +1,5 @@
+"aboutthisapp_appversion" = "App-versie %@ (build %@)";
+"aboutthisapp_configversion" = "Configuratie %1$@, %2$@";
 "appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol is werkt CoronaCheck niet. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag is vol";
@@ -32,10 +34,7 @@
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Begin van lijst.";
 "general.loading" = "Bezig met laden";
-/* Configuratie ABC123, 13-10-2021 00:00 */
-"general.menu.configVersion" = "%@, %@";
 "general.menu.open" = "Open menu";
-"general.menu.version" = "App-versie %@ (%@)";
 "general.netherlands" = "Nederland";
 "general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
 "general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
@@ -320,7 +319,6 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
 "holder.incompletedutchvaccination.title" = "Geen Nederlands vaccinatiebewijs";
 "holder.launch.text" = "We starten de app voor je op...";
-"holder.launch.version" = "%@ (build %@)";
 "holder.location.ggd.subtitle" = "Log in met je DigiD";
 "holder.location.ggd.title" = "GGD";
 "holder.location.message" = "Blijkt uit de test dat je geen corona hebt? Dan kun je van de testuitslag een bewijs maken. Geef aan waar je getest bent.";
@@ -651,7 +649,10 @@
 "holder_helpInfo_helpdesk" = "Helpdesk";
 "holder_helpInfo_title" = "Hulp & Informatie";
 "holder_helpdesk_appVersion" = "App-versie:";
+"holder_helpdesk_appVersion_value" = "%@ (build %@)";
 "holder_helpdesk_configuration" = "Configuratie:";
+/* Configuratie ABC123, 13-10-2021 00:00 */
+"holder_helpdesk_configuration_value" = "%@, %@";
 "holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op %@ (gratis).</p>";
 "holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: %@.</p>";
 "holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van %@ t/m %@ %@ - %@ uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";

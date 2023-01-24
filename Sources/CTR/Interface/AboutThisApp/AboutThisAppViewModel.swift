@@ -61,6 +61,8 @@ class AboutThisAppViewModel {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
+	@Bindable private(set) var appVersion: String
+	@Bindable private(set) var configVersion: String?
 	@Bindable private(set) var alert: AlertContent?
 	@Bindable private(set) var menu: [AboutThisAppMenuSection] = []
 
@@ -69,8 +71,10 @@ class AboutThisAppViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
+	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor
 	init(
+		versionSupplier: AppVersionSupplierProtocol,
 		flavor: AppFlavor,
 		outcomeHandler: @escaping (Outcome) -> Void
 	) {
@@ -79,6 +83,18 @@ class AboutThisAppViewModel {
 		self.flavor = flavor
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
 		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
+
+		appVersion = L.aboutthisapp_appversion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+		
+		configVersion = {
+			guard let timestamp = Current.userSettings.configFetchedTimestamp,
+				  let hash = Current.userSettings.configFetchedHash
+			else { return nil }
+
+			let dateString = DateFormatter.Format.numericDateWithTime.string(from: Date(timeIntervalSince1970: timestamp))
+
+			return L.aboutthisapp_configversion(String(hash.prefix(7)), dateString)
+		}()
 
 		if flavor == .holder {
 			setupMenuHolder()
