@@ -1,7 +1,7 @@
 "appstatus_diskfull_body" = "Because your phone’s storage is full, CoronaCheck doesn't work. Please free up space on your phone and reopen CoronaCheck.";
 "appstatus_diskfull_button" = "Close CoronaCheck";
 "appstatus_diskfull_title" = "Your storage is full";
-"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via <a href=\"tel:0800-1421\">0800-1421</a> and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
+"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via %@ and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
 "appstatus_launchError_button" = "Close the app";
 "appstatus_launchError_title" = "Something went wrong";
 "general.add" = "Add";
@@ -182,7 +182,7 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the helpdesk at <a href=\"tel:08001421\">0800-1421</a> (free) and provide the following error code: (i 075).</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, we weren’t able to refresh your QR code. Open the app again in 10 minutes.<br /><br />Still not working? Please call the helpdesk at %@ (free) and provide the following error code: (i 075).</p>";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "The app periodically needs a connection to the server to refresh your QR codes. We failed to reach the server because of an error. <a href=\"%@\">Try again</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
@@ -560,7 +560,7 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
-"holder_contactCoronaCheckHelpdesk_message" = "<p>Request your certificate at the CoronaCheck helpdesk. You can call them every day between 8AM and 8PM at: <a href=\"tel:0800-1421\">0800-1421</a> (free).</p>\n<p>Or if you’re calling from abroad: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>. In the menu you can choose “request a certificate”.</p>Please provide the following:<ul><li>your citizen service number (BSN)</li><li>your zipcode</li></ul><p>Your certificate with QR code will be sent by post. This can take up to 7 working days.</p>";
+"holder_contactCoronaCheckHelpdesk_message" = "<p>Request your certificate at the CoronaCheck helpdesk. You can call them from %@ till %@, between %@ to %@ at: %@ (free).</p>\n<p>Or if you’re calling from abroad: %@. In the menu you can choose “request a certificate”.</p>Please provide the following:<ul><li>your citizen service number (BSN)</li><li>your zipcode</li></ul><p>Your certificate with QR code will be sent by post. This can take up to 7 working days.</p>";
 "holder_contactCoronaCheckHelpdesk_title" = "Request your certificate via the helpdesk";
 "holder_contactProviderHelpdesk_message_ggdPortalEnabled" = "Please contact the care provider who vaccinated you. Here you can request your certificate on paper or as a PDF file.";
 "holder_contactProviderHelpdesk_testFlow_message" = "<p>Request your paper certificate by calling the GGD on <a href=\"tel:0888-5090\">0800 - 5090</a>.</p><p>Your certificate with QR code will be sent by post.</p>";
@@ -652,9 +652,9 @@
 "holder_helpInfo_title" = "Help & Information";
 "holder_helpdesk_appVersion" = "App version:";
 "holder_helpdesk_configuration" = "Configuration:";
-"holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br /><a href=\"tel:0800-1421\">0800-1421</a> (free).</p>";
-"holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Open from Monday till Friday, between 08.00 a.m. - 06.00 p.m.</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br />%@ (free).</p>";
+"holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: %@.</p>";
+"holder_helpdesk_contact_message_line3" = "<p>Open from %@ till %@, between %@ - %@</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
 "holder_helpdesk_support_title" = "Support";
@@ -689,7 +689,7 @@
 "holder_invaliddetailsremoved_alert_title" = "Invalid details removed";
 "holder_invaliddetailsremoved_banner_button_readmore" = "Read more";
 "holder_invaliddetailsremoved_banner_title" = "Details have been removed from the app.";
-"holder_invaliddetailsremoved_moreinfo_body" = "<p>Some of your details were declared invalid. They have therefore been removed from the app. It concerns the following details:</p>%@<p>Certificates may have been removed from the app as well. Please add a valid vaccination or test to retrieve certificates again.</p><p>Do you have questions about this? Please contact the CoronaCheck helpdesk via <a href=\"tel:08001421\">0800-1421</a> and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
+"holder_invaliddetailsremoved_moreinfo_body" = "<p>Some of your details were declared invalid. They have therefore been removed from the app. It concerns the following details:</p>%@<p>Certificates may have been removed from the app as well. Please add a valid vaccination or test to retrieve certificates again.</p><p>Do you have questions about this? Please contact the CoronaCheck helpdesk via %@ and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
 "holder_invaliddetailsremoved_moreinfo_title" = "Removed details";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We can't create a certificate";
@@ -701,7 +701,7 @@
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccination and recovery certificates created";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>You were tested positive for coronavirus too long ago. That is why your test result is no longer valid for creating a recovery certificate.</p><p>However, your positive test could be recorded into your vaccination certificate. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We couldn't create a recovery certificate";
-"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>This certificate has been declared invalid. For that reason, you cannot add it to the app.</p><p>Try to add a valid certificate, or contact the CoronaCheck helpdesk via <a href=\"tel:08001421\">0800-1421</a> and pass on the error code below.</p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>This certificate has been declared invalid. For that reason, you cannot add it to the app.</p><p>Try to add a valid certificate, or contact the CoronaCheck helpdesk via %@ and pass on the error code below.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateNoValidCertificate_title" = "Invalid certificate";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>A recovery certificate has been created from your retrieved details.</p><p>Your positive test could also be recorded into your vaccination certificate. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "A recovery certificate has been created";
@@ -889,7 +889,8 @@
 "visitorpass_token_error_unknown_provider" = "This test location is not known to us. Please contact the location who tested you.";
 "visitorpass_token_modal_notoken_details" = "<p>You will receive an approval code on paper from the desk that reviewed your vaccination. Don't have an approval code? Please go back to the desk you stopped by.</p><p>Didn’t stop by a desk yet to have your vaccination reviewed? For more information, please visit <a href=\"https://www.government.nl/entry-pass-visitors-cc\">www.government.nl/entry-pass-visitors</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Don't have an approval code?";
-"visitorpass_token_next" = "Next";"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
+"visitorpass_token_next" = "Next";
+"general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "general_menu" = "Menu ";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 "new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";

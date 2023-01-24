@@ -1,7 +1,7 @@
 "appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol is werkt CoronaCheck niet. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag is vol";
-"appstatus_launchError_body" = "<p>Op dit moment kan de app niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op <a href=\"tel:0800-1421\">0800-1421</a> en geef de foutcode hieronder door.</p><p><b>Foutcode:</b><br /> %@ </p>";
+"appstatus_launchError_body" = "<p>Op dit moment kan de app niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op %@ en geef de foutcode hieronder door.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "appstatus_launchError_button" = "Sluit de app";
 "appstatus_launchError_title" = "Er gaat iets mis";
 "general.add" = "Toevoegen";
@@ -182,7 +182,7 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis) en geef de foutcode (i 075) door.</p>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Sorry, het is niet gelukt de QR-code te vernieuwen. Open de app opnieuw over 10 minuten.<br /><br />Helpt dat niet? Bel dan de helpdesk op %@ (gratis) en geef de foutcode (i 075) door.</p>";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "De app heeft af en toe verbinding met de server nodig om je QR-codes te vernieuwen. Dat is niet gelukt door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
@@ -560,7 +560,7 @@
 "holder_completecertificate_body" = "<p>Haal een negatieve testuitslag op om je bezoekersbewijs compleet te maken.</p><p>Heb je nog geen coronatest gedaan? Maak een afspraak op <a href=\"https://www.testenvoortoegang.org\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Testuitslag ophalen";
 "holder_completecertificate_title" = "Maak je bezoekersbewijs compleet";
-"holder_contactCoronaCheckHelpdesk_message" = "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je elke dag tussen 08.00 en 20.00 uur bellen op: <a href=\"tel:0800-1421\">0800-1421</a> (gratis).</p>\n<p>Of als je vanuit het buitenland belt: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>";
+"holder_contactCoronaCheckHelpdesk_message" = "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je elke dag van %@ t/m %@ tussen %@ en %@ uur bellen op: %@ (gratis).</p>\n<p>Of als je vanuit het buitenland belt: %@. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>";
 "holder_contactCoronaCheckHelpdesk_title" = "Vraag je coronabewijs aan via de helpdesk";
 "holder_contactProviderHelpdesk_message_ggdPortalEnabled" = "Neem contact op met de zorgverlener waar je bent gevaccineerd. Hier kun je jouw coronabewijs aanvragen op papier of als pdf-bestand.";
 "holder_contactProviderHelpdesk_testFlow_message" = "<p>Vraag een papieren coronabewijs aan door te bellen met de GGD op <a href=\"tel:0888-5090\">0800 - 5090</a>.</p><p>Je bewijs met QR-code wordt per post opgestuurd.</p>";
@@ -652,9 +652,9 @@
 "holder_helpInfo_title" = "Hulp & Informatie";
 "holder_helpdesk_appVersion" = "App-versie:";
 "holder_helpdesk_configuration" = "Configuratie:";
-"holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op <a href=\"tel:0800-1421\">0800-1421</a> (gratis).</p>";
-"holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: <a href=\"tel:+31707503720\">+31 70 750 37 20</a>.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van maandag t/m vrijdag 08:00 - 18:00 uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op %@ (gratis).</p>";
+"holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: %@.</p>";
+"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van %@ t/m %@ %@ - %@ uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:";
 "holder_helpdesk_support_title" = "Ondersteuning";
@@ -689,7 +689,7 @@
 "holder_invaliddetailsremoved_alert_title" = "Ongeldige gegevens verwijderd";
 "holder_invaliddetailsremoved_banner_button_readmore" = "Lees meer";
 "holder_invaliddetailsremoved_banner_title" = "Er zijn gegevens uit de app verwijderd.";
-"holder_invaliddetailsremoved_moreinfo_body" = "<p>Er zijn gegevens van jou ongeldig verklaard. Daarom zijn deze uit de app verwijderd. Het gaat om de volgende gegevens:</p>%@<p>Mogelijk zijn hierdoor ook bewijzen uit de app verwijderd. Voeg een geldige vaccinatie of test toe om bewijzen weer terug te halen.</p><p>Heb je vragen? Bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_invaliddetailsremoved_moreinfo_body" = "<p>Er zijn gegevens van jou ongeldig verklaard. Daarom zijn deze uit de app verwijderd. Het gaat om de volgende gegevens:</p>%@<p>Mogelijk zijn hierdoor ook bewijzen uit de app verwijderd. Voeg een geldige vaccinatie of test toe om bewijzen weer terug te halen.</p><p>Heb je vragen? Bel de CoronaCheck helpdesk op %@ en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_invaliddetailsremoved_moreinfo_title" = "Verwijderde gegevens";
 "holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
@@ -701,7 +701,7 @@
 "holder_listRemoteEvents_endStateInternationalVaccinationAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daardoor is je testuitslag niet meer geldig om een herstelbewijs van te maken.</p><p>Je positieve test kon wel meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateNoRecoveryButDosisCorrection_title" = "We konden geen herstelbewijs maken";
-"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>Dit bewijs is ongeldig verklaard. Daarom kun je het niet aan de app toevoegen.</p><p>Probeer een geldig bewijs toe te voegen, of bel de CoronaCheck helpdesk op <a href=\"tel:08001421\">0800-1421</a> en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateNoValidCertificate_body" = "<p>Dit bewijs is ongeldig verklaard. Daarom kun je het niet aan de app toevoegen.</p><p>Probeer een geldig bewijs toe te voegen, of bel de CoronaCheck helpdesk op %@ en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateNoValidCertificate_title" = "Geen geldig bewijs";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_message" = "<p>Van je opgehaalde gegevens is een herstelbewijs gemaakt.</p><p>Je positieve test kon ook meegeteld worden in je vaccinatiebewijs. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "Er is een herstelbewijs gemaakt";
@@ -889,7 +889,8 @@
 "visitorpass_token_error_unknown_provider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
-"visitorpass_token_next" = "Volgende";"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"visitorpass_token_next" = "Volgende";
+"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "general_menu" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";

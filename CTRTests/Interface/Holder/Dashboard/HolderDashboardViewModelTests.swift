@@ -25,6 +25,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	var environmentSpies: EnvironmentSpies!
+
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {

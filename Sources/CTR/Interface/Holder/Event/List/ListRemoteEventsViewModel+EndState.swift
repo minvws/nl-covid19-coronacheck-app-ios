@@ -127,7 +127,10 @@ extension ListRemoteEventsViewModel {
 		
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holder_listRemoteEvents_endStateNoValidCertificate_title(),
-			body: L.holder_listRemoteEvents_endStateNoValidCertificate_body(errorCode.description),
+			body: L.holder_listRemoteEvents_endStateNoValidCertificate_body(
+				Current.contactInformationProvider.phoneNumberLink,
+				errorCode.description
+			),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}

@@ -20,11 +20,19 @@ class LaunchErrorViewModel: AppStatusViewModel {
 	private let urlHandler: (URL) -> Void
 	private let closeHandler: () -> Void
 	
-	init(errorCodes: [ErrorCode], urlHandler: @escaping (URL) -> Void, closeHandler: @escaping () -> Void) {
-		
+	init(
+		errorCodes: [ErrorCode],
+		urlHandler: @escaping (URL) -> Void,
+		closeHandler: @escaping () -> Void) {
+			
 		self.closeHandler = closeHandler
 		self.urlHandler = urlHandler
-		self.message = Observable(value: L.appstatus_launchError_body(ErrorCode.flatten(errorCodes)))
+		self.message = Observable(
+			value: L.appstatus_launchError_body(
+				Current.contactInformationProvider.phoneNumberLink,
+				ErrorCode.flatten(errorCodes)
+			)
+		)
 	}
 	
 	func actionButtonTapped() {

@@ -433,7 +433,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 
 		let title: String = L.holder_invaliddetailsremoved_moreinfo_title()
-		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(bulletpoints, errorCode.description)
+		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(
+			bulletpoints, Current.contactInformationProvider.phoneNumberLink, errorCode.description)
 
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
 	}
