@@ -19,6 +19,12 @@ final class AboutThisAppView: ScrolledStackView {
 			static let spacing: CGFloat = 8
 		}
 
+		enum Footer {
+			static let lineHeight: CGFloat = 18
+			static let kerning: CGFloat = -0.24
+			static let spacing: CGFloat = 24
+		}
+
 		enum StackView {
 			static let topMargin: CGFloat = 40
 			static let bottomMargin: CGFloat = 40
@@ -51,19 +57,31 @@ final class AboutThisAppView: ScrolledStackView {
 		return Button(title: L.holder_menu_resetApp(), style: .roundedRedBorder)
 	}()
 
+	private let appVersionLabel: Label = {
+
+		return Label(subhead: nil).multiline()
+	}()
+
+	private let configVersionLabel: Label = {
+
+		return Label(subhead: nil).multiline()
+	}()
+
 	private let resetButtonStackView: UIStackView = {
 		let testStackView = UIStackView()
 		testStackView.alignment = .center
 		testStackView.axis = .vertical
 		return testStackView
 	}()
-	
+
 	/// setup the views
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = C.white()
 		stackView.distribution = .fill
+		appVersionLabel.textColor = C.grey1()
+		configVersionLabel.textColor = C.grey1()
 		
 		resetButton.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
 	}
@@ -72,11 +90,14 @@ final class AboutThisAppView: ScrolledStackView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		
+
 		stackView.addArrangedSubview(messageTextView)
 		stackView.setCustomSpacing(ViewTraits.StackView.topMargin, after: messageTextView)
 		stackView.addArrangedSubview(menuStackView)
 		stackView.setCustomSpacing(ViewTraits.StackView.bottomMargin, after: menuStackView)
+		stackView.addArrangedSubview(appVersionLabel)
+		stackView.setCustomSpacing(ViewTraits.Footer.spacing, after: appVersionLabel)
+		stackView.addArrangedSubview(configVersionLabel)
 		
 		resetButtonStackView.addArrangedSubview(resetButton)
 		addSubview(resetButtonStackView)
@@ -121,6 +142,28 @@ final class AboutThisAppView: ScrolledStackView {
 		}
 	}
 
+	/// The app version
+	var appVersion: String? {
+		didSet {
+			appVersionLabel.attributedText = appVersion?.setLineHeight(
+				ViewTraits.Footer.lineHeight,
+				kerning: ViewTraits.Footer.kerning,
+				textColor: C.grey1()!
+			)
+		}
+	}
+
+	/// The config version
+	var configVersion: String? {
+		didSet {
+			configVersionLabel.attributedText = configVersion?.setLineHeight(
+				ViewTraits.Footer.lineHeight,
+				kerning: ViewTraits.Footer.kerning,
+				textColor: C.grey1()!
+			)
+		}
+	}
+
 	func createMenuStackView(title: String?) -> UIStackView {
 
 		// The stack view for the menu items
@@ -144,6 +187,6 @@ final class AboutThisAppView: ScrolledStackView {
 		
 		return menuOptionStackView
 	}
-	
+
 	var resetButtonTapHandler: (() -> Void)?
 }

@@ -20,10 +20,8 @@ class HelpdeskViewModel {
 	
 	init(flavor: AppFlavor, versionSupplier: AppVersionSupplierProtocol, urlHandler: @escaping (URL) -> Void) {
 	
-		appVersion = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-
+		appVersion = L.holder_helpdesk_appVersion_value(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+		
 		configVersion = {
 			guard let timestamp = Current.userSettings.configFetchedTimestamp,
 				  let hash = Current.userSettings.configFetchedHash
@@ -31,7 +29,7 @@ class HelpdeskViewModel {
 
 			let dateString = DateFormatter.Format.numericDateWithTime.string(from: Date(timeIntervalSince1970: timestamp))
 
-			return L.generalMenuConfigVersion(String(hash.prefix(7)), dateString)
+			return L.holder_helpdesk_configuration_value(String(hash.prefix(7)), dateString)
 		}()
 		
 		self.urlHandler = urlHandler
