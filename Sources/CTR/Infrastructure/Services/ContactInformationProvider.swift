@@ -60,28 +60,23 @@ class ContactInformationProvider: ContactInformationProtocol {
 	
 	var startHour: String {
 		let start = remoteConfigManager?.storedConfiguration.contactInformation?.startHour ?? "08:00"
-		if let startDate = importDateFormatter.date(from: start) {
-			return printDateFormatter.string(from: startDate)
+		if let startDate = DateFormatter.Format.time.date(from: start) {
+			return DateFormatter.Format.localizedTime.string(from: startDate)
 		}
 		return start
 	}
 	
 	var endHour: String {
 		let end = remoteConfigManager?.storedConfiguration.contactInformation?.endHour ?? "18:00"
-		if let endDate = importDateFormatter.date(from: end) {
-			return printDateFormatter.string(from: endDate)
+		if let endDate = DateFormatter.Format.time.date(from: end) {
+			return DateFormatter.Format.localizedTime.string(from: endDate)
 		}
 		return end
 	}
 	
 	private let remoteConfigManager: RemoteConfigManaging?
-	private var importDateFormatter = DateFormatter.Format.time
-	private var printDateFormatter = DateFormatter.Format.localizedTime
 	
 	init(remoteConfigManager: RemoteConfigManaging) {
 		self.remoteConfigManager = remoteConfigManager
-		// Set identical timezones, so the "08:00" remains 8 o'clock. 
-		importDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		printDateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 	}
 }

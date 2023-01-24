@@ -79,6 +79,7 @@ extension DateFormatter.Format {
 		let formatter = DateFormatter()
 		formatter.dateStyle = .none
 		formatter.timeStyle = .short
+		formatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		return formatter
 	}()
 }
