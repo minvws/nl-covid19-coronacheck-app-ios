@@ -346,7 +346,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func navigateToAboutThisApp() {
 		
-		let viewModel = AboutThisAppViewModel(flavor: AppFlavor.flavor) { [weak self] outcome in
+		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
 			guard let self else { return }
 			switch outcome {
 				case let .openURL(url, inApp):
