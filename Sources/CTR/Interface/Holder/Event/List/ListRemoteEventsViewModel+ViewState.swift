@@ -467,7 +467,7 @@ extension ListRemoteEventsViewModel {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 			
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? test.sampleDate
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
