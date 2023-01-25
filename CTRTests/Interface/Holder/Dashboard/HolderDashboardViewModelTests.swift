@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import CoreData
+import Shared
 
 class HolderDashboardViewModelTests: XCTestCase {
 
@@ -24,6 +25,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
 	var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	var environmentSpies: EnvironmentSpies!
+
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {

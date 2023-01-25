@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 import SnapshotTesting
 @testable import CTR
+import Shared
 
 final class VerifiedInfoViewControllerTests: XCTestCase {
 	

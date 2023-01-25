@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import SnapshotTesting
+import Shared
 
 // swiftlint:disable:next type_name
 class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {

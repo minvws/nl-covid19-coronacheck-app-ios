@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Shared
 
 final class MakeTestAppointmentViewModel {
 	

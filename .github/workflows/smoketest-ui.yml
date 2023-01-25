@@ -16,7 +16,7 @@ jobs:
   smoketest-ui:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-12
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
         # 🧐 when changing below, don't forget to also change the device name in the Fastfile too:

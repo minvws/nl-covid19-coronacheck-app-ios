@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import SnapshotTesting
+import Shared
 
 final class EmptyDashboardImagePlaceholderViewTests: XCTestCase {
 	

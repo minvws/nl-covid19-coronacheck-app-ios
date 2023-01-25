@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import ViewControllerPresentationSpy
+import Shared
 
 class FetchRemoteEventsViewControllerTests: XCTestCase {
 	

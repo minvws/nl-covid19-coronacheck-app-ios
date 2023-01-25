@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 final class AboutThisAppView: ScrolledStackView {
 
@@ -120,7 +121,7 @@ final class AboutThisAppView: ScrolledStackView {
 		}
 	}
 
-	func createMenuStackView(title: String) -> UIStackView {
+	func createMenuStackView(title: String?) -> UIStackView {
 
 		// The stack view for the menu items
 		let menuOptionStackView: UIStackView = {
@@ -133,7 +134,14 @@ final class AboutThisAppView: ScrolledStackView {
 			view.spacing = 0
 			return view
 		}()
-
+		
+		if let title {
+			let label = Label(caption1SemiBold: nil).multiline().header()
+			label.attributedText = title.setLineHeight(ViewTraits.ListHeader.lineHeight)
+			menuOptionStackView.addArrangedSubview(label)
+			menuOptionStackView.setCustomSpacing(ViewTraits.ListHeader.spacing, after: label)
+		}
+		
 		return menuOptionStackView
 	}
 	

@@ -7,6 +7,7 @@
 
 import Foundation
 import Transport
+import Shared
 
 final class ShowHintsViewModel {
 	

@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import Shared
 
 class ShowQRViewItemControllerTests: XCTestCase {
 

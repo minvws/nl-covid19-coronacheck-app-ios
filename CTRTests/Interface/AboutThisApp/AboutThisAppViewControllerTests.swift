@@ -62,7 +62,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
 			.to(haveCount(4))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(5))
+			.to(haveCount(6))
 
 		sut.assertImage()
 	}
@@ -88,9 +88,9 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(2))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(4))
+			.to(haveCount(3))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[1] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(1))
+			.to(haveCount(2))
 		
 		sut.assertImage()
 	}
@@ -115,7 +115,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.menuStackView.arrangedSubviews)
 			.to(haveCount(1))
 		expect((self.sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews)
-			.to(haveCount(4))
+			.to(haveCount(3))
 		
 		sut.assertImage()
 	}
@@ -134,7 +134,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		sut.sceneView.resetButtonTapHandler?()
 		
 		// Then
 		alertVerifier.verify(
@@ -160,7 +160,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		let alertVerifier = AlertVerifier()
 		loadView()
-		((sut.sceneView.menuStackView.arrangedSubviews[0] as? UIStackView)?.arrangedSubviews[3] as? SimpleDisclosureButton)?.primaryButtonTapped()
+		sut.sceneView.resetButtonTapHandler?()
 		
 		// When
 		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())

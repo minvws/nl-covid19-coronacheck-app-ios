@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Shared
 
 class HelpdeskViewController: TraitWrappedGenericViewController<HelpdeskView, HelpdeskViewModel> {
 	
@@ -25,9 +26,9 @@ class HelpdeskViewController: TraitWrappedGenericViewController<HelpdeskView, He
 	func setupBindings() {
 
 		sceneView.contactSubtitle = L.holder_helpdesk_contact_title()
-		sceneView.contactMessage1 = L.holder_helpdesk_contact_message_line1()
-		sceneView.contactMessage2 = L.holder_helpdesk_contact_message_line2()
-		sceneView.contactMessage3 = L.holder_helpdesk_contact_message_line3()
+		viewModel.$messageLine1.binding = { [weak self] in self?.sceneView.contactMessage1 = $0 }
+		viewModel.$messageLine2.binding = { [weak self] in self?.sceneView.contactMessage2 = $0 }
+		viewModel.$messageLine3.binding = { [weak self] in self?.sceneView.contactMessage3 = $0 }
 		sceneView.supportSubtitle = L.holder_helpdesk_support_title()
 		sceneView.supportMessage = L.holder_helpdesk_support_message()
 		

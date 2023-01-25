@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import Clcore
+import Shared
 
 final class CheckIdentityViewModelTests: XCTestCase {
 	

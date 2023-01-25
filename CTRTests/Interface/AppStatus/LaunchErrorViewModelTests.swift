@@ -9,16 +9,20 @@ import XCTest
 @testable import CTR
 import Nimble
 import Transport
+import Shared
 
 class LaunchErrorViewModelTests: XCTestCase {
 	
 	// MARK: Subject under test
 	var sut: AppStatusViewModel!
+	private var environmentalSpies: EnvironmentSpies!
 	
 	// MARK: Test lifecycle
 	
 	override func setUp() {
 		
+		environmentalSpies = setupEnvironmentSpies()
+		environmentalSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		super.setUp()
 	}
 	
@@ -36,9 +40,11 @@ class LaunchErrorViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.title.value) == L.appstatus_launchError_title()
-		expect(self.sut.message.value) == L.appstatus_launchError_body("i 010 000 123")
+		expect(self.sut.message.value) == L.appstatus_launchError_body("<a href=\"tel:TEST\">TEST</a>", "i 010 000 123")
+		expect(self.environmentalSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 		expect(self.sut.actionTitle.value) == L.appstatus_launchError_button()
 		expect(self.sut.image.value) == I.launchError()
+		expect(self.environmentalSpies.contactInformationSpy.invokedPhoneNumberLinkGetter) == true
 	}
 	
 	func test_actionButtonTapped() {

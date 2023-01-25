@@ -12,7 +12,6 @@ import Reachability
 import Shared
 import Transport
 import OpenIDConnect
-import Inject
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -434,7 +433,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 
 		let title: String = L.holder_invaliddetailsremoved_moreinfo_title()
-		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(bulletpoints, errorCode.description)
+		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(
+			bulletpoints, Current.contactInformationProvider.phoneNumberLink, errorCode.description)
 
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
 	}
@@ -691,7 +691,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			self?.userWishesToSeeStoredEvents()
 		}
 		
-		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_aboutthisapp()!, overrideColor: nil) { [weak self] in
+		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak self] in
 			self?.userWishesToSeeHelpAndInfoMenu()
 		}
 		
@@ -771,16 +771,13 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToSeeHelpdesk() {
 		
-		let viewController = Inject.ViewControllerHost({
-			let viewController = HelpdeskViewController(viewModel: HelpdeskViewModel(
-				flavor: AppFlavor.flavor,
-				versionSupplier: self.versionSupplier,
-				urlHandler: { [weak self] url in
-					self?.openUrl(url, inApp: true)
-				}
-			))
-			return viewController
-		}())
+		let viewController = HelpdeskViewController(viewModel: HelpdeskViewModel(
+			flavor: AppFlavor.flavor,
+			versionSupplier: self.versionSupplier,
+			urlHandler: { [weak self] url in
+				self?.openUrl(url, inApp: true)
+			}
+		))
 		
 		navigationController.pushViewController(viewController, animated: true)
 	}

@@ -11,6 +11,7 @@ import Nimble
 import Lottie
 @testable import CTR
 import SnapshotTesting
+import Shared
 
 class ScanInstructionsViewModelTests: XCTestCase {
 

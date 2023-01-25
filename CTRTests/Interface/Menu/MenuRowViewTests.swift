@@ -10,6 +10,7 @@ import SnapshotTesting
 @testable import CTR
 import XCTest
 import Nimble
+import Shared
 
 class MenuRowViewTests: XCTestCase {
 	
