@@ -20,7 +20,7 @@ class BottomSheetContentViewModel {
 
 	// MARK: - Private
 	private let linkTapHander: ((URL) -> Void)?
-	private let screenCaptureDetector = ScreenCaptureDetector()
+	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 	internal let content: Content
 	
 	// MARK: - Initializer
@@ -31,15 +31,18 @@ class BottomSheetContentViewModel {
 	///   - message: The message of the page
 	init(
 		content: Content,
+		screenCaptureDetector: ScreenCaptureDetectorProtocol,
 		linkTapHander: ((URL) -> Void)? = nil, // todo: merge this into Content?
-		hideBodyForScreenCapture: Bool = false) {
+		hideBodyForScreenCapture: Bool = false
+	) {
 
 		self.content = content
 		self.title = content.title
 		self.body = content.body ?? ""
 		self.secondaryButtonTitle = content.secondaryActionTitle
 		self.linkTapHander = linkTapHander
-
+		self.screenCaptureDetector = screenCaptureDetector
+		
 		if hideBodyForScreenCapture {
 			screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 				self?.hideForCapture = isBeingCaptured

@@ -9,7 +9,7 @@ import Foundation
 
 extension Formatter {
 
-	static func getDateFrom(dateString8601 string: String) -> Date? {
+	public static func getDateFrom(dateString8601 string: String) -> Date? {
 
 		// None of the options seems to handle no seconds.
 		let dateFormatter = DateFormatter()

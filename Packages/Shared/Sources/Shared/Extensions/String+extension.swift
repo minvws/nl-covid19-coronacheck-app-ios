@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import Shared
 
 extension String {
 
@@ -15,7 +14,7 @@ extension String {
 	///   - underlined: the part to underline
 	///   - color: the color to underline with
 	/// - Returns: attributed string
-	func underline(underlined: String, with color: UIColor) -> NSAttributedString {
+	public func underline(underlined: String, with color: UIColor) -> NSAttributedString {
 
 		let underlineRange = (self as NSString).range(of: underlined)
 		let attributes: [NSAttributedString.Key: Any] = [
@@ -32,7 +31,7 @@ extension String {
 	/// Set the line height
 	/// - Parameter lineHeight: the line height (defaults to 22)
 	/// - Returns: attributed string
-	func setLineHeight(
+	public func setLineHeight(
 		_ lineHeight: CGFloat = 22.0,
 		alignment: NSTextAlignment = .left,
 		kerning: CGFloat = 0.0,
@@ -59,7 +58,7 @@ extension String {
 
 extension String {
 
-	func capitalizingFirstLetter() -> String {
+	public func capitalizingFirstLetter() -> String {
 
 		return prefix(1).capitalized + dropFirst()
 	}
@@ -67,7 +66,7 @@ extension String {
 
 extension String {
 
-	func strippingWhitespace() -> String {
+	public func strippingWhitespace() -> String {
 
 		return trimmingCharacters(in: .whitespacesAndNewlines)
 			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)

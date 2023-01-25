@@ -9,7 +9,7 @@ import Foundation
 
 extension FileManager {
 
-	func addSkipBackupAttributeToItemAt(_ url: NSURL) throws {
+	public func addSkipBackupAttributeToItemAt(_ url: NSURL) throws {
 
 		try url.setResourceValue(true, forKey: URLResourceKey.isExcludedFromBackupKey)
 	}

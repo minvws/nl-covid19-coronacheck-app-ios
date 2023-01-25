@@ -7,8 +7,8 @@
 
 import XCTest
 import Nimble
-@testable import CTR
 import SnapshotTesting
+@testable import ReusableViews
 
 class ListOptionsViewTests: XCTestCase {
 	var sut: ListOptionsView!

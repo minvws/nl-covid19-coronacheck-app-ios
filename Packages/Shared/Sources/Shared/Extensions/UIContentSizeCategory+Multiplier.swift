@@ -9,11 +9,11 @@ import UIKit
 
 extension UIContentSizeCategory {
 	
-	static var currentSizeMultiplier: CGFloat {
+	public static var currentSizeMultiplier: CGFloat {
 		return UIApplication.shared.preferredContentSizeCategory.sizeMultiplier
 	}
 	
-	var sizeMultiplier: CGFloat {
+	public var sizeMultiplier: CGFloat {
 		let size = { (amount: CGFloat) -> CGFloat in
 			let step = 0.075
 			return 1 + step * amount

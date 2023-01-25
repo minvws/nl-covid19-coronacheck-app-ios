@@ -6,9 +6,10 @@
 */
 
 import XCTest
-@testable import CTR
 import SnapshotTesting
 import Nimble
+import TestingShared
+@testable import ReusableViews
 
 class ContentViewControllerTests: XCTestCase {
 

@@ -6,11 +6,11 @@
  */
 
 import Foundation
-@testable import CTR
 import XCTest
 import SnapshotTesting
 import Nimble
 import Shared
+@testable import ReusableViews
 
 final class PageControlTests: XCTestCase {
 	

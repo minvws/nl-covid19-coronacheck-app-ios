@@ -6,10 +6,9 @@
 */
 
 import UIKit
-import Shared
 
 extension String {
-	func components(separatedBy separators: [some StringProtocol]) -> [String] {
+	public func components(separatedBy separators: [some StringProtocol]) -> [String] {
 		var result = [self]
 		for separator in separators {
 			result = result
@@ -24,14 +23,14 @@ extension String {
 public extension NSAttributedString {
 
 	struct HTMLStyle {
-		let font: UIFont
-		let textColor: UIColor
-		let lineHeight: CGFloat
-		let kern: CGFloat
-		let paragraphSpacing: CGFloat
-		let alignment: NSTextAlignment
+		public let font: UIFont
+		public let textColor: UIColor
+		public let lineHeight: CGFloat
+		public let kern: CGFloat
+		public let paragraphSpacing: CGFloat
+		public let alignment: NSTextAlignment
 
-		init(font: UIFont, textColor: UIColor, lineHeight: CGFloat = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8, alignment: NSTextAlignment = .natural) {
+		public init(font: UIFont, textColor: UIColor, lineHeight: CGFloat = 22, kern: CGFloat = -0.41, paragraphSpacing: CGFloat = 8, alignment: NSTextAlignment = .natural) {
 			self.font = font
 			self.textColor = textColor
 			self.lineHeight = lineHeight
@@ -40,7 +39,7 @@ public extension NSAttributedString {
 			self.alignment = alignment
 		}
 
-		static var bodyDark: HTMLStyle = HTMLStyle(font: Fonts.body, textColor: C.black()!)
+		public static var bodyDark: HTMLStyle = HTMLStyle(font: Fonts.body, textColor: C.black()!)
 	}
 }
 
