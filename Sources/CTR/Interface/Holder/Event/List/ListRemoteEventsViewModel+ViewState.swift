@@ -230,7 +230,7 @@ extension ListRemoteEventsViewModel {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
