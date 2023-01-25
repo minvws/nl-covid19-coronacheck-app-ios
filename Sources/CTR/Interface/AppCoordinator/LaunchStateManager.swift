@@ -61,11 +61,6 @@ final class LaunchStateManager: LaunchStateManaging {
 			return
 		}
 		
-		guard Current.cryptoLibUtility.isInitialized else {
-			delegate?.cryptoLibDidNotInitialize()
-			return
-		}
-		
 		if state == .withinTTL {
 			// If within the TTL, and the firstUseDate is nil, that means an existing installation.
 			// Use the documents directory creation date.
@@ -75,6 +70,10 @@ final class LaunchStateManager: LaunchStateManaging {
 		checkRemoteConfiguration(Current.remoteConfigManager.storedConfiguration) {
 			switch state {
 				case .finished, .withinTTL:
+					guard Current.cryptoLibUtility.isInitialized else {
+						self.delegate?.cryptoLibDidNotInitialize()
+						return
+					}
 					self.startApplication()
 				case let .serverError(tuples):
 					if !self.applicationHasStarted {
