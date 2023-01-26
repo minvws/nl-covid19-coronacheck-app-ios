@@ -15,6 +15,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: .init(1, 9, 0)),
+		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
         .package(name: "Shared", path: "../Shared"),
     ],
     targets: [
@@ -24,5 +25,7 @@ let package = Package(
             name: "TestingShared",
             dependencies: [
 				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+				.product(name: "Nimble", package: "Nimble")
+            ])
     ]
 )
