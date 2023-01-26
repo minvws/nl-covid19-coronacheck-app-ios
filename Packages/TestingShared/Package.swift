@@ -24,9 +24,5 @@ let package = Package(
             name: "TestingShared",
             dependencies: [
 				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-            ]),
-        // .testTarget(
-        //     name: "TestingSharedTests",
-        //     dependencies: ["TestingShared"]),
     ]
 )
