@@ -45,7 +45,7 @@ public extension NSAttributedString {
 
 public extension NSAttributedString {
 
-	static func makeFromHtml(text: String?, style: HTMLStyle, completion: @escaping (NSAttributedString) -> Void) {
+	public static func makeFromHtml(text: String?, style: HTMLStyle, completion: @escaping (NSAttributedString) -> Void) {
 
 		guard !ProcessInfo.processInfo.isUnitTesting else {
 			completion(NSAttributedString(string: text ?? ""))
@@ -58,7 +58,7 @@ public extension NSAttributedString {
 		}
 	}
 	
-	static func makeFromHtml(text: String?, style: HTMLStyle) -> NSAttributedString {
+	public static func makeFromHtml(text: String?, style: HTMLStyle) -> NSAttributedString {
 
 		guard !ProcessInfo.processInfo.isUnitTesting else {
 			return NSAttributedString(string: text ?? "")
@@ -243,15 +243,15 @@ public extension NSAttributedString {
 
 extension NSMutableParagraphStyle {
 	
-	func minimumLineHeightAdjustedForContentSize(_ lineHeight: CGFloat) {
+	public func minimumLineHeightAdjustedForContentSize(_ lineHeight: CGFloat) {
 		minimumLineHeight = lineHeight * UIContentSizeCategory.currentSizeMultiplier
 	}
 }
 
-public extension NSMutableAttributedString {
+extension NSMutableAttributedString {
 	
 	/// Trims white space and new line at the start and end
-	func trim() {
+	public func trim() {
 		let characterSet = CharacterSet.whitespacesAndNewlines.inverted
 		
 		// Trim start:
@@ -270,7 +270,7 @@ public extension NSMutableAttributedString {
 	}
 	
 	/// Strip bullets (<li>) so that they're not read out loud
-	func stripParagraphStyle() {
+	public func stripParagraphStyle() {
 		
 		removeAttribute(.paragraphStyle, range: NSRange(location: 0, length: length))
 	}
