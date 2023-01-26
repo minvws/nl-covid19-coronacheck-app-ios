@@ -9,6 +9,7 @@ import XCTest
 import SnapshotTesting
 import Nimble
 import TestingShared
+import Shared
 @testable import ReusableViews
 
 class ContentViewControllerTests: XCTestCase {
@@ -23,6 +24,11 @@ class ContentViewControllerTests: XCTestCase {
 	
 	var window = UIWindow()
 
+	override class func setUp() {
+		super.setUp()
+		registerFonts()
+	}
+	
 	// MARK: Test lifecycle
 	override func setUp() {
 
@@ -80,6 +86,8 @@ class ContentViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.secondaryButtonTitle) == "Secondary Action"
 		
 		// Snapshot
+		// todo: this one test fails when you run the ReusableViews tests (but passes when running Holder Dev tests), because the font changes size. Should investigate.
+		// 		 other snapshot tests in the same SPM do not fail though.
 		sut.assertImage(containedInNavigationController: true)
 	}
 	

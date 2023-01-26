@@ -16,6 +16,11 @@ final class PageControlTests: XCTestCase {
 	
 	var sut: PageControl!
 	var backgroundView: UIStackView!
+
+	override class func setUp() {
+		super.setUp()
+		registerFonts()
+	}
 	
 	override func setUp() {
 		super.setUp()

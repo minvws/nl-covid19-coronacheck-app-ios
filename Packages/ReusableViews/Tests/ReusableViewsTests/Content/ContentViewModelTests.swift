@@ -7,6 +7,7 @@
 
 import XCTest
 import Nimble
+import Shared
 @testable import ReusableViews
 
 final class ContentViewModelTests: XCTestCase {
@@ -16,6 +17,11 @@ final class ContentViewModelTests: XCTestCase {
 	private var linkTapHandlerCalled = false
 	private var backActionCalled = false
 
+	override class func setUp() {
+		super.setUp()
+		registerFonts()
+	}
+	
 	override func setUp() {
 		super.setUp()
 

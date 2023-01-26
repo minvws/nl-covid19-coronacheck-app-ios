@@ -8,11 +8,17 @@
 import XCTest
 import Nimble
 import SnapshotTesting
+import Shared
 @testable import ReusableViews
 
 class ListOptionsViewTests: XCTestCase {
 	var sut: ListOptionsView!
 
+	override class func setUp() {
+		super.setUp()
+		registerFonts()
+	}
+	
 	override func setUp() {
 		super.setUp()
 

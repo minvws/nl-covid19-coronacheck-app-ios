@@ -15,6 +15,11 @@ class ErrorViewTests: XCTestCase {
 
 	var sut: ErrorView!
 	
+	override class func setUp() {
+		super.setUp()
+		registerFonts()
+	}
+	
 	override func setUp() {
 		super.setUp()
 		

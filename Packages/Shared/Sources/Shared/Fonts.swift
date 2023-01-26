@@ -165,14 +165,7 @@ public class Fonts {
 	
 	// MARK: - Private
  
-	@Atomic<Bool> private static var hasRegisteredFonts: Bool = false
-	
 	private static let customMontserratTextStyles: [UIFont.TextStyle: UIFont] = {
-		
-		// todo: undesirable side-effect to this function is that it registers the font if it's not yet registered 
-		if !hasRegisteredFonts {
-			registerFonts()
-		}
 		
 		let fontMap: [UIFont.TextStyle: UIFont?] = [
 			.largeTitle: UIFont(name: "Montserrat-Bold", size: 34)!,
