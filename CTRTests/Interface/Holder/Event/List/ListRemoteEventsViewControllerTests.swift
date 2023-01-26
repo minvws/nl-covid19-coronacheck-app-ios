@@ -122,6 +122,38 @@ class ListRemoteEventsViewControllerTests: XCTestCase {
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
+	func test_viewStateEvents_paperproof_negativeTest() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeTest
+		setupSut(eventMode: .paperflow, remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof])
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_listRemoteEvents_paperflow_title()
+		expect(self.sut.sceneView.message) == L.holder_listRemoteEvents_paperflow_message()
+		
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_viewStateEvents_paperproof_recovery() {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeRecovery
+		setupSut(eventMode: .paperflow, remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof])
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_listRemoteEvents_paperflow_title()
+		expect(self.sut.sceneView.message) == L.holder_listRemoteEvents_paperflow_message()
+		
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
 	func test_viewStateEvents_vaccination_positiveTest() {
 		
 		// Given
