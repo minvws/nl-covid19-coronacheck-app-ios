@@ -15,13 +15,10 @@ let package = Package(
 		// Dependencies declare other packages that this package depends on.
 		// .package(url: /* package url */, from: "1.0.0"),
 		.package(name: "Shared", path: "../Shared"),
-		.package(name: "TestingShared", path: "../TestingShared"),
-		// .package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
-		// .package(url: "https://github.com/Thomvis/BrightFutures", branch: "master"),
 		
 		// // testing:
+		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: .init(1, 9, 0)),
-		// .package(url: "https://github.com/AliSoftware/OHHTTPStubs", exact: .init(9, 1, 0)),
 		.package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0))
 	],
 	targets: [
@@ -30,25 +27,16 @@ let package = Package(
 		.target(
 			name: "ReusableViews",
 			dependencies: [
-				// .product(name: "HTTPSecurity", package: "nl-rdo-app-ios-modules"),
 				.product(name: "Shared", package: "Shared"),
-				// .product(name: "BrightFutures", package: "BrightFutures")
 			]),
 		.testTarget(
 			name: "ReusableViewsTests",
 			dependencies: [
 				"ReusableViews",
 				.product(name: "TestingShared", package: "TestingShared"),
-				// .product(name: "HTTPSecurity", package: "nl-rdo-app-ios-modules"),
-				// .product(name: "Shared", package: "Shared"),
-				// .product(name: "BrightFutures", package: "BrightFutures"),
 				.product(name: "Nimble", package: "Nimble"),
 				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-				// .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
 			]
-			// , resources: [
-			// 	Resource.process("Resources")
-			// ]
 		)
 	]
 )
