@@ -11,6 +11,7 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
+import TestingShared
 
 class ConfigurationNotificationManagerTests: XCTestCase {
 

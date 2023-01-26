@@ -8,11 +8,15 @@
 import Foundation
 
 /// For recording calls to an observer during tests (e.g. in ScanLockManagerTests)
-class ObserverCallbackRecorder<T> {
+public class ObserverCallbackRecorder<T> {
 	
-	var values: [T] = []
+	public var values: [T] = []
 	
-	func recordEvents(_ value: T) {
+	public init() {
+		self.values = []
+	}
+
+	public func recordEvents(_ value: T) {
 		values += [value]
 	}
 }

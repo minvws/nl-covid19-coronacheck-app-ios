@@ -12,6 +12,7 @@
 @testable import Shared
 import XCTest
 import Nimble
+import TestingShared
 
 class ListRemoteEventsViewModelTests: XCTestCase {
 
