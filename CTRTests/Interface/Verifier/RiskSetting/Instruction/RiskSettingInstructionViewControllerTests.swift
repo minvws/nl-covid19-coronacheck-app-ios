@@ -11,6 +11,7 @@ import SnapshotTesting
 import Nimble
 import Rswift
 import Shared
+import TestingShared
 
 final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint:disable:this type_name
 	

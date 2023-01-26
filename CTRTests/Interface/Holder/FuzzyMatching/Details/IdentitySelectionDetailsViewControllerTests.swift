@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 import SnapshotTesting
 @testable import CTR
+import TestingShared
 
 // swiftlint:disable type_name
 final class IdentitySelectionDetailsViewControllerTests: XCTestCase {

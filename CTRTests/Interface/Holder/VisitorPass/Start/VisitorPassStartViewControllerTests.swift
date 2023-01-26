@@ -10,6 +10,7 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 import Shared
+import TestingShared
 
 class VisitorPassStartViewControllerTests: XCTestCase {
 

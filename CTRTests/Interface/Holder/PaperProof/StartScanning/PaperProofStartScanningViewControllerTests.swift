@@ -10,6 +10,7 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 import Shared
+import TestingShared
 
 // swiftlint:disable:next type_name
 class PaperProofStartScanningViewControllerTests: XCTestCase {

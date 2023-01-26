@@ -11,6 +11,7 @@ import XCTest
 @testable import Shared
 import Nimble
 import SnapshotTesting
+import TestingShared
 
 class RemoteEventDetailsViewControllerTests: XCTestCase {
 
