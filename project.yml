@@ -35,6 +35,8 @@ packages:
     exactVersion: 1.9.0
   Shared:
     path: ./Packages/Shared
+  TestingShared:
+    path: ./Packages/TestingShared
   Transport:
     path: ./Packages/Transport
 
@@ -225,6 +227,7 @@ targetTemplates:
     platform: iOS
     type: bundle.unit-test
     dependencies:
+      - package: TestingShared
       - package: Nimble
       - package: OHHTTPStubs
         product: OHHTTPStubsSwift

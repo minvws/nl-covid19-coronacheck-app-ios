@@ -8,7 +8,7 @@
 import Foundation
 import Nimble
 
-func eventuallyUnwrap<T>(eval: @escaping () -> T?) -> T? {
+public func eventuallyUnwrap<T>(eval: @escaping () -> T?) -> T? {
 	
 	var unwrapped: T?
 	expect {

@@ -12,6 +12,7 @@ import Transport
 import Nimble
 import SnapshotTesting
 import Shared
+import TestingShared
 
 class AppStatusViewControllerTests: XCTestCase {
 

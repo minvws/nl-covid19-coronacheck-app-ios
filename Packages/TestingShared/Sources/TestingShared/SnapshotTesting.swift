@@ -17,8 +17,8 @@ extension XCTestCase {
 //	}
 }
 
-internal extension UIViewController {
-	func assertImage(
+extension UIViewController {
+	public func assertImage(
 		containedInNavigationController: Bool = false,
 		file: StaticString = #file,
 		testName: String = #function,
@@ -46,8 +46,8 @@ internal extension UIViewController {
 	}
 }
 
-internal extension UIView {
-	func assertImage(
+extension UIView {
+	public func assertImage(
 		file: StaticString = #file,
 		testName: String = #function,
 		line: UInt = #line,

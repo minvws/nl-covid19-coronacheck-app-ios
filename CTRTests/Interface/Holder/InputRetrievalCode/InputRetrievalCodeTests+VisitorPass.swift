@@ -13,6 +13,7 @@ import Nimble
 @testable import Transport
 @testable import Shared
 import SnapshotTesting
+import TestingShared
 
 // swiftlint:disable:next type_name
 class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {

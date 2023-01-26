@@ -11,6 +11,7 @@ import SnapshotTesting
 import ViewControllerPresentationSpy
 @testable import CTR
 import Shared
+import TestingShared
 
 final class ListIdentitySelectionViewControllerTests: XCTestCase {
 	

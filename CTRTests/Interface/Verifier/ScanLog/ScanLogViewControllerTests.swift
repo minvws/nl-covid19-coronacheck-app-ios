@@ -11,6 +11,7 @@ import XCTest
 @testable import Shared
 import SnapshotTesting
 import Nimble
+import TestingShared
 
 class ScanLogViewControllerTests: XCTestCase {
 
