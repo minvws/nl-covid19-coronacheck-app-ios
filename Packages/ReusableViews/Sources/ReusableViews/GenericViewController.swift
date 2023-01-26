@@ -11,15 +11,15 @@ import Shared
 /// A generic viewcontroller
 /// V: The view to use for the scene, must be a (subclass of) baseview
 /// M: The class to use as viewModel
-class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecognizerDelegate {
+open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecognizerDelegate {
 
-	let viewModel: M
+	public let viewModel: M
 	
 	// The outward-facing accessor for `sceneView`.
 	// Purpose: syntactic sugar for `_sceneViewInstance()`.
 	// Release-mode: returns a constant instance.
 	// Debug-mode: returns the latest instance of V (after possible hot-reloads).
-	var sceneView: V { _sceneViewInstance() }
+	open var sceneView: V { _sceneViewInstance() }
 	
 	// Wraps the mechanism for getting the current sceneView instance
 	// Purpose: hides the underlying (_available in `DEBUG` only_) `_InjectableViewHost` type
@@ -38,7 +38,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	/// - Parameters:
 	///   - sceneView: the class to use as the sceneView. Must derive from BaseView
 	///   - viewModel: the class to use as the viewModel
-	init(sceneView: @autoclosure @escaping () -> V = { V() }(), viewModel: M) {
+	public init(sceneView: @autoclosure @escaping () -> V = { V() }(), viewModel: M) {
 		
 		self.viewModel = viewModel
 	
@@ -52,20 +52,20 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	/// Required initialzer
 	/// - Parameter coder: the coder
 	@available(*, unavailable)
-	required init?(coder: NSCoder) {
+	required public init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
 	// MARK: View lifecycle
-	override func loadView() {
+	override open func loadView() {
 		
 		view = _rootView
 	}
 	
 	/// Enable/disable navigation back swiping. Default is true.
-	var enableSwipeBack: Bool { true }
+	open var enableSwipeBack: Bool { true }
 	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
+	override open var preferredStatusBarStyle: UIStatusBarStyle {
 		
 		if #available(iOS 13.0, *) {
 			return .darkContent
@@ -74,11 +74,11 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 		}
 	}
 	
-	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+	override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 		return .all
 	}
 	
-	override func viewDidLoad() {
+	override open func viewDidLoad() {
 		
 		super.viewDidLoad()
 		
@@ -93,7 +93,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 		navigationItem.hidesBackButton = true
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
+	override open func viewDidAppear(_ animated: Bool) {
 		
 		super.viewDidAppear(animated)
 		
@@ -106,7 +106,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	// If the user is has VoiceOver enabled, they can
 	// draw a "Z" shape with two fingers to trigger a navigation pop.
 	// http://ronnqvi.st/adding-accessible-behavior
-	@objc override func accessibilityPerformEscape() -> Bool {
+	@objc override open func accessibilityPerformEscape() -> Bool {
 		if enableSwipeBack {
 			onBack()
 			return true
@@ -123,7 +123,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 	/// - Parameters:
 	///   - action: The action when the users taps the close button
 	///   - tintColor: The button tint color
-	func addCloseButton(
+	open func addCloseButton(
 		action: Selector,
 		tintColor: UIColor = C.black()!) {
 			
@@ -138,7 +138,7 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 			navigationItem.leftBarButtonItem = .create(config)
 		}
 	
-	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+	open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
 		return true
 	}
 }
@@ -146,9 +146,9 @@ class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecogniz
 /// A generic viewcontroller,which on iPad automagically applies side insets.
 /// V: The view to use for the scene, must be a (subclass of) baseview
 /// M: The class to use as viewModel
-class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V, M> {
+open class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V, M> {
 	
-	override func loadView() {
+	override public func loadView() {
 		
 		view = TraitWrapper(_sceneViewInstance())
 	}
@@ -156,7 +156,7 @@ class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewController<V
 
 extension UIViewController {
 	
-	func addBackButton(
+	public func addBackButton(
 		customAction: Selector? = nil) {
 			
 			var action = #selector(onBack)
@@ -174,7 +174,7 @@ extension UIViewController {
 			navigationItem.leftBarButtonItem = .create(config)
 		}
 	
-	@objc func onBack() {
+	@objc open func onBack() {
 		navigationController?.popViewController(animated: true)
 	}
 }

@@ -7,14 +7,14 @@
 
 import UIKit
 
-class NavigationController: UINavigationController {
+public class NavigationController: UINavigationController {
 
-	convenience init() {
+	convenience public init() {
 		self.init(nibName: nil, bundle: nil)
 		navigationBar.prefersLargeTitles = UIDevice.current.userInterfaceIdiom != .pad
 	}
 	
-	override var preferredStatusBarStyle: UIStatusBarStyle {
+	override open var preferredStatusBarStyle: UIStatusBarStyle {
 
 		if #available(iOS 13.0, *) {
 			return topViewController?.preferredStatusBarStyle ?? .darkContent

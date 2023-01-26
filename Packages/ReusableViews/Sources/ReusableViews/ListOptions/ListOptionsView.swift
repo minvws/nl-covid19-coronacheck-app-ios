@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class ListOptionsView: ScrolledStackView {
+public class ListOptionsView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -49,7 +49,7 @@ class ListOptionsView: ScrolledStackView {
 	}()
 
 	/// The stack view for the content
-	let optionStackView: UIStackView = {
+	public let optionStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ class ListOptionsView: ScrolledStackView {
 	}()
 
 	/// Setup all the views
-	override func setupViews() {
+	override open func setupViews() {
 
 		super.setupViews()
 		backgroundColor = C.white()
@@ -71,7 +71,7 @@ class ListOptionsView: ScrolledStackView {
 	}
 
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
@@ -81,7 +81,7 @@ class ListOptionsView: ScrolledStackView {
 		stackView.addArrangedSubview(secondaryButton)
 	}
 
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 
 		super.setupViewConstraints()
 
@@ -94,7 +94,7 @@ class ListOptionsView: ScrolledStackView {
 	}
 
 	/// User tapped on the primary button
-	@objc func secondaryButtonTapped() {
+	@objc public func secondaryButtonTapped() {
 
 		secondaryButtonTappedCommand?()
 	}
@@ -102,7 +102,7 @@ class ListOptionsView: ScrolledStackView {
 	// MARK: Public Access
 
 	/// The  title
-	var title: String? {
+	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
 				ViewTraits.Title.lineHeight,
@@ -112,7 +112,7 @@ class ListOptionsView: ScrolledStackView {
 	}
 
 	/// The message
-	var message: String? {
+	public var message: String? {
 		didSet {
 			if let message {
 				messageLabel.attributedText = message.setLineHeight(ViewTraits.Message.lineHeight)
@@ -123,7 +123,7 @@ class ListOptionsView: ScrolledStackView {
 		}
 	}
 
-	var secondaryButtonTitle: String? {
+	public var secondaryButtonTitle: String? {
 		didSet {
 			secondaryButton.title = secondaryButtonTitle
 			secondaryButton.isAccessibilityElement = secondaryButtonTitle != nil
@@ -131,5 +131,5 @@ class ListOptionsView: ScrolledStackView {
 		}
 	}
 
-	var secondaryButtonTappedCommand: (() -> Void)?
+	public var secondaryButtonTappedCommand: (() -> Void)?
 }

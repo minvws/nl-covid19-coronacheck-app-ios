@@ -8,12 +8,12 @@
 import UIKit
 import Shared
 
-protocol PageControlDelegate: AnyObject {
+public protocol PageControlDelegate: AnyObject {
 	
 	func pageControl(didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int)
 }
 
-final class PageControl: BaseView {
+public final class PageControl: BaseView {
 	
 	private enum ViewTraits {
 		
@@ -41,13 +41,13 @@ final class PageControl: BaseView {
 	}
 	
 	/// The delegate to get current and previous page index
-	weak var delegate: PageControlDelegate?
+	public weak var delegate: PageControlDelegate?
 	
 	/// Get current page index
-	private(set) var currentPageIndex: Int = 0
+	public private(set) var currentPageIndex: Int = 0
 	
 	/// Set number of pages. Indicators shown when more than one page is set.
-	var numberOfPages: Int = 0 {
+	public var numberOfPages: Int = 0 {
 		didSet {
 			let showIndicators = numberOfPages > 1
 			isHidden = !showIndicators
@@ -80,7 +80,7 @@ final class PageControl: BaseView {
 	
 	// MARK: Setup & Overrides
 	
-	override func setupViewHierarchy() {
+	override public func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
 		let previousButton = TappableButton()
@@ -93,7 +93,7 @@ final class PageControl: BaseView {
 		buttonStackView.addArrangedSubview(nextButton)
 	}
 	
-	override func setupViewConstraints() {
+	override public func setupViewConstraints() {
 		super.setupViewConstraints()
 		
 		indicatorStackView.embed(
@@ -103,14 +103,14 @@ final class PageControl: BaseView {
 		buttonStackView.embed(in: self)
 	}
 	
-	override func setupAccessibility() {
+	override public func setupAccessibility() {
 		super.setupAccessibility()
 		
 		isAccessibilityElement = true
 		accessibilityTraits = .adjustable
 	}
 	
-	override var intrinsicContentSize: CGSize {
+	override public var intrinsicContentSize: CGSize {
 		let height: CGFloat = ViewTraits.Size.selected
 		let count = CGFloat(numberOfPages)
 		let margins = 2 * ViewTraits.Margin.extraHorizontalTapArea
@@ -118,15 +118,15 @@ final class PageControl: BaseView {
 		return CGSize(width: width, height: height)
 	}
 	
-	override func accessibilityIncrement() {
+	override public func accessibilityIncrement() {
 		navigateToNextPage()
 	}
 	
-	override func accessibilityDecrement() {
+	override public func accessibilityDecrement() {
 		navigateToPreviousPage()
 	}
 	
-	override var accessibilityValue: String? {
+	override public var accessibilityValue: String? {
 		get { L.general_pagecontrol_accessibility_value(currentPageIndex + 1, numberOfPages) }
 		set { super.accessibilityValue = newValue }
 	}
@@ -135,7 +135,7 @@ final class PageControl: BaseView {
 	
 	/// Update selected page indicator
 	/// - Parameter pageIndex: Page index to have selected state
-	func update(for pageIndex: Int) {
+	public func update(for pageIndex: Int) {
 		guard currentPageIndex != pageIndex else { return }
 		
 		if pageIndex > currentPageIndex, canGoToNexPage {

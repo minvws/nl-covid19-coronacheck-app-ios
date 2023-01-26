@@ -7,41 +7,41 @@
 
 import UIKit
 
-protocol PageViewControllerDelegate: AnyObject {
+public protocol PageViewControllerDelegate: AnyObject {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int)
 }
 
-final class PageViewController: UIPageViewController {
+final public class PageViewController: UIPageViewController {
 	
-	weak var pageViewControllerDelegate: PageViewControllerDelegate?
+	public weak var pageViewControllerDelegate: PageViewControllerDelegate?
 	private var inProgress = false
-	var pages: [UIViewController]? {
+	public var pages: [UIViewController]? {
 		didSet {
 			guard let pages = pages, let initialViewController = pages.first else { return }
 			setViewControllers([initialViewController], direction: .forward, animated: false, completion: nil)
 		}
 	}
-	var isLastPage: Bool {
+	public var isLastPage: Bool {
 		guard let pages = pages else { return false }
 		return pages.count - 1 == currentIndex
 	}
-	var isAccessibilityPageAnnouncementEnabled = true
+	public var isAccessibilityPageAnnouncementEnabled = true
 	
-	private(set) var currentIndex = 0 {
+	public private(set) var currentIndex = 0 {
 		didSet {
 			pageViewControllerDelegate?.pageViewController(self, didSwipeToPendingViewControllerAt: currentIndex)
 		}
 	}
 	
-	override func viewDidLoad() {
+	public override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		dataSource = self
 		delegate = self
 	}
 	
-	override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewController.NavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
+	public override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewController.NavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
 
 		guard !inProgress else { return }
 		inProgress = true
@@ -60,7 +60,7 @@ final class PageViewController: UIPageViewController {
 		}
 	}
 	
-	func nextPage() {
+	public func nextPage() {
 		guard let currentViewController = viewControllers?.first else { return }
 		guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
 		guard !inProgress else { return }
@@ -68,7 +68,7 @@ final class PageViewController: UIPageViewController {
 		setViewControllers([nextViewController], direction: .forward, animated: true)
 	}
 	
-	func previousPage() {
+	public func previousPage() {
 		guard let currentViewController = viewControllers?.first else { return }
 		guard let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
 		guard !inProgress else { return }
@@ -76,7 +76,7 @@ final class PageViewController: UIPageViewController {
 		setViewControllers([previousViewController], direction: .reverse, animated: true)
 	}
 
-	func startAtIndex(_ index: Int) {
+	public func startAtIndex(_ index: Int) {
 		guard let pages = pages, pages.count > index else { return }
 		guard !inProgress else { return }
 		setViewControllers([pages[index]], direction: .forward, animated: false, completion: nil)
@@ -86,14 +86,14 @@ final class PageViewController: UIPageViewController {
 
 extension PageViewController: UIPageViewControllerDataSource {
 	
-	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+	public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 		guard let pages = pages, let index = pages.firstIndex(of: viewController) else { return nil }
 		let updatedIndex = index - 1
 		guard updatedIndex >= 0 else { return nil }
 		return pages[updatedIndex]
 	}
 	
-	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+	public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 		guard let pages = pages, let index = pages.firstIndex(of: viewController) else { return nil }
 		let updatedIndex = index + 1
 		guard updatedIndex < pages.count else { return nil }
@@ -103,7 +103,7 @@ extension PageViewController: UIPageViewControllerDataSource {
 
 extension PageViewController: UIPageViewControllerDelegate {
 	
-	func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+	public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
 		guard completed else { return }
 		guard let pages = pages, let currentViewController = viewControllers?.first, let index = pages.firstIndex(of: currentViewController) else { return }
 		currentIndex = index

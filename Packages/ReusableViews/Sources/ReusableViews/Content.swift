@@ -10,23 +10,23 @@ import UIKit
 // A common class for displaying content. Most of our pages consist of a title, a body/subTitle
 // and a primary action (aka the big blue button at the bottom) + button title.
 // This struct also has an optional second action + button title for more flexibility.
-struct Content: Equatable {
+public struct Content: Equatable {
 
-	let title: String
-	let body: String?
-	let primaryActionTitle: String?
-	let primaryAction: (() -> Void)?
-	let secondaryActionTitle: String?
-	let secondaryAction: (() -> Void)?
+	public let title: String
+	public let body: String?
+	public let primaryActionTitle: String?
+	public let primaryAction: (() -> Void)?
+	public let secondaryActionTitle: String?
+	public let secondaryAction: (() -> Void)?
 
-	static func == (lhs: Content, rhs: Content) -> Bool {
+	public static func == (lhs: Content, rhs: Content) -> Bool {
 		return lhs.title == rhs.title &&
 			lhs.body == rhs.body &&
 			lhs.primaryActionTitle == rhs.primaryActionTitle &&
 			lhs.secondaryActionTitle == rhs.secondaryActionTitle
 	}
 
-	init(
+	public init(
 		title: String,
 		body: String? = nil,
 		primaryActionTitle: String? = nil,

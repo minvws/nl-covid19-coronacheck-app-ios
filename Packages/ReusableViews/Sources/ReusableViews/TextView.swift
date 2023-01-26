@@ -11,14 +11,14 @@ import UIKit
 /// Auto expands to fit its content.
 /// By default the content is not editable or selectable.
 /// Can listen to selected links and updated text.
-class TextView: UIStackView {
+open class TextView: UIStackView {
 	
 	var paragraphMarginMultiplier: CGFloat = 1.0
 	var headerMarginMultiplier: CGFloat = 0.25
 	var listItemMarginMultiplier: CGFloat = 0.25
 	
 	/// Helper variable to display the given text by using a TextElement
-	var text: String? {
+	public var text: String? {
 		didSet {
 			removeAllArrangedSubviews()
 			
@@ -28,7 +28,7 @@ class TextView: UIStackView {
 	}
 	
 	/// Helper variable to display a TextElement for each paragraph in the attributed string
-	var attributedText: NSAttributedString? {
+	public var attributedText: NSAttributedString? {
 		didSet {
 			removeAllArrangedSubviews()
 			
@@ -79,33 +79,33 @@ class TextView: UIStackView {
 	}
 	
 	/// Helper variable to retrieve all subviews
-	var textElements: [TextElement] {
+	public var textElements: [TextElement] {
 		return arrangedSubviews.compactMap { view in
 			return view as? TextElement
 		}
 	}
 	
 	/// Helper variable to pass linkTextAttributes to each subview
-	var linkTextAttributes: [NSAttributedString.Key: Any]? {
+	public var linkTextAttributes: [NSAttributedString.Key: Any]? {
 		didSet {
 			applyLinkTextAttributesToTextElements()
 		}
 	}
 	
-	var linkTouchedHandler: ((URL) -> Void)? {
+	public var linkTouchedHandler: ((URL) -> Void)? {
 		didSet {
 			applyLinkTouchedHandlerToTextElements()
 		}
 	}
 	
-	var textChangedHandler: ((String?) -> Void)? {
+	public var textChangedHandler: ((String?) -> Void)? {
 		didSet {
 			applyTextChangedHandlerToTextElements()
 		}
 	}
 	
 	/// Initializes the TextView by parsing the given string to HTML
-	init(htmlText: String) {
+	public init(htmlText: String) {
 		
 		super.init(frame: .zero)
 		setup()
@@ -113,14 +113,14 @@ class TextView: UIStackView {
 	}
 	
 	//// Initializes the TextView with a string
-	init(text: String? = nil) {
+	public init(text: String? = nil) {
 		super.init(frame: .zero)
 		setup()
 		
 		self.text = text
 	}
 	
-	required init(coder: NSCoder) {
+	required public init(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
@@ -132,7 +132,7 @@ class TextView: UIStackView {
 	
 	/// Sets the content to the supplied html string.
 	///
-	func applyHTML(_ htmlText: String?, completion: (() -> Void)? = nil) {
+	public func applyHTML(_ htmlText: String?, completion: (() -> Void)? = nil) {
 		NSAttributedString.makeFromHtml(text: htmlText, style: .bodyDark) { attributedString in
 			self.attributedText = attributedString
 			

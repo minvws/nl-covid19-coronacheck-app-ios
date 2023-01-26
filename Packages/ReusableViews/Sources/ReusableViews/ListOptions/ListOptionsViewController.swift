@@ -7,23 +7,23 @@
 
 import UIKit
 
-class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsView, ListOptionsProtocol> {
+open class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsView, ListOptionsProtocol> {
 
-	struct OptionModel {
-		init(title: String, subTitle: String? = nil, image: UIImage? = nil, action: @escaping () -> Void) {
+	public struct OptionModel {
+		public init(title: String, subTitle: String? = nil, image: UIImage? = nil, action: @escaping () -> Void) {
 			self.title = title
 			self.subTitle = subTitle
 			self.image = image
 			self.action = action
 		}
 		
-		let title: String
-		let subTitle: String?
-		let image: UIImage?
-		let action: () -> Void
+		public let title: String
+		public let subTitle: String?
+		public let image: UIImage?
+		public let action: () -> Void
 	}
 
-	override func viewDidLoad() {
+	override public func viewDidLoad() {
 
 		super.viewDidLoad()
 
@@ -32,7 +32,7 @@ class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsVi
 		setupBackButton()
 	}
 
-	func setupBinding() {
+	public func setupBinding() {
 
 		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
@@ -43,7 +43,7 @@ class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsVi
 		}
 	}
 	
-	func setupOptions() {
+	public func setupOptions() {
 		
 		viewModel.optionModels.observe { [weak self] buttons in
 			guard let self else { return }
@@ -73,7 +73,7 @@ class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsVi
 		}
 	}
 	
-	func setupBackButton() {
+	public func setupBackButton() {
 		// Only show an arrow as back button
 		addBackButton()
 	}
@@ -86,7 +86,7 @@ extension DisclosureButton {
 	///   - title: the title of the button
 	///   - command: the command to execute when tapped
 	/// - Returns: A disclosure button
-	static func makeButton(
+	public static func makeButton(
 		title: String,
 		icon: UIImage? = nil,
 		command: (() -> Void)? ) -> DisclosureButton {
@@ -108,7 +108,7 @@ extension DisclosureSubtitleButton {
 	///   - subTitle: the sub title of the button
 	///   - command: the command to execute when tapped
 	/// - Returns: A disclosure button
-	static func makeButton(
+	public static func makeButton(
 		title: String,
 		subtitle: String,
 		command: (() -> Void)? ) -> DisclosureSubtitleButton {

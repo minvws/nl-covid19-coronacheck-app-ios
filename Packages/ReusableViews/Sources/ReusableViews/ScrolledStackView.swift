@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScrolledStackView: BaseView {
+open class ScrolledStackView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -19,9 +19,9 @@ class ScrolledStackView: BaseView {
 	}
 
 	/// Scroll view bottom constraint
-	var bottomScrollViewConstraint: NSLayoutConstraint?
+	public var bottomScrollViewConstraint: NSLayoutConstraint?
 
-	var stackViewInset = UIEdgeInsets(
+	public var stackViewInset = UIEdgeInsets(
 		top: ViewTraits.topMargin,
 		left: ViewTraits.margin,
 		bottom: ViewTraits.margin,
@@ -29,7 +29,7 @@ class ScrolledStackView: BaseView {
 	)
 
 	/// The scrollview
-	let scrollView: UIScrollView = {
+	public let scrollView: UIScrollView = {
 
 		let view = UIScrollView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +38,7 @@ class ScrolledStackView: BaseView {
 	}()
 
 	/// The stackview for the content
-	let stackView: UIStackView = {
+	public let stackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -50,14 +50,14 @@ class ScrolledStackView: BaseView {
 	}()
 	
 	/// Content view to get proper size in scroll view
-	let scrollViewContent: UIView = {
+	public let scrollViewContent: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 		stackView.embed(in: scrollViewContent)
@@ -66,7 +66,7 @@ class ScrolledStackView: BaseView {
 	}
 
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 
 		super.setupViewConstraints()
 

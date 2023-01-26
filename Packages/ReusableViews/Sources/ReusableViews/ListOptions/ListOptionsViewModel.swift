@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-protocol ListOptionsProtocol: AnyObject {
+public protocol ListOptionsProtocol: AnyObject {
 
 	var title: Observable<String> { get }
 	var message: Observable<String?> { get }

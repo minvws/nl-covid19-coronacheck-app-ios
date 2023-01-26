@@ -9,7 +9,7 @@ import UIKit
 import Shared
 
 /// A grey full width button with a title, sub title and a disclosure icon
-class DisclosureSubtitleButton: BaseView {
+open class DisclosureSubtitleButton: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -65,7 +65,7 @@ class DisclosureSubtitleButton: BaseView {
 		return button
 	}()
 	
-	override func setupViews() {
+	override open func setupViews() {
 		
 		super.setupViews()
 		backgroundColor = C.primaryBlue5()
@@ -74,7 +74,7 @@ class DisclosureSubtitleButton: BaseView {
 	}
 	
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
 		addSubview(disclosureView)
@@ -85,7 +85,7 @@ class DisclosureSubtitleButton: BaseView {
 	}
 	
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 		
 		super.setupViewConstraints()
 		
@@ -142,7 +142,7 @@ class DisclosureSubtitleButton: BaseView {
 	}
 	
 	/// Setup all the accessibility traits
-	override func setupAccessibility() {
+	override open func setupAccessibility() {
 		
 		super.setupAccessibility()
 		
@@ -155,7 +155,7 @@ class DisclosureSubtitleButton: BaseView {
 	}
 	
 	/// User tapped on the primary button
-	@objc func primaryButtonTapped() {
+	@objc public func primaryButtonTapped() {
 		
 		primaryButtonTappedCommand?()
 	}
@@ -163,10 +163,10 @@ class DisclosureSubtitleButton: BaseView {
 	// MARK: Public Access
 	
 	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
+	open var primaryButtonTappedCommand: (() -> Void)?
 	
 	/// The  title
-	var title: String? {
+	open var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
 				ViewTraits.Title.lineHeight,
@@ -177,7 +177,7 @@ class DisclosureSubtitleButton: BaseView {
 	}
 	
 	/// The sub title
-	var subtitle: String? {
+	open var subtitle: String? {
 		didSet {
 			subtitleLabel.attributedText = subtitle?.setLineHeight(
 				ViewTraits.Message.lineHeight,

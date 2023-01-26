@@ -8,26 +8,33 @@
 import UIKit
 import Shared
 
-struct AlertContent {
+public struct AlertContent {
 	
-	struct Action {
+	public struct Action {
 		
-		var title: String
-		var action: ((UIAlertAction) -> Void)?
-		var isDestructive: Bool = false
-		var isPreferred: Bool = false
+		public var title: String
+		public var action: ((UIAlertAction) -> Void)?
+		public var isDestructive: Bool = false
+		public var isPreferred: Bool = false
 		
-		static let okay = AlertContent.Action(title: L.generalOk())
-		static let cancel = AlertContent.Action(title: L.general_cancel())
+		public static let okay = AlertContent.Action(title: L.generalOk(), action: nil)
+		public static let cancel = AlertContent.Action(title: L.general_cancel(), action: nil)
+		
+		public init(title: String, action: ((UIAlertAction) -> Void)? = nil, isDestructive: Bool = false, isPreferred: Bool = false) {
+			self.title = title
+			self.action = action
+			self.isDestructive = isDestructive
+			self.isPreferred = isPreferred
+		}
 	}
 	
-	private (set) var title: String
-	private (set) var subTitle: String
-	private (set) var okAction: AlertContent.Action
-	private (set) var cancelAction: AlertContent.Action?
-	private (set) var alertWasPresentedCallback: (() -> Void)?
+	public private (set) var title: String
+	public private (set) var subTitle: String
+	public private (set) var okAction: AlertContent.Action
+	public private (set) var cancelAction: AlertContent.Action?
+	public private (set) var alertWasPresentedCallback: (() -> Void)?
 	
-	init(
+	public init(
 		title: String,
 		subTitle: String,
 		okAction: AlertContent.Action,
@@ -46,7 +53,7 @@ extension UIViewController {
 	/// Show an alert
 	/// - Parameters:
 	///   - alertContent: the content of the alert
-	func showAlert(_ alertContent: AlertContent) {
+	public func showAlert(_ alertContent: AlertContent) {
 
 		performUIUpdate {
 			let alertController = UIAlertController(
@@ -66,7 +73,7 @@ extension UIViewController {
 
 extension UIAlertController {
 	
-	func addAlertAction(action: AlertContent.Action, style: UIAlertAction.Style = .default) {
+	public func addAlertAction(action: AlertContent.Action, style: UIAlertAction.Style = .default) {
 		
 		let alertAction = UIAlertAction(
 			title: action.title,

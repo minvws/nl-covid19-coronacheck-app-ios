@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class ErrorView: BaseView {
+open class ErrorView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -42,14 +42,14 @@ class ErrorView: BaseView {
 		return Label(subhead: nil).multiline()
 	}()
 	
-	override func setupViews() {
+	override open func setupViews() {
 		
 		super.setupViews()
 		view?.backgroundColor = .clear
 	}
 	
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
 		addSubview(errorImageView)
@@ -57,7 +57,7 @@ class ErrorView: BaseView {
 	}
 	
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 		
 		super.setupViewConstraints()
 		
@@ -91,7 +91,7 @@ class ErrorView: BaseView {
 	// MARK: Public Access
 	
 	/// The header
-	var error: String? {
+	public var error: String? {
 		didSet {
 			errorLabel.attributedText = error?.setLineHeight(
 				ViewTraits.Font.lineHeight,

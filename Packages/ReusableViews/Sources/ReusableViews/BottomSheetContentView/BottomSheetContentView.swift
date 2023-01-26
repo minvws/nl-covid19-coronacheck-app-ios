@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 import Shared
 
-class BottomSheetContentView: BaseView {
+public class BottomSheetContentView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -41,7 +41,7 @@ class BottomSheetContentView: BaseView {
 		return TextView()
 	}()
 
-	let secondaryButton: Button = {
+	public let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +50,7 @@ class BottomSheetContentView: BaseView {
 		return button
 	}()
 	
-	override func setupViews() {
+	override open func setupViews() {
 
 		super.setupViews()
 		titleLabel.textColor = C.black()
@@ -58,7 +58,7 @@ class BottomSheetContentView: BaseView {
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
@@ -78,36 +78,36 @@ class BottomSheetContentView: BaseView {
 
 	// MARK: Public Access
 
-	var title: String? {
+	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
 															 kerning: ViewTraits.kerning)
 		}
 	}
 
-	var body: String? {
+	public var body: String? {
 		didSet {
 			messageLabel.attributedText = .makeFromHtml(text: body, style: .bodyDark)
 		}
 	}
 
-	var messageLinkTapHandler: ((URL) -> Void)? {
+	public var messageLinkTapHandler: ((URL) -> Void)? {
 		didSet {
 			messageLabel.linkTouchedHandler = messageLinkTapHandler
 		}
 	}
 	
-	var secondaryButtonTappedCommand: (() -> Void)?
+	public var secondaryButtonTappedCommand: (() -> Void)?
 
 	/// The title for the secondary white/blue button
-	var secondaryButtonTitle: String? {
+	public var secondaryButtonTitle: String? {
 		didSet {
 			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
 			secondaryButton.isHidden = secondaryButtonTitle?.isEmpty ?? true
 		}
 	}
 
-	func handleScreenCapture(shouldHide: Bool) {
+	public func handleScreenCapture(shouldHide: Bool) {
 		messageLabel.isHidden = shouldHide
 	}
 }

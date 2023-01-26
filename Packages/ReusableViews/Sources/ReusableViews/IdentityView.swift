@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class IdentityElementView: BaseView {
+open class IdentityElementView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -41,11 +41,11 @@ class IdentityElementView: BaseView {
 	}
 
 	/// Initialize the identity element view
-	init() {
+	public init() {
 		super.init(frame: .zero)
 	}
 
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 
@@ -68,7 +68,7 @@ class IdentityElementView: BaseView {
 		return view
 	}()
 
-	override func setupViews() {
+	override open func setupViews() {
 		super.setupViews()
 
 		borderView.layer.cornerRadius = ViewTraits.cornerRadius
@@ -90,7 +90,7 @@ class IdentityElementView: BaseView {
 	}
 
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
@@ -100,7 +100,7 @@ class IdentityElementView: BaseView {
 	}
 
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 
 		super.setupViewConstraints()
 
@@ -153,7 +153,7 @@ class IdentityElementView: BaseView {
 	// MARK: Public Access
 
 	/// The title
-	var header: String? {
+	public var header: String? {
 		didSet {
 			headerLabel.attributedText = header?.setLineHeight(
 				ViewTraits.headerLineHeight,
@@ -163,7 +163,7 @@ class IdentityElementView: BaseView {
 	}
 
 	/// The title
-	var body: String? {
+	public var body: String? {
 		didSet {
 			bodyLabel.attributedText = (self.body ?? "-").setLineHeight(
 				ViewTraits.titleLineHeight,

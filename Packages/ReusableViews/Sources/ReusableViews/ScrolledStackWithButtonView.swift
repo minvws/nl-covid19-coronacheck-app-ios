@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class ScrolledStackWithButtonView: ScrolledStackView {
+open class ScrolledStackWithButtonView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -18,12 +18,12 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
 
 	/// the update button
-	var primaryButton: Button {
+	public var primaryButton: Button {
 		return footerButtonView.primaryButton
 	}
 	
 	/// The footer view with primary button
-	let footerButtonView: FooterButtonView = {
+	public let footerButtonView: FooterButtonView = {
 		
 		let footerView = FooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +34,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	private var scrollViewToFooterConstraint: NSLayoutConstraint?
 	
 	/// Setup all the views
-	override func setupViews() {
+	override open func setupViews() {
 
 		super.setupViews()
 		stackView.spacing = ViewTraits.spacing
@@ -48,7 +48,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
 
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
@@ -56,7 +56,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
  
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 
 		super.setupViewConstraints()
 		
@@ -73,7 +73,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
 
 	/// User tapped on the primary button
-	@objc func primaryButtonTapped() {
+	@objc public func primaryButtonTapped() {
 
 		primaryButtonTappedCommand?()
 	}
@@ -91,7 +91,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	// MARK: Public Access
 
 	/// The title for the primary button
-	var primaryTitle: String? {
+	public var primaryTitle: String? {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 			shouldShowFooter = primaryTitle != nil
@@ -99,5 +99,5 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
 
 	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
+	public var primaryButtonTappedCommand: (() -> Void)?
 }

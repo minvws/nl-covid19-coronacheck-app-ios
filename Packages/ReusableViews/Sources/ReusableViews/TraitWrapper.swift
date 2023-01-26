@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TraitWrapper: BaseView {
+open class TraitWrapper: BaseView {
 	
-	let wrappedView: UIView
+	public let wrappedView: UIView
 	
 	private lazy var constrainedWidthConstraint: NSLayoutConstraint = wrappedView.widthAnchor.constraint(equalTo: widthAnchor)
 	private lazy var regularWidthConstraint: NSLayoutConstraint = {
@@ -18,23 +18,23 @@ class TraitWrapper: BaseView {
 	
 	private var backgroundColorObserverToken: NSKeyValueObservation?
 
-	init(_ sceneView: UIView) {
+	public init(_ sceneView: UIView) {
 		self.wrappedView = sceneView
 		super.init(frame: .zero)
 	}
 	
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		fatalError("unimplemented.")
 	}
 	
 	/// Setup all the views
-	override func setupViews() {
+	override open func setupViews() {
 		super.setupViews()
 		wrappedView.translatesAutoresizingMaskIntoConstraints = false
 	}
 
 	/// Setup the view hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		addSubview(wrappedView)
 
@@ -42,7 +42,7 @@ class TraitWrapper: BaseView {
 	}
 	
 	/// Setup all the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 		super.setupViewConstraints()
 		
 		addConstraints([
@@ -59,7 +59,7 @@ class TraitWrapper: BaseView {
 		activateCorrectConstraint(forTraitCollection: traitCollection)
 	}
 	
-	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+	override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		activateCorrectConstraint(forTraitCollection: traitCollection)
 	}

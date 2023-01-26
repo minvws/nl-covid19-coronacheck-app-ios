@@ -8,7 +8,7 @@
 import UIKit
 
 /// A grey full width button with a title and a disclosure icon
-class DisclosureButton: DisclosureSubtitleButton {
+open class DisclosureButton: DisclosureSubtitleButton {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -37,14 +37,14 @@ class DisclosureButton: DisclosureSubtitleButton {
 	var titleLabelToDisclosureLayoutConstraint: NSLayoutConstraint?
 	var titleLabelToIconLayoutConstraint: NSLayoutConstraint?
 	
-	override func setupViews() {
+	override open func setupViews() {
 		
 		super.setupViews()
 		subtitleLabel.isHidden = true
 		addSubview(iconView)
 	}
 	
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 		
 		// No super.setupViewConstraints(), override only
 

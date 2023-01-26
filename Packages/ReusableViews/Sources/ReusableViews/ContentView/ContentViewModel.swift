@@ -8,16 +8,16 @@
 import Foundation
 import Shared
 
-final class ContentViewModel {
+public final class ContentViewModel {
 
-	@Bindable private(set) var content: Content
+	@Bindable public private(set) var content: Content
 	
-	let showBackButton: Bool
-	let allowsSwipeBack: Bool
+	public let showBackButton: Bool
+	public let allowsSwipeBack: Bool
 	private var backbuttonAction: (() -> Void)?
 	private let linkTapHander: ((URL) -> Void)?
 	
-	init(
+	public init(
 		content: Content,
 		backAction: (() -> Void)?,
 		allowsSwipeBack: Bool,
@@ -31,12 +31,12 @@ final class ContentViewModel {
 		self.linkTapHander = linkTapHander
 	}
 
-	func backButtonTapped() {
+	public func backButtonTapped() {
 
 		backbuttonAction?()
 	}
 	
-	func openUrl(_ url: URL) {
+	public func openUrl(_ url: URL) {
 		
 		linkTapHander?(url)
 	}

@@ -10,7 +10,7 @@ import Shared
 
 /// Footer view with primary button.
 /// It has a fade animation method to display a shadow separator when pinned to a scroll view.
-final class FooterButtonView: BaseView {
+public final class FooterButtonView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -31,13 +31,13 @@ final class FooterButtonView: BaseView {
 	}
 
 	/// The shadow gradient view
-	let gradientView: UIView = {
+	public let gradientView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
-	let buttonStackView: UIStackView = {
+	public let buttonStackView: UIStackView = {
 		let stackView = UIStackView()
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .vertical
@@ -47,7 +47,7 @@ final class FooterButtonView: BaseView {
 	}()
 
 	/// The primary button
-	let primaryButton: Button = {
+	public let primaryButton: Button = {
 		let button = Button()
 		button.titleLabel?.textAlignment = .center
 		button.titleLabel?.numberOfLines = 2
@@ -55,7 +55,7 @@ final class FooterButtonView: BaseView {
 	}()
 	
 	/// Setup all the views
-	override func setupViews() {
+	override public func setupViews() {
 		super.setupViews()
 		
 		backgroundColor = C.white()
@@ -63,7 +63,7 @@ final class FooterButtonView: BaseView {
 	}
 
 	/// Setup the view hierarchy
-	override func setupViewHierarchy() {
+	override public func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
 		addSubview(gradientView)
@@ -72,7 +72,7 @@ final class FooterButtonView: BaseView {
 	}
 
 	/// Setup all the constraints
-	override func setupViewConstraints() {
+	override public func setupViewConstraints() {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
@@ -148,30 +148,30 @@ final class FooterButtonView: BaseView {
 		gradientView.layer.insertSublayer(gradient, at: 0)
 	}
 	
-	override func layoutSubviews() {
+	override public func layoutSubviews() {
 		super.layoutSubviews()
 		setupShadowGradient()
 	}
 	
 	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
+	public var primaryButtonTappedCommand: (() -> Void)?
 	
 	/// The title for the primary button
-	var primaryTitle: String? {
+	public var primaryTitle: String? {
 		didSet {
 			primaryButton.title = primaryTitle
 		}
 	}
 	
 	/// The top constraint for margin changes
-	var topButtonConstraint: NSLayoutConstraint?
+	public var topButtonConstraint: NSLayoutConstraint?
 	
 	/// The bottom constraint for keyboard changes
-	var bottomButtonConstraint: NSLayoutConstraint?
+	public var bottomButtonConstraint: NSLayoutConstraint?
 	
 	/// Fade shadow separator.
 	/// - Parameter scrollOffset: The scroll offset of the scroll view (animation range: -height to 0).
-	func updateFadeAnimation(from scrollOffset: CGFloat) {
+	public func updateFadeAnimation(from scrollOffset: CGFloat) {
 		let maxRange: CGFloat = ViewTraits.Gradient.height
 		let distance = clamp(scrollOffset: scrollOffset, maxRange: maxRange)
 		

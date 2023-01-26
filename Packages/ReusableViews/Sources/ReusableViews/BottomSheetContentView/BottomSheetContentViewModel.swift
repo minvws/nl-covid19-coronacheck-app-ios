@@ -8,7 +8,7 @@
 import Foundation
 import Shared
 
-class BottomSheetContentViewModel {
+public class BottomSheetContentViewModel {
 
 	// MARK: - Bindable
 
@@ -21,7 +21,7 @@ class BottomSheetContentViewModel {
 	// MARK: - Private
 	private let linkTapHander: ((URL) -> Void)?
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
-	internal let content: Content
+	public let content: Content
 	
 	// MARK: - Initializer
 
@@ -29,7 +29,7 @@ class BottomSheetContentViewModel {
 	/// - Parameters:
 	///   - title: The title of the page
 	///   - message: The message of the page
-	init(
+	public init(
 		content: Content,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol,
 		linkTapHander: ((URL) -> Void)? = nil, // todo: merge this into Content?

@@ -8,9 +8,9 @@
 import UIKit
 import Shared
 
-class BottomSheetContentViewController: GenericViewController<BottomSheetContentView, BottomSheetContentViewModel> {
+public class BottomSheetContentViewController: GenericViewController<BottomSheetContentView, BottomSheetContentViewModel> {
 
-	override func viewDidLoad() {
+	public override func viewDidLoad() {
 
 		super.viewDidLoad()
 

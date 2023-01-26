@@ -9,7 +9,7 @@ import UIKit
 
 extension UIImage {
 	
-	func resizedImage(toSize imageSize: CGSize) -> UIImage? {
+	public func resizedImage(toSize imageSize: CGSize) -> UIImage? {
 		
 		let frame = CGRect(origin: CGPoint.zero, size: CGSize(width: imageSize.width, height: imageSize.height))
 		UIGraphicsBeginImageContextWithOptions(frame.size, false, 0)

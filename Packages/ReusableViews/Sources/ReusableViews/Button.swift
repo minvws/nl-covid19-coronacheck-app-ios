@@ -9,9 +9,9 @@ import UIKit
 import Shared
 
 /// A styled UIButton subclass
-class Button: TappableButton {
+open class Button: TappableButton {
 	
-	enum ButtonType {
+	public enum ButtonType {
 		
 		/// Used for the QRCardView ShowQR Button
 		case narrowRoundedBlue
@@ -40,7 +40,7 @@ class Button: TappableButton {
 		/// Rounded, blue background, white text, right image with label in center
 		case roundedBlueImage
 		
-		func backgroundColor(isEnabled: Bool = true) -> UIColor {
+		public func backgroundColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .narrowRoundedBlue, .roundedBlueImage:
 					return isEnabled ? C.primaryBlue()! : C.grey5()!
@@ -53,7 +53,7 @@ class Button: TappableButton {
 			}
 		}
 		
-		func textColor(isEnabled: Bool = true) -> UIColor {
+		public func textColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlue, .narrowRoundedBlue, .roundedBlueImage:
 					return isEnabled ? C.white()! : C.grey2()!
@@ -70,14 +70,14 @@ class Button: TappableButton {
 			}
 		}
 		
-		var font: UIFont {
+		public var font: UIFont {
 			switch self {
 				case .textLabelBlue: return Fonts.bodyMedium
 				default: return Fonts.bodySemiBold
 			}
 		}
 		
-		var contentEdgeInsets: UIEdgeInsets {
+		public var contentEdgeInsets: UIEdgeInsets {
 			switch self {
 				case .textLabelBlue: return .zero
 				case .roundedBlue: return .topBottom(10) + .leftRight(56)
@@ -88,14 +88,14 @@ class Button: TappableButton {
 			}
 		}
 		
-		var imageTitlePadding: CGFloat {
+		public var imageTitlePadding: CGFloat {
 			switch self {
 				case .roundedBlueImage: return 11
 				default: return 0
 			}
 		}
 		
-		func borderColor(isEnabled: Bool = true) -> UIColor {
+		public func borderColor(isEnabled: Bool = true) -> UIColor {
 			switch self {
 				case .roundedBlueBorder:
 					return isEnabled ? C.primaryBlue()! : C.grey2()!
@@ -108,7 +108,7 @@ class Button: TappableButton {
 			}
 		}
 		
-		var borderWidth: CGFloat {
+		public var borderWidth: CGFloat {
 			switch self {
 				case .roundedClear,
 					.roundedBlueBorder,
@@ -120,7 +120,7 @@ class Button: TappableButton {
 			}
 		}
 		
-		var isRounded: Bool {
+		public var isRounded: Bool {
 			switch self {
 				case .textLabelBlue: return false
 				default: return true
@@ -128,29 +128,29 @@ class Button: TappableButton {
 		}
 	}
 	
-	var style = ButtonType.roundedBlue {
+	open var style = ButtonType.roundedBlue {
 		didSet {
 			setupButtonType()
 		}
 	}
 	
-	var title: String? = "" {
+	open var title: String? = "" {
 		didSet {
 			setTitle(title, for: .normal)
 		}
 	}
 	
-	override var isEnabled: Bool {
+	override open var isEnabled: Bool {
 		didSet {
 			setupColors()
 		}
 	}
 	
-	var useHapticFeedback = true
+	open var useHapticFeedback = true
 	
 	// MARK: - Init
 	
-	required init(title: String = "", style: ButtonType = .roundedBlue) {
+	required public init(title: String = "", style: ButtonType = .roundedBlue) {
 		
 		super.init(frame: .zero)
 		
@@ -173,12 +173,12 @@ class Button: TappableButton {
 		setupAccessibility()
 	}
 	
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
 	@discardableResult
-	func touchUpInside(_ target: Any?, action: Selector) -> Self {
+	open func touchUpInside(_ target: Any?, action: Selector) -> Self {
 		
 		super.addTarget(target, action: action, for: .touchUpInside)
 		return self
@@ -186,7 +186,7 @@ class Button: TappableButton {
 	
 	// MARK: - Overrides
 	
-	override func layoutSubviews() {
+	override open func layoutSubviews() {
 
 		super.layoutSubviews()
 		layer.cornerRadius = style.isRounded ? min(bounds.width, bounds.height) / 2 : 0
@@ -196,7 +196,7 @@ class Button: TappableButton {
 	}
 	
 	// Calculates content size including insets for dynamic font size scaling
-	override var intrinsicContentSize: CGSize {
+	override open var intrinsicContentSize: CGSize {
 		
 		guard style != .roundedBlueImage else {
 			return super.intrinsicContentSize

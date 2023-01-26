@@ -7,15 +7,31 @@
 
 import UIKit
 
-extension UIBarButtonItem {
+public extension UIBarButtonItem {
 	
 	struct Configuration {
-		let target: Any?
-		let action: Selector
-		let content: Content
-		var tintColor: UIColor?
-		let accessibilityIdentifier: String
-		let accessibilityLabel: String
+		public let target: Any?
+		public let action: Selector
+		public let content: Content
+		public var tintColor: UIColor?
+		public let accessibilityIdentifier: String
+		public let accessibilityLabel: String
+		
+		public init (
+			target: Any?,
+			action: Selector,
+			content: Content,
+			tintColor: UIColor? = nil,
+			accessibilityIdentifier: String,
+			accessibilityLabel: String
+		) {
+			self.target = target
+			self.action = action
+			self.content = content
+			self.tintColor = tintColor
+			self.accessibilityIdentifier = accessibilityIdentifier
+			self.accessibilityLabel = accessibilityLabel
+		}
 	}
 
 	enum Content {

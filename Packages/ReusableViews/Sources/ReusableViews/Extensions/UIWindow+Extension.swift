@@ -14,7 +14,7 @@ extension UIWindow {
 	///   - viewController: The view controller to be shown
 	///   - animated: Display fade animation
 	///   - completion: A completion handler to be executed when the animation sequence ends
-	func replaceRootViewController(with viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
+	public func replaceRootViewController(with viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
 		
 		guard animated else {
 			rootViewController = viewController

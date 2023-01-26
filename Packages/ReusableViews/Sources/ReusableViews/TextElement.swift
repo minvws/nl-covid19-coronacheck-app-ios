@@ -12,12 +12,12 @@ import Shared
 /// Auto expands to fit its content.
 /// By default the content is not editable or selectable.
 /// Can listen to selected links and updated text.
-class TextElement: UITextView, UITextViewDelegate {
+open class TextElement: UITextView, UITextViewDelegate {
 	
 	/// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
 	///
 	/// - parameter handler: The closure to be called when the user selects a link
-	var linkTouchedHandler: ((URL) -> Void)? {
+	open var linkTouchedHandler: ((URL) -> Void)? {
 		didSet {
 			isSelectable = textChangedHandler != nil || linkTouchedHandler != nil
 		}
@@ -26,7 +26,7 @@ class TextElement: UITextView, UITextViewDelegate {
 	/// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
 	///
 	/// - parameter handler: The closure to be called when the text is updated
-	var textChangedHandler: ((String?) -> Void)? {
+	open var textChangedHandler: ((String?) -> Void)? {
 		didSet {
 			isSelectable = textChangedHandler != nil || linkTouchedHandler != nil
 			isEditable = textChangedHandler != nil
@@ -34,7 +34,7 @@ class TextElement: UITextView, UITextViewDelegate {
 	}
 	
 	///  Initializes the TextView with the given attributed string
-	init(
+	public init(
 		attributedText: NSAttributedString
 	) {
 		super.init(frame: .zero, textContainer: nil)
@@ -53,14 +53,14 @@ class TextElement: UITextView, UITextViewDelegate {
 	}
 	
 	///  Initializes the TextView with the given string
-	init(text: String? = nil) {
+	public init(text: String? = nil) {
 		super.init(frame: .zero, textContainer: nil)
 		setup()
 		
 		self.text = text
 	}
 	
-	required init?(coder: NSCoder) {
+	required public init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
@@ -107,7 +107,7 @@ class TextElement: UITextView, UITextViewDelegate {
 	}
 	
 	/// Calculates the intrisic content size
-	override var intrinsicContentSize: CGSize {
+	override open var intrinsicContentSize: CGSize {
 		let superSize = super.intrinsicContentSize
 		
 		if isEditable {
@@ -118,7 +118,7 @@ class TextElement: UITextView, UITextViewDelegate {
 	}
 	
 	/// Delegate method to determine whether a URL can be interacted with
-	func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+	open func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
 		switch interaction {
 			case .invokeDefaultAction:
 				guard let linkTouchedHandler = linkTouchedHandler else { return false }
@@ -130,12 +130,12 @@ class TextElement: UITextView, UITextViewDelegate {
 	}
 	
 	/// Delegate method which is called when the user has ended editing
-	func textViewDidEndEditing(_ textView: UITextView) {
+	open func textViewDidEndEditing(_ textView: UITextView) {
 		textChangedHandler?(textView.text)
 	}
 	
 	/// Delegate method which is called when the user has changed selection
-	func textViewDidChangeSelection(_ textView: UITextView) {
+	open func textViewDidChangeSelection(_ textView: UITextView) {
 		// Allows links to be tapped but disables text selection
 		textView.selectedTextRange = nil
 	}

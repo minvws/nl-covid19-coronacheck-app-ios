@@ -8,13 +8,13 @@
 import UIKit
 import Shared
 
-protocol BottomSheetScrollable: AnyObject {
+public protocol BottomSheetScrollable: AnyObject {
 	
 	/// Used by BottomSheetInteractiveTransition
 	var scrollView: UIScrollView { get }
 }
 
-final class BottomSheetModalViewController: UIViewController, BottomSheetScrollable {
+final public class BottomSheetModalViewController: UIViewController, BottomSheetScrollable {
 	
 	private enum ViewTraits {
 		
@@ -24,7 +24,7 @@ final class BottomSheetModalViewController: UIViewController, BottomSheetScrolla
 		}
 	}
 	
-	var scrollView: UIScrollView = {
+	public var scrollView: UIScrollView = {
 		let scrollView = UIScrollView()
 		scrollView.showsHorizontalScrollIndicator = false
 		return scrollView
@@ -43,9 +43,9 @@ final class BottomSheetModalViewController: UIViewController, BottomSheetScrolla
 	
 	var interactiveTransition: BottomSheetInteractiveTransition?
 	
-	internal let childViewController: UIViewController
+	public let childViewController: UIViewController
 	
-	init(childViewController: UIViewController) {
+	public init(childViewController: UIViewController) {
 		self.childViewController = childViewController
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -54,7 +54,7 @@ final class BottomSheetModalViewController: UIViewController, BottomSheetScrolla
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func viewDidLoad() {
+	public override func viewDidLoad() {
 		super.viewDidLoad()
 		setupViews()
 		setupViewHierarchy()
@@ -64,12 +64,12 @@ final class BottomSheetModalViewController: UIViewController, BottomSheetScrolla
 		interactiveTransition = BottomSheetInteractiveTransition(presentingViewController: self)
 	}
 	
-	override func viewSafeAreaInsetsDidChange() {
+	public override func viewSafeAreaInsetsDidChange() {
 		super.viewSafeAreaInsetsDidChange()
 		scrollView.contentInset.bottom = view.safeAreaInsets.bottom
 	}
 	
-	override func accessibilityPerformEscape() -> Bool {
+	public override func accessibilityPerformEscape() -> Bool {
 		dismissModal()
 		return true
 	}

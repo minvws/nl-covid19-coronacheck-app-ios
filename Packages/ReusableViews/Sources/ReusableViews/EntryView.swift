@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class EntryView: BaseView {
+open class EntryView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -25,7 +25,7 @@ class EntryView: BaseView {
 		return Label(caption1SemiBold: nil).multiline()
 	}()
 	
-	let inputField: UITextField = {
+	public let inputField: UITextField = {
 		
 		let field = UITextField()
 		field.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +46,7 @@ class EntryView: BaseView {
 	}()
 	
 	/// Setup all the views
-	override func setupViews() {
+	override open func setupViews() {
 		
 		super.setupViews()
 		let tapGestureRecognizer = UITapGestureRecognizer(
@@ -56,7 +56,7 @@ class EntryView: BaseView {
 		self.addGestureRecognizer(tapGestureRecognizer)
 	}
 
-	override func setupAccessibility() {
+	override open func setupAccessibility() {
 		super.setupAccessibility()
 
 		// Don't wish to read the header via VoiceOver - instead
@@ -72,7 +72,7 @@ class EntryView: BaseView {
 	}
 	
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
 		addSubview(headerLabel)
@@ -81,7 +81,7 @@ class EntryView: BaseView {
 	}
 	
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 		
 		super.setupViewConstraints()
 		
@@ -111,7 +111,7 @@ class EntryView: BaseView {
 	// MARK: Public Access
 	
 	/// The header
-	var header: String? {
+	open var header: String? {
 		didSet {
 			headerLabel.text = header
 

@@ -9,7 +9,7 @@ import UIKit
 import Shared
 
 /// A grey full width button with a title and a disclosure icon
-class SimpleDisclosureButton: BaseView {
+open class SimpleDisclosureButton: BaseView {
 
 	/// The display constants
 	fileprivate struct ViewTraits {
@@ -56,7 +56,7 @@ class SimpleDisclosureButton: BaseView {
 		return button
 	}()
 
-	override func setupViews() {
+	override open func setupViews() {
 
 		super.setupViews()
 		backgroundColor = C.white()
@@ -67,7 +67,7 @@ class SimpleDisclosureButton: BaseView {
 	}
 
 	/// Setup the hierarchy
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 		addSubview(disclosureView)
@@ -78,7 +78,7 @@ class SimpleDisclosureButton: BaseView {
 	}
 
 	/// Setup the constraints
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 
 		super.setupViewConstraints()
 		NSLayoutConstraint.activate([
@@ -124,7 +124,7 @@ class SimpleDisclosureButton: BaseView {
 		])
 	}
 
-	override func setupAccessibility() {
+	override open func setupAccessibility() {
 
 		super.setupAccessibility()
 		titleLabel.isAccessibilityElement = false
@@ -140,10 +140,10 @@ class SimpleDisclosureButton: BaseView {
 	// MARK: Public Access
 
 	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
+	open var primaryButtonTappedCommand: (() -> Void)?
 
 	/// The  title
-	var title: String? {
+	open var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
 															 kerning: ViewTraits.kerning)
@@ -152,7 +152,7 @@ class SimpleDisclosureButton: BaseView {
 	}
 }
 
-class RedDisclosureButton: SimpleDisclosureButton {
+public class RedDisclosureButton: SimpleDisclosureButton {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -163,13 +163,13 @@ class RedDisclosureButton: SimpleDisclosureButton {
 		static let bottomMargin: CGFloat = 24.0
 	}
 	
-	override func setupViews() {
+	override open func setupViews() {
 		
 		super.setupViews()
 		titleLabel.font = Fonts.bodyBold
 	}
 	
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 		
 		super.setupViewConstraints()
 		titleTopMarginConstraint?.constant = RedDisclosureButton.ViewTraits.topMargin
@@ -179,7 +179,7 @@ class RedDisclosureButton: SimpleDisclosureButton {
 	}
 	
 	/// The  title
-	override var title: String? {
+	public override var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
 				SimpleDisclosureButton.ViewTraits.lineHeight,

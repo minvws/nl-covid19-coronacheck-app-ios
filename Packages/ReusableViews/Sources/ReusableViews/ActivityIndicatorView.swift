@@ -8,16 +8,16 @@
 import UIKit
 import Shared
 
-class ActivityIndicatorView: BaseView {
+open class ActivityIndicatorView: BaseView {
 	
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
 		addSubview(spinner)
 	}
 	
-	override func setupViewConstraints() {
+	override open func setupViewConstraints() {
 
 		super.setupViewConstraints()
 
@@ -42,7 +42,7 @@ class ActivityIndicatorView: BaseView {
 		return view
 	}()
 	
-	var shouldShowLoadingSpinner: Bool = false {
+	public var shouldShowLoadingSpinner: Bool = false {
 		didSet {
 			if shouldShowLoadingSpinner {
 				spinner.startAnimating()
@@ -56,7 +56,7 @@ class ActivityIndicatorView: BaseView {
 		}
 	}
 	
-	var shouldShowLoadingSpinnerWithoutVoiceOver: Bool = false {
+	public var shouldShowLoadingSpinnerWithoutVoiceOver: Bool = false {
 		didSet {
 			if shouldShowLoadingSpinnerWithoutVoiceOver {
 				spinner.startAnimating()

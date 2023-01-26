@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-protocol Embeddable {
+public protocol Embeddable {
 	var view: UIView? { get }
 
 	var leadingAnchor: NSLayoutXAxisAnchor { get }
@@ -18,13 +18,13 @@ protocol Embeddable {
 }
 
 extension UIView: Embeddable {
-	var view: UIView? {
+	public var view: UIView? {
 		return self
 	}
 }
 
 extension UILayoutGuide: Embeddable {
-	var view: UIView? {
+	public var view: UIView? {
 		return owningView
 	}
 }
@@ -43,7 +43,7 @@ extension UIView {
 	/// ````
 	/// - Tag: Embed
 	@discardableResult
-	func embed(
+	public func embed(
 		in embeddable: Embeddable,
 		insets: UIEdgeInsets = .zero) -> Self {
 

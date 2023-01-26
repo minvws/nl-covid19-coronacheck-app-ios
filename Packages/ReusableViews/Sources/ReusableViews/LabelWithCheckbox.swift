@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-final class LabelWithCheckbox: UIControl {
+public final class LabelWithCheckbox: UIControl {
 
 	private enum Images {
 		enum Icon {
@@ -39,20 +39,20 @@ final class LabelWithCheckbox: UIControl {
 		}
 	}
 
-	override var isSelected: Bool {
+	override public var isSelected: Bool {
 		didSet { applyState() }
 	}
 	
-	var hasError: Bool = false {
+	public var hasError: Bool = false {
 		didSet { applyState() }
 	}
 
-	override var accessibilityTraits: UIAccessibilityTraits {
+	override public var accessibilityTraits: UIAccessibilityTraits {
 		get { return UISwitch().accessibilityTraits }
 		set { super.accessibilityTraits = newValue }
 	}
 	
-	override var accessibilityValue: String? {
+	override public var accessibilityValue: String? {
 		get { return isSelected ? "1" : "0" }
 		set { super.accessibilityValue = newValue }
 	}
@@ -66,7 +66,7 @@ final class LabelWithCheckbox: UIControl {
 		setupAccessibility()
 	}
 
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 
@@ -154,7 +154,7 @@ final class LabelWithCheckbox: UIControl {
 		])
 	}
 	
-	override func accessibilityActivate() -> Bool {
+	override public func accessibilityActivate() -> Bool {
 		
 		isSelected.toggle()
 		accessibilityValue = isSelected ? "1" : "0"
@@ -169,7 +169,7 @@ final class LabelWithCheckbox: UIControl {
 	}
 
 	@discardableResult
-	func valueChanged(_ target: Any?, action: Selector) -> Self {
+	public func valueChanged(_ target: Any?, action: Selector) -> Self {
 		super.addTarget(target, action: action, for: .valueChanged)
 		return self
 	}
@@ -210,7 +210,7 @@ final class LabelWithCheckbox: UIControl {
 	
 	// MARK: Public Access
 	
-	var title: String? {
+	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
 				ViewTraits.Dimension.lineHeight,
@@ -221,7 +221,7 @@ final class LabelWithCheckbox: UIControl {
 		}
 	}
 	
-	var defaultBackgroundColor: UIColor? = C.primaryBlue5() {
+	public var defaultBackgroundColor: UIColor? = C.primaryBlue5() {
 		didSet {
 			applyState()
 		}

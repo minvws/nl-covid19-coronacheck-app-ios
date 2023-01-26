@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-class ContentView: ScrolledStackWithButtonView {
+open class ContentView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -24,14 +24,14 @@ class ContentView: ScrolledStackWithButtonView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	let contentTextView: TextView = {
+	public let contentTextView: TextView = {
 
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
-	let secondaryButton: Button = {
+	public let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -40,14 +40,14 @@ class ContentView: ScrolledStackWithButtonView {
 		return button
 	}()
 
-	override func setupViews() {
+	override open func setupViews() {
 
 		super.setupViews()
 		backgroundColor = C.white()
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
-	override func setupViewHierarchy() {
+	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
@@ -64,7 +64,7 @@ class ContentView: ScrolledStackWithButtonView {
 	// MARK: Public Access
 
 	/// The title
-	var title: String? {
+	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
 				ViewTraits.titleLineHeight,
@@ -74,16 +74,16 @@ class ContentView: ScrolledStackWithButtonView {
 	}
 
 	/// The message
-	var message: String? {
+	public var message: String? {
 		didSet {
 			contentTextView.applyHTML(message)
 		}
 	}
 
-	var secondaryButtonTappedCommand: (() -> Void)?
+	public var secondaryButtonTappedCommand: (() -> Void)?
 
 	/// The title for the secondary white/blue button
-	var secondaryButtonTitle: String? {
+	public var secondaryButtonTitle: String? {
 		didSet {
 			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
 			secondaryButton.isHidden = secondaryButtonTitle?.isEmpty ?? true

@@ -7,9 +7,9 @@
   
 import UIKit
 
-class BaseView: UIView {
+open class BaseView: UIView {
 
-	override var backgroundColor: UIColor? {
+	override open var backgroundColor: UIColor? {
 		didSet {
 			guard let backgroundColor = backgroundColor else {
 				return
@@ -19,11 +19,11 @@ class BaseView: UIView {
 		}
 	}
 	
-	@objc dynamic var observableBackgroundColor: UIColor = .black
+	@objc dynamic open var observableBackgroundColor: UIColor = .black
 	
 	/// Initializer
 	/// - Parameter frame: the frame for the view
-	override init(frame: CGRect) {
+	override public init(frame: CGRect) {
 
 		// Init
 
@@ -37,7 +37,7 @@ class BaseView: UIView {
 
 	/// Required initializer
 	/// - Parameter aDecoder: decoder
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 
 		super.init(coder: aDecoder)
 
@@ -48,25 +48,25 @@ class BaseView: UIView {
 	}
 
 	/// Setup all the views
-	func setupViews() {
+	open func setupViews() {
 
 		// Base view doesn't need to do any setup
 	}
 
 	/// Setup the view hierarchy
-	func setupViewHierarchy() {
+	open func setupViewHierarchy() {
 
 		// Base view doesn't need to do any setup
 	}
 
 	/// Setup all the constraints
-	func setupViewConstraints() {
+	open func setupViewConstraints() {
 
 		// Base view doesn't need to do any setup
 	}
 
 	/// Setup all the accessibility traits
-	func setupAccessibility() {
+	open func setupAccessibility() {
 
 		// Base view doesn't need to do any setup
 	}

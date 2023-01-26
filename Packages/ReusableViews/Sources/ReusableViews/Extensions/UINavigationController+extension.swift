@@ -11,7 +11,7 @@ import UIKit
 
 extension UINavigationController {
 	
-	func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
+	public func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
 		pushViewController(viewController, animated: animated)
 
 		guard animated, let coordinator = transitionCoordinator else {
@@ -22,7 +22,7 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 
-	func popViewController( animated: Bool, completion: @escaping () -> Void) {
+	public func popViewController( animated: Bool, completion: @escaping () -> Void) {
 
 		popViewController(animated: animated)
 
@@ -34,7 +34,7 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 
-	func popToViewController(_ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
+	public func popToViewController(_ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
 
 		popToViewController(viewController, animated: animated)
 
@@ -46,7 +46,7 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 
-	func popToRootViewController(animated: Bool, completion: @escaping () -> Void) {
+	public func popToRootViewController(animated: Bool, completion: @escaping () -> Void) {
 		popToRootViewController(animated: animated)
 
 		guard animated, let coordinator = transitionCoordinator else {
@@ -57,7 +57,7 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 	
-	func setViewControllers(_ viewControllers: [UIViewController], animated: Bool, completion: @escaping () -> Void) {
+	public func setViewControllers(_ viewControllers: [UIViewController], animated: Bool, completion: @escaping () -> Void) {
 		
 		setViewControllers(viewControllers, animated: animated)
 		
@@ -74,7 +74,7 @@ extension UINavigationController {
 	/// - Parameters:
 	///   - viewController: The view controller to push onto the stack or replace to.
 	///   - animated: Specify true to animate the transition or false if you do not want the transition to be animated.
-	func pushOrReplaceTopViewController(with viewController: UIViewController, animated: Bool) {
+	public func pushOrReplaceTopViewController(with viewController: UIViewController, animated: Bool) {
 		if viewControllers.count <= 1 {
 			pushViewController(viewController, animated: animated)
 		} else {
@@ -88,7 +88,7 @@ extension UINavigationController {
 	/// - Parameters:
 	///   - viewController: The view controller to push onto the stack.
 	///   - animationDuration: The animation duration.
-	func pushWithFadeAnimation(with viewController: UIViewController, animationDuration: CFTimeInterval) {
+	public func pushWithFadeAnimation(with viewController: UIViewController, animationDuration: CFTimeInterval) {
 		let transition = CATransition()
 		transition.duration = animationDuration
 		transition.type = .fade
@@ -96,7 +96,7 @@ extension UINavigationController {
 		pushViewController(viewController, animated: false)
 	}
 	
-	func popbackTo(instanceOf viewControllerType: UIViewController.Type, animated: Bool, completion: @escaping () -> Void) {
+	public func popbackTo(instanceOf viewControllerType: UIViewController.Type, animated: Bool, completion: @escaping () -> Void) {
 
 		guard let popbackVC = viewControllers.first(where: { $0.isKind(of: viewControllerType) })
 		else {
@@ -108,7 +108,7 @@ extension UINavigationController {
 	}
 	
 	/// `oneOfInstanceOf` is in descending priority order
-	func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
+	public func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
 
 		let viewControllersMatchingTypes = viewControllerTypes.compactMap { viewControllerType in
 			self.viewControllers.last(where: { $0.isKind(of: viewControllerType) })

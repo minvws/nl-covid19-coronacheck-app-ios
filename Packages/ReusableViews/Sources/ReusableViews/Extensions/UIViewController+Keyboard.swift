@@ -14,7 +14,7 @@ extension UIViewController {
 	/// - Parameters:
 	///   - keyboardWillShow: method called when the keyboard will show
 	///   - keyboardWillHide: method called when the keyboard will hide
-	func subscribeToKeyboardEvents(_ keyboardWillShow: Selector, keyboardWillHide: Selector) {
+	public func subscribeToKeyboardEvents(_ keyboardWillShow: Selector, keyboardWillHide: Selector) {
 		
 		// Listen to Keyboard events.
 		NotificationCenter.default.addObserver(
@@ -31,7 +31,7 @@ extension UIViewController {
 		)
 	}
 
-	func unSubscribeToKeyboardEvents() {
+	public func unSubscribeToKeyboardEvents() {
 		
 		// Remove Keyboard listeners
 		NotificationCenter.default.removeObserver(

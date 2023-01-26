@@ -9,10 +9,10 @@ import UIKit
 import Shared
 
 /// Scrollview that keeps its content at full height. Can be used with subviews pinned to top and bottom of scrollview.
-final class ScrolledContentHeightView: UIScrollView {
+public final class ScrolledContentHeightView: UIScrollView {
 
 	/// Attach subviews to contentView to make a scrollable view
-	let contentView: UIView = {
+	public let contentView: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +26,7 @@ final class ScrolledContentHeightView: UIScrollView {
 		setupViewConstraints()
 	}
 	
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 

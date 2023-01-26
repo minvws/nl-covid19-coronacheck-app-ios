@@ -10,12 +10,12 @@ import UIKit
 extension UIScrollView {
 	
 	/// Translates scroll offset Y origin to bottom. Scrolled to bottom will return value of zero.
-	var translatedBottomScrollOffset: CGFloat {
+	public var translatedBottomScrollOffset: CGFloat {
 		return contentOffset.y - (contentSize.height - bounds.height)
 	}
 	
 	/// Scroll to bottom if content is not completely visible. Is animated.
-	func scrollToBottomIfNotCompletelyVisible() {
+	public func scrollToBottomIfNotCompletelyVisible() {
 		// Only scroll when content is scrollable
 		guard contentSize.height > bounds.height else { return }
 		

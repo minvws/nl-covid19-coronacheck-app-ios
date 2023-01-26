@@ -8,9 +8,9 @@
 import UIKit
 import Shared
 
-class ContentViewController: TraitWrappedGenericViewController<ContentView, ContentViewModel> {
+public class ContentViewController: TraitWrappedGenericViewController<ContentView, ContentViewModel> {
 	
-	override func viewDidLoad() {
+	override public func viewDidLoad() {
 
 		super.viewDidLoad()
 
@@ -28,12 +28,12 @@ class ContentViewController: TraitWrappedGenericViewController<ContentView, Cont
 		}
 	}
 	
-	override var enableSwipeBack: Bool {
+	override public var enableSwipeBack: Bool {
 
 		viewModel.allowsSwipeBack
 	}
 
-	@objc func backButtonTapped() {
+	@objc public func backButtonTapped() {
 
 		viewModel.backButtonTapped()
 	}

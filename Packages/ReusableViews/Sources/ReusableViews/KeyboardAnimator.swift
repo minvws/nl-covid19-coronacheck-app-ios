@@ -7,9 +7,9 @@
 
 import UIKit
 
-struct KeyboardAnimator {
+public struct KeyboardAnimator {
 	
-	static func keyBoardWillShow(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
+	public static func keyBoardWillShow(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
 		
 		let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
 		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
@@ -28,7 +28,7 @@ struct KeyboardAnimator {
 		animator.startAnimation()
 	}
 	
-	static func keyBoardWillHide(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
+	public static func keyBoardWillHide(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {
 		
 		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
 		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0

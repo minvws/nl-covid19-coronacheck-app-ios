@@ -9,7 +9,7 @@ import UIKit
 
 extension UIView {
 	
-	func setupLargeContentViewer(title: String? = nil) {
+	public func setupLargeContentViewer(title: String? = nil) {
 		guard #available(iOS 13.0, *) else { return }
 		addInteraction(UILargeContentViewerInteraction())
 		showsLargeContentViewer = true
