@@ -8,6 +8,7 @@
 import CoreData
 import XCTest
 @testable import CTR
+import ReusableViews
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 

@@ -12,6 +12,7 @@ import XCTest
 @testable import Shared
 import Nimble
 import TestingShared
+import ReusableViews
 
 class ConfigurationNotificationManagerTests: XCTestCase {
 

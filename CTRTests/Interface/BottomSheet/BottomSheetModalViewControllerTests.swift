@@ -10,6 +10,7 @@ import Foundation
 import XCTest
 import SnapshotTesting
 import Nimble
+import ReusableViews
 
 final class BottomSheetModalViewControllerTests: XCTestCase {
 	

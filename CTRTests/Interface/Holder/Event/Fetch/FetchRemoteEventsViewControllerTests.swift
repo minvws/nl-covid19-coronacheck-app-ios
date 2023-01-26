@@ -12,6 +12,7 @@ import SnapshotTesting
 import ViewControllerPresentationSpy
 import Shared
 import TestingShared
+import ReusableViews
 
 class FetchRemoteEventsViewControllerTests: XCTestCase {
 	

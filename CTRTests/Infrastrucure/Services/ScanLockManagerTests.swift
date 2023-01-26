@@ -9,6 +9,7 @@
 import XCTest
 import Nimble
 import TestingShared
+import ReusableViews
 
 class ScanLockManagerTests: XCTestCase {
 
