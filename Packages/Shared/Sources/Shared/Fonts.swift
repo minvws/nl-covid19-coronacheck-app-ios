@@ -164,21 +164,31 @@ public class Fonts {
 	}
 	
 	// MARK: - Private
+ 
+	@Atomic<Bool> private static var hasRegisteredFonts: Bool = false
 	
 	private static let customMontserratTextStyles: [UIFont.TextStyle: UIFont] = {
-		return [
-			.largeTitle: R.font.montserratBold(size: 34)!,
-			.title1: R.font.montserratBold(size: 26)!, // this value is changed from default of 28
-			.title2: R.font.montserratBold(size: 22)!,
-			.title3: R.font.montserratBold(size: 20)!,
-			.headline: R.font.montserratBold(size: 17)!,
-			.body: R.font.montserratBold(size: 17)!,
-			.callout: R.font.montserratBold(size: 16)!,
-			.subheadline: R.font.montserratBold(size: 15)!,
-			.footnote: R.font.montserratBold(size: 13)!,
-			.caption1: R.font.montserratBold(size: 12)!,
-			.caption2: R.font.montserratBold(size: 11)!
+		
+		// todo: undesirable side-effect to this function is that it registers the font if it's not yet registered 
+		if !hasRegisteredFonts {
+			registerFonts()
+		}
+		
+		let fontMap: [UIFont.TextStyle: UIFont?] = [
+			.largeTitle: UIFont(name: "Montserrat-Bold", size: 34)!,
+			.title1: UIFont(name: "Montserrat-Bold", size: 26)!, // this value is changed from default of 28
+			.title2: UIFont(name: "Montserrat-Bold", size: 22)!,
+			.title3: UIFont(name: "Montserrat-Bold", size: 20)!,
+			.headline: UIFont(name: "Montserrat-Bold", size: 17)!,
+			.body: UIFont(name: "Montserrat-Bold", size: 17)!,
+			.callout: UIFont(name: "Montserrat-Bold", size: 16)!,
+			.subheadline: UIFont(name: "Montserrat-Bold", size: 15)!,
+			.footnote: UIFont(name: "Montserrat-Bold", size: 13)!,
+			.caption1: UIFont(name: "Montserrat-Bold", size: 12)!,
+			.caption2: UIFont(name: "Montserrat-Bold", size: 11)!
 		]
+		
+		return fontMap.compactMapValues { $0 }
 	}()
 	
 	private class func font(
@@ -192,31 +202,31 @@ public class Fonts {
 				return customFont
 			}
 		}
-		
+
 		var fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
-		
+
 		if weight == .heavyBold {
 			fontDescriptor = fontDescriptor.addingAttributes(
 				[.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.bold]]
 			)
 		}
-		
+
 		if weight == .bold, let boldFontDescriptor = fontDescriptor.withSymbolicTraits(.traitBold) {
 			fontDescriptor = boldFontDescriptor
 		}
-		
+
 		if weight == .semiBold {
 			fontDescriptor = fontDescriptor.addingAttributes(
 				[.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.semibold]]
 			)
 		}
-		
+
 		if weight == .medium {
 			fontDescriptor = fontDescriptor.addingAttributes(
 				[.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.medium]]
 			)
 		}
-		
+
 		return UIFont(descriptor: fontDescriptor, size: fontDescriptor.pointSize)
 	}
 	
@@ -228,5 +238,46 @@ public class Fonts {
 			return UIFont.preferredFont(forTextStyle: style)
 		}
 		return metrics.scaledFont(for: montserratFont)
+	}
+}
+
+/* taken from https://github.com/pointfreeco/isowords/blob/main/Sources/Styleguide/RegisterFonts.swift */
+
+@discardableResult
+public func registerFonts() -> Bool {
+	[
+		UIFont.registerFont(bundle: .module, fontName: "Montserrat-Bold", fontExtension: "ttf")
+	]
+	.allSatisfy { $0 } // check if any failed to register
+}
+
+extension UIFont {
+	static func registerFont(bundle: Bundle, fontName: String, fontExtension: String) -> Bool {
+		guard let fontURL = bundle.url(forResource: fontName, withExtension: fontExtension) else {
+			print("Couldn't find font \(fontName)")
+			return false
+		}
+		guard let fontDataProvider = CGDataProvider(url: fontURL as CFURL) else {
+			print("Couldn't load data from the font \(fontName)")
+			return false
+		}
+		guard let font = CGFont(fontDataProvider) else {
+			print("Couldn't create font from data")
+			return false
+		}
+		
+		var error: Unmanaged<CFError>?
+		let success = CTFontManagerRegisterGraphicsFont(font, &error)
+		guard success else {
+			print(
+  """
+  Error registering font: \(fontName). Maybe it was already registered.\
+  \(error.map { " \($0.takeUnretainedValue().localizedDescription)" } ?? "")
+  """
+			)
+			return true
+		}
+		
+		return true
 	}
 }
