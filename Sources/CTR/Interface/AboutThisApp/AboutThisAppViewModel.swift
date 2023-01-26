@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import ReusableViews
 
 /// the various about menu options
 enum AboutThisAppMenuIdentifier: String {

@@ -8,6 +8,7 @@
 import UIKit
 import OpenIDConnect
 import Shared
+import ReusableViews
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, OpenIDConnectState {

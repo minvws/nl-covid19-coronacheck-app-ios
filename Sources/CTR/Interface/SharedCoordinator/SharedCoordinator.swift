@@ -7,6 +7,8 @@
 
 import UIKit
 import SafariServices
+import Shared
+import ReusableViews
 
 protocol Dismissable: AnyObject {
 
@@ -63,6 +65,7 @@ class SharedCoordinator: Coordinator {
 					title: title,
 					body: body
 				),
+				screenCaptureDetector: ScreenCaptureDetector(),
  				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: openURLsInApp)

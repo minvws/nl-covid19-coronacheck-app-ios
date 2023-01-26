@@ -8,6 +8,7 @@
 import UIKit
 import Transport
 import Shared
+import ReusableViews
 
 class PaperProofScanViewModel: ScanPermissionViewModel {
 

@@ -8,6 +8,7 @@
 import UIKit
 import Transport
 import Shared
+import ReusableViews
 
 enum EventScreenResult: Equatable {
 
@@ -268,6 +269,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 					title: title,
 					body: body
 				),
+				screenCaptureDetector: ScreenCaptureDetector(),
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)

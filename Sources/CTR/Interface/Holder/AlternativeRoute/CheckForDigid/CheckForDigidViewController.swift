@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 class CheckForDigidViewController: ListOptionsViewController {
 	// We need a subclass to detect the end of alternative route flow.

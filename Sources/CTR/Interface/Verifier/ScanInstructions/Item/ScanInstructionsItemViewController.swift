@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 // swiftlint:disable type_name
 protocol ScanInstructionsItemViewControllerDelegate: AnyObject {

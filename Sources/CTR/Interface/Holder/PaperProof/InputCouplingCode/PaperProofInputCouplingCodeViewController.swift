@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 // swiftlint:disable:next type_name
 class PaperProofInputCouplingCodeViewController: TraitWrappedGenericViewController<PaperProofInputCouplingCodeView, PaperProofInputCouplingCodeViewModel> {

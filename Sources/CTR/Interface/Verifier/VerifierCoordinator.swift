@@ -9,6 +9,7 @@ import UIKit
 import Clcore
 import Transport
 import Shared
+import ReusableViews
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Reachability
 import Shared
+import ReusableViews
 import Transport
 import OpenIDConnect
 
@@ -512,6 +513,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 					)
 				}
 			),
+			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
 				self?.openUrl(url, inApp: true)
 			},
@@ -537,6 +539,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 					self.openUrl(url, inApp: true)
 				}
 			),
+			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
 				self?.openUrl(url, inApp: true)
 			},
@@ -562,6 +565,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 					self.openUrl(url, inApp: true)
 				}
 			),
+			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
 				self?.openUrl(url, inApp: true)
 			},

@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 /// Hides VoiceControl labels for Label
 final class AccessibleBodyLabelView: BaseView {

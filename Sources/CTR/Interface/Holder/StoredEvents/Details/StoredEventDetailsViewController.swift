@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 final class StoredEventDetailsViewController: GenericViewController<StoredEventDetailsView, RemoteEventDetailsViewModel> {
 

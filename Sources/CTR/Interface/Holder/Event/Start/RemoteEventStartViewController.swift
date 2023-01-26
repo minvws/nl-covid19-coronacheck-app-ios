@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 class RemoteEventStartViewController: TraitWrappedGenericViewController<RemoteEventStartView, RemoteEventStartViewModel> {
 	

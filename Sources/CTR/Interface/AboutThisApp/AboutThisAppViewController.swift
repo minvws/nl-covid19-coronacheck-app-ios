@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisAppView, AboutThisAppViewModel> {
 

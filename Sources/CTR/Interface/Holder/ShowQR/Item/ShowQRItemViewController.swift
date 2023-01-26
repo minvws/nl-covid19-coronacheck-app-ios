@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 class ShowQRItemViewController: TraitWrappedGenericViewController<ShowQRItemView, ShowQRItemViewModel> {
 	

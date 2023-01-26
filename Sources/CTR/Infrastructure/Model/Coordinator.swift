@@ -7,6 +7,8 @@
 
 import UIKit
 import SafariServices
+import Shared
+import ReusableViews
 
 protocol Coordinator: AnyObject {
 	
