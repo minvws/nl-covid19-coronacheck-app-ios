@@ -234,8 +234,7 @@ public class Fonts {
 	}
 }
 
-/* taken from https://github.com/pointfreeco/isowords/blob/main/Sources/Styleguide/RegisterFonts.swift */
-
+/// taken from https://github.com/pointfreeco/isowords/blob/main/Sources/Styleguide/RegisterFonts.swift
 @discardableResult
 public func registerFonts() -> Bool {
 	[
@@ -244,25 +243,27 @@ public func registerFonts() -> Bool {
 	.allSatisfy { $0 } // check if any failed to register
 }
 
+/// Taken from https://github.com/pointfreeco/isowords/blob/main/Sources/Styleguide/RegisterFonts.swift
+/// Necessary because fonts loaded from a swift package are not automatically registered
 extension UIFont {
 	static func registerFont(bundle: Bundle, fontName: String, fontExtension: String) -> Bool {
 		guard let fontURL = bundle.url(forResource: fontName, withExtension: fontExtension) else {
-			print("Couldn't find font \(fontName)")
+			logError("Couldn't find font \(fontName)")
 			return false
 		}
 		guard let fontDataProvider = CGDataProvider(url: fontURL as CFURL) else {
-			print("Couldn't load data from the font \(fontName)")
+			logError("Couldn't load data from the font \(fontName)")
 			return false
 		}
 		guard let font = CGFont(fontDataProvider) else {
-			print("Couldn't create font from data")
+			logError("Couldn't create font from data")
 			return false
 		}
 		
 		var error: Unmanaged<CFError>?
 		let success = CTFontManagerRegisterGraphicsFont(font, &error)
 		guard success else {
-			print(
+			logError(
   """
   Error registering font: \(fontName). Maybe it was already registered.\
   \(error.map { " \($0.takeUnretainedValue().localizedDescription)" } ?? "")

@@ -7,7 +7,7 @@
 
 import UIKit
 import Shared
-import ReusableViews 
+import ReusableViews
 
 class PagedAnnouncementView: BaseView {
 	

@@ -9,7 +9,6 @@ import UIKit
 import Shared
 import ReusableViews
 
-
 class MenuView: ScrolledStackView {
 
 	private let navigationBackgroundView: UIView = {
