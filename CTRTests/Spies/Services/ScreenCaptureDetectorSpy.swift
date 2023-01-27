@@ -7,6 +7,8 @@
 
 import Foundation
 @testable import CTR
+import ReusableViews
+import Shared
 
 class ScreenCaptureDetectorSpy: ScreenCaptureDetectorProtocol {
 

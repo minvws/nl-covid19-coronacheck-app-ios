@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 final class PolicyInformationViewController: GenericViewController<PolicyInformationView, PolicyInformationViewModel> {
 	

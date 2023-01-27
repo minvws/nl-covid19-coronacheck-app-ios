@@ -11,6 +11,7 @@ import XCTest
 @testable import Shared
 import Nimble
 import Clcore
+import ReusableViews
 
 class VerifierCoordinatorTests: XCTestCase {
 

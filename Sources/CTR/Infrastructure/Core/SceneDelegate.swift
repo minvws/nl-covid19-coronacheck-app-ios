@@ -7,6 +7,8 @@
 
 import UIKit
 import OpenIDConnect
+import Shared
+import ReusableViews
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

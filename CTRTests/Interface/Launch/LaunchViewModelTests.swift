@@ -10,6 +10,7 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
+import ReusableViews
 
 class LaunchViewModelTests: XCTestCase {
 

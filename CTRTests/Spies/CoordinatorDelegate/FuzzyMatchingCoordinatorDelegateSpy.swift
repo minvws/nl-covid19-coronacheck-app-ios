@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import ReusableViews
 
 final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegate {
 

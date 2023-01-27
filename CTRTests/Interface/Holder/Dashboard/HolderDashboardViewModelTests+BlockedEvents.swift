@@ -11,6 +11,7 @@ import Nimble
 import CoreData
 import Shared
 import TestingShared
+import ReusableViews
 
 extension HolderDashboardViewModelTests {
 	

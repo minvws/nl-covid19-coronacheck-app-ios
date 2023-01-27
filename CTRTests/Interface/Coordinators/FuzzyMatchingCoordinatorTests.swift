@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import Transport
 import Shared
+import ReusableViews
 
 class FuzzyMatchingCoordinatorTests: XCTestCase {
 	

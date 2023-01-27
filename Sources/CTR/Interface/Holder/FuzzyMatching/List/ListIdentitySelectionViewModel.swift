@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import ReusableViews
 import Transport
 
 enum IdentityControlViewState: Equatable {

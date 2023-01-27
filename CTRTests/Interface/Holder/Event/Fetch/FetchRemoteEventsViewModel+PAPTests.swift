@@ -10,6 +10,7 @@
 @testable import Shared
 import XCTest
 import Nimble
+import ReusableViews
 
 class FetchRemoteEventsViewModelPAPTests: XCTestCase {
 

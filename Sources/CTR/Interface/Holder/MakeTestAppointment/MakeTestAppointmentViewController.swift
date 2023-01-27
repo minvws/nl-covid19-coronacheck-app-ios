@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 final class MakeTestAppointmentViewController: GenericViewController<MakeTestAppointmentView, MakeTestAppointmentViewModel> {
 	

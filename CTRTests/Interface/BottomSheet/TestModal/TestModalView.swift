@@ -7,6 +7,7 @@
 
 import UIKit
 @testable import CTR
+import ReusableViews
 
 final class TestModalView: BaseView {
 	

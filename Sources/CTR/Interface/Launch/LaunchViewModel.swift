@@ -9,6 +9,7 @@ import UIKit
 import LocalAuthentication
 import Transport
 import Shared
+import ReusableViews
 
 class LaunchViewModel {
 

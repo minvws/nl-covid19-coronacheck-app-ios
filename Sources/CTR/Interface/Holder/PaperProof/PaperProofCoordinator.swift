@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 protocol PaperProofFlowDelegate: AnyObject {
 	
@@ -124,6 +125,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 					title: L.holder_paperproof_whichProofsCanBeUsed_title(),
 					body: L.holder_paperproof_whichProofsCanBeUsed_body()
 				),
+				screenCaptureDetector: ScreenCaptureDetector(),
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)

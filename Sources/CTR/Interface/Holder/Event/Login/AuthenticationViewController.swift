@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 class AuthenticationViewController: TraitWrappedGenericViewController<FetchRemoteEventsView, AuthenticationViewModel> {
 

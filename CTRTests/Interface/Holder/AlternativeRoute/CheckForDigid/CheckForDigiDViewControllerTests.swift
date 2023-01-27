@@ -10,6 +10,7 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 import TestingShared
+import ReusableViews
 
 class CheckForDigidViewControllerTests: XCTestCase {
 

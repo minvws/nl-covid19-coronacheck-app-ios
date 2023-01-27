@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 @testable import CTR
 import Shared
+import ReusableViews
 
 class CheckForBSNViewModelTests: XCTestCase {
 	
