@@ -36,6 +36,18 @@ final class SharedTests: XCTestCase {
 		XCTAssertEqual(result, "2.1.0")
 	}
 	
+	func test_fullStringVersion_noDigits() {
+		
+		// Given
+		let value = "🦠"
+		
+		// When
+		let result = value.fullVersionString()
+		
+		// Then
+		XCTAssertEqual(result, "🦠.0.0")
+	}
+	
 	// MARK: - Collection
 	
 	func test_array_isNotEmpty_notEmpty() {
