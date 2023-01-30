@@ -76,44 +76,4 @@ extension RemovedEvent {
 		}
 		return nil
 	}
-	
-	@discardableResult
-	static func createAndPersist(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
-		
-		var result = [RemovedEvent]()
-		
-		guard let events = wrapper.events else {
-			return result
-		}
-		
-		var eventMode: EventMode?
-		if let event = events.first {
-			if event.hasVaccinationAssessment {
-				eventMode = .vaccinationassessment
-			} else if event.hasPaperCertificate {
-				eventMode = .paperflow
-			} else if event.hasPositiveTest {
-				eventMode = .recovery
-			} else if event.hasNegativeTest {
-				eventMode = .test( wrapper.isGGD ? .ggd : .commercial)
-			} else if event.hasRecovery {
-				eventMode = .recovery
-			} else if event.hasVaccination {
-				eventMode = .vaccination
-			}
-		}
-		
-		for event in events {
-			if let eventDate = event.getSortDate(with: DateFormatter.Event.iso8601),
-				let eventMode,
-				let removedEvent = Current.walletManager.storeRemovedEvent(
-				type: eventMode,
-				eventDate: eventDate,
-				reason: reason.rawValue
-			) {
-				result.append( removedEvent)
-			}
-		}
-		return result
-	}
 }

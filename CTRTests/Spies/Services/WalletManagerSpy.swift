@@ -139,6 +139,20 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreRemovedEventResult
 	}
 
+	var invokedCreateAndPersistRemovedEvent = false
+	var invokedCreateAndPersistRemovedEventCount = 0
+	var invokedCreateAndPersistRemovedEventParameters: (wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)?
+	var invokedCreateAndPersistRemovedEventParametersList = [(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)]()
+	var stubbedCreateAndPersistRemovedEventResult: [RemovedEvent]! = []
+
+	func createAndPersistRemovedEvent(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
+		invokedCreateAndPersistRemovedEvent = true
+		invokedCreateAndPersistRemovedEventCount += 1
+		invokedCreateAndPersistRemovedEventParameters = (wrapper, reason)
+		invokedCreateAndPersistRemovedEventParametersList.append((wrapper, reason))
+		return stubbedCreateAndPersistRemovedEventResult
+	}
+
 	var invokedListEventGroups = false
 	var invokedListEventGroupsCount = 0
 	var stubbedListEventGroupsResult: [EventGroup]! = []
