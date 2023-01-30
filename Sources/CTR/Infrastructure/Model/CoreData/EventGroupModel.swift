@@ -63,17 +63,6 @@ extension EventGroup {
 		
 		return finalJSONString
 	}
-	
-//	func update(isDraft: Bool) {
-//		guard let managedObjectContext = managedObjectContext else { return }
-//		
-//		managedObjectContext.performAndWait {
-//			
-//			self.isDraft = isDraft
-//			
-//			Current.dataStoreManager.save(managedObjectContext)
-//		}
-//	}
 }
 
 extension EventGroup {
