@@ -27,9 +27,6 @@ packages:
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
-  RSwiftLibrary:
-    github: mac-cain13/R.swift.Library
-    majorVersion: 5.4.0
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
@@ -151,8 +148,6 @@ targetTemplates:
         product: HTTPSecurity
       - package: Reachability
         product: Reachability
-      - package: RSwiftLibrary
-        product: Rswift
       - package: BrightFutures
         product: BrightFutures
       # Frameworks:

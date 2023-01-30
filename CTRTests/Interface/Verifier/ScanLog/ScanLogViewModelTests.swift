@@ -10,7 +10,6 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
-import Rswift
 import ReusableViews
 
 class ScanLogViewModelTests: XCTestCase {

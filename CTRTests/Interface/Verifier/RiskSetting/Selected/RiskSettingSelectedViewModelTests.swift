@@ -8,7 +8,6 @@
 import XCTest
 @testable import CTR
 import Nimble
-import Rswift
 import Shared
 import ReusableViews
 
