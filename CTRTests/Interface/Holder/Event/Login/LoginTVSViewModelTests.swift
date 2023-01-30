@@ -120,7 +120,7 @@ class AuthenticationViewModelTests: XCTestCase {
 		)
 
 		// When
-		sut.cancel()
+		sut.loginCancelled()
 
 		// Then
 		expect(self.coordinatorSpy.invokedAuthenticationScreenDidFinish) == true

@@ -73,4 +73,6 @@ protocol WalletManaging: AnyObject {
 	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard]
 	
 	func updateEventGroup(identifier: String, expiryDate: Date)
+	
+	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool)
 }

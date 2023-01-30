@@ -42,13 +42,13 @@ private extension BottomSheetInteractiveTransition {
 		let delta: CGFloat = 75
 		
 		switch gestureRecognizer.state {
-			case .began:
+			case UIGestureRecognizer.State.began:
 				isInteractionInProgress = true
 				translationStart = translation.y
 				presentingViewController.dismiss(animated: true)
-			case .changed:
+			case UIGestureRecognizer.State.changed:
 				update(transitionPercentage)
-			case .ended, .cancelled:
+			case UIGestureRecognizer.State.ended, UIGestureRecognizer.State.cancelled:
 				isInteractionInProgress = false
 				if velocity.x < highVelocity {
 					// Taper off completion speed for smoother transition finish
