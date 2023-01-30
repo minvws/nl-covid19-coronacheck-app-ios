@@ -213,15 +213,27 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedGreencardsWithUnexpiredOriginsResult
 	}
 
-	var invokedUpdateEventGroup = false
-	var invokedUpdateEventGroupCount = 0
-	var invokedUpdateEventGroupParameters: (identifier: String, expiryDate: Date)?
-	var invokedUpdateEventGroupParametersList = [(identifier: String, expiryDate: Date)]()
+	var invokedUpdateEventGroupIdentifier = false
+	var invokedUpdateEventGroupIdentifierCount = 0
+	var invokedUpdateEventGroupIdentifierParameters: (identifier: String, expiryDate: Date)?
+	var invokedUpdateEventGroupIdentifierParametersList = [(identifier: String, expiryDate: Date)]()
 
 	func updateEventGroup(identifier: String, expiryDate: Date) {
-		invokedUpdateEventGroup = true
-		invokedUpdateEventGroupCount += 1
-		invokedUpdateEventGroupParameters = (identifier, expiryDate)
-		invokedUpdateEventGroupParametersList.append((identifier, expiryDate))
+		invokedUpdateEventGroupIdentifier = true
+		invokedUpdateEventGroupIdentifierCount += 1
+		invokedUpdateEventGroupIdentifierParameters = (identifier, expiryDate)
+		invokedUpdateEventGroupIdentifierParametersList.append((identifier, expiryDate))
+	}
+
+	var invokedUpdateEventGroupIsDraft = false
+	var invokedUpdateEventGroupIsDraftCount = 0
+	var invokedUpdateEventGroupIsDraftParameters: (eventGroup: EventGroup, isDraft: Bool)?
+	var invokedUpdateEventGroupIsDraftParametersList = [(eventGroup: EventGroup, isDraft: Bool)]()
+
+	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool) {
+		invokedUpdateEventGroupIsDraft = true
+		invokedUpdateEventGroupIsDraftCount += 1
+		invokedUpdateEventGroupIsDraftParameters = (eventGroup, isDraft)
+		invokedUpdateEventGroupIsDraftParametersList.append((eventGroup, isDraft))
 	}
 }

@@ -359,7 +359,7 @@ class GreenCardLoaderTests: XCTestCase {
 		}
 		
 		// Assert
-		expect(self.environmentSpies.walletManagerSpy.invokedUpdateEventGroupCount) == 1
+		expect(self.environmentSpies.walletManagerSpy.invokedUpdateEventGroupIdentifierCount) == 1
 		
 		expect(result?.successValue) == response
 	}

@@ -123,7 +123,7 @@ class SendIdentitySelectionViewModel {
 					// Signer says OK. Mark all events as non draft.
 					Current.walletManager.listEventGroups()
 						.filter { $0.isDraft }
-						.forEach { $0.update(isDraft: false) }
+						.forEach { Current.walletManager.updateEventGroup($0, isDraft: false) }
 					
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
 

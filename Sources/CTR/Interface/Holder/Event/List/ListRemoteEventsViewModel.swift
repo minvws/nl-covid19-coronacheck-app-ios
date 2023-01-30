@@ -230,7 +230,7 @@ class ListRemoteEventsViewModel {
 				// therefore none of the `eventsBeingAdded` should no longer be marked as draft:
 				eventsBeingAdded
 					.filter { $0.isDraft }
-					.forEach { $0.update(isDraft: false) }
+					.forEach { Current.walletManager.updateEventGroup($0, isDraft: false) }
 				
 				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
 				guard !shouldShowBlockingEndState else {

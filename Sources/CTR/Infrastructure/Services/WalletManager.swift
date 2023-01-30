@@ -154,6 +154,15 @@ class WalletManager: WalletManaging {
 			dataStoreManager.save(context)
 		}
 	}
+	
+	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool) {
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			eventGroup.isDraft = isDraft
+			dataStoreManager.save(context)
+		}
+	}
 }
 
 // MARK: Storing
