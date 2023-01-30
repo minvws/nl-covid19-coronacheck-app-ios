@@ -59,7 +59,7 @@ class AuthenticationViewModel {
 		content = Content(title: L.holder_fetchRemoteEvents_title())
 	}
 
-	func cancel() {
+	func loginCancelled() {
 
 		self.coordinator?.authenticationScreenDidFinish(.back(eventMode: eventMode))
 	}
@@ -73,7 +73,7 @@ class AuthenticationViewModel {
 			body: nil,
 			primaryActionTitle: L.generalClose(),
 			primaryAction: { [weak self] in
-				self?.cancel()
+				self?.loginCancelled()
 			},
 			secondaryActionTitle: nil,
 			secondaryAction: nil
@@ -100,7 +100,7 @@ class AuthenticationViewModel {
 	func handleToken(_ token: OpenIDConnectToken) {
 		
 		switch authenticationMode {
-			case .manyAuthenticationExchange:
+			case AuthenticationMode.manyAuthenticationExchange:
 				
 				guard let idToken = token.idToken else {
 					self.handleError(NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
@@ -109,7 +109,7 @@ class AuthenticationViewModel {
 				
 				self.coordinator?.authenticationScreenDidFinish(.didLogin(token: idToken, authenticationMode: .manyAuthenticationExchange, eventMode: self.eventMode))
 				
-			case .patientAuthenticationProvider:
+			case AuthenticationMode.patientAuthenticationProvider:
 				
 				guard let accessToken = token.accessToken else {
 					self.handleError(NSError(domain: OIDGeneralErrorDomain, code: OIDErrorCode.idTokenParsingError.rawValue))
@@ -150,7 +150,9 @@ extension AuthenticationViewModel {
 				return
 			} else if case let ServerError.error(_, _, networkError) = error {
 				switch networkError {
-					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
+					case NetworkError.serverUnreachableTimedOut,
+						NetworkError.serverUnreachableConnectionLost,
+						NetworkError.serverUnreachableInvalidHost:
 
 						let errorCode = ErrorCode(
 							flow: eventMode.flow,
@@ -217,7 +219,7 @@ extension AuthenticationViewModel {
 			secondaryActionTitle: nil,
 			secondaryAction: nil
 		)
-		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: cancel))
+		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: loginCancelled))
 	}
 
 	func displayUnreachable(errorCode: ErrorCode) {
@@ -247,6 +249,6 @@ extension AuthenticationViewModel {
 				self?.coordinator?.openUrl(url, inApp: true)
 			}
 		)
-		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: cancel))
+		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: loginCancelled))
 	}
 }
