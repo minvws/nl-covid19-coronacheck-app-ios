@@ -374,6 +374,25 @@ extension WalletManager {
 		return result
 	}
 	
+	@discardableResult
+	func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
+		
+		guard let eventMode = euCredentialAttributes.eventMode else {
+			return nil
+		}
+		
+		var eventDate: Date? {
+			guard let eventDate = euCredentialAttributes.eventDate else { return nil }
+			return DateFormatter.Event.iso8601.date(from: eventDate)
+		}
+		
+		return storeRemovedEvent(
+			type: eventMode,
+			eventDate: eventDate ?? .distantPast,
+			reason: reason.rawValue
+		)
+	}
+	
 	/// Store an event group
 	/// - Parameters:
 	///   - type: the event type (vaccination, recovery, test)

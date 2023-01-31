@@ -90,7 +90,7 @@ class SendIdentitySelectionViewModel {
 					if let wrapper = dataSource.getEventResultWrapper(uniqueIdentifier) {
 						result = result && Current.walletManager.createAndPersistRemovedEvent(wrapper: wrapper, reason: RemovalReason.mismatchedIdentity).isNotEmpty
 					} else if let euCredentialAttributes = dataSource.getEUCreditialAttributes(uniqueIdentifier) {
-						result = result && RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovalReason.mismatchedIdentity) != nil
+						result = result && Current.walletManager.createAndPersistRemovedEvent(euCredentialAttributes: euCredentialAttributes, reason: RemovalReason.mismatchedIdentity) != nil
 					}
 					
 					let eventGroups = Current.walletManager.listEventGroups()

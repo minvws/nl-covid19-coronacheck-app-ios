@@ -139,18 +139,32 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreRemovedEventResult
 	}
 
-	var invokedCreateAndPersistRemovedEvent = false
-	var invokedCreateAndPersistRemovedEventCount = 0
-	var invokedCreateAndPersistRemovedEventParameters: (wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)?
-	var invokedCreateAndPersistRemovedEventParametersList = [(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)]()
-	var stubbedCreateAndPersistRemovedEventResult: [RemovedEvent]! = []
+	var invokedCreateAndPersistRemovedEventWrapper = false
+	var invokedCreateAndPersistRemovedEventWrapperCount = 0
+	var invokedCreateAndPersistRemovedEventWrapperParameters: (wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)?
+	var invokedCreateAndPersistRemovedEventWrapperParametersList = [(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)]()
+	var stubbedCreateAndPersistRemovedEventWrapperResult: [RemovedEvent]! = []
 
 	func createAndPersistRemovedEvent(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
-		invokedCreateAndPersistRemovedEvent = true
-		invokedCreateAndPersistRemovedEventCount += 1
-		invokedCreateAndPersistRemovedEventParameters = (wrapper, reason)
-		invokedCreateAndPersistRemovedEventParametersList.append((wrapper, reason))
-		return stubbedCreateAndPersistRemovedEventResult
+		invokedCreateAndPersistRemovedEventWrapper = true
+		invokedCreateAndPersistRemovedEventWrapperCount += 1
+		invokedCreateAndPersistRemovedEventWrapperParameters = (wrapper, reason)
+		invokedCreateAndPersistRemovedEventWrapperParametersList.append((wrapper, reason))
+		return stubbedCreateAndPersistRemovedEventWrapperResult
+	}
+
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributes = false
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributesCount = 0
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters: (euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)?
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributesParametersList = [(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)]()
+	var stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult: RemovedEvent!
+
+	func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
+		invokedCreateAndPersistRemovedEventEuCredentialAttributes = true
+		invokedCreateAndPersistRemovedEventEuCredentialAttributesCount += 1
+		invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters = (euCredentialAttributes, reason)
+		invokedCreateAndPersistRemovedEventEuCredentialAttributesParametersList.append((euCredentialAttributes, reason))
+		return stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult
 	}
 
 	var invokedListEventGroups = false

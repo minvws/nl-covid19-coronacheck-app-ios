@@ -910,5 +910,67 @@ class WalletManagerTests: XCTestCase {
 		expect(persisted.first?.reason) == RemovalReason.blockedEvent.rawValue
 	}
 	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesVaccination() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeVaccination(),
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) != nil
+		expect(persisted?.type) == EventMode.vaccination.rawValue
+		expect(persisted?.reason) == RemovalReason.mismatchedIdentity.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesRecovery() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeRecovery,
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) != nil
+		expect(persisted?.type) == EventMode.recovery.rawValue
+		expect(persisted?.reason) == RemovalReason.mismatchedIdentity.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesNegativeTest() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeTest,
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) != nil
+		expect(persisted?.type) == EventMode.test(.dcc).rawValue
+		expect(persisted?.reason) == RemovalReason.mismatchedIdentity.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesInvalid() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeEmptyCertificate,
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) == nil
+	}
+	
 	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)
 }
