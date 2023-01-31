@@ -170,9 +170,7 @@ extension HolderDashboardStrippenRefresherTests {
 		sut.load()
 		
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.eventDate) == DateFormatter.Event.iso8601.date(from: "2021-06-01")!
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.type) == .vaccination
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreRemovedEventParameters?.reason) == RemovalReason.blockedEvent.rawValue
+		expect(self.environmentSpies.walletManagerSpy.invokedCreateAndPersistRemovedEventBlockItem).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}

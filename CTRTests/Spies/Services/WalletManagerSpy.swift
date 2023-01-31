@@ -167,6 +167,20 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult
 	}
 
+	var invokedCreateAndPersistRemovedEventBlockItem = false
+	var invokedCreateAndPersistRemovedEventBlockItemCount = 0
+	var invokedCreateAndPersistRemovedEventBlockItemParameters: (blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)?
+	var invokedCreateAndPersistRemovedEventBlockItemParametersList = [(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)]()
+	var stubbedCreateAndPersistRemovedEventBlockItemResult: RemovedEvent!
+
+	func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent? {
+		invokedCreateAndPersistRemovedEventBlockItem = true
+		invokedCreateAndPersistRemovedEventBlockItemCount += 1
+		invokedCreateAndPersistRemovedEventBlockItemParameters = (blockItem, existingEventGroup, cryptoManager)
+		invokedCreateAndPersistRemovedEventBlockItemParametersList.append((blockItem, existingEventGroup, cryptoManager))
+		return stubbedCreateAndPersistRemovedEventBlockItemResult
+	}
+
 	var invokedListEventGroups = false
 	var invokedListEventGroupsCount = 0
 	var stubbedListEventGroupsResult: [EventGroup]! = []

@@ -61,6 +61,9 @@ protocol WalletManaging: AnyObject {
 	@discardableResult
 	func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent?
 	
+	@discardableResult
+	func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent?
+	
 	/// List all the event groups
 	/// - Returns: all the event groups
 	func listEventGroups() -> [EventGroup]

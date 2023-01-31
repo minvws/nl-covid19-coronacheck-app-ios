@@ -393,6 +393,29 @@ extension WalletManager {
 		)
 	}
 	
+	@discardableResult
+	func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent? {
+		
+		guard let jsonData = existingEventGroup.jsonData,
+			  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
+			  let credentialData = object.credential.data(using: .utf8),
+			  let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+			  let eventMode = euCredentialAttributes.eventMode,
+			  let reason = blockItem.reason
+		else { return nil }
+		
+		var eventDate: Date? {
+			guard let eventDate = euCredentialAttributes.eventDate else { return nil }
+			return DateFormatter.Event.iso8601.date(from: eventDate)
+		}
+		
+		return storeRemovedEvent(
+			type: eventMode,
+			eventDate: eventDate ?? .distantPast,
+			reason: reason
+		)
+	}
+	
 	/// Store an event group
 	/// - Parameters:
 	///   - type: the event type (vaccination, recovery, test)
