@@ -444,7 +444,13 @@ extension WalletManager {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
+						if greenCard.type == GreenCardType.domestic.rawValue {
+							// Reset the secret key to nil if the domestic greencard is deleted.
+							Current.secureUserSettings.holderSecretKey = nil
+						}
+
 						greenCard.delete(context: context)
+
 					}
 					dataStoreManager.save(context)
 				}

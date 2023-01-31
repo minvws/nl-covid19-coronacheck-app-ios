@@ -9,24 +9,7 @@ import UIKit
 import Transport
 import Shared
 
-enum EventMode: Equatable {
-
-	enum TestRoute: Equatable {
-		// We scanned a paper proof negative test
-		case dcc
-		// We want to fetch a negative test from the GGD
-		case ggd
-		// We want to fetch a negative test with a token from a commercial provider
-		case commercial
-	}
-	
-	case paperflow
-	case vaccinationAndPositiveTest
-	case recovery
-	case test(TestRoute)
-	case vaccination
-	case vaccinationassessment
-
+extension EventMode {
 	var localized: String {
 		switch self {
 			case .paperflow: return L.generalPaperflow()
@@ -57,23 +40,6 @@ enum EventMode: Equatable {
 			case .recovery: return ["positivetest"]
 			case .vaccinationassessment: return ["vaccinationassessment"]
 			case .paperflow: return nil
-		}
-	}
-	
-	var rawValue: String {
-		switch self {
-			case .paperflow:
-				return "paperflow"
-			case .vaccinationAndPositiveTest:
-				return "positiveTest" // rawValue positiveTest for backwards compatibility with CoreData
-			case .recovery:
-				return "recovery"
-			case .test:
-				return "test"
-			case .vaccination:
-				return "vaccination"
-			case .vaccinationassessment:
-				return "vaccinationassessment"
 		}
 	}
 }

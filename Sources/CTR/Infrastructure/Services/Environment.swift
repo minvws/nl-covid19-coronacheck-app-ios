@@ -110,7 +110,7 @@ struct Environment {
 			guard !ProcessInfo().isUnitTesting else { return } // never callback
 		#endif
 		
-		_ = DataStoreManager(.persistent, flavor: .flavor) { result in
+		_ = DataStoreManager(.persistent, persistentContainerName: (AppFlavor.flavor == .holder) ? "CoronaCheck" : "Verifier") { result in
 			switch result {
 				case .success(let dataStoreManager):
 					

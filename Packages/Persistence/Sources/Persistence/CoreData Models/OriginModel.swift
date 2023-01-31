@@ -9,66 +9,9 @@ import Foundation
 import CoreData
 import Shared
 
-enum OriginType: String, Codable, Equatable {
-
-	case recovery
-	case test
-	case vaccination
-	case vaccinationassessment
-	
-	var localized: String {
-		switch self {
-			case .recovery: return L.general_recoverycertificate()
-			case .vaccination: return L.general_vaccination()
-			case .test: return L.general_negativeTest()
-			case .vaccinationassessment: return L.general_visitorPass()
-		}
-	}
-	
-	/// e.g. "Test Certificate", "Vaccination Certificate"
-	var localizedProof: String {
-		switch self {
-			case .recovery: return L.general_recoverycertificate()
-			case .vaccination: return L.general_vaccinationcertificate()
-			case .test: return L.general_testcertificate()
-			case .vaccinationassessment: return L.general_visitorPass()
-		}
-	}
-	
-	/// e.g. Vaccinatiedatum etc.
-	var localizedDateLabel: String? {
-		switch self {
-			case .recovery: return L.generalRecoverydate()
-			case .vaccination: return L.generalVaccinationdate()
-			case .test: return L.generalTestdate()
-			case .vaccinationassessment: return nil // not localized.
-		}
-	}
-	
-	/// e.g. "Internationaal vaccinatiebewijs"
-	var localizedProofInternational0G: String {
-		switch self {
-			case .recovery: return L.general_recoverycertificate_0G()
-			case .vaccination: return L.general_vaccinationcertificate_0G()
-			case .test: return L.general_testcertificate_0G()
-			case .vaccinationassessment: return localizedProof
-		}
-	}
-
-	/// There is a particular order to sort these onscreen
-	var customSortIndex: Double {
-		switch self {
-			case .vaccination: return 0
-			case .recovery: return 1
-			case .vaccinationassessment: return 2
-			case .test: return 3
-		}
-	}
-}
-	
 extension Origin {
 	
-	@discardableResult convenience init(
+	@discardableResult public convenience init(
 		type: OriginType,
 		eventDate: Date,
 		expirationTime: Date,
@@ -76,27 +19,27 @@ extension Origin {
 		doseNumber: Int?,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) {
-		
-		self.init(context: managedContext)
-		self.type = type.rawValue
-		self.eventDate = eventDate
-		self.expirationTime = expirationTime
-		self.validFromDate = validFromDate
-		if let doseNumber = doseNumber {
-			self.doseNumber = doseNumber as NSNumber
+			
+			self.init(context: managedContext)
+			self.type = type.rawValue
+			self.eventDate = eventDate
+			self.expirationTime = expirationTime
+			self.validFromDate = validFromDate
+			if let doseNumber = doseNumber {
+				self.doseNumber = doseNumber as NSNumber
+			}
+			self.greenCard = greenCard
 		}
-		self.greenCard = greenCard
-	}
 	
 	/// Get the hints, strongly typed.
-	func castHints() -> [OriginHint] {
+	public func castHints() -> [OriginHint] {
 		
 		return hints?.compactMap({ $0 as? OriginHint }) ?? []
 	}
 	
 	/// Is this a paper based dcc?
 	/// - Returns: True if this is a paper based dcc
-	func isPaperBasedDCC() -> Bool {
+	public func isPaperBasedDCC() -> Bool {
 		
 		for hint in castHints() where hint.hint == "event_from_dcc" {
 			return true
@@ -105,17 +48,25 @@ extension Origin {
 	}
 }
 
+public enum OriginType: String, Codable, Equatable {
+	
+	case recovery
+	case test
+	case vaccination
+	case vaccinationassessment
+}
+
 extension Array {
 
 	/// Find the Origin element with the latest expiry date (note: this could still be in the past).
-	func latestOriginExpiryTime() -> Date? where Element == Origin {
+	public func latestOriginExpiryTime() -> Date? where Element == Origin {
 		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
 			.last?
 			.expirationTime
 	}
 	
 	/// Is there an origin that is paper based dcc?
-	func hasPaperBasedDCC() -> Bool where Element == Origin {
+	public func hasPaperBasedDCC() -> Bool where Element == Origin {
 		
 		filter { $0.isPaperBasedDCC() }.isNotEmpty
 	}
