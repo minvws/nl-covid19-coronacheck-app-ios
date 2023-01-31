@@ -9,6 +9,7 @@ import Foundation
 import Shared
 import ReusableViews
 import Transport
+import Persistence
 
 class SendIdentitySelectionViewModel {
 	
@@ -123,7 +124,7 @@ class SendIdentitySelectionViewModel {
 					// Signer says OK. Mark all events as non draft.
 					Current.walletManager.listEventGroups()
 						.filter { $0.isDraft }
-						.forEach { Current.walletManager.updateEventGroup($0, isDraft: false) }
+						.forEach { $0.update(isDraft: false, save: { Current.dataStoreManager.save($0) }) }
 					
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
 

@@ -6,6 +6,7 @@
  */
 
 import Foundation
+import Persistence
 
 struct ShowQRItem {
 	let greenCard: GreenCard

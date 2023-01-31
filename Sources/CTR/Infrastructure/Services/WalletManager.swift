@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 import Transport
 import Shared
+import Persistence
 
 class WalletManager: WalletManaging {
 
@@ -448,9 +449,9 @@ extension WalletManager {
 							// Reset the secret key to nil if the domestic greencard is deleted.
 							Current.secureUserSettings.holderSecretKey = nil
 						}
-
+				
 						greenCard.delete(context: context)
-
+							
 					}
 					dataStoreManager.save(context)
 				}

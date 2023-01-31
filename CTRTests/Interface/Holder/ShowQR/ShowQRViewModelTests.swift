@@ -11,6 +11,8 @@ import XCTest
 @testable import CTR
 import Nimble
 import Shared
+import TestingShared
+import Persistence
 
 class ShowQRViewModelTests: XCTestCase {
 

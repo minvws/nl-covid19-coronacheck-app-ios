@@ -7,16 +7,16 @@
 
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Persistence
 import CoreData
 
 class EventGroupModelTests: XCTestCase {
 
-	var environmentalSpies: EnvironmentSpies!
-	
+	var dataStoreManager: DataStoreManaging!
+
 	override func setUp() {
 		super.setUp()
-		environmentalSpies = setupEnvironmentSpies()
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 	}
 
 	// MARK: Tests
@@ -28,7 +28,7 @@ class EventGroupModelTests: XCTestCase {
 		var eventGroup: EventGroup?
 		let date = Date()
 		let json = "test_createEvent".data(using: .utf8)
-		let context = Current.dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedJson = json, let unwrappedWallet = wallet {
@@ -59,7 +59,7 @@ class EventGroupModelTests: XCTestCase {
 
 		// Given
 		var wallet: Wallet?
-		let context = Current.dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet,
@@ -95,7 +95,7 @@ class EventGroupModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var event1: EventGroup?
-		let context = Current.dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet,
@@ -125,7 +125,7 @@ class EventGroupModelTests: XCTestCase {
 		
 		// When
 		let objectId = try XCTUnwrap(event1?.objectID)
-		let result = Current.dataStoreManager.delete(objectId)
+		let result = dataStoreManager.delete(objectId)
 		
 		// Then
 		expect(result.isSuccess) == true
@@ -137,7 +137,7 @@ class EventGroupModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var event1: EventGroup?
-		let context = Current.dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet,
@@ -167,8 +167,8 @@ class EventGroupModelTests: XCTestCase {
 		
 		// When
 		let objectId = try XCTUnwrap(event1?.objectID)
-		_ = Current.dataStoreManager.delete(objectId)
-		let result = Current.dataStoreManager.delete(objectId)
+		_ = dataStoreManager.delete(objectId)
+		let result = dataStoreManager.delete(objectId)
 
 		// Then
 		expect(result.isFailure) == true
@@ -180,7 +180,7 @@ class EventGroupModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var eventGroup: EventGroup?
-		let context = Current.dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet,
@@ -225,7 +225,7 @@ class EventGroupModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var eventGroup: EventGroup?
-		let context = Current.dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet,

@@ -8,6 +8,8 @@
 @testable import CTR
 import XCTest
 import Nimble
+import TestingShared
+import Persistence
 
 class ScanLogManagerTests: XCTestCase {
 
@@ -17,7 +19,7 @@ class ScanLogManagerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, loadPersistentStoreCompletion: { _ in })
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "Verifier", loadPersistentStoreCompletion: { _ in })
 		sut = ScanLogManager(dataStoreManager: dataStoreManager)
 	}
 

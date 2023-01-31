@@ -13,6 +13,7 @@
 import XCTest
 import Nimble
 import TestingShared
+import Persistence
 import ReusableViews
 
 class ListRemoteEventsViewModelTests: XCTestCase {

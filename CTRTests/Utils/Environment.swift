@@ -10,6 +10,8 @@ import Clcore
 @testable import CTR
 @testable import Transport
 @testable import Shared
+import TestingShared
+import Persistence
 
 ///
 /// Set of Spies with sensible default stubbed values, which can be modified per-test.
@@ -56,7 +58,7 @@ final class EnvironmentSpies {
 		return spy
 	}()
 	
-	var dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+	var dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 	
 	var deviceAuthenticationDetectorSpy: DeviceAuthenticationSpy = {
 		let spy = DeviceAuthenticationSpy()

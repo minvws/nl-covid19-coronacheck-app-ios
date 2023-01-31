@@ -9,6 +9,8 @@ import XCTest
 import Nimble
 @testable import CTR
 import Shared
+import TestingShared
+import Persistence
 
 final class ListIdentitySelectionViewModelTests: XCTestCase {
 

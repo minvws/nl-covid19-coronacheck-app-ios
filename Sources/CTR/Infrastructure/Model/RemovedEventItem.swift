@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Persistence
 
 struct RemovedEventItem: Equatable {
 	let objectID: NSManagedObjectID

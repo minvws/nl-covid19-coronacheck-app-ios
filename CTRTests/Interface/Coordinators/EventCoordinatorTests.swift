@@ -13,6 +13,8 @@ import XCTest
 @testable import Shared
 import Nimble
 import ReusableViews
+import TestingShared
+import Persistence
 
 class EventCoordinatorTests: XCTestCase {
 	

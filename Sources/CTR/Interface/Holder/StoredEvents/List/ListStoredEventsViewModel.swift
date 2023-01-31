@@ -10,6 +10,7 @@ import CoreData
 import Shared
 import ReusableViews
 import Transport
+import Persistence
 
 class ListStoredEventsViewModel {
 
