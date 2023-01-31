@@ -30,6 +30,8 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
+  Persistence:
+    path: ./Packages/Persistence
   ReusableViews:
     path: ./Packages/ReusableViews
   Shared:
@@ -133,6 +135,7 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: Persistence
       - package: Shared
       - package: Transport
       - package: ReusableViews
