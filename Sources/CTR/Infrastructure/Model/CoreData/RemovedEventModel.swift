@@ -58,22 +58,4 @@ extension RemovedEvent {
 			reason: reason
 		)
 	}
-	
-//	@discardableResult
-//	static func createAndPersist(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
-//		
-//		if let eventMode = euCredentialAttributes.eventMode {
-//			var eventDate: Date? {
-//				guard let eventDate = euCredentialAttributes.eventDate else { return nil }
-//				return DateFormatter.Event.iso8601.date(from: eventDate)
-//			}
-//			
-//			return Current.walletManager.storeRemovedEvent(
-//				type: eventMode,
-//				eventDate: eventDate ?? .distantPast,
-//				reason: reason.rawValue
-//			)
-//		}
-//		return nil
-//	}
 }
