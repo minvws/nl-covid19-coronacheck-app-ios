@@ -9,6 +9,7 @@ import Foundation
 import Transport
 import Shared
 import ReusableViews
+import Persistence
 
 extension ListRemoteEventsViewModel {
 	

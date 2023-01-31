@@ -10,7 +10,7 @@ import CoreData
 
 extension NSManagedObject {
 	
-	var autoId: Int64 {
+	public var autoId: Int64 {
 		/*
 		 Core Data automatically generate auto increment id for each managed object.
 		 

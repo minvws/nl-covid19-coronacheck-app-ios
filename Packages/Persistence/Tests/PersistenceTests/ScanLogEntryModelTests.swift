@@ -7,7 +7,8 @@
 
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Persistence
+import TestingShared
 import CoreData
 
 class ScanLogEntryModelTests: XCTestCase {
@@ -16,7 +17,7 @@ class ScanLogEntryModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, loadPersistentStoreCompletion: { _ in })
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "Verifier", loadPersistentStoreCompletion: { _ in })
 	}
 
 	// MARK: Tests

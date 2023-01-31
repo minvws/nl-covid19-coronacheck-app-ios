@@ -8,6 +8,7 @@
 import Foundation
 import XCTest
 import Nimble
+import TestingShared
 @testable import CTR
 
 class HelpdeskViewModelTests: XCTestCase {

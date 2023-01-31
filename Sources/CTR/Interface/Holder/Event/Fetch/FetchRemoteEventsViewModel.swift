@@ -10,6 +10,7 @@ import BrightFutures
 import Transport
 import Shared
 import ReusableViews
+import Persistence
 
 // swiftlint:disable type_body_length
 final class FetchRemoteEventsViewModel {

@@ -8,33 +8,15 @@
 import Foundation
 import CoreData
 
-enum GreenCardType: String {
+public enum GreenCardType: String {
 
 	case domestic
 	case eu
 }
 
-class GreenCardModel {
-
-	class func fetchByIds(objectIDs: [NSManagedObjectID]) -> Result<[GreenCard], Error> {
-
-		var result = [GreenCard]()
-		for objectID in objectIDs {
-			do {
-				if let greenCard = try Current.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
-					result.append(greenCard)
-				}
-			} catch let error {
-				return .failure(error)
-			}
-		}
-		return .success(result)
-	}
-}
-
 extension GreenCard {
 	
-	@discardableResult convenience init(
+	@discardableResult public convenience init(
 		type: GreenCardType,
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) {
@@ -46,7 +28,7 @@ extension GreenCard {
 
 	/// Get the type of a greenCard as a GreenCardType
 	/// - Returns: greenCard type
-	func getType() -> GreenCardType? {
+	public func getType() -> GreenCardType? {
 		
 		if let type {
 			return GreenCardType(rawValue: type)
@@ -57,7 +39,7 @@ extension GreenCard {
 	/// Get the active credential with the longest lifetime for a date
 	/// - Parameter now: the date for the credential (defaults to now)
 	/// - Returns: the active credential
-	func getActiveDomesticCredential(forDate now: Date = Date()) -> Credential? {
+	public func getActiveDomesticCredential(forDate now: Date = Date()) -> Credential? {
 		
 		guard getType() == GreenCardType.domestic else {
 			return nil
@@ -75,7 +57,7 @@ extension GreenCard {
 		return nil
 	}
 
-	func originsActiveNowOrBeforeThresholdFromNow(now: Date, thresholdDays: Int) -> [Origin]? {
+	public func originsActiveNowOrBeforeThresholdFromNow(now: Date, thresholdDays: Int) -> [Origin]? {
 		
 		let thresholdEndDate = now.addingTimeInterval(TimeInterval(60 * 60 * 24 * thresholdDays))
 
@@ -88,12 +70,12 @@ extension GreenCard {
 			}
 	}
 
-	func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
+	public func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
 
 		return !activeCredentialsNowOrInFuture(forDate: now).isEmpty
 	}
 
-	func activeCredentialsNowOrInFuture(forDate now: Date = Date()) -> [Credential] {
+	public func activeCredentialsNowOrInFuture(forDate now: Date = Date()) -> [Credential] {
 		
 		guard let list = castCredentials() else { return [] }
 
@@ -104,7 +86,7 @@ extension GreenCard {
 		return activeCredentialsNowOrInFuture
 	}
 
-	func currentOrNextActiveCredential(forDate now: Date = Date()) -> Credential? {
+	public func currentOrNextActiveCredential(forDate now: Date = Date()) -> Credential? {
 		
 		let activeCrendentials = activeCredentialsNowOrInFuture(forDate: now)
 		return activeCrendentials.sorted(by: {
@@ -113,18 +95,18 @@ extension GreenCard {
 	}
 
 	/// Get the credentials, strongly typed.
-	func castCredentials() -> [Credential]? {
+	public func castCredentials() -> [Credential]? {
 		
 		return credentials?.compactMap({ $0 as? Credential })
 	}
 
 	/// Get the origins, strongly typed.
-	func castOrigins() -> [Origin]? {
+	public func castOrigins() -> [Origin]? {
 		
 		return origins?.compactMap({ $0 as? Origin })
 	}
 	
-	func getLatestInternationalCredential() -> Credential? {
+	public func getLatestInternationalCredential() -> Credential? {
 		
 		guard getType() == GreenCardType.eu else {
 			return nil
@@ -133,12 +115,8 @@ extension GreenCard {
 		return castCredentials()?.last
 	}
 	
-	func delete(context: NSManagedObjectContext) {
+	public func delete(context: NSManagedObjectContext) {
 		
-		if type == GreenCardType.domestic.rawValue {
-			// Reset the secret key to nil if the domestic greencard is deleted.
-			Current.secureUserSettings.holderSecretKey = nil
-		}
 		context.delete(self)
 	}
 }

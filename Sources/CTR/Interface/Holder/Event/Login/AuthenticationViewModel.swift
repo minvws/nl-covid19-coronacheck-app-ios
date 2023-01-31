@@ -10,6 +10,7 @@ import Shared
 import ReusableViews
 import Transport
 import OpenIDConnect
+import Persistence
 
 enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)

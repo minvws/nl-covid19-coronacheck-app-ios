@@ -11,6 +11,8 @@
 @testable import Shared
 import XCTest
 import Nimble
+import TestingShared
+import Persistence
 
 class WalletManagerTests: XCTestCase {
 
@@ -23,7 +25,7 @@ class WalletManagerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		
-		dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
 

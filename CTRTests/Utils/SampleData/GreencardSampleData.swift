@@ -8,6 +8,8 @@
 import Foundation
 import CoreData
 @testable import CTR
+import TestingShared
+import Persistence
 
 extension GreenCard {
 

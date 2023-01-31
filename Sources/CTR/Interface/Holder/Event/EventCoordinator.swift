@@ -9,6 +9,7 @@ import UIKit
 import Transport
 import Shared
 import ReusableViews
+import Persistence
 
 enum EventScreenResult: Equatable {
 

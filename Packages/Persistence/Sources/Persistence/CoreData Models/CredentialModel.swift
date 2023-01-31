@@ -10,7 +10,7 @@ import CoreData
 
 extension Credential {
 
-	@discardableResult convenience init(
+	@discardableResult public convenience init(
 		data: Data,
 		validFrom: Date,
 		expirationTime: Date,
@@ -30,7 +30,7 @@ extension Credential {
 extension Array {
 
 	/// Find the Credential element with the latest expiry date (note: this could still be in the past).
-	func latestCredentialExpiryTime() -> Date? where Element == Credential {
+	public func latestCredentialExpiryTime() -> Date? where Element == Credential {
 		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
 			.last?
 			.expirationTime

@@ -10,7 +10,7 @@ import CoreData
 
 extension ScanLogEntry {
 
-	@discardableResult convenience init(
+	@discardableResult public convenience init(
 		mode: String,
 		date: Date,
 		managedContext: NSManagedObjectContext) {
@@ -22,16 +22,16 @@ extension ScanLogEntry {
 	}
 }
 
-class ScanLogEntryModel {
+final public class ScanLogEntryModel {
 
-	static let entityName = "ScanLogEntry"
+	public static let entityName = "ScanLogEntry"
 
 	/// List all the entries starting from a date
 	/// - Parameters:
 	///   - date: the date
 	///   - managedContext: the managed object context
 	/// - Returns: list of scan log entries
-	class func listEntriesStartingFrom(date: Date, managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
+	class public func listEntriesStartingFrom(date: Date, managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
 		let fromPredicate = NSPredicate(format: "date >= %@", date as NSDate)
@@ -50,7 +50,7 @@ class ScanLogEntryModel {
 	///   - date: the date
 	///   - managedContext: the managed object context
 	/// - Returns: list of scan log entries
-	class func listEntriesUpTo(date: Date, managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
+	class public func listEntriesUpTo(date: Date, managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
 		let fromPredicate = NSPredicate(format: "date < %@", date as NSDate)
@@ -68,7 +68,7 @@ class ScanLogEntryModel {
 	/// - Parameters:
 	///   - managedContext: the managed object context
 	/// - Returns: list of scan log entries
-	class func listEntries(managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
+	class public func listEntries(managedContext: NSManagedObjectContext) -> Result<[ScanLogEntry], Error> {
 
 		let fetchRequest = NSFetchRequest<ScanLogEntry>(entityName: entityName)
 		do {
@@ -82,7 +82,7 @@ class ScanLogEntryModel {
 
 extension Array {
 
-	func sortedByIdentifier() -> [ScanLogEntry] where Element == ScanLogEntry {
+	public func sortedByIdentifier() -> [ScanLogEntry] where Element == ScanLogEntry {
 		sorted(by: { ($0.identifier) < ($1.identifier) })
 	}
 }

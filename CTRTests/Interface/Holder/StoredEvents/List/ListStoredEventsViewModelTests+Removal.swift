@@ -11,6 +11,8 @@ import Nimble
 @testable import Transport
 @testable import Shared
 import ReusableViews
+import TestingShared
+import Persistence
 
 class ListStoredEventsViewModelRemovalTests: XCTestCase {
 	

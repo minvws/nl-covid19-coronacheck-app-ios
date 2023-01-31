@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Persistence
 
 protocol HolderDashboardQRCardDatasourceProtocol: AnyObject {
 	typealias QRCard = HolderDashboardViewModel.QRCard

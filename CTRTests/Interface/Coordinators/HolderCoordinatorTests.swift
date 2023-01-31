@@ -13,6 +13,8 @@ import XCTest
 @testable import Shared
 import Nimble
 import ReusableViews
+import TestingShared
+import Persistence
 
 class HolderCoordinatorTests: XCTestCase {
 
@@ -780,7 +782,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs_differentContext() throws {
 		
 		// Given
-		let dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+		let dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		var greenCard: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {

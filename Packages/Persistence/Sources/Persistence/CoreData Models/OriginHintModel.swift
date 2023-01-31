@@ -10,7 +10,7 @@ import CoreData
 
 extension OriginHint {
 	
-	@discardableResult convenience init(
+	@discardableResult public convenience init(
 		origin: Origin,
 		hint: String,
 		managedContext: NSManagedObjectContext) {

@@ -8,7 +8,8 @@
 @testable import CTR
 @testable import Transport
 @testable import Shared
-
+import TestingShared
+import Persistence
 import XCTest
 import CoreData
 

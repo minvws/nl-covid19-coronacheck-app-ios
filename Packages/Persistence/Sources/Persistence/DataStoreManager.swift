@@ -8,17 +8,16 @@
 import Foundation
 import CoreData
 import SQLite3
-import Shared
 
-enum StorageType {
+public enum StorageType {
 	case persistent, inMemory
 }
 
 extension Notification.Name {
-	static let diskFull = Notification.Name("nl.rijksoverheid.ctr.diskFull")
+	public static let diskFull = Notification.Name("nl.rijksoverheid.ctr.diskFull")
 }
 
-protocol DataStoreManaging {
+public protocol DataStoreManaging {
 
 	/// Get a context to perform a query on
 	/// - Returns: the main context
@@ -32,35 +31,36 @@ protocol DataStoreManaging {
 	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Error>
 }
 
-class DataStoreManager: DataStoreManaging {
+public final class DataStoreManager: DataStoreManaging {
 
-	enum Error: Swift.Error, CustomNSError {
+	public enum Error: Swift.Error, CustomNSError {
 		case diskFull
 		case underlying(error: Swift.Error)
 
-		var errorCode: Int {
+		public var errorCode: Int {
 			guard case let .underlying(error) = self else { return 0 }
 			return (error as NSError).code
 		}
 	}
 
-	private var storageType: StorageType
-	private let flavor: AppFlavor
+	private let persistentContainerName: String
+	private let storageType: StorageType
 
 	/// The persistent container holding our data model
 	private let persistentContainer: NSPersistentContainer
 
 	/// Initialize the database manager
 	/// - Parameter storageType: store the data in memory or on disk.
-	required init(
+	public required init(
 		_ storageType: StorageType,
-		flavor: AppFlavor = AppFlavor.flavor,
+		persistentContainerName: String,
 		loadPersistentStoreCompletion: @escaping (Result<DataStoreManager, DataStoreManager.Error>) -> Void
 	) {
 		self.storageType = storageType
-		self.flavor = flavor
+		self.persistentContainerName = persistentContainerName
 		
-		let persistentContainer = NSPersistentContainer(name: flavor == .holder ? "CoronaCheck" : "Verifier")
+		let managedObjectModel = NSManagedObjectModel(contentsOf: Bundle.module.url(forResource: persistentContainerName, withExtension: "momd")!)
+		let persistentContainer = NSPersistentContainer(name: persistentContainerName, managedObjectModel: managedObjectModel!)
 		self.persistentContainer = persistentContainer
 		
 		let description = NSPersistentStoreDescription()
@@ -100,14 +100,14 @@ class DataStoreManager: DataStoreManaging {
 	
 	/// Get a context to perform a query on
 	/// - Returns: the main context
-	func managedObjectContext() -> NSManagedObjectContext {
+	public func managedObjectContext() -> NSManagedObjectContext {
 
 		return persistentContainer.viewContext
 	}
 
 	/// Save the context, saves all pending changes.
 	/// - Parameter context: the context to be saved.
-	func save(_ context: NSManagedObjectContext) {
+	public func save(_ context: NSManagedObjectContext) {
 		guard context.hasChanges else { return }
 		
 		do {
@@ -128,7 +128,7 @@ class DataStoreManager: DataStoreManaging {
 	}
 	
 	@discardableResult
-	func delete(_ objectID: NSManagedObjectID) -> Result<Void, Swift.Error> {
+	public func delete(_ objectID: NSManagedObjectID) -> Result<Void, Swift.Error> {
 
 		do {
 			let eventGroup = try managedObjectContext().existingObject(with: objectID)

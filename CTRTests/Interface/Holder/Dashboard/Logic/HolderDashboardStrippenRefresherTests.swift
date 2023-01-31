@@ -13,6 +13,8 @@ import CoreData
 @testable import Shared
 import Nimble
 import Reachability
+import TestingShared
+import Persistence
 
 class HolderDashboardStrippenRefresherTests: XCTestCase {
 	
