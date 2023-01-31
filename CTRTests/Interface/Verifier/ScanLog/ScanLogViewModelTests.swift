@@ -82,7 +82,7 @@ class ScanLogViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.displayEntries).to(haveCount(1))
-		expect(self.sut.displayEntries.first) == ScanLogDisplayEntry.message(message: L.scan_log_list_no_items())
+		expect(self.sut.displayEntries.first) == ScanLogDisplayEntry.logMessage(message: L.scan_log_list_no_items())
 	}
 
 	func test_oneEntry() {

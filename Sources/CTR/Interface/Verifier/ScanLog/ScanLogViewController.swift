@@ -51,7 +51,7 @@ class ScanLogViewController: GenericViewController<ScanLogView, ScanLogViewModel
 
 			// Entries
 			entries.forEach { entry in
-				if case let ScanLogDisplayEntry.message(message) = entry {
+				if case let ScanLogDisplayEntry.logMessage(message) = entry {
 					strongSelf.sceneView.logStackView.addArrangedSubview(strongSelf.sceneView.createLabel(message))
 				}
 				if case let ScanLogDisplayEntry.entry(type: riskType, timeInterval: timeInterval, message: message, warning: warning) = entry {
