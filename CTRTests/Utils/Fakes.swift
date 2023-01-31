@@ -404,6 +404,19 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 			]
 		)
 	}
+	
+	static func sampleWithoutEvent(country: String = "NL") -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0"
+		)
+	}
 }
 
 extension RemoteGreenCards.Origin {
@@ -1349,6 +1362,16 @@ extension EuCredentialAttributes {
 		EuCredentialAttributes(
 			credentialVersion: 1,
 			digitalCovidCertificate: .sampleWithRecovery(),
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
+			issuer: "NL"
+		)
+	}
+	
+	static var fakeEmptyCertificate: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: .sampleWithoutEvent(),
 			expirationTime: now.timeIntervalSince1970 + 3600,
 			issuedAt: now.timeIntervalSince1970,
 			issuer: "NL"

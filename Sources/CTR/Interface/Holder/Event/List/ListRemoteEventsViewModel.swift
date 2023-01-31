@@ -296,7 +296,11 @@ class ListRemoteEventsViewModel {
 			Current.userSettings.hasShownBlockedEventsAlert = false
 		}
 		blockItemsForEventsNotBeingAdded.forEach { blockItem, eventGroup in
-			RemovedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+			Current.walletManager.createAndPersistRemovedEvent(
+				blockItem: blockItem,
+				existingEventGroup: eventGroup,
+				cryptoManager: Current.cryptoManager
+			)
 		}
 		
 		// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:
