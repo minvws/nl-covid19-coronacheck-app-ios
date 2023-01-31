@@ -339,7 +339,7 @@ extension WalletManager {
 		
 		var result: [RemovedEvent] = []
 		
-		guard let events = wrapper.events else {
+		guard let events = wrapper.events, events.isNotEmpty else {
 			return result
 		}
 		
