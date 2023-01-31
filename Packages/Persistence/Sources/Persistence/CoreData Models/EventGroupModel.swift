@@ -29,17 +29,6 @@ extension EventGroup {
 		return finalJSONString
 	}
 	
-	public func update(isDraft: Bool, save: @escaping (NSManagedObjectContext) -> Void) {
-		guard let managedObjectContext = managedObjectContext else { return }
-		
-		managedObjectContext.performAndWait {
-			
-			self.isDraft = isDraft
-			
-			save(managedObjectContext)
-		}
-	}
-	
 	@discardableResult public convenience init(
 		rawType: String,
 		providerIdentifier: String,
