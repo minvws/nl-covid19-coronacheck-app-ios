@@ -7,6 +7,8 @@
 
 @testable import CTR
 import XCTest
+import TestingShared
+import Persistence
 
 class IdentityCheckerSpy: IdentityCheckerProtocol {
 

@@ -10,6 +10,7 @@ import Reachability
 import Transport
 import Shared
 import OpenIDConnect
+import Persistence
 
 // MARK: - 1: Define the Environment
 
@@ -110,7 +111,7 @@ struct Environment {
 			guard !ProcessInfo().isUnitTesting else { return } // never callback
 		#endif
 		
-		_ = DataStoreManager(.persistent, flavor: .flavor) { result in
+		_ = DataStoreManager(.persistent, persistentContainerName: (AppFlavor.flavor == .holder) ? "CoronaCheck" : "Verifier") { result in
 			switch result {
 				case .success(let dataStoreManager):
 					

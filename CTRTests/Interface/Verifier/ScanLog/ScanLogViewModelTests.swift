@@ -10,8 +10,9 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
-import Rswift
 import ReusableViews
+import TestingShared
+import Persistence
 
 class ScanLogViewModelTests: XCTestCase {
 
@@ -23,7 +24,7 @@ class ScanLogViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, loadPersistentStoreCompletion: { _ in })
+		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "Verifier", loadPersistentStoreCompletion: { _ in })
 		
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 

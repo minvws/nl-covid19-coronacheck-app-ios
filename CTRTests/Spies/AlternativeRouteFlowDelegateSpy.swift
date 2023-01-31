@@ -6,6 +6,7 @@
 */
 
 @testable import CTR
+import Persistence
 
 class AlternativeRouteFlowDelegateSpy: AlternativeRouteFlowDelegate {
 

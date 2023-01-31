@@ -7,6 +7,8 @@
 
 import XCTest
 @testable import CTR
+import TestingShared
+import Persistence
 
 class ScanLogManagingSpy: ScanLogManaging {
 

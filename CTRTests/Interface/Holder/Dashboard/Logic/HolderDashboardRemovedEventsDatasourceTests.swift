@@ -9,6 +9,8 @@ import Foundation
 import XCTest
 import Nimble
 @testable import CTR
+import TestingShared
+import Persistence
 
 // swiftlint:disable:next type_name
 class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {

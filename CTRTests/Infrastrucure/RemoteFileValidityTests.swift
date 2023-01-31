@@ -6,10 +6,12 @@
 */
 
 import Foundation
-@testable import CTR
-@testable import Transport
 import XCTest
 import Nimble
+import TestingShared
+import Persistence
+@testable import CTR
+import Transport
 
 class RemoteFileValidityTests: XCTestCase {
 	

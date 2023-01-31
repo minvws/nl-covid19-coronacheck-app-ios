@@ -7,10 +7,12 @@
 
 import Foundation
 import XCTest
-@testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import CTR
 import Nimble
+import TestingShared
+import Persistence
 
 class UniversalLinkTests: XCTestCase {
 	

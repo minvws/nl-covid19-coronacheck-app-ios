@@ -11,6 +11,9 @@ import Foundation
 @testable import Transport
 @testable import Shared
 import UIKit
+import TestingShared
+import Persistence
+import CoreData
 
 extension TestProvider {
 
@@ -1518,5 +1521,13 @@ struct FakeRemoteEvent {
 			wrapper: EventFlow.EventResultWrapper.fakePaperProofResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
+	}
+}
+
+extension WalletModel {
+	
+	@discardableResult class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
+		
+		return Wallet(label: "testWallet", managedContext: managedContext)
 	}
 }

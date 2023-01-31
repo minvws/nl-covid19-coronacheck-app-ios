@@ -13,6 +13,8 @@ import Nimble
 import QRGenerator
 import Shared
 import ReusableViews
+import TestingShared
+import Persistence
 
 class ShowQRItemViewModelTests: XCTestCase {
 

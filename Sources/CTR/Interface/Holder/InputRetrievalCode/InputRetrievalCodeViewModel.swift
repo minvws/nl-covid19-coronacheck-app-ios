@@ -10,6 +10,7 @@ import UIKit
 import Transport
 import Shared
 import ReusableViews
+import Persistence
 
 enum InputRetrievalCodeMode {
 	case negativeTest

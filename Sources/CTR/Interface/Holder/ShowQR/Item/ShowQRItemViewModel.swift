@@ -9,6 +9,7 @@ import UIKit
 import Transport
 import Shared
 import QRGenerator
+import Persistence
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	

@@ -10,6 +10,7 @@ import Reachability
 import UIKit
 import Transport
 import Shared
+import Persistence
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()

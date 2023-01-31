@@ -7,7 +7,7 @@
 
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Persistence
 import CoreData
 
 class WalletModelTests: XCTestCase {
@@ -16,7 +16,7 @@ class WalletModelTests: XCTestCase {
 	
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 	}
 	
 	// MARK: Tests

@@ -11,6 +11,7 @@
 import XCTest
 import Nimble
 import Reachability
+import TestingShared
 
 class CryptoLibUtilityTests: XCTestCase {
 

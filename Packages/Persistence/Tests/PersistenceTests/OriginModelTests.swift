@@ -1,34 +1,33 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
- *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
- *
- *  SPDX-License-Identifier: EUPL-1.2
- */
+* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+*
+*  SPDX-License-Identifier: EUPL-1.2
+*/
 
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Persistence
 
-class OriginHintModelTests: XCTestCase {
-	
+class OriginModelTests: XCTestCase {
+
 	var dataStoreManager: DataStoreManaging!
-	
+
 	override func setUp() {
 		super.setUp()
-		dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 	}
-	
+
 	// MARK: Tests
-	
-	func test_createHint() {
-		
+
+	func test_createOrigin() {
+
 		// Given
 		var greenCard: GreenCard?
 		var origin: Origin?
-		var hint: OriginHint?
 		let date = Date()
 		let validFromDate = Date(timeIntervalSinceNow: -10)
-		
+
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
@@ -38,7 +37,7 @@ class OriginHintModelTests: XCTestCase {
 					managedContext: context
 				)
 				if let unwrappedGreenCard = greenCard {
-					
+
 					// When
 					origin = Origin(
 						type: .vaccination,
@@ -49,27 +48,24 @@ class OriginHintModelTests: XCTestCase {
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					
-					if let unwrappedOrigin = origin {
-						hint = OriginHint(origin: unwrappedOrigin, hint: "test hint", managedContext: context)
-					}
 				}
 			}
 		}
-		
+
 		// Then
-		expect(origin?.hints).toEventually(haveCount(1))
-		expect(hint?.hint).toEventually(equal("test hint"))
+		expect(origin?.type).toEventually(equal(OriginType.vaccination.rawValue))
+		expect(origin?.eventDate).toEventually(equal(date))
+		expect(origin?.expirationTime).toEventually(equal(date))
+		expect(origin?.validFromDate).toEventually(equal(validFromDate))
+		expect(origin?.greenCard).toEventually(equal(greenCard))
+		expect(greenCard?.origins).toEventually(haveCount(1))
 	}
-	
-	func test_createTwoHints() {
-		
+
+	func test_createTwoOrigins() {
+
 		// Given
 		var greenCard: GreenCard?
-		var origin: Origin?
 		let date = Date()
-		let validFromDate = Date(timeIntervalSinceNow: -10)
-		
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
@@ -78,28 +74,33 @@ class OriginHintModelTests: XCTestCase {
 					wallet: wallet,
 					managedContext: context
 				)
+
 				if let unwrappedGreenCard = greenCard {
-					
+
 					// When
-					origin = Origin(
+					Origin(
+						type: .recovery,
+						eventDate: date,
+						expirationTime: date,
+						validFromDate: date,
+						doseNumber: nil,
+						greenCard: unwrappedGreenCard,
+						managedContext: context
+					)
+					Origin(
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
-						validFromDate: validFromDate,
+						validFromDate: date,
 						doseNumber: 1,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					
-					if let unwrappedOrigin = origin {
-						OriginHint(origin: unwrappedOrigin, hint: "hint one", managedContext: context)
-						OriginHint(origin: unwrappedOrigin, hint: "hint two", managedContext: context)
-					}
 				}
 			}
 		}
-		
+
 		// Then
-		expect(origin?.hints).toEventually(haveCount(2))
+		expect(greenCard?.origins).toEventually(haveCount(2))
 	}
 }

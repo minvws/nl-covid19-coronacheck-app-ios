@@ -6,6 +6,8 @@
  */
 
 import Foundation
+import Persistence
+
 // swiftlint:disable type_name
 protocol VaccinationAssessmentNotificationManagerProtocol {
 	

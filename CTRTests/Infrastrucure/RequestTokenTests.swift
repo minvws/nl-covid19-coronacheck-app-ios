@@ -8,8 +8,10 @@
 import Foundation
 import XCTest
 @testable import CTR
-@testable import Transport
 @testable import Shared
+import TestingShared
+import Persistence
+import Transport
 
 class RequestTokenTests: XCTestCase {
 	

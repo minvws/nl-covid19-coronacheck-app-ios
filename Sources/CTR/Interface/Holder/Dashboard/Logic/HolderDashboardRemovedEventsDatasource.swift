@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Persistence
 
 // swiftlint:disable type_name
 protocol HolderDashboardRemovedEventsDatasourceProtocol: AnyObject {

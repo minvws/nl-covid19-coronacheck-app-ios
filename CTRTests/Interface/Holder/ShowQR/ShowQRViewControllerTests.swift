@@ -10,6 +10,8 @@ import XCTest
 import Nimble
 import Shared
 import ReusableViews
+import TestingShared
+import Persistence
 
 class ShowQRViewControllerTests: XCTestCase {
 

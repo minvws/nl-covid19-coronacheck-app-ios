@@ -8,6 +8,7 @@
 import Foundation
 import Transport
 import Shared
+import Persistence
 
 struct EuCredentialAttributes: Codable, Equatable {
 

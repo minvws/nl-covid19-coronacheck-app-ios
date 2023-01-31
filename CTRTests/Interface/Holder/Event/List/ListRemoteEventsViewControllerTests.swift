@@ -12,6 +12,7 @@ import SnapshotTesting
 import ViewControllerPresentationSpy
 import Shared
 import TestingShared
+import Persistence
 import ReusableViews
 
 class ListRemoteEventsViewControllerTests: XCTestCase {
