@@ -972,5 +972,41 @@ class WalletManagerTests: XCTestCase {
 		expect(persisted) == nil
 	}
 	
+	func test_createAndPersistRemovedEvent_blockedItem_cryptoFail() throws {
+
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		let blobExpiry = RemoteGreenCards.BlobExpiry(
+			identifier: eventGroup.uniqueIdentifier,
+			expirationDate: .distantPast,
+			reason: RemovalReason.blockedEvent.rawValue
+		)
+
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: environmentSpies.cryptoManagerSpy)
+
+		// Then
+		expect(persisted) == nil
+	}
+	
+	func test_createAndPersistRemovedEvent_blockedItem() throws {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		let blobExpiry = RemoteGreenCards.BlobExpiry(
+			identifier: eventGroup.uniqueIdentifier,
+			expirationDate: .distantPast,
+			reason: RemovalReason.blockedEvent.rawValue
+		)
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: environmentSpies.cryptoManagerSpy)
+		
+		// Then
+		expect(persisted) != nil
+	}
+	
 	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)
 }
