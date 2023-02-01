@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-final class RiskSettingUnselectedViewController: GenericViewController<RiskSettingUnselectedView, RiskSettingUnselectedViewModel> {
+final class RiskSettingUnselectedViewController: TraitWrappedGenericViewController<RiskSettingUnselectedView, RiskSettingUnselectedViewModel> {
 
 	override func viewDidLoad() {
 

@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-final class RiskSettingStartViewController: GenericViewController<RiskSettingStartView, RiskSettingStartViewModel> {
+final class RiskSettingStartViewController: TraitWrappedGenericViewController<RiskSettingStartView, RiskSettingStartViewModel> {
 	
 	override var enableSwipeBack: Bool { true }
 	

@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-class ScanLogViewController: GenericViewController<ScanLogView, ScanLogViewModel> {
+class ScanLogViewController: TraitWrappedGenericViewController<ScanLogView, ScanLogViewModel> {
 
 	override var enableSwipeBack: Bool { true }
 
