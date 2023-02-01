@@ -24,7 +24,7 @@ protocol OnboardingDelegate: AnyObject {
 	func consentGiven()
 }
 
-class OnboardingCoordinator: Coordinator {
+class OnboardingCoordinator: Coordinator, OpenUrlProtocol {
 	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -81,22 +81,6 @@ class OnboardingCoordinator: Coordinator {
 	/// Override point for coordinators which wish to deal with universal links.
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
-	}
-}
-
-// MARK: - OpenUrlProtocol
-
-extension OnboardingCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			navigationController.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
 	}
 }
 
