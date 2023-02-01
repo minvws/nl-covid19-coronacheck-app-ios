@@ -285,7 +285,7 @@ class InputRetrievalCodeViewModel {
 				return
 			}
 
-			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
+			if let requestToken = RequestTokenFactory.create(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {

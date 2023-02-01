@@ -36,7 +36,7 @@ class RequestTokenTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		
 		// Act
-		let sut = RequestToken(input: input, tokenValidator: tokenValidatorSpy)
+		let sut = RequestTokenFactory.create(input: input, tokenValidator: tokenValidatorSpy)
 		
 		// Assert
 		
@@ -58,7 +58,7 @@ class RequestTokenTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true // bug in validator! 🪳
 		
 		// Act
-		let sut = RequestToken(input: input, tokenValidator: tokenValidatorSpy)
+		let sut = RequestTokenFactory.create(input: input, tokenValidator: tokenValidatorSpy)
 		
 		// Assert
 		XCTAssertNil(sut) // didn't crash but returned nil.
@@ -66,9 +66,9 @@ class RequestTokenTests: XCTestCase {
 	
 	func test_invalidParameters_returnNil() {
 		let tokenValidator = TokenValidator(isLuhnCheckEnabled: false) // use a real one for an integration test here
-		XCTAssertNil(RequestToken(input: "XXX-YYYYYYYYYYYY-ZV", tokenValidator: tokenValidator))
-		XCTAssertNil(RequestToken(input: "XXX-YYYY", tokenValidator: tokenValidator))
-		XCTAssertNil(RequestToken(input: "XXX-YYYYYYYYYYYY-Z", tokenValidator: tokenValidator))
-		XCTAssertNil(RequestToken(input: "XX-YYYYYYYYYYYY-Z2", tokenValidator: tokenValidator))
+		XCTAssertNil(RequestTokenFactory.create(input: "XXX-YYYYYYYYYYYY-ZV", tokenValidator: tokenValidator))
+		XCTAssertNil(RequestTokenFactory.create(input: "XXX-YYYY", tokenValidator: tokenValidator))
+		XCTAssertNil(RequestTokenFactory.create(input: "XXX-YYYYYYYYYYYY-Z", tokenValidator: tokenValidator))
+		XCTAssertNil(RequestTokenFactory.create(input: "XX-YYYYYYYYYYYY-Z2", tokenValidator: tokenValidator))
 	}
 }
