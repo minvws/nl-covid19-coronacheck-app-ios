@@ -15,37 +15,16 @@ open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRec
 
 	public let viewModel: M
 	
-	// The outward-facing accessor for `sceneView`.
-	// Purpose: syntactic sugar for `_sceneViewInstance()`.
-	// Release-mode: returns a constant instance.
-	// Debug-mode: returns the latest instance of V (after possible hot-reloads).
-	open var sceneView: V { _sceneViewInstance() }
-	
-	// Wraps the mechanism for getting the current sceneView instance
-	// Purpose: hides the underlying (_available in `DEBUG` only_) `_InjectableViewHost` type
-	//			inside a `() -> V` closure.
-	// Release-mode: returns a constant instance.
-	// Debug-mode: returns the latest instance of V (after possible hot-reloads).
-	fileprivate let _sceneViewInstance: () -> V
-	
-	// Either the `sceneView`, or a type-erased hot-reload wrapper (`_InjectableViewHost`).
-	// Purpose: purely for use in `func loadView()`.
-	// Release-mode: is the sceneView.
-	// Debug-mode: is the hot-reload `_InjectableViewHost` wrapper, which itself embeds the sceneView.
-	private let _rootView: UIView
+	public let sceneView: V
 	
 	/// The initializer of the Generic ViewController
 	/// - Parameters:
 	///   - sceneView: the class to use as the sceneView. Must derive from BaseView
 	///   - viewModel: the class to use as the viewModel
-	public init(sceneView: @autoclosure @escaping () -> V = { V() }(), viewModel: M) {
+	public init(sceneView: V = V(), viewModel: M) {
 		
+		self.sceneView = sceneView
 		self.viewModel = viewModel
-	
-		let sceneViewInstance: V = sceneView()
-		_rootView = sceneViewInstance
-		_sceneViewInstance = { sceneViewInstance }
-	
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -59,7 +38,7 @@ open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRec
 	// MARK: View lifecycle
 	override open func loadView() {
 		
-		view = _rootView
+		view = sceneView
 	}
 	
 	/// Enable/disable navigation back swiping. Default is true.
@@ -150,7 +129,7 @@ open class TraitWrappedGenericViewController<V: BaseView, M>: GenericViewControl
 	
 	override public func loadView() {
 		
-		view = TraitWrapper(_sceneViewInstance())
+		view = TraitWrapper(sceneView)
 	}
 }
 
