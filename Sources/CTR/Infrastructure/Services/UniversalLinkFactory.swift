@@ -11,7 +11,7 @@ import Shared
 
 final class UniversalLinkFactory {
 	
-	static func create(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor, isLunhCheckEnabled: Bool) -> UniversalLink? {
+	static func create(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor) -> UniversalLink? {
 		
 		// Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
 		guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
@@ -20,42 +20,45 @@ final class UniversalLinkFactory {
 		
 		switch appFlavor {
 			case .holder:
-				return HolderUniversalLinkFactory.create(url: url, isLunhCheckEnabled: isLunhCheckEnabled)
+				return HolderUniversalLinkFactory().create(url: url)
 			case .verifier:
-				return VerifierUniversalLinkFactory.create(url: url)
+				return VerifierUniversalLinkFactory().create(url: url)
 		}
 	}
 }
 
 final class HolderUniversalLinkFactory {
 	
-	static func create(url: URL, isLunhCheckEnabled: Bool) -> UniversalLink? {
+	func create(url: URL) -> UniversalLink? {
 		
 		if url.path == "/app/redeem", let fragment = url.fragment {
-			let tokenValidator = TokenValidator(isLuhnCheckEnabled: isLunhCheckEnabled)
-			guard let requestToken = RequestToken(input: fragment, tokenValidator: tokenValidator) else {
-				return nil
-			}
+			
+			guard let requestToken = getRequestToken(fragment: fragment) else { return nil }
 			return UniversalLink.redeemHolderToken(requestToken: requestToken)
 		} else if (url.path == "/app/redeem/assessment" || url.path == "/app/redeem-assessment"), let fragment = url.fragment {
-			let tokenValidator = TokenValidator(isLuhnCheckEnabled: isLunhCheckEnabled)
-			guard let requestToken = RequestToken(input: fragment, tokenValidator: tokenValidator) else {
-				return nil
-			}
+			
+			guard let requestToken = getRequestToken(fragment: fragment) else { return nil }
 			return UniversalLink.redeemVaccinationAssessment(requestToken: requestToken)
 		} else if url.path == "/app/open" {
+			
 			return UniversalLink.thirdPartyTicketApp(returnURL: createReturnURL(for: url))
 		} else if url.path.hasPrefix("/app/auth") {
+			
 			// Currently '/app/auth2' path is in use
 			return .tvsAuth(returnURL: url)
 		}
 		return nil
 	}
+	
+	func getRequestToken(fragment: String) -> RequestToken? {
+		let tokenValidator = TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
+		return RequestToken(input: fragment, tokenValidator: tokenValidator)
+	}
 }
 
 final class VerifierUniversalLinkFactory {
 	
-	static func create(url: URL) -> UniversalLink? {
+	func create(url: URL) -> UniversalLink? {
 		
 		if url.path == "/verifier/scan" {
 			return UniversalLink.thirdPartyScannerApp(returnURL: createReturnURL(for: url))

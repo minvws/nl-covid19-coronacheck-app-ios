@@ -16,11 +16,20 @@ import Persistence
 
 class UniversalLinkTests: XCTestCase {
 	
+	private var environmentSpies: EnvironmentSpies!
+	
+	override func setUp() {
+		
+		super.setUp()
+		environmentSpies = setupEnvironmentSpies()
+	}
+	
 	func test_validHolderURL_withValidFragment_inHolderApp_createsLink() {
 		
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-STXT2VF3389TJ2-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
@@ -29,7 +38,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -40,6 +49,7 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = false
 		
 		let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "YYYYYYYYYYYY",
@@ -48,7 +58,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: false)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -59,9 +69,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -72,8 +83,9 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier)
 		
 		XCTAssertNil(link)
 	}
@@ -83,9 +95,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z_") // invalid token in URL fragment
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -96,9 +109,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#Xsdfsdf") // invalid token in URL fragment
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -109,9 +123,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: "Other")
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -122,6 +137,7 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#XXX-STXT2VF3389TJ2-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		let expected = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
@@ -130,7 +146,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -141,6 +157,7 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = false
 		
 		let expected = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
 			token: "YYYYYYYYYYYY",
@@ -149,7 +166,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: false)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -160,9 +177,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -173,8 +191,9 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier)
 		
 		XCTAssertNil(link)
 	}
@@ -184,9 +203,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#XXX-YYYYYYYYYYYY-Z_") // invalid token in URL fragment
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -197,9 +217,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#Xsdfsdf") // invalid token in URL fragment
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -210,6 +231,7 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#XXX-STXT2VF3389TJ2-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		let expected = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
@@ -218,7 +240,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -229,6 +251,7 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = false
 		
 		let expected = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
 			token: "YYYYYYYYYYYY",
@@ -237,7 +260,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: false)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -248,9 +271,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -261,8 +285,9 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#XXX-YYYYYYYYYYYY-Z2")
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier)
 		
 		XCTAssertNil(link)
 	}
@@ -272,9 +297,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#XXX-YYYYYYYYYYYY-Z_") // invalid token in URL fragment
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -285,9 +311,10 @@ class UniversalLinkTests: XCTestCase {
 		// Arrange
 		let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#Xsdfsdf") // invalid token in URL fragment
+		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder, isLunhCheckEnabled: true)
+		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
