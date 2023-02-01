@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-final class PolicyInformationViewController: GenericViewController<PolicyInformationView, PolicyInformationViewModel> {
+final class PolicyInformationViewController: TraitWrappedGenericViewController<PolicyInformationView, PolicyInformationViewModel> {
 	
 	override func viewDidLoad() {
 		
