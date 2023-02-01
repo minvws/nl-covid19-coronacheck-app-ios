@@ -16,7 +16,7 @@ protocol ScanInstructionsItemViewControllerDelegate: AnyObject {
 	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
 }
 
-class ScanInstructionsItemViewController: GenericViewController<ScanInstructionsItemView, ScanInstructionsItemViewModel> {
+class ScanInstructionsItemViewController: TraitWrappedGenericViewController<ScanInstructionsItemView, ScanInstructionsItemViewModel> {
 	
 	/// The delegate
 	weak var delegate: ScanInstructionsItemViewControllerDelegate?
