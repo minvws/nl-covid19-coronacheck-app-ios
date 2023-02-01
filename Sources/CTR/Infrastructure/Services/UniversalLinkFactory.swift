@@ -33,11 +33,11 @@ final class HolderUniversalLinkFactory {
 		
 		if url.path == "/app/redeem", let fragment = url.fragment {
 			
-			guard let requestToken = RequestTokenFactory.create(input: fragment) else { return nil }
+			guard let requestToken = getRequestToken(fragment: fragment) else { return nil }
 			return UniversalLink.redeemHolderToken(requestToken: requestToken)
 		} else if (url.path == "/app/redeem/assessment" || url.path == "/app/redeem-assessment"), let fragment = url.fragment {
 			
-			guard let requestToken = RequestTokenFactory.create(input: fragment) else { return nil }
+			guard let requestToken = getRequestToken(fragment: fragment) else { return nil }
 			return UniversalLink.redeemVaccinationAssessment(requestToken: requestToken)
 		} else if url.path == "/app/open" {
 			
@@ -48,6 +48,11 @@ final class HolderUniversalLinkFactory {
 			return .tvsAuth(returnURL: url)
 		}
 		return nil
+	}
+	
+	func getRequestToken(fragment: String) -> RequestToken? {
+		let tokenValidator = TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
+		return RequestToken(input: fragment, tokenValidator: tokenValidator)
 	}
 }
 
@@ -68,26 +73,4 @@ private func createReturnURL(for url: URL) -> URL? {
 	guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
 	guard let returnURLString = components.queryItems?.first(where: { $0.name == "returnUri" })?.value else { return nil }
 	return URL(string: returnURLString)
-}
-
-final class RequestTokenFactory {
-	
-	static func create(input: String) -> RequestToken? {
-		
-		let tokenValidator = TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
-		guard tokenValidator.validate(input) else {
-			return nil
-		}
-		
-		let parts = input.split(separator: "-")
-		guard parts.count >= 2, parts[0].count == 3 else { return nil }
-		
-		let identifierPart = String(parts[0])
-		let tokenPart = String(parts[1])
-		return RequestToken(
-			token: tokenPart,
-			protocolVersion: RequestToken.highestKnownProtocolVersion,
-			providerIdentifier: identifierPart
-		)
-	}
 }

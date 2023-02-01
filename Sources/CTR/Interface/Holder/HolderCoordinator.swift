@@ -316,6 +316,7 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: InputRetrievalCodeViewModel(
 				coordinator: self,
 				requestToken: token,
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
 				inputRetrievalCodeMode: retrievalMode
 			)
 		)
