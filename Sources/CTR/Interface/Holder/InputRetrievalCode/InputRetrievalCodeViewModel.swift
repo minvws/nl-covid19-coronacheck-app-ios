@@ -96,7 +96,6 @@ class InputRetrievalCodeViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
 
@@ -154,12 +153,10 @@ class InputRetrievalCodeViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		requestToken: RequestToken?,
-		tokenValidator: TokenValidatorProtocol,
 		inputRetrievalCodeMode: InputRetrievalCodeMode = .negativeTest) {
 		
 		self.coordinator = coordinator
 		self.requestToken = requestToken
-		self.tokenValidator = tokenValidator
 		self.message = nil
 		
 		if let unwrappedToken = requestToken {
@@ -285,7 +282,7 @@ class InputRetrievalCodeViewModel {
 				return
 			}
 
-			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
+			if let requestToken = RequestTokenFactory.create(input: sanitize(tokenInput)) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {
