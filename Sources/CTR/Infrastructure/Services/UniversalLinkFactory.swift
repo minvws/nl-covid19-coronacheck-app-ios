@@ -33,11 +33,11 @@ final class HolderUniversalLinkFactory {
 		
 		if url.path == "/app/redeem", let fragment = url.fragment {
 			
-			guard let requestToken = getRequestToken(fragment: fragment) else { return nil }
+			guard let requestToken = createRequestToken(fragment: fragment) else { return nil }
 			return UniversalLink.redeemHolderToken(requestToken: requestToken)
 		} else if (url.path == "/app/redeem/assessment" || url.path == "/app/redeem-assessment"), let fragment = url.fragment {
 			
-			guard let requestToken = getRequestToken(fragment: fragment) else { return nil }
+			guard let requestToken = createRequestToken(fragment: fragment) else { return nil }
 			return UniversalLink.redeemVaccinationAssessment(requestToken: requestToken)
 		} else if url.path == "/app/open" {
 			
@@ -50,9 +50,10 @@ final class HolderUniversalLinkFactory {
 		return nil
 	}
 	
-	func getRequestToken(fragment: String) -> RequestToken? {
+	func createRequestToken(fragment: String) -> RequestToken? {
+		
 		let tokenValidator = TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
-		return RequestToken(input: fragment, tokenValidator: tokenValidator)
+		return RequestTokenFactory.create(input: fragment, tokenValidator: tokenValidator)
 	}
 }
 
