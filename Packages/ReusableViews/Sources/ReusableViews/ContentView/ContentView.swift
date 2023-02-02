@@ -12,10 +12,11 @@ open class ContentView: ScolledStackContentBaseView {
 
 	/// The display constants
 	private struct ViewTraits {
-
-		// Dimensions
-		static let titleLineHeight: CGFloat = 26
-		static let titleKerning: CGFloat = -0.26
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
 	}
 
 	public let secondaryButton: Button = {
@@ -51,8 +52,8 @@ open class ContentView: ScolledStackContentBaseView {
 	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
 		}
 	}
