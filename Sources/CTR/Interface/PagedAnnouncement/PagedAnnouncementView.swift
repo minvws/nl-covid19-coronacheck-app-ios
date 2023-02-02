@@ -113,7 +113,7 @@ class PagedAnnouncementView: BaseView {
 			// ImageContainer
 			containerView.topAnchor.constraint(equalTo: shouldShowWithVWSRibbon ? ribbonView.bottomAnchor : topAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
 		])
 	}
 	
