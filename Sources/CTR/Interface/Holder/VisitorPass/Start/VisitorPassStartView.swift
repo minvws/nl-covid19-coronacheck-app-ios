@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-final class VisitorPassStartView: ScrolledStackWithButtonView {
+final class VisitorPassStartView: ScolledStackContentBaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -20,31 +20,10 @@ final class VisitorPassStartView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	/// The title label
-	private let titleLabel: Label = {
-		
-		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
-	
-	let contentTextView: TextView = {
-		
-		let view = TextView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-	
 	override func setupViews() {
 		
 		super.setupViews()
 		backgroundColor = C.white()
-	}
-	
-	override func setupViewHierarchy() {
-		
-		super.setupViewHierarchy()
-		
-		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(contentTextView)
 	}
 	
 	// MARK: Public Access

@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-open class ContentView: ScrolledStackWithButtonView {
+open class ContentView: ScolledStackContentBaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -17,19 +17,6 @@ open class ContentView: ScrolledStackWithButtonView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 	}
-
-	/// The title label
-	private let titleLabel: Label = {
-
-		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
-
-	public let contentTextView: TextView = {
-
-		let view = TextView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
 
 	public let secondaryButton: Button = {
 
@@ -50,9 +37,6 @@ open class ContentView: ScrolledStackWithButtonView {
 	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-
-		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(contentTextView)
 		stackView.addArrangedSubview(secondaryButton)
 	}
 
