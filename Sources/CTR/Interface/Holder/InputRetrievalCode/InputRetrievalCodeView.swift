@@ -15,7 +15,7 @@ class InputRetrievalCodeView: ScolledStackContentBaseView {
 	private struct ViewTraits {
 		
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let textLineHeight: CGFloat = 18
 		static let textKerning: CGFloat = -0.24

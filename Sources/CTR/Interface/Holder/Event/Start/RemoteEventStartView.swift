@@ -20,7 +20,7 @@ class RemoteEventStartView: ScolledStackContentBaseView {
 			static let height: CGFloat = 52
 		}
 		enum Title {
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 		enum InfoCard {
