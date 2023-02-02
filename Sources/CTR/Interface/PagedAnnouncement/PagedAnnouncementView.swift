@@ -67,6 +67,11 @@ class PagedAnnouncementView: BaseView {
 		super.init(frame: .zero)
 	}
 	
+	override init(frame: CGRect) {
+		self.shouldShowWithVWSRibbon = false
+		super.init(frame: frame)
+	}
+	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError()
 	}

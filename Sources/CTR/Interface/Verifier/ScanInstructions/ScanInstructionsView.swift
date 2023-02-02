@@ -12,8 +12,6 @@ import ReusableViews
 class ScanInstructionsView: PagedAnnouncementView {
 	
 	override func setupContainerViewConstraints() {
-
-		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
 			containerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 15),
