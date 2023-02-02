@@ -20,7 +20,6 @@ struct UpdatedDisclosurePolicyFactory {
 					title: L.holder_newintheapp_content_only1G_title(),
 					content: L.holder_newintheapp_content_only1G_body(),
 					image: I.disclosurePolicy.newInTheApp(),
-					imageBackgroundColor: nil,
 					tagline: L.general_newpolicy(),
 					step: returningFromNoDisclosurePolicies ? 1 : 0,
 					nextButtonTitle: returningFromNoDisclosurePolicies ? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates() : nil
@@ -33,7 +32,6 @@ struct UpdatedDisclosurePolicyFactory {
 					title: L.holder_newintheapp_content_only3G_title(),
 					content: L.holder_newintheapp_content_only3G_body(),
 					image: I.disclosurePolicy.newInTheApp(),
-					imageBackgroundColor: nil,
 					tagline: L.general_newpolicy(),
 					step: returningFromNoDisclosurePolicies ? 1 : 0,
 					nextButtonTitle: returningFromNoDisclosurePolicies ? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates() : nil
@@ -46,7 +44,6 @@ struct UpdatedDisclosurePolicyFactory {
 					title: L.holder_newintheapp_content_3Gand1G_title(),
 					content: L.holder_newintheapp_content_3Gand1G_body(),
 					image: I.disclosurePolicy.newInTheApp(),
-					imageBackgroundColor: nil,
 					tagline: L.general_newpolicy(),
 					step: returningFromNoDisclosurePolicies ? 1 : 0,
 					nextButtonTitle: returningFromNoDisclosurePolicies ? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates() : nil
@@ -59,7 +56,6 @@ struct UpdatedDisclosurePolicyFactory {
 				title: L.holder_newintheapp_content_onlyInternationalCertificates_0G_title(),
 				content: L.holder_newintheapp_content_onlyInternationalCertificates_0G_body(),
 				image: I.onboarding.validity(),
-				imageBackgroundColor: nil,
 				tagline: L.general_newintheapp(),
 				step: 0
 			)]
@@ -89,7 +85,6 @@ struct UpdatedDisclosurePolicyFactory {
 		title: L.holder_newintheapp_content_dutchAndInternationalCertificates_title(),
 		content: L.holder_newintheapp_content_dutchAndInternationalCertificates_body(),
 		image: I.disclosurePolicy.dutchAndInternationalQRCards(),
-		imageBackgroundColor: nil,
 		tagline: L.general_newintheapp(),
 		step: 0
 	)

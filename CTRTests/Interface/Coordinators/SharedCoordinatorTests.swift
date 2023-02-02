@@ -104,7 +104,6 @@ class SharedCoordinatorTests: XCTestCase {
 		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "",
 			content: "",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "",
 			step: 0
