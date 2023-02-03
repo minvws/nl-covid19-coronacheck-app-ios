@@ -12,8 +12,10 @@ do
 	PLURAL_PATH="Packages/Shared/Sources/Shared/Resources/Localization/${i}.lproj/Localizable.stringsdict"
 
     cat tmp/localization_downloads/Holder/$i.lproj/Localizable.strings > $COMBINED_PATH
-	cat tmp/localization_downloads/Holder/$i.lproj/Localizable.stringsdict > $PLURAL_PATH
+    echo "" >> $COMBINED_PATH # ensures that the second file starts on a newline 
     cat tmp/localization_downloads/Verifier/$i.lproj/Localizable.strings >> $COMBINED_PATH
+	
+    cat tmp/localization_downloads/Holder/$i.lproj/Localizable.stringsdict > $PLURAL_PATH
 	# cat tmp/localization_downloads/Verifier/$i.lproj/Localizable.stringsdict >> $PLURAL_PATH # appending doesn't work with XML.. 
 
     # Count duplicate lines
