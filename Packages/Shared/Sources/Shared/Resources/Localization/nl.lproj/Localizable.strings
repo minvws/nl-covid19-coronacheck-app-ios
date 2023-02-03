@@ -558,7 +558,9 @@
 "holder_completecertificate_body" = "<p>Haal een negatieve testuitslag op om je bezoekersbewijs compleet te maken.</p><p>Heb je nog geen coronatest gedaan? Maak een afspraak op <a href=\"https://www.testenvoortoegang.org\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Testuitslag ophalen";
 "holder_completecertificate_title" = "Maak je bezoekersbewijs compleet";
-"holder_contactCoronaCheckHelpdesk_message" = "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je elke dag van %@ t/m %@ tussen %@ en %@ uur bellen op: %@ (gratis).</p>\n<p>Of als je vanuit het buitenland belt: %@. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>";
+"holder_contactCoronaCheckHelpdesk_message" = "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je %@ tussen %@ en %@ uur bellen op: %@ (gratis).</p>\n<p>Of als je vanuit het buitenland belt: %@. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>";
+"holder_contactCoronaCheckHelpdesk_message_every_day" = "elke dag";
+"holder_contactCoronaCheckHelpdesk_message_until" = "%@ t/m %@";
 "holder_contactCoronaCheckHelpdesk_title" = "Vraag je coronabewijs aan via de helpdesk";
 "holder_contactProviderHelpdesk_message_ggdPortalEnabled" = "Neem contact op met de zorgverlener waar je bent gevaccineerd. Hier kun je jouw coronabewijs aanvragen op papier of als pdf-bestand.";
 "holder_contactProviderHelpdesk_testFlow_message" = "<p>Vraag een papieren coronabewijs aan door te bellen met de GGD op <a href=\"tel:0888-5090\">0800 - 5090</a>.</p><p>Je bewijs met QR-code wordt per post opgestuurd.</p>";
@@ -655,7 +657,7 @@
 "holder_helpdesk_configuration_value" = "%@, %@";
 "holder_helpdesk_contact_message_line1" = "<p>Bij vragen of problemen kun je contact opnemen met de CoronaCheck helpdesk.</p><p><b>Bel de helpdesk:</b><br />Op %@ (gratis).</p>";
 "holder_helpdesk_contact_message_line2" = "<p>Of als je vanuit het buitenland belt: %@.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar van %@ t/m %@ %@ - %@ uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line3" = "<p>Telefonisch bereikbaar %@ van %@ tot %@ uur.</p><p><b>Of stuur een e-mail naar:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "Wanneer je contact opneemt met de CoronaCheck helpdesk, kan er gevraagd worden om de volgende informatie:";
 "holder_helpdesk_support_title" = "Ondersteuning";
@@ -890,8 +892,7 @@
 "visitorpass_token_error_unknown_provider" = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest.";
 "visitorpass_token_modal_notoken_details" = "<p>Je krijgt een beoordelingscode van de balie waar je vaccinatie is beoordeeld. Deze code heb je geprint gekregen. Heb je geen beoordelingscode? Ga dan terug naar de balie waar je bent geweest.</p><p>Nog niet langs een balie geweest om je vaccinatie te laten beoordelen? Kijk voor meer informatie op <a href=\"https://www.rijksoverheid.nl/ctb-bezoekers-cc\">www.rijksoverheid.nl/ctb-bezoekers</a>.</p>";
 "visitorpass_token_modal_notoken_title" = "Heb je geen beoordelingscode?";
-"visitorpass_token_next" = "Volgende";
-"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"visitorpass_token_next" = "Volgende";"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "general_menu" = "Menu ";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.highlights" = "<b>Dit is veranderd</b><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";

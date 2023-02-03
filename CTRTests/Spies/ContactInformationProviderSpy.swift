@@ -29,24 +29,14 @@ class ContactInformationProviderSpy: ContactInformationProtocol {
 		return stubbedPhoneNumberAbroadLink
 	}
 
-	var invokedStartDayGetter = false
-	var invokedStartDayGetterCount = 0
-	var stubbedStartDay: String! = ""
+	var invokedOpeningDaysGetter = false
+	var invokedOpeningDaysGetterCount = 0
+	var stubbedOpeningDays: String! = ""
 
-	var startDay: String {
-		invokedStartDayGetter = true
-		invokedStartDayGetterCount += 1
-		return stubbedStartDay
-	}
-
-	var invokedEndDayGetter = false
-	var invokedEndDayGetterCount = 0
-	var stubbedEndDay: String! = ""
-
-	var endDay: String {
-		invokedEndDayGetter = true
-		invokedEndDayGetterCount += 1
-		return stubbedEndDay
+	var openingDays: String {
+		invokedOpeningDaysGetter = true
+		invokedOpeningDaysGetterCount += 1
+		return stubbedOpeningDays
 	}
 
 	var invokedStartHourGetter = false
