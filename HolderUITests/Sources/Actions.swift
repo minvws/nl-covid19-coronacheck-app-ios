@@ -216,13 +216,11 @@ extension BaseTest {
 	
 	func viewWallet() {
 		app.tapButton("Open menu")
-		app.tapButton("Over deze app")
 		app.tapButton("Opgeslagen gegevens")
 		app.textExists("Mijn opgeslagen gegevens")
 	}
 	
 	func returnFromWalletToOverview() {
-		app.tapButton("Terug")
 		app.tapButton("Terug")
 		app.tapButton("Terug")
 	}
