@@ -60,7 +60,7 @@ final class ScanView: BaseView {
 		return view
 	}()
 	
-	private let cameraInterruptedMessageLabel: UILabel = {
+	private let cameraInterruptedMessageLabel: Label = {
 		let label = Label(bodyBold: "Camera is alleen te gebruiken in volledig scherm. Sluit je vensterweergave.", textColor: C.white()!)
 		label.textAlignment = .center
 		label.numberOfLines = 0
