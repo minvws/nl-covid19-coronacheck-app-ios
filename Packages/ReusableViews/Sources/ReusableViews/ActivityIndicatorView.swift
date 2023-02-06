@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ A centered spinner view
+ */
 open class ActivityIndicatorView: BaseView {
 	
 	override open func setupViewHierarchy() {

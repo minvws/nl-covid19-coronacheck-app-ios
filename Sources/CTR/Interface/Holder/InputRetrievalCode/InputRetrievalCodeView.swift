@@ -9,13 +9,13 @@ import UIKit
 import Shared
 import ReusableViews
 
-class InputRetrievalCodeView: ScrolledStackWithButtonView {
+class InputRetrievalCodeView: ScrolledStackContentBaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
 		
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let textLineHeight: CGFloat = 18
 		static let textKerning: CGFloat = -0.24
@@ -23,19 +23,6 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 		// Margins
 		static let margin: CGFloat = 20.0
 	}
-	
-	/// The title label
-	private let titleLabel: Label = {
-		
-		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
-
-	private let contentTextView: TextView = {
-
-		let view = TextView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
 	
 	/// The request token entry view
 	let tokenEntryView: EntryView = {
@@ -115,8 +102,6 @@ class InputRetrievalCodeView: ScrolledStackWithButtonView {
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
-		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(contentTextView)
 
 		stackView.addArrangedSubview(tokenEntryView)
 		stackView.setCustomSpacing(8, after: tokenEntryView)

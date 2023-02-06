@@ -8,7 +8,9 @@
 import UIKit
 import Shared
 
-/// A grey full width button with a title and a disclosure icon
+/*
+ A grey full width button with a title and a disclosure icon
+ */
 open class SimpleDisclosureButton: BaseView {
 
 	/// The display constants

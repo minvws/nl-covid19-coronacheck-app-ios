@@ -7,6 +7,9 @@
 
 import UIKit
 
+/*
+ Showing and hiding the keyboard in a animated style
+ */
 public struct KeyboardAnimator {
 	
 	public static func keyBoardWillShow(notification: Notification, onCompletion: ((CGFloat) -> Void)?) {

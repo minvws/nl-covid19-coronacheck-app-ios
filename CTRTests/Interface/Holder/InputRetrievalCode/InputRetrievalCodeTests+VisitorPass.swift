@@ -30,6 +30,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
+		
 	}
 
 	func test_withoutInitialRequestToken_initialState() {

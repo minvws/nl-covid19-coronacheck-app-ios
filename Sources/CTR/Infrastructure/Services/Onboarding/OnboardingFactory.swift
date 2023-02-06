@@ -62,24 +62,18 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_content_TravelSafe_0G_title(),
 				content: L.holder_onboarding_content_TravelSafe_0G_message(),
 				image: I.onboarding.zeroGInternational(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 1
 			),
 			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleYourqr(),
 				content: L.holderOnboardingMessageYourqr(),
 				image: I.onboarding.yourQR(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 2
 			),
 			PagedAnnoucementItem(
 				title: L.holder_onboarding_content_onlyInternationalQR_0G_title(),
 				content: L.holder_onboarding_content_onlyInternationalQR_0G_message(),
 				image: I.onboarding.validity(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 3,
 				nextButtonTitle: L.generalNext()
 			)
@@ -93,32 +87,24 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holderOnboardingTitleSafely(),
 				content: L.holderOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 1
 			),
 			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleYourqr(),
 				content: L.holderOnboardingMessageYourqr(),
 				image: I.onboarding.yourQR(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 2
 			),
 			PagedAnnoucementItem(
 				title: L.holderOnboardingTitleValidity(),
 				content: L.holderOnboardingMessageValidity(),
 				image: I.onboarding.validity(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 3
 			),
 			PagedAnnoucementItem(
 				title: L.holderOnboardingTitlePrivacy(),
 				content: L.holderOnboardingMessagePrivacy(),
 				image: I.onboarding.international(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 4,
 				nextButtonTitle: L.generalNext()
 			)
@@ -132,8 +118,6 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title(),
 				content: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 5,
 				nextButtonTitle: L.generalNext()
 			)
@@ -142,8 +126,6 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title(),
 				content: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 5,
 				nextButtonTitle: L.generalNext()
 			)
@@ -152,8 +134,6 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title(),
 				content: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
 				image: I.onboarding.disclosurePolicy(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 5,
 				nextButtonTitle: L.generalNext()
 			)
@@ -214,8 +194,6 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				title: L.verifierOnboardingTitleSafely(),
 				content: L.verifierOnboardingMessageSafely(),
 				image: I.onboarding.safely(),
-				imageBackgroundColor: nil,
-				tagline: nil,
 				step: 1,
 				nextButtonTitle: L.generalNext()
 			)

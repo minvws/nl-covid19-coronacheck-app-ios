@@ -44,7 +44,6 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0

@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ A struct to setup an alert dialog. Use viewController.showAlert(alertContent) to show the dialog. 
+ */
 public struct AlertContent {
 	
 	public struct Action {

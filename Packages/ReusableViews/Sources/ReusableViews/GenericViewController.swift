@@ -8,9 +8,11 @@
 import UIKit
 import Shared
 
-/// A generic viewcontroller
-/// V: The view to use for the scene, must be a (subclass of) baseview
-/// M: The class to use as viewModel
+/*
+ A generic viewcontroller, used to reduce scaffolding
+ V: The view to use for the scene, must be a (subclass of) baseview
+ M: The class to use as viewModel
+ */
 open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecognizerDelegate {
 
 	public let viewModel: M

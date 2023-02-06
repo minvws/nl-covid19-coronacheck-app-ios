@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ A label with a checkbox in front of it. Used for consent. 
+ */
 public final class LabelWithCheckbox: UIControl {
 
 	private enum Images {

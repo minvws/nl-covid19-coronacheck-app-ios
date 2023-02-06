@@ -7,9 +7,11 @@
 
 import UIKit
 
-// A common class for displaying content. Most of our pages consist of a title, a body/subTitle
-// and a primary action (aka the big blue button at the bottom) + button title.
-// This struct also has an optional second action + button title for more flexibility.
+/*
+ A common class for displaying content. Most of our pages consist of a title, a body/subTitle
+ and a primary action (aka the big blue button at the bottom) + button title.
+ This struct also has an optional second action + button title for more flexibility.
+ */
 public struct Content: Equatable {
 
 	public let title: String

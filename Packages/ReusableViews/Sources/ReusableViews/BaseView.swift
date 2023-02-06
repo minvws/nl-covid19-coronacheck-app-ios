@@ -7,6 +7,10 @@
   
 import UIKit
 
+/*
+ The base for most of our views, has the four setupViews, setupViewHierarchy, setupViewContraints and setupAccessibilty
+ methods. Also has an observable background color. 
+ */
 open class BaseView: UIView {
 
 	override open var backgroundColor: UIColor? {
