@@ -198,6 +198,7 @@ private class TabBarButton: UIControl {
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
+		label.isSelectable = false
 		return label
 	}()
 	

@@ -88,6 +88,7 @@ public final class LabelWithCheckbox: UIControl {
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityLarge
 		}
+		label.isSelectable = false
 		return label
 	}()
 	
