@@ -74,7 +74,7 @@ open class TextElement: UITextView, UITextViewDelegate {
 		font = Fonts.body
 		isScrollEnabled = false
 		isEditable = false
-		isSelectable = false
+		isSelectable = true
 		backgroundColor = nil
 		layer.cornerRadius = 0
 		textContainer.lineFragmentPadding = 0
@@ -134,11 +134,5 @@ open class TextElement: UITextView, UITextViewDelegate {
 	/// Delegate method which is called when the user has ended editing
 	open func textViewDidEndEditing(_ textView: UITextView) {
 		textChangedHandler?(textView.text)
-	}
-	
-	/// Delegate method which is called when the user has changed selection
-	open func textViewDidChangeSelection(_ textView: UITextView) {
-		// Allows links to be tapped but disables text selection
-		textView.selectedTextRange = nil
 	}
 }
