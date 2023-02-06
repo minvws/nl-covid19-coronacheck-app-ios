@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ A borderd rectangular view to show a header and a text. Used for displaying the initials and birth day of a CTB. 
+ */
 open class IdentityElementView: BaseView {
 
 	/// The display constants

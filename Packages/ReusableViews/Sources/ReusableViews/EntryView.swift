@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ An input field with a title header and a bottom line. 
+ */
 open class EntryView: BaseView {
 	
 	/// The display constants

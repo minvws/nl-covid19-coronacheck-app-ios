@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-class InputRetrievalCodeView: ScolledStackContentBaseView {
+class InputRetrievalCodeView: ScrolledStackContentBaseView {
 	
 	/// The display constants
 	private struct ViewTraits {

@@ -8,7 +8,7 @@
 import UIKit
 import Shared
 
-open class ContentView: ScolledStackContentBaseView {
+open class ContentView: ScrolledStackContentBaseView {
 
 	/// The display constants
 	private struct ViewTraits {

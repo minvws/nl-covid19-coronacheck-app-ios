@@ -7,7 +7,11 @@
 
 import UIKit
 
-open class ScolledStackContentBaseView: ScrolledStackWithButtonView {
+/*
+ An extention to the Scrolled Stack View, this one has a title Label and a text View
+ Mostly used for end states and pages with no CTA
+ */
+open class ScrolledStackContentBaseView: ScrolledStackWithButtonView {
 	
 	/// The title label
 	public let titleLabel: Label = {

@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-class RemoteEventStartView: ScolledStackContentBaseView {
+class RemoteEventStartView: ScrolledStackContentBaseView {
 
 	/// The display constants
 	private struct ViewTraits {

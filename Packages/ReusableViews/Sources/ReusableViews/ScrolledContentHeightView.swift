@@ -8,7 +8,9 @@
 import UIKit
 import Shared
 
-/// Scrollview that keeps its content at full height. Can be used with subviews pinned to top and bottom of scrollview.
+/*
+ Scrollview that keeps its content at full height. Can be used with subviews pinned to top and bottom of scrollview.
+ */
 public final class ScrolledContentHeightView: UIScrollView {
 
 	/// Attach subviews to contentView to make a scrollable view

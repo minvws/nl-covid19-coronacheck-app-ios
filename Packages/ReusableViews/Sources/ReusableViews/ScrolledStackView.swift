@@ -7,6 +7,10 @@
 
 import UIKit
 
+/*
+ A fullscreen scrollView with a public nested stackView to add views to.
+ If you need a scrollable fullscreen view, this is the one you need.
+ */
 open class ScrolledStackView: BaseView {
 
 	/// The display constants

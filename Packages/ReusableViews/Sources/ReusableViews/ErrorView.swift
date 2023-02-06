@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ A view to show an error line with a preceding erron icon.
+ */
 open class ErrorView: BaseView {
 	
 	/// The display constants

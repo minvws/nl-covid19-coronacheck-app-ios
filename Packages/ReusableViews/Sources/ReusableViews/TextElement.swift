@@ -8,10 +8,12 @@
 import UIKit
 import Shared
 
-/// Styled subclass of UITextView that can handle (simple) html.
-/// Auto expands to fit its content.
-/// By default the content is not editable or selectable.
-/// Can listen to selected links and updated text.
+/*
+ Styled subclass of UITextView that can handle (simple) html.
+ Auto expands to fit its content.
+ By default the content is not editable or selectable.
+ Can listen to selected links and updated text.
+ */
 open class TextElement: UITextView, UITextViewDelegate {
 	
 	/// Add a listener for selected links. Calling this method will set `isSelectable` to `true`

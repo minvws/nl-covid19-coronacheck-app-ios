@@ -8,6 +8,9 @@
 import UIKit
 import Shared
 
+/*
+ An extention to the Scrolled Stack View, this one has a fixed footer with a blue button in it for a primary action
+ */
 open class ScrolledStackWithButtonView: ScrolledStackView {
 
 	/// The display constants

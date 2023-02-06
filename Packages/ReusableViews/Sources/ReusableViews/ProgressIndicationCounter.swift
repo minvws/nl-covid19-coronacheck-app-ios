@@ -7,7 +7,9 @@
 
 import Foundation
 
-/// Thread-safe way of tracking ProgressIndication by incrementing/decrementing an integer
+/*
+ Thread-safe way of tracking ProgressIndication by incrementing/decrementing an integer
+ */
 public class ProgressIndicationCounter {
 
 	private let shouldShowProgressIndicationCallback: (Bool) -> Void

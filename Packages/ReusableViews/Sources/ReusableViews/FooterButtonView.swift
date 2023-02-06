@@ -8,9 +8,11 @@
 import UIKit
 import Shared
 
-/// Footer view with primary button.
-/// It has a fade animation method to display a shadow separator when pinned to a scroll view.
-public final class FooterButtonView: BaseView {
+/*
+ Footer view with primary button.
+ It has a fade animation method to display a shadow separator when pinned to a scroll view.
+ */
+ public final class FooterButtonView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {

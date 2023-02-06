@@ -8,7 +8,9 @@
 import UIKit
 import Shared
 
-/// Styled UILabel subclass providing convenience initialization for each text style support in the Theme
+/*
+ Styled UILabel subclass providing convenience initialization for each text style support in the Theme
+ */
 open class Label: UILabel {
 	
 	public init(_ text: String?, font: UIFont = Fonts.body, textColor: UIColor = C.black()!) {

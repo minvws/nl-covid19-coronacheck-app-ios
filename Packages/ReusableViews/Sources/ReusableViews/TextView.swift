@@ -7,10 +7,12 @@
 
 import UIKit
 
-/// Styled subclass of UIStackView that displays one or more TextElement's, which can handle (simple) html
-/// Auto expands to fit its content.
-/// By default the content is not editable or selectable.
-/// Can listen to selected links and updated text.
+/*
+ Styled subclass of UIStackView that displays one or more TextElement's, which can handle (simple) html
+ Auto expands to fit its content.
+ By default the content is not editable or selectable.
+ Can listen to selected links and updated text.
+ */
 open class TextView: UIStackView {
 	
 	var paragraphMarginMultiplier: CGFloat = 1.0

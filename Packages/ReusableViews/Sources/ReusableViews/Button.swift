@@ -8,7 +8,9 @@
 import UIKit
 import Shared
 
-/// A styled UIButton subclass
+/*
+ A styled UIButton subclass
+ */
 open class Button: TappableButton {
 	
 	public enum ButtonType {

@@ -7,7 +7,9 @@
 
 import UIKit
 
-/// A grey full width button with a title and a disclosure icon
+/*
+ A grey full width button with a title and a disclosure icon
+ */
 open class DisclosureButton: DisclosureSubtitleButton {
 	
 	/// The display constants

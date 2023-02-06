@@ -7,6 +7,9 @@
 
 import UIKit
 
+/*
+ A wrapper to center a view. Used to scale views for iPad.
+ */
 open class TraitWrapper<View: BaseView>: BaseView {
 	
 	public let wrappedView: View
