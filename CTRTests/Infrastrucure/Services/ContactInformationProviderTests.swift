@@ -41,9 +41,74 @@ class ContactInformationProviderTests: XCTestCase {
 		// Then
 		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
 		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
-		expect(self.sut.startDay) == "maandag"
+		expect(self.sut.openingDays) == "maandag t/m dinsdag"
 		expect(self.sut.startHour) == "07:00"
-		expect(self.sut.endDay) == "dinsdag"
+		expect(self.sut.endHour) == "08:00"
+	}
+	
+	func test_properties_everyDay() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
+			phoneNumber: "T E S T",
+			phoneNumberAbroad: "T E S T 2",
+			startDay: 1,
+			startHour: "07:00",
+			endDay: 0,
+			endHour: "08:00"
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(self.sut.openingDays) == "elke dag"
+		expect(self.sut.startHour) == "07:00"
+		expect(self.sut.endHour) == "08:00"
+	}
+
+	func test_properties_startDayOutOfScope() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
+			phoneNumber: "T E S T",
+			phoneNumberAbroad: "T E S T 2",
+			startDay: 1586,
+			startHour: "07:00",
+			endDay: 4,
+			endHour: "08:00"
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(self.sut.openingDays) == "zondag t/m donderdag"
+		expect(self.sut.startHour) == "07:00"
+		expect(self.sut.endHour) == "08:00"
+	}
+	
+	func test_properties_endDayOutOfScope() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
+			phoneNumber: "T E S T",
+			phoneNumberAbroad: "T E S T 2",
+			startDay: 1,
+			startHour: "07:00",
+			endDay: 158,
+			endHour: "08:00"
+		)
+		
+		// When
+		
+		// Then
+		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(self.sut.openingDays) == "elke dag"
+		expect(self.sut.startHour) == "07:00"
 		expect(self.sut.endHour) == "08:00"
 	}
 	
@@ -57,9 +122,8 @@ class ContactInformationProviderTests: XCTestCase {
 		// Then
 		expect(self.sut.phoneNumberLink) == "<a href=\"tel:0800-1421\">0800 - 1421</a>"
 		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:+31707503720\">+31 70 750 37 20</a>"
-		expect(self.sut.startDay) == "maandag"
+		expect(self.sut.openingDays) == "elke dag"
 		expect(self.sut.startHour) == "08:00"
-		expect(self.sut.endDay) == "vrijdag"
 		expect(self.sut.endHour) == "18:00"
 	}
 }
