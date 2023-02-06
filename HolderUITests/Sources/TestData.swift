@@ -35,7 +35,7 @@ final class TestData {
 	
 	// Vaccinations - personal statement 'vaccination elsewhere'
 	static let vacP1PSVacElsewhere = TestPerson(bsn: "999993501", dose: 1, doseIntl: ["2/2"], vacUntil: 240) // 1 pfizer + personal statement 'vaccination elsewhere'
-	static let vacP2PSVacElsewhereBoth = TestPerson(bsn: "999992934", dose: 2, doseIntl: ["2/2", "2/2"], vacFrom: -30, vacUntil: 240) // 2 pfizer + personal statement 'vaccination elsewhere' on both
+	static let vacP2PSVacElsewhereBoth = TestPerson(bsn: "999992934", dose: 2, doseIntl: ["2/2", "3/3"], vacFrom: -30, vacUntil: 240) // 2 pfizer + personal statement 'vaccination elsewhere' on both
 	static let vacP2PSVacElsewhereFirst = TestPerson(bsn: "999993537", dose: 2, doseIntl: ["2/2", "3/3"], vacFrom: -30) // 2 pfizer + personal statement 'vaccination elsewhere' on first
 	
 	// Vaccinations - personal statement 'prior event'
