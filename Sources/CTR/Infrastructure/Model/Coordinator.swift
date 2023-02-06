@@ -106,11 +106,13 @@ extension Coordinator {
 	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
 	func openUrl(_ url: URL, inApp: Bool) {
 		
-		var shouldOpenInApp = inApp
-		if !(url.scheme == "http" || url.scheme == "https") {
+		let shouldOpenInApp = {
 			// Other URL schemes can't be opened in SFSafariViewController, - it doesn't work & will crash.
-			shouldOpenInApp = false
-		}
+			guard url.scheme == "http" || url.scheme == "https" else {
+				return false
+			}
+			return inApp
+		}()
 		
 		guard #available(iOS 13.0, *), shouldOpenInApp else {
 			UIApplication.shared.open(url)
