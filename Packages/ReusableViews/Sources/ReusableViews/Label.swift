@@ -21,6 +21,7 @@ open class Label: UILabel {
 		self.textColor = textColor
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.adjustsFontForContentSizeCategory = true
+		self.isSelectable = true
 	}
 	
 	required public init?(coder: NSCoder) {
@@ -140,6 +141,53 @@ open class Label: UILabel {
 		guard let attributedText = attributedText else { return false }
 		return attributedText.attributes { key, value, range in
 			return key == .underlineStyle || key == .link
+		}
+	}
+	
+	// MARK: - Selectable
+	
+	open var isSelectable: Bool {
+		set {
+			if newValue {
+				self.isUserInteractionEnabled = true
+				self.backgroundColor = .cyan
+				addGestureRecognizer(
+					longPressGestureRecognizer
+				)
+			} else {
+				self.backgroundColor = .red
+				self.removeGestureRecognizer(longPressGestureRecognizer)
+				self.isUserInteractionEnabled = false
+			}
+		}
+		get { return false }
+	}
+	
+	open override var canBecomeFirstResponder: Bool {
+		return true
+	}
+	
+	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		return action == #selector(copy(_:))
+	}
+
+	// MARK: - UIResponderStandardEditActions
+	
+	open override func copy(_ sender: Any?) {
+		UIPasteboard.general.string = text
+	}
+	
+	// MARK: - Long-press Handler
+
+	private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+	
+	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
+		if recognizer.state == .began,
+			let recognizerView = recognizer.view,
+			let recognizerSuperview = recognizerView.superview {
+			recognizerView.becomeFirstResponder()
+			UIMenuController.shared.setTargetRect(recognizerView.frame, in: recognizerSuperview)
+			UIMenuController.shared.setMenuVisible(true, animated: true)
 		}
 	}
 }
