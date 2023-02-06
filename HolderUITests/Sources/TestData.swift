@@ -245,8 +245,8 @@ final class TestData {
 	// Encoding
 	static let encodingLatin = TestPerson(bsn: "999992697", name: "Geer, Corrie", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Latin
 	static let encodingLatinDiacritic = TestPerson(bsn: "999992703", name: "T.Śar ŃĆ ĹāÑ ŤÙmön ĊéŴÀŅŇĩ Ļl'ÁÚŘŠĎÉ Pomme-d' Or ĽÒÓĢÛŨ, Ŗî Ãō Øū Ŋÿ Ği ŢžŰŲ ŜŞőĠĪ Ŷŵ Ĉŷ", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Latin diacritic
-	static let encodingArabic = TestPerson(bsn: "999992715", name: "⁨بوير, بوب⁩", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Arabic
-	static let encodingHebrew = TestPerson(bsn: "999992727", name: "⁨בורד, בוב⁩", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Hebrew
+	static let encodingArabic = TestPerson(bsn: "999992715", name: "بوير, بوب", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Arabic
+	static let encodingHebrew = TestPerson(bsn: "999992727", name: "בורד, בוב", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Hebrew
 	static let encodingChinese = TestPerson(bsn: "999992739", name: "吹牛, 鲍勃", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Chinese
 	static let encodingGreek = TestPerson(bsn: "999992740", name: "οικοδόμος, Ἄκαστος", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Greek
 	static let encodingCyrillic = TestPerson(bsn: "999992752", name: "строитель, бобов", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 240, recUntil: 90) // Cyrillic
