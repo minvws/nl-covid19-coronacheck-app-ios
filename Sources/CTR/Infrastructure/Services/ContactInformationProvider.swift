@@ -6,6 +6,7 @@
  */
 
 import Foundation
+import Shared
 
 protocol ContactInformationProtocol {
 	
@@ -15,11 +16,8 @@ protocol ContactInformationProtocol {
 	/// The phone number for the helpsdesk when calling outside NL
 	var phoneNumberAbroadLink: String { get }
 	
-	/// The first weekday the helpdesk is open
-	var startDay: String { get }
-	
-	/// The last weekday the helpdesk is open
-	var endDay: String { get }
+	/// The days the helpdesk is open (mon - fri / every day)
+	var openingDays: String { get }
 	
 	/// The start of the opening hours
 	var startHour: String { get }
@@ -38,6 +36,29 @@ class ContactInformationProvider: ContactInformationProtocol {
 	var phoneNumberAbroadLink: String {
 		let number = remoteConfigManager?.storedConfiguration.contactInformation?.phoneNumberAbroad ?? "+31 70 750 37 20"
 		return "<a href=\"tel:\(number.strippingWhitespace())\">\(number)</a>"
+	}
+	
+	var openingDays: String {
+		
+		guard let contactInfo = remoteConfigManager?.storedConfiguration.contactInformation,
+			  var startDay = contactInfo.startDay,
+			  var endDay = contactInfo.endDay else {
+			return L.holder_contactCoronaCheckHelpdesk_message_every_day()
+		}
+		
+		if !(0...6).contains(startDay) {
+			startDay = 0
+		}
+		
+		if !(0...6).contains(endDay) {
+			endDay = 0
+		}
+		
+		if startDay == 1 && endDay == 0 {
+			return L.holder_contactCoronaCheckHelpdesk_message_every_day()
+		}
+		
+		return L.holder_contactCoronaCheckHelpdesk_message_until(Calendar.current.weekdaySymbols[startDay], Calendar.current.weekdaySymbols[endDay])
 	}
 	
 	var startDay: String {
