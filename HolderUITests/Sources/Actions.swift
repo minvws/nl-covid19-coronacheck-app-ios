@@ -242,10 +242,13 @@ extension BaseTest {
 	
 	func resetApp(confirm: Bool = true) {
 		app.tapButton("Open menu")
+		app.tapButton("Hulp & Info")
 		app.tapButton("Over deze app")
+		app.swipeUp()
 		app.tapButton("App resetten")
 		app.tapButton(confirm ? "Reset app" : "Annuleer")
 		if !confirm {
+			app.tapButton("Terug")
 			app.tapButton("Terug")
 			app.tapButton("Terug")
 		}
