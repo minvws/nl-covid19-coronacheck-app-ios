@@ -33,7 +33,9 @@ open class SimpleDisclosureButton: BaseView {
 	
 	fileprivate let titleLabel: Label = {
 
-		return Label(body: nil).multiline()
+		let label = Label(body: nil).multiline()
+		label.isSelectable = false
+		return label
 	}()
 
 	private let disclosureView: UIImageView = {
@@ -147,8 +149,10 @@ open class SimpleDisclosureButton: BaseView {
 	/// The  title
 	open var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
-															 kerning: ViewTraits.kerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.lineHeight,
+				kerning: ViewTraits.kerning
+			)
 			button.accessibilityLabel = title
 		}
 	}

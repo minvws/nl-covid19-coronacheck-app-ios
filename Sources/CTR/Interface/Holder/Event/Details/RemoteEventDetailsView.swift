@@ -71,8 +71,10 @@ final class RemoteEventDetailsView: BaseView, EventDetailsViewable {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight,
-															 kerning: ViewTraits.titleKerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 			stackView.setCustomSpacing(ViewTraits.spacing, after: titleLabel)
 		}
 	}
@@ -95,6 +97,7 @@ final class RemoteEventDetailsView: BaseView, EventDetailsViewable {
 	var footer: String? {
 		didSet {
 			footerTextView.attributedText = .makeFromHtml(text: footer, style: .bodyDark)
+			footerTextView.isHidden = footer == nil
 		}
 	}
 }
