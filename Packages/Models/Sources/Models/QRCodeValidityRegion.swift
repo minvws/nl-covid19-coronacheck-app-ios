@@ -9,11 +9,11 @@ import Foundation
 import Shared
 
 // Remove this - see QRCard.Region
-enum QRCodeValidityRegion: String, Codable, Equatable {
+public enum QRCodeValidityRegion: String, Codable, Equatable {
 	case domestic
 	case europeanUnion
 
-	init?(rawValue: String) {
+	public init?(rawValue: String) {
 		switch rawValue {
 			case "europeanUnion", "eu": self = .europeanUnion
 			case "domestic": self = .domestic
@@ -21,14 +21,14 @@ enum QRCodeValidityRegion: String, Codable, Equatable {
 		}
 	}
 
-	var localizedNoun: String {
+	public var localizedNoun: String {
 		switch self {
 			case .domestic: return L.generalNetherlands()
 			case .europeanUnion: return L.generalEuropeanUnion()
 		}
 	}
 
-	var localizedAdjective: String {
+	public var localizedAdjective: String {
 		switch self {
 			case .domestic: return L.generalDutch()
 			case .europeanUnion: return L.generalEuropean()
@@ -36,7 +36,7 @@ enum QRCodeValidityRegion: String, Codable, Equatable {
 	}
 
 	/// If there's ever more than 2 regions, will need to rethink usages of this:
-	var opposite: QRCodeValidityRegion {
+	public var opposite: QRCodeValidityRegion {
 		switch self {
 			case .domestic: return .europeanUnion
 			case .europeanUnion: return .domestic

@@ -7,19 +7,19 @@
 
 import Foundation
 
-class Configuration {
+public class Configuration {
 
 	/// Dictionary with DigiD configs
-	var digid: NSDictionary = [:]
+	public var digid: NSDictionary = [:]
 	
 	/// Dictionary with GGD Portal configs
-	var ggdPortal: NSDictionary = [:]
+	public var ggdPortal: NSDictionary = [:]
 
 	/// Dictionary with General configs
-	var general: NSDictionary = [:]
+	public var general: NSDictionary = [:]
 
 	/// Initlializer
-	init() {
+	public init() {
 
 		let plistPath: String?
 
@@ -48,7 +48,7 @@ class Configuration {
 		}
 	}
 
-	func getEnvironment() -> String {
+	public func getEnvironment() -> String {
 
 		if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
 			return networkConfigurationValue.lowercased()
