@@ -10,6 +10,7 @@ import Transport
 import Shared
 import ReusableViews
 import Persistence
+import Models
 
 enum EventScreenResult: Equatable {
 

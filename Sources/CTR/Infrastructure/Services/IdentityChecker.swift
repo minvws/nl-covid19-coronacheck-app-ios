@@ -9,6 +9,7 @@ import Foundation
 import Shared
 import Transport
 import Persistence
+import Models
 
 protocol IdentityCheckerProtocol {
 
