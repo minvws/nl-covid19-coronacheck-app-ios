@@ -12,8 +12,9 @@ let package = Package(
             targets: ["Models"]),
     ],
     dependencies: [
+        .package(name: "CryptoCore", path: "../CryptoCore"),
         .package(name: "Shared", path: "../Shared"),
-        .package(name: "Transport", path: "../Transport"),
+        .package(name: "Transport", path: "../Transport")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -21,8 +22,9 @@ let package = Package(
         .target(
             name: "Models",
             dependencies: [
+                .product(name: "CryptoCore", package: "CryptoCore"),
                 .product(name: "Shared", package: "Shared"),
-                .product(name: "Transport", package: "Transport"),
+                .product(name: "Transport", package: "Transport")
             ]),
         .testTarget(
             name: "ModelsTests",
