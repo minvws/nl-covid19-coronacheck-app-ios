@@ -6,7 +6,7 @@
 */
 
 import UIKit
-
+import Models
 /// A struct to use for combining all the content needed for new feature
 struct NewFeatureInformation {
 

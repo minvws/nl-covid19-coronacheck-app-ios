@@ -8,6 +8,7 @@
 import UIKit
 import SafariServices
 import Shared
+import Models
 
 protocol UpdatedDisclosurePolicyDelegate: AnyObject {
 
