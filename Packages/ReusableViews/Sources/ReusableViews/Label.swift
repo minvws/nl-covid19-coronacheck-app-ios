@@ -148,8 +148,8 @@ open class Label: UILabel {
 	
 	open var isSelectable: Bool {
 		set {
+			self.isUserInteractionEnabled = newValue
 			if newValue {
-				self.isUserInteractionEnabled = true
 				self.backgroundColor = .cyan
 				addGestureRecognizer(
 					longPressGestureRecognizer
@@ -157,24 +157,25 @@ open class Label: UILabel {
 			} else {
 				self.backgroundColor = .red
 				self.removeGestureRecognizer(longPressGestureRecognizer)
-				self.isUserInteractionEnabled = false
 			}
 		}
 		get { return false }
 	}
 	
 	open override var canBecomeFirstResponder: Bool {
-		return true
+		return isUserInteractionEnabled
 	}
 	
 	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-		return action == #selector(copy(_:))
+		return action == #selector(copy(_:)) && isUserInteractionEnabled
 	}
 
 	// MARK: - UIResponderStandardEditActions
 	
 	open override func copy(_ sender: Any?) {
-		UIPasteboard.general.string = text
+		if isUserInteractionEnabled {
+			UIPasteboard.general.string = text
+		}
 	}
 	
 	// MARK: - Long-press Handler
@@ -183,11 +184,14 @@ open class Label: UILabel {
 	
 	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
 		if recognizer.state == .began,
-			let recognizerView = recognizer.view,
-			let recognizerSuperview = recognizerView.superview {
+		   let recognizerView = recognizer.view,
+		   let recognizerSuperview = recognizerView.superview {
 			recognizerView.becomeFirstResponder()
-			UIMenuController.shared.setTargetRect(recognizerView.frame, in: recognizerSuperview)
-			UIMenuController.shared.setMenuVisible(true, animated: true)
+			
+			let copyMenu = UIMenuController.shared
+			copyMenu.arrowDirection = .default
+			copyMenu.setTargetRect(bounds, in: recognizerSuperview)
+			copyMenu.setMenuVisible(true, animated: true)
 		}
 	}
 }
