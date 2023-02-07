@@ -1,0 +1,68 @@
+{
+  "pins" : [
+    {
+      "identity" : "appauth-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rool/AppAuth-iOS.git",
+      "state" : {
+        "branch" : "feature/custom-url-support",
+        "revision" : "46e9b6d35d365066b3d8b7cf86672fc68451a09b"
+      }
+    },
+    {
+      "identity" : "brightfutures",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Thomvis/BrightFutures",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a4b4cb27ef1525739988184dac73a1a462f9d62d"
+      }
+    },
+    {
+      "identity" : "nl-rdo-app-ios-modules",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/minvws/nl-rdo-app-ios-modules",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fe6a25b5bd901fd0a11bfe141a404f007ccc81d0"
+      }
+    },
+    {
+      "identity" : "openssl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/OpenSSL.git",
+      "state" : {
+        "revision" : "52db2ab9de7f78d1dea0d728fddd47fb133e25b7",
+        "version" : "1.1.1900"
+      }
+    },
+    {
+      "identity" : "r.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mac-cain13/R.swift.git",
+      "state" : {
+        "revision" : "cffbe4aa55ab5f012590b38ad114079c407e6937",
+        "version" : "7.2.4"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "4ad606ba5d7673ea60679a61ff867cc1ff8c8e86",
+        "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "xcodeedit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomlokhorst/XcodeEdit",
+      "state" : {
+        "revision" : "cd466d6e8c5ffd2f2b61165d37b0646f09068e1e",
+        "version" : "2.9.0"
+      }
+    }
+  ],
+  "version" : 2
+}
