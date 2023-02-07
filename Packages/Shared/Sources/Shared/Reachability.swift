@@ -8,7 +8,7 @@
 import Foundation
 import Reachability
 
-protocol ReachabilityProtocol: AnyObject {
+public protocol ReachabilityProtocol: AnyObject {
 	var whenReachable: ((Reachability) -> Void)? { get set }
 	var whenUnreachable: ((Reachability) -> Void)? { get set }
 

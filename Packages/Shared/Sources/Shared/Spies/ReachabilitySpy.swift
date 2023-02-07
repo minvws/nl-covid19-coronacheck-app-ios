@@ -7,7 +7,6 @@
 
 import Foundation
 import Reachability
-@testable import CTR
 
 class ReachabilitySpy: ReachabilityProtocol {
 
