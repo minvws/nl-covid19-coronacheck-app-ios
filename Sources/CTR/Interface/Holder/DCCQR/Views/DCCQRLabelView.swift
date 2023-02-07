@@ -37,7 +37,6 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 		
 		// Make this dual label view selectable
 		self.isUserInteractionEnabled = true
-		self.backgroundColor = .cyan
 		addGestureRecognizer(
 			longPressGestureRecognizer
 		)

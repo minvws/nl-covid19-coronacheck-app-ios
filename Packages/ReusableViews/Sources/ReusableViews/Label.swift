@@ -21,7 +21,7 @@ open class Label: UILabel {
 		self.textColor = textColor
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.adjustsFontForContentSizeCategory = true
-		self.isSelectable = true
+		self.isSelectable = true // Default all labels are selectable.
 	}
 	
 	required public init?(coder: NSCoder) {
@@ -150,12 +150,10 @@ open class Label: UILabel {
 		set {
 			self.isUserInteractionEnabled = newValue
 			if newValue {
-				self.backgroundColor = .cyan
 				addGestureRecognizer(
 					longPressGestureRecognizer
 				)
 			} else {
-				self.backgroundColor = .red
 				self.removeGestureRecognizer(longPressGestureRecognizer)
 			}
 		}

@@ -16,29 +16,22 @@ import Shared
  */
 open class TextElement: UITextView, UITextViewDelegate {
 	
-	/// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
+	/// Add a listener for selected links.
 	///
 	/// - parameter handler: The closure to be called when the user selects a link
-	open var linkTouchedHandler: ((URL) -> Void)? {
-		didSet {
-			isSelectable = textChangedHandler != nil || linkTouchedHandler != nil
-		}
-	}
+	open var linkTouchedHandler: ((URL) -> Void)?
 	
-	/// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
+	/// Add a listener for updated text. Calling this method will set `isEditable` to `true`
 	///
 	/// - parameter handler: The closure to be called when the text is updated
 	open var textChangedHandler: ((String?) -> Void)? {
 		didSet {
-			isSelectable = textChangedHandler != nil || linkTouchedHandler != nil
 			isEditable = textChangedHandler != nil
 		}
 	}
 	
 	///  Initializes the TextView with the given attributed string
-	public init(
-		attributedText: NSAttributedString
-	) {
+	public init(attributedText: NSAttributedString) {
 		super.init(frame: .zero, textContainer: nil)
 		setup()
 		
@@ -74,7 +67,7 @@ open class TextElement: UITextView, UITextViewDelegate {
 		font = Fonts.body
 		isScrollEnabled = false
 		isEditable = false
-		isSelectable = true
+		isSelectable = true // Default all textviews are selectable.
 		backgroundColor = nil
 		layer.cornerRadius = 0
 		textContainer.lineFragmentPadding = 0
