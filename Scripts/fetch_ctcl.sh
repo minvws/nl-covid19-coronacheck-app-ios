@@ -12,6 +12,7 @@ go install golang.org/x/mobile/cmd/gomobile@latest
 gomobile init
 gomobile bind -target ios,iossimulator -o clcore.xcframework -iosversion 11.0 github.com/minvws/nl-covid19-coronacheck-mobile-core
 cd ../
-rm -rf clcore.framework
-cp -R tmp-clcore/clcore.xcframework .
+rm -rf clcore.framework # cleanup previous location
+mkdir -p Frameworks
+cp -R tmp-clcore/clcore.xcframework Frameworks/
 rm -rf tmp-clcore

@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "CryptoCore",
-            targets: ["CryptoCore"]),
+            targets: ["CryptoCore", "clcore"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -21,8 +21,12 @@ let package = Package(
         .target(
             name: "CryptoCore",
             dependencies: []),
-        .testTarget(
-            name: "CryptoCoreTests",
-            dependencies: ["CryptoCore"]),
+		.binaryTarget(
+			name: "clcore",
+			path: "../../Frameworks/clcore.xcframework"
+		),
+        // .testTarget(
+        //     name: "CryptoCoreTests",
+        //     dependencies: ["CryptoCore"]),
     ]
 )
