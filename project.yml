@@ -32,6 +32,8 @@ packages:
     exactVersion: 1.9.0
   CryptoCore:
     path: ./Packages/CryptoCore
+  Managers:
+    path: ./Packages/Managers
   Models:
     path: ./Packages/Models
   Persistence:
@@ -140,6 +142,7 @@ targetTemplates:
     dependencies:
       # SPM:
       - package: CryptoCore
+      - package: Managers
       - package: Models
       - package: Persistence
       - package: Shared
