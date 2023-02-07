@@ -52,7 +52,6 @@ class Tokentest: BaseTest {
 	
 	func test_tokenRetrievalErrors() {
 		let retrievalCode = "ZZZ-ZT66URU6TY2J96-32"
-		let incorrectCode = "A"
 		
 		addCommercialTestCertificate()
 		
@@ -68,10 +67,16 @@ class Tokentest: BaseTest {
 		app.containsValue("Heb je geen code gekregen? Of ben je deze kwijtgeraakt? Neem dan contact op met je testlocatie.")
 		app.tapButton("Sluiten")
 		
-		// Incorrect retrieval code
+		// No retrieval code
 		let retrievalField = app.textFields["Ophaalcode"]
 		retrievalField.tap()
-		retrievalField.typeText(incorrectCode)
+		retrievalField.typeText("")
+		app.staticTexts["Volgende"].tap()
+		app.containsValue("Graag eerst een ophaalcode invullen")
+		
+		// Incorrect retrieval code
+		retrievalField.tap()
+		retrievalField.typeText("incorrect")
 		app.staticTexts["Volgende"].tap()
 		app.containsValue("Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: BRB-YYYYYYYYY1-Z2.")
 		
@@ -84,10 +89,16 @@ class Tokentest: BaseTest {
 		app.textExists("Verificatiecode")
 		app.textExists("Je krijgt een code via sms of e-mail")
 		
-		// Incorrect verification code
+		// No verification code
 		let verificationField = app.textFields["Verificatiecode"]
 		verificationField.tap()
-		verificationField.typeText(incorrectCode)
+		verificationField.typeText("")
+		app.staticTexts["Volgende"].tap()
+		app.containsValue("Graag eerst een verificatiecode invullen")
+		
+		// Incorrect verification code
+		verificationField.tap()
+		verificationField.typeText("incorrect")
 		app.staticTexts["Volgende"].tap()
 		app.containsValue("Geen geldige combinatie. Vul de 6-cijferige verificatiecode in.")
 		
