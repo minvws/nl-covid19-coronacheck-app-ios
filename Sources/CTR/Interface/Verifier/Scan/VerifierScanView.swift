@@ -179,6 +179,7 @@ final class RiskLevelIndicator: BaseView {
 		backgroundColor = C.white()
 		
 		isAccessibilityElement = true
+		titleLabel.isSelectable = false
 	}
 
 	override func setupViewHierarchy() {
