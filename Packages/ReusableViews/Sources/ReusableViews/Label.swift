@@ -27,11 +27,11 @@ open class Label: UILabel {
 		super.init(coder: coder)
 	}
 	
-	public convenience init(largeTitle: String?, textColor: UIColor = .darkText) {
+	public convenience init(largeTitle: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(largeTitle, font: Fonts.largeTitle, textColor: textColor)
 	}
 	
-	public convenience init(title1: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
+	public convenience init(title1: String?, textColor: UIColor = C.primaryText()!, montserrat: Bool = false) {
 		if montserrat {
 			self.init(title1, font: Fonts.title1Montserrat, textColor: textColor)
 		} else {
@@ -39,11 +39,11 @@ open class Label: UILabel {
 		}
 	}
 	
-	public convenience init(title2: String?, textColor: UIColor = .darkText) {
+	public convenience init(title2: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(title2, font: Fonts.title2, textColor: textColor)
 	}
 	
-	public convenience init(title3: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
+	public convenience init(title3: String?, textColor: UIColor = C.primaryText()!, montserrat: Bool = false) {
 		if montserrat {
 			self.init(title3, font: Fonts.title3Montserrat, textColor: textColor)
 		} else {
@@ -51,15 +51,15 @@ open class Label: UILabel {
 		}
 	}
 	
-	public convenience init(title3Medium: String?, textColor: UIColor = .darkText) {
+	public convenience init(title3Medium: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(title3Medium, font: Fonts.title3Medium, textColor: textColor)
 	}
 
-	public convenience init(headline: String?, textColor: UIColor = .darkText) {
+	public convenience init(headline: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(headline, font: Fonts.headline, textColor: textColor)
 	}
 	
-	public convenience init(headlineBold: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
+	public convenience init(headlineBold: String?, textColor: UIColor = C.primaryText()!, montserrat: Bool = false) {
 		if montserrat {
 			self.init(headlineBold, font: Fonts.headlineBoldMontserrat, textColor: textColor)
 		} else {
@@ -67,55 +67,55 @@ open class Label: UILabel {
 		}
 	}
 	
-	public convenience init(body: String?, textColor: UIColor = .darkText) {
+	public convenience init(body: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(body, font: Fonts.body, textColor: textColor)
 	}
 	
-	public convenience init(bodyBold: String?, textColor: UIColor = .darkText) {
+	public convenience init(bodyBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(bodyBold, font: Fonts.bodyBold, textColor: textColor)
 	}
 	
-	public convenience init(bodySemiBold: String?, textColor: UIColor = .darkText) {
+	public convenience init(bodySemiBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(bodySemiBold, font: Fonts.bodySemiBold, textColor: textColor)
 	}
 	
-	public convenience init(bodyMedium: String?, textColor: UIColor = .darkText) {
+	public convenience init(bodyMedium: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(bodyMedium, font: Fonts.bodyMedium, textColor: textColor)
 	}
 	
-	public convenience init(callout: String?, textColor: UIColor = .darkText) {
+	public convenience init(callout: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(callout, font: Fonts.callout, textColor: textColor)
 	}
 	
-	public convenience init(calloutSemiBold: String?, textColor: UIColor = .darkText) {
+	public convenience init(calloutSemiBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(calloutSemiBold, font: Fonts.calloutSemiBold, textColor: textColor)
 	}
 	
-	public convenience init(subhead: String?, textColor: UIColor = .darkText) {
+	public convenience init(subhead: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(subhead, font: Fonts.subhead, textColor: textColor)
 	}
 	
-	public convenience init(subheadBold: String?, textColor: UIColor = .darkText) {
+	public convenience init(subheadBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(subheadBold, font: Fonts.subheadBold, textColor: textColor)
 	}
 	
-	public convenience init(subheadHeavyBold: String?, textColor: UIColor = .darkText) {
+	public convenience init(subheadHeavyBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(subheadHeavyBold, font: Fonts.subheadHeavyBold, textColor: textColor)
 	}
 	
-	public convenience init(subheadMedium: String?, textColor: UIColor = .darkText) {
+	public convenience init(subheadMedium: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(subheadMedium, font: Fonts.subheadMedium, textColor: textColor)
 	}
 	
-	public convenience init(footnote: String?, textColor: UIColor = .darkText) {
+	public convenience init(footnote: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(footnote, font: Fonts.footnote, textColor: textColor)
 	}
 	
-	public convenience init(caption1: String?, textColor: UIColor = .darkText) {
+	public convenience init(caption1: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(caption1, font: Fonts.caption1, textColor: textColor)
 	}
 	
-	public convenience init(caption1SemiBold: String?, textColor: UIColor = .darkText) {
+	public convenience init(caption1SemiBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(caption1SemiBold, font: Fonts.caption1SemiBold, textColor: textColor)
 	}
 	
