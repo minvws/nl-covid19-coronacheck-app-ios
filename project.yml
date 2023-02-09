@@ -8,10 +8,10 @@ name: CTR
 packages:
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
-    majorVersion: 1.9.5
+    majorVersion: 1.9.6
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 4.0.1
+    majorVersion: 4.1.2
   RDOModules:
     github: minvws/nl-rdo-app-ios-modules
     branch: main
