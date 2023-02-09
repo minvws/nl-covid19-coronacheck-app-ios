@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 final class PrivacyConsentView: BaseView {
 
@@ -14,7 +15,7 @@ final class PrivacyConsentView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
 		static let maxButtonHeightMultiplier: CGFloat = 0.3
 
 		// Margins

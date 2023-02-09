@@ -7,6 +7,8 @@
 
 import Foundation
 @testable import CTR
+import ReusableViews
+import Shared
 
 // If regenerating, watch out for `addObserver()` as it is customized to retain the `using block` parameter:
 

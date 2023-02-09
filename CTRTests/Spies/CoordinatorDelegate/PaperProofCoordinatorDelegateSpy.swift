@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import CTR
+import ReusableViews
 
 class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 

@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 import Transport
 import Shared
+import Persistence
 
 class WalletManager: WalletManaging {
 
@@ -151,6 +152,15 @@ class WalletManager: WalletManaging {
 					eventGroup.expiryDate = expiryDate
 				}
 			}
+			dataStoreManager.save(context)
+		}
+	}
+	
+	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool) {
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			eventGroup.isDraft = isDraft
 			dataStoreManager.save(context)
 		}
 	}
@@ -300,7 +310,8 @@ extension WalletManager {
 		}
 	}
 	
-	@discardableResult func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
+	@discardableResult
+	func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
 
 		var blockedEvent: RemovedEvent?
 		let context = dataStoreManager.managedObjectContext()
@@ -322,6 +333,88 @@ extension WalletManager {
 		}
 		
 		return blockedEvent
+	}
+	
+	@discardableResult
+	func createAndPersistRemovedEvent(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
+		
+		var result: [RemovedEvent] = []
+		
+		guard let events = wrapper.events, events.isNotEmpty else {
+			return result
+		}
+		
+		var eventMode: EventMode?
+		if let event = events.first {
+			if event.hasVaccinationAssessment {
+				eventMode = .vaccinationassessment
+			} else if event.hasPaperCertificate {
+				eventMode = .paperflow
+			} else if event.hasPositiveTest {
+				eventMode = .recovery
+			} else if event.hasNegativeTest {
+				eventMode = .test( wrapper.isGGD ? .ggd : .commercial)
+			} else if event.hasRecovery {
+				eventMode = .recovery
+			} else if event.hasVaccination {
+				eventMode = .vaccination
+			}
+		}
+		
+		for event in events {
+			if let eventDate = event.getSortDate(with: DateFormatter.Event.iso8601),
+				let eventMode,
+				let removedEvent = storeRemovedEvent(
+				type: eventMode,
+				eventDate: eventDate,
+				reason: reason.rawValue
+			) {
+				result.append( removedEvent)
+			}
+		}
+		return result
+	}
+	
+	@discardableResult
+	func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
+		
+		guard let eventMode = euCredentialAttributes.eventMode else {
+			return nil
+		}
+		
+		var eventDate: Date? {
+			guard let eventDate = euCredentialAttributes.eventDate else { return nil }
+			return DateFormatter.Event.iso8601.date(from: eventDate)
+		}
+		
+		return storeRemovedEvent(
+			type: eventMode,
+			eventDate: eventDate ?? .distantPast,
+			reason: reason.rawValue
+		)
+	}
+	
+	@discardableResult
+	func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent? {
+		
+		guard let jsonData = existingEventGroup.jsonData,
+			  let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData),
+			  let credentialData = object.credential.data(using: .utf8),
+			  let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData),
+			  let eventMode = euCredentialAttributes.eventMode,
+			  let reason = blockItem.reason
+		else { return nil }
+		
+		var eventDate: Date? {
+			guard let eventDate = euCredentialAttributes.eventDate else { return nil }
+			return DateFormatter.Event.iso8601.date(from: eventDate)
+		}
+		
+		return storeRemovedEvent(
+			type: eventMode,
+			eventDate: eventDate ?? .distantPast,
+			reason: reason
+		)
 	}
 	
 	/// Store an event group
@@ -435,7 +528,13 @@ extension WalletManager {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
+						if greenCard.type == GreenCardType.domestic.rawValue {
+							// Reset the secret key to nil if the domestic greencard is deleted.
+							Current.secureUserSettings.holderSecretKey = nil
+						}
+				
 						greenCard.delete(context: context)
+							
 					}
 					dataStoreManager.save(context)
 				}

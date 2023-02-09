@@ -8,6 +8,7 @@
 import UIKit
 import OpenIDConnect
 import Shared
+import ReusableViews
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, OpenIDConnectState {
@@ -111,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OpenIDConnectState {
 	func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 		
 		// Parse an activity from the userActivity
-		guard let universalLink = UniversalLink(userActivity: userActivity, isLunhCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()) else { return false }
+		guard let universalLink = UniversalLinkFactory.create(userActivity: userActivity) else { return false }
 		
 		return appCoordinator?.receive(universalLink: universalLink) ?? false
 	}

@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import Reachability
 import Shared
+import ReusableViews
+import Persistence
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {

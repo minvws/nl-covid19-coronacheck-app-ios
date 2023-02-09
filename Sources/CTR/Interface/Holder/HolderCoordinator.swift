@@ -10,8 +10,10 @@ import UIKit
 import CoreData
 import Reachability
 import Shared
+import ReusableViews
 import Transport
 import OpenIDConnect
+import Persistence
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -346,7 +348,7 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func navigateToAboutThisApp() {
 		
-		let viewModel = AboutThisAppViewModel(flavor: AppFlavor.flavor) { [weak self] outcome in
+		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
 			guard let self else { return }
 			switch outcome {
 				case let .openURL(url, inApp):
@@ -512,6 +514,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 					)
 				}
 			),
+			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
 				self?.openUrl(url, inApp: true)
 			},
@@ -537,6 +540,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 					self.openUrl(url, inApp: true)
 				}
 			),
+			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
 				self?.openUrl(url, inApp: true)
 			},
@@ -562,6 +566,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 					self.openUrl(url, inApp: true)
 				}
 			),
+			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
 				self?.openUrl(url, inApp: true)
 			},

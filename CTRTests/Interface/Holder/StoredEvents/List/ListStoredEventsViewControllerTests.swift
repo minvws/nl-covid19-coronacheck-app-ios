@@ -11,6 +11,8 @@ import SnapshotTesting
 @testable import CTR
 @testable import Transport
 @testable import Shared
+import TestingShared
+import Persistence
 
 class ListStoredEventsViewControllerTests: XCTestCase {
 

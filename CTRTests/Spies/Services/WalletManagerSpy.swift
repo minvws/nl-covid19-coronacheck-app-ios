@@ -8,7 +8,8 @@
 @testable import CTR
 @testable import Transport
 @testable import Shared
-
+import TestingShared
+import Persistence
 import XCTest
 import CoreData
 
@@ -139,6 +140,48 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreRemovedEventResult
 	}
 
+	var invokedCreateAndPersistRemovedEventWrapper = false
+	var invokedCreateAndPersistRemovedEventWrapperCount = 0
+	var invokedCreateAndPersistRemovedEventWrapperParameters: (wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)?
+	var invokedCreateAndPersistRemovedEventWrapperParametersList = [(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)]()
+	var stubbedCreateAndPersistRemovedEventWrapperResult: [RemovedEvent]! = []
+
+	func createAndPersistRemovedEvent(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
+		invokedCreateAndPersistRemovedEventWrapper = true
+		invokedCreateAndPersistRemovedEventWrapperCount += 1
+		invokedCreateAndPersistRemovedEventWrapperParameters = (wrapper, reason)
+		invokedCreateAndPersistRemovedEventWrapperParametersList.append((wrapper, reason))
+		return stubbedCreateAndPersistRemovedEventWrapperResult
+	}
+
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributes = false
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributesCount = 0
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters: (euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)?
+	var invokedCreateAndPersistRemovedEventEuCredentialAttributesParametersList = [(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)]()
+	var stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult: RemovedEvent!
+
+	func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
+		invokedCreateAndPersistRemovedEventEuCredentialAttributes = true
+		invokedCreateAndPersistRemovedEventEuCredentialAttributesCount += 1
+		invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters = (euCredentialAttributes, reason)
+		invokedCreateAndPersistRemovedEventEuCredentialAttributesParametersList.append((euCredentialAttributes, reason))
+		return stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult
+	}
+
+	var invokedCreateAndPersistRemovedEventBlockItem = false
+	var invokedCreateAndPersistRemovedEventBlockItemCount = 0
+	var invokedCreateAndPersistRemovedEventBlockItemParameters: (blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)?
+	var invokedCreateAndPersistRemovedEventBlockItemParametersList = [(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)]()
+	var stubbedCreateAndPersistRemovedEventBlockItemResult: RemovedEvent!
+
+	func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent? {
+		invokedCreateAndPersistRemovedEventBlockItem = true
+		invokedCreateAndPersistRemovedEventBlockItemCount += 1
+		invokedCreateAndPersistRemovedEventBlockItemParameters = (blockItem, existingEventGroup, cryptoManager)
+		invokedCreateAndPersistRemovedEventBlockItemParametersList.append((blockItem, existingEventGroup, cryptoManager))
+		return stubbedCreateAndPersistRemovedEventBlockItemResult
+	}
+
 	var invokedListEventGroups = false
 	var invokedListEventGroupsCount = 0
 	var stubbedListEventGroupsResult: [EventGroup]! = []
@@ -213,15 +256,27 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedGreencardsWithUnexpiredOriginsResult
 	}
 
-	var invokedUpdateEventGroup = false
-	var invokedUpdateEventGroupCount = 0
-	var invokedUpdateEventGroupParameters: (identifier: String, expiryDate: Date)?
-	var invokedUpdateEventGroupParametersList = [(identifier: String, expiryDate: Date)]()
+	var invokedUpdateEventGroupIdentifier = false
+	var invokedUpdateEventGroupIdentifierCount = 0
+	var invokedUpdateEventGroupIdentifierParameters: (identifier: String, expiryDate: Date)?
+	var invokedUpdateEventGroupIdentifierParametersList = [(identifier: String, expiryDate: Date)]()
 
 	func updateEventGroup(identifier: String, expiryDate: Date) {
-		invokedUpdateEventGroup = true
-		invokedUpdateEventGroupCount += 1
-		invokedUpdateEventGroupParameters = (identifier, expiryDate)
-		invokedUpdateEventGroupParametersList.append((identifier, expiryDate))
+		invokedUpdateEventGroupIdentifier = true
+		invokedUpdateEventGroupIdentifierCount += 1
+		invokedUpdateEventGroupIdentifierParameters = (identifier, expiryDate)
+		invokedUpdateEventGroupIdentifierParametersList.append((identifier, expiryDate))
+	}
+
+	var invokedUpdateEventGroupIsDraft = false
+	var invokedUpdateEventGroupIsDraftCount = 0
+	var invokedUpdateEventGroupIsDraftParameters: (eventGroup: EventGroup, isDraft: Bool)?
+	var invokedUpdateEventGroupIsDraftParametersList = [(eventGroup: EventGroup, isDraft: Bool)]()
+
+	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool) {
+		invokedUpdateEventGroupIsDraft = true
+		invokedUpdateEventGroupIsDraftCount += 1
+		invokedUpdateEventGroupIsDraftParameters = (eventGroup, isDraft)
+		invokedUpdateEventGroupIsDraftParametersList.append((eventGroup, isDraft))
 	}
 }

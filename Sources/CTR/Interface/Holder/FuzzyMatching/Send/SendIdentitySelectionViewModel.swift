@@ -7,7 +7,9 @@
 
 import Foundation
 import Shared
+import ReusableViews
 import Transport
+import Persistence
 
 class SendIdentitySelectionViewModel {
 	
@@ -87,9 +89,9 @@ class SendIdentitySelectionViewModel {
 					}
 					
 					if let wrapper = dataSource.getEventResultWrapper(uniqueIdentifier) {
-						result = result && RemovedEvent.createAndPersist(wrapper: wrapper, reason: RemovalReason.mismatchedIdentity).isNotEmpty
+						result = result && Current.walletManager.createAndPersistRemovedEvent(wrapper: wrapper, reason: RemovalReason.mismatchedIdentity).isNotEmpty
 					} else if let euCredentialAttributes = dataSource.getEUCreditialAttributes(uniqueIdentifier) {
-						result = result && RemovedEvent.createAndPersist(euCredentialAttributes: euCredentialAttributes, reason: RemovalReason.mismatchedIdentity) != nil
+						result = result && Current.walletManager.createAndPersistRemovedEvent(euCredentialAttributes: euCredentialAttributes, reason: RemovalReason.mismatchedIdentity) != nil
 					}
 					
 					let eventGroups = Current.walletManager.listEventGroups()
@@ -122,7 +124,7 @@ class SendIdentitySelectionViewModel {
 					// Signer says OK. Mark all events as non draft.
 					Current.walletManager.listEventGroups()
 						.filter { $0.isDraft }
-						.forEach { $0.update(isDraft: false) }
+						.forEach { Current.walletManager.updateEventGroup($0, isDraft: false) }
 					
 					self.coordinatorDelegate?.userWishesToSeeSuccess(name: self.selectedIdentity ?? "")
 

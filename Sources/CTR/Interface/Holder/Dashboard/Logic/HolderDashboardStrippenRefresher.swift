@@ -10,6 +10,7 @@ import Reachability
 import UIKit
 import Transport
 import Shared
+import Persistence
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()
@@ -288,7 +289,11 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 		// Match blockItems (`blobExpiry`) to relevant eventGroups so that a BlockedEvent can be created & persisted:
 		blockItems.combinedWith(matchingEventGroups: allEventGroups).forEach { blockItem, eventGroup in
-			RemovedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+			Current.walletManager.createAndPersistRemovedEvent(
+				blockItem: blockItem,
+				existingEventGroup: eventGroup,
+				cryptoManager: Current.cryptoManager
+			)
 		}
 	}
 

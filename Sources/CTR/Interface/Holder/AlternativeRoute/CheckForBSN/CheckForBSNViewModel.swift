@@ -7,6 +7,8 @@
 
 import UIKit
 import Shared
+import ReusableViews
+import Persistence
 
 class CheckForBSNViewModel: ListOptionsProtocol {
 	

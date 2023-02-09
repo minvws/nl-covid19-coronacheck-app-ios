@@ -6,8 +6,10 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
-class AppStatusViewController: GenericViewController<AppStatusView, AppStatusViewModel> {
+class AppStatusViewController: TraitWrappedGenericViewController<AppStatusView, AppStatusViewModel> {
 
 	override func viewDidLoad() {
 		

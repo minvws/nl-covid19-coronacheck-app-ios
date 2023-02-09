@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 protocol FuzzyMatchingFlowDelegate: AnyObject {
 	
@@ -197,7 +198,8 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 			content: Content(
 				title: L.holder_fuzzyMatching_why_title(),
 				body: L.holder_fuzzyMatching_why_body()
-			)
+			),
+			screenCaptureDetector: ScreenCaptureDetector()
 		)
 		
 		let viewController = BottomSheetContentViewController(viewModel: viewModel)

@@ -67,9 +67,4 @@ class LaunchArgumentsHandler {
 		
 		return CommandLine.arguments.contains("-disclosurePolicyMode3G")
 	}
-	
-	static func shouldInjectView() -> Bool {
-		
-		return CommandLine.arguments.contains("-shouldInjectView")
-	}
 }

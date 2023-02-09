@@ -7,6 +7,8 @@
 
 import UIKit
 import SafariServices
+import Shared
+import ReusableViews
 
 protocol Coordinator: AnyObject {
 	
@@ -104,16 +106,25 @@ extension Coordinator {
 	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
 	func openUrl(_ url: URL, inApp: Bool) {
 		
-		guard inApp && url.scheme != "tel" && url.scheme != "mailto" else {
+		let shouldOpenInApp = {
+			// Other URL schemes can't be opened in SFSafariViewController, - it doesn't work & will crash.
+			guard url.scheme == "http" || url.scheme == "https" else {
+				return false
+			}
+			return inApp
+		}()
+		
+		guard #available(iOS 13.0, *), shouldOpenInApp else {
 			UIApplication.shared.open(url)
 			return
 		}
 		
 		let safariController = SFSafariViewController(url: url)
+		
 		if let presentedViewController = navigationController.presentedViewController {
-			presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+			presentedViewController.presentingViewController?.dismiss(animated: true) {
 				self.navigationController.present(safariController, animated: true)
-			})
+			}
 		} else {
 			navigationController.present(safariController, animated: true)
 		}

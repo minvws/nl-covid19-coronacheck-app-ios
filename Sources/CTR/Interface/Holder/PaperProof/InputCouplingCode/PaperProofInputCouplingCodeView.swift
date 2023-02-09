@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 	
@@ -14,7 +15,7 @@ class PaperProofInputCouplingCodeView: ScrolledStackWithButtonView {
 	private struct ViewTraits {
 		
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
 		

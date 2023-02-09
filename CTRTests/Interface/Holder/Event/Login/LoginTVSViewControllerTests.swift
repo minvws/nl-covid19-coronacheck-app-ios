@@ -12,6 +12,8 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import OpenIDConnect
+import TestingShared
+import ReusableViews
 
 class AuthenticationViewControllerTests: XCTestCase {
 	

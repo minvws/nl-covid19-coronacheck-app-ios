@@ -11,6 +11,8 @@ import XCTest
 @testable import Shared
 import SnapshotTesting
 import Nimble
+import TestingShared
+import Persistence
 
 class ScanLogViewControllerTests: XCTestCase {
 
@@ -29,7 +31,7 @@ class ScanLogViewControllerTests: XCTestCase {
 		super.setUp()
 		coordinatorSpy = VerifierCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, flavor: .verifier, loadPersistentStoreCompletion: { _ in })
+		environmentSpies.dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "Verifier", loadPersistentStoreCompletion: { _ in })
 
 		viewModel = ScanLogViewModel(coordinator: coordinatorSpy)
 		sut = ScanLogViewController(viewModel: viewModel)

@@ -23,7 +23,10 @@ let package = Package(
 		.target(
 			name: "Shared",
 			dependencies: [.product(name: "RswiftLibrary", package: "R.swift")],
-			resources: 	[.copy("Resources/Animations")],
+			resources: 	[
+				.copy("Resources/Animations"),
+				.process("Fonts")
+			],
 			plugins: [.plugin(name: "RswiftGeneratePublicResources", package: "R.swift")]
 		),
 		.testTarget(

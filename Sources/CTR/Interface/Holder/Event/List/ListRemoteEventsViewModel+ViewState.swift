@@ -8,6 +8,7 @@
 import Foundation
 import Transport
 import Shared
+import ReusableViews
 
 typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
 
@@ -230,7 +231,7 @@ extension ListRemoteEventsViewModel {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
@@ -467,7 +468,7 @@ extension ListRemoteEventsViewModel {
 			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
 			
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? test.sampleDate
+			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? test.sampleDate
 
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),

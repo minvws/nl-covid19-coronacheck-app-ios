@@ -10,6 +10,7 @@ import XCTest
 import SnapshotTesting
 import Nimble
 import Shared
+import TestingShared
 
 final class VerifiedAccessViewControllerTests: XCTestCase {
 	

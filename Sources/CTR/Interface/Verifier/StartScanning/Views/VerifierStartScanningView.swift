@@ -8,6 +8,7 @@
 import UIKit
 import Lottie
 import Shared
+import ReusableViews
 
 // swiftlint:disable type_body_length
 class VerifierStartScanningView: BaseView {
@@ -57,6 +58,7 @@ class VerifierStartScanningView: BaseView {
 
 		let view = UIScrollView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.showsHorizontalScrollIndicator = false
 		return view
 	}()
 
@@ -187,6 +189,13 @@ class VerifierStartScanningView: BaseView {
 			let translatedOffset = scrollView.translatedBottomScrollOffset
 			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)
 		}
+		
+		NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+			DispatchQueue.main.async { // because otherwise `UIApplication.shared.keyWindow?.bounds.width` has the wrong value 🙄
+				self?.updateStackViewInsets()
+			}
+		}
+		updateStackViewInsets()
 	}
 
 	/// Setup the hierarchy
@@ -265,6 +274,31 @@ class VerifierStartScanningView: BaseView {
 		
 		titleLabel.accessibilityTraits.insert(.updatesFrequently)
 	}
+	
+	// MARK: - UITraitEnvironment
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		
+		updateStackViewInsets()
+	}
+	
+	private func updateStackViewInsets() {
+		guard let windowWidth = UIApplication.shared.keyWindow?.bounds.width else { return }
+		
+		let insets: NSDirectionalEdgeInsets? = {
+			guard !(traitCollection.preferredContentSizeCategory.isAccessibilityCategory || traitCollection.horizontalSizeClass == .compact)
+			else { return nil }
+			
+			let contentPercentageWidth: CGFloat = 0.65
+			let horizontalInset = CGFloat((windowWidth - windowWidth * contentPercentageWidth) / 2)
+			return NSDirectionalEdgeInsets(top: 8, leading: horizontalInset, bottom: 8, trailing: horizontalInset)
+		}()
+		
+		stackView.insets(insets)
+	}
+	
+	// MARK: - User input
 	
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {

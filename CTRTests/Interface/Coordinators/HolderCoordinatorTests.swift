@@ -12,6 +12,9 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
+import ReusableViews
+import TestingShared
+import Persistence
 
 class HolderCoordinatorTests: XCTestCase {
 
@@ -53,7 +56,6 @@ class HolderCoordinatorTests: XCTestCase {
 		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0
@@ -779,7 +781,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs_differentContext() throws {
 		
 		// Given
-		let dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+		let dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		var greenCard: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {

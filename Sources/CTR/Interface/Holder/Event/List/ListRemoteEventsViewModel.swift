@@ -8,6 +8,8 @@
 import Foundation
 import Transport
 import Shared
+import ReusableViews
+import Persistence
 
 class ListRemoteEventsViewModel {
 
@@ -229,7 +231,7 @@ class ListRemoteEventsViewModel {
 				// therefore none of the `eventsBeingAdded` should no longer be marked as draft:
 				eventsBeingAdded
 					.filter { $0.isDraft }
-					.forEach { $0.update(isDraft: false) }
+					.forEach { Current.walletManager.updateEventGroup($0, isDraft: false) }
 				
 				let shouldShowBlockingEndState = Self.processBlockedEvents(fromResponse: response, eventsBeingAdded: eventsBeingAdded)
 				guard !shouldShowBlockingEndState else {
@@ -294,7 +296,11 @@ class ListRemoteEventsViewModel {
 			Current.userSettings.hasShownBlockedEventsAlert = false
 		}
 		blockItemsForEventsNotBeingAdded.forEach { blockItem, eventGroup in
-			RemovedEvent.createAndPersist(blockItem: blockItem, existingEventGroup: eventGroup)
+			Current.walletManager.createAndPersistRemovedEvent(
+				blockItem: blockItem,
+				existingEventGroup: eventGroup,
+				cryptoManager: Current.cryptoManager
+			)
 		}
 		
 		// We may need to show an error screen here, if there's a block on any `eventsBeingAdded`:

@@ -10,6 +10,7 @@ import Reachability
 import Transport
 import Shared
 import OpenIDConnect
+import Persistence
 
 // MARK: - 1: Define the Environment
 
@@ -110,7 +111,7 @@ struct Environment {
 			guard !ProcessInfo().isUnitTesting else { return } // never callback
 		#endif
 		
-		_ = DataStoreManager(.persistent, flavor: .flavor) { result in
+		_ = DataStoreManager(.persistent, persistentContainerName: (AppFlavor.flavor == .holder) ? "CoronaCheck" : "Verifier") { result in
 			switch result {
 				case .success(let dataStoreManager):
 					
@@ -141,7 +142,9 @@ private let clockDeviationManager = ClockDeviationManager(
 	currentSystemUptime: ClockDeviationManager.currentSystemUptime,
 	now: now
 )
-private let contactInformationProvider = ContactInformationProvider()
+private let contactInformationProvider = ContactInformationProvider(
+	remoteConfigManager: remoteConfigManager
+)
 private let couplingManager = CouplingManager(cryptoManager: cryptoManager, networkManager: networkManager)
 private let cryptoManager = CryptoManager(
 	cryptoLibUtility: cryptoLibUtility,

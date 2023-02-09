@@ -27,14 +27,17 @@ packages:
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
-  RSwiftLibrary:
-    github: mac-cain13/R.swift.Library
-    majorVersion: 5.4.0
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
+  Persistence:
+    path: ./Packages/Persistence
+  ReusableViews:
+    path: ./Packages/ReusableViews
   Shared:
     path: ./Packages/Shared
+  TestingShared:
+    path: ./Packages/TestingShared
   Transport:
     path: ./Packages/Transport
 
@@ -132,6 +135,10 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: Persistence
+      - package: Shared
+      - package: Transport
+      - package: ReusableViews
       - package: IOSSecuritySuite
       - package: Lottie
       - package: RDOModules
@@ -144,8 +151,6 @@ targetTemplates:
         product: HTTPSecurity
       - package: Reachability
         product: Reachability
-      - package: RSwiftLibrary
-        product: Rswift
       - package: BrightFutures
         product: BrightFutures
       # Frameworks:
@@ -156,7 +161,7 @@ targetTemplates:
       base:
         CURRENT_PROJECT_VERSION: 1 # needs to be present for project to build locally, but is overwritten by fastlane. No need to change.
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Core/CTR-Bridging-Header.h
-        TARGETED_DEVICE_FAMILY: 1
+        TARGETED_DEVICE_FAMILY: 1,2 # iPhone + iPad
         PRODUCT_NAME: $(TARGET_NAME)
         PRODUCT_MODULE_NAME: CTR
     info:
@@ -225,6 +230,7 @@ targetTemplates:
     platform: iOS
     type: bundle.unit-test
     dependencies:
+      - package: TestingShared
       - package: Nimble
       - package: OHHTTPStubs
         product: OHHTTPStubsSwift
@@ -250,10 +256,6 @@ targets:
   Holder:
     # scheme:
     #   testTargets:
-        
-    dependencies:
-      - package: Shared
-      - package: Transport
     templates:
       - Standard_iOS
       - Standard_Signing
@@ -272,7 +274,6 @@ targets:
         MARKETING_VERSION: 4.11.0 # holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
-        TARGETED_DEVICE_FAMILY: 1,2 # holder supports iPad
 
       configs:
         Development:
@@ -328,9 +329,6 @@ targets:
         UILaunchStoryboardName: LaunchScreenHolder
 
   Verifier:
-    dependencies:
-      - package: Shared
-      - package: Transport
     templates:
       - Standard_iOS
       - Standard_Signing
@@ -344,7 +342,7 @@ targets:
       base:
         APP_FLAVOR: verifier
         # keep the comment on the next line, as it shows up in the CI logs & helps distinguish
-        MARKETING_VERSION: 3.0.3 # verifier
+        MARKETING_VERSION: 3.1.0 # verifier
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
       configs:
@@ -491,6 +489,9 @@ schemes:
           randomExecutionOrder: true
           parallelizable: false
         - package: Transport/TransportTests
+          randomExecutionOrder: true
+          parallelizable: false
+        - package: ReusableViews/ReusableViewsTests
           randomExecutionOrder: true
           parallelizable: false
         - name: CTRTests

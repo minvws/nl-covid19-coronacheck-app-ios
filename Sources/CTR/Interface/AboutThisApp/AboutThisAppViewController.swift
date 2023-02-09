@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
 final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutThisAppView, AboutThisAppViewModel> {
 
@@ -20,6 +22,8 @@ final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutT
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$appVersion.binding = { [weak self] in self?.sceneView.appVersion = $0 }
+		viewModel.$configVersion.binding = { [weak self] in self?.sceneView.configVersion = $0 }
 		viewModel.$alert.binding = { [weak self] alertContent in
 			guard let alertContent else { return }
 			self?.showAlert(alertContent)
@@ -27,7 +31,7 @@ final class AboutThisAppViewController: TraitWrappedGenericViewController<AboutT
 
 		addBackButton(customAction: nil)
 		setupMenuOptions()
-		
+
 		sceneView.resetButtonTapHandler = { [weak viewModel] in
 			viewModel?.didTapResetApp()
 		}

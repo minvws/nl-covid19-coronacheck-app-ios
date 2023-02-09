@@ -10,6 +10,8 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import Shared
+import TestingShared
+import ReusableViews
 
 class PrivacyConsentViewControllerTests: XCTestCase {
 

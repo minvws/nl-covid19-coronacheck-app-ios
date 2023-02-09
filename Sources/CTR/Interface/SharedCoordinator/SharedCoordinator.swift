@@ -7,6 +7,8 @@
 
 import UIKit
 import SafariServices
+import Shared
+import ReusableViews
 
 protocol Dismissable: AnyObject {
 
@@ -24,7 +26,7 @@ protocol OpenUrlProtocol: AnyObject {
 }
 
 /// The shared base class for the holder and verifier coordinator.
-class SharedCoordinator: Coordinator {
+class SharedCoordinator: Coordinator, OpenUrlProtocol {
 
 	var window: UIWindow
 
@@ -63,6 +65,7 @@ class SharedCoordinator: Coordinator {
 					title: title,
 					body: body
 				),
+				screenCaptureDetector: ScreenCaptureDetector(),
  				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: openURLsInApp)
@@ -139,39 +142,6 @@ extension SharedCoordinator: Dismissable {
 			navigationController.dismiss(animated: true, completion: nil)
 		} else {
 			navigationController.popViewController(animated: false)
-		}
-	}
-}
-
-// MARK: - OpenUrlProtocol
-
-extension SharedCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	/// - Parameters:
-	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		var shouldOpenInApp = inApp
-		if !(url.scheme == "http" || url.scheme == "https") {
-			// Other URL schemes can't be opened in SFSafariViewController, - it doesn't work & will crash.
-			shouldOpenInApp = false
-		}
-
-		guard #available(iOS 13.0, *), shouldOpenInApp else {
-			UIApplication.shared.open(url)
-			return
-		}
-		
-		let safariController = SFSafariViewController(url: url)
-
-		if let presentedViewController = navigationController.presentedViewController {
-			presentedViewController.presentingViewController?.dismiss(animated: true) {
-				self.navigationController.present(safariController, animated: true)
-			}
-		} else {
-			navigationController.present(safariController, animated: true)
 		}
 	}
 }

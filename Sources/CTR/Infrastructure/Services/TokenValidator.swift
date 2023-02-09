@@ -82,24 +82,3 @@ public class TokenValidator: TokenValidatorProtocol {
 		return luhnCheck.luhnModN(code)
 	}
 }
-
-extension RequestToken {
-	
-	public init?(input: String, tokenValidator: TokenValidatorProtocol) {
-		// Check the validity of the input
-		guard tokenValidator.validate(input) else {
-			return nil
-		}
-		
-		let parts = input.split(separator: "-")
-		guard parts.count >= 2, parts[0].count == 3 else { return nil }
-		
-		let identifierPart = String(parts[0])
-		let tokenPart = String(parts[1])
-		self = RequestToken(
-			token: tokenPart,
-			protocolVersion: type(of: self).highestKnownProtocolVersion,
-			providerIdentifier: identifierPart
-		)
-	}
-}

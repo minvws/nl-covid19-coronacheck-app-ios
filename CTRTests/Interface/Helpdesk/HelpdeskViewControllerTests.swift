@@ -10,6 +10,7 @@ import ViewControllerPresentationSpy
 @testable import CTR
 import Nimble
 import SnapshotTesting
+import TestingShared
 
 class HelpdeskViewControllerTests: XCTestCase {
 	
@@ -27,8 +28,7 @@ class HelpdeskViewControllerTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedHash = "hereisanicelongshahashforthistest"
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberAbroadLink = "<a href=\"tel:TEST 2\">TEST 2</a>"
-		environmentSpies.contactInformationSpy.stubbedStartDay = "maandag"
-		environmentSpies.contactInformationSpy.stubbedEndDay = "vrijdag"
+		environmentSpies.contactInformationSpy.stubbedOpeningDays = "maandag t/m vrijdag"
 		environmentSpies.contactInformationSpy.stubbedStartHour = "08:00"
 		environmentSpies.contactInformationSpy.stubbedEndHour = "18:00"
 		window = UIWindow()

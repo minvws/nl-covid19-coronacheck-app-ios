@@ -9,6 +9,7 @@ import Foundation
 import SnapshotTesting
 @testable import CTR
 import XCTest
+import TestingShared
 
 class QRCardViewTests: XCTestCase {
 

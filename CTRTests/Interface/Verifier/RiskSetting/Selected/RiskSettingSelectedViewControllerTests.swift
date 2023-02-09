@@ -9,8 +9,8 @@ import XCTest
 @testable import CTR
 import SnapshotTesting
 import Nimble
-import Rswift
 import Shared
+import TestingShared
 
 final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	

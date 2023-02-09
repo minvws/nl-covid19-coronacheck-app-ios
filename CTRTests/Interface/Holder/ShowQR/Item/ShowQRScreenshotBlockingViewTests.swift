@@ -9,6 +9,7 @@ import UIKit
 @testable import CTR
 import SnapshotTesting
 import XCTest
+import TestingShared
 
 class ShowQRScreenshotBlockingViewTests: XCTestCase {
 

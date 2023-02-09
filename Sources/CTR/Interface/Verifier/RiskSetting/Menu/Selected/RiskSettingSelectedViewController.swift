@@ -6,8 +6,10 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
-final class RiskSettingSelectedViewController: GenericViewController<RiskSettingSelectedView, RiskSettingSelectedViewModel> {
+final class RiskSettingSelectedViewController: TraitWrappedGenericViewController<RiskSettingSelectedView, RiskSettingSelectedViewModel> {
 
 	override func viewDidLoad() {
 

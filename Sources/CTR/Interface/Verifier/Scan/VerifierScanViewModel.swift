@@ -10,6 +10,7 @@ import AVFoundation
 import Clcore
 import Transport
 import Shared
+import ReusableViews
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 

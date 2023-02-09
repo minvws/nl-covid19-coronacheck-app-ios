@@ -6,8 +6,10 @@
 */
 
 import UIKit
+import Shared
+import ReusableViews
 
-final class ShowHintsViewController: TraitWrappedGenericViewController<ShowHintsView, ShowHintsViewModel> {
+final class ShowHintsViewController: TraitWrappedGenericViewController<ContentView, ShowHintsViewModel> {
 	
 	override var enableSwipeBack: Bool { false }
 	

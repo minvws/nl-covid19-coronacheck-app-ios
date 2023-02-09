@@ -7,16 +7,21 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 class VerifierStartScanningViewController: GenericViewController<VerifierStartScanningView, VerifierStartScanningViewModel> {
 	
 	override var enableSwipeBack: Bool { false }
+	
+	// MARK: View lifecycle
 
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
 		
 		setupBindings()
+		
+		navigationController?.setNavigationBarHidden(false, animated: false)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

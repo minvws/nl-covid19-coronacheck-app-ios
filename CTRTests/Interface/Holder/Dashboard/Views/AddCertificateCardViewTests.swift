@@ -10,6 +10,7 @@ import SnapshotTesting
 @testable import CTR
 import XCTest
 import Shared
+import TestingShared
 
 class AddCertificateCardViewTests: XCTestCase {
 

@@ -11,6 +11,8 @@
 @testable import Shared
 import XCTest
 import Nimble
+import TestingShared
+import Persistence
 
 class WalletManagerTests: XCTestCase {
 
@@ -23,7 +25,7 @@ class WalletManagerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		
-		dataStoreManager = DataStoreManager(.inMemory, loadPersistentStoreCompletion: { _ in })
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
 
@@ -830,6 +832,182 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 		expect(self.sut.listEventGroups().first?.expiryDate) == nil
+	}
+
+	func test_createAndPersistRemovedEvent_noEvents() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeBlocked,
+			reason: RemovalReason.blockedEvent
+		)
+		
+		// Then
+		expect(persisted).to(beEmpty())
+	}
+	
+	func test_createAndPersistRemovedEvent_wrapperVaccination() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
+			reason: RemovalReason.blockedEvent
+		)
+		
+		// Then
+		expect(persisted).to(haveCount(1))
+		expect(persisted.first?.type) == EventMode.vaccination.rawValue
+		expect(persisted.first?.reason) == RemovalReason.blockedEvent.rawValue
+	}
+
+	func test_createAndPersistRemovedEvent_wrapperRecovery() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeRecoveryResultWrapper,
+			reason: RemovalReason.blockedEvent
+		)
+		
+		// Then
+		expect(persisted).to(haveCount(1))
+		expect(persisted.first?.type) == EventMode.recovery.rawValue
+		expect(persisted.first?.reason) == RemovalReason.blockedEvent.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_wrapperPositiveTest() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper,
+			reason: RemovalReason.blockedEvent
+		)
+		
+		// Then
+		expect(persisted).to(haveCount(1))
+		expect(persisted.first?.type) == EventMode.recovery.rawValue
+		expect(persisted.first?.reason) == RemovalReason.blockedEvent.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_wrapperNegativeTest() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
+			reason: RemovalReason.blockedEvent
+		)
+		
+		// Then
+		expect(persisted).to(haveCount(1))
+		expect(persisted.first?.type) == EventMode.test(.commercial).rawValue
+		expect(persisted.first?.reason) == RemovalReason.blockedEvent.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesVaccination() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeVaccination(),
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) != nil
+		expect(persisted?.type) == EventMode.vaccination.rawValue
+		expect(persisted?.reason) == RemovalReason.mismatchedIdentity.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesRecovery() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeRecovery,
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) != nil
+		expect(persisted?.type) == EventMode.recovery.rawValue
+		expect(persisted?.reason) == RemovalReason.mismatchedIdentity.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesNegativeTest() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeTest,
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) != nil
+		expect(persisted?.type) == EventMode.test(.dcc).rawValue
+		expect(persisted?.reason) == RemovalReason.mismatchedIdentity.rawValue
+	}
+	
+	func test_createAndPersistRemovedEvent_euCredentialAttributesInvalid() {
+		
+		// Given
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(
+			euCredentialAttributes: EuCredentialAttributes.fakeEmptyCertificate,
+			reason: RemovalReason.mismatchedIdentity
+		)
+		
+		// Then
+		expect(persisted) == nil
+	}
+	
+	func test_createAndPersistRemovedEvent_blockedItem_cryptoFail() throws {
+
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		let blobExpiry = RemoteGreenCards.BlobExpiry(
+			identifier: eventGroup.uniqueIdentifier,
+			expirationDate: .distantPast,
+			reason: RemovalReason.blockedEvent.rawValue
+		)
+
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: environmentSpies.cryptoManagerSpy)
+
+		// Then
+		expect(persisted) == nil
+	}
+	
+	func test_createAndPersistRemovedEvent_blockedItem() throws {
+		
+		// Given
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		let blobExpiry = RemoteGreenCards.BlobExpiry(
+			identifier: eventGroup.uniqueIdentifier,
+			expirationDate: .distantPast,
+			reason: RemovalReason.blockedEvent.rawValue
+		)
+		
+		// When
+		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: environmentSpies.cryptoManagerSpy)
+		
+		// Then
+		expect(persisted) != nil
 	}
 	
 	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)

@@ -9,7 +9,8 @@ import XCTest
 import Shared
 @testable import CTR
 import Nimble
-import Rswift
+import TestingShared
+import Persistence
 
 class VerifierStartScanningViewModelTests: XCTestCase {
 	

@@ -9,6 +9,7 @@ import Foundation
 import BrightFutures
 import Transport
 import Shared
+import Persistence
 
 protocol GreenCardLoading {
 	func signTheEventsIntoGreenCardsAndCredentials(

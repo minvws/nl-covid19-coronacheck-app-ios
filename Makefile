@@ -1,6 +1,6 @@
 # -- Main entrypoint
 
-dev: install_dev_deps install_githooks generate_project compile_mobilecore open_project
+dev: install_dev_deps install_githooks remove_old_rswift generate_project compile_mobilecore open_project
 
 # -- Setup Environment --
 
@@ -91,7 +91,11 @@ download_translations:
 	@Scripts/check_html_in_strings.sh
 # Cleanup:
 	@rm -rf "tmp/localization_downloads"
+
 # -- Periphery --
 
 scan_unused_code:
 	periphery scan --index-exclude "Sources/CTR/Infrastructure/Resources/R.generated.swift"
+
+remove_old_rswift:
+	@rm Sources/CTR/Infrastructure/Resources/R.generated.swift || true

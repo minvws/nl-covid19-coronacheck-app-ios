@@ -8,10 +8,12 @@
 import Foundation
 import Transport
 import Shared
+import ReusableViews
+import Persistence
 
 enum ScanLogDisplayEntry: Equatable {
 
-	case message (message: String)
+	case logMessage (message: String)
 
 	case entry(type: String, timeInterval: String, message: String, warning: String?)
 }
@@ -114,7 +116,7 @@ private struct ScanLogDataSource {
 	func getDisplayEntries() -> [ScanLogDisplayEntry] {
 
 		guard !entries.isEmpty else {
-			return [.message(message: L.scan_log_list_no_items())]
+			return [.logMessage(message: L.scan_log_list_no_items())]
 		}
 		return populateLog(sortedEntries: entries.sortedByIdentifier())
 	}

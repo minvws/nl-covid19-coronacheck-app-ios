@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import ReusableViews
 
 class ListStoredEventsView: ScrolledStackView {
 
@@ -19,7 +20,7 @@ class ListStoredEventsView: ScrolledStackView {
 
 		enum Title {
 			static let spacing: CGFloat = 24
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 

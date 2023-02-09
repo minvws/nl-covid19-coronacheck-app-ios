@@ -11,6 +11,8 @@ import XCTest
 @testable import Shared
 import Nimble
 import Reachability
+import TestingShared
+import Persistence
 
 class RemoteConfigManagerTests: XCTestCase {
 	

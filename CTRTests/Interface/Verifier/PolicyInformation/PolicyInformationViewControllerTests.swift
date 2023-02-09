@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import Shared
+import TestingShared
 
 final class PolicyInformationViewControllerTests: XCTestCase {
 	

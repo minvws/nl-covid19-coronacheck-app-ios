@@ -10,6 +10,7 @@ import Nimble
 @testable import Transport
 @testable import CTR
 import Shared
+import ReusableViews
 
 final class SendIdentitySelectionViewModelTests: XCTestCase {
 

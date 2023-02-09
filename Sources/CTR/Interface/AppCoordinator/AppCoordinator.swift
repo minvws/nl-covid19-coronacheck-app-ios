@@ -7,8 +7,10 @@
 
 import UIKit
 import Shared
+import ReusableViews
 import Transport
 import OpenIDConnect
+import Persistence
 
 protocol AppCoordinatorDelegate: AnyObject {
 	
@@ -332,6 +334,17 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	}
 	
 	func errorWhileLoading(_ errorTuples: [(error: ServerError, step: ErrorCode.Step)]) {
+		
+		// Show Internet Required if we have a no internet
+		for errorTuple in errorTuples {
+			switch errorTuple.error {
+				case .error(_, _, let error), .provider(_, _, _, let error):
+					if [.serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .noInternetConnection].contains(error) {
+						showInternetRequired()
+						return
+					}
+			}
+		}
 		
 		let errorCodes = ErrorCode.mapServerErrors(errorTuples, for: .onboarding)
 		let viewModel = LaunchErrorViewModel(errorCodes: errorCodes) { [weak self] url in

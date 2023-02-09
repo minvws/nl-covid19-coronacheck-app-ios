@@ -8,6 +8,8 @@
 import Foundation
 import Transport
 import Shared
+import ReusableViews
+import Persistence
 
 final class ShowHintsViewModel {
 	

@@ -11,6 +11,8 @@ import XCTest
 @testable import Shared
 import Nimble
 import ViewControllerPresentationSpy
+import TestingShared
+import Persistence
 
 class UnrecoverableErrorCoordinatorTests: XCTestCase {
 

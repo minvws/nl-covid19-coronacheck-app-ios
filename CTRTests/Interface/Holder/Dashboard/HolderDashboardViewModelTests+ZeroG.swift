@@ -10,6 +10,8 @@ import XCTest
 import Nimble
 import CoreData
 import Shared
+import TestingShared
+import Persistence
 
 extension HolderDashboardViewModelTests {
 	

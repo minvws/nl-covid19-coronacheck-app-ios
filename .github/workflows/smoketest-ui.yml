@@ -4,7 +4,7 @@ name: smoketest-ui
 
 on:
   schedule:
-    - cron: '0 5 * * 2,4' # Run at 05:00 on Tuesday and Thursday.
+    - cron: '0 13 * * 0' # Run at 13:00 on Sunday.
   workflow_dispatch:
 
 env:

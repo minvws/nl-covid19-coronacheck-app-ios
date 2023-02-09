@@ -8,6 +8,7 @@
 import UIKit
 @testable import CTR
 import Shared
+import ReusableViews
 
 final class TestModalViewController: GenericViewController<TestModalView, TestModalViewModel> {
 		

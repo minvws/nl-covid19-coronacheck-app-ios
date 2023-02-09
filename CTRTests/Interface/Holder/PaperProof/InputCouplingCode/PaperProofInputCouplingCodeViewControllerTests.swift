@@ -10,6 +10,8 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import Shared
+import TestingShared
+import ReusableViews
 
 // swiftlint:disable:next type_name
 class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {

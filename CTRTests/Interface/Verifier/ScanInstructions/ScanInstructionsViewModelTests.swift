@@ -12,6 +12,7 @@ import Lottie
 @testable import CTR
 import SnapshotTesting
 import Shared
+import TestingShared
 
 class ScanInstructionsViewModelTests: XCTestCase {
 

@@ -12,6 +12,7 @@ import ViewControllerPresentationSpy
 @testable import Shared
 import Nimble
 import SnapshotTesting
+import TestingShared
 
 class AboutThisAppViewControllerTests: XCTestCase {
 	
@@ -29,12 +30,12 @@ class AboutThisAppViewControllerTests: XCTestCase {
 
 		outcomes = [AboutThisAppViewModel.Outcome]()
 		let viewModel = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)
 			}
 		)
-		
 		sut = AboutThisAppViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
@@ -72,6 +73,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = true
 		let viewModel = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { outcome in
 				self.outcomes.append(outcome)
@@ -99,6 +101,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)
@@ -124,6 +127,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)
@@ -152,6 +156,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 		
 		// Given
 		let viewModel = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInit"),
 			flavor: AppFlavor.verifier,
 			outcomeHandler: { [unowned self] outcome in
 				self.outcomes.append(outcome)

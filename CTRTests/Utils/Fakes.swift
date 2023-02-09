@@ -11,6 +11,9 @@ import Foundation
 @testable import Transport
 @testable import Shared
 import UIKit
+import TestingShared
+import Persistence
+import CoreData
 
 extension TestProvider {
 
@@ -399,6 +402,19 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 					validFrom: "2021-08-11T09:50:00+00:00"
 				)
 			]
+		)
+	}
+	
+	static func sampleWithoutEvent(country: String = "NL") -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0"
 		)
 	}
 }
@@ -1351,6 +1367,16 @@ extension EuCredentialAttributes {
 			issuer: "NL"
 		)
 	}
+	
+	static var fakeEmptyCertificate: EuCredentialAttributes {
+		EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: .sampleWithoutEvent(),
+			expirationTime: now.timeIntervalSince1970 + 3600,
+			issuedAt: now.timeIntervalSince1970,
+			issuer: "NL"
+		)
+	}
 }
 
 extension EventGroup {
@@ -1495,5 +1521,13 @@ struct FakeRemoteEvent {
 			wrapper: EventFlow.EventResultWrapper.fakePaperProofResultWrapper,
 			signedResponse: SignedResponse.fakeResponse
 		)
+	}
+}
+
+extension WalletModel {
+	
+	@discardableResult class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
+		
+		return Wallet(label: "testWallet", managedContext: managedContext)
 	}
 }
