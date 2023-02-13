@@ -6,7 +6,6 @@
 */
 
 import Foundation
-import Transport
 import LuhnCheck
 
 public protocol TokenValidatorProtocol {
@@ -67,7 +66,7 @@ public class TokenValidator: TokenValidatorProtocol {
 
 			return false
 		}
-		
+
 		guard codeSplit[2].last == "2" else {
 
 			return false
@@ -77,7 +76,7 @@ public class TokenValidator: TokenValidatorProtocol {
 			// Skip Luhn check if disabled
 			return true
 		}
-		
+
 		let code = codeSplit[1] + codeSplit[2].prefix(1)
 		return luhnCheck.luhnModN(code)
 	}
