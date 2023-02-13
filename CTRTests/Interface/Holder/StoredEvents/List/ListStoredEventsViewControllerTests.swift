@@ -13,6 +13,7 @@ import SnapshotTesting
 @testable import Shared
 import TestingShared
 import Persistence
+@testable import Models
 
 class ListStoredEventsViewControllerTests: XCTestCase {
 

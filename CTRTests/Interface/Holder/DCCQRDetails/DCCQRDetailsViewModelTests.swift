@@ -8,6 +8,7 @@
 import XCTest
 import Nimble
 @testable import CTR
+@testable import Models
 import Shared
 
 class DCCQRDetailsViewModelTests: XCTestCase {

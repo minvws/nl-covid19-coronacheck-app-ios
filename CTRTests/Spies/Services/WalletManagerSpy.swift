@@ -12,6 +12,7 @@ import TestingShared
 import Persistence
 import XCTest
 import CoreData
+@testable import Models
 
 class WalletManagerSpy: WalletManaging {
 

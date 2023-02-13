@@ -13,6 +13,7 @@ import XCTest
 import Nimble
 import TestingShared
 import Persistence
+@testable import Models
 
 class WalletManagerTests: XCTestCase {
 

@@ -12,6 +12,7 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import TestingShared
+@testable import Models
 
 class StoredEventDetailsViewControllerTests: XCTestCase {
 

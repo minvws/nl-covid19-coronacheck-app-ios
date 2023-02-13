@@ -15,6 +15,7 @@ import Nimble
 import Reachability
 import TestingShared
 import Persistence
+@testable import Models
 
 class HolderDashboardStrippenRefresherTests: XCTestCase {
 	
