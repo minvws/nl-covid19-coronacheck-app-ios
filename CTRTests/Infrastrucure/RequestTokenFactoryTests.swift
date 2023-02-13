@@ -9,12 +9,11 @@ import Foundation
 import XCTest
 @testable import CTR
 @testable import Shared
+@testable import Model
+@testable import Transport
 import TestingShared
-import Persistence
-import Transport
-@testable import Models
 
-class RequestTokenTests: XCTestCase {
+class RequestTokenFactoryTests: XCTestCase {
 	
 	var tokenValidatorSpy: TokenValidatorSpy!
 	
