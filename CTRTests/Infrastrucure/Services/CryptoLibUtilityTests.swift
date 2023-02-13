@@ -8,6 +8,7 @@
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Persistence
 import XCTest
 import Nimble
 import Reachability

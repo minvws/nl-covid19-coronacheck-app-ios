@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import CTR
 @testable import Shared
-@testable import Model
+@testable import Models
 @testable import Transport
 import TestingShared
 
