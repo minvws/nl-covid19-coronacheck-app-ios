@@ -15,6 +15,9 @@ let package = Package(
         .package(name: "CryptoCore", path: "../CryptoCore"),
         .package(name: "Shared", path: "../Shared"),
         .package(name: "Transport", path: "../Transport")
+        // Testing:
+        .package(name: "TestingShared", path: "../TestingShared"),
+        .package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0)),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -28,6 +31,10 @@ let package = Package(
             ]),
         .testTarget(
             name: "ModelsTests",
-            dependencies: ["Models"]),
+            dependencies: [
+                "Models",
+                .product(name: "TestingShared", package: "TestingShared"),
+				.product(name: "Nimble", package: "Nimble"),
+            ]),
     ]
 )
