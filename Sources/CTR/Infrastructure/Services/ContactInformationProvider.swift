@@ -61,24 +61,6 @@ class ContactInformationProvider: ContactInformationProtocol {
 		return L.holder_contactCoronaCheckHelpdesk_message_until(Calendar.current.weekdaySymbols[startDay], Calendar.current.weekdaySymbols[endDay])
 	}
 	
-	var startDay: String {
-		if let contactInfo = remoteConfigManager?.storedConfiguration.contactInformation,
-		   let start = contactInfo.startDay, start >= 0, start <= 6 {
-			return Calendar.current.weekdaySymbols[start]
-		}
-		// Fallback
-		return Calendar.current.weekdaySymbols[1]
-	}
-	
-	var endDay: String {
-		if let contactInfo = remoteConfigManager?.storedConfiguration.contactInformation,
-		   let end = contactInfo.endDay, end >= 0, end <= 6 {
-			return Calendar.current.weekdaySymbols[end]
-		}
-		// Fallback
-		return Calendar.current.weekdaySymbols[5]
-	}
-	
 	var startHour: String {
 		let start = remoteConfigManager?.storedConfiguration.contactInformation?.startHour ?? "08:00"
 		if let startDate = DateFormatter.Format.time.date(from: start) {
