@@ -9,7 +9,7 @@
 import XCTest
 import TestingShared
 import Persistence
-@testable import Models
+@testable import Transport
 
 class IdentityCheckerSpy: IdentityCheckerProtocol {
 

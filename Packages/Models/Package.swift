@@ -14,7 +14,7 @@ let package = Package(
     dependencies: [
         .package(name: "CryptoCore", path: "../CryptoCore"),
         .package(name: "Shared", path: "../Shared"),
-        .package(name: "Transport", path: "../Transport")
+        
         // Testing:
         .package(name: "TestingShared", path: "../TestingShared"),
         .package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0)),
@@ -26,8 +26,7 @@ let package = Package(
             name: "Models",
             dependencies: [
                 .product(name: "CryptoCore", package: "CryptoCore"),
-                .product(name: "Shared", package: "Shared"),
-                .product(name: "Transport", package: "Transport")
+                .product(name: "Shared", package: "Shared")
             ]),
         .testTarget(
             name: "ModelsTests",

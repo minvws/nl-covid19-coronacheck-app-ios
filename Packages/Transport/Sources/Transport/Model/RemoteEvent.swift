@@ -6,7 +6,6 @@
 */
 
 import Foundation
-import Transport
 import Shared
 
 public struct RemoteEvent {
