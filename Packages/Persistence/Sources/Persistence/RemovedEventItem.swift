@@ -13,4 +13,11 @@ public struct RemovedEventItem: Equatable {
 	public let eventDate: Date
 	public let reason: String
 	public let type: OriginType
+	
+	public init(objectID: NSManagedObjectID, eventDate: Date, reason: String, type: OriginType) {
+		self.objectID = objectID
+		self.eventDate = eventDate
+		self.reason = reason
+		self.type = type
+	}
 }

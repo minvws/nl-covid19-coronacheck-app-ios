@@ -12,6 +12,7 @@ import Clcore
 import Transport
 import Shared
 import Models
+import Persistence
 
 protocol CryptoLibUtilityProtocol: AnyObject {
 	

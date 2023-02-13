@@ -40,26 +40,3 @@ class GreenCardModel {
 	}
 }
 
-extension RemovedEvent {
-	
-	static let entityName = "RemovedEvent"
-	
-	convenience init(
-		type: EventMode,
-		eventDate: Date,
-		reason: String,
-		wallet: Wallet,
-		managedContext: NSManagedObjectContext) {
-		
-		self.init(context: managedContext)
-		self.type = type.rawValue
-		self.eventDate = eventDate
-		self.reason = reason
-		self.wallet = wallet
-	}
-	
-	func delete(context: NSManagedObjectContext) {
-		
-		context.delete(self)
-	}
-}
