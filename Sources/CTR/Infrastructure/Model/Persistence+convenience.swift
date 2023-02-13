@@ -22,21 +22,4 @@ extension Array where Element == RemoteGreenCards.BlobExpiry {
 	}
 }
 
-class GreenCardModel {
-
-	class func fetchByIds(objectIDs: [NSManagedObjectID]) -> Result<[GreenCard], Error> {
-
-		var result = [GreenCard]()
-		for objectID in objectIDs {
-			do {
-				if let greenCard = try Current.dataStoreManager.managedObjectContext().existingObject(with: objectID) as? GreenCard {
-					result.append(greenCard)
-				}
-			} catch let error {
-				return .failure(error)
-			}
-		}
-		return .success(result)
-	}
-}
 

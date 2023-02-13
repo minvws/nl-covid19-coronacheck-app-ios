@@ -120,3 +120,21 @@ extension GreenCard {
 		context.delete(self)
 	}
 }
+
+public class GreenCardModel {
+
+	public class func fetchByIds(objectIDs: [NSManagedObjectID], managedObjectContext: NSManagedObjectContext) -> Result<[GreenCard], Error> {
+
+		var result = [GreenCard]()
+		for objectID in objectIDs {
+			do {
+				if let greenCard = try managedObjectContext.existingObject(with: objectID) as? GreenCard {
+					result.append(greenCard)
+				}
+			} catch let error {
+				return .failure(error)
+			}
+		}
+		return .success(result)
+	}
+}
