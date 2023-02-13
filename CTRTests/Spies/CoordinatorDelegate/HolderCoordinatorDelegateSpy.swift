@@ -11,6 +11,7 @@ import XCTest
 import ReusableViews
 import TestingShared
 import Persistence
+@testable import Models
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
