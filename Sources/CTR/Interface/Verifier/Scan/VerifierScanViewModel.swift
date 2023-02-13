@@ -11,6 +11,7 @@ import Clcore
 import Transport
 import Shared
 import ReusableViews
+import Models
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 

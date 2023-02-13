@@ -7,6 +7,7 @@
 
 import Foundation
 import Clcore
+import Models
 
 protocol CryptoManaging: AnyObject {
 	

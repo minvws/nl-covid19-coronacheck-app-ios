@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import Shared
 import Persistence
+import Models
 
 class ShowQRViewModel {
 

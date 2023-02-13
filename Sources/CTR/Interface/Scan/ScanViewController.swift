@@ -9,6 +9,7 @@ import AVFoundation
 import UIKit
 import Shared
 import ReusableViews
+import Models
 
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 

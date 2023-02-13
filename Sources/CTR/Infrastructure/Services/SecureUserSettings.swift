@@ -9,6 +9,7 @@
 import Foundation
 import Transport
 import Shared
+import Models
 
 protocol SecureUserSettingsProtocol: AnyObject {
 	typealias ForcedInformationData = NewFeaturesManager.ForcedInformationData

@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 import Shared
 import Persistence
+import Models
 
 // MARK: - Model
 

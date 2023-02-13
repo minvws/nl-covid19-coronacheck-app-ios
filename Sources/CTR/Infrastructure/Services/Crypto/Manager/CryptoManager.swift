@@ -8,6 +8,7 @@
 import Foundation
 import Clcore
 import Shared
+import Models
 
 /// The cryptography manager
 class CryptoManager: CryptoManaging {

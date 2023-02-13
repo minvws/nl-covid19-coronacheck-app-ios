@@ -11,6 +11,7 @@ import Reachability
 import Clcore
 import Transport
 import Shared
+import Models
 
 protocol CryptoLibUtilityProtocol: AnyObject {
 	
