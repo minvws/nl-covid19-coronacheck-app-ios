@@ -12,6 +12,7 @@ import XCTest
 import TestingShared
 import Persistence
 import Transport
+@testable import Models
 
 class RequestTokenTests: XCTestCase {
 	

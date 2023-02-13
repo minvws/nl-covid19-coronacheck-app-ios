@@ -6,18 +6,15 @@
 */
 
 import Foundation
-@testable import CTR
-@testable import Transport
-@testable import Shared
 
-class TokenValidatorSpy: TokenValidatorProtocol {
-	
+internal class TokenValidatorSpy: TokenValidatorProtocol {
+
 	var invokedValidate = false
 	var invokedValidateCount = 0
 	var invokedValidateParameters: (token: String, Void)?
 	var invokedValidateParametersList = [(token: String, Void)]()
 	var stubbedValidateResult: Bool! = false
-	
+
 	func validate(_ token: String) -> Bool {
 		invokedValidate = true
 		invokedValidateCount += 1
