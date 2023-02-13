@@ -7,11 +7,10 @@
 
 import Foundation
 import CoreData
-import Persistence
 
-struct RemovedEventItem: Equatable {
-	let objectID: NSManagedObjectID
-	let eventDate: Date
-	let reason: String
-	let type: OriginType
+public struct RemovedEventItem: Equatable {
+	public let objectID: NSManagedObjectID
+	public let eventDate: Date
+	public let reason: String
+	public let type: OriginType
 }
