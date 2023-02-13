@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import CTR
+@testable import Models
 
 extension DomesticCredentialAttributes {
 	
