@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Clcore
+@testable import Models
 
 class CryptoManagerSpy: CryptoManaging {
 

@@ -12,6 +12,7 @@ import TestingShared
 import Persistence
 @testable import CTR
 import Transport
+@testable import Models
 
 class RemoteFileValidityTests: XCTestCase {
 	

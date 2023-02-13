@@ -8,6 +8,7 @@
 import XCTest
 import Shared
 @testable import CTR
+@testable import Models
 
 class VerificationPolicyManagerSpy: VerificationPolicyManaging {
 

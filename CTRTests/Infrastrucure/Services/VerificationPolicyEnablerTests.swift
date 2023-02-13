@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+@testable import Models
 
 final class VerificationPolicyEnablerTests: XCTestCase {
 	

@@ -10,6 +10,7 @@ import XCTest
 import Clcore
 import Nimble
 import Shared
+@testable import Models
 
 class VerifierScanViewModelTests: XCTestCase {
 	
