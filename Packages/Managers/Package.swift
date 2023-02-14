@@ -12,7 +12,9 @@ let package = Package(
             targets: ["Managers"]),
     ],
     dependencies: [
+        .package(name: "CryptoCore", path: "../CryptoCore"),
         .package(name: "Models", path: "../Models"),
+        .package(name: "Persistence", path: "../Persistence"), // TODO: only for FileStorageProtocol, consider moving
         .package(name: "Shared", path: "../Shared"),
         .package(name: "Transport", path: "../Transport"),
 
@@ -26,7 +28,9 @@ let package = Package(
         .target(
             name: "Managers",
             dependencies: [
+                .product(name: "CryptoCore", package: "CryptoCore"),
                 .product(name: "Models", package: "Models"),
+                .product(name: "Persistence", package: "Persistence"),
                 .product(name: "Shared", package: "Shared"),
                 .product(name: "Transport", package: "Transport"),
             ]),
