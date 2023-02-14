@@ -21,5 +21,3 @@ extension Array where Element == RemoteGreenCards.BlobExpiry {
 		}
 	}
 }
-
-
