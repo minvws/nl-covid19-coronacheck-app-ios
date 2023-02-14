@@ -23,6 +23,7 @@ let package = Package(
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0)),
+		.package(url: "https://github.com/ashleymills/Reachability.swift", from: "5.1.0")
 	],
 	targets: [
 		// Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -44,6 +45,8 @@ let package = Package(
 				"Managers",
 				.product(name: "TestingShared", package: "TestingShared"),
 				.product(name: "Nimble", package: "Nimble"),
+
+				.product(name: "Reachability", package: "Reachability.swift") // required to use ReachabilitySpy
 			]),
 	]
 )

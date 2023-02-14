@@ -8,6 +8,7 @@
 import XCTest
 import Nimble
 import TestingShared
+import Reachability
 @testable import Managers
 @testable import Transport
 @testable import Shared
@@ -285,17 +286,16 @@ class CryptoLibUtilityTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
-	// TODO: 
-//	func test_reachability() {
-//
-//		// Arrange
-//		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
-//		sut.registerTriggers()
-//
-//		// Act
-//		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
-//
-//		// Assert
-//		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
-//	}
+	func test_reachability() {
+
+		// Arrange
+		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
+		sut.registerTriggers()
+
+		// Act
+		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
+
+		// Assert
+		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
+	}
 }

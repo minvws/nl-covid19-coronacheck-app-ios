@@ -8,6 +8,7 @@
 import XCTest
 import Nimble
 import TestingShared
+import Reachability
 @testable import Transport
 @testable import Shared
 @testable import Persistence
@@ -444,19 +445,18 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
-	// TODO: 
-//	func test_reachability() {
-//
-//		// Arrange
-//		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 0
-//		sut.registerTriggers()
-//
-//		// Act
-//		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
-//
-//		// Assert
-//		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 1
-//	}
+	func test_reachability() {
+
+		// Arrange
+		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 0
+		sut.registerTriggers()
+
+		// Act
+		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
+
+		// Assert
+		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 1
+	}
 }
 
 extension RemoteConfiguration {
