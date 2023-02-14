@@ -151,13 +151,9 @@ targetTemplates:
       - package: IOSSecuritySuite
       - package: Lottie
       - package: RDOModules
-        product: LuhnCheck
-      - package: RDOModules
         product: QRGenerator
       - package: RDOModules
         product: OpenIDConnect
-      - package: RDOModules
-        product: HTTPSecurity
       - package: Reachability
         product: Reachability
       - package: BrightFutures
