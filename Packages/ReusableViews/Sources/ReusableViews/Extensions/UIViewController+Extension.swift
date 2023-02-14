@@ -12,7 +12,7 @@ import ReusableViews
 extension UIViewController {
 	
 	/// Set up translucent navigation bar. By default, navigation bar has an opaque background
-	func setupTranslucentNavigationBar() {
+	public func setupTranslucentNavigationBar() {
 		let titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: C.black()!,
 			NSAttributedString.Key.font: Fonts.bodyMontserratFixed
@@ -41,7 +41,7 @@ extension UIViewController {
 	/// Set the navigation bar's title color. For use with iOS 15.
 	/// - Parameters:
 	///   - color: The color to apply
-	func overrideNavigationBarTitleColor(with color: UIColor) {
+	public func overrideNavigationBarTitleColor(with color: UIColor) {
 		
 		let titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: color,
@@ -59,7 +59,7 @@ extension UIViewController {
 	/// Presents a view controller as bottom sheet modal
 	/// - Parameters:
 	///   - viewControllerToPresent: The view controller to display over the current view controller’s content
-	func presentBottomSheet(_ viewControllerToPresent: UIViewController) {
+	public func presentBottomSheet(_ viewControllerToPresent: UIViewController) {
 		let bottomSheetViewController = BottomSheetModalViewController(childViewController: viewControllerToPresent)
 		bottomSheetViewController.transitioningDelegate = BottomSheetTransitioningDelegate.default
 		bottomSheetViewController.modalPresentationStyle = .custom
