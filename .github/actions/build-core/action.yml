@@ -24,8 +24,8 @@ runs:
       uses: actions/cache@v3
       with:
         path: |
-          clcore.xcframework
-        key: clcore-xcframework-${{ steps.version.outputs.VERSION }}-${{ steps.version.outputs.GO_VERSION }}
+          Packages/CryptoCore/Frameworks/clcore.xcframework
+        key: clcore-xcframework-${{ steps.version.outputs.VERSION }}-${{ steps.version.outputs.GO_VERSION }}-v3
 
     - name: Setup go
       if: steps.corecache.outputs.cache-hit != 'true'
@@ -45,8 +45,9 @@ runs:
         gomobile init
         gomobile bind -target ios,iossimulator -o clcore.xcframework -iosversion 11.0 github.com/minvws/nl-covid19-coronacheck-mobile-core
         cd ../
-        rm -rf clcore.xcframework
-        cp -R tmp-clcore/clcore.xcframework .
+        rm -rf clcore.framework # cleanup previous location
+        rm -rf Frameworks # cleanup previous location
+        cp -R tmp-clcore/clcore.xcframework Packages/CryptoCore/Frameworks/
         rm -rf tmp-clcore
 
     - name: Archive mobile core dependency
@@ -54,5 +55,5 @@ runs:
       with:
         name: clcore.xcframework
         path: |
-          clcore.xcframework
+          Packages/CryptoCore/Frameworks/clcore.xcframework
         retention-days: 2

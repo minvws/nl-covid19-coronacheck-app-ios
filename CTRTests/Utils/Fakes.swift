@@ -14,6 +14,7 @@ import UIKit
 import TestingShared
 import Persistence
 import CoreData
+@testable import Models
 
 extension TestProvider {
 

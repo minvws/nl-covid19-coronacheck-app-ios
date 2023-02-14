@@ -13,6 +13,7 @@ import Lottie
 import SnapshotTesting
 import Shared
 import TestingShared
+@testable import Models
 
 class ScanInstructionsViewModelTests: XCTestCase {
 

@@ -8,7 +8,7 @@
 import Foundation
 import Shared
 
-protocol FileStorageProtocol: AnyObject {
+public protocol FileStorageProtocol: AnyObject {
 	func store(_ data: Data, as fileName: String) throws
 	func read(fileName: String) -> Data?
 	func fileExists(_ fileName: String) -> Bool
@@ -17,16 +17,16 @@ protocol FileStorageProtocol: AnyObject {
 	var documentsURL: URL? { get }
 }
 
-final class FileStorage: FileStorageProtocol {
+final public class FileStorage: FileStorageProtocol {
 	
 	private let fileManager: FileManager
 	
-	init(fileManager: FileManager = FileManager.default) {
+	public init(fileManager: FileManager = FileManager.default) {
 		self.fileManager = fileManager
 	}
 
 	/// Get url to documents directory
-	var documentsURL: URL? {
+	public var documentsURL: URL? {
 		return fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
 	}
 
@@ -35,7 +35,7 @@ final class FileStorage: FileStorageProtocol {
 	///   - data: Store data
 	///   - fileName: Name of file
 	/// - Throws
-	func store(_ data: Data, as fileName: String) throws {
+	public func store(_ data: Data, as fileName: String) throws {
 		guard let url = documentsURL else {
 			logError("Failed to load documents directory")
 			return
@@ -46,7 +46,7 @@ final class FileStorage: FileStorageProtocol {
 		try data.write(to: fileUrl, options: .atomic)
 	}
 	
-	func read(fileName: String) -> Data? {
+	public func read(fileName: String) -> Data? {
 		
 		guard let url = documentsURL else {
 			logError("Failed to load documents directory")
@@ -69,7 +69,7 @@ final class FileStorage: FileStorageProtocol {
 	/// Check if a file exists
 	/// - Parameter fileName: the name of the file
 	/// - Returns: True if it does.
-	func fileExists(_ fileName: String) -> Bool {
+	public func fileExists(_ fileName: String) -> Bool {
 
 		guard let url = documentsURL else {
 			logError("Failed to load documents directory")
@@ -83,7 +83,7 @@ final class FileStorage: FileStorageProtocol {
 	/// Check if a file exists
 	/// - Parameter fileName: the name of the file
 	/// - Returns: True if it does.
-	func remove(_ fileName: String) {
+	public func remove(_ fileName: String) {
 
 		guard let url = documentsURL else {
 			logError("Failed to load documents directory")

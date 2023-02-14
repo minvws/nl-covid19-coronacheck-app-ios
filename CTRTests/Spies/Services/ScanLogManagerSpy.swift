@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import TestingShared
 import Persistence
+@testable import Models
 
 class ScanLogManagingSpy: ScanLogManaging {
 

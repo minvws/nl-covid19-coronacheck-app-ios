@@ -12,6 +12,7 @@ import Clcore
 @testable import Shared
 import TestingShared
 import Persistence
+@testable import Models
 
 ///
 /// Set of Spies with sensible default stubbed values, which can be modified per-test.

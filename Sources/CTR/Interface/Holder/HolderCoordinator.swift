@@ -14,6 +14,7 @@ import ReusableViews
 import Transport
 import OpenIDConnect
 import Persistence
+import Models
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -801,7 +802,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			navigationController.present(alertController, animated: true, completion: nil)
 		}
 		
-		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
+		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs, managedObjectContext: Current.dataStoreManager.managedObjectContext())
 		switch result {
 			case let .success(greenCards):
 				if greenCards.isEmpty {

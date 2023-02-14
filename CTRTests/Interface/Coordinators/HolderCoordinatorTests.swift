@@ -15,6 +15,7 @@ import Nimble
 import ReusableViews
 import TestingShared
 import Persistence
+@testable import Models
 
 class HolderCoordinatorTests: XCTestCase {
 

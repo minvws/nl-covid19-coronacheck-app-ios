@@ -10,6 +10,7 @@ import Transport
 import Shared
 import QRGenerator
 import Persistence
+import Models
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	

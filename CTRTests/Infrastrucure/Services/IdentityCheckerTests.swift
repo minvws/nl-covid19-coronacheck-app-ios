@@ -12,6 +12,7 @@ import Nimble
 @testable import Shared
 import TestingShared
 import Persistence
+@testable import Models
 
 class IdentityCheckerTests: XCTestCase {
 

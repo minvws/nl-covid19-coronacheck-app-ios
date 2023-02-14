@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct DomesticCredentialAttributes: Codable {
+public struct DomesticCredentialAttributes: Codable {
 
-	let birthDay: String
-	let birthMonth: String
-	let firstNameInitial: String
-	let lastNameInitial: String
-	let credentialVersion: String
-	let category: String?
-	let specimen: String
-	let paperProof: String
-	let validFrom: String
-	let validForHours: String
+	public let birthDay: String
+	public let birthMonth: String
+	public let firstNameInitial: String
+	public let lastNameInitial: String
+	public let credentialVersion: String
+	public let category: String?
+	public let specimen: String
+	public let paperProof: String
+	public let validFrom: String
+	public let validForHours: String
 
-	enum CodingKeys: String, CodingKey {
+	public enum CodingKeys: String, CodingKey {
 
 		case birthDay
 		case birthMonth
@@ -34,12 +34,12 @@ struct DomesticCredentialAttributes: Codable {
 		case validForHours
 	}
 
-	var isPaperProof: Bool {
+	public var isPaperProof: Bool {
 
 		return paperProof == "1"
 	}
 
-	var isSpecimen: Bool {
+	public var isSpecimen: Bool {
 
 		return specimen == "1"
 	}
@@ -47,7 +47,7 @@ struct DomesticCredentialAttributes: Codable {
 	/// Map the identity of the holder
 	/// - Parameter months: the months
 	/// - Returns: mapped identify
-	func mapIdentity(months: [String]) -> [String] {
+	public func mapIdentity(months: [String]) -> [String] {
 
 		var output: [String] = []
 		output.append(firstNameInitial)
@@ -72,12 +72,12 @@ struct DomesticCredentialAttributes: Codable {
 	}
 }
 
-struct DomesticCredential: Codable {
+public struct DomesticCredential: Codable {
 	
-	struct DomesticCredentialContainer: Codable {
+	public struct DomesticCredentialContainer: Codable {
 		
-		let attributes: [String?]
-		let signature: DomesticSignature
+		public let attributes: [String?]
+		public let signature: DomesticSignature
 		
 		enum CodingKeys: String, CodingKey {
 			
@@ -86,14 +86,14 @@ struct DomesticCredential: Codable {
 		}
 	}
 	
-	struct DomesticSignature: Codable {
+	public struct DomesticSignature: Codable {
 		
-		let aPart: String
-		let ePart: String
-		let keyShareP: String?
-		let vPart: String
+		public let aPart: String
+		public let ePart: String
+		public let keyShareP: String?
+		public let vPart: String
 		
-		enum CodingKeys: String, CodingKey {
+		public enum CodingKeys: String, CodingKey {
 			
 			case aPart = "A"
 			case ePart = "e"
@@ -102,21 +102,21 @@ struct DomesticCredential: Codable {
 		}
 	}
 
-	let credential: Data?
-	let attributes: DomesticCredentialAttributes
+	public let credential: Data?
+	public let attributes: DomesticCredentialAttributes
 
-	enum CodingKeys: String, CodingKey {
+	public enum CodingKeys: String, CodingKey {
 
 		case credential
 		case attributes
 	}
 
-	init(credential: Data?, attributes: DomesticCredentialAttributes) {
+	public init(credential: Data?, attributes: DomesticCredentialAttributes) {
 		self.credential = credential
 		self.attributes = attributes
 	}
 
-	init(from decoder: Decoder) throws {
+	public init(from decoder: Decoder) throws {
 
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 

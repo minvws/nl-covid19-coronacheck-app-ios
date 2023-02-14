@@ -9,6 +9,7 @@ import Foundation
 import Shared
 @testable import CTR
 import ReusableViews
+@testable import Models
 
 class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 

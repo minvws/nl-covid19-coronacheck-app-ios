@@ -13,6 +13,7 @@ import CoreData
 import Shared
 import TestingShared
 import Persistence
+@testable import Models
 
 extension HolderDashboardViewModelTests {
 	

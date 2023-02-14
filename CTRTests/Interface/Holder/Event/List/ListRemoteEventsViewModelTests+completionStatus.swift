@@ -10,6 +10,7 @@
 @testable import Shared
 import XCTest
 import Nimble
+@testable import Models
 
 // swiftlint:disable:next type_name
 class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {

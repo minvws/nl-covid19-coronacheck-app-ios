@@ -8,29 +8,29 @@
 import Foundation
 import UIKit
 
-struct PagedAnnoucementItem: Equatable {
+public struct PagedAnnoucementItem: Equatable {
 
 	/// The title of a new feature page
-	let title: String
+	public let title: String
 
 	/// The content of a new feature page
-	let content: String
+	public let content: String
 
 	/// The image of a new feature page
-	let image: UIImage?
+	public let image: UIImage?
 
-	let imageBackgroundColor: UIColor?
+	public let imageBackgroundColor: UIColor?
 
 	/// The tagline of a new feature page
-	let tagline: String?
+	public let tagline: String?
  
 	/// The step of the onboarding page
-	let step: Int
+	public let step: Int
 
 	/// The title of the primary "next" button (or `nil` for default)
-	var nextButtonTitle: String?
+	public var nextButtonTitle: String?
 	
-	internal init(
+	public init(
 		title: String,
 		content: String,
 		image: UIImage? = nil,

@@ -11,6 +11,7 @@ import Shared
 import ReusableViews
 import Transport
 import Persistence
+import Models
 
 class ListStoredEventsViewModel {
 

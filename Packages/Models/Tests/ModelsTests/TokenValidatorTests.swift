@@ -6,10 +6,9 @@
 */
 
 import XCTest
-@testable import CTR
-@testable import Transport
-@testable import Shared
+import Shared
 import Nimble
+import Models
 
 class TokenValidatorTests: XCTestCase {
 
@@ -77,13 +76,13 @@ class TokenValidatorTests: XCTestCase {
 			expect(result) == false
 		}
 	}
-	
+
 	/// Test the validator with invalid tokens and Luhn check disabled
 	func test_validator_whenLuhnCheckIsDisabled_withInvalidTokens() {
 
 		// Given
 		let sut = TokenValidator(isLuhnCheckEnabled: false)
-		
+
 		let invalidTokens: [String] = [
 			"ZZZ-5343CQ2BJ3UV7X-Z2",
 			"ZZZ-Q343CQ2BJ3UV7X-Q2"
@@ -98,13 +97,13 @@ class TokenValidatorTests: XCTestCase {
 			expect(result) == true
 		}
 	}
-	
+
 	/// Test the validator with invalid tokens and Luhn check enabled
 	func test_validator_whenLuhnCheckIsEnabled_withInvalidTokens() {
 
 		// Given
 		let sut = TokenValidator(isLuhnCheckEnabled: true)
-		
+
 		let invalidTokens: [String] = [
 			"ZZZ-5343CQ2BJ3UV7X-Z2",
 			"ZZZ-Q343CQ2BJ3UV7X-Q2"

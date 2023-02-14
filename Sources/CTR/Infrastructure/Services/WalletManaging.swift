@@ -10,6 +10,7 @@ import CoreData
 import Transport
 import Shared
 import Persistence
+import Models
 
 protocol WalletManaging: AnyObject {
 

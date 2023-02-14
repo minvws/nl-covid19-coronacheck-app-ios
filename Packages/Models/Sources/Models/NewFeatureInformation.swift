@@ -8,11 +8,16 @@
 import UIKit
 
 /// A struct to use for combining all the content needed for new feature
-struct NewFeatureInformation {
+public struct NewFeatureInformation {
 
 	/// An array of additional onboarding pages
-	let pages: [PagedAnnoucementItem]
+	public let pages: [PagedAnnoucementItem]
 
 	/// The version of the new feature
-	let version: Int
+	public let version: Int
+	
+	public init(pages: [PagedAnnoucementItem], version: Int) {
+		self.pages = pages
+		self.version = version
+	}
 }

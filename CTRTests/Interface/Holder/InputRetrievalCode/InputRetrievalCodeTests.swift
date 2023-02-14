@@ -15,6 +15,7 @@ import Nimble
 import SnapshotTesting
 import TestingShared
 import ReusableViews
+@testable import Models
 
 /// (Experimentally) combines TokenEntryViewModel tests and TokenEntryViewController snapshot tests
 class InputRetrievalCodeViewModelTests: XCTestCase {

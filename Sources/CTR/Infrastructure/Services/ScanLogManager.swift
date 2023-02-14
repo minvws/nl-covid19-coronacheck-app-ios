@@ -9,6 +9,7 @@ import UIKit
 import CoreData
 import Shared
 import Persistence
+import Models
 
 protocol ScanLogManaging: AnyObject {
 

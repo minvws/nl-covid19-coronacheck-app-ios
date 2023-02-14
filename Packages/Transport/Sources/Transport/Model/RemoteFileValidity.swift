@@ -6,16 +6,15 @@
 */
 
 import Foundation
-import Transport
 
-enum RemoteFileValidity {
+public enum RemoteFileValidity {
 
 	case neverFetched
 	case withinTTL
 	case withinMinimalInterval // should not refresh
 	case refreshNeeded
 
-	static func evaluateIfUpdateNeeded(
+	public static func evaluateIfUpdateNeeded(
 		configuration: RemoteConfiguration,
 		lastFetchedTimestamp: TimeInterval?,
 		isAppLaunching: Bool,

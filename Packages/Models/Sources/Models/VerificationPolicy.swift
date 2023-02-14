@@ -8,13 +8,13 @@
 import Foundation
 import Clcore
 
-enum VerificationPolicy: Codable, CaseIterable {
+public enum VerificationPolicy: Codable, CaseIterable {
 	/// 3G policy
 	case policy3G
 	/// 1G policy
 	case policy1G
 	
-	var scanPolicy: String {
+	public var scanPolicy: String {
 		switch self {
 			case .policy3G:
 				return MobilecoreVERIFICATION_POLICY_3G
@@ -23,7 +23,7 @@ enum VerificationPolicy: Codable, CaseIterable {
 		}
 	}
 	
-	var featureFlag: String {
+	public var featureFlag: String {
 		switch self {
 			case .policy3G:
 				return "3G"
@@ -32,7 +32,7 @@ enum VerificationPolicy: Codable, CaseIterable {
 		}
 	}
 	
-	var localization: String {
+	public var localization: String {
 		switch self {
 			case .policy3G:
 				return "3G"

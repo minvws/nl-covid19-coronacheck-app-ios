@@ -8,6 +8,7 @@
 import UIKit
 import Lottie
 import Shared
+import Models
 
 enum VerifierStartResult {
 

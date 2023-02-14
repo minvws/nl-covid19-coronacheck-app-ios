@@ -8,6 +8,7 @@
 import UIKit
 import Clcore
 import Shared
+import Models
 
 final class CheckIdentityViewModel {
 	

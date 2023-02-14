@@ -10,6 +10,7 @@ import Nimble
 import ViewControllerPresentationSpy
 @testable import CTR
 import Shared
+@testable import Models
 
 class VerifierScanViewControllerTests: XCTestCase {
 

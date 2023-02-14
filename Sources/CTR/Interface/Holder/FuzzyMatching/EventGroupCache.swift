@@ -9,6 +9,7 @@ import Foundation
 import Transport
 import Shared
 import Persistence
+import Models
 
 protocol EventGroupCacheProtocol {
 	

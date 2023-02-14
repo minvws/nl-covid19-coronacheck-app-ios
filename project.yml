@@ -30,6 +30,10 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
+  CryptoCore:
+    path: ./Packages/CryptoCore
+  Models:
+    path: ./Packages/Models
   Persistence:
     path: ./Packages/Persistence
   ReusableViews:
@@ -135,6 +139,8 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: CryptoCore
+      - package: Models
       - package: Persistence
       - package: Shared
       - package: Transport
@@ -153,8 +159,6 @@ targetTemplates:
         product: Reachability
       - package: BrightFutures
         product: BrightFutures
-      # Frameworks:
-      - framework: clcore.xcframework
         embed: false
       - sdk: libSwiftCoreGraphics.tbd
     settings:

@@ -11,6 +11,7 @@ import Shared
 import Nimble
 import TestingShared
 import Persistence
+@testable import Models
 
 class VerifierStartScanningViewModelTests: XCTestCase {
 	

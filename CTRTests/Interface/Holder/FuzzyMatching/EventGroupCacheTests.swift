@@ -11,6 +11,7 @@ import Nimble
 import Transport
 import TestingShared
 import Persistence
+@testable import Models
 
 final class EventGroupCacheTests: XCTestCase {
 	

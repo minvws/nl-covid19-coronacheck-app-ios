@@ -6,18 +6,22 @@
 */
 
 import Foundation
-import Transport
 import Shared
 
 public struct RemoteEvent {
 	
 	public let wrapper: EventFlow.EventResultWrapper
 	public let signedResponse: SignedResponse? // (optional, a scanned DCC does not have a signature)
+	
+	public init(wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?) {
+		self.wrapper = wrapper
+		self.signedResponse = signedResponse
+	}
 }
 
 extension RemoteEvent {
 	
-	func getEventsAsJSON() -> Data? {
+	public func getEventsAsJSON() -> Data? {
 		
 		if let signedResponse,
 		   let jsonData = try? JSONEncoder().encode(signedResponse) {
@@ -30,7 +34,7 @@ extension RemoteEvent {
 		return nil
 	}
 	
-	var uniqueIdentifier: String {
+	public var uniqueIdentifier: String {
 		return (wrapper.events ?? []).compactMap { $0.unique }.joined(separator: "-")
 	}
 }

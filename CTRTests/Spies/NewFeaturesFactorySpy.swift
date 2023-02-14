@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+@testable import Models
 
 final class NewFeaturesFactorySpy: NewFeaturesFactory {
 

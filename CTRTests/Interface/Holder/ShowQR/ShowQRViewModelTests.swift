@@ -13,6 +13,7 @@ import Nimble
 import Shared
 import TestingShared
 import Persistence
+@testable import Models
 
 class ShowQRViewModelTests: XCTestCase {
 

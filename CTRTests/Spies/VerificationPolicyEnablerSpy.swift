@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 @testable import CTR
+@testable import Models
 
 final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 

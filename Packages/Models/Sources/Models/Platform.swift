@@ -8,9 +8,9 @@
 import Foundation
 
 /// Platform to detect if we are running in the simulator (used for preventing camera features)
-struct Platform {
+public struct Platform {
 
-	static let isSimulator: Bool = {
+	public static let isSimulator: Bool = {
 
 		#if targetEnvironment(simulator)
 		return true

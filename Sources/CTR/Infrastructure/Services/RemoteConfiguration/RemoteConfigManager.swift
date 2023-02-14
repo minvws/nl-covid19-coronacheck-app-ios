@@ -10,6 +10,8 @@ import Reachability
 import UIKit
 import Transport
 import Shared
+import Models
+import Persistence
 
 protocol RemoteConfigManaging: AnyObject {
 	var storedConfiguration: RemoteConfiguration { get }

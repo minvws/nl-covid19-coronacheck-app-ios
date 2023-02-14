@@ -7,6 +7,7 @@
 // swiftlint:disable type_body_length
 import XCTest
 @testable import CTR
+@testable import Models
 
 class UserSettingsSpy: UserSettingsProtocol {
 
