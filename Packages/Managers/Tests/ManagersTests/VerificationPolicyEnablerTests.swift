@@ -6,9 +6,10 @@
 */
 
 import XCTest
-@testable import CTR
 import Nimble
 @testable import Models
+@testable import Managers
+
 
 final class VerificationPolicyEnablerTests: XCTestCase {
 	

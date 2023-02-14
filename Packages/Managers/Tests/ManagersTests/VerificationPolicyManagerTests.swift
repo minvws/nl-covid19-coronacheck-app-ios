@@ -5,10 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
 import XCTest
 import Nimble
 import TestingShared
+@testable import Managers
 @testable import Models
 
 class VerificationPolicyManagerTests: XCTestCase {

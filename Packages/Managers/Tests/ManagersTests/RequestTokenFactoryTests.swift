@@ -7,10 +7,10 @@
 
 import Foundation
 import XCTest
-@testable import CTR
 @testable import Shared
 @testable import Models
 @testable import Transport
+@testable import Managers
 import TestingShared
 
 class RequestTokenFactoryTests: XCTestCase {

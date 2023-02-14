@@ -6,21 +6,19 @@
  */
 
 import XCTest
-@testable import CTR
 import Nimble
-import Shared
+@testable import Managers
 @testable import Models
+@testable import Shared 
 
 class NewFeaturesManagerTests: XCTestCase {
 	
 	// MARK: - Setup
 	var sut: NewFeaturesManager!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
-	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
 		
 		// The direct dependencies of Managers are still injected in the init:
 		secureUserSettingsSpy = SecureUserSettingsSpy()

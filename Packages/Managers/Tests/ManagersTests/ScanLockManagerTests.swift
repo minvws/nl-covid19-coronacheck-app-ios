@@ -5,24 +5,24 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
 import XCTest
 import Nimble
 import TestingShared
-import ReusableViews
+// @testable import ReusableViews
+@testable import Managers
+@testable import Shared
 
 class ScanLockManagerTests: XCTestCase {
 
 	private var sut: ScanLockManager!
 	private var notificationCenterSpy: NotificationCenterSpy!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
+	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 	private var observerVCR: ObserverCallbackRecorder<ScanLockManager.State>!
-	private var environmentSpies: EnvironmentSpies!
 	
 	override func setUp() {
 
 		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
 		
 		notificationCenterSpy = NotificationCenterSpy()
 		notificationCenterSpy.stubbedAddObserverForNameResult = NSObject()
@@ -30,6 +30,12 @@ class ScanLockManagerTests: XCTestCase {
 		secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedScanLockUntil = .distantPast
 		
+		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		remoteConfigManagerSpy.stubbedStoredConfiguration.scanLockSeconds = 300
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
+		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
+
 		observerVCR = ObserverCallbackRecorder()
 	}
 	
@@ -38,7 +44,8 @@ class ScanLockManagerTests: XCTestCase {
 		sut = ScanLockManager(
 			now: { now },
 			notificationCenter: notificationCenterSpy,
-			secureUserSettings: secureUserSettingsSpy
+			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy
 		)
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
@@ -59,7 +66,8 @@ class ScanLockManagerTests: XCTestCase {
 		sut = ScanLockManager(
 			now: { now },
 			notificationCenter: notificationCenterSpy,
-			secureUserSettings: secureUserSettingsSpy
+			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy
 		)
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 
@@ -73,12 +81,13 @@ class ScanLockManagerTests: XCTestCase {
 		sut = ScanLockManager(
 			now: { now },
 			notificationCenter: notificationCenterSpy,
-			secureUserSettings: secureUserSettingsSpy
+			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy
 		)
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 
 		// Act
-		let lockDuration = TimeInterval(environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.scanLockSeconds!)
+		let lockDuration = TimeInterval(remoteConfigManagerSpy.stubbedStoredConfiguration.scanLockSeconds!)
 		let lockUntil = now.addingTimeInterval(lockDuration)
 		secureUserSettingsSpy.stubbedScanLockUntil = lockUntil
 		sut.lock()
@@ -105,6 +114,7 @@ class ScanLockManagerTests: XCTestCase {
 			now: { localTime },
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
 			vendTimer: { _, _ in
 				guard timer1 == nil else {
 					fail("Expected to vend one timer")
@@ -150,6 +160,7 @@ class ScanLockManagerTests: XCTestCase {
 			now: { now },
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
 			vendTimer: { _, _ in
 				if timer1 == nil {
 					timer1 = TimerSpy()
@@ -195,6 +206,7 @@ class ScanLockManagerTests: XCTestCase {
 			now: { now },
 			notificationCenter: notificationCenterSpy,
 			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy,
 			vendTimer: { _, _ in
 				guard timer1 == nil else {
 					fail("Expected to vend one timer")
@@ -228,7 +240,8 @@ class ScanLockManagerTests: XCTestCase {
 		sut = ScanLockManager(
 			now: { now },
 			notificationCenter: notificationCenterSpy,
-			secureUserSettings: secureUserSettingsSpy
+			secureUserSettings: secureUserSettingsSpy,
+			remoteConfigManager: remoteConfigManagerSpy
 		)
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 

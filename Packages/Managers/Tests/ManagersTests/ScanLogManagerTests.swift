@@ -5,22 +5,24 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
 import XCTest
 import Nimble
 import TestingShared
-import Persistence
+@testable import Managers
+@testable import Persistence
 
 class ScanLogManagerTests: XCTestCase {
 
 	private var sut: ScanLogManager!
 	private var dataStoreManager: DataStoreManaging!
+	private var remoteConfigManager: RemoteConfigManaging!
 	
 	override func setUp() {
 
 		super.setUp()
 		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "Verifier", loadPersistentStoreCompletion: { _ in })
-		sut = ScanLogManager(dataStoreManager: dataStoreManager)
+		remoteConfigManager = RemoteConfigManagingSpy()
+		sut = ScanLogManager(dataStoreManager: dataStoreManager, remoteConfigManager: remoteConfigManager, now: { now })
 	}
 
 	func test_didWeScanQR_nothingScanned() {

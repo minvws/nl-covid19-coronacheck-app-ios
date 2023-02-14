@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
   
-@testable import CTR
 import XCTest
 import Nimble
+@testable import Managers
 
 class JailBreakTests: XCTestCase {
 

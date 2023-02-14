@@ -7,10 +7,11 @@
 
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Managers
+@testable import Models
 @testable import Transport
 @testable import Shared
-@testable import Models
+
 
 class CouplingManagerTests: XCTestCase {
 

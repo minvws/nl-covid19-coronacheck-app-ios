@@ -8,9 +8,9 @@
 import Foundation
 import XCTest
 import Nimble
-@testable import CTR
 import TestingShared
-import Persistence
+@testable import Managers
+@testable import Persistence
 
 class AppInstalledSinceManagerTests: XCTestCase {
 

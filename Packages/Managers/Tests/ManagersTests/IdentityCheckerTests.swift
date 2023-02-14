@@ -7,23 +7,25 @@
 
 import XCTest
 import Nimble
-@testable import CTR
+import TestingShared
+@testable import Managers
+@testable import Models
+@testable import Persistence
 @testable import Transport
 @testable import Shared
-import TestingShared
-import Persistence
-@testable import Models
 
 class IdentityCheckerTests: XCTestCase {
 
 	var sut: IdentityChecker!
-	private var environmentSpies: EnvironmentSpies!
+	var cryptoManagerSpy: CryptoManagerSpy!
+	var dataStoreManager: DataStoreManager!
 	
 	override func setUp() {
 		super.setUp()
 
-		environmentSpies = setupEnvironmentSpies()
-		sut = IdentityChecker()
+		cryptoManagerSpy = CryptoManagerSpy()
+		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
+		sut = IdentityChecker(cryptoManager: cryptoManagerSpy)
 	}
 
 	// MARK: - Tests
@@ -201,7 +203,7 @@ class IdentityCheckerTests: XCTestCase {
 		if let payloadData = try? JSONEncoder().encode(wrapper) {
 		   let base64String = payloadData.base64EncodedString()
 			let signedResponse = SignedResponse(payload: base64String, signature: "does not matter for this test")
-			let context = environmentSpies.dataStoreManager.managedObjectContext()
+			let context = dataStoreManager.managedObjectContext()
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {

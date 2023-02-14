@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 import Nimble
-@testable import CTR
+@testable import Managers
 @testable import Transport
 @testable import Shared
 import TestingShared

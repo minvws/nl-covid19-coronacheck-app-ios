@@ -6,26 +6,28 @@
 */
 // swiftlint:disable type_body_length file_length
 
-@testable import CTR
-@testable import Transport
-@testable import Shared
 import XCTest
 import Nimble
 import TestingShared
-import Persistence
+@testable import Managers
 @testable import Models
+@testable import Persistence
+@testable import Transport
+@testable import Shared
 
 class WalletManagerTests: XCTestCase {
 
 	private var sut: WalletManager!
 	private var dataStoreManager: DataStoreManaging!
-	private var environmentSpies: EnvironmentSpies!
+	private var cryptoManagerSpy: CryptoManagerSpy!
+	private var secureUserSettingsSpy: SecureUserSettingsSpy!
 	
 	override func setUp() {
 
 		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
 		
+		cryptoManagerSpy = CryptoManagerSpy()
+		secureUserSettingsSpy = SecureUserSettingsSpy()
 		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
@@ -575,7 +577,7 @@ class WalletManagerTests: XCTestCase {
 		
 		// Given
 		// When
-		sut.removeExistingGreenCards()
+		sut.removeExistingGreenCards(secureUserSettings: secureUserSettingsSpy)
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(beEmpty())
@@ -584,14 +586,14 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingGreenCards_oneGreenCard() {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		
 		// When
-		sut.removeExistingGreenCards()
+		sut.removeExistingGreenCards(secureUserSettings: secureUserSettingsSpy)
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(beEmpty())
@@ -600,18 +602,18 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingGreenCards_twoGreenCards() {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .failure(CryptoError.unknown)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		
 		// When
-		sut.removeExistingGreenCards()
+		sut.removeExistingGreenCards(secureUserSettings: secureUserSettingsSpy)
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(beEmpty())
@@ -631,10 +633,10 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneValidGreenCard() throws {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 
 		// When
@@ -647,10 +649,10 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneExpiredGreenCard() throws {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		_ = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpired30DaysAgo,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 
 		// When
@@ -664,12 +666,12 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_vaccination() throws {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		
 		// Then
@@ -684,12 +686,12 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_recovery() throws {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeRecoveryGreenCardExpiresIn30Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		
 		// Then
@@ -701,12 +703,12 @@ class WalletManagerTests: XCTestCase {
 	func test_storeDomesticGreenCard_vaccinationAssessment() throws {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
 		
 		// When
 		let success = sut.storeDomesticGreenCard(
 			RemoteGreenCards.DomesticGreenCard.fakeVaccinationAssessmentGreenCardExpiresIn14Days,
-			cryptoManager: environmentSpies.cryptoManagerSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		
 		// Then
@@ -722,12 +724,12 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_storeInternationalGreenCard_vaccination"
 		)
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		
 		// When
-		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
 		
 		// Then
 		expect(success) == true
@@ -745,10 +747,10 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_storeInternationalGreenCard_vaccination"
 		)
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
 		
 		// When
-		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
 		
 		// Then
 		expect(success) == false
@@ -763,12 +765,12 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days],
 			credential: "test_storeInternationalGreenCard_recovery"
 		)
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		
 		// When
-		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
+		let success = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
 		
 		// Then
 		expect(success) == true
@@ -783,13 +785,13 @@ class WalletManagerTests: XCTestCase {
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days],
 			credential: "test_storeInternationalGreenCard_twoVaccinations"
 		)
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		
 		// When
-		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
-		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: environmentSpies.cryptoManagerSpy)
+		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
+		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(haveCount(2))
@@ -978,8 +980,9 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_blockedItem_cryptoFail() throws {
 
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
-		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
+		
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
 		let blobExpiry = RemoteGreenCards.BlobExpiry(
 			identifier: eventGroup.uniqueIdentifier,
 			expirationDate: .distantPast,
@@ -987,7 +990,7 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		// When
-		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: environmentSpies.cryptoManagerSpy)
+		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: cryptoManagerSpy)
 
 		// Then
 		expect(persisted) == nil
@@ -996,8 +999,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_blockedItem() throws {
 		
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
-		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
 		let blobExpiry = RemoteGreenCards.BlobExpiry(
 			identifier: eventGroup.uniqueIdentifier,
 			expirationDate: .distantPast,
@@ -1005,7 +1008,7 @@ class WalletManagerTests: XCTestCase {
 		)
 		
 		// When
-		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: environmentSpies.cryptoManagerSpy)
+		let persisted = sut.createAndPersistRemovedEvent(blockItem: blobExpiry, existingEventGroup: eventGroup, cryptoManager: cryptoManagerSpy)
 		
 		// Then
 		expect(persisted) != nil
