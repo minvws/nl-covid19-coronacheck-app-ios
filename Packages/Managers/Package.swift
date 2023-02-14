@@ -18,6 +18,8 @@ let package = Package(
         .package(name: "Shared", path: "../Shared"),
         .package(name: "Transport", path: "../Transport"),
 
+		.package(url: "https://github.com/securing/IOSSecuritySuite", from: "1.9.5"),
+		
         // Testing:
         .package(name: "TestingShared", path: "../TestingShared"),
         .package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0)),
@@ -33,6 +35,8 @@ let package = Package(
                 .product(name: "Persistence", package: "Persistence"),
                 .product(name: "Shared", package: "Shared"),
                 .product(name: "Transport", package: "Transport"),
+				
+				.product(name: "IOSSecuritySuite", package: "IOSSecuritySuite"), 
             ]),
         .testTarget(
             name: "ManagersTests",

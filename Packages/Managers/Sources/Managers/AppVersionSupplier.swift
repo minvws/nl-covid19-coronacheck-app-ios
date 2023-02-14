@@ -20,7 +20,7 @@ public protocol AppVersionSupplierProtocol {
 public struct AppVersionSupplier: AppVersionSupplierProtocol {
 
 	public init() {}
-
+	
 	/// Get the current version number of the app
 	/// - Returns: the current version number
 	public func getCurrentVersion() -> String {
