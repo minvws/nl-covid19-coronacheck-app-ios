@@ -149,7 +149,11 @@ Feature flags / configuration values are loaded dynamically from the backend ([C
 
 ### Dependencies
 
-The majority of our dependencies are included as Swift Packages. Here is an overview of what dependencies are used and why.
+There are a number of Swift Packages in `Packages/`, which the app target depends on. Here is the dependency graph: 
+
+<img src="Diagrams/packages-withouttests.png" />
+
+The majority of our third-party dependencies are included as Swift Packages. Here is an overview of what dependencies are used and why.
 
 * [BrightFutures](https://github.com/Thomvis/BrightFutures): a Swift implementation of futures and promises.
 * [IOSSecuritySuite](https://github.com/securing/IOSSecuritySuite): for detecting a jailbroken environment.

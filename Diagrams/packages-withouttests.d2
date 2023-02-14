@@ -1,0 +1,82 @@
+direction: down
+
+# Third-Party
+Rswift: {
+  shape: hexagon
+}
+Reachability: {
+  shape: hexagon
+}
+BrightFutures: {
+  shape: hexagon
+}
+HTTPSecurity: {
+  shape: hexagon
+}
+LuhnCheck: {
+  shape: hexagon
+}
+iOSSecuritySuite: {
+  shape: hexagon
+}
+Lottie: {
+  shape: hexagon
+}
+QRGenerator: {
+  shape: hexagon
+}
+OpenIDConnect: {
+  shape: hexagon
+}
+
+app: {
+  shape: package
+}
+app <- CryptoCore
+app <- Managers
+app <- Models
+app <- Persistence
+app <- Shared
+app <- Transport
+app <- Reusableviews
+app <- iOSSecuritySuite
+app <- Lottie
+app <- QRGenerator
+app <- OpenIDConnect
+app <- Reachability
+app <- BrightFutures
+app <- Rswift
+
+# - Packages - 
+
+# ☑️ CRYPTOCORE
+CryptoCore { fill: "#ffcc00" }
+
+Managers { fill: "#ffcc00" }
+Managers <- CryptoCore
+Managers <- Models
+Managers <- Persistence
+Managers <- Shared
+Managers <- Transport
+Managers <- iOSSecuritySuite
+
+Models { fill: "#ffcc00" }
+Models <- CryptoCore
+Models <- Persistence
+Models <- Shared
+Models <- Transport
+Models <- LuhnCheck
+
+Persistence { fill: "#ffcc00" }
+Persistence <- Shared
+
+ReusableViews { fill: "#ffcc00" }
+ReusableViews <- Shared
+
+Shared { fill: "#ffcc00" }
+Shared <- Rswift
+Shared <- Reachability
+
+Transport { fill: "#ffcc00" }
+Transport <- HTTPSecurity
+Transport <- Shared

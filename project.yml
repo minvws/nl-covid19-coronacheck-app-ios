@@ -65,6 +65,7 @@ fileGroups:
   - project.yml
   - .github
   - Scripts
+  - README.md
 
 # - Project Level settings:
 
