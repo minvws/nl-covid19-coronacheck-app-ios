@@ -20,7 +20,7 @@ let package = Package(
             dependencies: []),
 		.binaryTarget(
 			name: "clcore",
-			path: "../../Frameworks/clcore.xcframework"
+			path: "Frameworks/clcore.xcframework"
 		),
     ]
 )
