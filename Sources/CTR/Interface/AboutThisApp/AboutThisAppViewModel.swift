@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import ReusableViews
+import Managers
 import Models
 
 /// the various about menu options

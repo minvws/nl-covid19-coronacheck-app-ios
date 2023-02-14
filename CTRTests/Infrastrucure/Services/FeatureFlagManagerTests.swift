@@ -8,6 +8,7 @@
 @testable import CTR
 import XCTest
 import Nimble
+@testable import Managers
 
 class FeatureFlagManagerTests: XCTestCase {
 	

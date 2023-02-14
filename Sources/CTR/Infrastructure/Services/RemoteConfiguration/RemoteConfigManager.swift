@@ -10,6 +10,7 @@ import Reachability
 import UIKit
 import Transport
 import Shared
+import Managers
 import Models
 import Persistence
 

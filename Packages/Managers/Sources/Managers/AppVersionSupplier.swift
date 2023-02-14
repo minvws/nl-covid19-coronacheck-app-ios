@@ -8,7 +8,7 @@
 import Foundation
 
 /// The version of the app
-protocol AppVersionSupplierProtocol {
+public protocol AppVersionSupplierProtocol {
 
 	/// Get the current version of the app
 	func getCurrentVersion() -> String
@@ -17,11 +17,13 @@ protocol AppVersionSupplierProtocol {
 	func getCurrentBuild() -> String
 }
 
-struct AppVersionSupplier: AppVersionSupplierProtocol {
+public struct AppVersionSupplier: AppVersionSupplierProtocol {
+
+	public init() {}
 
 	/// Get the current version number of the app
 	/// - Returns: the current version number
-	func getCurrentVersion() -> String {
+	public func getCurrentVersion() -> String {
 
 		if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
 			return version
@@ -31,7 +33,7 @@ struct AppVersionSupplier: AppVersionSupplierProtocol {
 	}
 
 	/// Get the current build of the app
-	func getCurrentBuild() -> String {
+	public func getCurrentBuild() -> String {
 
 		if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
 			return version

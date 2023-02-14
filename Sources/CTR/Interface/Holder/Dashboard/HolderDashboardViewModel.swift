@@ -12,6 +12,7 @@ import Reachability
 import Shared
 import ReusableViews
 import Persistence
+import Managers
 import Models
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards

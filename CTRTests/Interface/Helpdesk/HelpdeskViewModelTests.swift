@@ -11,6 +11,7 @@ import Nimble
 import TestingShared
 import Shared
 @testable import CTR
+@testable import Managers
 
 class HelpdeskViewModelTests: XCTestCase {
 	

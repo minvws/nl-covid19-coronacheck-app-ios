@@ -9,6 +9,7 @@ import UIKit
 import MessageUI
 import Shared
 import Persistence
+import Managers
 
 // Note: Do NOT use `Current` in this context, as it's not available
 
