@@ -8,7 +8,6 @@
 import Foundation
 import Shared
 import Models
-import Managers
 
 final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 

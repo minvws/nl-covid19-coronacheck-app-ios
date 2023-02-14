@@ -12,7 +12,6 @@ import Nimble
 @testable import Transport
 @testable import Shared
 
-
 class CouplingManagerTests: XCTestCase {
 
 	private var sut: CouplingManager!

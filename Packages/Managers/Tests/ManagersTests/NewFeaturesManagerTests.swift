@@ -9,7 +9,7 @@ import XCTest
 import Nimble
 @testable import Managers
 @testable import Models
-@testable import Shared 
+@testable import Shared
 
 class NewFeaturesManagerTests: XCTestCase {
 	
