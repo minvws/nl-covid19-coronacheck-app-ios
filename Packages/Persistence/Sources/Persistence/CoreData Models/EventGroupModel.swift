@@ -125,4 +125,15 @@ public enum EventMode: Equatable {
 				return "vaccinationassessment"
 		}
 	}
+	
+	public var asList: [String]? {
+		switch self {
+			case .vaccinationAndPositiveTest: return ["vaccination", "positivetest"]
+			case .test: return ["negativetest"]
+			case .vaccination: return ["vaccination"]
+			case .recovery: return ["positivetest"]
+			case .vaccinationassessment: return ["vaccinationassessment"]
+			case .paperflow: return nil
+		}
+	}
 }
