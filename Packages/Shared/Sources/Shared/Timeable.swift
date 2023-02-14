@@ -8,7 +8,7 @@
 import Foundation
 
 /// Used in ScanLockManager
-protocol Timeable {
+public protocol Timeable {
 	func invalidate()
 	func fire()
 }
