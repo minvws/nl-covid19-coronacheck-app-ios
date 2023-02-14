@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
-@testable import Transport
-@testable import Shared
+import Foundation
+import Transport
+import Shared
 
 class MappingManagerSpy: MappingManaging {
 

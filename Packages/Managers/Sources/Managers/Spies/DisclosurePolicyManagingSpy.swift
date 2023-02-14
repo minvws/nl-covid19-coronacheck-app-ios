@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
+import Foundation
 import Shared
-@testable import CTR
 
 class DisclosurePolicyManagingSpy: DisclosurePolicyManaging {
 

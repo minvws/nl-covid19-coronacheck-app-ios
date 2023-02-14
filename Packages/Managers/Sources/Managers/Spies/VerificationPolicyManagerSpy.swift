@@ -6,22 +6,16 @@
 */
 
 import Foundation
-@testable import CTR
 import Shared
+import Models
 
-extension ScanLockManagerSpy {
-	static var configScanLockDuration: TimeInterval {
-		return 10
-	}
-}
-
-class ScanLockManagerSpy: ScanLockManaging {
+class VerificationPolicyManagerSpy: VerificationPolicyManaging {
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
-	var stubbedState: ScanLockManager.State!
+	var stubbedState: VerificationPolicy!
 
-	var state: ScanLockManager.State {
+	var state: VerificationPolicy? {
 		invokedStateGetter = true
 		invokedStateGetterCount += 1
 		return stubbedState
@@ -29,20 +23,24 @@ class ScanLockManagerSpy: ScanLockManaging {
 
 	var invokedObservatoryGetter = false
 	var invokedObservatoryGetterCount = 0
-	var stubbedObservatory: Observatory<ScanLockManager.State>!
+	var stubbedObservatory: Observatory<VerificationPolicy?>!
 
-	var observatory: Observatory<ScanLockManager.State> {
+	var observatory: Observatory<VerificationPolicy?> {
 		invokedObservatoryGetter = true
 		invokedObservatoryGetterCount += 1
 		return stubbedObservatory
 	}
 
-	var invokedLock = false
-	var invokedLockCount = 0
+	var invokedUpdate = false
+	var invokedUpdateCount = 0
+	var invokedUpdateParameters: (verificationPolicy: VerificationPolicy?, Void)?
+	var invokedUpdateParametersList = [(verificationPolicy: VerificationPolicy?, Void)]()
 
-	func lock() {
-		invokedLock = true
-		invokedLockCount += 1
+	func update(verificationPolicy: VerificationPolicy?) {
+		invokedUpdate = true
+		invokedUpdateCount += 1
+		invokedUpdateParameters = (verificationPolicy, ())
+		invokedUpdateParametersList.append((verificationPolicy, ()))
 	}
 
 	var invokedWipeScanMode = false

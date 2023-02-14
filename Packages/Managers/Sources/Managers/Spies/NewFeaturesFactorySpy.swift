@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-@testable import CTR
-@testable import Models
+import Foundation
+import Models
 
 final class NewFeaturesFactorySpy: NewFeaturesFactory {
 

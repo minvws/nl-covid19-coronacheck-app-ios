@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-@testable import CTR
-import TestingShared
+import Foundation
 import Persistence
-@testable import Models
+import Models
 
 class ScanLogManagingSpy: ScanLogManaging {
 

@@ -5,10 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
-@testable import Transport
-@testable import Shared
-@testable import Models
+import Foundation
+import Transport
+import Shared
+import Models
 
 class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 

@@ -5,10 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-@testable import CTR
+import Foundation
 import Clcore
-@testable import Models
+import Models
 
 class CryptoManagerSpy: CryptoManaging {
 

@@ -5,18 +5,22 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
+import Foundation
 import Shared
-@testable import CTR
-@testable import Models
 
-class VerificationPolicyManagerSpy: VerificationPolicyManaging {
+extension ScanLockManagerSpy {
+	static var configScanLockDuration: TimeInterval {
+		return 10
+	}
+}
+
+class ScanLockManagerSpy: ScanLockManaging {
 
 	var invokedStateGetter = false
 	var invokedStateGetterCount = 0
-	var stubbedState: VerificationPolicy!
+	var stubbedState: ScanLockManager.State!
 
-	var state: VerificationPolicy? {
+	var state: ScanLockManager.State {
 		invokedStateGetter = true
 		invokedStateGetterCount += 1
 		return stubbedState
@@ -24,24 +28,30 @@ class VerificationPolicyManagerSpy: VerificationPolicyManaging {
 
 	var invokedObservatoryGetter = false
 	var invokedObservatoryGetterCount = 0
-	var stubbedObservatory: Observatory<VerificationPolicy?>!
+	var stubbedObservatory: Observatory<ScanLockManager.State>!
 
-	var observatory: Observatory<VerificationPolicy?> {
+	var observatory: Observatory<ScanLockManager.State> {
 		invokedObservatoryGetter = true
 		invokedObservatoryGetterCount += 1
 		return stubbedObservatory
 	}
 
-	var invokedUpdate = false
-	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (verificationPolicy: VerificationPolicy?, Void)?
-	var invokedUpdateParametersList = [(verificationPolicy: VerificationPolicy?, Void)]()
+	var invokedConfigScanLockDurationGetter = false
+	var invokedConfigScanLockDurationGetterCount = 0
+	var stubbedConfigScanLockDuration: TimeInterval!
 
-	func update(verificationPolicy: VerificationPolicy?) {
-		invokedUpdate = true
-		invokedUpdateCount += 1
-		invokedUpdateParameters = (verificationPolicy, ())
-		invokedUpdateParametersList.append((verificationPolicy, ()))
+	var configScanLockDuration: TimeInterval {
+		invokedConfigScanLockDurationGetter = true
+		invokedConfigScanLockDurationGetterCount += 1
+		return stubbedConfigScanLockDuration
+	}
+
+	var invokedLock = false
+	var invokedLockCount = 0
+
+	func lock() {
+		invokedLock = true
+		invokedLockCount += 1
 	}
 
 	var invokedWipeScanMode = false

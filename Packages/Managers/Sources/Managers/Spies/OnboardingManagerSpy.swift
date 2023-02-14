@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-@testable import CTR
+import Foundation
+import Models
 
 class OnboardingManagerSpy: OnboardingManaging {
 

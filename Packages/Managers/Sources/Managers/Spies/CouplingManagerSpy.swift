@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-@testable import CTR
-@testable import Transport
+import Foundation
+import Transport
 
 class CouplingManagerSpy: CouplingManaging {
 

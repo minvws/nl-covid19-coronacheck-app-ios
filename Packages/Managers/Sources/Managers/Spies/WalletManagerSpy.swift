@@ -5,14 +5,12 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
   
-@testable import CTR
-@testable import Transport
-@testable import Shared
-import TestingShared
+import Foundation
+import Transport
+import Shared
 import Persistence
-import XCTest
 import CoreData
-@testable import Models
+import Models
 
 class WalletManagerSpy: WalletManaging {
 
@@ -77,10 +75,14 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingGreenCards = false
 	var invokedRemoveExistingGreenCardsCount = 0
+	var invokedRemoveExistingGreenCardsParameters: (secureUserSettings: SecureUserSettingsProtocol, Void)?
+	var invokedRemoveExistingGreenCardsParametersList = [(secureUserSettings: SecureUserSettingsProtocol, Void)]()
 
-	func removeExistingGreenCards() {
+	func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol) {
 		invokedRemoveExistingGreenCards = true
 		invokedRemoveExistingGreenCardsCount += 1
+		invokedRemoveExistingGreenCardsParameters = (secureUserSettings, ())
+		invokedRemoveExistingGreenCardsParametersList.append((secureUserSettings, ()))
 	}
 
 	var invokedRemoveExistingBlockedEvents = false

@@ -5,19 +5,22 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-@testable import CTR
-@testable import Models
+import Foundation
+import Models
 
 class OnboardingFactorySpy: OnboardingFactoryProtocol {
 
 	var invokedCreate = false
 	var invokedCreateCount = 0
+	var invokedCreateParameters: (featureFlagManager: FeatureFlagManaging, Void)?
+	var invokedCreateParametersList = [(featureFlagManager: FeatureFlagManaging, Void)]()
 	var stubbedCreateResult: [PagedAnnoucementItem]! = []
 
-	func create() -> [PagedAnnoucementItem] {
+	func create(featureFlagManager: FeatureFlagManaging) -> [PagedAnnoucementItem] {
 		invokedCreate = true
 		invokedCreateCount += 1
+		invokedCreateParameters = (featureFlagManager, ())
+		invokedCreateParametersList.append((featureFlagManager, ()))
 		return stubbedCreateResult
 	}
 
@@ -39,16 +42,6 @@ class OnboardingFactorySpy: OnboardingFactoryProtocol {
 		invokedGetConsentMessage = true
 		invokedGetConsentMessageCount += 1
 		return stubbedGetConsentMessageResult
-	}
-
-	var invokedGetConsentLink = false
-	var invokedGetConsentLinkCount = 0
-	var stubbedGetConsentLinkResult: String! = ""
-
-	func getConsentLink() -> String {
-		invokedGetConsentLink = true
-		invokedGetConsentLinkCount += 1
-		return stubbedGetConsentLinkResult
 	}
 
 	var invokedGetConsentButtonTitle = false

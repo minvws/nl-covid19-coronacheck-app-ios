@@ -6,10 +6,8 @@
 */
 
 import Foundation
-@testable import CTR
-@testable import Transport
-@testable import Shared
-import TestingShared
+import Transport
+import Shared
 import Persistence
 
 class GreenCardLoaderSpy: GreenCardLoading {

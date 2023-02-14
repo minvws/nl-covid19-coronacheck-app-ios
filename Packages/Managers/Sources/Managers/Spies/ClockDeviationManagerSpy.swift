@@ -7,7 +7,6 @@
 
 import Foundation
 import Shared
-@testable import CTR
 
 class ClockDeviationManagerSpy: ClockDeviationManaging {
 
