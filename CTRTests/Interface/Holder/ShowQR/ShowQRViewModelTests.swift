@@ -10,10 +10,11 @@ import UIKit
 import XCTest
 @testable import CTR
 import Nimble
-import Shared
 import TestingShared
-import Persistence
+@testable import Persistence
 @testable import Models
+@testable import Managers
+@testable import Shared
 
 class ShowQRViewModelTests: XCTestCase {
 

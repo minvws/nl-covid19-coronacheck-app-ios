@@ -10,6 +10,7 @@ import XCTest
 import TestingShared
 import Persistence
 @testable import Transport
+@testable import Managers
 
 class IdentityCheckerSpy: IdentityCheckerProtocol {
 

@@ -14,6 +14,7 @@ import SnapshotTesting
 import Shared
 import TestingShared
 @testable import Models
+@testable import Managers
 
 class ScanInstructionsViewModelTests: XCTestCase {
 

@@ -10,6 +10,7 @@ import MessageUI
 import Shared
 import Persistence
 import Managers
+import Models
 
 // Note: Do NOT use `Current` in this context, as it's not available
 

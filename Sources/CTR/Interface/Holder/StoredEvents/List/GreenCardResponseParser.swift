@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import Transport
+import Managers
 
 enum GreenCardResponseError: Error {
 

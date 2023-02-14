@@ -15,6 +15,7 @@ import Transport
 import OpenIDConnect
 import Persistence
 import Models
+import Managers
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -894,7 +895,10 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 			return
 		}
 		
-		let pagedAnnouncementItems = Current.disclosurePolicyManager.factory.create()
+		let pagedAnnouncementItems = type(of: Current.disclosurePolicyManager.factory).create(
+			featureFlagManager: Current.featureFlagManager,
+			userSettings: Current.userSettings
+		)
 		guard pagedAnnouncementItems.isNotEmpty else {
 			return
 		}

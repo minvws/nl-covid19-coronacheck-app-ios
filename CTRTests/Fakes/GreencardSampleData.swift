@@ -10,6 +10,7 @@ import CoreData
 @testable import CTR
 import TestingShared
 import Persistence
+@testable import Managers
 
 extension GreenCard {
 

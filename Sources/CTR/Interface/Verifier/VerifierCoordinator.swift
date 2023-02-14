@@ -11,6 +11,7 @@ import Transport
 import Shared
 import ReusableViews
 import Models
+import Managers
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	

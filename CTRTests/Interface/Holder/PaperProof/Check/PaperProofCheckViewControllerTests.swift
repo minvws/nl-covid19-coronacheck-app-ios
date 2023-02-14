@@ -14,6 +14,7 @@ import ViewControllerPresentationSpy
 @testable import Shared
 import TestingShared
 import ReusableViews
+@testable import Managers
 
 class PaperProofCheckViewControllerTests: XCTestCase {
 

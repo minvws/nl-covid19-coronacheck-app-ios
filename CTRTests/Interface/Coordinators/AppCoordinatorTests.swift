@@ -11,6 +11,7 @@ import XCTest
 @testable import Transport
 @testable import Shared
 @testable import Managers
+@testable import Models
 import Nimble
 import ViewControllerPresentationSpy
 

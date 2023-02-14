@@ -29,4 +29,9 @@ public struct SignedResponse: Codable, Equatable {
 	public var decodedSignature: Data? {
 		Data(base64Encoded: signature)
 	}
+	
+	public init(payload: String, signature: String) {
+		self.payload = payload
+		self.signature = signature
+	}
 }

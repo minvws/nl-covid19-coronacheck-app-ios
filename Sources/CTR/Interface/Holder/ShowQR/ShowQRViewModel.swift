@@ -10,6 +10,7 @@ import UIKit
 import Shared
 import Persistence
 import Models
+import Managers
 
 class ShowQRViewModel {
 

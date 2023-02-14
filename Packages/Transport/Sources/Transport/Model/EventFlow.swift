@@ -310,6 +310,12 @@ public struct EventFlow {
 			}
 			return nil
 		}
+		
+		public init(sampleDate: String?, validFrom: String?, validUntil: String?) {
+			self.sampleDate = sampleDate
+			self.validFrom = validFrom
+			self.validUntil = validUntil
+		}
 	}
 
 	/// An actual vaccination event
@@ -365,6 +371,20 @@ public struct EventFlow {
 			}
 			return nil
 		}
+		
+		public init(dateString: String?, hpkCode: String?, type: String?, manufacturer: String?, brand: String?, doseNumber: Int?, totalDoses: Int?, country: String?, completedByMedicalStatement: Bool?, completedByPersonalStatement: Bool?, completionReason: CompletionReason?) {
+			self.dateString = dateString
+			self.hpkCode = hpkCode
+			self.type = type
+			self.manufacturer = manufacturer
+			self.brand = brand
+			self.doseNumber = doseNumber
+			self.totalDoses = totalDoses
+			self.country = country
+			self.completedByMedicalStatement = completedByMedicalStatement
+			self.completedByPersonalStatement = completedByPersonalStatement
+			self.completionReason = completionReason
+		}
 	}
 
 	public struct TestEvent: Codable, Equatable {
@@ -400,6 +420,17 @@ public struct EventFlow {
 			}
 			return nil
 		}
+		
+		public init(sampleDateString: String?, negativeResult: Bool?, positiveResult: Bool?, facility: String?, type: String?, name: String?, manufacturer: String?, country: String?) {
+			self.sampleDateString = sampleDateString
+			self.negativeResult = negativeResult
+			self.positiveResult = positiveResult
+			self.facility = facility
+			self.type = type
+			self.name = name
+			self.manufacturer = manufacturer
+			self.country = country
+		}
 	}
 	
 	public struct VaccinationAssessment: Codable, Equatable {
@@ -424,6 +455,12 @@ public struct EventFlow {
 				return dateformatter.date(from: dateTimeString)
 			}
 			return nil
+		}
+		
+		public init(dateTimeString: String?, country: String?, verified: Bool) {
+			self.dateTimeString = dateTimeString
+			self.country = country
+			self.verified = verified
 		}
 	}
 

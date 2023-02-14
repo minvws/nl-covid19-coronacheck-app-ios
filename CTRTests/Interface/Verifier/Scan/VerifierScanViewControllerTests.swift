@@ -11,6 +11,7 @@ import ViewControllerPresentationSpy
 @testable import CTR
 import Shared
 @testable import Models
+@testable import Managers
 
 class VerifierScanViewControllerTests: XCTestCase {
 

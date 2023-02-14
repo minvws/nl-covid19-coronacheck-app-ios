@@ -12,6 +12,7 @@ import SnapshotTesting
 import Shared
 import TestingShared
 @testable import Models
+@testable import Managers
 
 final class PolicyInformationViewControllerTests: XCTestCase {
 	

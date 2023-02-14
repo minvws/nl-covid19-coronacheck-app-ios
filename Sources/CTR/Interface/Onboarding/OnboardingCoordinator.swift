@@ -9,6 +9,7 @@ import UIKit
 import SafariServices
 import Shared
 import Models
+import Managers
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
 
@@ -52,7 +53,7 @@ class OnboardingCoordinator: Coordinator, OpenUrlProtocol {
 		self.onboardingDelegate = onboardingDelegate
 		self.appFlavor = appFlavor
 		onboardingFactory = factory
-		onboardingPages = onboardingFactory.create()
+		onboardingPages = onboardingFactory.create(featureFlagManager: Current.featureFlagManager)
 	}
 	
 	/// The onboarding pages

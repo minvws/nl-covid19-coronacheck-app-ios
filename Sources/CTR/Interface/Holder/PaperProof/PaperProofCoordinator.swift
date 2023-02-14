@@ -9,6 +9,8 @@ import UIKit
 import Shared
 import ReusableViews
 import Transport
+import Managers
+import Models
 
 protocol PaperProofFlowDelegate: AnyObject {
 	

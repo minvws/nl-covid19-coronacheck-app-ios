@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import Shared
 @testable import Models
+@testable import Managers
 
 final class PolicyInformationViewModelTests: XCTestCase {
 	

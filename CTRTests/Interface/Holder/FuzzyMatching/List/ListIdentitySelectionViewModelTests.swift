@@ -11,6 +11,7 @@ import Nimble
 import Shared
 import TestingShared
 import Persistence
+@testable import Managers
 
 final class ListIdentitySelectionViewModelTests: XCTestCase {
 

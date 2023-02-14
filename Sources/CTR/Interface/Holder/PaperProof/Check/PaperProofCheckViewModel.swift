@@ -10,6 +10,7 @@ import Transport
 import Shared
 import ReusableViews
 import Models
+import Managers
 
 class PaperProofCheckViewModel {
 

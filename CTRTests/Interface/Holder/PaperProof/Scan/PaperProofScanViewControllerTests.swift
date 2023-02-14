@@ -11,6 +11,7 @@ import ViewControllerPresentationSpy
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Managers
 
 class PaperProofScanViewControllerTests: XCTestCase {
 
