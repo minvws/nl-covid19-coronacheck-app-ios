@@ -9,7 +9,7 @@ import Foundation
 import Transport
 import Shared
 
-enum UniversalLink: Equatable {
+public enum UniversalLink: Equatable {
 	
 	case redeemHolderToken(requestToken: RequestToken)
 	case redeemVaccinationAssessment(requestToken: RequestToken)
