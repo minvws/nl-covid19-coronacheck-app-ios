@@ -16,6 +16,7 @@ import OpenIDConnect
 import Persistence
 import Models
 import Managers
+import Resources
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	

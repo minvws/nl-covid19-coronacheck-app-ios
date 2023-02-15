@@ -10,6 +10,7 @@ import Shared
 import ReusableViews
 import Transport
 import Persistence
+import Resources
 
 class SendIdentitySelectionViewModel {
 	

@@ -9,6 +9,7 @@ import UIKit
 import Transport
 import Shared
 import Persistence
+import Resources
 
 extension EventMode {
 	var localized: String {

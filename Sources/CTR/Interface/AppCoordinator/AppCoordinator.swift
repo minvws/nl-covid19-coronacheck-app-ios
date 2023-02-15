@@ -13,6 +13,7 @@ import OpenIDConnect
 import Persistence
 import Managers
 import Models
+import Resources
 
 protocol AppCoordinatorDelegate: AnyObject {
 	

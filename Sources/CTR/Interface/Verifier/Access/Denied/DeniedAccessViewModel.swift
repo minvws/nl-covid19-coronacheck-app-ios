@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import Models
+import Resources
 
 final class DeniedAccessViewModel {
 	

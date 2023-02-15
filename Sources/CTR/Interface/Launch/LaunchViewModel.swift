@@ -11,6 +11,7 @@ import Transport
 import Shared
 import ReusableViews
 import Managers
+import Resources
 
 class LaunchViewModel {
 

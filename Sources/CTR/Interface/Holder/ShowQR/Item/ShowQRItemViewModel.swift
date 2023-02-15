@@ -12,6 +12,7 @@ import QRGenerator
 import Persistence
 import Models
 import Managers
+import Resources
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	

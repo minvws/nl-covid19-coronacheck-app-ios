@@ -9,6 +9,7 @@ import UIKit
 import Transport
 import Shared
 import ReusableViews
+import Resources
 
 class LaunchErrorViewModel: AppStatusViewModel {
 	

@@ -10,6 +10,7 @@ import Transport
 import Shared
 import ReusableViews
 import Models
+import Resources
 
 protocol IdentitySelectionDataSourceProtocol {
 	

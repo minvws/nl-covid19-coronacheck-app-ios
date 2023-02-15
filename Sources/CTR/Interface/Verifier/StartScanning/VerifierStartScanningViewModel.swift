@@ -10,6 +10,7 @@ import Lottie
 import Shared
 import Models
 import Managers
+import Resources
 
 enum VerifierStartResult {
 
