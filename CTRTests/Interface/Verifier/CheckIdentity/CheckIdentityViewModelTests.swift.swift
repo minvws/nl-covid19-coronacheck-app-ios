@@ -12,6 +12,7 @@ import Clcore
 import Shared
 @testable import Models
 @testable import Managers
+
 final class CheckIdentityViewModelTests: XCTestCase {
 	
 	/// Subject under test

@@ -11,6 +11,7 @@ import Nimble
 @testable import Models
 import Shared
 @testable import Managers
+
 class DCCQRDetailsViewModelTests: XCTestCase {
 
 	private var sut: DCCQRDetailsViewModel!
