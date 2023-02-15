@@ -10,6 +10,7 @@ import XCTest
 import SnapshotTesting
 import Shared
 @testable import ReusableViews
+@testable import Resources
 
 class ErrorViewTests: XCTestCase {
 

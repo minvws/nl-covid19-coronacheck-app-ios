@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 /*
  A grey full width button with a title, sub title and a disclosure icon
