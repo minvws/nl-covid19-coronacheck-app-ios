@@ -14,6 +14,7 @@ import ViewControllerPresentationSpy
 import Nimble
 import SnapshotTesting
 import TestingShared
+@testable import Resources
 
 class AboutThisAppViewControllerTests: XCTestCase {
 	

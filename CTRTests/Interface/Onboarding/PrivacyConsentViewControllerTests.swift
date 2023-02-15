@@ -13,6 +13,7 @@ import Shared
 import TestingShared
 import ReusableViews
 @testable import Managers
+@testable import Resources
 
 class PrivacyConsentViewControllerTests: XCTestCase {
 

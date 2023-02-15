@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Resources
 import Nimble
 import CoreData
 import ReusableViews

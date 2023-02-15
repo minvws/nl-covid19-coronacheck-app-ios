@@ -14,6 +14,7 @@ import XCTest
 @testable import Persistence
 @testable import Models
 @testable import Managers
+@testable import Resources
 import Nimble
 import ReusableViews
 import TestingShared

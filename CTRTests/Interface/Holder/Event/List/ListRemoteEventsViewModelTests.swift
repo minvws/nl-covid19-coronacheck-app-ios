@@ -17,6 +17,7 @@ import Persistence
 import ReusableViews
 @testable import Models
 @testable import Managers
+@testable import Resources
 
 class ListRemoteEventsViewModelTests: XCTestCase {
 

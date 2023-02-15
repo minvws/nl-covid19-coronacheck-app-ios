@@ -15,6 +15,7 @@ import TestingShared
 @testable import Models
 @testable import Managers
 @testable import Shared
+@testable import Resources
 
 class ShowQRViewModelTests: XCTestCase {
 

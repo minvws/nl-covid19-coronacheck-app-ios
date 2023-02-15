@@ -12,6 +12,7 @@ import Clcore
 import Shared
 @testable import Models
 @testable import Managers
+@testable import Resources
 
 final class CheckIdentityViewModelTests: XCTestCase {
 	

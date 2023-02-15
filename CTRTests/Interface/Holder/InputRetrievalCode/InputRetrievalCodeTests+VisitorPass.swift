@@ -16,6 +16,7 @@ import SnapshotTesting
 import TestingShared
 import ReusableViews
 @testable import Models
+@testable import Resources
 
 // swiftlint:disable:next type_name
 class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {

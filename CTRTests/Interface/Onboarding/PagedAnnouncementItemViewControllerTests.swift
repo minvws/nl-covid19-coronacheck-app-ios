@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Shared
+@testable import Resources
 @testable import Models
 
 class PagedAnnouncementItemViewControllerTests: XCTestCase {

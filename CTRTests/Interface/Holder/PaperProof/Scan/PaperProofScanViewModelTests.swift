@@ -13,6 +13,7 @@ import SnapshotTesting
 @testable import Shared
 import TestingShared
 @testable import Managers
+@testable import Resources
 
 final class PaperProofScanViewModelTests: XCTestCase {
 	

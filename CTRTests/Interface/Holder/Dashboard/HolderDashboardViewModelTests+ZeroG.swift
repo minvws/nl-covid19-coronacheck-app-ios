@@ -14,6 +14,7 @@ import TestingShared
 import Persistence
 @testable import Models
 @testable import Managers
+@testable import Resources
 
 extension HolderDashboardViewModelTests {
 	
