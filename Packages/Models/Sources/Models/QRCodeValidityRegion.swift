@@ -21,20 +21,6 @@ public enum QRCodeValidityRegion: String, Codable, Equatable {
 		}
 	}
 
-	public var localizedNoun: String {
-		switch self {
-			case .domestic: return L.generalNetherlands()
-			case .europeanUnion: return L.generalEuropeanUnion()
-		}
-	}
-
-	public var localizedAdjective: String {
-		switch self {
-			case .domestic: return L.generalDutch()
-			case .europeanUnion: return L.generalEuropean()
-		}
-	}
-
 	/// If there's ever more than 2 regions, will need to rethink usages of this:
 	public var opposite: QRCodeValidityRegion {
 		switch self {
