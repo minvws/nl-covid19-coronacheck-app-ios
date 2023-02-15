@@ -538,7 +538,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_qr_code_expired_explanation_action(),
 				secondaryAction: { [weak self] in
-					guard let self = self,
+					guard let self,
 						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
 					self.openUrl(url, inApp: true)
 				}
@@ -564,7 +564,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_qr_code_hidden_explanation_action(),
 				secondaryAction: { [weak self] in
-					guard let self = self,
+					guard let self,
 							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
 					self.openUrl(url, inApp: true)
 				}

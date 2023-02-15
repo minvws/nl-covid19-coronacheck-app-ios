@@ -53,7 +53,7 @@ public class ScanLogManager: ScanLogManaging {
 		}
 		
 		notificationCenter.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.deleteExpiredScanLogEntries(
 				seconds: self.remoteConfigManager.storedConfiguration.scanLogStorageSeconds ?? 3600,
 				now: self.now()
