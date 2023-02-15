@@ -19,6 +19,7 @@ let package = Package(
 		.package(name: "Transport", path: "../Transport"),
 		
 		.package(url: "https://github.com/securing/IOSSecuritySuite", from: "1.9.5"),
+		.package(url: "https://github.com/Thomvis/BrightFutures", branch: "master"),
 		
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
@@ -38,6 +39,7 @@ let package = Package(
 				.product(name: "Transport", package: "Transport"),
 				
 				.product(name: "IOSSecuritySuite", package: "IOSSecuritySuite"),
+				.product(name: "BrightFutures", package: "BrightFutures"),
 			]),
 		.testTarget(
 			name: "ManagersTests",
