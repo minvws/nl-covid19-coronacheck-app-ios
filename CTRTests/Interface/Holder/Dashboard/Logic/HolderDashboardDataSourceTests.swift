@@ -11,6 +11,7 @@ import XCTest
 import Nimble
 import TestingShared
 import Persistence
+@testable import Managers
 
 class HolderDashboardDatasourceTests: XCTestCase {
 	

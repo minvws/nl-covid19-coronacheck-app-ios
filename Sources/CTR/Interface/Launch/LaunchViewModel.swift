@@ -10,6 +10,7 @@ import LocalAuthentication
 import Transport
 import Shared
 import ReusableViews
+import Managers
 
 class LaunchViewModel {
 

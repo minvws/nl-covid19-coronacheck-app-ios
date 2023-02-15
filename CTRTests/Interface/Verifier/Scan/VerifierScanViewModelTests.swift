@@ -11,6 +11,7 @@ import Clcore
 import Nimble
 import Shared
 @testable import Models
+@testable import Managers
 
 class VerifierScanViewModelTests: XCTestCase {
 	

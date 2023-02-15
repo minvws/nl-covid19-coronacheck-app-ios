@@ -9,6 +9,7 @@ import Foundation
 import Shared
 import ReusableViews
 import Models
+import Managers
 
 final class RiskSettingSelectedViewModel {
 	

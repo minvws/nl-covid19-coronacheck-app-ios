@@ -13,6 +13,7 @@ import Nimble
 import ReusableViews
 import TestingShared
 import Persistence
+@testable import Managers
 
 class ScanLogViewModelTests: XCTestCase {
 

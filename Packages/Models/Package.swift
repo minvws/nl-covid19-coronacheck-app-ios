@@ -13,7 +13,9 @@ let package = Package(
 	],
 	dependencies: [
 		.package(name: "CryptoCore", path: "../CryptoCore"),
+		.package(name: "Persistence", path: "../Persistence"),
 		.package(name: "Shared", path: "../Shared"),
+		.package(name: "Transport", path: "../Transport"),
 		
 		.package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
 		
@@ -28,7 +30,10 @@ let package = Package(
 			name: "Models",
 			dependencies: [
 				.product(name: "CryptoCore", package: "CryptoCore"),
+				.product(name: "Persistence", package: "Persistence"),
 				.product(name: "Shared", package: "Shared"),
+				.product(name: "Transport", package: "Transport"),
+				
 				.product(name: "LuhnCheck", package: "nl-rdo-app-ios-modules"),
 			]),
 		.testTarget(

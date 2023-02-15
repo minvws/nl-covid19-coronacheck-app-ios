@@ -6,6 +6,8 @@
 */
 
 import UIKit
+import Managers
+import Models
 
 protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 

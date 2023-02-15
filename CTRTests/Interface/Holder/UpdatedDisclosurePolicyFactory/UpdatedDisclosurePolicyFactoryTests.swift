@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import Shared
+@testable import Managers
 
 final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 	
@@ -25,7 +26,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 		
 		// Then
 		expect(result).to(haveCount(1))
@@ -44,7 +48,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(haveCount(1))
@@ -62,7 +69,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(haveCount(2))
@@ -88,7 +98,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(haveCount(1))
@@ -107,7 +120,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(haveCount(2))
@@ -133,7 +149,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.userSettingsSpy.stubbedLastKnownConfigDisclosurePolicy = ["1G"] // not 0g, as that's special-cased.
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(haveCount(1))
@@ -151,7 +170,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(haveCount(2))
@@ -177,7 +199,10 @@ final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = false
 
 		// When
-		let result = UpdatedDisclosurePolicyFactory().create()
+		let result = UpdatedDisclosurePolicyFactory.create(
+			featureFlagManager: environmentSpies.featureFlagManagerSpy,
+			userSettings: environmentSpies.userSettingsSpy
+		)
 
 		// Then
 		expect(result).to(beEmpty())

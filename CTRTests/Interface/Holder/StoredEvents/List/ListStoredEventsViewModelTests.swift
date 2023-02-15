@@ -14,6 +14,7 @@ import Nimble
 import TestingShared
 import Persistence
 @testable import Models
+@testable import Managers
 
 class ListStoredEventsViewModelTests: XCTestCase {
 	

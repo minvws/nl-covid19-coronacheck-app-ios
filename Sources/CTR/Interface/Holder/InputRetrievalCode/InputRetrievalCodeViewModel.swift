@@ -12,6 +12,7 @@ import Shared
 import ReusableViews
 import Persistence
 import Models
+import Managers
 
 enum InputRetrievalCodeMode {
 	case negativeTest

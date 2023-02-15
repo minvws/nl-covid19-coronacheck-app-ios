@@ -13,6 +13,8 @@ import Nimble
 import ViewControllerPresentationSpy
 import TestingShared
 import Persistence
+@testable import Managers
+@testable import Models
 
 class UnrecoverableErrorCoordinatorTests: XCTestCase {
 

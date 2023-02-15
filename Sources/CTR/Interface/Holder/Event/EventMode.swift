@@ -32,17 +32,6 @@ extension EventMode {
 			case .vaccinationassessment: return L.holder_event_vaccination_assessment_alert_message()
 		}
 	}
-	
-	var asList: [String]? {
-		switch self {
-			case .vaccinationAndPositiveTest: return ["vaccination", "positivetest"]
-			case .test: return ["negativetest"]
-			case .vaccination: return ["vaccination"]
-			case .recovery: return ["positivetest"]
-			case .vaccinationassessment: return ["vaccinationassessment"]
-			case .paperflow: return nil
-		}
-	}
 }
 
 // MARK: - ErrorCode Flow -

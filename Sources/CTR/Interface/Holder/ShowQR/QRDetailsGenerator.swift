@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import Models
+import Managers
 
 class NegativeTestQRDetailsGenerator {
 

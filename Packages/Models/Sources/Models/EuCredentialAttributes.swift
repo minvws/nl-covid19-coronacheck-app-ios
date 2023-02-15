@@ -6,7 +6,9 @@
 */
 
 import Foundation
+import Transport
 import Shared
+import Persistence
 
 public struct EuCredentialAttributes: Codable, Equatable {
 
@@ -137,6 +139,28 @@ public struct EuCredentialAttributes: Codable, Equatable {
 		case expirationTime
 		case issuedAt
 		case issuer
+	}
+
+	public var identity: EventFlow.Identity {
+
+		return EventFlow.Identity(
+			infix: nil,
+			firstName: digitalCovidCertificate.name.givenName,
+			lastName: digitalCovidCertificate.name.familyName,
+			birthDateString: digitalCovidCertificate.dateOfBirth
+		)
+	}
+
+	public var eventMode: EventMode? {
+
+		if digitalCovidCertificate.vaccinations?.first != nil {
+			return .vaccination
+		} else if digitalCovidCertificate.recoveries?.first != nil {
+			return .recovery
+		} else if digitalCovidCertificate.tests?.first != nil {
+			return .test(.dcc)
+		}
+		return nil
 	}
 
 	public var eventDate: String? {

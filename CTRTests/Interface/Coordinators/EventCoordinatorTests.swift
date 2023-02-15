@@ -11,10 +11,12 @@ import XCTest
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Persistence
+@testable import Models
+@testable import Managers
 import Nimble
 import ReusableViews
 import TestingShared
-import Persistence
 
 class EventCoordinatorTests: XCTestCase {
 	

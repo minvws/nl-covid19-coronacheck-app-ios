@@ -8,6 +8,7 @@
 import XCTest
 import Nimble
 @testable import CTR
+@testable import Managers
 
 final class PaperProofIdentifierTests: XCTestCase {
 	

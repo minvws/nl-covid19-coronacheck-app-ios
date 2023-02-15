@@ -12,6 +12,7 @@ import Nimble
 import ViewControllerPresentationSpy
 import Shared
 import TestingShared
+@testable import Managers
 
 class VerifierStartScanningViewControllerTests: XCTestCase {
 

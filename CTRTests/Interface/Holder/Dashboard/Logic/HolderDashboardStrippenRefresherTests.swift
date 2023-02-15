@@ -16,6 +16,7 @@ import Reachability
 import TestingShared
 import Persistence
 @testable import Models
+@testable import Managers
 
 class HolderDashboardStrippenRefresherTests: XCTestCase {
 	

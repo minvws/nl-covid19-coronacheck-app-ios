@@ -6,9 +6,6 @@ name: CTR
 # - Packages:
 
 packages:
-  IOSSecuritySuite:
-    github: securing/IOSSecuritySuite
-    majorVersion: 1.9.6
   Lottie:
     github: airbnb/lottie-ios
     majorVersion: 4.1.2
@@ -32,6 +29,8 @@ packages:
     exactVersion: 1.9.0
   CryptoCore:
     path: ./Packages/CryptoCore
+  Managers:
+    path: ./Packages/Managers
   Models:
     path: ./Packages/Models
   Persistence:
@@ -63,6 +62,7 @@ fileGroups:
   - project.yml
   - .github
   - Scripts
+  - README.md
 
 # - Project Level settings:
 
@@ -140,21 +140,17 @@ targetTemplates:
     dependencies:
       # SPM:
       - package: CryptoCore
+      - package: Managers
       - package: Models
       - package: Persistence
       - package: Shared
       - package: Transport
       - package: ReusableViews
-      - package: IOSSecuritySuite
       - package: Lottie
-      - package: RDOModules
-        product: LuhnCheck
       - package: RDOModules
         product: QRGenerator
       - package: RDOModules
         product: OpenIDConnect
-      - package: RDOModules
-        product: HTTPSecurity
       - package: Reachability
         product: Reachability
       - package: BrightFutures

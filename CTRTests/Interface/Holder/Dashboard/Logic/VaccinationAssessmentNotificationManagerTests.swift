@@ -11,6 +11,7 @@ import XCTest
 import Nimble
 import TestingShared
 import Persistence
+@testable import Managers
 
 // swiftlint:disable:next type_name
 class VaccinationAssessmentNotificationManagerTests: XCTestCase {

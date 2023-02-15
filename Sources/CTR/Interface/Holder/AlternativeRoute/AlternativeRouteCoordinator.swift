@@ -9,6 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 import Persistence
+import Models
 
 protocol AlternativeRouteFlowDelegate: AnyObject {
 

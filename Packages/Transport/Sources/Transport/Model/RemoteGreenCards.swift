@@ -23,18 +23,35 @@ public struct RemoteGreenCards: Codable, Equatable {
 			case blobExpireDates
 			case hints
 		}
+		
+		public init(domesticGreenCard: DomesticGreenCard? = nil, euGreenCards: [EuGreenCard]? = nil, blobExpireDates: [BlobExpiry]? = nil, hints: [String]? = nil) {
+			self.domesticGreenCard = domesticGreenCard
+			self.euGreenCards = euGreenCards
+			self.blobExpireDates = blobExpireDates
+			self.hints = hints
+		}
 	}
 
 	public struct DomesticGreenCard: Codable, Equatable {
 
 		public let origins: [RemoteGreenCards.Origin]
 		public let createCredentialMessages: String?
+		
+		public init(origins: [RemoteGreenCards.Origin], createCredentialMessages: String?) {
+			self.origins = origins
+			self.createCredentialMessages = createCredentialMessages
+		}
 	}
 
 	public struct EuGreenCard: Codable, Equatable {
 
 		public let origins: [RemoteGreenCards.Origin]
 		public let credential: String
+		
+		public init(origins: [RemoteGreenCards.Origin], credential: String) {
+			self.origins = origins
+			self.credential = credential
+		}
 	}
 
 	public struct Origin: Codable, Equatable {
@@ -54,6 +71,15 @@ public struct RemoteGreenCards: Codable, Equatable {
 			case doseNumber
 			case hints
 		}
+		
+		public init(type: String, eventTime: Date, expirationTime: Date, validFrom: Date, doseNumber: Int?, hints: [String]) {
+			self.type = type
+			self.eventTime = eventTime
+			self.expirationTime = expirationTime
+			self.validFrom = validFrom
+			self.doseNumber = doseNumber
+			self.hints = hints
+		}
 	}
 	
 	public struct BlobExpiry: Codable, Equatable {
@@ -67,6 +93,12 @@ public struct RemoteGreenCards: Codable, Equatable {
 			case identifier = "id"
 			case expirationDate = "expiry"
 			case reason = "reason"
+		}
+		
+		public init(identifier: String, expirationDate: Date, reason: String?) {
+			self.identifier = identifier
+			self.expirationDate = expirationDate
+			self.reason = reason
 		}
 	}
 }
