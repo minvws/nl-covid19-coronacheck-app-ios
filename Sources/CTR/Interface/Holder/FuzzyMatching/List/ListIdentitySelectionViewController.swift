@@ -9,6 +9,7 @@ import Foundation
 import Shared
 import ReusableViews
 import UIKit
+import Resources
 
 class ListIdentitySelectionViewController: TraitWrappedGenericViewController<ListIdentitySelectionView, ListIdentitySelectionViewModel> {
 	

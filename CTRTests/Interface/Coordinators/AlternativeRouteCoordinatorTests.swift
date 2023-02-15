@@ -11,6 +11,7 @@ import XCTest
 @testable import Shared
 @testable import Models
 @testable import Managers
+@testable import Resources
 import Nimble
 import ReusableViews
 

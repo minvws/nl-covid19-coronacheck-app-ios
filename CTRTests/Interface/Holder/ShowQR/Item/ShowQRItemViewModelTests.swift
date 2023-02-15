@@ -16,6 +16,7 @@ import ReusableViews
 import TestingShared
 import Persistence
 @testable import Managers
+@testable import Resources
 
 class ShowQRItemViewModelTests: XCTestCase {
 

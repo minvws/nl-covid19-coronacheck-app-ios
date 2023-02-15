@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import Resources
 
 struct EventDetails {
 	let field: EventDetailable

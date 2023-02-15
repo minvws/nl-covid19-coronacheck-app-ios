@@ -10,6 +10,7 @@ import OpenIDConnect
 import Shared
 import ReusableViews
 import Managers
+import Resources
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, OpenIDConnectState {

@@ -11,6 +11,7 @@ import Shared
 import Persistence
 import Managers
 import Models
+import Resources
 
 // Note: Do NOT use `Current` in this context, as it's not available
 

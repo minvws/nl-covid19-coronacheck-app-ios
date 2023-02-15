@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 import Nimble
-import Shared
+import Resources
 
 /// Basic sanity check that ensures that we are able to retrieve localized strings for all languages
 /// we support.
@@ -67,7 +67,7 @@ fileprivate extension LocalizedCopyTests {
 	}
 
 	func copyValue(key: String, forLocaleIdentifier localeIdentifier: AvailableLocale) -> String? {
-		guard let path = Shared.R.bundle.path(forResource: localeIdentifier.rawValue, ofType: "lproj"),
+		guard let path = Resources.R.bundle.path(forResource: localeIdentifier.rawValue, ofType: "lproj"),
 			  let bundle = Bundle(path: path) else {
 			XCTFail("Missing localization for \(localeIdentifier.rawValue)")
 			return nil

@@ -11,6 +11,7 @@ import SnapshotTesting
 import Shared
 import TestingShared
 import Persistence
+@testable import Resources
 
 @testable import CTR
 

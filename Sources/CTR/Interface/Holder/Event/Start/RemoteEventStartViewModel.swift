@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import Persistence
+import Resources
 
 class RemoteEventStartViewModel {
 

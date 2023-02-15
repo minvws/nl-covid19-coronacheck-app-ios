@@ -12,6 +12,7 @@ import ReusableViews
 import Transport
 import Persistence
 import Models
+import Resources
 
 class ListStoredEventsViewModel {
 

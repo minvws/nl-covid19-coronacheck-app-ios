@@ -9,6 +9,7 @@ import Foundation
 import XCTest
 import Nimble
 @testable import CTR
+@testable import Resources
 import Shared
 
 // swiftlint:disable:next type_name

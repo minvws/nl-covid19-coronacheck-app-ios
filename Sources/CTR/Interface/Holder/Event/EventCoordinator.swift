@@ -11,6 +11,7 @@ import Shared
 import ReusableViews
 import Persistence
 import Models
+import Resources
 
 enum EventScreenResult: Equatable {
 

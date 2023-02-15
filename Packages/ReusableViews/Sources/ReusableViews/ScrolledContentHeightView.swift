@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 /*
  Scrollview that keeps its content at full height. Can be used with subviews pinned to top and bottom of scrollview.

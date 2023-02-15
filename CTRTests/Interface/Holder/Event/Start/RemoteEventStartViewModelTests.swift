@@ -11,6 +11,7 @@
 import XCTest
 import Nimble
 @testable import Managers
+@testable import Resources
 
 class RemoteEventStartViewModelTests: XCTestCase {
 

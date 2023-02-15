@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import Shared
+@testable import Resources
 
 class UpdateRequiredViewModelTests: XCTestCase {
 	

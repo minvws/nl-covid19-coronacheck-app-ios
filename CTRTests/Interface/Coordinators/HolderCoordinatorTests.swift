@@ -17,6 +17,8 @@ import TestingShared
 import Persistence
 @testable import Models
 @testable import Managers
+@testable import Resources
+
 class HolderCoordinatorTests: XCTestCase {
 
 	var sut: HolderCoordinator!

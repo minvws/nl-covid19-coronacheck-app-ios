@@ -9,6 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 import Models
+import Resources
 
 protocol FuzzyMatchingFlowDelegate: AnyObject {
 	

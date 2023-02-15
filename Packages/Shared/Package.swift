@@ -15,7 +15,6 @@ let package = Package(
 	dependencies: [
 		// Dependencies declare other packages that this package depends on.
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
-		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.0.0"),
 		.package(url: "https://github.com/ashleymills/Reachability.swift", from: "5.1.0")
 	],
 	targets: [
@@ -24,14 +23,8 @@ let package = Package(
 		.target(
 			name: "Shared",
 			dependencies: [
-				.product(name: "RswiftLibrary", package: "R.swift"),
 				.product(name: "Reachability", package: "Reachability.swift")
-			],
-			resources: 	[
-				.copy("Resources/Animations"),
-				.process("Fonts")
-			],
-			plugins: [.plugin(name: "RswiftGeneratePublicResources", package: "R.swift")]
+			]
 		),
 		.testTarget(
 			name: "SharedTests",

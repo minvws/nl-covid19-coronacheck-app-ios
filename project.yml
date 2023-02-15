@@ -37,6 +37,8 @@ packages:
     path: ./Packages/Persistence
   ReusableViews:
     path: ./Packages/ReusableViews
+  Resources:
+    path: ./Packages/Resources
   Shared:
     path: ./Packages/Shared
   TestingShared:
@@ -143,6 +145,7 @@ targetTemplates:
       - package: Managers
       - package: Models
       - package: Persistence
+      - package: Resources
       - package: Shared
       - package: Transport
       - package: ReusableViews
@@ -492,6 +495,9 @@ schemes:
           randomExecutionOrder: true
           parallelizable: false        
         - package: Persistence/PersistenceTests
+          randomExecutionOrder: true
+          parallelizable: false        
+        - package: Resources/ResourcesTests
           randomExecutionOrder: true
           parallelizable: false        
         - package: ReusableViews/ReusableViewsTests

@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Shared
 @testable import Models
+@testable import Resources
 
 class PagedAnnouncementDelegateSpy: PagedAnnouncementDelegate {
 

@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import Shared
 @testable import Managers
+@testable import Resources
 
 final class UpdatedDisclosurePolicyFactoryTests: XCTestCase {
 	

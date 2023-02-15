@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 public class Fonts {
 	// Using default textStyles from Apple typography guidelines:

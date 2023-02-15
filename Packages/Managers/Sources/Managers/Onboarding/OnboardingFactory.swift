@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import Models
+import Resources
 
 public protocol OnboardingFactoryProtocol {
 

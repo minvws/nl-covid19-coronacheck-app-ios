@@ -17,6 +17,7 @@ import ReusableViews
 @testable import Transport
 @testable import Models
 @testable import Managers
+@testable import Resources
 
 class ListRemoteEventsViewControllerTests: XCTestCase {
 	

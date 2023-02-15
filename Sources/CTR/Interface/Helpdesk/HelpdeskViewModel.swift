@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import Managers
+import Resources
 
 class HelpdeskViewModel {
 	

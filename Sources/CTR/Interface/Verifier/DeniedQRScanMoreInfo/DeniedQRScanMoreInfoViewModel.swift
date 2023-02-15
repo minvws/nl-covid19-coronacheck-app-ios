@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import Managers
+import Resources
 
 typealias DisplayContent = (text: String, customSpacing: CGFloat)
 

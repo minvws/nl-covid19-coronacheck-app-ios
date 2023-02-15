@@ -8,6 +8,7 @@
 import Foundation
 import SnapshotTesting
 @testable import CTR
+@testable import Resources
 import XCTest
 import Shared
 import TestingShared

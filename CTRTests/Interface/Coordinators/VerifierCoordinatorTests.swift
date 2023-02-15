@@ -14,6 +14,7 @@ import Clcore
 import ReusableViews
 @testable import Models
 @testable import Managers
+@testable import Resources
 
 class VerifierCoordinatorTests: XCTestCase {
 

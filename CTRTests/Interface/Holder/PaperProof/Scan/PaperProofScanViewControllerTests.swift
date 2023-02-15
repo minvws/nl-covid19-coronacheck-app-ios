@@ -8,6 +8,7 @@
 import XCTest
 import Nimble
 import ViewControllerPresentationSpy
+@testable import Resources
 @testable import CTR
 @testable import Transport
 @testable import Shared

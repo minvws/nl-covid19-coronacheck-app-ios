@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 /*
  A label with a checkbox in front of it. Used for consent. 

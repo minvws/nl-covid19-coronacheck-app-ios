@@ -13,6 +13,7 @@ import Shared
 import ReusableViews
 import Models
 import Managers
+import Resources
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 

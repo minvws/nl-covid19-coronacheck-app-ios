@@ -14,6 +14,7 @@ import Nimble
 import SnapshotTesting
 import TestingShared
 @testable import Managers
+@testable import Resources
 
 class LaunchViewControllerTests: XCTestCase {
 

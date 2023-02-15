@@ -12,6 +12,7 @@ import SnapshotTesting
 import Shared
 import TestingShared
 import ReusableViews
+@testable import Resources
 
 // swiftlint:disable:next type_name
 class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {

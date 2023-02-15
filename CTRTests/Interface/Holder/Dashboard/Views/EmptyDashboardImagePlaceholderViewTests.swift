@@ -10,6 +10,7 @@ import XCTest
 import SnapshotTesting
 import Shared
 import TestingShared
+@testable import Resources
 
 final class EmptyDashboardImagePlaceholderViewTests: XCTestCase {
 	

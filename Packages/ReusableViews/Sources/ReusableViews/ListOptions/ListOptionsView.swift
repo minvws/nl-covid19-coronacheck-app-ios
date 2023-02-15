@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 public class ListOptionsView: ScrolledStackView {
 
