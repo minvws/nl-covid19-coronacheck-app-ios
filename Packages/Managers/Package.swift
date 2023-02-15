@@ -15,6 +15,7 @@ let package = Package(
 		.package(name: "CryptoCore", path: "../CryptoCore"),
 		.package(name: "Models", path: "../Models"),
 		.package(name: "Persistence", path: "../Persistence"), // TODO: only for FileStorageProtocol, consider moving
+		.package(name: "Resources", path: "../Resources"),
 		.package(name: "Shared", path: "../Shared"),
 		.package(name: "Transport", path: "../Transport"),
 		
@@ -35,6 +36,7 @@ let package = Package(
 				.product(name: "CryptoCore", package: "CryptoCore"),
 				.product(name: "Models", package: "Models"),
 				.product(name: "Persistence", package: "Persistence"),
+				.product(name: "Resources", package: "Resources"),
 				.product(name: "Shared", package: "Shared"),
 				.product(name: "Transport", package: "Transport"),
 				
