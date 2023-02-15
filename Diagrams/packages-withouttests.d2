@@ -48,16 +48,17 @@ app <- Rswift
 
 # - Packages - 
 
-# ☑️ CRYPTOCORE
 CryptoCore { fill: "#ffcc00" }
 
 Managers { fill: "#ffcc00" }
 Managers <- CryptoCore
 Managers <- Models
 Managers <- Persistence
+Managers <- Resources
 Managers <- Shared
 Managers <- Transport
 Managers <- iOSSecuritySuite
+Managers <- BrightFutures
 
 Models { fill: "#ffcc00" }
 Models <- CryptoCore
@@ -69,11 +70,15 @@ Models <- LuhnCheck
 Persistence { fill: "#ffcc00" }
 Persistence <- Shared
 
+Resources { fill: "#ffcc00" }
+Resources <- Shared
+Resources <- Rswift
+
 ReusableViews { fill: "#ffcc00" }
 ReusableViews <- Shared
+ReusableViews <- Resources
 
 Shared { fill: "#ffcc00" }
-Shared <- Rswift
 Shared <- Reachability
 
 Transport { fill: "#ffcc00" }
