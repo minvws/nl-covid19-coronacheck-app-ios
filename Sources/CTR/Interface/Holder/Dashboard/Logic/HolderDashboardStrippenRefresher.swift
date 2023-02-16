@@ -183,7 +183,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 		// Start updates for network access availablity:
 		self.reachability = reachability
 		reachability?.whenReachable = { [weak self] _ in
-			guard let self = self,
+			guard let self,
 				  self.state.loadingState == .noInternet
 			else { return }
 
