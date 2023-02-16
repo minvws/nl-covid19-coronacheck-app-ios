@@ -12,6 +12,7 @@ import XCTest
 import Nimble
 import Shared
 import TestingShared
+@testable import Resources
 
 class MenuRowViewTests: XCTestCase {
 	

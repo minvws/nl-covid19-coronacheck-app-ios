@@ -14,6 +14,7 @@ import Shared
 import TestingShared
 import Persistence
 import ReusableViews
+@testable import Resources
 
 class FetchRemoteEventsViewControllerTests: XCTestCase {
 	

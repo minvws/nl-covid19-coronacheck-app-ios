@@ -8,6 +8,9 @@
 import UIKit
 import Lottie
 import Shared
+import Models
+import Managers
+import Resources
 
 enum VerifierStartResult {
 
@@ -229,12 +232,12 @@ class VerifierStartScanningViewModel {
 
 				// We're already locked, but maybe the `until` time has changed?
 				case let (.locked(prelockMode, _, _), .locked(until)):
-					let totalDuration = type(of: Current.scanLockManager).configScanLockDuration
+					let totalDuration = Current.scanLockManager.configScanLockDuration
 					mode = .locked(mode: prelockMode, timeRemaining: until.timeIntervalSince(Current.now()), totalDuration: totalDuration)
 
 				// We're not already locked, but must now lock:
 				case (_, .locked(let until)):
-					let totalDuration = type(of: Current.scanLockManager).configScanLockDuration
+					let totalDuration = Current.scanLockManager.configScanLockDuration
 					mode = .locked(mode: mode, timeRemaining: until.timeIntervalSince(Current.now()), totalDuration: totalDuration)
 
 				// We're locked, but must unlock:

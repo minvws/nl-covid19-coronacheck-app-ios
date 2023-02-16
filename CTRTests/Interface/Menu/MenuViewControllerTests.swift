@@ -11,6 +11,7 @@ import Nimble
 import SnapshotTesting
 import Shared
 import TestingShared
+@testable import Resources
 
 class MenuViewControllerTests: XCTestCase {
 

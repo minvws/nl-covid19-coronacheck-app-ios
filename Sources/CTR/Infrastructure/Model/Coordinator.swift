@@ -9,6 +9,7 @@ import UIKit
 import SafariServices
 import Shared
 import ReusableViews
+import Models
 
 protocol Coordinator: AnyObject {
 	

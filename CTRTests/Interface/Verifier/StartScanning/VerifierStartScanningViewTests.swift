@@ -11,6 +11,7 @@ import Lottie
 @testable import CTR
 import SnapshotTesting
 import Shared
+@testable import Resources
 
 class VerifierStartScanningViewTests: XCTestCase {
 	var sut: VerifierStartScanningView!

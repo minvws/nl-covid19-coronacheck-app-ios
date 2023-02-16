@@ -10,6 +10,9 @@ import XCTest
 import Nimble
 import Shared
 import ReusableViews
+@testable import Models
+@testable import Managers
+@testable import Resources
 
 final class RiskSettingSelectedViewModelTests: XCTestCase {
 	

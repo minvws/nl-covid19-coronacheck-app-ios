@@ -6,9 +6,6 @@ name: CTR
 # - Packages:
 
 packages:
-  IOSSecuritySuite:
-    github: securing/IOSSecuritySuite
-    majorVersion: 1.9.6
   Lottie:
     github: airbnb/lottie-ios
     majorVersion: 4.1.2
@@ -30,10 +27,18 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
+  CryptoCore:
+    path: ./Packages/CryptoCore
+  Managers:
+    path: ./Packages/Managers
+  Models:
+    path: ./Packages/Models
   Persistence:
     path: ./Packages/Persistence
   ReusableViews:
     path: ./Packages/ReusableViews
+  Resources:
+    path: ./Packages/Resources
   Shared:
     path: ./Packages/Shared
   TestingShared:
@@ -59,6 +64,7 @@ fileGroups:
   - project.yml
   - .github
   - Scripts
+  - README.md
 
 # - Project Level settings:
 
@@ -135,26 +141,23 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: CryptoCore
+      - package: Managers
+      - package: Models
       - package: Persistence
+      - package: Resources
       - package: Shared
       - package: Transport
       - package: ReusableViews
-      - package: IOSSecuritySuite
       - package: Lottie
-      - package: RDOModules
-        product: LuhnCheck
       - package: RDOModules
         product: QRGenerator
       - package: RDOModules
         product: OpenIDConnect
-      - package: RDOModules
-        product: HTTPSecurity
       - package: Reachability
         product: Reachability
       - package: BrightFutures
         product: BrightFutures
-      # Frameworks:
-      - framework: clcore.xcframework
         embed: false
       - sdk: libSwiftCoreGraphics.tbd
     settings:
@@ -485,13 +488,25 @@ schemes:
       language: nl
     test:
       targets:
+        - package: Managers/ManagersTests
+          randomExecutionOrder: true
+          parallelizable: false  
+        - package: Models/ModelsTests
+          randomExecutionOrder: true
+          parallelizable: false        
+        - package: Persistence/PersistenceTests
+          randomExecutionOrder: true
+          parallelizable: false        
+        - package: Resources/ResourcesTests
+          randomExecutionOrder: true
+          parallelizable: false        
+        - package: ReusableViews/ReusableViewsTests
+          randomExecutionOrder: true
+          parallelizable: false        
         - package: Shared/SharedTests
           randomExecutionOrder: true
           parallelizable: false
         - package: Transport/TransportTests
-          randomExecutionOrder: true
-          parallelizable: false
-        - package: ReusableViews/ReusableViewsTests
           randomExecutionOrder: true
           parallelizable: false
         - name: CTRTests

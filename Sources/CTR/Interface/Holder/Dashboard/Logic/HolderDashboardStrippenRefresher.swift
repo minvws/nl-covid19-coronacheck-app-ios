@@ -11,6 +11,7 @@ import UIKit
 import Transport
 import Shared
 import Persistence
+import Managers
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()

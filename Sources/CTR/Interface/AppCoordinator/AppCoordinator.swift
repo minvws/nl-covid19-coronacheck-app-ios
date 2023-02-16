@@ -11,6 +11,9 @@ import ReusableViews
 import Transport
 import OpenIDConnect
 import Persistence
+import Managers
+import Models
+import Resources
 
 protocol AppCoordinatorDelegate: AnyObject {
 	

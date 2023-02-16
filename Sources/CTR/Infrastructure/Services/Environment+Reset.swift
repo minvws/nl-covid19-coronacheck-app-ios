@@ -24,7 +24,7 @@ extension Environment {
 		switch flavor {
 			case .holder:
 				walletManager.removeExistingEventGroups()
-				walletManager.removeExistingGreenCards()
+				walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
 				walletManager.removeExistingBlockedEvents()
 				walletManager.removeExistingMismatchedIdentityEvents()
 			case .verifier:

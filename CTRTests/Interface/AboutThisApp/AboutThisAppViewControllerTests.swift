@@ -10,9 +10,11 @@ import ViewControllerPresentationSpy
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Managers
 import Nimble
 import SnapshotTesting
 import TestingShared
+@testable import Resources
 
 class AboutThisAppViewControllerTests: XCTestCase {
 	

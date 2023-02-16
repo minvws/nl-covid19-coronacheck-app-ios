@@ -9,6 +9,7 @@ import UIKit
 import Lottie
 import Shared
 import ReusableViews
+import Resources
 
 // swiftlint:disable type_body_length
 class VerifierStartScanningView: BaseView {
@@ -404,7 +405,7 @@ class VerifierStartScanningView: BaseView {
 			guard oldValue != headerMode else { return }
 			switch headerMode {
 				case .animation(let animationName):
-					headerAnimationView.animation = LottieAnimation.named("Animations/" + animationName, bundle: Shared.R.bundle)
+					headerAnimationView.animation = LottieAnimation.named("Animations/" + animationName, bundle: Resources.R.bundle)
 					headerAnimationView.play()
 				case .image(let image):
 					headerImageView.image = image

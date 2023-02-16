@@ -11,6 +11,7 @@ import ViewControllerPresentationSpy
 import Nimble
 import SnapshotTesting
 import TestingShared
+@testable import Managers
 
 class HelpdeskViewControllerTests: XCTestCase {
 	

@@ -10,6 +10,8 @@ import XCTest
 import Nimble
 import CoreData
 import Shared
+@testable import Models
+@testable import Managers
 
 class HolderDashboardViewModelTests: XCTestCase {
 

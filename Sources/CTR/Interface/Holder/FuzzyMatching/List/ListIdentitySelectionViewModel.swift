@@ -9,6 +9,7 @@ import Foundation
 import Shared
 import ReusableViews
 import Transport
+import Resources
 
 enum IdentityControlViewState: Equatable {
 	case selected

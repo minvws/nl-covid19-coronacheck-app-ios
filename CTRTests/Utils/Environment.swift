@@ -12,6 +12,8 @@ import Clcore
 @testable import Shared
 import TestingShared
 import Persistence
+@testable import Models
+@testable import Managers
 
 ///
 /// Set of Spies with sensible default stubbed values, which can be modified per-test.
@@ -142,6 +144,7 @@ final class EnvironmentSpies {
 	var scanLockManagerSpy: ScanLockManagerSpy = {
 		let spy = ScanLockManagerSpy()
 		spy.stubbedState = .unlocked
+		spy.stubbedConfigScanLockDuration = 60
 		(spy.stubbedObservatory, _) = Observatory<ScanLockManager.State>.create()
 		return spy
 	}()

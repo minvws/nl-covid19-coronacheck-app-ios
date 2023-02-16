@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 import Shared
 @testable import ReusableViews
+@testable import Resources
 
 final class ContentViewModelTests: XCTestCase {
 	

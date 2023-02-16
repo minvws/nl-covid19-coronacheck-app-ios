@@ -10,6 +10,7 @@ import Shared
 import ReusableViews
 import Transport
 import Persistence
+import Resources
 
 class SendIdentitySelectionViewModel {
 	
@@ -134,7 +135,7 @@ class SendIdentitySelectionViewModel {
 						case .noInternet:
 							self.displayNoInternet()
 						case .noSignedEvents:
-							Current.walletManager.removeExistingGreenCards()
+							Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
 							self.displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .signer, clientCode: .noEventsToSendToTheSigner))
 						case let .customError(title: title, message: message):
 							removesDraftEventGroups = true

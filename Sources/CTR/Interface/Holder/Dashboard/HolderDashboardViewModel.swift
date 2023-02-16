@@ -12,6 +12,9 @@ import Reachability
 import Shared
 import ReusableViews
 import Persistence
+import Managers
+import Models
+import Resources
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {

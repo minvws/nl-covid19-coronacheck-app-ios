@@ -10,6 +10,7 @@ import Transport
 import Shared
 import ReusableViews
 import Persistence
+import Resources
 
 extension ListRemoteEventsViewModel {
 	

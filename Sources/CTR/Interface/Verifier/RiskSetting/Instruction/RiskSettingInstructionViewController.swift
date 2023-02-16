@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Models
 
 final class RiskSettingInstructionViewController: GenericViewController<RiskSettingInstructionView, RiskSettingInstructionViewModel> {
 

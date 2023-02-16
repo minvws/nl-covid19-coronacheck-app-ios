@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 /// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:
 extension InputRetrievalCodeViewModel {

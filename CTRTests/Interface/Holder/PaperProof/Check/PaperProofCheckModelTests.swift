@@ -11,6 +11,8 @@ import Nimble
 @testable import Transport
 @testable import Shared
 import ReusableViews
+@testable import Managers
+@testable import Resources
 
 class PaperProofCheckModelTests: XCTestCase {
 	

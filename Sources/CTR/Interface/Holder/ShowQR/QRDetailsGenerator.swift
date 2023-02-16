@@ -7,6 +7,9 @@
 
 import Foundation
 import Shared
+import Models
+import Managers
+import Resources
 
 class NegativeTestQRDetailsGenerator {
 

@@ -11,6 +11,9 @@ import SnapshotTesting
 import Nimble
 import Shared
 import TestingShared
+@testable import Models
+@testable import Managers
+@testable import Resources
 
 final class RiskSettingSelectedViewControllerTests: XCTestCase {
 	

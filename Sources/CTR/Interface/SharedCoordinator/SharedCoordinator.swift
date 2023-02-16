@@ -9,6 +9,8 @@ import UIKit
 import SafariServices
 import Shared
 import ReusableViews
+import Managers
+import Models
 
 protocol Dismissable: AnyObject {
 

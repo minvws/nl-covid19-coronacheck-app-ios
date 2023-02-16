@@ -14,6 +14,7 @@ import SnapshotTesting
 import OpenIDConnect
 import TestingShared
 import ReusableViews
+@testable import Resources
 
 class AuthenticationViewControllerTests: XCTestCase {
 	

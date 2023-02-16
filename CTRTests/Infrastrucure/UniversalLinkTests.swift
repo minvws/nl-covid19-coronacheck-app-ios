@@ -13,6 +13,8 @@ import XCTest
 import Nimble
 import TestingShared
 import Persistence
+@testable import Managers
+@testable import Models
 
 class UniversalLinkTests: XCTestCase {
 	
@@ -38,7 +40,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -58,7 +60,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -72,7 +74,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -85,7 +87,7 @@ class UniversalLinkTests: XCTestCase {
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .verifier)
 		
 		XCTAssertNil(link)
 	}
@@ -98,7 +100,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -112,7 +114,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -126,7 +128,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -146,7 +148,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -166,7 +168,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -180,7 +182,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -193,7 +195,7 @@ class UniversalLinkTests: XCTestCase {
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem/assessment#XXX-YYYYYYYYYYYY-Z2")
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .verifier)
 		
 		XCTAssertNil(link)
 	}
@@ -206,7 +208,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -220,7 +222,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -240,7 +242,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -260,7 +262,7 @@ class UniversalLinkTests: XCTestCase {
 		))
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == expected
@@ -274,7 +276,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -287,7 +289,7 @@ class UniversalLinkTests: XCTestCase {
 		activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem-assessment#XXX-YYYYYYYYYYYY-Z2")
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .verifier)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .verifier)
 		
 		XCTAssertNil(link)
 	}
@@ -300,7 +302,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil
@@ -314,7 +316,7 @@ class UniversalLinkTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsLuhnCheckEnabledResult = true
 		
 		// Act
-		let link = UniversalLinkFactory.create(userActivity: activity, appFlavor: .holder)
+		let link = UniversalLinkFactory.create(userActivity: activity, featureFlagManager: environmentSpies.featureFlagManagerSpy, appFlavor: .holder)
 		
 		// Assert
 		expect(link) == nil

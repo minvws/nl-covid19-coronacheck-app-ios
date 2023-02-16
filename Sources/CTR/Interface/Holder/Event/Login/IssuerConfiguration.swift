@@ -7,6 +7,7 @@
 
 import UIKit
 import OpenIDConnect
+import Models
 
 final class MaxConfig: OpenIDConnectConfiguration {
 	
