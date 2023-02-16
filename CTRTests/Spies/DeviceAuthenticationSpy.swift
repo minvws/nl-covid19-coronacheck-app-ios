@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import CTR
-
+@testable import Managers
 class DeviceAuthenticationSpy: DeviceAuthenticationProtocol {
 
 	required init() {}

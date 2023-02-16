@@ -9,6 +9,7 @@ import UIKit
 import Lottie
 import Shared
 import ReusableViews
+import Resources
 
 class ScanInstructionsItemView: ScrolledStackView {
 	
@@ -131,7 +132,7 @@ class ScanInstructionsItemView: ScrolledStackView {
 	var animationName: String? {
 		didSet {
 			guard let animationName = animationName else { return }
-			animationView.animation = LottieAnimation.named("Animations/" + animationName, bundle: Shared.R.bundle)
+			animationView.animation = LottieAnimation.named("Animations/" + animationName, bundle: Resources.R.bundle)
 		}
 	}
 

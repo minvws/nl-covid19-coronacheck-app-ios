@@ -12,6 +12,8 @@ import Nimble
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Models
+@testable import Resources
 
 class InputRetrievalCodeControllerTests: XCTestCase {
 

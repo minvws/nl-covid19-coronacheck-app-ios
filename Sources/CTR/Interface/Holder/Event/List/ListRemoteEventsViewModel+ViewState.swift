@@ -9,6 +9,8 @@ import Foundation
 import Transport
 import Shared
 import ReusableViews
+import Models
+import Resources
 
 typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
 

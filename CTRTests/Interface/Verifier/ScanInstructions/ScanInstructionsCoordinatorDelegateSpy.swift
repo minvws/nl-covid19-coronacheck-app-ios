@@ -7,6 +7,8 @@
 
 import UIKit
 @testable import CTR
+@testable import Managers
+@testable import Models
 
 class ScanInstructionsCoordinatorDelegateSpy: Coordinator, ScanInstructionsCoordinatorDelegate, OpenUrlProtocol {
 

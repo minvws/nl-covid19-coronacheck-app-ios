@@ -10,6 +10,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class QRCardView: BaseView {
 

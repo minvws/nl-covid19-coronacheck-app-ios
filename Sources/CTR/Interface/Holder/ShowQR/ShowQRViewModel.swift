@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 import Shared
 import Persistence
+import Models
+import Managers
+import Resources
 
 class ShowQRViewModel {
 

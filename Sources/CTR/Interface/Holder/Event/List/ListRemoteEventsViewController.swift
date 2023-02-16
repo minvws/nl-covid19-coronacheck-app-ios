@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class ListRemoteEventsViewController: TraitWrappedGenericViewController<ListRemoteEventsView, ListRemoteEventsViewModel> {
 

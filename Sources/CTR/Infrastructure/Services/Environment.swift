@@ -11,6 +11,8 @@ import Transport
 import Shared
 import OpenIDConnect
 import Persistence
+import Managers
+import Models
 
 // MARK: - 1: Define the Environment
 
@@ -146,10 +148,12 @@ private let contactInformationProvider = ContactInformationProvider(
 	remoteConfigManager: remoteConfigManager
 )
 private let couplingManager = CouplingManager(cryptoManager: cryptoManager, networkManager: networkManager)
+private let userSettings = UserSettings()
 private let cryptoManager = CryptoManager(
 	cryptoLibUtility: cryptoLibUtility,
 	verificationPolicyManager: verificationPolicyManager,
-	featureFlagManager: featureFlagManager
+	featureFlagManager: featureFlagManager,
+	userSettings: userSettings
 )
 
 private let deviceAuthenticationDetector = DeviceAuthenticationDetector()
@@ -157,11 +161,9 @@ private let disclosurePolicyManager = DisclosurePolicyManager(
 	remoteConfigManager: remoteConfigManager,
 	userSettings: userSettings
 )
-private let featureFlagManager = FeatureFlagManager(
-	remoteConfigManager: remoteConfigManager
-)
+
 private let fileStorage = FileStorage()
-private let identityChecker = IdentityChecker()
+private let identityChecker = IdentityChecker(cryptoManager: cryptoManager)
 private let jailBreakDetector = JailBreakDetector()
 private let mappingManager = MappingManager(remoteConfigManager: remoteConfigManager)
 private let onboardingManager = OnboardingManager(secureUserSettings: secureUserSettings)
@@ -199,9 +201,14 @@ private let remoteConfigManager = RemoteConfigManager(
 	fileStorage: fileStorage
 )
 private let verificationPolicyManager = VerificationPolicyManager(secureUserSettings: secureUserSettings)
-private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secureUserSettings)
+private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secureUserSettings, remoteConfigManager: remoteConfigManager)
 private let secureUserSettings = SecureUserSettings()
-private let userSettings = UserSettings()
+
+private let featureFlagManager = FeatureFlagManager(
+	remoteConfigManager: remoteConfigManager,
+	disclosurePolicyManager: disclosurePolicyManager,
+	userSettings: userSettings
+)
 
 // MARK: - 3: Instantiate the Environment using private dependencies:
 
@@ -211,8 +218,8 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		fatalError("During unit testing, real services should not be instantiated during Environment setup.")
 	}
 	
-	// Dependencies that depend on `DataStoreManager`: 
-	let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager)
+	// Dependencies that depend on `DataStoreManager`:
+	let scanLogManager = ScanLogManager(dataStoreManager: datastoreManager, remoteConfigManager: remoteConfigManager, now: now)
 	let walletManager = WalletManager(dataStoreManager: datastoreManager)
 	let verificationPolicyEnabler = VerificationPolicyEnabler(
 		remoteConfigManager: remoteConfigManager,

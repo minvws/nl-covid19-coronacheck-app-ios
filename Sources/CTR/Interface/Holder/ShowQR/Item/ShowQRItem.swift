@@ -7,6 +7,7 @@
 
 import Foundation
 import Persistence
+import Models
 
 struct ShowQRItem {
 	let greenCard: GreenCard

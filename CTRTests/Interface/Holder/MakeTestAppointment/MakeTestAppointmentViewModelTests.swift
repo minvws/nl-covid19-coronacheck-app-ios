@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 @testable import CTR
 import Shared
+@testable import Resources
 
 final class MakeTestAppointmentViewModelTests: XCTestCase {
 	

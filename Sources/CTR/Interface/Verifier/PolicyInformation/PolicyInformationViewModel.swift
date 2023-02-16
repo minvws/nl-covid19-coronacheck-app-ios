@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 final class PolicyInformationViewModel {
 	

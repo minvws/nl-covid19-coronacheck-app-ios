@@ -9,6 +9,8 @@ import UIKit
 import OpenIDConnect
 import Shared
 import ReusableViews
+import Models
+import Managers
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -44,7 +46,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 					
 					// Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:
 					if let userActivity = connectionOptions.userActivities.first,
-					   let activity = UniversalLinkFactory.create(userActivity: userActivity) {
+					   let activity = UniversalLinkFactory.create(userActivity: userActivity, featureFlagManager: Current.featureFlagManager) {
 						self.appCoordinator?.receive(universalLink: activity)
 					}
 					
@@ -58,7 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// If your app was __already running__ (or suspended in memory), this delegate
 	/// callback will receive the UserActivity when a universal link is tapped:
 	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-		guard let activity = UniversalLinkFactory.create(userActivity: userActivity) else { return }
+		guard let activity = UniversalLinkFactory.create(userActivity: userActivity, featureFlagManager: Current.featureFlagManager) else { return }
 		appCoordinator?.receive(universalLink: activity)
 	}
 

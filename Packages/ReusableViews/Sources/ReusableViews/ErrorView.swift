@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 /*
  A view to show an error line with a preceding erron icon.

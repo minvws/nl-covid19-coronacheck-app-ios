@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import Transport
+@testable import Models
 
 final class IdentitySelectionDataSourceTests: XCTestCase {
 	

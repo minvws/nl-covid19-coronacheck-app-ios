@@ -17,6 +17,20 @@ extension RemovedEvent {
 	
 	public static let entityName = "RemovedEvent"
 	
+	public convenience init(
+		type: EventMode,
+		eventDate: Date,
+		reason: String,
+		wallet: Wallet,
+		managedContext: NSManagedObjectContext) {
+		
+		self.init(context: managedContext)
+		self.type = type.rawValue
+		self.eventDate = eventDate
+		self.reason = reason
+		self.wallet = wallet
+	}
+
 	public func delete(context: NSManagedObjectContext) {
 		
 		context.delete(self)

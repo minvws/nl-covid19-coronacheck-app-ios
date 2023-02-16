@@ -9,6 +9,7 @@ import UIKit
 import Lottie
 import Shared
 import ReusableViews
+import Resources
 
 class SecurityFeaturesView: BaseView {
 

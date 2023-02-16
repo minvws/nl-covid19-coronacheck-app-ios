@@ -9,6 +9,7 @@ import UIKit
 import Transport
 import Shared
 import Persistence
+import Resources
 
 extension EventMode {
 	var localized: String {
@@ -30,17 +31,6 @@ extension EventMode {
 			case .test: return L.holder_test_alert_message()
 			case .vaccination: return L.holder_vaccination_alert_message()
 			case .vaccinationassessment: return L.holder_event_vaccination_assessment_alert_message()
-		}
-	}
-	
-	var asList: [String]? {
-		switch self {
-			case .vaccinationAndPositiveTest: return ["vaccination", "positivetest"]
-			case .test: return ["negativetest"]
-			case .vaccination: return ["vaccination"]
-			case .recovery: return ["positivetest"]
-			case .vaccinationassessment: return ["vaccinationassessment"]
-			case .paperflow: return nil
 		}
 	}
 }

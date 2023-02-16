@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 /*
  A generic viewcontroller, used to reduce scaffolding

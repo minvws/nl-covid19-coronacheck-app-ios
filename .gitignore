@@ -52,5 +52,7 @@ report.xml
 /TransportTests/Info.plist
 /Sources/Shared/Shared-Info.plist
 /clcore.xcframework
+/Frameworks/clcore.xcframework
+/Packages/CryptoCore/Frameworks/clcore.xcframework
 /tmp-clcore
 /tmp

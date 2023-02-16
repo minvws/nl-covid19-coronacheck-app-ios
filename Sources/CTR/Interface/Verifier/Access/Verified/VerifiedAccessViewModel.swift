@@ -7,6 +7,8 @@
 
 import UIKit
 import Shared
+import Models
+import Resources
 
 /// The access options
 enum VerifiedAccess: Equatable {

@@ -11,6 +11,7 @@ import Nimble
 import TestingShared
 import Shared
 @testable import ReusableViews
+@testable import Resources
 
 class ContentViewControllerTests: XCTestCase {
 

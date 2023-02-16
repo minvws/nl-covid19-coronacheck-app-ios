@@ -16,10 +16,9 @@ let package = Package(
 		// .package(url: /* package url */, from: "1.0.0"),
 		.package(name: "Shared", path: "../Shared"),
 		.package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
-		.package(url: "https://github.com/Thomvis/BrightFutures", branch: "master"),
 		
 		// testing:
-		.package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: .init(1, 9, 0)),
+		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/AliSoftware/OHHTTPStubs", exact: .init(9, 1, 0)),
 		.package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0))
 	],
@@ -31,17 +30,14 @@ let package = Package(
 			dependencies: [
 				.product(name: "HTTPSecurity", package: "nl-rdo-app-ios-modules"),
 				.product(name: "Shared", package: "Shared"),
-				.product(name: "BrightFutures", package: "BrightFutures")
 			]),
 		.testTarget(
 			name: "TransportTests",
 			dependencies: [
 				"Transport",
-				.product(name: "HTTPSecurity", package: "nl-rdo-app-ios-modules"),
-				.product(name: "Shared", package: "Shared"),
-				.product(name: "BrightFutures", package: "BrightFutures"),
+				.product(name: "TestingShared", package: "TestingShared"),
+				
 				.product(name: "Nimble", package: "Nimble"),
-				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
 				.product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
 			],
 			resources: [

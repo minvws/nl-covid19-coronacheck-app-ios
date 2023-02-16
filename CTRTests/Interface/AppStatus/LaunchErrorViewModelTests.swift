@@ -10,6 +10,7 @@ import XCTest
 import Nimble
 import Transport
 import Shared
+@testable import Resources
 
 class LaunchErrorViewModelTests: XCTestCase {
 	

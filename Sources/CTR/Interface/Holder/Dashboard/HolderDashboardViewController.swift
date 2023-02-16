@@ -8,6 +8,8 @@
 import UIKit
 import Shared
 import ReusableViews
+import Models
+import Resources
 
 class HolderDashboardViewController: GenericViewController<HolderDashboardView, HolderDashboardViewModelType> {
 	
@@ -166,7 +168,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.selectedTab.observe { [weak self, sceneView] region in
-			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
+			guard let self, self.didSetInitialStartingTabOnSceneView else { return }
 			sceneView.selectTab(tab: region)
 		}
 		

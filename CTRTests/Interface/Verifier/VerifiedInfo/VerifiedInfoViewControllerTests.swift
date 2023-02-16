@@ -11,6 +11,7 @@ import SnapshotTesting
 @testable import CTR
 import Shared
 import TestingShared
+@testable import Resources
 
 final class VerifiedInfoViewControllerTests: XCTestCase {
 	

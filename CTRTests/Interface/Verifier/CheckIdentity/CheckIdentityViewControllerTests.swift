@@ -12,6 +12,9 @@ import Nimble
 import Clcore
 import Shared
 import TestingShared
+@testable import Resources
+@testable import Managers
+@testable import Models
 
 final class CheckIdentityViewControllerTests: XCTestCase {
 	

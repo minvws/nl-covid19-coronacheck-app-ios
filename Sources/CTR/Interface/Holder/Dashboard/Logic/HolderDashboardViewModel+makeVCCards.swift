@@ -8,6 +8,8 @@
 import Foundation
 import Shared
 import Persistence
+import Models
+import Resources
 
 extension HolderDashboardViewController.Card {
 

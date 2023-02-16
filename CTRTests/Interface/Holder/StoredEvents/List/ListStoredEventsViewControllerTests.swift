@@ -13,6 +13,9 @@ import SnapshotTesting
 @testable import Shared
 import TestingShared
 import Persistence
+@testable import Models
+@testable import Managers
+@testable import Resources
 
 class ListStoredEventsViewControllerTests: XCTestCase {
 

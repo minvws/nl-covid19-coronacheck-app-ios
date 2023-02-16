@@ -10,6 +10,8 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
+@testable import Managers
+@testable import Models
 
 class ScanInstructionsCoordinatorTests: XCTestCase {
 

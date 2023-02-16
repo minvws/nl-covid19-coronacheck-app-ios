@@ -8,9 +8,11 @@
 import XCTest
 @testable import CTR
 import Nimble
-import Transport
 import TestingShared
-import Persistence
+@testable import Transport
+@testable import Persistence
+@testable import Models
+@testable import Managers
 
 final class EventGroupCacheTests: XCTestCase {
 	

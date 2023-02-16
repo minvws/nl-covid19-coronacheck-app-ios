@@ -9,6 +9,9 @@ import Foundation
 import Transport
 import Shared
 import ReusableViews
+import Models
+import Managers
+import Resources
 
 class PaperProofCheckViewModel {
 

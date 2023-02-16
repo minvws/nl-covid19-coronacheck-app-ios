@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class AboutThisAppView: ScrolledStackView {
 
@@ -117,7 +118,7 @@ final class AboutThisAppView: ScrolledStackView {
 		// Pin to the bottom of the screen, unless scrollview goes off bottom of screen, in which case pin
 		//  to the bottom of the scrollview contents (with a nice rubber-band effect)
 		
-		let pinUpwardsToScrollViewContents = resetButtonStackView.topAnchor.constraint(greaterThanOrEqualTo: menuStackView.bottomAnchor, constant: ViewTraits.ResetButton.verticalMargin)
+		let pinUpwardsToScrollViewContents = resetButtonStackView.topAnchor.constraint(greaterThanOrEqualTo: configVersionLabel.bottomAnchor, constant: ViewTraits.ResetButton.verticalMargin)
 		pinUpwardsToScrollViewContents.priority = .defaultLow
 		pinUpwardsToScrollViewContents.isActive = true
 		

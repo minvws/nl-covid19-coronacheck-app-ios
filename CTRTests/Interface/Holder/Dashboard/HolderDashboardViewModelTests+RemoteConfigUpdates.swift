@@ -12,6 +12,8 @@ import XCTest
 import Nimble
 import CoreData
 import TestingShared
+@testable import Models
+@testable import Managers
 
 extension HolderDashboardViewModelTests {
 

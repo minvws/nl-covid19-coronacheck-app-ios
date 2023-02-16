@@ -99,3 +99,6 @@ scan_unused_code:
 
 remove_old_rswift:
 	@rm Sources/CTR/Infrastructure/Resources/R.generated.swift || true
+
+generate_diagrams:
+	@d2 Diagrams/packages-withouttests.d2 Diagrams/packages-withouttests.png --layout=elk --sketch

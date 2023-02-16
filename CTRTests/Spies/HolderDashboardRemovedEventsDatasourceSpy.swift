@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import CTR
+@testable import Persistence
 
 // swiftlint:disable:next type_name
 class HolderDashboardRemovedEventsDatasourceSpy: HolderDashboardRemovedEventsDatasourceProtocol {
