@@ -144,7 +144,7 @@ class VerifierStartScanningViewModel {
 	
 	private lazy var lockLabelCountdownTimer: Timeable = {
 		return vendTimer(TimeInterval(1), true) { [weak self] in
-			guard let self = self,
+			guard let self,
 				  case let .locked(mode, timeRemaining, totalDuration) = self.mode,
 				  timeRemaining > 0
 			else { return }

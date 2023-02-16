@@ -58,7 +58,7 @@ class VerifierCoordinator: SharedCoordinator {
 	override func start() {
 		
 		verificationPolicyEnablerObserverToken = Current.verificationPolicyEnabler.observatory.append { [weak self] _ in
-			guard let self = self, self.navigationController.viewControllers.contains(where: { $0 is VerifierStartScanningViewController }) else { return }
+			guard let self, self.navigationController.viewControllers.contains(where: { $0 is VerifierStartScanningViewController }) else { return }
 			self.navigateToVerifierWelcome()
 		}
 		

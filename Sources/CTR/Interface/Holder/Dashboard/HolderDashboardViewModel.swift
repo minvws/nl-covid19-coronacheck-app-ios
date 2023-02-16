@@ -373,7 +373,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	func setupConfigNotificationManager() {
 
 		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
-			guard let self = self, case .success = result else { return }
+			guard let self, case .success = result else { return }
 			self.setupRecommendedVersion()
 		}
 	}
