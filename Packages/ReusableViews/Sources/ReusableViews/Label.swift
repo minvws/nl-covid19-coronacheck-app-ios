@@ -183,13 +183,12 @@ open class Label: UILabel {
 	
 	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
 		if recognizer.state == .began,
-		   let recognizerView = recognizer.view,
-		   let recognizerSuperview = recognizerView.superview {
+		   let recognizerView = recognizer.view {
 			recognizerView.becomeFirstResponder()
 			
 			let copyMenu = UIMenuController.shared
 			copyMenu.arrowDirection = .default
-			copyMenu.setTargetRect(bounds, in: recognizerSuperview)
+			copyMenu.setTargetRect(bounds, in: self)
 			copyMenu.setMenuVisible(true, animated: true)
 		}
 	}
