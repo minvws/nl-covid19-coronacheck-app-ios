@@ -150,7 +150,7 @@ class QRCardView: BaseView {
 	private var titleTopAnchor: NSLayoutConstraint?
 
 	private var reloadTimer: Timer?
-
+	
 	// MARK: - init
 
 	init(stackSize: Int) {
@@ -165,7 +165,7 @@ class QRCardView: BaseView {
 		})
 		reloadTimer?.fire()
 	}
-
+	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -180,10 +180,10 @@ class QRCardView: BaseView {
 		squashedCards.forEach { squashedCardView in
 			squashedCardView.translatesAutoresizingMaskIntoConstraints = false
 			squashedCardView.clipsToBounds = false
-			squashedCardView.backgroundColor = C.white()
+			squashedCardView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		}
 
-		hostView.backgroundColor = C.white()
+		hostView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		hostView.translatesAutoresizingMaskIntoConstraints = false
 	}
 	
@@ -194,7 +194,7 @@ class QRCardView: BaseView {
 			verticalLabelsStackView.accessibilityRespondsToUserInteraction = false
 		}
 	}
-
+	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
@@ -205,12 +205,17 @@ class QRCardView: BaseView {
 		squashedCards.reversed().forEach { squashedCardView in
 			addSubview(squashedCardView)
 			squashedCardView.layer.cornerRadius = ViewTraits.cornerRadius
-			createShadow(view: squashedCardView, forSquashedViewIndex: squashedCards.firstIndex(of: squashedCardView)!, forTotalSquashedViewCount: squashedCards.count)
+			if !shouldUseDarkMode {
+				createShadow(view: squashedCardView, forSquashedViewIndex: squashedCards.firstIndex(of: squashedCardView)!, forTotalSquashedViewCount: squashedCards.count)
+			}
 		}
 
 		addSubview(hostView)
 		hostView.layer.cornerRadius = ViewTraits.cornerRadius
-		createShadow(view: hostView, hasSquashedViews: !squashedCards.isEmpty)
+		
+		if !shouldUseDarkMode {
+			createShadow(view: hostView, hasSquashedViews: !squashedCards.isEmpty)
+		}
 
 		hostView.addSubview(titleLabel)
 		hostView.addSubview(largeIconImageView)

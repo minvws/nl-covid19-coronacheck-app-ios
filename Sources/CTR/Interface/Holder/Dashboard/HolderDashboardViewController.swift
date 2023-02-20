@@ -145,6 +145,17 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 			self.sceneView.updateScrollPosition()
 		}
 	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+	
+		if #available(iOS 13.0, *),
+			traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+			
+			setup(cards: viewModel.domesticCards.value, with: sceneView.domesticScrollView.stackView)
+			setup(cards: viewModel.internationalCards.value, with: sceneView.internationalScrollView.stackView)
+		}
+	}
 
 	// MARK: - Setup
 	
@@ -305,7 +316,7 @@ private extension HeaderMessageCardView {
 		let view = HeaderMessageCardView()
 		view.message = message
 		view.buttonTitle = buttonTitle
-		view.contentTextView.linkTouchedHandler = { url in
+		view.linkTouchedHandler = { url in
 			openURLHandler(url)
 		}
 		view.buttonTappedCommand = {
@@ -322,9 +333,7 @@ private extension EmptyDashboardDescriptionCardView {
 		let view = EmptyDashboardDescriptionCardView()
 		view.message = message
 		view.buttonTitle = buttonTitle
-		view.contentTextView.linkTouchedHandler = { url in
-			openURLHandler(url)
-		}
+		view.linkTouchedHandler = openURLHandler
 		view.buttonTappedCommand = {
 			guard let url = URL(string: L.holderDashboardEmptyInternationalUrl()) else { return }
 			openURLHandler(url)

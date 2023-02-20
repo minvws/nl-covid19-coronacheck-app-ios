@@ -77,7 +77,6 @@ final class MenuRowView: UIControl {
 	
 	private let bottomBorderView: UIView = {
 		let view = UIView()
-		view.backgroundColor = C.grey5()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
 		return view
@@ -99,7 +98,7 @@ final class MenuRowView: UIControl {
 	}
 	
 	func setupViews() {
-		backgroundColor = C.white()
+		setColorsForTraitCurrentCollection()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
@@ -145,6 +144,11 @@ final class MenuRowView: UIControl {
 		NSLayoutConstraint.activate(constraints)
 	}
 	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForTraitCurrentCollection()
+	}
+	
 	/// Setup all the accessibility traits
 	private func setupAccessibility() {
 
@@ -152,20 +156,30 @@ final class MenuRowView: UIControl {
 		accessibilityTraits = .button
 	}
 	
+	private func setColorsForTraitCurrentCollection() {
+ 
+		backgroundColor = {
+			if shouldUseDarkMode {
+				return isHighlighted || isSelected
+					? C.white()
+					: C.grey5()
+			} else {
+				return isHighlighted || isSelected
+					? C.primaryBlue5()
+					: C.white()
+			}
+		}()
+		
+		bottomBorderView.backgroundColor = shouldUseDarkMode ? C.grey4() : C.grey5()
+	}
+	
 	// MARK: - Interaction
 	
 	override var isSelected: Bool {
-		didSet { updateDynamicAttributes() }
+		didSet { setColorsForTraitCurrentCollection() }
 	}
 	override var isHighlighted: Bool {
-		didSet { updateDynamicAttributes() }
-	}
-	
-	private func updateDynamicAttributes() {
-		
-		backgroundColor = isHighlighted || isSelected
-			? C.primaryBlue5()
-			: C.white()
+		didSet { setColorsForTraitCurrentCollection() }
 	}
 	
 	// MARK: - Objc Target-Action callbacks:

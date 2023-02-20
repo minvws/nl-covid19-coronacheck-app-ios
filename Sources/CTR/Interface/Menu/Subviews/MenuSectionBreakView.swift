@@ -14,8 +14,8 @@ final class MenuSectionBreakView: BaseView {
 	
 	override func setupViews() {
 		super.setupViews()
-		
-		backgroundColor = C.primaryBlue5()
+	
+		setColorsForTraitCurrentCollection()
 	}
 	
 	override func setupViewConstraints() {
@@ -26,4 +26,12 @@ final class MenuSectionBreakView: BaseView {
 		NSLayoutConstraint.activate(constraints)
 	}
 	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForTraitCurrentCollection()
+	}
+	
+	private func setColorsForTraitCurrentCollection() {
+		backgroundColor = shouldUseDarkMode ? C.white() : C.primaryBlue5()
+	}
 }

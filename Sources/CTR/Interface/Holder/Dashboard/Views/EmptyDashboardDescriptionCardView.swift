@@ -20,7 +20,13 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 		}
 	}
 	
-	let contentTextView = TextView()
+	private var contentTextView: TextView = {
+		let textView = TextView()
+		textView.linkTextAttributes = [
+			.foregroundColor: C.primaryBlue() as Any
+		]
+		return textView
+	}()
 	
 	private let button: Button = {
 		let button = Button(style: .textLabelBlue)
@@ -88,4 +94,11 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 
 	/// The user tapped on the button
 	var buttonTappedCommand: (() -> Void)?
+	
+	/// User tapped on a link in the contentTextView text
+	var linkTouchedHandler: ((URL) -> Void)? {
+		didSet {
+			contentTextView.linkTouchedHandler = linkTouchedHandler
+		}
+	}
 }
