@@ -162,19 +162,19 @@ open class Label: UILabel {
 	}
 	
 	open override var canBecomeFirstResponder: Bool {
-		return isUserInteractionEnabled
+		isUserInteractionEnabled
 	}
 	
 	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-		return action == #selector(copy(_:)) && isUserInteractionEnabled
+		action == #selector(copy(_:)) && isUserInteractionEnabled
 	}
 
 	// MARK: - UIResponderStandardEditActions
 	
 	open override func copy(_ sender: Any?) {
-		if isUserInteractionEnabled {
-			UIPasteboard.general.string = text
-		}
+		
+		guard isUserInteractionEnabled else { return }
+		UIPasteboard.general.string = text
 	}
 	
 	// MARK: - Long-press Handler
@@ -182,14 +182,13 @@ open class Label: UILabel {
 	private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
 	
 	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
-		if recognizer.state == .began,
-		   let recognizerView = recognizer.view {
-			recognizerView.becomeFirstResponder()
-			
-			let copyMenu = UIMenuController.shared
-			copyMenu.arrowDirection = .default
-			copyMenu.setTargetRect(bounds, in: self)
-			copyMenu.setMenuVisible(true, animated: true)
-		}
+		
+		guard recognizer.state == .began, let recognizerView = recognizer.view else { return }
+		
+		recognizerView.becomeFirstResponder()
+		let copyMenu = UIMenuController.shared
+		copyMenu.arrowDirection = .default
+		copyMenu.setTargetRect(bounds, in: self)
+		copyMenu.setMenuVisible(true, animated: true)
 	}
 }

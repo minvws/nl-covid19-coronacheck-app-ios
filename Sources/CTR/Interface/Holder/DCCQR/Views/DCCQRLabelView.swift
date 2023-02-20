@@ -110,11 +110,11 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	// MARK: - Selectable
 	
 	override var canBecomeFirstResponder: Bool {
-		return true
+		true
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-		return action == #selector(copy(_:))
+		action == #selector(copy(_:))
 	}
 
 	// MARK: - UIResponderStandardEditActions
@@ -128,12 +128,9 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
 	
 	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
-		if recognizer.state == .began,
-			let recognizerView = recognizer.view,
-			let recognizerSuperview = recognizerView.superview {
-			recognizerView.becomeFirstResponder()
-			UIMenuController.shared.setTargetRect(recognizerView.frame, in: recognizerSuperview)
-			UIMenuController.shared.setMenuVisible(true, animated: true)
-		}
+		guard recognizer.state == .began, let recognizerView = recognizer.view else { return }
+		recognizerView.becomeFirstResponder()
+		UIMenuController.shared.setTargetRect(recognizerView.frame, in: self)
+		UIMenuController.shared.setMenuVisible(true, animated: true)
 	}
 }
