@@ -1,0 +1,162 @@
+direction: down
+
+# Text
+
+explanation: |md
+  # CoronaCheck - Client Side Data model
+  - **Changelog**
+    - *1.5.1* Layout changes with d2lang
+    - *1.5* Updated EventGroup with isDraft
+    - *1.4* Added OriginHint and RemovedEvents
+    - *1.3* Renamed EventGroup issued_at to expiryDate
+    - *1.2* Added origin level, styling changes
+    - *1.1* Added provider identifier, credential version to event table renamed event to EventGroup
+    - *1.0* Removed 'valid until' fields as this is config-determined
+    - *0.2* Matched terminology currently used in clients
+    - *0.1* Initial version
+
+  - **Authors**
+     - Ivo, Bart, Rool
+| {
+  near: wallet
+}
+
+# Containers
+
+wallet: {
+  label: Wallet
+  table: Table {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    1abel: main
+  }
+  comment: |md
+    This level is currently __YAGNI__ and will be  
+    added once we support multiple people's QR's.
+  |
+  style.shadow: true
+}
+
+eventgroup: {
+  label: EventGroup
+  table: {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    walletId: Int {constraint: foreign_key}
+    expiryDate: Date 2012-04-15T10:01:00Z
+    isDraft: Boolean true
+    jsonData: Blob
+    providerIdentifier: String {constraint: unique}
+    type: String vaccination|recovery|test
+  }
+  comment: |md
+    **Note**: the jsonData can contain multiple  
+      events with a single signature.
+  |
+  style.shadow: true
+}
+
+greencard: {
+  label: Greencard
+  table: Table {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    walletId: Int {constraint: foreign_key}
+    type: eu|domestic
+  }
+  style.shadow: true
+}
+
+origin: {
+  label: Origin
+  table: Table {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    greencardId: Int {constraint: foreign_key}
+    doseNumber: Int
+    eventDate: Date
+    expirationTime: Date
+    type: vaccination|recovery|test
+    validFrom: Date
+  }
+  style.shadow: true
+}
+
+credential: {
+  label: Credential
+  table: Table {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    greencardId: Int {constraint: foreign_key}
+    data: Binary Data
+    expirationTime: Date
+    validFrom: Date
+    version: Int
+  }
+  style.shadow: true
+}
+
+removedevent: {
+  label: RemovedEvent
+  table: Table {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    walletId: Int {constraint: foreign_key}
+    eventDate: Date
+    reason: String
+    type: vaccination|recovery|test
+  }
+  style.shadow: true
+}
+
+hint: {
+  label: OriginHint
+  table: Table {
+    shape: sql_table
+    id: Int {constraint: primary_key}
+    originId: Int {constraint: foreign_key}
+    hint: String
+  }
+  style.shadow: true
+}
+
+# Connections
+
+wallet -> eventgroup: "Data to be sent to signer: all events" {
+  source-arrowhead: 0
+  target-arrowhead: * {
+    shape: diamond
+  }
+}
+wallet -> greencard: {
+  source-arrowhead: 0
+  target-arrowhead: * {
+    shape: diamond
+  }
+}
+wallet -> removedEvent: "EventGroup metadata for eventgroups that are removed\ndue to identity mismatch or blocked events " {
+  source-arrowhead: 0
+  target-arrowhead: * {
+    shape: diamond
+  }
+}
+
+greencard -> origin: "This indicates what the\ngreencard was based upon" {
+  source-arrowhead: 1
+  target-arrowhead: * {
+    shape: diamond
+  }
+}
+greencard -> credential: "Only green card type domestic can have multiple\ncredentials, all others have a single credential" {
+  source-arrowhead: 1
+  target-arrowhead: * {
+    shape: diamond
+  }
+}
+
+origin -> hint: "Hints store more information\nfor an origin, i.e. event_from_dcc" {
+  source-arrowhead: 1
+  target-arrowhead: * {
+    shape: diamond
+  }
+}
