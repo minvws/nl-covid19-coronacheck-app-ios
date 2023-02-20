@@ -3,6 +3,16 @@
     {
       "filename" : "icon_menu_addvisitorpass.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 1138.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
