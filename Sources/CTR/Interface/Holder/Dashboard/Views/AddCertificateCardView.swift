@@ -112,6 +112,7 @@ private class LargeAddCertificateButton: UIControl {
 		let label = Label(body: nil).multiline()
 		label.textAlignment = .center
 		label.textColor = C.primaryBlue()
+		label.isSelectable = false
 		
 		return label
 	}()

@@ -22,6 +22,7 @@ open class Label: UILabel {
 		self.textColor = textColor
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.adjustsFontForContentSizeCategory = true
+		self.isSelectable = true // Default all labels are selectable.
 	}
 	
 	required public init?(coder: NSCoder) {
@@ -141,6 +142,54 @@ open class Label: UILabel {
 		guard let attributedText = attributedText else { return false }
 		return attributedText.attributes { key, value, range in
 			return key == .underlineStyle || key == .link
+		}
+	}
+	
+	// MARK: - Selectable
+	
+	open var isSelectable: Bool {
+		set {
+			self.isUserInteractionEnabled = newValue
+			if newValue {
+				addGestureRecognizer(
+					longPressGestureRecognizer
+				)
+			} else {
+				self.removeGestureRecognizer(longPressGestureRecognizer)
+			}
+		}
+		get { return false }
+	}
+	
+	open override var canBecomeFirstResponder: Bool {
+		return isUserInteractionEnabled
+	}
+	
+	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		return action == #selector(copy(_:)) && isUserInteractionEnabled
+	}
+
+	// MARK: - UIResponderStandardEditActions
+	
+	open override func copy(_ sender: Any?) {
+		if isUserInteractionEnabled {
+			UIPasteboard.general.string = text
+		}
+	}
+	
+	// MARK: - Long-press Handler
+
+	private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+	
+	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
+		if recognizer.state == .began,
+		   let recognizerView = recognizer.view {
+			recognizerView.becomeFirstResponder()
+			
+			let copyMenu = UIMenuController.shared
+			copyMenu.arrowDirection = .default
+			copyMenu.setTargetRect(bounds, in: self)
+			copyMenu.setMenuVisible(true, animated: true)
 		}
 	}
 }

@@ -41,6 +41,7 @@ final class PaperProofScanView: BaseView, HasScanView {
 		super.setupViews()
 		scanView.accessibilityIdentifier = "scanView"
 		backgroundColor = C.black()
+		messageLabel.isSelectable = false
 	}
 	
 	override func setupViewHierarchy() {

@@ -374,6 +374,7 @@ class QRCardView: BaseView {
 				let label = Label(body: text)
 				label.numberOfLines = 0
 				label.textColor = C.black()
+				label.isSelectable = false
 				verticalLabelsStackView.addArrangedSubview(label)
 			}
 

@@ -56,6 +56,7 @@ final class MenuRowView: UIControl {
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
+		label.isSelectable = false
 		return label
 	}()
 	
@@ -65,6 +66,7 @@ final class MenuRowView: UIControl {
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
+		label.isSelectable = false
 		return label
 	}()
 	
