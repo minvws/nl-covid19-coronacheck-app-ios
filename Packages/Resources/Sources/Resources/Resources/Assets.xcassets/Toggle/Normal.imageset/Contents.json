@@ -3,6 +3,16 @@
     {
       "filename" : "Unchecked.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Unchecked-dark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

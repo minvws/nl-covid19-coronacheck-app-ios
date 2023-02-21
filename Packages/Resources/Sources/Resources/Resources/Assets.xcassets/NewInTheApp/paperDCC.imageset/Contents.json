@@ -3,6 +3,16 @@
     {
       "filename" : "paperDCC.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Group 704.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
