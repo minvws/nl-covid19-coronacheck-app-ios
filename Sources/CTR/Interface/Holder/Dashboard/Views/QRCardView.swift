@@ -677,8 +677,8 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 	
 	override func setupViews() {
 		super.setupViews()
+		setColorsForCurrentTraitCollection()
 		
-		backgroundColor = C.primaryBlue5()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
 	}
@@ -713,6 +713,15 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 		label.isAccessibilityElement = false
 		iconImageView.isAccessibilityElement = false
 		isAccessibilityElement = false
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey4() : C.primaryBlue5()
 	}
 
 	var title: String? {
