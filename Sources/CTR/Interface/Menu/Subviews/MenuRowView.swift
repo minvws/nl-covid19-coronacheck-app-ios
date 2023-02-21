@@ -98,7 +98,7 @@ final class MenuRowView: UIControl {
 	}
 	
 	func setupViews() {
-		setColorsForTraitCurrentCollection()
+		setColorsForCurrentTraitCollection()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
@@ -146,7 +146,7 @@ final class MenuRowView: UIControl {
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
-		setColorsForTraitCurrentCollection()
+		setColorsForCurrentTraitCollection()
 	}
 	
 	/// Setup all the accessibility traits
@@ -156,7 +156,7 @@ final class MenuRowView: UIControl {
 		accessibilityTraits = .button
 	}
 	
-	private func setColorsForTraitCurrentCollection() {
+	private func setColorsForCurrentTraitCollection() {
  
 		backgroundColor = {
 			if shouldUseDarkMode {
@@ -176,10 +176,10 @@ final class MenuRowView: UIControl {
 	// MARK: - Interaction
 	
 	override var isSelected: Bool {
-		didSet { setColorsForTraitCurrentCollection() }
+		didSet { setColorsForCurrentTraitCollection() }
 	}
 	override var isHighlighted: Bool {
-		didSet { setColorsForTraitCurrentCollection() }
+		didSet { setColorsForCurrentTraitCollection() }
 	}
 	
 	// MARK: - Objc Target-Action callbacks:

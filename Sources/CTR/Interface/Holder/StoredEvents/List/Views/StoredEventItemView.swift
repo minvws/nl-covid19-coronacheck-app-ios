@@ -79,9 +79,8 @@ class StoredEventItemView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		view?.backgroundColor = C.white()
-		lineView.backgroundColor = C.grey4()
-		disclosureView.tintColor = C.black()
+		setColorsForCurrentTraitCollection()
+		
 		backgroundButton.addTarget(
 			self,
 			action: #selector(backgroundButtonTapped),
@@ -161,6 +160,17 @@ class StoredEventItemView: BaseView {
 		titleLabel.isAccessibilityElement = false
 		detailsStackView.isAccessibilityElement = false
 		accessibilityElements = [backgroundButton]
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		lineView.backgroundColor = C.grey4()
 	}
 	
 	private func updateAccessbilityLabel() {

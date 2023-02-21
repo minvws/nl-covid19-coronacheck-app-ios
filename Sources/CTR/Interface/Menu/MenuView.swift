@@ -29,7 +29,7 @@ class MenuView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		setColorsForTraitCurrentCollection()
+		setColorsForCurrentTraitCollection()
 		
 		stackViewInset = .zero
 		stackView.spacing = 0
@@ -63,10 +63,10 @@ class MenuView: ScrolledStackView {
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
-		setColorsForTraitCurrentCollection()
+		setColorsForCurrentTraitCollection()
 	}
 	
-	private func setColorsForTraitCurrentCollection() {
+	private func setColorsForCurrentTraitCollection() {
 		navigationBackgroundView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		topBorderView.backgroundColor = shouldUseDarkMode ? C.grey4() : C.grey5()
 		backgroundColor = shouldUseDarkMode ? C.white() : C.primaryBlue5()

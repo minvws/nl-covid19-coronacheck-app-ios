@@ -139,6 +139,7 @@ class StoredEventHeaderView: StoredEventTitleView {
 	override func setupViews() {
 		
 		super.setupViews()
+		setColorsForCurrentTraitCollection()
 		titleLabel.font = Fonts.caption1
 	}
 	
@@ -152,6 +153,15 @@ class StoredEventHeaderView: StoredEventTitleView {
 	override func setupAccessibility() {
 		super.setupAccessibility()
 		titleLabel.accessibilityTraits = .header
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 	}
 	
 	/// The  title
