@@ -20,13 +20,7 @@ final class EmptyDashboardDescriptionCardView: BaseView {
 		}
 	}
 	
-	private var contentTextView: TextView = {
-		let textView = TextView()
-		textView.linkTextAttributes = [
-			.foregroundColor: C.primaryBlue() as Any
-		]
-		return textView
-	}()
+	private var contentTextView = TextView()
 	
 	private let button: Button = {
 		let button = Button(style: .textLabelBlue)
