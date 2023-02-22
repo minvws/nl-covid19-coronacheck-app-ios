@@ -23,14 +23,8 @@ final class HeaderMessageCardView: BaseView {
 		}
 	}
 	
-	private var contentTextView: TextView = {
-		let textView = TextView()
-		textView.linkTextAttributes = [
-			.foregroundColor: C.primaryBlue() as Any
-		]
-		return textView
-	}()
-	
+	private var contentTextView: TextView = TextView()
+ 
 	private let button: Button = {
 		let button = Button(style: .textLabelBlue)
 		button.contentHorizontalAlignment = .left
