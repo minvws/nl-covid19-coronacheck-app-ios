@@ -40,7 +40,7 @@ final class PaperProofScanView: BaseView, HasScanView {
 	override func setupViews() {
 		super.setupViews()
 		scanView.accessibilityIdentifier = "scanView"
-		backgroundColor = C.black()
+		backgroundColor = UIColor(red: 56 / 255, green: 56 / 255, blue: 54 / 255, alpha: 1) // hardcode - should not change during dark mode
 	}
 	
 	override func setupViewHierarchy() {
@@ -103,7 +103,7 @@ final class PaperProofScanView: BaseView, HasScanView {
 			messageLabel.attributedText = message?.setLineHeight(
 				ViewTraits.messageLineHeight,
 				alignment: .center,
-				textColor: C.white()!
+				textColor: .white // intentionally UIColor.white - it should always white.
 			)
 		}
 	}
