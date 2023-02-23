@@ -52,10 +52,7 @@ class StoredEventTitleView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = C.white()
-		titleLabel.textColor = C.secondaryText()
-		topLineView.backgroundColor = C.grey4()
-		bottomLineView.backgroundColor = C.grey4()
+		setColorsForCurrentTraitCollection()
 	}
 	
 	/// Setup the hierarchy
@@ -106,6 +103,18 @@ class StoredEventTitleView: BaseView {
 			topLineView.topAnchor.constraint(equalTo: topAnchor),
 			topLineView.heightAnchor.constraint(equalToConstant: 1)
 		])
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		titleLabel.textColor = C.secondaryText()
+		topLineView.backgroundColor = C.grey4()
+		bottomLineView.backgroundColor = C.grey4()
 	}
 	
 	// MARK: Public Access
