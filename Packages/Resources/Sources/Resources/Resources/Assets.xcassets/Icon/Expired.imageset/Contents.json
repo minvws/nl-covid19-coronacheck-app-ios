@@ -3,6 +3,16 @@
     {
       "filename" : "Hidden.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Hidden-dark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
