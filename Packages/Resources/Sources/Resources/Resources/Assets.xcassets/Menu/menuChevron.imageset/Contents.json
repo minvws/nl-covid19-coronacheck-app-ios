@@ -3,6 +3,16 @@
     {
       "filename" : "chevron.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "chevron-dark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

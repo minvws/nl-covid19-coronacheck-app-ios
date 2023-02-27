@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "DisclosrePolicy.svg",
+      "filename" : "2_scannen 1.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "2_scannen.pdf",
       "idiom" : "universal"
     }
   ],

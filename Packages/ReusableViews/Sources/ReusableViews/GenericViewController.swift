@@ -49,7 +49,7 @@ open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRec
 	
 	override open var preferredStatusBarStyle: UIStatusBarStyle {
 		
-		if #available(iOS 13.0, *) {
+		if #available(iOS 13.0, *), AppFlavor.flavor == .verifier {
 			return .darkContent
 		} else {
 			return super.preferredStatusBarStyle
@@ -66,7 +66,7 @@ open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRec
 		
 		navigationItem.largeTitleDisplayMode = .never // overriding in subclass is okay.
 		
-		if #available(iOS 13.0, *) {
+		if #available(iOS 13.0, *), AppFlavor.flavor == .verifier {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
 		}

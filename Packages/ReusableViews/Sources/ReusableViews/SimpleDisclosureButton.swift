@@ -173,6 +173,7 @@ public class RedDisclosureButton: SimpleDisclosureButton {
 	override open func setupViews() {
 		
 		super.setupViews()
+		setColorsForCurrentTraitCollection()
 		titleLabel.font = Fonts.bodyBold
 	}
 	
@@ -183,6 +184,15 @@ public class RedDisclosureButton: SimpleDisclosureButton {
 		titleBottomMarginConstraint?.constant = -RedDisclosureButton.ViewTraits.bottomMargin
 		titleLeadingConstraint?.constant = RedDisclosureButton.ViewTraits.inset
 		disclosureTrailingConstraint?.constant = -RedDisclosureButton.ViewTraits.inset
+	}
+	
+	public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 	}
 	
 	/// The  title

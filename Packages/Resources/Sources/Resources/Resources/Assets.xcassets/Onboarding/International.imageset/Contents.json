@@ -3,6 +3,16 @@
     {
       "filename" : "4_nederland_wereld.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Group.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

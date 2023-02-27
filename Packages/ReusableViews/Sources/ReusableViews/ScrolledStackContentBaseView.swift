@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Resources
 
 /*
  An extention to the Scrolled Stack View, this one has a title Label and a text View
@@ -23,6 +24,10 @@ open class ScrolledStackContentBaseView: ScrolledStackWithButtonView {
 		
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.linkTextAttributes = [
+			.foregroundColor: C.primaryBlue() as Any
+		]
+		
 		return view
 	}()
 	

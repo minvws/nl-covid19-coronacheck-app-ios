@@ -112,7 +112,7 @@ class MessageCardView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		view?.backgroundColor = C.white()
+		view?.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
 		

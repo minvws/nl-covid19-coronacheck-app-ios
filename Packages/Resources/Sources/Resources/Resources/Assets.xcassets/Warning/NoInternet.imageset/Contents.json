@@ -3,6 +3,16 @@
     {
       "filename" : "notification_no_internet.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Group.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

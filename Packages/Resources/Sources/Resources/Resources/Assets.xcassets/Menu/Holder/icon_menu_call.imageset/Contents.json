@@ -3,6 +3,16 @@
     {
       "filename" : "icon_menu_call.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 1139 (1).pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -37,7 +37,6 @@ class ListStoredEventsView: ScrolledStackView {
 	private let navigationBackgroundView: UIView = {
 		
 		let view = UIView()
-		view.backgroundColor = C.white()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -46,7 +45,6 @@ class ListStoredEventsView: ScrolledStackView {
 		
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = C.white()
 		return view
 	}()
 	
@@ -106,7 +104,8 @@ class ListStoredEventsView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = C.primaryBlue5()
+
+		setColorsForCurrentTraitCollection()
 		
 		stackViewInset = .zero
 		stackView.spacing = 0
@@ -152,12 +151,23 @@ class ListStoredEventsView: ScrolledStackView {
 		
 		NSLayoutConstraint.activate(constraints)
 	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		navigationBackgroundView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		topView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		backgroundColor = shouldUseDarkMode ? C.white() : C.primaryBlue5()
+	}
 
-	private func createSeparatorView() -> UIView {
+	private func createSeparatorView() -> SeparatorView {
 
-		let view = UIView()
+		let view = SeparatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = C.grey4()
+		view.backgroundColor = .clear
 		return view
 	}
 
@@ -215,10 +225,11 @@ class ListStoredEventsView: ScrolledStackView {
 			separator.heightAnchor.constraint(equalToConstant: 1)
 		])
 	}
-	
+
 	func addGroupStackView(_ groupView: UIStackView) {
 
 		listStackView.addArrangedSubview(groupView)
+		setColorsForCurrentTraitCollection()
 	}
 
 	var hideForCapture: Bool = false {
@@ -238,6 +249,8 @@ class ListStoredEventsView: ScrolledStackView {
 	
 	func addToListStackView(_ view: UIView) {
 		listStackView.addArrangedSubview(view)
+		
+		setColorsForCurrentTraitCollection()
 	}
 	
 	var shouldShowLoadingSpinner: Bool = false {
@@ -246,3 +259,5 @@ class ListStoredEventsView: ScrolledStackView {
 		}
 	}
 }
+
+private class SeparatorView: UIView {}

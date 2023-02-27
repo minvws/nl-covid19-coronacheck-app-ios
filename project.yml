@@ -204,7 +204,6 @@ targetTemplates:
         UIApplicationSupportsIndirectInputEvents: true
         UIRequiredDeviceCapabilities:
           - armv7
-        UIStatusBarStyle: UIStatusBarStyleDarkContent
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft
@@ -215,8 +214,6 @@ targetTemplates:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        UIUserInterfaceStyle: Light
-        UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
       - name: Run SwiftLint
         basedOnDependencyAnalysis: false
@@ -395,6 +392,11 @@ targets:
               CFBundleURLSchemes:
                 - coronacheck-verifier-acc
         UILaunchStoryboardName: LaunchScreenVerifier
+        # -- Force to light mode: -- 
+        UIUserInterfaceStyle: Light
+        UIViewControllerBasedStatusBarAppearance: true
+        UIStatusBarStyle: UIStatusBarStyleDarkContent
+        # -- End force to light mode: -- 
 
   CTRTests:
     templates:
