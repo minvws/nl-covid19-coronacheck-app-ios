@@ -222,10 +222,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  fastlane (~> 2.212)
+  fastlane (~> 2.212.1)
   fastlane-plugin-badge
   fastlane-plugin-firebase_app_distribution
   xcode-install (~> 2.8)
 
 BUNDLED WITH
-   2.2.21
+   2.2.32
