@@ -41,6 +41,7 @@ final class PaperProofScanView: BaseView, HasScanView {
 		super.setupViews()
 		scanView.accessibilityIdentifier = "scanView"
 		backgroundColor = UIColor(red: 56 / 255, green: 56 / 255, blue: 54 / 255, alpha: 1) // hardcode - should not change during dark mode
+		messageLabel.isSelectable = false
 	}
 	
 	override func setupViewHierarchy() {

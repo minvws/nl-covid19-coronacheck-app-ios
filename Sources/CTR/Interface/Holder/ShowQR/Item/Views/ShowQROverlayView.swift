@@ -33,7 +33,7 @@ class ShowQROverlayView: BaseView {
 	}()
 	
 	/// The title label
-	private let titleLabel: UILabel = {
+	private let titleLabel: Label = {
 		
 		return Label(bodyBold: nil).header().multiline()
 	}()
