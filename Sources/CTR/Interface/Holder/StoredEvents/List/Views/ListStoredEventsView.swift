@@ -161,17 +161,8 @@ class ListStoredEventsView: ScrolledStackView {
 		navigationBackgroundView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		topView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		backgroundColor = shouldUseDarkMode ? C.white() : C.primaryBlue5()
-		
-//		listStackView.subviews
-//			.compactMap { $0 as? SeparatorView }
-//			.forEach(setColorForCurrentTraitCollection(separatorView:))
 	}
-//
-//	private func setColorForCurrentTraitCollection(separatorView: SeparatorView) {
-//
-//		separatorView.backgroundColor = C.grey4()
-//	}
-	
+
 	private func createSeparatorView() -> SeparatorView {
 
 		let view = SeparatorView()
