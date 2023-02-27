@@ -12,7 +12,7 @@ public extension UIView {
 	
 	var shouldUseDarkMode: Bool {
 		guard #available(iOS 13.0, *) else { return false }
-		return type(of: self).shouldUseDarkMode(forTraitCollection: traitCollection)
+		return Self.shouldUseDarkMode(forTraitCollection: traitCollection)
 	}
 	
 	@available(iOS 12.0, *)
