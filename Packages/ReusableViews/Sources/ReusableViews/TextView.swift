@@ -89,9 +89,7 @@ open class TextView: UIStackView {
 	}
 	
 	/// Helper variable to pass linkTextAttributes to each subview
-	public var linkTextAttributes: [NSAttributedString.Key: Any]? = [
-		.foregroundColor: C.primaryBlue() as Any
-	]{
+	public var linkTextAttributes: [NSAttributedString.Key: Any]? = [.foregroundColor: C.primaryBlue() as Any ] {
 		didSet {
 			applyLinkTextAttributesToTextElements()
 		}
