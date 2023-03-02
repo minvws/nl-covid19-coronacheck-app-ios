@@ -339,10 +339,11 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func errorWhileLoading(_ errorTuples: [(error: ServerError, step: ErrorCode.Step)]) {
 		
 		// Show Internet Required if we have a no internet
+		logDebug("tuples: \(errorTuples)")
 		for errorTuple in errorTuples {
 			switch errorTuple.error {
 				case .error(_, _, let error), .provider(_, _, _, let error):
-					if [.serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .noInternetConnection].contains(error) {
+					if [.serverUnreachableTimedOut, .serverUnreachableConnectionLost, .noInternetConnection].contains(error) {
 						showInternetRequired()
 						return
 					}
