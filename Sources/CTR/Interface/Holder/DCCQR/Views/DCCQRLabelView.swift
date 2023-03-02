@@ -130,7 +130,8 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
 		guard recognizer.state == .began, let recognizerView = recognizer.view else { return }
 		recognizerView.becomeFirstResponder()
-		UIMenuController.shared.setTargetRect(recognizerView.frame, in: self)
+		
+		UIMenuController.shared.setTargetRect(recognizerView.bounds, in: self)
 		UIMenuController.shared.setMenuVisible(true, animated: true)
 	}
 }
