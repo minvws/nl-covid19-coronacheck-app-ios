@@ -161,6 +161,30 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
 		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
 	}
+	
+	func test_handleLaunchState_serverUnreachable() {
+
+		// Given
+		let state = LaunchState.serverError(
+			[
+				(error: ServerError.error(statusCode: 500, response: nil, error: .serverUnreachableInvalidHost),
+				 step: .configuration)
+			]
+		)
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+
+		// When
+		sut.handleLaunchState(state)
+
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(viewControllerSpy.presentCalled) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect((viewControllerSpy.thePresentedViewController as? AppStatusViewController)?.viewModel is LaunchErrorViewModel) == true
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == false
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == false
+	}
 
 	func test_handleLaunchState_withinTTL_cryptoLibNotInitialized() {
 
