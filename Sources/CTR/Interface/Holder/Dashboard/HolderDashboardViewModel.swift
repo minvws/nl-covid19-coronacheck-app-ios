@@ -217,7 +217,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
-	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
+	private var remoteConfigUpdatesToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
@@ -323,7 +323,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
-		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
+		remoteConfigUpdatesToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
 	}
 
 	// MARK: - Setup
@@ -378,9 +378,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	func setupConfigNotificationManager() {
 
-		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
-			guard let self, case .success = result else { return }
-			self.setupRecommendedVersion()
+		remoteConfigUpdatesToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] result in
+			guard let self else { return }
+			self.setupRecommendedVersion() // Config changed, check recommended version.
+			self.qrcardDatasource.reload() // Config changed, reload the screen.
 		}
 	}
 
