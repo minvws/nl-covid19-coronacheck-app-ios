@@ -130,7 +130,15 @@ extension HolderDashboardViewModel {
 				  let firstOrigin = firstGreenCard.origins.first
 			else { return .greatestFiniteMagnitude }
 
-			return firstOrigin.customSortIndex
+			// DCCs and CTBs should be grouped when the GreenCards are sorted:
+			let regionModifier: Double = {
+				switch self.region {
+				case .europeanUnion: return 1
+				case .netherlands: return 0
+				}
+			}()
+			
+			return firstOrigin.customSortIndex + regionModifier
 		}
 
 		var origins: [GreenCard.Origin] {
