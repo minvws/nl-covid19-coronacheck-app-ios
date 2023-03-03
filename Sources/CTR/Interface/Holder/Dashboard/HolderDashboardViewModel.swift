@@ -93,6 +93,12 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
 	struct State: Equatable {
+		enum StrippenRefresherFailMissingCredentialsError: Error {
+			case noInternet
+			case otherFailureFirstOccurence, otherFailureSubsequentOccurence
+		}
+
+
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
 		var blockedEventItems: [RemovedEventItem]
@@ -103,7 +109,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		// When there's an error with the refreshing process,
 		// we show an error message on each QR card that lacks credentials.
 		// This does not discriminate between domestic/EU.
-		var errorForQRCardsMissingCredentials: String?
+		var errorForQRCardsMissingCredentials: StrippenRefresherFailMissingCredentialsError?
 
 		var deviceHasClockDeviation: Bool = false
 
@@ -461,7 +467,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 			case (.noInternet, .expired, true):
 				logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
-				state.errorForQRCardsMissingCredentials = L.holderDashboardStrippenExpiredErrorfooterNointernet()
+				state.errorForQRCardsMissingCredentials = .noInternet
 
 			case (.noInternet, .expiring, true):
 				// Do nothing
@@ -478,8 +484,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				checkForMismatchedIdentityError(error: error)
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
-				? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(Current.contactInformationProvider.phoneNumberLink)
-					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+					? .otherFailureSubsequentOccurence
+					: .otherFailureFirstOccurence
 
 			case let (.failed(error), .expiring, _):
 				// In this case we just swallow the server errors.
