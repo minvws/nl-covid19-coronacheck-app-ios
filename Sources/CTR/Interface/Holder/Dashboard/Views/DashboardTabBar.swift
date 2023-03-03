@@ -185,7 +185,8 @@ private class TabBarButton: UIControl {
 			static let bottom: CGFloat = 18
 		}
 		enum Colors {
-			static let highlighted = UIColor(white: 0.98, alpha: 1)
+			static let highlightedLightMode = UIColor(white: 0.98, alpha: 1)
+			static let highlightedDarkMode = UIColor(white: 0.02, alpha: 1)
 		}
 		enum Title {
 			static let lineHeight: CGFloat = 18
@@ -199,6 +200,7 @@ private class TabBarButton: UIControl {
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
+		label.isSelectable = false
 		return label
 	}()
 	
@@ -213,7 +215,13 @@ private class TabBarButton: UIControl {
 	
 	override var isHighlighted: Bool {
 		didSet {
-			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : C.white()
+			backgroundColor = {
+				if isHighlighted {
+					return shouldUseDarkMode ? ViewTraits.Colors.highlightedDarkMode : ViewTraits.Colors.highlightedLightMode
+				} else {
+					return C.white()
+				}
+			}()
 		}
 	}
 	

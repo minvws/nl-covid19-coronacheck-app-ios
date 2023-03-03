@@ -108,6 +108,9 @@ final class PrivacyConsentView: BaseView {
 		super.setupViews()
 		backgroundColor = C.white()
 		
+		let linkTextAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: C.primaryBlue() as Any]
+		contentTextView.linkTextAttributes = linkTextAttributes
+		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset
 			self?.footerButtonView.updateFadeAnimation(from: translatedOffset)

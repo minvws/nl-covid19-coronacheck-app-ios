@@ -3,6 +3,16 @@
     {
       "filename" : "Chevron right.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Chevron right_dark.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

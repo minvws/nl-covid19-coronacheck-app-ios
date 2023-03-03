@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Resources
 
 /*
  Styled subclass of UIStackView that displays one or more TextElement's, which can handle (simple) html
@@ -88,7 +89,7 @@ open class TextView: UIStackView {
 	}
 	
 	/// Helper variable to pass linkTextAttributes to each subview
-	public var linkTextAttributes: [NSAttributedString.Key: Any]? {
+	public var linkTextAttributes: [NSAttributedString.Key: Any]? = [.foregroundColor: C.primaryBlue() as Any ] {
 		didSet {
 			applyLinkTextAttributesToTextElements()
 		}
@@ -167,7 +168,7 @@ open class TextView: UIStackView {
 	}
 	
 	private func applyTextChangedHandlerToTextElements() {
-		textElements.forEach({ $0.textChangedHandler = textChangedHandler })
+		textElements.forEach { $0.textChangedHandler = textChangedHandler }
 	}
 	
 	private func applyLinkTextAttributesToTextElements() {

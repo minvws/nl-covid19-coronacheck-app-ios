@@ -3,6 +3,16 @@
     {
       "filename" : "icon_holder_camera.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 1139.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -3,6 +3,16 @@
     {
       "filename" : "LaunchError.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "person.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

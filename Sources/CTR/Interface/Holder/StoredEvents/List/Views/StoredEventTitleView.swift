@@ -52,10 +52,7 @@ class StoredEventTitleView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = C.white()
-		titleLabel.textColor = C.secondaryText()
-		topLineView.backgroundColor = C.grey4()
-		bottomLineView.backgroundColor = C.grey4()
+		setColorsForCurrentTraitCollection()
 	}
 	
 	/// Setup the hierarchy
@@ -108,6 +105,18 @@ class StoredEventTitleView: BaseView {
 		])
 	}
 	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		titleLabel.textColor = C.secondaryText()
+		topLineView.backgroundColor = C.grey4()
+		bottomLineView.backgroundColor = C.grey4()
+	}
+	
 	// MARK: Public Access
 	
 	/// The  title
@@ -139,6 +148,7 @@ class StoredEventHeaderView: StoredEventTitleView {
 	override func setupViews() {
 		
 		super.setupViews()
+		setColorsForCurrentTraitCollection()
 		titleLabel.font = Fonts.caption1
 	}
 	
@@ -152,6 +162,15 @@ class StoredEventHeaderView: StoredEventTitleView {
 	override func setupAccessibility() {
 		super.setupAccessibility()
 		titleLabel.accessibilityTraits = .header
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 	}
 	
 	/// The  title

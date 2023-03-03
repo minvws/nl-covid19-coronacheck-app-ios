@@ -3,6 +3,16 @@
     {
       "filename" : "icon_menu_aboutthisapp.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 1140.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

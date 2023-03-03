@@ -74,6 +74,8 @@ open class DisclosureSubtitleButton: BaseView {
 		backgroundColor = C.primaryBlue5()
 		layer.cornerRadius = ViewTraits.View.cornerRadius
 		button.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
+		titleLabel.isSelectable = false
+		subtitleLabel.isSelectable = false
 	}
 	
 	/// Setup the hierarchy

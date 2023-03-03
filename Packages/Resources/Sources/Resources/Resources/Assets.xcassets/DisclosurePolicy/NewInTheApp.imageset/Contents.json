@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "DisclosurePolicyNew.svg",
+      "filename" : "Group 3.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Group 4.pdf",
       "idiom" : "universal"
     }
   ],
