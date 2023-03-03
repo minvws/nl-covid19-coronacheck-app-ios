@@ -45,7 +45,7 @@ public class DisclosurePolicyManager: DisclosurePolicyManaging {
 	
 	private func configureRemoteConfigManager() {
 		
-		remoteConfigManagerObserverToken = remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _ in
+		remoteConfigManagerObserverToken = remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _, _ in
 			self?.detectPolicyChange()
 		}
 	}
