@@ -31,7 +31,8 @@ public protocol RemoteConfigManaging: AnyObject {
 
 /// The remote configuration manager
 public class RemoteConfigManager: RemoteConfigManaging {
-	public typealias ConfigNotification = (RemoteConfiguration, Data, URLResponse)
+	/// String is the config hash:
+	public typealias ConfigNotification = (RemoteConfiguration, Data, URLResponse, String)
 	
 	// MARK: - Vars
 
@@ -200,7 +201,7 @@ public class RemoteConfigManager: RemoteConfigManaging {
 				storedConfiguration = remoteConfiguration
 
 				// Some observers want to know whenever the config is reloaded (regardless if data changed since last time):
-				self.notifyReloadObservers(Result.success((remoteConfiguration: remoteConfiguration, data: data, response: urlResponse)))
+				self.notifyReloadObservers(Result.success((remoteConfiguration: remoteConfiguration, data: data, response: urlResponse, hash: newHash ?? "")))
 	
 				// Is the newly fetched config hash the same as the existing one?
 				// Use the hash, as not all of the config values are mapping in the remoteconfig object.
@@ -208,7 +209,7 @@ public class RemoteConfigManager: RemoteConfigManaging {
 					completion(.success((false, remoteConfiguration)))
 				} else {
 					// Inform the observers that only wish to know when config has changed:
-					notifyUpdateObservers((remoteConfiguration: remoteConfiguration, data: data, response: urlResponse))
+					notifyUpdateObservers((remoteConfiguration: remoteConfiguration, data: data, response: urlResponse, hash: newHash ?? ""))
 					completion(.success((true, remoteConfiguration)))
 				}
 		}

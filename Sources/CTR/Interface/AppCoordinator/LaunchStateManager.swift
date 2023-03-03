@@ -136,7 +136,7 @@ final class LaunchStateManager: LaunchStateManaging {
 		// Attach behaviours that we want the RemoteConfigManager to perform
 		// each time it refreshes the config in future:
 		
-		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { _, rawData, _ in
+		remoteConfigManagerUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { _, rawData, _, _ in
 
 			// Update the remote config for the crypto library
 			Current.cryptoLibUtility.store(rawData, for: .remoteConfiguration)
@@ -169,7 +169,7 @@ final class LaunchStateManager: LaunchStateManaging {
 							// We are within the TTL. Nothing to do.
 							break
 					}
-				case .success(let (_, _, urlResponse)):
+				case .success(let (_, _, urlResponse, _)):
 					// Mark remote config loaded
 					Current.cryptoLibUtility.checkFile(.remoteConfiguration)
 					

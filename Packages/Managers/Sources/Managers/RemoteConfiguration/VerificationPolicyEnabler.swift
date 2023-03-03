@@ -55,7 +55,7 @@ public final class VerificationPolicyEnabler: VerificationPolicyEnableable {
 	
 	private func configureRemoteConfigManager() {
 		
-		remoteConfigManagerObserverToken = remoteConfigManager.observatoryForUpdates.append { [weak self] remoteConfiguration, _, _ in
+		remoteConfigManagerObserverToken = remoteConfigManager.observatoryForUpdates.append { [weak self] remoteConfiguration, _, _, _ in
 			guard let policies = remoteConfiguration.verificationPolicies else {
 				// No feature flag available, enable default policy
 				self?.enable(verificationPolicies: [])
