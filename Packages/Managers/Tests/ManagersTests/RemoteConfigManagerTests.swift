@@ -250,7 +250,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 
@@ -297,7 +297,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 
@@ -389,7 +389,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 
@@ -427,7 +427,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		_ = sut.observatoryForReloads.append { result in
 			reloadObserverReceivedConfiguration = result.successValue?.0
 		}
-		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _ in
+		_ = sut.observatoryForUpdates.append { remoteConfiguration, _, _, _ in
 			updateObserverReceivedConfiguration = remoteConfiguration
 		}
 

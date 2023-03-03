@@ -104,6 +104,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		var blockedEventItems: [RemovedEventItem]
 		var mismatchedIdentityItems: [RemovedEventItem]
 		var isRefreshingStrippen: Bool
+		var lastKnownConfigHash: String?
 
 		// Related to strippen refreshing.
 		// When there's an error with the refreshing process,
@@ -217,7 +218,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
-	private var remoteConfigUpdatesToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
@@ -277,7 +277,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		setupFuzzyMatchingRemovedEventsDatasource()
 		setupStrippenRefresher()
 		setupNotificationListeners()
-		setupConfigNotificationManager()
 		setupRecommendedVersion()
 		recalculateActiveDisclosurePolicyMode()
 		recalculateDisclosureBannerState()
@@ -295,8 +294,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 		
 		// If the config ever changes, reload dependencies:
-		remoteConfigUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _ in
+		remoteConfigUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _, hash in
 			self?.strippenRefresher.load()
+			self?.setupRecommendedVersion() // Config changed, check recommended version.
+			self?.state.lastKnownConfigHash = hash
 		}
 
 		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
@@ -323,7 +324,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
-		remoteConfigUpdatesToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
 	}
 
 	// MARK: - Setup
@@ -374,15 +374,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
 		strippenRefresher.load()
-	}
-
-	func setupConfigNotificationManager() {
-
-		remoteConfigUpdatesToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] result in
-			guard let self else { return }
-			self.setupRecommendedVersion() // Config changed, check recommended version.
-			self.qrcardDatasource.reload() // Config changed, reload the screen.
-		}
 	}
 
 	// MARK: - View Lifecycle callbacks:
