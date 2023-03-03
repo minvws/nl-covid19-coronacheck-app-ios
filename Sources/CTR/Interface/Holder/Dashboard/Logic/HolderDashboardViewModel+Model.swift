@@ -133,8 +133,8 @@ extension HolderDashboardViewModel {
 			// DCCs and CTBs should be grouped when the GreenCards are sorted:
 			let regionModifier: Double = {
 				switch self.region {
-				case .europeanUnion: return 1
-				case .netherlands: return 0
+					case .europeanUnion: return 1
+					case .netherlands: return 0
 				}
 			}()
 			

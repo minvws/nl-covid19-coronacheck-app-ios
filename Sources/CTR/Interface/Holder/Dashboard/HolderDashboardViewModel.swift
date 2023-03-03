@@ -93,11 +93,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
 	struct State: Equatable {
-		enum StrippenRefresherFailMissingCredentialsError: Error {
+		enum StrippenRefresherFailMissingCredentialsError: Error { // swiftlint:disable:this type_name
 			case noInternet
 			case otherFailureFirstOccurence, otherFailureSubsequentOccurence
 		}
-
 
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
