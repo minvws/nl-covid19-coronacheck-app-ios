@@ -9,6 +9,9 @@ import XCTest
 @testable import CTR
 @testable import Transport
 @testable import Shared
+@testable import Models
+@testable import Managers
+@testable import Resources
 import Nimble
 import ReusableViews
 
@@ -109,8 +112,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		// Given
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberAbroadLink = "<a href=\"tel:TEST 2\">TEST 2</a>"
-		environmentSpies.contactInformationSpy.stubbedStartDay = "maandag"
-		environmentSpies.contactInformationSpy.stubbedEndDay = "vrijdag"
+		environmentSpies.contactInformationSpy.stubbedOpeningDays = "maandag t/m vrijdag"
 		environmentSpies.contactInformationSpy.stubbedStartHour = "08:00"
 		environmentSpies.contactInformationSpy.stubbedEndHour = "18:00"
 		
@@ -122,7 +124,7 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Vraag je coronabewijs aan via de helpdesk"
-		expect(viewModel.content.body) == "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je elke dag van maandag t/m vrijdag tussen 08:00 en 18:00 uur bellen op: <a href=\"tel:TEST\">TEST</a> (gratis).</p>\n<p>Of als je vanuit het buitenland belt: <a href=\"tel:TEST 2\">TEST 2</a>. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>"
+		expect(viewModel.content.body) == "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je maandag t/m vrijdag tussen 08:00 en 18:00 uur bellen op: <a href=\"tel:TEST\">TEST</a> (gratis).</p>\n<p>Of als je vanuit het buitenland belt: <a href=\"tel:TEST 2\">TEST 2</a>. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>"
 	}
 	
 	func test_userHasNoBSN_portalDisabled_vaccinationFlow() throws {

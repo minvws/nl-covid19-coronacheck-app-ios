@@ -12,6 +12,7 @@
 import XCTest
 import Nimble
 import OpenIDConnect
+@testable import Resources
 
 class AuthenticationViewModelPAPTests: XCTestCase {
 

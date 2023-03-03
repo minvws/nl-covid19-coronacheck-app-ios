@@ -8,6 +8,8 @@
 import UIKit
 import Shared
 import ReusableViews
+import Models
+import Resources
 
 final class VerifierScanView: BaseView, HasScanView {
 	
@@ -179,6 +181,7 @@ final class RiskLevelIndicator: BaseView {
 		backgroundColor = C.white()
 		
 		isAccessibilityElement = true
+		titleLabel.isSelectable = false
 	}
 
 	override func setupViewHierarchy() {

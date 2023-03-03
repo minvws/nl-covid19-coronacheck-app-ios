@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class RiskSettingControl: UIControl {
 	
@@ -70,6 +71,8 @@ final class RiskSettingControl: UIControl {
 		backgroundColor = C.white()
 		
 		addTarget(self, action: #selector(toggle), for: .touchUpInside)
+		titleLabel.isSelectable = false
+		subtitleLabel.isSelectable = false
 	}
 	
 	/// Setup the view hierarchy

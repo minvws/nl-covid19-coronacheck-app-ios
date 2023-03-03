@@ -7,6 +7,8 @@
 
 import UIKit
 import Shared
+import Managers
+import Resources
 
 class ScanInstructionsViewModel {
 	

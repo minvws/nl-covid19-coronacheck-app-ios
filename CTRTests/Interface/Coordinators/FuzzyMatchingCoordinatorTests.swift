@@ -11,6 +11,8 @@ import Nimble
 import Transport
 import Shared
 import ReusableViews
+@testable import Models
+@testable import Resources
 
 class FuzzyMatchingCoordinatorTests: XCTestCase {
 	
@@ -47,7 +49,6 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		factorySpy.stubbedPages = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0
@@ -234,7 +235,6 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		factorySpy.stubbedPages = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0
@@ -257,7 +257,6 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		factorySpy.stubbedPages = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "test",
 			step: 0

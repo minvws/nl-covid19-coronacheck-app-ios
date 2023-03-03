@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class FakeNavigationBarView: BaseView {
 	
@@ -33,6 +34,7 @@ class FakeNavigationBarView: BaseView {
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
+		label.isSelectable = false
 		return label
 	}()
 	

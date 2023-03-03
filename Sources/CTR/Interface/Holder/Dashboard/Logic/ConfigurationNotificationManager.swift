@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Managers
 
 protocol ConfigurationNotificationManagerProtocol {
 	var shouldShowAlmostOutOfDateBanner: Bool { get }

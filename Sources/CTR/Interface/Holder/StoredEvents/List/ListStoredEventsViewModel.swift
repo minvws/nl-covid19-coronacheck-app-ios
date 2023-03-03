@@ -11,6 +11,8 @@ import Shared
 import ReusableViews
 import Transport
 import Persistence
+import Models
+import Resources
 
 class ListStoredEventsViewModel {
 
@@ -340,7 +342,7 @@ class ListStoredEventsViewModel {
 							
 						case .noSignedEvents:
 							// No more stored events. Remove existing greencards.
-							Current.walletManager.removeExistingGreenCards()
+							Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
 							self.viewState = self.getEventGroupListViewState()
 							
 						case let .customError(title: title, message: message):

@@ -10,6 +10,9 @@ import Transport
 import Shared
 import ReusableViews
 import Persistence
+import Models
+import Managers
+import Resources
 
 class ListRemoteEventsViewModel {
 
@@ -257,7 +260,7 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
-						Current.walletManager.removeExistingGreenCards()
+						Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
 						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
 					
 						showEventError()

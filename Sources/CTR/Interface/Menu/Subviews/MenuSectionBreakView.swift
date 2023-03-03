@@ -8,13 +8,14 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class MenuSectionBreakView: BaseView {
 	
 	override func setupViews() {
 		super.setupViews()
-		
-		backgroundColor = C.primaryBlue5()
+	
+		setColorsForCurrentTraitCollection()
 	}
 	
 	override func setupViewConstraints() {
@@ -25,4 +26,12 @@ final class MenuSectionBreakView: BaseView {
 		NSLayoutConstraint.activate(constraints)
 	}
 	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.white() : C.primaryBlue5()
+	}
 }

@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-final class VisitorPassStartViewController: TraitWrappedGenericViewController<VisitorPassStartView, VisitorPassStartViewModel> {
+final class VisitorPassStartViewController: TraitWrappedGenericViewController<ContentView, VisitorPassStartViewModel> {
 
 	override func viewDidLoad() {
 

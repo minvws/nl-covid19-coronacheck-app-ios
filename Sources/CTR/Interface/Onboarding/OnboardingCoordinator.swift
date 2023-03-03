@@ -8,6 +8,8 @@
 import UIKit
 import SafariServices
 import Shared
+import Models
+import Managers
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
 
@@ -24,7 +26,7 @@ protocol OnboardingDelegate: AnyObject {
 	func consentGiven()
 }
 
-class OnboardingCoordinator: Coordinator {
+class OnboardingCoordinator: Coordinator, OpenUrlProtocol {
 	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -51,7 +53,7 @@ class OnboardingCoordinator: Coordinator {
 		self.onboardingDelegate = onboardingDelegate
 		self.appFlavor = appFlavor
 		onboardingFactory = factory
-		onboardingPages = onboardingFactory.create()
+		onboardingPages = onboardingFactory.create(featureFlagManager: Current.featureFlagManager)
 	}
 	
 	/// The onboarding pages
@@ -81,22 +83,6 @@ class OnboardingCoordinator: Coordinator {
 	/// Override point for coordinators which wish to deal with universal links.
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
-	}
-}
-
-// MARK: - OpenUrlProtocol
-
-extension OnboardingCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			navigationController.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
 	}
 }
 

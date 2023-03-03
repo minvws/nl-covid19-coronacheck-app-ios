@@ -11,6 +11,8 @@ import Nimble
 @testable import CTR
 import Shared
 import ReusableViews
+@testable import Managers
+@testable import Resources
 
 final class SendIdentitySelectionViewModelTests: XCTestCase {
 

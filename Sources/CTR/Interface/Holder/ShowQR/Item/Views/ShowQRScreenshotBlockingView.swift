@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class ShowQRScreenshotBlockingView: BaseView {
 
@@ -37,7 +38,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 
 	// MARK: - Private properties
 
-	private let titleLabel: UILabel = {
+	private let titleLabel: Label = {
 		let label = Label(nil, font: Fonts.headlineBoldMontserrat)
 		label.numberOfLines = 2
 		label.adjustsFontSizeToFitWidth = true
@@ -50,7 +51,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 		return label
 	}()
 
-	private let subtitleLabel: UILabel = {
+	private let subtitleLabel: Label = {
 		let label = Label(nil, font: Fonts.body)
 		label.numberOfLines = 2
 		label.adjustsFontSizeToFitWidth = true
@@ -63,7 +64,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 		return label
 	}()
 
-	private let countdownLabel: UILabel = {
+	private let countdownLabel: Label = {
 		let label = Label(nil, font: Fonts.subhead)
 		label.numberOfLines = 1
 		label.adjustsFontSizeToFitWidth = true

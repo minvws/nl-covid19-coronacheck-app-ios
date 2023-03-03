@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class MenuButton: UIControl {
 	
@@ -43,6 +44,7 @@ class MenuButton: UIControl {
 		label.adjustsFontForContentSizeCategory = true
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.setContentCompressionResistancePriority(.required, for: .vertical)
+		label.isSelectable = false
 		
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium

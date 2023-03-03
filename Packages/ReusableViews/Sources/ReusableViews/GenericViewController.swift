@@ -7,10 +7,13 @@
 
 import UIKit
 import Shared
+import Resources
 
-/// A generic viewcontroller
-/// V: The view to use for the scene, must be a (subclass of) baseview
-/// M: The class to use as viewModel
+/*
+ A generic viewcontroller, used to reduce scaffolding
+ V: The view to use for the scene, must be a (subclass of) baseview
+ M: The class to use as viewModel
+ */
 open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRecognizerDelegate {
 
 	public let viewModel: M
@@ -46,7 +49,7 @@ open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRec
 	
 	override open var preferredStatusBarStyle: UIStatusBarStyle {
 		
-		if #available(iOS 13.0, *) {
+		if #available(iOS 13.0, *), AppFlavor.flavor == .verifier {
 			return .darkContent
 		} else {
 			return super.preferredStatusBarStyle
@@ -63,7 +66,7 @@ open class GenericViewController<V: BaseView, M>: UIViewController, UIGestureRec
 		
 		navigationItem.largeTitleDisplayMode = .never // overriding in subclass is okay.
 		
-		if #available(iOS 13.0, *) {
+		if #available(iOS 13.0, *), AppFlavor.flavor == .verifier {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
 		}

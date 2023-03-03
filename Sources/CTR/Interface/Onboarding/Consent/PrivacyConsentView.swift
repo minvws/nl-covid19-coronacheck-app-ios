@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class PrivacyConsentView: BaseView {
 
@@ -15,7 +16,7 @@ final class PrivacyConsentView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
 		static let maxButtonHeightMultiplier: CGFloat = 0.3
 
 		// Margins
@@ -106,6 +107,9 @@ final class PrivacyConsentView: BaseView {
 
 		super.setupViews()
 		backgroundColor = C.white()
+		
+		let linkTextAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: C.primaryBlue() as Any]
+		contentTextView.linkTextAttributes = linkTextAttributes
 		
 		scrollViewContentOffsetObserver = scrollView.observe(\.contentOffset) { [weak self] scrollView, _ in
 			let translatedOffset = scrollView.translatedBottomScrollOffset

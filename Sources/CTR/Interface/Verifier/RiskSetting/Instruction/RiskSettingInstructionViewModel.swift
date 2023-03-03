@@ -7,6 +7,8 @@
 
 import Foundation
 import Shared
+import Models
+import Resources
 
 final class RiskSettingInstructionViewModel {
 	

@@ -12,6 +12,10 @@ import CoreData
 import Shared
 import TestingShared
 import ReusableViews
+@testable import Persistence
+@testable import Models
+@testable import Resources
+@testable import Managers
 
 extension HolderDashboardViewModelTests {
 	

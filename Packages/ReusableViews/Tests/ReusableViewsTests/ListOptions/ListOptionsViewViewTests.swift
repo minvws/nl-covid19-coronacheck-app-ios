@@ -10,6 +10,7 @@ import Nimble
 import SnapshotTesting
 import Shared
 @testable import ReusableViews
+@testable import Resources
 
 class ListOptionsViewTests: XCTestCase {
 	var sut: ListOptionsView!

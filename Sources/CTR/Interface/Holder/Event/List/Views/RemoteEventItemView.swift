@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class RemoteEventItemView: BaseView {
 	
@@ -76,6 +77,8 @@ class RemoteEventItemView: BaseView {
 			action: #selector(backgroundButtonTapped),
 			for: .touchUpInside
 		)
+		titleLabel.isSelectable = false
+		linkLabel.isSelectable = false
 	}
 	
 	/// Setup the hierarchy
@@ -176,6 +179,7 @@ class RemoteEventItemView: BaseView {
 			detailsStackView.removeArrangedSubviews()
 			details.forEach { detail in
 				let label = Label(subhead: nil).multiline()
+				label.isSelectable = false
 				
 				NSAttributedString.makeFromHtml(
 					text: detail,

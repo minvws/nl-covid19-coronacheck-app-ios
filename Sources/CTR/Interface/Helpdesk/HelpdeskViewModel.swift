@@ -7,6 +7,8 @@
 
 import Foundation
 import Shared
+import Managers
+import Resources
 
 class HelpdeskViewModel {
 	
@@ -38,8 +40,7 @@ class HelpdeskViewModel {
 		messageLine1 = L.holder_helpdesk_contact_message_line1(Current.contactInformationProvider.phoneNumberLink)
 		messageLine2 = L.holder_helpdesk_contact_message_line2(Current.contactInformationProvider.phoneNumberAbroadLink)
 		messageLine3 = L.holder_helpdesk_contact_message_line3(
-			Current.contactInformationProvider.startDay,
-			Current.contactInformationProvider.endDay,
+			Current.contactInformationProvider.openingDays,
 			Current.contactInformationProvider.startHour,
 			Current.contactInformationProvider.endHour
 		)

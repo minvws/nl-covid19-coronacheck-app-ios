@@ -8,6 +8,8 @@
 import XCTest
 @testable import CTR
 import Shared
+@testable import Models
+@testable import Resources
 
 class PagedAnnouncementDelegateSpy: PagedAnnouncementDelegate {
 
@@ -32,7 +34,6 @@ class PagedAnnouncementViewControllerTests: XCTestCase {
 		content: "Onboarding Message",
 		image: I.onboarding.safely(),
 		imageBackgroundColor: C.white(),
-		tagline: nil,
 		step: 1
 	)
 

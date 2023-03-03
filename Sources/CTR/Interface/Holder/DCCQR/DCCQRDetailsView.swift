@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class DCCQRDetailsView: BaseView {
 	
@@ -94,16 +95,20 @@ final class DCCQRDetailsView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.Title.lineHeight,
-															 kerning: ViewTraits.Title.kerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
+			)
 		}
 	}
 	
 	/// The description
 	var detailsDescription: String? {
 		didSet {
-			descriptionLabel.attributedText = detailsDescription?.setLineHeight(ViewTraits.Description.lineHeight,
-																				kerning: ViewTraits.Description.kerning)
+			descriptionLabel.attributedText = detailsDescription?.setLineHeight(
+				ViewTraits.Description.lineHeight,
+				kerning: ViewTraits.Description.kerning
+			)
 		}
 	}
 	
@@ -119,8 +124,10 @@ final class DCCQRDetailsView: BaseView {
 	/// The footer date information
 	var dateInformation: String? {
 		didSet {
-			dateInformationLabel.attributedText = dateInformation?.setLineHeight(ViewTraits.Footer.lineHeight,
-																				 kerning: ViewTraits.Footer.kerning)
+			dateInformationLabel.attributedText = dateInformation?.setLineHeight(
+				ViewTraits.Footer.lineHeight,
+				kerning: ViewTraits.Footer.kerning
+			)
 		}
 	}
 	

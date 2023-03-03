@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 public protocol PageControlDelegate: AnyObject {
 	
@@ -35,8 +36,8 @@ public final class PageControl: BaseView {
 			static let animation: TimeInterval = 0.15
 		}
 		enum Color {
-			static let selected: UIColor = C.primaryBlue() ?? .systemBlue
-			static let deselected: UIColor = C.grey2() ?? .gray
+			static let selected: UIColor? = C.primaryBlue()
+			static let deselected: UIColor? = C.grey2()
 		}
 	}
 	

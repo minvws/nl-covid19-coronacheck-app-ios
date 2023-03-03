@@ -7,8 +7,11 @@
 
 import UIKit
 import Shared
+import Resources
 
-/// A grey full width button with a title and a disclosure icon
+/*
+ A grey full width button with a title and a disclosure icon
+ */
 open class SimpleDisclosureButton: BaseView {
 
 	/// The display constants
@@ -31,7 +34,9 @@ open class SimpleDisclosureButton: BaseView {
 	
 	fileprivate let titleLabel: Label = {
 
-		return Label(body: nil).multiline()
+		let label = Label(body: nil).multiline()
+		label.isSelectable = false
+		return label
 	}()
 
 	private let disclosureView: UIImageView = {
@@ -145,8 +150,10 @@ open class SimpleDisclosureButton: BaseView {
 	/// The  title
 	open var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.lineHeight,
-															 kerning: ViewTraits.kerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.lineHeight,
+				kerning: ViewTraits.kerning
+			)
 			button.accessibilityLabel = title
 		}
 	}
@@ -166,6 +173,7 @@ public class RedDisclosureButton: SimpleDisclosureButton {
 	override open func setupViews() {
 		
 		super.setupViews()
+		setColorsForCurrentTraitCollection()
 		titleLabel.font = Fonts.bodyBold
 	}
 	
@@ -176,6 +184,15 @@ public class RedDisclosureButton: SimpleDisclosureButton {
 		titleBottomMarginConstraint?.constant = -RedDisclosureButton.ViewTraits.bottomMargin
 		titleLeadingConstraint?.constant = RedDisclosureButton.ViewTraits.inset
 		disclosureTrailingConstraint?.constant = -RedDisclosureButton.ViewTraits.inset
+	}
+	
+	public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 	}
 	
 	/// The  title

@@ -8,6 +8,8 @@
 import XCTest
 @testable import CTR
 import Shared
+@testable import Resources
+@testable import Models
 
 class PagedAnnouncementItemViewControllerTests: XCTestCase {
 
@@ -21,7 +23,6 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		content: "Onboarding Message",
 		image: I.onboarding.safely(),
 		imageBackgroundColor: C.white(),
-		tagline: nil,
 		step: 1
 	)
 

@@ -7,7 +7,11 @@
 
 import UIKit
 import Shared
+import Resources
 
+/*
+ A label with a checkbox in front of it. Used for consent. 
+ */
 public final class LabelWithCheckbox: UIControl {
 
 	private enum Images {
@@ -85,6 +89,7 @@ public final class LabelWithCheckbox: UIControl {
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityLarge
 		}
+		label.isSelectable = false
 		return label
 	}()
 	

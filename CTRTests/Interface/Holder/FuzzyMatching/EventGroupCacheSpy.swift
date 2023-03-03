@@ -7,6 +7,7 @@
 
 @testable import CTR
 @testable import Transport
+@testable import Models
 
 class EventGroupCacheSpy: EventGroupCacheProtocol {
 

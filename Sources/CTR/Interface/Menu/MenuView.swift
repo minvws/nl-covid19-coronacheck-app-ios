@@ -8,19 +8,18 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class MenuView: ScrolledStackView {
 
 	private let navigationBackgroundView: UIView = {
 		let view = UIView()
-		view.backgroundColor = C.white()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
 	private let topBorderView: UIView = {
 		let view = UIView()
-		view.backgroundColor = C.grey5()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -30,7 +29,7 @@ class MenuView: ScrolledStackView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = C.primaryBlue5()
+		setColorsForCurrentTraitCollection()
 		
 		stackViewInset = .zero
 		stackView.spacing = 0
@@ -60,5 +59,16 @@ class MenuView: ScrolledStackView {
 		constraints += [topBorderView.heightAnchor.constraint(equalToConstant: 1)]
 		
 		NSLayoutConstraint.activate(constraints)
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		navigationBackgroundView.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		topBorderView.backgroundColor = shouldUseDarkMode ? C.grey4() : C.grey5()
+		backgroundColor = shouldUseDarkMode ? C.white() : C.primaryBlue5()
 	}
 }

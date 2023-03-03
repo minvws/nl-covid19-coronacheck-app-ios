@@ -13,6 +13,8 @@ import SnapshotTesting
 import Nimble
 import TestingShared
 import Persistence
+@testable import Managers
+@testable import Resources
 
 class ScanLogViewControllerTests: XCTestCase {
 

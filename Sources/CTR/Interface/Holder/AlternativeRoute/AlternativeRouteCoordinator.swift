@@ -9,6 +9,8 @@ import UIKit
 import Shared
 import ReusableViews
 import Persistence
+import Models
+import Resources
 
 protocol AlternativeRouteFlowDelegate: AnyObject {
 
@@ -101,8 +103,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 		displayContent(
 			title: L.holder_contactCoronaCheckHelpdesk_title(),
 			message: L.holder_contactCoronaCheckHelpdesk_message(
-				Current.contactInformationProvider.startDay,
-				Current.contactInformationProvider.endDay,
+				Current.contactInformationProvider.openingDays,
 				Current.contactInformationProvider.startHour,
 				Current.contactInformationProvider.endHour,
 				Current.contactInformationProvider.phoneNumberLink,

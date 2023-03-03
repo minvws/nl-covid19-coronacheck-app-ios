@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class StoredEventItemView: BaseView {
 	
@@ -78,14 +79,14 @@ class StoredEventItemView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		view?.backgroundColor = C.white()
-		lineView.backgroundColor = C.grey4()
-		disclosureView.tintColor = C.black()
+		setColorsForCurrentTraitCollection()
+		
 		backgroundButton.addTarget(
 			self,
 			action: #selector(backgroundButtonTapped),
 			for: .touchUpInside
 		)
+		titleLabel.isSelectable = false
 	}
 	
 	/// Setup the hierarchy
@@ -130,7 +131,7 @@ class StoredEventItemView: BaseView {
 				constant: ViewTraits.Details.leadingMargin
 			),
 			detailsStackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor
+				equalTo: disclosureView.leadingAnchor
 			),
 			detailsStackView.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
@@ -142,6 +143,7 @@ class StoredEventItemView: BaseView {
 				constant: -ViewTraits.Disclosure.trailingMargin
 			),
 			disclosureView.heightAnchor.constraint(equalToConstant: ViewTraits.Disclosure.height),
+			disclosureView.widthAnchor.constraint(equalTo: disclosureView.heightAnchor),
 			disclosureView.centerYAnchor.constraint(equalTo: centerYAnchor),
 			
 			// Line
@@ -160,6 +162,17 @@ class StoredEventItemView: BaseView {
 		titleLabel.isAccessibilityElement = false
 		detailsStackView.isAccessibilityElement = false
 		accessibilityElements = [backgroundButton]
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		setColorsForCurrentTraitCollection()
+	}
+	
+	private func setColorsForCurrentTraitCollection() {
+		
+		backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
+		lineView.backgroundColor = C.grey4()
 	}
 	
 	private func updateAccessbilityLabel() {
@@ -195,6 +208,7 @@ class StoredEventItemView: BaseView {
 			details.forEach { detail in
 				let label = Label(body: nil).multiline()
 				label.isAccessibilityElement = false
+				label.isSelectable = false
 				
 				NSAttributedString.makeFromHtml(
 					text: detail,

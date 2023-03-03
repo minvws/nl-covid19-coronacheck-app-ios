@@ -14,6 +14,9 @@ import ReusableViews
 import Transport
 import OpenIDConnect
 import Persistence
+import Models
+import Managers
+import Resources
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	
@@ -535,7 +538,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_qr_code_expired_explanation_action(),
 				secondaryAction: { [weak self] in
-					guard let self = self,
+					guard let self,
 						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
 					self.openUrl(url, inApp: true)
 				}
@@ -561,7 +564,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_qr_code_hidden_explanation_action(),
 				secondaryAction: { [weak self] in
-					guard let self = self,
+					guard let self,
 							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
 					self.openUrl(url, inApp: true)
 				}
@@ -801,7 +804,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			navigationController.present(alertController, animated: true, completion: nil)
 		}
 		
-		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs)
+		let result = GreenCardModel.fetchByIds(objectIDs: greenCardObjectIDs, managedObjectContext: Current.dataStoreManager.managedObjectContext())
 		switch result {
 			case let .success(greenCards):
 				if greenCards.isEmpty {
@@ -893,7 +896,10 @@ extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
 			return
 		}
 		
-		let pagedAnnouncementItems = Current.disclosurePolicyManager.factory.create()
+		let pagedAnnouncementItems = type(of: Current.disclosurePolicyManager.factory).create(
+			featureFlagManager: Current.featureFlagManager,
+			userSettings: Current.userSettings
+		)
 		guard pagedAnnouncementItems.isNotEmpty else {
 			return
 		}

@@ -8,6 +8,9 @@
 import Foundation
 import Transport
 import Shared
+import Models
+import Managers
+import Resources
 
 class NegativeTestDetailsGenerator {
 

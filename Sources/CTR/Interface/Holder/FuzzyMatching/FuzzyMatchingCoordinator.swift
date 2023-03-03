@@ -8,6 +8,8 @@
 import UIKit
 import Shared
 import ReusableViews
+import Models
+import Resources
 
 protocol FuzzyMatchingFlowDelegate: AnyObject {
 	
@@ -106,7 +108,7 @@ extension FuzzyMatchingCoordinator: FuzzyMatchingCoordinatorDelegate {
 	func userWishesToSeeOnboarding() {
 		
 		let backNavigationAction: () -> Void = { [weak self] in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.navigationController.popViewController(animated: true, completion: {
 				self.delegate?.fuzzyMatchingUserBackedOutOfFlow()
 			})

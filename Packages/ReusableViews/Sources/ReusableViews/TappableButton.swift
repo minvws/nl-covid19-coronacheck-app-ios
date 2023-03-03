@@ -7,7 +7,9 @@
 
 import UIKit
 
-/// Button with larger tap area (44x44 points). It is for small icon-sized buttons.
+/*
+ Button with larger tap area (44x44 points). It is for small icon-sized buttons.
+ */
 open class TappableButton: UIButton {
 	
 	private enum ViewTraits {

@@ -43,4 +43,13 @@ public struct TestProvider: Codable, CertificateProvider, Equatable {
 
 		return URL(string: resultURLString)
 	}
+	
+	public init(identifier: String, name: String, resultURLString: String, cmsCertificates: [String], tlsCertificates: [String], usages: [EventFlow.ProviderUsage]) {
+		self.identifier = identifier
+		self.name = name
+		self.resultURLString = resultURLString
+		self.cmsCertificates = cmsCertificates
+		self.tlsCertificates = tlsCertificates
+		self.usages = usages
+	}
 }

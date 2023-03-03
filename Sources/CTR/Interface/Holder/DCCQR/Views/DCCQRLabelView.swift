@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	
@@ -32,6 +33,14 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 		super.setupViews()
 		
 		backgroundColor = C.white()
+		fieldLabel.isSelectable = false
+		valueLabel.isSelectable = false
+		
+		// Make this dual label view selectable
+		self.isUserInteractionEnabled = true
+		addGestureRecognizer(
+			longPressGestureRecognizer
+		)
 	}
 	
 	override func setupViewHierarchy() {
@@ -61,16 +70,20 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 	/// The dcc field
 	var field: String? {
 		didSet {
-			fieldLabel.attributedText = field?.setLineHeight(ViewTraits.lineHeight,
-															 kerning: ViewTraits.kerning)
+			fieldLabel.attributedText = field?.setLineHeight(
+				ViewTraits.lineHeight,
+				kerning: ViewTraits.kerning
+			)
 		}
 	}
 	
 	/// The dcc value
 	var value: String? {
 		didSet {
-			valueLabel.attributedText = value?.setLineHeight(ViewTraits.lineHeight,
-															 kerning: ViewTraits.kerning)
+			valueLabel.attributedText = value?.setLineHeight(
+				ViewTraits.lineHeight,
+				kerning: ViewTraits.kerning
+			)
 		}
 	}
 	
@@ -92,5 +105,32 @@ final class DCCQRLabelView: BaseView, DCCQRLabelViewable {
 		
 		// Disabled as interactive element for SwitchControl
 		isAccessibilityElement = !UIAccessibility.isSwitchControlRunning
+	}
+	
+	// MARK: - Selectable
+	
+	override var canBecomeFirstResponder: Bool {
+		true
+	}
+	
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		action == #selector(copy(_:))
+	}
+
+	// MARK: - UIResponderStandardEditActions
+	
+	override func copy(_ sender: Any?) {
+		UIPasteboard.general.string = "\(field ?? "") \(value ?? "")"
+	}
+	
+	// MARK: - Long-press Handler
+
+	private lazy var longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+	
+	@objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
+		guard recognizer.state == .began, let recognizerView = recognizer.view else { return }
+		recognizerView.becomeFirstResponder()
+		UIMenuController.shared.setTargetRect(recognizerView.frame, in: self)
+		UIMenuController.shared.setMenuVisible(true, animated: true)
 	}
 }

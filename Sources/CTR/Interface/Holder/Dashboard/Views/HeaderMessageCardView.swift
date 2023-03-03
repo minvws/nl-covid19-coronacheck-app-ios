@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class HeaderMessageCardView: BaseView {
 	
@@ -22,8 +23,8 @@ final class HeaderMessageCardView: BaseView {
 		}
 	}
 	
-	let contentTextView = TextView()
-	
+	private var contentTextView: TextView = TextView()
+ 
 	private let button: Button = {
 		let button = Button(style: .textLabelBlue)
 		button.contentHorizontalAlignment = .left
@@ -98,4 +99,11 @@ final class HeaderMessageCardView: BaseView {
 
 	/// The user tapped on the button
 	var buttonTappedCommand: (() -> Void)?
+	
+	/// User tapped on a link in the contentTextView text
+	var linkTouchedHandler: ((URL) -> Void)? {
+		didSet {
+			contentTextView.linkTouchedHandler = linkTouchedHandler
+		}
+	}
 }

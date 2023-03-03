@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import Shared
 import Persistence
+import Models
+import Managers
 
 protocol ShowQRDatasourceProtocol {
 

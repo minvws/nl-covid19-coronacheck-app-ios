@@ -7,29 +7,18 @@
 
 import UIKit
 import Shared
+import Resources
 
-open class ContentView: ScrolledStackWithButtonView {
+open class ContentView: ScrolledStackContentBaseView {
 
 	/// The display constants
 	private struct ViewTraits {
-
-		// Dimensions
-		static let titleLineHeight: CGFloat = 26
-		static let titleKerning: CGFloat = -0.26
+		
+		enum Title {
+			static let lineHeight: CGFloat = 32
+			static let kerning: CGFloat = -0.26
+		}
 	}
-
-	/// The title label
-	private let titleLabel: Label = {
-
-		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
-
-	public let contentTextView: TextView = {
-
-		let view = TextView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
 
 	public let secondaryButton: Button = {
 
@@ -50,9 +39,6 @@ open class ContentView: ScrolledStackWithButtonView {
 	override open func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-
-		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(contentTextView)
 		stackView.addArrangedSubview(secondaryButton)
 	}
 
@@ -67,8 +53,8 @@ open class ContentView: ScrolledStackWithButtonView {
 	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
-				ViewTraits.titleLineHeight,
-				kerning: ViewTraits.titleKerning
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
 			)
 		}
 	}

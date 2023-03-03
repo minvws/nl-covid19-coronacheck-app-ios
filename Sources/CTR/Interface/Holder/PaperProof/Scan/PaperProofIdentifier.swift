@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Managers
 
 enum PaperProofType: Equatable {
 	case hasDomesticPrefix

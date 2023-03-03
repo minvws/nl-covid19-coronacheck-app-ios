@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class PaperProofScanView: BaseView, HasScanView {
 	
@@ -19,6 +20,10 @@ final class PaperProofScanView: BaseView, HasScanView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		
+		// Colors
+		static let backgroundColor: UIColor = UIColor(red: 56 / 255, green: 56 / 255, blue: 54 / 255, alpha: 1) // hardcode - should not change during dark mode
+		static let textColor: UIColor = .white // intentionally UIColor.white - it should always be white.
 	}
 	
 	/// The message label
@@ -39,7 +44,8 @@ final class PaperProofScanView: BaseView, HasScanView {
 	override func setupViews() {
 		super.setupViews()
 		scanView.accessibilityIdentifier = "scanView"
-		backgroundColor = C.black()
+		backgroundColor = ViewTraits.backgroundColor
+		messageLabel.isSelectable = false
 	}
 	
 	override func setupViewHierarchy() {
@@ -102,7 +108,7 @@ final class PaperProofScanView: BaseView, HasScanView {
 			messageLabel.attributedText = message?.setLineHeight(
 				ViewTraits.messageLineHeight,
 				alignment: .center,
-				textColor: C.white()!
+				textColor: ViewTraits.textColor
 			)
 		}
 	}

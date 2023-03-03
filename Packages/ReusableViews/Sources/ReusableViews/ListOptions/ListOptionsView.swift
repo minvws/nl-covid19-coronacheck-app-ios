@@ -7,6 +7,7 @@
 
 import UIKit
 import Shared
+import Resources
 
 public class ListOptionsView: ScrolledStackView {
 
@@ -14,7 +15,7 @@ public class ListOptionsView: ScrolledStackView {
 	private struct ViewTraits {
 
 		enum Title {
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 

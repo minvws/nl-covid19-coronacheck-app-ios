@@ -9,7 +9,10 @@ import Foundation
 import XCTest
 import Nimble
 import TestingShared
+import Shared
 @testable import CTR
+@testable import Managers
+@testable import Resources
 
 class HelpdeskViewModelTests: XCTestCase {
 	
@@ -58,5 +61,23 @@ class HelpdeskViewModelTests: XCTestCase {
 		
 		// Assert
 		expect(urlTapped) == urlExpected
+	}
+	
+	func test_contactInfo() {
+		
+		// Arrange
+		environmentSpies.contactInformationSpy.stubbedStartHour = "08:00"
+		environmentSpies.contactInformationSpy.stubbedOpeningDays = "elke dag"
+		environmentSpies.contactInformationSpy.stubbedEndHour = "12:00"
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "TEST 1"
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberAbroadLink = "TEST 2"
+		
+		// Act
+		let sut = HelpdeskViewModel(flavor: .holder, versionSupplier: AppVersionSupplierSpy(version: "holder", build: "1.2.3"), urlHandler: { _ in })
+		
+		// Assert
+		expect(sut.messageLine1) == L.holder_helpdesk_contact_message_line1("TEST 1")
+		expect(sut.messageLine2) == L.holder_helpdesk_contact_message_line2("TEST 2")
+		expect(sut.messageLine3) == L.holder_helpdesk_contact_message_line3("elke dag", "08:00", "12:00")
 	}
 }

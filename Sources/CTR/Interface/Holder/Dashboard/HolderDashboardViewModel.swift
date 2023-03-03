@@ -12,6 +12,9 @@ import Reachability
 import Shared
 import ReusableViews
 import Persistence
+import Managers
+import Models
+import Resources
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {
@@ -370,7 +373,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	func setupConfigNotificationManager() {
 
 		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
-			guard let self = self, case .success = result else { return }
+			guard let self, case .success = result else { return }
 			self.setupRecommendedVersion()
 		}
 	}

@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class AddCertificateCardView: BaseView {
 
@@ -34,9 +35,12 @@ class AddCertificateCardView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = C.white()
+		view?.backgroundColor = shouldUseDarkMode ? C.grey5() : C.white()
 		layer.cornerRadius = ViewTraits.cornerRadius
-		createShadow()
+		
+		if !shouldUseDarkMode {
+			createShadow()
+		}
 
 		addCertificateButton.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
@@ -111,6 +115,7 @@ private class LargeAddCertificateButton: UIControl {
 		let label = Label(body: nil).multiline()
 		label.textAlignment = .center
 		label.textColor = C.primaryBlue()
+		label.isSelectable = false
 		
 		return label
 	}()
@@ -131,7 +136,7 @@ private class LargeAddCertificateButton: UIControl {
 	/// Setup all the views
 	private func setupViews() {
 
-		backgroundColor = C.white()
+		backgroundColor = .clear
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 		addTarget(self, action: #selector(touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])

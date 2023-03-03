@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class HelpdeskView: ScrolledStackView {
 	
@@ -63,7 +64,7 @@ final class HelpdeskView: ScrolledStackView {
 		
 	private let dividerView: UIView = {
 		let view = UIView()
-		view.backgroundColor = C.grey3a()
+		view.backgroundColor = C.grey4()
 		return view
 	}()
 		
@@ -78,9 +79,9 @@ final class HelpdeskView: ScrolledStackView {
 		return Label(bodyBold: "").multiline()
 	}()
 	
-	private let appVersionTextView: TextView = {
+	private let appVersionTextView: Label = {
 
-		return TextView()
+		return Label(body: "")
 	}()
 
 	private let configurationLabel: Label = {
@@ -88,9 +89,9 @@ final class HelpdeskView: ScrolledStackView {
 		return Label(bodyBold: "").multiline()
 	}()
 	
-	private let configurationTextView: TextView = {
+	private let configurationTextView: Label = {
 
-		return TextView()
+		return Label(body: "")
 	}()
 		
 	override func setupViews() {

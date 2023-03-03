@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 final class DeniedQRScanMoreInfoView: BaseView {
 
@@ -15,7 +16,7 @@ final class DeniedQRScanMoreInfoView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let spacing: CGFloat = 24
 		static let bottomMargin: CGFloat = 20

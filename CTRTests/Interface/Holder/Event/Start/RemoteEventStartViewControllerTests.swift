@@ -12,6 +12,7 @@ import SnapshotTesting
 import Shared
 import TestingShared
 import ReusableViews
+@testable import Resources
 
 class RemoteEventStartViewControllerTests: XCTestCase {
 

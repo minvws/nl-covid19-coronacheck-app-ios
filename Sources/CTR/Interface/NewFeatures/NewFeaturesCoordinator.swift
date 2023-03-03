@@ -8,6 +8,8 @@
 import UIKit
 import SafariServices
 import Shared
+import Managers
+import Models
 
 protocol NewFeaturesDelegate: AnyObject {
 

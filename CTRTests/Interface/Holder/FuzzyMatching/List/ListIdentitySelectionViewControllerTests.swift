@@ -9,6 +9,7 @@ import XCTest
 import Nimble
 import SnapshotTesting
 import ViewControllerPresentationSpy
+@testable import Resources
 @testable import CTR
 import Shared
 import TestingShared

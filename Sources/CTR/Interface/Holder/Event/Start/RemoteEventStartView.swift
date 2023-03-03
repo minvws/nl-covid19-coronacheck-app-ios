@@ -8,8 +8,9 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
-class RemoteEventStartView: ScrolledStackWithButtonView {
+class RemoteEventStartView: ScrolledStackContentBaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -20,7 +21,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 			static let height: CGFloat = 52
 		}
 		enum Title {
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 		enum InfoCard {
@@ -40,17 +41,6 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 			static let size: CGSize = CGSize(width: 22.0, height: 22.0)
 		}
 	}
-
-	/// The title label
-	private let titleLabel: Label = {
-
-		return Label(title1: nil, montserrat: true).multiline().header()
-	}()
-
-	let contentTextView: TextView = {
-
-		return TextView()
-	}()
 	
 	let infoCard: UIView = {
 		let view = UIView()
@@ -101,9 +91,7 @@ class RemoteEventStartView: ScrolledStackWithButtonView {
 		
 		infoCard.addSubview(infoTextView)
 		infoCard.addSubview(labelWithCheckbox)
-
-		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(contentTextView)
+		
 		stackView.addArrangedSubview(infoCard)
 		footerButtonView.buttonStackView.addArrangedSubview(secondaryButton)
 	}

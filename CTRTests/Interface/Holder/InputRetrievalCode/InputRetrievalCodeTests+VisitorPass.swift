@@ -15,6 +15,8 @@ import Nimble
 import SnapshotTesting
 import TestingShared
 import ReusableViews
+@testable import Models
+@testable import Resources
 
 // swiftlint:disable:next type_name
 class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
@@ -30,6 +32,7 @@ class InputRetrievalCodeVisitorPassViewModelTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
+		
 	}
 
 	func test_withoutInitialRequestToken_initialState() {

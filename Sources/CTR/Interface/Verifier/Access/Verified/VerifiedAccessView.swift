@@ -8,6 +8,8 @@
 import UIKit
 import Shared
 import ReusableViews
+import Models
+import Resources
 
 final class VerifiedAccessView: BaseView {
 	

@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class LaunchView: BaseView {
 
@@ -42,6 +43,7 @@ class LaunchView: BaseView {
 		if #available(iOS 15.0, *) {
 			label.maximumContentSizeCategory = .accessibilityMedium
 		}
+		label.isSelectable = false
 		return label
 	}()
 

@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 import Shared
+import Resources
 
 public class BottomSheetContentView: BaseView {
 

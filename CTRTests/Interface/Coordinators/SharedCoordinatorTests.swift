@@ -9,6 +9,9 @@ import XCTest
 @testable import CTR
 import Nimble
 import Shared
+@testable import Models
+@testable import Managers
+@testable import Resources
 
 class SharedCoordinatorTests: XCTestCase {
 
@@ -104,7 +107,6 @@ class SharedCoordinatorTests: XCTestCase {
 		environmentSpies.newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "",
 			content: "",
-			image: nil,
 			imageBackgroundColor: C.white(),
 			tagline: "",
 			step: 0

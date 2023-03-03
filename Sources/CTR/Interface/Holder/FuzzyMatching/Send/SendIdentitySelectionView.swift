@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class SendIdentitySelectionView: ScrolledStackView {
 
@@ -15,7 +16,7 @@ class SendIdentitySelectionView: ScrolledStackView {
 	private struct ViewTraits {
 
 		enum Title {
-			static let lineHeight: CGFloat = 26
+			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
 	}

@@ -12,6 +12,7 @@ import Shared
 import ReusableViews
 import TestingShared
 import Persistence
+@testable import Resources
 
 class ShowQRViewControllerTests: XCTestCase {
 

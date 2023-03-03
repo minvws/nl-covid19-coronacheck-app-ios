@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 
 class PagedAnnouncementView: BaseView {
 	
@@ -67,18 +68,21 @@ class PagedAnnouncementView: BaseView {
 		super.init(frame: .zero)
 	}
 	
+	override init(frame: CGRect) {
+		self.shouldShowWithVWSRibbon = false
+		super.init(frame: frame)
+	}
+	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError()
 	}
  
-	/// setup the views
 	override func setupViews() {
 		
 		super.setupViews()
 		backgroundColor = C.white()
 	}
 	
-	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
@@ -91,7 +95,6 @@ class PagedAnnouncementView: BaseView {
 		footerButtonView.buttonStackView.insertArrangedSubview(pageControl, at: 0)
 	}
 	
-	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
@@ -106,12 +109,23 @@ class PagedAnnouncementView: BaseView {
 			])
 		}
 		
+		setupContainerViewConstraints()
+		setupFooterButtonViewConstraints()
+	}
+	
+	func setupContainerViewConstraints() {
+		
 		NSLayoutConstraint.activate([
 			// ImageContainer
 			containerView.topAnchor.constraint(equalTo: shouldShowWithVWSRibbon ? ribbonView.bottomAnchor : topAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			
+			containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
+		])
+	}
+	
+	func setupFooterButtonViewConstraints() {
+
+		NSLayoutConstraint.activate([
 			footerButtonView.topAnchor.constraint(equalTo: containerView.bottomAnchor),
 			footerButtonView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			footerButtonView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -119,7 +133,6 @@ class PagedAnnouncementView: BaseView {
 		])
 	}
 
-	/// Setup all the accessibility traits
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
