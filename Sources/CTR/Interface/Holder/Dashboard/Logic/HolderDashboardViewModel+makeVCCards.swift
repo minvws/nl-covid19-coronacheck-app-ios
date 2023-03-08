@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import Foundation
 import Shared
@@ -572,7 +573,16 @@ extension HolderDashboardViewModel.QRCard {
 	/// Returns `HolderDashboardViewController.Card.Error`, if appropriate, which configures the display of an error on the QRCardView.
 	private func qrCardError(state: HolderDashboardViewModel.State, actionHandler: HolderDashboardCardUserActionHandling) -> HolderDashboardViewController.Card.Error? {
 		guard let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard else { return nil }
-		return HolderDashboardViewController.Card.Error(message: error, didTapURL: { [weak actionHandler] url in
+		
+		let errorMessage: String = {
+			switch error {
+				case .noInternet: return L.holderDashboardStrippenExpiredErrorfooterNointernet()
+				case .otherFailureFirstOccurence: return L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+				case .otherFailureSubsequentOccurence: return L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(Current.contactInformationProvider.phoneNumberLink)
+			}
+		}()
+		
+		return HolderDashboardViewController.Card.Error(message: errorMessage, didTapURL: { [weak actionHandler] url in
 			if url.absoluteString == AppAction.tryAgain {
 				actionHandler?.didTapRetryLoadQRCards()
 			} else {
