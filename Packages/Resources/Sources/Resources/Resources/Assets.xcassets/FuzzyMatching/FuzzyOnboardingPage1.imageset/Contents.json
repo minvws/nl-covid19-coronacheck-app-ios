@@ -3,6 +3,16 @@
     {
       "filename" : "Page1.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "controle_idbewijs.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

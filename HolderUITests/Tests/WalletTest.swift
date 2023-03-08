@@ -90,6 +90,35 @@ class WalletTest: BaseTest {
 		assertWalletItem(ofType: .vaccination, atIndex: 1, with: vac1)
 	}
 	
+	func test_replaceSetup() {
+		let setup = TestData.setupForMatching
+		addVaccinationCertificate(for: setup.bsn)
+		addRetrievedCertificateToApp()
+		
+		let person = TestData.differentBirthdateDifferentName
+		addVaccinationCertificate(for: person.bsn)
+		let vac = storeRetrievedCertificateDetails()
+		addRetrievedCertificateToApp()
+		replaceExistingCertificate(true)
+		
+		viewWallet()
+		assertAmountOfWalletItems(ofType: .vaccination, is: 1)
+		assertWalletItem(ofType: .vaccination, with: vac)
+	}
+	
+	func test_removeVaccination() {
+		let setup = TestData.vacJ1
+		addVaccinationCertificate(for: setup.bsn)
+		addRetrievedCertificateToApp()
+		
+		viewWallet()
+		deleteItemFromWallet()
+		assertNoEventsInWallet()
+		
+		returnFromWalletToOverview()
+		assertNoCertificateRetrieved()
+	}
+	
 	func test_removePositiveTest() {
 		let person = TestData.posPcr
 		addRecoveryCertificate(for: person.bsn)
@@ -107,6 +136,21 @@ class WalletTest: BaseTest {
 		let person = TestData.negPcr
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
+		
+		viewWallet()
+		deleteItemFromWallet()
+		assertNoEventsInWallet()
+		
+		returnFromWalletToOverview()
+		assertNoCertificateRetrieved()
+	}
+	
+	func test_removeNegativeToken() {
+		let retrievalCode = "ZZZ-FZB3CUYL55U7ZT-R2"
+		addCommercialTestCertificate(for: retrievalCode)
+		
+		app.textExists("Kloppen de gegevens?")
+		app.tapButton("Maak bewijs")
 		
 		viewWallet()
 		deleteItemFromWallet()
