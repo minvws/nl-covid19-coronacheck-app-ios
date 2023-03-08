@@ -93,17 +93,23 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
 	struct State: Equatable {
+		enum StrippenRefresherFailMissingCredentialsError: Error { // swiftlint:disable:this type_name
+			case noInternet
+			case otherFailureFirstOccurence, otherFailureSubsequentOccurence
+		}
+
 		var qrCards: [QRCard]
 		var expiredGreenCards: [ExpiredQR]
 		var blockedEventItems: [RemovedEventItem]
 		var mismatchedIdentityItems: [RemovedEventItem]
 		var isRefreshingStrippen: Bool
+		var lastKnownConfigHash: String?
 
 		// Related to strippen refreshing.
 		// When there's an error with the refreshing process,
 		// we show an error message on each QR card that lacks credentials.
 		// This does not discriminate between domestic/EU.
-		var errorForQRCardsMissingCredentials: String?
+		var errorForQRCardsMissingCredentials: StrippenRefresherFailMissingCredentialsError?
 
 		var deviceHasClockDeviation: Bool = false
 
@@ -211,7 +217,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
-	private var remoteConfigUpdatesConfigurationWarningToken: Observatory.ObserverToken?
 	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
@@ -271,7 +276,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		setupFuzzyMatchingRemovedEventsDatasource()
 		setupStrippenRefresher()
 		setupNotificationListeners()
-		setupConfigNotificationManager()
 		setupRecommendedVersion()
 		recalculateActiveDisclosurePolicyMode()
 		recalculateDisclosureBannerState()
@@ -289,8 +293,10 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 		
 		// If the config ever changes, reload dependencies:
-		remoteConfigUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _ in
+		remoteConfigUpdateObserverToken = Current.remoteConfigManager.observatoryForUpdates.append { [weak self] _, _, _, hash in
 			self?.strippenRefresher.load()
+			self?.setupRecommendedVersion() // Config changed, check recommended version.
+			self?.state.lastKnownConfigHash = hash
 		}
 
 		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
@@ -317,7 +323,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
 		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
-		remoteConfigUpdatesConfigurationWarningToken.map(Current.remoteConfigManager.observatoryForReloads.remove)
 	}
 
 	// MARK: - Setup
@@ -368,14 +373,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
 		strippenRefresher.load()
-	}
-
-	func setupConfigNotificationManager() {
-
-		remoteConfigUpdatesConfigurationWarningToken = Current.remoteConfigManager.observatoryForReloads.append { [weak self] result in
-			guard let self, case .success = result else { return }
-			self.setupRecommendedVersion()
-		}
 	}
 
 	// MARK: - View Lifecycle callbacks:
@@ -461,7 +458,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 			case (.noInternet, .expired, true):
 				logDebug("StrippenRefresh: Need refreshing now, but no internet. Showing in UI.")
-				state.errorForQRCardsMissingCredentials = L.holderDashboardStrippenExpiredErrorfooterNointernet()
+				state.errorForQRCardsMissingCredentials = .noInternet
 
 			case (.noInternet, .expiring, true):
 				// Do nothing
@@ -478,8 +475,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				checkForMismatchedIdentityError(error: error)
 
 				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
-				? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(Current.contactInformationProvider.phoneNumberLink)
-					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+					? .otherFailureSubsequentOccurence
+					: .otherFailureFirstOccurence
 
 			case let (.failed(error), .expiring, _):
 				// In this case we just swallow the server errors.

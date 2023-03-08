@@ -6,25 +6,34 @@
 */
 
 import UIKit
-import Shared
-import Models
 
-final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
+public protocol ScreenCaptureDetectorProtocol: AnyObject {
+	var screenIsBeingCaptured: Bool { get }
+
+	var screenshotWasTakenCallback: (() -> Void)? { get set }
+	var screenCaptureDidChangeCallback: ((Bool) -> Void)? { get set }
+}
+
+public final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
-	private(set) var screenIsBeingCaptured: Bool = false
+	public private(set) var screenIsBeingCaptured: Bool = false
 
-	var screenshotWasTakenCallback: (() -> Void)?
-	var screenCaptureDidChangeCallback: ((Bool) -> Void)? {
+	public var screenshotWasTakenCallback: (() -> Void)?
+	public var screenCaptureDidChangeCallback: ((Bool) -> Void)? {
 		didSet {
 			updateScreenCaptureDidChangeCallback()
 		}
 	}
+	
+	private let environmentIsProduction: Bool
 
 	/// Initializer
-	init() {
-		screenIsBeingCaptured = isCaptured
+	public init(environmentIsProduction: Bool) {
+		self.environmentIsProduction = environmentIsProduction
+		self.screenIsBeingCaptured = isCaptured
+		
 		addObservers()
 	}
 
@@ -35,7 +44,7 @@ final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 	// MARK: - capturedDidChangeNotification
 
 	/// Add  observers to prevent screen capture
-	func addObservers() {
+	private func addObservers() {
 
 		notificationCenter.addObserver(
 			self,
@@ -82,7 +91,7 @@ private extension ScreenCaptureDetector {
 	
 	var isCaptured: Bool {
 		
-		guard Configuration().getEnvironment() == "production" else {
+		guard environmentIsProduction else {
 			// Screen Capture is allowed in non production.
 			return false
 		}

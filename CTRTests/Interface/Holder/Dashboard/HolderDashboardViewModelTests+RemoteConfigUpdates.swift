@@ -28,7 +28,7 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
 		
 		// Act
-		sendUpdate?((RemoteConfiguration.default, Data(), URLResponse()))
+		sendUpdate?((RemoteConfiguration.default, Data(), URLResponse(), "hash"))
 
 		// Assert
 
