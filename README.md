@@ -283,7 +283,7 @@ Once the build is approved by Apple, we release the approved build manually usin
 
 `Verifier-3.0.2` 
 
-Now that the release is completed, the private git repository should be "synced" with the public reposititory by running [this script](Scripts/sync_public_repo.sh). It pushes new *non-RC* tags to the public repository.
+Now that the release is completed, the private git repository should be "synced" with the public reposititory by running `make sync_repo`. It pushes new *non-RC* tags to the public repository. This command is part of the [RDO Repository Tools](https://github.com/minvws/nl-rdo-git-repository-tool). 
 
 ## Contribution process
 
