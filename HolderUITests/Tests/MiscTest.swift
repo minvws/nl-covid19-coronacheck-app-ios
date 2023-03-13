@@ -24,7 +24,6 @@ class MiscTest: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalTestCertificate(testType: .pcr)

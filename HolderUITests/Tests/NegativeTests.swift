@@ -17,7 +17,6 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		
 		assertValidInternationalTestCertificate(testType: .pcr)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
@@ -29,7 +28,6 @@ class NegativeTests: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
-		
 		
 		assertValidInternationalTestCertificate(testType: .rat)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
@@ -43,7 +41,6 @@ class NegativeTests: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
-		
 		
 		assertCertificateIsNotValidInternationally(ofType: .test)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
