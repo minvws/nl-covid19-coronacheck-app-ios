@@ -52,7 +52,7 @@ extension BaseTest {
 		viewQR(of: certificate, label: "Bekijk QR", hiddenQR: hiddenQR)
 	}
 	
-	func viewQRCodes(of	certificate: CertificateType, hiddenQR: Bool = false) {
+	func viewQRCodes(of certificate: CertificateType, hiddenQR: Bool = false) {
 		viewQR(of: certificate, label: "Bekijk QR-codes", hiddenQR: hiddenQR)
 	}
 	

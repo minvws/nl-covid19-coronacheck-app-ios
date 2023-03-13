@@ -30,7 +30,6 @@ struct DateHandler {
 }
 
 extension Date {
-	
 	init(_ dateString: String) {
 		self = dateString.toDate(.short)!
 	}

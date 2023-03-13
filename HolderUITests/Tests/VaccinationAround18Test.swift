@@ -64,7 +64,7 @@ class VaccinationAround18Test: BaseTest {
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
-	func test_around18Is17y10mWithJ1LastDose9M	() {
+	func test_around18Is17y10mWithJ1LastDose9M() {
 		let person = TestData.around18Is17y10mWithJ1LastDose9M
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()

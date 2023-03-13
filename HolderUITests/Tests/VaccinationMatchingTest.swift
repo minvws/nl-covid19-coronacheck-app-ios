@@ -124,13 +124,13 @@ class VaccinationMatchingTest: BaseTest {
 		
 		// Temp disabled as the signer does not use fuzzy matching
 		/*
-		chooseToKeepNameOf(person)
-		
-		retrieveCertificate(for: setupPerson)
-		chooseToKeepNameOf(person)
-		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		 chooseToKeepNameOf(person)
+		 
+		 retrieveCertificate(for: setupPerson)
+		 chooseToKeepNameOf(person)
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
 		 */
 		
 		// Default back to initial match result
@@ -268,9 +268,9 @@ class VaccinationMatchingTest: BaseTest {
 		// Temp disabled as the signer does not use fuzzy matching
 		/*
 		 chooseToKeepNameOf(person)
-		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
 		 */
 		// Default back to initial match result
 		assertMergedVaccinations(for: person)
