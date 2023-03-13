@@ -13,7 +13,6 @@ class VaccinationSmoke: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -23,7 +22,6 @@ class VaccinationSmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -33,7 +31,6 @@ class VaccinationSmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}
@@ -43,7 +40,6 @@ class VaccinationSmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)
 	}

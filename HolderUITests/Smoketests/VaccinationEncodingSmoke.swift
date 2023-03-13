@@ -14,7 +14,6 @@ class VaccinationEncodingSmoke: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 }

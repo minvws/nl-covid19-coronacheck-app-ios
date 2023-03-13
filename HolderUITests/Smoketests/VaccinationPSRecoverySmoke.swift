@@ -12,7 +12,6 @@ class VaccinationPSRecoverySmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -21,7 +20,6 @@ class VaccinationPSRecoverySmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 }

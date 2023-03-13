@@ -22,7 +22,6 @@ class PositiveOthersSmoke: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -35,9 +34,6 @@ class PositiveOthersSmoke: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
-		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
@@ -49,9 +45,6 @@ class PositiveOthersSmoke: BaseTest {
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)

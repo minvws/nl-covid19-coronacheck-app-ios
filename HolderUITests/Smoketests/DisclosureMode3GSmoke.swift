@@ -22,7 +22,6 @@ class DisclosureMode3GSmoke: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -31,7 +30,6 @@ class DisclosureMode3GSmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -40,7 +38,6 @@ class DisclosureMode3GSmoke: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 }

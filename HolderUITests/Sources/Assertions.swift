@@ -12,7 +12,6 @@ extension BaseTest {
 	// MARK: General
 	
 	func assertNoCertificateRetrieved() {
-		assertNoDutchCertificate()
 		assertNoInternationalCertificate()
 	}
 	
@@ -124,87 +123,8 @@ extension BaseTest {
 		}
 	}
 	
-	// MARK: - The Netherlands
-	
 	private func tapOnTheNetherlandsTab() {
 		app.tapButton("Nederland")
-	}
-	
-	func assertNoDutchCertificate() {
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		app.textExists("Hier komt jouw Nederlandse bewijs")
-	}
-	
-	func assertNoValidDutchCertificate(ofType certificateType: CertificateType) {
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		app.containsText("Je hebt geen Nederlands \(certificateType.rawValue.lowercased())")
-	}
-	
-	func assertVaccinationAssessmentIncomplete() {
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		app.containsText("Je vaccinatiebeoordeling is toegevoegd. Maak je bezoekersbewijs compleet met je negatieve coronatestuitslag")
-		app.containsText("Maak bewijs compleet")
-	}
-	
-	func assertValidDutchVaccinationCertificate(doses: Int = 0, validFromOffsetInDays: Int? = nil, validUntilOffsetInDays: Int? = nil, validUntilDate: String? = nil) {
-		guard ctbInUse else { return }
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		card3G().containsText(CertificateType.vaccination.rawValue)
-		card3G().containsText(amountOfDoses(for: doses))
-		if let offset = validUntilOffsetInDays {
-			card3G().containsText("geldig tot " + formattedOffsetDate(with: offset))
-		}
-		if let offset = validFromOffsetInDays {
-			card3G().containsText("geldig vanaf " + formattedOffsetDate(with: offset))
-		}
-		if let date = validUntilDate {
-			card3G().containsText("tot " + formattedDate(of: date))
-		}
-		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
-	}
-	
-	func assertValidDutchRecoveryCertificate(validUntilOffsetInDays: Int) {
-		guard ctbInUse else { return }
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		card3G().containsText(CertificateType.recovery.rawValue)
-		card3G().containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
-		card3G().containsText(is3GEnabled() ? "Bekijk QR" : "Dit bewijs wordt nu niet gebruikt in Nederland")
-	}
-	
-	func assertValidDutchTestCertificate(validUntilOffsetInHours: Int = 24, combinedWithOther: Bool = false) {
-		guard ctbInUse else { return }
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		for card in cardsToCheck(for: .test, combinedWithOther) {
-			card.containsText(CertificateType.test.rawValue)
-			card.containsText("geldig tot " + formattedOffsetDate(with: validUntilOffsetInHours, component: .hour, withYear: false, withDay: true))
-			card.containsText("Bekijk QR")
-		}
-	}
-	
-	func assertDutchCertificateIsNotYetValid(ofType certificateType: CertificateType, doses: Int = 0, validFromOffsetInDays: Int, validUntilOffsetInDays: Int? = nil) {
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		for card in cardsToCheck(for: certificateType) {
-			card.containsText(certificateType.rawValue)
-			card.containsText("geldig vanaf " + formattedOffsetDate(with: validFromOffsetInDays, withYear: false))
-			if let offset = validUntilOffsetInDays {
-				card.containsText("tot " + formattedOffsetDate(with: offset))
-			}
-			card.containsText("Wordt automatisch geldig")
-		}
-	}
-	
-	func assertValidDutchAssessmentCertificate(validUntilDate: Date) {
-		guard disclosureMode != .mode0G else { return }
-		tapOnTheNetherlandsTab()
-		card3G().containsText(CertificateType.assessment.rawValue)
-		card3G().containsText("Bezoekersbewijs: geldig tot " + validUntilDate.toString(.recently))
 	}
 	
 	// MARK: - International

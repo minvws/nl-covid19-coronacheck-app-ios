@@ -14,7 +14,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -25,7 +24,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -36,7 +34,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -47,7 +44,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -58,7 +54,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -69,7 +64,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -80,7 +74,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -91,7 +84,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -102,7 +94,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -113,7 +104,6 @@ class PositiveEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 }

@@ -14,7 +14,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -25,7 +24,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -36,7 +34,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -47,7 +44,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -58,7 +54,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -69,7 +64,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -80,7 +74,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -91,7 +84,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -102,7 +94,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -113,7 +104,6 @@ class NegativeEncodingTest: BaseTest {
 		assertRetrievedCertificateDetails(for: person)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 }
