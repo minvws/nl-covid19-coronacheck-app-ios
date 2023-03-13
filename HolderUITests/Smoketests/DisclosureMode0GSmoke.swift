@@ -8,7 +8,7 @@
 class DisclosureMode0GSmoke: BaseTest {
 	
 	override func setUpWithError() throws {
-		self.disclosureMode = DisclosureMode.mode0G
+		disclosureMode = DisclosureMode.mode0G
 		
 		try super.setUpWithError()
 	}

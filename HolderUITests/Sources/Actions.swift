@@ -130,10 +130,10 @@ extension BaseTest {
 	
 	private func retrieveCertificateFromServer(for bsn: String) {
 		
-		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
+		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: loginTimeout))
 		makeScreenShot(name: "Safari is ready")
 		
-		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
+		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: loginTimeout)
 		makeScreenShot(name: "Logged in: \(loggedIn.description)")
 		
 		if !loggedIn { loginToServer() }
@@ -189,8 +189,8 @@ extension BaseTest {
 	private func waitUntilSpinnerIsGone() {
 		let element = app.descendants(matching: .activityIndicator).firstMatch
 		let predicate = NSPredicate(format: "exists == false")
-		self.expectation(for: predicate, evaluatedWith: element, handler: nil)
-		self.waitForExpectations(timeout: 2.0, handler: nil)
+		expectation(for: predicate, evaluatedWith: element, handler: nil)
+		waitForExpectations(timeout: 2.0, handler: nil)
 	}
 	
 	func replaceExistingCertificate(_ replace: Bool) {

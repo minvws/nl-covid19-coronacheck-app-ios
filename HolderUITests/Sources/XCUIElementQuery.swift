@@ -10,10 +10,10 @@ import XCTest
 extension XCUIElementQuery {
 	
 	func elementMap() -> [Any] {
-		return self.allElementsBoundByIndex.map { $0.label.isEmpty ? "Value: \($0.value ?? "")" : "Label: \($0.label)" }
+		return allElementsBoundByIndex.map { $0.label.isEmpty ? "Value: \($0.value ?? "")" : "Label: \($0.label)" }
 	}
 	
 	func mapLabelsToSet() -> Set<String> {
-		return Set(self.allElementsBoundByIndex.compactMap { $0.label.isEmpty == false ? $0.label : nil })
+		return Set(allElementsBoundByIndex.compactMap { $0.label.isEmpty == false ? $0.label : nil })
 	}
 }

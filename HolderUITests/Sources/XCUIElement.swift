@@ -12,16 +12,16 @@ extension XCUIElement {
 	private static let timeout = 15.0
 	
 	func clearText() {
-		guard let stringValue = self.value as? String else {
+		guard let stringValue = value as? String else {
 			XCTFail("Tried to clear and enter text into a non string value")
 			return
 		}
 		
-		let lowerRightCorner = self.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
+		let lowerRightCorner = coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
 		lowerRightCorner.tap()
 		
 		let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: stringValue.count)
-		self.typeText(deleteString)
+		typeText(deleteString)
 	}
 	
 	func assertExistence() -> XCUIElement {
@@ -37,39 +37,39 @@ extension XCUIElement {
 	
 	func tapButton(_ label: String, index: Int = 0) {
 		let predicate = NSPredicate(format: "label beginswith[c] %@", label)
-		let elementQuery = self.descendants(matching: .any).matching(predicate)
+		let elementQuery = descendants(matching: .any).matching(predicate)
 		let element = elementQuery.element(boundBy: index)
 		element.assertExistence().tap()
 	}
 	
 	func enableSwitch(_ label: String) {
-		let element = self.switches[label]
+		let element = switches[label]
 		element.assertExistence().tap()
 		XCTAssertTrue(element.isEnabled)
 	}
 	
 	func textExists(_ label: String) {
-		_ = self.staticTexts[label].assertExistence()
+		_ = staticTexts[label].assertExistence()
 	}
 	
 	func textNotExists(_ label: String) {
-		self.staticTexts[label].assertNotExistence()
+		staticTexts[label].assertNotExistence()
 	}
 	
 	func labelValuePairExist(label: String, value: String) {
 		let elementLabel = [label, value].joined(separator: ",")
-		_ = self.otherElements[elementLabel].assertExistence()
+		_ = otherElements[elementLabel].assertExistence()
 	}
 	
 	func containsText(_ text: String) {
-		let elementQuery = self.descendants(matching: .any)
+		let elementQuery = descendants(matching: .any)
 		let predicate = NSPredicate(format: "label contains[c] %@", text)
 		let element = elementQuery.element(matching: predicate)
 		_ = element.assertExistence()
 	}
 	
 	func containsValue(_ text: String) {
-		let elementQuery = self.descendants(matching: .any)
+		let elementQuery = descendants(matching: .any)
 		let predicate = NSPredicate(format: "value contains[c] %@", text)
 		let element = elementQuery.element(matching: predicate)
 		_ = element.assertExistence()
