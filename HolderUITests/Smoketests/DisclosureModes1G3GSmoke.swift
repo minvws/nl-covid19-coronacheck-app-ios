@@ -13,10 +13,6 @@ class DisclosureMode1GWith3GSmoke: BaseTest {
 		try super.setUpWithError()
 	}
 	
-	func test_mode1GWith3G_messages() {
-		assertDisclosureMessages()
-	}
-	
 	func test_mode1GWith3G_negPcr() {
 		let person = TestData.negPcr
 		addTestCertificateFromGGD(for: person.bsn)

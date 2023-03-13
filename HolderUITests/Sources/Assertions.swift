@@ -107,26 +107,6 @@ extension BaseTest {
 		app.tapButton("Sluiten")
 	}
 	
-	func assertDisclosureMessages() {
-		switch disclosureMode {
-			case .mode0G:
-				app.textExists("In Nederland wordt het coronabewijs niet meer gebruikt. Daarom staan er alleen nog internationale bewijzen in de app.")
-			case .mode3G:
-				tapOnTheNetherlandsTab()
-				app.containsText("Op dit moment geeft een Nederlands bewijs 3G-toegang.")
-			case .mode1G:
-				tapOnTheNetherlandsTab()
-				app.textExists("Je kunt een bewijs voor 1G-toegang toevoegen wanneer je negatief getest bent")
-			case .mode1GWith3G:
-				tapOnTheNetherlandsTab()
-				app.textExists("De Nederlandse toegangsregels zijn veranderd. Er zijn nu aparte bewijzen voor plekken die 3G-toegang en 1G-toegang geven.")
-		}
-	}
-	
-	private func tapOnTheNetherlandsTab() {
-		app.tapButton("Nederland")
-	}
-	
 	// MARK: - International
 	
 	private func tapOnInternationalTab() {
