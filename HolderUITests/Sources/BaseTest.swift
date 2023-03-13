@@ -24,7 +24,7 @@ class BaseTest: XCTestCase {
 		app.launchArguments.append(disclosureMode.rawValue)
 		app.launch()
 		XCTAssertTrue(app.waitForExistence(timeout: loginTimeout), "App did not start")
-		XCTAssertTrue(app.staticTexts["Mijn bewijzen"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
+		XCTAssertTrue(app.buttons["Mijn bewijzen"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
 		
 		continueAfterFailure = false
 	}

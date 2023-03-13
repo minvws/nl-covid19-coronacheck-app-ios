@@ -31,7 +31,7 @@ extension BaseTest {
 	// MARK: - Certificate retrieval
 	
 	func assertSomethingWentWrong(error: String = "") {
-		app.textExists("Sorry, er gaat iets mis")
+		app.containsText("Sorry, er gaat iets mis")
 		if !error.isEmpty {
 			app.containsValue(error)
 		}
@@ -39,12 +39,12 @@ extension BaseTest {
 	}
 	
 	func assertNoVaccinationsAvailable() {
-		app.textExists("Geen vaccinaties beschikbaar")
+		app.containsText("Geen vaccinaties beschikbaar")
 		proceedToOverview()
 	}
 	
 	func assertNoCertificateCouldBeCreated(error: String = "") {
-		app.textExists("We kunnen geen bewijs maken")
+		app.containsText("We kunnen geen bewijs maken")
 		if !error.isEmpty {
 			app.containsValue(error)
 		}
@@ -58,7 +58,7 @@ extension BaseTest {
 	}
 	
 	func assertCertificateIsOnlyValidInternationally() {
-		app.textExists("Er is alleen een internationaal bewijs gemaakt")
+		app.containsText("Er is alleen een internationaal bewijs gemaakt")
 		app.containsValue("Van je opgehaalde gegevens kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
 		proceedToOverview()
 	}
@@ -69,21 +69,21 @@ extension BaseTest {
 	}
 	
 	func assertHintForInternationalVaccinationAndRecoveryCertificate() {
-		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		app.containsText("Vaccinatiebewijs en herstelbewijs gemaakt")
 		app.containsValue("Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
 		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.")
 		proceedToOverview()
 	}
 	
 	func assertHintForVaccinationAndRecoveryCertificate() {
-		app.textExists("Vaccinatiebewijs en herstelbewijs gemaakt")
+		app.containsText("Vaccinatiebewijs en herstelbewijs gemaakt")
 		app.containsValue("Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.")
 		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.")
 		proceedToOverview()
 	}
 	
 	func assertRetrievedCertificate(for person: TestPerson) {
-		app.textExists("Kloppen de gegevens?")
+		app.containsText("Kloppen de gegevens?")
 		app.containsText("Naam: " + person.name)
 		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
 	}
@@ -91,7 +91,7 @@ extension BaseTest {
 	func assertRetrievedCertificateDetails(for person: TestPerson) {
 		app.tapButton("Details")
 		app.containsText("Naam: " + person.name)
-		app.textExists("Geboortedatum: " + formattedDate(of: person.birthDate))
+		app.containsText("Geboortedatum: " + formattedDate(of: person.birthDate))
 		app.tapButton("Sluiten")
 	}
 	
@@ -118,7 +118,7 @@ extension BaseTest {
 	
 	func assertNoInternationalCertificate() {
 		tapOnInternationalTab()
-		app.textExists("Hier komt jouw internationale bewijs")
+		app.containsText("Hier komt jouw internationale bewijs")
 	}
 	
 	func assertValidInternationalVaccinationCertificate(doses: [String], vaccinationDateOffsetInDays: Int = -30) {
@@ -199,7 +199,7 @@ extension BaseTest {
 		
 		card(of: .vaccination).tapButton(doses.count > 1 ? "Bekijk QR-codes" : "Bekijk QR")
 		for (index, dose) in doses.reversed().enumerated() {
-			app.textExists("Dosis " + dose)
+			app.containsText("Dosis " + dose)
 			
 			openQRDetails(for: person)
 			app.textExists("Over mijn dosis " + dose)
@@ -220,7 +220,7 @@ extension BaseTest {
 	
 	func assertInternationalVaccinationQR(of vaccination: Vaccination, dose: String? = nil, for person: Person? = nil) {
 		if let dose {
-			app.textExists("Dosis " + dose)
+			app.containsText("Dosis " + dose)
 		}
 		
 		openQRDetails(for: person)
@@ -304,7 +304,7 @@ extension BaseTest {
 	// MARK: - Wallet
 	
 	func assertNoEventsInWallet() {
-		app.textExists("Geen gegevens opgeslagen")
+		app.containsText("Geen gegevens opgeslagen")
 	}
 	
 	func assertWalletItem(ofType eventType: EventType, atIndex: Int = 0, with dataToCheck: Set<String>) {

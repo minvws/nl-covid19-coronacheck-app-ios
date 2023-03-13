@@ -42,7 +42,7 @@ extension BaseTest {
 		app.containsText("Wat betekent dit?")
 		app.containsText("Laat toch zien")
 		app.tapButton("Wat betekent dit?")
-		app.textExists("Verborgen QR-code")
+		app.containsText("Verborgen QR-code")
 		app.tapButton("Sluiten")
 		app.tapButton("Laat toch zien")
 		app.textNotExists("QR-code is verborgen")
@@ -179,7 +179,7 @@ extension BaseTest {
 	
 	func addRetrievedCertificateToApp() {
 		makeScreenShot(name: "Back in app")
-		app.textExists("Kloppen de gegevens?")
+		app.containsText("Kloppen de gegevens?")
 		waitUntilSpinnerIsGone()
 		makeScreenShot(name: "Data retrieval screen")
 		app.tapButton("Maak bewijs")
@@ -217,7 +217,7 @@ extension BaseTest {
 	func viewWallet() {
 		app.tapButton("Open menu")
 		app.tapButton("Opgeslagen gegevens")
-		app.textExists("Mijn opgeslagen gegevens")
+		app.containsText("Mijn opgeslagen gegevens")
 	}
 	
 	func returnFromWalletToOverview() {
