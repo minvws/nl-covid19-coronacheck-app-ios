@@ -124,13 +124,13 @@ class VaccinationMatchingTest: BaseTest {
 		
 		// Temp disabled as the signer does not use fuzzy matching
 		/*
-		chooseToKeepNameOf(person)
-		
-		retrieveCertificate(for: setupPerson)
-		chooseToKeepNameOf(person)
-		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		 chooseToKeepNameOf(person)
+		 
+		 retrieveCertificate(for: setupPerson)
+		 chooseToKeepNameOf(person)
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
 		 */
 		
 		// Default back to initial match result
@@ -268,9 +268,9 @@ class VaccinationMatchingTest: BaseTest {
 		// Temp disabled as the signer does not use fuzzy matching
 		/*
 		 chooseToKeepNameOf(person)
-		
-		assertReplacedVaccination(for: person)
-		assertSetupVaccinationRemoved()
+		 
+		 assertReplacedVaccination(for: person)
+		 assertSetupVaccinationRemoved()
 		 */
 		// Default back to initial match result
 		assertMergedVaccinations(for: person)
@@ -331,7 +331,6 @@ class VaccinationMatchingTest: BaseTest {
 	}
 	
 	private func assertMergedVaccinations(for person: Person) {
-		assertValidDutchVaccinationCertificate(doses: 3, validFromOffsetInDays: -30)
 		assertInternationalVaccination(of: newVac, dose: "3/3")
 		assertInternationalVaccination(of: setupVac2of2, dose: "2/2")
 		assertInternationalVaccination(of: setupVac1of2, dose: "1/2")
@@ -346,7 +345,6 @@ class VaccinationMatchingTest: BaseTest {
 	}
 	
 	private func assertReplacedVaccination(for person: Person) {
-		assertValidDutchVaccinationCertificate(doses: 1, validFromOffsetInDays: -30)
 		assertInternationalVaccination(of: newVac, dose: "1/1")
 		
 		viewQRCode(of: .vaccination)

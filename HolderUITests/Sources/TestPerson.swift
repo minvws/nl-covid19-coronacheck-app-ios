@@ -33,19 +33,20 @@ struct TestPerson {
 		recFrom: Int = 0,
 		recUntil: Int = 0,
 		testFrom: Int = 0,
-		testUntil: Int = 0) {
-			self.bsn = bsn
-			self.name = name
-			self.birthDate = birthDate
-			self.dose = dose
-			self.doseIntl = doseIntl
-			self.vacFrom = vacFrom
-			self.vacUntil = vacUntil
-			self.vacUntilDate = vacUntilDate
-			self.vacOffset = vacOffset
-			self.recFrom = recFrom
-			self.recUntil = recUntil
-			self.testFrom = testFrom
-			self.testUntil = testUntil
-		}
+		testUntil: Int = 0
+	) {
+		self.bsn = bsn
+		self.name = name
+		self.birthDate = birthDate
+		self.dose = dose
+		self.doseIntl = doseIntl
+		self.vacFrom = vacFrom
+		self.vacUntil = vacUntil
+		self.vacUntilDate = vacUntilDate
+		self.vacOffset = vacOffset
+		self.recFrom = recFrom
+		self.recUntil = recUntil
+		self.testFrom = testFrom
+		self.testUntil = testUntil
+	}
 }

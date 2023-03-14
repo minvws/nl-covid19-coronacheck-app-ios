@@ -11,29 +11,29 @@ extension XCUIElement {
 	
 	func printChildElements() {
 		let debug = """
-			----- BEGIN ELEMENTS -----
-			Parent: \(self.debugDescription)
-			Buttons: \(self.buttons.elementMap())
-			Static Texts: \(self.staticTexts.elementMap())
-			Text Fields: \(self.textFields.elementMap())
-			Text Views: \(self.textViews.elementMap())
-			Links: \(self.links.elementMap())
-			Other Elements: \(self.otherElements.elementMap())
-			------ END ELEMENTS ------
-		"""
+   ----- BEGIN ELEMENTS -----
+   Parent: \(debugDescription)
+   Buttons: \(buttons.elementMap())
+   Static Texts: \(staticTexts.elementMap())
+   Text Fields: \(textFields.elementMap())
+   Text Views: \(textViews.elementMap())
+   Links: \(links.elementMap())
+   Other Elements: \(otherElements.elementMap())
+   ------ END ELEMENTS ------
+  """
 		print(debug)
 	}
 	
 	func printChildWebElements() {
 		let debug = """
-			----- BEGIN ELEMENTS -----
-			Buttons: \(self.webViews.buttons.elementMap())
-			Static Texts: \(self.webViews.staticTexts.elementMap())
-			Text Fields: \(self.webViews.textFields.elementMap())
-			Text Views: \(self.webViews.textViews.elementMap())
-			Secure Text Fields: \(self.webViews.secureTextFields.elementMap())
-			------ END ELEMENTS ------
-		"""
+   ----- BEGIN ELEMENTS -----
+   Buttons: \(webViews.buttons.elementMap())
+   Static Texts: \(webViews.staticTexts.elementMap())
+   Text Fields: \(webViews.textFields.elementMap())
+   Text Views: \(webViews.textViews.elementMap())
+   Secure Text Fields: \(webViews.secureTextFields.elementMap())
+   ------ END ELEMENTS ------
+  """
 		print(debug)
 	}
 }

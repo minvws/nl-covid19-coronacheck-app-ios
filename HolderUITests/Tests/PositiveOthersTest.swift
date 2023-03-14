@@ -15,9 +15,6 @@ class PositiveOthersTest: BaseTest {
 		addRetrievedCertificateToApp()
 		assertHintForVaccinationAndRecoveryCertificate()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
-		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
@@ -27,9 +24,6 @@ class PositiveOthersTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertHintForVaccinationAndRecoveryCertificate()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -41,9 +35,6 @@ class PositiveOthersTest: BaseTest {
 		addRetrievedCertificateToApp()
 		assertHintForVaccinationAndRecoveryCertificate()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
-		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
@@ -53,9 +44,6 @@ class PositiveOthersTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn, combinedWithPositiveTest: true)
 		addRetrievedCertificateToApp()
 		assertHintForVaccinationAndRecoveryCertificate()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
@@ -73,7 +61,6 @@ class PositiveOthersTest: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -93,7 +80,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 		assertInternationalCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -102,7 +88,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -111,7 +96,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .recovery, validFromOffsetInDays: person.recFrom, validUntilOffsetInDays: person.recUntil)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)
 	}
 	
@@ -122,7 +106,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -131,7 +114,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -140,7 +122,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -149,7 +130,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -158,7 +138,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -169,7 +148,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -178,7 +156,6 @@ class PositiveOthersTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 }

@@ -117,7 +117,7 @@ final class TestData {
 	
 	// Vaccinations - matching
 	static let setupForMatching = TestPerson(bsn: "999993562", dose: 2, doseIntl: ["1/2", "2/2"], vacUntil: 210, vacOffset: -60) // setup situation
-
+	
 	static let identicalBirthdateIdenticalName = TestPerson(bsn: "999991255", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // matching birthdate, name matches 100%, merges
 	static let identicalBirthdateMatchingName = TestPerson(bsn: "999991267", name: "van Gool, Berrie", dose: 3, doseIntl: ["1/2", "2/2", "3/3"], vacUntil: 210) // matching birthdate, name matches >75%, merges
 	static let identicalBirthdateDifferentFirstName = TestPerson(bsn: "999992156", name: "van Gool, Borry", dose: 1, doseIntl: ["1/1"], vacUntil: 240) // matching birthdate, first name matches <75%, can replace setup

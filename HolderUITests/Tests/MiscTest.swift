@@ -12,7 +12,6 @@ class MiscTest: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 	
@@ -24,10 +23,6 @@ class MiscTest: BaseTest {
 		
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validUntilOffsetInDays: person.vacUntil)
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
-		assertValidDutchTestCertificate(combinedWithOther: true)
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)

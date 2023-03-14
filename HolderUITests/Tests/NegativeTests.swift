@@ -17,9 +17,6 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertValidDutchTestCertificate()
-		assertNoValidDutchCertificate(ofType: .vaccination)
-		
 		assertValidInternationalTestCertificate(testType: .pcr)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
@@ -31,9 +28,6 @@ class NegativeTests: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
-		
-		assertValidDutchTestCertificate()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertValidInternationalTestCertificate(testType: .rat)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
@@ -47,9 +41,6 @@ class NegativeTests: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
-		
-		assertValidDutchTestCertificate()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		
 		assertCertificateIsNotValidInternationally(ofType: .test)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
@@ -78,7 +69,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 	
@@ -87,7 +77,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
 	}
 	
 	// MARK: Negative tests - event matching
@@ -96,7 +85,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPcrDifferentFirstName.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -104,7 +92,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPcrDifferentLastName.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -112,7 +99,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthdate.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -120,7 +106,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthDay.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -128,7 +113,6 @@ class NegativeTests: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPcrDifferentBirthMonth.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 }

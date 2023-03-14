@@ -13,7 +13,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -23,7 +22,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -33,7 +31,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -43,7 +40,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -53,7 +49,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -63,7 +58,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -73,7 +67,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -83,7 +76,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -93,7 +85,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -103,7 +94,6 @@ class VaccinationNullOrEmptyTest: BaseTest {
 		addRetrievedCertificateToApp()
 		
 		assertCertificateIsOnlyValidInternationally()
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 }

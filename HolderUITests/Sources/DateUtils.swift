@@ -12,7 +12,7 @@ import Foundation
 extension DateFormatter {
 	convenience init(format: String) {
 		self.init()
-		self.dateFormat = format
+		dateFormat = format
 	}
 }
 
@@ -30,7 +30,6 @@ struct DateHandler {
 }
 
 extension Date {
-	
 	init(_ dateString: String) {
 		self = dateString.toDate(.short)!
 	}
@@ -48,7 +47,7 @@ extension Date {
 	}
 	
 	var short: String {
-		return self.toString(.short)
+		return toString(.short)
 	}
 }
 

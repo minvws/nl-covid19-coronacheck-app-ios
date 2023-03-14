@@ -194,22 +194,22 @@ class DccExpiredRecDE: BaseTest {
 }
 
 class DccValidNegDE: BaseTest {
-
+	
 	let person = TestData.negPcr
 	let negativeTest = TestData.validNegDE
-
+	
 	override func setUpWithError() throws {
 		app.launchArguments.append("-scanneddcc:" + negativeTest.dcc!)
-
+		
 		try super.setUpWithError()
 	}
-
+	
 	func test_validVac1of2DE() {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
 		addScannedQR()
-
+		
 		assertSomethingWentWrong(error: "i 580 000 400 99785")
 	}
 }

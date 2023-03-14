@@ -18,7 +18,7 @@ class Tokentest: BaseTest {
 		let retrievalCode = "ZZZ-ZT66URU6TY2J96-32"
 		addCommercialTestCertificate(for: retrievalCode, with: verificationCode)
 		
-		app.textExists("Kloppen de gegevens?")
+		app.containsText("Kloppen de gegevens?")
 		
 		app.tapButton("Details")
 		app.containsText("Naam: " + fullName)
@@ -36,7 +36,7 @@ class Tokentest: BaseTest {
 		let retrievalCode = "ZZZ-FZB3CUYL55U7ZT-R2"
 		addCommercialTestCertificate(for: retrievalCode)
 		
-		app.textExists("Kloppen de gegevens?")
+		app.containsText("Kloppen de gegevens?")
 		
 		app.tapButton("Details")
 		app.containsText("Naam: " + fullName)
@@ -56,7 +56,7 @@ class Tokentest: BaseTest {
 		addCommercialTestCertificate()
 		
 		// Assert screen
-		app.textExists("Testuitslag ophalen")
+		app.containsText("Testuitslag ophalen")
 		app.textNotExists("Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: BRB-YYYYYYYYY1-Z2.")
 		
 		// Assert info sheet
@@ -86,8 +86,8 @@ class Tokentest: BaseTest {
 		app.staticTexts["Volgende"].tap()
 		
 		app.textNotExists("Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: BRB-YYYYYYYYY1-Z2.")
-		app.textExists("Verificatiecode")
-		app.textExists("Je krijgt een code via sms of e-mail")
+		app.containsText("Verificatiecode")
+		app.containsText("Je krijgt een code via sms of e-mail")
 		
 		// No verification code
 		let verificationField = app.textFields["Verificatiecode"]
