@@ -316,6 +316,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToRestartCount += 1
 	}
 
+	var invokedUserWishesToSeeAboutThisApp = false
+	var invokedUserWishesToSeeAboutThisAppCount = 0
+
+	func userWishesToSeeAboutThisApp() {
+		invokedUserWishesToSeeAboutThisApp = true
+		invokedUserWishesToSeeAboutThisAppCount += 1
+	}
+
 	var invokedUserWishesToSeeEventDetails = false
 	var invokedUserWishesToSeeEventDetailsCount = 0
 	var invokedUserWishesToSeeEventDetailsParameters: (title: String, details: [EventDetails])?
@@ -334,6 +342,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToSeeHelpAndInfoMenu() {
 		invokedUserWishesToSeeHelpAndInfoMenu = true
 		invokedUserWishesToSeeHelpAndInfoMenuCount += 1
+	}
+
+	var invokedUserWishesToSeeHelpdesk = false
+	var invokedUserWishesToSeeHelpdeskCount = 0
+
+	func userWishesToSeeHelpdesk() {
+		invokedUserWishesToSeeHelpdesk = true
+		invokedUserWishesToSeeHelpdeskCount += 1
 	}
 
 	var invokedUserWishesToSeeStoredEvents = false

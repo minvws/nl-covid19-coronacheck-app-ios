@@ -49,6 +49,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		loadView()
 		
 		// Then
+		expect(self.sut.title) == L.general_menu()
 		sut.assertImage(containedInNavigationController: true)
 	}
 	
