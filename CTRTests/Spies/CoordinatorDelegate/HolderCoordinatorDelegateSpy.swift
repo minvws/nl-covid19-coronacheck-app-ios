@@ -208,6 +208,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
 	}
 
+	var invokedUserWishesToAddPaperProof = false
+	var invokedUserWishesToAddPaperProofCount = 0
+
+	func userWishesToAddPaperProof() {
+		invokedUserWishesToAddPaperProof = true
+		invokedUserWishesToAddPaperProofCount += 1
+	}
+
+	var invokedUserWishesToAddVisitorPass = false
+	var invokedUserWishesToAddVisitorPassCount = 0
+
+	func userWishesToAddVisitorPass() {
+		invokedUserWishesToAddVisitorPass = true
+		invokedUserWishesToAddVisitorPassCount += 1
+	}
+
 	var invokedUserWishesToChooseTestLocation = false
 	var invokedUserWishesToChooseTestLocationCount = 0
 
@@ -292,6 +308,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToOpenTheMenuCount += 1
 	}
 
+	var invokedUserWishesToRestart = false
+	var invokedUserWishesToRestartCount = 0
+
+	func userWishesToRestart() {
+		invokedUserWishesToRestart = true
+		invokedUserWishesToRestartCount += 1
+	}
+
+	var invokedUserWishesToSeeAboutThisApp = false
+	var invokedUserWishesToSeeAboutThisAppCount = 0
+
+	func userWishesToSeeAboutThisApp() {
+		invokedUserWishesToSeeAboutThisApp = true
+		invokedUserWishesToSeeAboutThisAppCount += 1
+	}
+
 	var invokedUserWishesToSeeEventDetails = false
 	var invokedUserWishesToSeeEventDetailsCount = 0
 	var invokedUserWishesToSeeEventDetailsParameters: (title: String, details: [EventDetails])?
@@ -302,6 +334,30 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToSeeEventDetailsCount += 1
 		invokedUserWishesToSeeEventDetailsParameters = (title, details)
 		invokedUserWishesToSeeEventDetailsParametersList.append((title, details))
+	}
+
+	var invokedUserWishesToSeeHelpAndInfoMenu = false
+	var invokedUserWishesToSeeHelpAndInfoMenuCount = 0
+
+	func userWishesToSeeHelpAndInfoMenu() {
+		invokedUserWishesToSeeHelpAndInfoMenu = true
+		invokedUserWishesToSeeHelpAndInfoMenuCount += 1
+	}
+
+	var invokedUserWishesToSeeHelpdesk = false
+	var invokedUserWishesToSeeHelpdeskCount = 0
+
+	func userWishesToSeeHelpdesk() {
+		invokedUserWishesToSeeHelpdesk = true
+		invokedUserWishesToSeeHelpdeskCount += 1
+	}
+
+	var invokedUserWishesToSeeStoredEvents = false
+	var invokedUserWishesToSeeStoredEventsCount = 0
+
+	func userWishesToSeeStoredEvents() {
+		invokedUserWishesToSeeStoredEvents = true
+		invokedUserWishesToSeeStoredEventsCount += 1
 	}
 
 	var invokedUserWishesToViewQRs = false

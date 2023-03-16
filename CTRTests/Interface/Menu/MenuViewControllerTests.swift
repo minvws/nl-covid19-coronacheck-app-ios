@@ -14,21 +14,32 @@ import TestingShared
 @testable import Resources
 
 class MenuViewControllerTests: XCTestCase {
-
+	
+	private class TestMenuViewModel: MenuViewModelProtocol {
+		
+		var title = Shared.Observable(value: "")
+		var items = Shared.Observable<[Item]>(value: [])
+		
+		init(title: String = L.general_menu(), items: [Item]) {
+			self.title.value = title
+			self.items.value = items
+		}
+	}
+	
 	// MARK: Subject under test
 	private var sut: MenuViewController!
-
+	
 	var window = UIWindow()
-
+	
 	// MARK: Test lifecycle
 	override func setUp() {
 		
 		window = UIWindow()
 		super.setUp()
 	}
-
+	
 	func loadView() {
-
+		
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
 	}
@@ -37,9 +48,9 @@ class MenuViewControllerTests: XCTestCase {
 		
 		// Given
 		sut = MenuViewController(
-			viewModel: MenuViewModel(
+			viewModel: TestMenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "test_singleItem", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
+					TestMenuViewModel.Item.row(title: "test_singleItem", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
@@ -55,9 +66,9 @@ class MenuViewControllerTests: XCTestCase {
 		
 		// Given
 		sut = MenuViewController(
-			viewModel: MenuViewModel(
+			viewModel: TestMenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "test_singleItem", subTitle: "subTitle", icon: I.icon_menu_add()!, overrideColor: nil, action: { })
+					TestMenuViewModel.Item.row(title: "test_singleItem", subTitle: "subTitle", icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
@@ -68,15 +79,15 @@ class MenuViewControllerTests: XCTestCase {
 		// Then
 		sut.assertImage(containedInNavigationController: true)
 	}
-
+	
 	func test_twoItems() {
 		
 		// Given
 		sut = MenuViewController(
-			viewModel: MenuViewModel(
+			viewModel: TestMenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { }),
-					MenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
+					TestMenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { }),
+					TestMenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
@@ -92,11 +103,11 @@ class MenuViewControllerTests: XCTestCase {
 		
 		// Given
 		sut = MenuViewController(
-			viewModel: MenuViewModel(
+			viewModel: TestMenuViewModel(
 				items: [
-					MenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { }),
-					MenuViewModel.Item.sectionBreak,
-					MenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
+					TestMenuViewModel.Item.row(title: "first item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { }),
+					TestMenuViewModel.Item.sectionBreak,
+					TestMenuViewModel.Item.row(title: "second item", subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil, action: { })
 				]
 			)
 		)
