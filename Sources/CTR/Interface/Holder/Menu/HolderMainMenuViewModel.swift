@@ -14,7 +14,7 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 	
 	private weak var coordinator: HolderCoordinatorDelegate?
 	
-	var title = Shared.Observable(value: L.holder_helpInfo_title())
+	var title = Shared.Observable(value: L.general_menu())
 	var items = Shared.Observable<[Item]>(value: [])
 	
 	init(_ coordinator: HolderCoordinatorDelegate) {
