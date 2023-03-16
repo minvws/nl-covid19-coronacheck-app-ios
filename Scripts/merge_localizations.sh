@@ -6,10 +6,10 @@ array=( "nl" "en" )
 
 for i in "${array[@]}"
 do
-    mkdir -p "Packages/Shared/Sources/Shared/Resources/Localization/${i}.lproj"
+    mkdir -p "Packages/Resources/Sources/Resources/Resources/Localization/${i}.lproj"
 
-    COMBINED_PATH="Packages/Shared/Sources/Shared/Resources/Localization/${i}.lproj/Localizable.strings"
-	PLURAL_PATH="Packages/Shared/Sources/Shared/Resources/Localization/${i}.lproj/Localizable.stringsdict"
+    COMBINED_PATH="Packages/Resources/Sources/Resources/Resources/Localization/${i}.lproj/Localizable.strings"
+	PLURAL_PATH="Packages/Resources/Sources/Resources/Resources/Localization/${i}.lproj/Localizable.stringsdict"
 
     cat tmp/localization_downloads/Holder/$i.lproj/Localizable.strings > $COMBINED_PATH
     echo "" >> $COMBINED_PATH # ensures that the second file starts on a newline 
