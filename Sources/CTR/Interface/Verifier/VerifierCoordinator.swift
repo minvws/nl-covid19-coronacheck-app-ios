@@ -212,37 +212,37 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	func userWishesToOpenTheMenu() {
 		
-		let itemScanInstructions: MenuViewModel.Item = .row(title: L.verifierMenuScaninstructions(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak self] in
-			self?.navigateToScanInstruction(allowSkipInstruction: false)
-		}
-		
-		let itemRiskSetting: MenuViewModel.Item = .row(title: L.verifier_menu_risksetting(), subTitle: nil, icon: I.icon_menu_risklevel()!, overrideColor: nil) { [weak self] in
-			self?.navigateToOpenRiskLevelSettings()
-		}
-		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.verifierMenuSupport(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak self] in
-			guard let faqUrl = URL(string: L.verifierUrlFaq()) else { return }
-			self?.openUrl(faqUrl, inApp: true)
-		}
-		
-		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak self] in
-			self?.userWishesToSeeHelpdesk()
-		}
-		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.verifierMenuAbout(), subTitle: nil, icon: I.icon_menu_phone()!, overrideColor: nil) { [weak self] in
-			self?.navigateToAboutThisApp()
-		}
-		
-		var items = [MenuViewModel.Item]()
-		items += [itemScanInstructions]
-		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
-			items += [itemRiskSetting]
-		}
-		items += [.sectionBreak, itemFAQ, itemHelpdesk]
-		items += [.sectionBreak, itemAboutThisApp]
-		
-		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
-		navigationController.pushViewController(viewController, animated: true)
+//		let itemScanInstructions: MenuViewModel.Item = .row(title: L.verifierMenuScaninstructions(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak self] in
+//			self?.navigateToScanInstruction(allowSkipInstruction: false)
+//		}
+//		
+//		let itemRiskSetting: MenuViewModel.Item = .row(title: L.verifier_menu_risksetting(), subTitle: nil, icon: I.icon_menu_risklevel()!, overrideColor: nil) { [weak self] in
+//			self?.navigateToOpenRiskLevelSettings()
+//		}
+//		
+//		let itemFAQ: MenuViewModel.Item = .row(title: L.verifierMenuSupport(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak self] in
+//			guard let faqUrl = URL(string: L.verifierUrlFaq()) else { return }
+//			self?.openUrl(faqUrl, inApp: true)
+//		}
+//		
+//		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak self] in
+//			self?.userWishesToSeeHelpdesk()
+//		}
+//		
+//		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.verifierMenuAbout(), subTitle: nil, icon: I.icon_menu_phone()!, overrideColor: nil) { [weak self] in
+//			self?.navigateToAboutThisApp()
+//		}
+//		
+//		var items = [MenuViewModel.Item]()
+//		items += [itemScanInstructions]
+//		if Current.featureFlagManager.areMultipleVerificationPoliciesEnabled() {
+//			items += [itemRiskSetting]
+//		}
+//		items += [.sectionBreak, itemFAQ, itemHelpdesk]
+//		items += [.sectionBreak, itemAboutThisApp]
+//		
+//		let viewController = MenuViewController(viewModel: MenuViewModel(items: items))
+//		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	func userWishesToSeeHelpdesk() {

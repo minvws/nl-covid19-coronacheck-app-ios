@@ -7,34 +7,37 @@
 
 import Foundation
 import Resources
+import Shared
 
-class HolderHelpAndInfoMenuViewModel: MenuViewModel {
+class HolderHelpAndInfoMenuViewModel: MenuViewModelProtocol {
 	
 	private weak var coordinator: HolderCoordinatorDelegate?
 	
+	var title = Shared.Observable(value: L.holder_helpInfo_title())
+	var items = Shared.Observable<[Item]>(value: [])
+	
 	init(_ coordinator: HolderCoordinatorDelegate) {
 		
-		super.init(title: L.holder_helpInfo_title(), items: [])
 		self.coordinator = coordinator
-		setupMenuItems()
+		self.items.value = createMenuItems()
 	}
 	
-	func setupMenuItems() {
+	func createMenuItems() -> [Item] {
 		
-		let itemFAQ: MenuViewModel.Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak coordinator] in
+		let itemFAQ: Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak coordinator] in
 			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
 			coordinator?.openUrl(faqUrl, inApp: true)
 		}
 		
-		let itemHelpdesk: MenuViewModel.Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak coordinator] in
+		let itemHelpdesk: Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeHelpdesk()
 		}
 		
-		let itemAboutThisApp: MenuViewModel.Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_phone()!, overrideColor: nil) { [weak coordinator] in
+		let itemAboutThisApp: Item = .row(title: L.holderMenuAbout(), subTitle: nil, icon: I.icon_menu_phone()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeAboutThisApp()
 		}
 		
-		items = [
+		return [
 			itemFAQ,
 			itemHelpdesk,
 			.sectionBreak,

@@ -8,46 +8,49 @@
 import Foundation
 import Resources
 import Models
+import Shared
 
-class HolderMainMenuViewModel: MenuViewModel {
+class HolderMainMenuViewModel: MenuViewModelProtocol {
 	
 	private weak var coordinator: HolderCoordinatorDelegate?
 	
+	var title = Shared.Observable(value: L.holder_helpInfo_title())
+	var items = Shared.Observable<[Item]>(value: [])
+	
 	init(_ coordinator: HolderCoordinatorDelegate) {
 		
-		super.init(items: [])
 		self.coordinator = coordinator
-		setupMenuItems()
+		self.items.value = createMenuItems()
 	}
 	
-	func setupMenuItems() {
+	func createMenuItems() -> [Item] {
 		
-		let itemAddCertificate: MenuViewModel.Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil) { [weak coordinator] in
+		let itemAddCertificate: Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToCreateAQR()
 		}
 		
-		let itemAddPaperCertificate: MenuViewModel.Item = .row(title: L.holder_menu_paperproof_title(), subTitle: L.holder_menu_paperproof_subTitle(), icon: I.icon_menu_addpapercertificate()!, overrideColor: nil) { [weak coordinator] in
+		let itemAddPaperCertificate: Item = .row(title: L.holder_menu_paperproof_title(), subTitle: L.holder_menu_paperproof_subTitle(), icon: I.icon_menu_addpapercertificate()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToAddPaperProof()
 		}
 		
-		let itemAddVisitorPass: MenuViewModel.Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, overrideColor: nil) { [weak coordinator] in
+		let itemAddVisitorPass: Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToAddVisitorPass()
 		}
 		
-		let itemStoredData: MenuViewModel.Item = .row(title: L.holder_menu_storedEvents(), subTitle: nil, icon: I.icon_menu_storeddata()!, overrideColor: nil) { [weak coordinator] in
+		let itemStoredData: Item = .row(title: L.holder_menu_storedEvents(), subTitle: nil, icon: I.icon_menu_storeddata()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeStoredEvents()
 		}
 		
-		let itemHelpAndInfo: MenuViewModel.Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak coordinator] in
+		let itemHelpAndInfo: Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeHelpAndInfoMenu()
 		}
 		
-		let debugItemResetApp: MenuViewModel.Item = .row(title: L.holder_menu_resetApp(), subTitle: nil, icon: I.icon_menu_warning()!, overrideColor: C.ccError()) { [weak coordinator] in
+		let debugItemResetApp: Item = .row(title: L.holder_menu_resetApp(), subTitle: nil, icon: I.icon_menu_warning()!, overrideColor: C.ccError()) { [weak coordinator] in
 			Current.wipePersistedData(flavor: .holder)
 			coordinator?.userWishesToRestart()
 		}
 		
-		var holderItems = [MenuViewModel.Item]()
+		var holderItems = [Item]()
 		holderItems += [itemAddCertificate]
 		holderItems += [itemAddPaperCertificate]
 		if Current.featureFlagManager.isVisitorPassEnabled() {
@@ -62,6 +65,6 @@ class HolderMainMenuViewModel: MenuViewModel {
 			holderItems += [.sectionBreak]
 			holderItems += [debugItemResetApp]
 		}
-		items = holderItems
+		return holderItems
 	}
 }
