@@ -45,7 +45,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .cannotSerialize
+				)
 				done()
 			}
 		}
@@ -89,7 +93,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: 200, response: nil, error: .cannotDeserialize)
+				expect(result.failureError) == ServerError.error(
+					statusCode: 200,
+					response: nil,
+					error: .cannotDeserialize
+				)
 				done()
 			}
 		}
@@ -111,7 +119,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .noInternetConnection
+				)
 				done()
 			}
 		}
@@ -154,7 +166,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .serverUnreachableTimedOut
+				)
 				done()
 			}
 		}
@@ -176,7 +192,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .serverUnreachableInvalidHost
+				)
 				done()
 			}
 		}
@@ -198,7 +218,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .serverUnreachableConnectionLost
+				)
 				done()
 			}
 		}
@@ -220,7 +244,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .invalidResponse
+				)
 				done()
 			}
 		}
@@ -242,7 +270,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: nil, response: nil, error: .authenticationCancelled)
+				expect(result.failureError) == ServerError.error(
+					statusCode: nil,
+					response: nil,
+					error: .authenticationCancelled
+				)
 				done()
 			}
 		}
@@ -254,7 +286,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
-			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702], statusCode: 500, headers: nil)
+			return HTTPStubsResponse(
+				jsonObject: ["status": "error", "code": 99702] as [String: Any],
+				statusCode: 500,
+				headers: nil
+			)
 		}
 		
 		// When
@@ -263,7 +299,11 @@ class NetworkManagerCouplingCodeTests: XCTestCase {
 				
 				// Then
 				expect(result.isFailure) == true
-				expect(result.failureError) == ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99702), error: .serverError)
+				expect(result.failureError) == ServerError.error(
+					statusCode: 500,
+					response: ServerResponse(status: "error", code: 99702),
+					error: .serverError
+				)
 				done()
 			}
 		}
