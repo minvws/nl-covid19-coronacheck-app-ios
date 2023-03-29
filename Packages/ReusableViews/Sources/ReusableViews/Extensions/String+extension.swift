@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RswiftResources
 import Resources
 
 extension String {

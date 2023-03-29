@@ -179,7 +179,7 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 			return HTTPStubsResponse(
 				jsonObject: [
 					[
-						"cl_keys": [],
+						"cl_keys": [] as [Any],
 						"nl_keys": [
 							"VWS-ACC-0": [
 								"public_key": "test 0"
@@ -194,7 +194,7 @@ class NetworkManagerPublicKeysTests: XCTestCase {
 								"public_key": "test 3"
 							]
 						]
-					]
+					] as [String: Any]
 				],
 				statusCode: 200,
 				headers: nil

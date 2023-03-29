@@ -220,7 +220,7 @@ class NetworkManagerPrepareIssueTests: XCTestCase {
 		
 		// Given
 		stub(condition: isPath(path)) { _ in
-			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702], statusCode: 500, headers: nil)
+			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702] as [String: Any], statusCode: 500, headers: nil)
 		}
 		
 		// When

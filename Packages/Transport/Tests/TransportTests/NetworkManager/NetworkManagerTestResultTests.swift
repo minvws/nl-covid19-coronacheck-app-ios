@@ -240,10 +240,10 @@ class NetworkManagerTestResultsTests: XCTestCase {
 								"type": "LP217198-3",
 								"name": "Test Rolus",
 								"manufacturer": "2696"
-							]
-						]
+							] as [String: Any?]
+						] as [String: Any]
 					]
-				],
+				] as [String: Any],
 				statusCode: 200,
 				headers: nil
 			)
