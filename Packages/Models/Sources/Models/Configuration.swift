@@ -8,6 +8,13 @@
 import Foundation
 
 public class Configuration {
+	
+	public enum Release: String {
+		case production
+		case acceptance = "acc"
+		case test
+		case development = "dev"
+	}
 
 	/// Dictionary with DigiD configs
 	public var digid: NSDictionary = [:]
@@ -22,15 +29,16 @@ public class Configuration {
 	public init() {
 
 		let plistPath: String?
-
-		if getEnvironment() == "production" {
-			plistPath = Bundle.main.path(forResource: "configuration-production", ofType: "plist")
-		} else if getEnvironment() == "acc" {
-			plistPath = Bundle.main.path(forResource: "configuration-acceptance", ofType: "plist")
-		} else if getEnvironment() == "test" {
-			plistPath = Bundle.main.path(forResource: "configuration-test", ofType: "plist")
-		} else {
-			plistPath = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
+		
+		switch getRelease() {
+			case .production:
+				plistPath = Bundle.main.path(forResource: "configuration-production", ofType: "plist")
+			case .acceptance:
+				plistPath = Bundle.main.path(forResource: "configuration-acceptance", ofType: "plist")
+			case .test:
+				plistPath = Bundle.main.path(forResource: "configuration-test", ofType: "plist")
+			case .development:
+				plistPath = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
 		}
 
 		if let path = plistPath, let dictionary = NSDictionary(contentsOfFile: path) {
@@ -47,13 +55,11 @@ public class Configuration {
 			}
 		}
 	}
+	
+	public func getRelease() -> Release {
 
-	public func getEnvironment() -> String {
-
-		if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
-			return networkConfigurationValue.lowercased()
-		} else {
-			return "test"
-		}
+		guard let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String else { return .test }
+		guard let release = Release(rawValue: networkConfigurationValue.lowercased()) else { return .test }
+		return release
 	}
 }
