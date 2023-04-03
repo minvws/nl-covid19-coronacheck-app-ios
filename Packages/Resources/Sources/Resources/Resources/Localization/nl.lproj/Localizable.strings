@@ -694,7 +694,7 @@
 "holder_invaliddetailsremoved_banner_title" = "Er zijn gegevens uit de app verwijderd.";
 "holder_invaliddetailsremoved_moreinfo_body" = "<p>Er zijn gegevens van jou ongeldig verklaard. Daarom zijn deze uit de app verwijderd. Het gaat om de volgende gegevens:</p>%@<p>Mogelijk zijn hierdoor ook bewijzen uit de app verwijderd. Voeg een geldige vaccinatie of test toe om bewijzen weer terug te halen.</p><p>Heb je vragen? Bel de CoronaCheck helpdesk op %@ en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_invaliddetailsremoved_moreinfo_title" = "Verwijderde gegevens";
-"holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>Op dit moment kunnen we geen bewijs maken van je %@. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We kunnen geen bewijs maken";
 "holder_listRemoteEvents_endStateDuplicate_message" = "Het bewijs dat je probeert toe te voegen staat al in de app. Je hoeft het niet nog een keer te scannen.";
 "holder_listRemoteEvents_endStateDuplicate_title" = "Dit bewijs staat al in de app";
@@ -710,7 +710,7 @@
 "holder_listRemoteEvents_endStateRecoveryAndDosisCorrection_title" = "Er is een herstelbewijs gemaakt";
 "holder_listRemoteEvents_endStateRecoveryOnly_message" = "<p>Van je opgehaalde gegevens kon alleen een herstelbewijs worden gemaakt. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryOnly_title" = "Er is alleen een herstelbewijs gemaakt";
-"holder_listRemoteEvents_endStateRecoveryTooOld_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Kijk voor meer informatie op de <a href=\"https://www.coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_listRemoteEvents_endStateRecoveryTooOld_message" = "<p>Het is te lang geleden dat je positief getest bent op corona. Daarom is je testuitslag niet meer geldig. Je kunt helaas geen herstelbewijs maken.</p><p>Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
 "holder_listRemoteEvents_endStateRecoveryTooOld_title" = "Positieve testuitslag niet meer geldig";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_message" = "<p>Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.</p><p>Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.</p>";
 "holder_listRemoteEvents_endStateVaccinationsAndRecovery_title" = "Vaccinatiebewijs en herstelbewijs gemaakt";
@@ -792,7 +792,7 @@
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
 "holder_qr_code_expired_explanation_title" = "Verlopen QR-code";
-"holder_qr_code_expired_explanation_url" = "https://www.coronacheck.nl/nl/faq/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/nl/faq/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
 "holder_qr_code_expired_overlay_title" = "QR-code is verlopen";
 "holder_qr_code_hidden_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_hidden_explanation_button" = "Wat betekent dit?";
