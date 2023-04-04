@@ -121,13 +121,13 @@ extension Coordinator {
 				break
 			case .acceptance, .development:
 				releaseAdjustedURL = URL(string: url.absoluteString
-					.replacingOccurrences(of: "www.coronacheck.nl/", with: "coronacheck.nl/")
-					.replacingOccurrences(of: "coronacheck.nl/", with: "web.acc.coronacheck.nl/")
+					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
+					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
 				)
 			case .test:
 				releaseAdjustedURL = URL(string: url.absoluteString
-					.replacingOccurrences(of: "www.coronacheck.nl/", with: "coronacheck.nl/")
-					.replacingOccurrences(of: "coronacheck.nl/", with: "web.test.coronacheck.nl/")
+					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
+					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
 				)
 		}
 		
