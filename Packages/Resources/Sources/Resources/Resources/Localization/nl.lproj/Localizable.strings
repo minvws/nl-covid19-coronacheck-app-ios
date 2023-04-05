@@ -266,8 +266,6 @@
 "holder.errorstate.someresult.title" = "Zijn dit al je vaccinaties?";
 "holder.errorstate.test.message" = "<p>Er gaat iets mis bij de testlocatie. Daardoor kunnen jouw gegevens niet worden opgehaald.</p><p><b>Wat nu?</b><br />Neem contact op met je testlocatie en geef de volgende foutcode door:</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.errorstate.title" = "Sorry, er gaat iets mis";
-"holder.euvaccinationswereupgraded.message" = "<p>We hebben voor iedereen het vaccinatiebewijs vernieuwd. Je hebt nu ook toegang tot QR-codes van eerdere prikken.</p><p>Dat is bijvoorbeeld handig voor mensen die ergens heen willen waar hun laatste prik nog niet geldig is.</p><p><a href=\"https://coronacheck.nl/nl/faq/3-5-waarom-heb-ik-voor-elke-prik-een-internationale-QR-code/\">Lees hier meer over je vernieuwde vaccinatiebewijs</a>.</p>";
-"holder.euvaccinationswereupgraded.title" = "Vernieuwd vaccinatiebewijs";
 "holder.event.about.recovery.date" = "Testdatum:";
 "holder.event.about.recovery.dateofbirth" = "Geboortedatum:";
 "holder.event.about.recovery.identifier" = "Uniek testnummer:";
@@ -792,13 +790,13 @@
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
 "holder_qr_code_expired_explanation_title" = "Verlopen QR-code";
-"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/nl/faq/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/nl/faq-in-app/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
 "holder_qr_code_expired_overlay_title" = "QR-code is verlopen";
 "holder_qr_code_hidden_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_hidden_explanation_button" = "Wat betekent dit?";
 "holder_qr_code_hidden_explanation_description" = "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>";
 "holder_qr_code_hidden_explanation_title" = "Verborgen QR-code";
-"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/nl/faq/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
+"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/nl/faq-in-app/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_qr_explanation_description_domestic_1G" = "<p>In jouw Nederlandse QR-code staat dat je een geldig bewijs hebt voor 1G-toegang en er zijn minimale gegevens zichtbaar.</p><p>De controleur ziet alleen de eerste letter van je voornaam en van je achternaam, je geboortedag en geboortemaand. Dit is om zeker te zijn dat de QR-code bij jou hoort.</p><p>Jouw gegevens*: <b>%@</b></p><p></p><p>* Soms vallen gegevens weg om je privacy te beschermen. Je ziet dan een streepje (_).</p>";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_scanner_cameraBlockedDueToMultitasking" = "Camera is alleen te gebruiken in volledig scherm. Sluit je vensterweergave.";
@@ -838,7 +836,7 @@
 "holder_storedEvents_list_noEvents" = "Geen gegevens opgeslagen";
 "holder_storedEvents_message" = "De gegevens hieronder staan opgeslagen op je telefoon en worden gebruikt door CoronaCheck om je coronabewijs te maken.";
 "holder_storedEvents_title" = "Mijn opgeslagen gegevens";
-"holder_storedEvents_url" = "https://coronacheck.nl/nl/privacy";
+"holder_storedEvents_url" = "https://coronacheck.nl/nl/privacy-in-app";
 "holder_test_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
 "holder_updateApp_button" = "Installeer update";
 "holder_updateApp_content" = "Download de laatste versie van de app om verder te gaan.";
