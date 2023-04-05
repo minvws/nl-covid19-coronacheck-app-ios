@@ -266,8 +266,6 @@
 "holder.errorstate.someresult.title" = "Are these all your vaccinations?";
 "holder.errorstate.test.message" = "<p>Something is going wrong at the test location. Therefore, your details can’t be retrieved.</p><p><b>What's next?</b><br />Contact the test location and give them the following error code:</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.title" = "Sorry, something went wrong";
-"holder.euvaccinationswereupgraded.message" = "<p>We have renewed everyone's vaccination certificate. From now on, you have access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p><a href=\"https://coronacheck.nl/en/faq/3-5-waarom-heb-ik-voor-elke-prik-een-internationale-QR-code/\">Read more about your renewed vaccination certificate here</a>.</p>";
-"holder.euvaccinationswereupgraded.title" = "Renewed vaccination certificate";
 "holder.event.about.recovery.date" = "Test date:";
 "holder.event.about.recovery.dateofbirth" = "Date of birth:";
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
@@ -792,13 +790,13 @@
 "holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired it means your vaccination is still valid, but the certificate that you’ve added isn't. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
 "holder_qr_code_expired_explanation_title" = "Expired QR code";
-"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/en/faq/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/en/faq-in-app/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
 "holder_qr_code_expired_overlay_title" = "QR code has expired";
 "holder_qr_code_hidden_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_hidden_explanation_button" = "What does this mean?";
 "holder_qr_code_hidden_explanation_description" = "<p>If the QR code of your vaccination is hidden, you probably don’t need it. This is because there are QR codes of your more recent vaccinations in the app too.</p><p>You can still show and use hidden QR codes if needed.</p>";
 "holder_qr_code_hidden_explanation_title" = "Hidden QR code";
-"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/en/faq/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
+"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/en/faq-in-app/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_scanner_cameraBlockedDueToMultitasking" = "Camera can only be used in full screen. Close your tile window view.";
@@ -838,7 +836,7 @@
 "holder_storedEvents_list_noEvents" = "No stored data";
 "holder_storedEvents_message" = "The data below is stored on your phone and is used by CoronaCheck to create your coronavirus pass.";
 "holder_storedEvents_title" = "My stored data";
-"holder_storedEvents_url" = "https://coronacheck.nl/en/privacy";
+"holder_storedEvents_url" = "https://coronacheck.nl/en/privacy-in-app";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_updateApp_button" = "Install update";
 "holder_updateApp_content" = "To continue, install the latest version of the app.";
