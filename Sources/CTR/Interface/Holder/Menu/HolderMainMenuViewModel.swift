@@ -61,7 +61,7 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		holderItems += [itemStoredData]
 		holderItems += [itemHelpAndInfo]
 		
-		if Configuration().getEnvironment() != "production" {
+		if Configuration().getRelease() != .production {
 			holderItems += [.sectionBreak]
 			holderItems += [debugItemResetApp]
 		}
