@@ -259,15 +259,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
 			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now()),
 			activeDisclosurePolicyMode: {
-				if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-					return .combined1gAnd3g
-				} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-					return .exclusive1G
-				} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+//				if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+//					return .combined1gAnd3g
+//				} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+//					return .exclusive1G
+//				} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
 					return .zeroG
-				} else {
-					return .exclusive3G
-				}
+//				} else {
+//					return .exclusive3G
+//				}
 			}()
 		)
 
@@ -389,23 +389,24 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		guard state != oldState // save recomputation effort if `==`
 		else { return }
 		
-		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			// 1G-only
-			domesticCards.value = HolderDashboardViewModel.assemble1gOnlyCards(
-				forValidityRegion: .domestic,
-				state: state,
-				actionHandler: self,
-				now: Current.now()
-			)
-		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-			// 3G + 1G
-			domesticCards.value = HolderDashboardViewModel.assemble3gWith1GCards(
-				forValidityRegion: .domestic,
-				state: state,
-				actionHandler: self,
-				now: Current.now()
-			)
-		} else if state.shouldShowOnlyInternationalPane {
+//		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+//			// 1G-only
+//			domesticCards.value = HolderDashboardViewModel.assemble1gOnlyCards(
+//				forValidityRegion: .domestic,
+//				state: state,
+//				actionHandler: self,
+//				now: Current.now()
+//			)
+//		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+//			// 3G + 1G
+//			domesticCards.value = HolderDashboardViewModel.assemble3gWith1GCards(
+//				forValidityRegion: .domestic,
+//				state: state,
+//				actionHandler: self,
+//				now: Current.now()
+//			)
+//		} else
+		if state.shouldShowOnlyInternationalPane {
 			// 0G
 			domesticCards.value = []
 		} else {
@@ -530,15 +531,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	
 	fileprivate func recalculateActiveDisclosurePolicyMode() {
 		
-		if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-			state.activeDisclosurePolicyMode = .combined1gAnd3g
-		} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			state.activeDisclosurePolicyMode = .exclusive1G
-		} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+//		if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
+//			state.activeDisclosurePolicyMode = .combined1gAnd3g
+//		} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+//			state.activeDisclosurePolicyMode = .exclusive1G
+//		} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
 			state.activeDisclosurePolicyMode = .zeroG
-		} else {
-			state.activeDisclosurePolicyMode = .exclusive3G
-		}
+//		} else {
+//			state.activeDisclosurePolicyMode = .exclusive3G
+//		}
 	}
 	
 	// MARK: - NSNotification

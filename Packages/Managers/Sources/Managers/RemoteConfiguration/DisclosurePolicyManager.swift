@@ -93,65 +93,65 @@ public struct UpdatedDisclosurePolicyFactory {
 	/// Generate an array of `PagedAnnoucementItem` for New Disclosure Policy screens
 	public static func create(featureFlagManager: FeatureFlagManaging, userSettings: UserSettingsProtocol) -> [PagedAnnoucementItem] {
 		
-		let returningFromNoDisclosurePolicies = self.returningFromNoDisclosurePolicies(userSettings: userSettings)
-		
-		if featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			
-			return possiblyCombineWithReturnToCTB(
-				PagedAnnoucementItem(
-					title: L.holder_newintheapp_content_only1G_title(),
-					content: L.holder_newintheapp_content_only1G_body(),
-					image: I.disclosurePolicy.newInTheApp(),
-					tagline: L.general_newpolicy(),
-					step: returningFromNoDisclosurePolicies ? 1 : 0,
-					nextButtonTitle: returningFromNoDisclosurePolicies ? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates() : nil
-				),
-				userSettings: userSettings
-			)
-		} else if featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
-			
-			return possiblyCombineWithReturnToCTB(
-				PagedAnnoucementItem(
-					title: L.holder_newintheapp_content_only3G_title(),
-					content: L.holder_newintheapp_content_only3G_body(),
-					image: I.disclosurePolicy.newInTheApp(),
-					tagline: L.general_newpolicy(),
-					step: returningFromNoDisclosurePolicies ? 1 : 0,
-					nextButtonTitle: returningFromNoDisclosurePolicies
-						? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
-						: nil
-				),
-				userSettings: userSettings
-			)
-		} else if featureFlagManager.areBothDisclosurePoliciesEnabled() {
-			
-			return possiblyCombineWithReturnToCTB(
-				PagedAnnoucementItem(
-					title: L.holder_newintheapp_content_3Gand1G_title(),
-					content: L.holder_newintheapp_content_3Gand1G_body(),
-					image: I.disclosurePolicy.newInTheApp(),
-					tagline: L.general_newpolicy(),
-					step: returningFromNoDisclosurePolicies ? 1 : 0,
-					nextButtonTitle: returningFromNoDisclosurePolicies
-						? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
-						: nil
-				),
-				userSettings: userSettings
-			)
-			
-		} else if featureFlagManager.areZeroDisclosurePoliciesEnabled() {
-			
-			return [PagedAnnoucementItem(
-				title: L.holder_newintheapp_content_onlyInternationalCertificates_0G_title(),
-				content: L.holder_newintheapp_content_onlyInternationalCertificates_0G_body(),
-				image: I.onboarding.validity(),
-				tagline: L.general_newintheapp(),
-				step: 0
-			)]
-		} else {
-			
+//		let returningFromNoDisclosurePolicies = self.returningFromNoDisclosurePolicies(userSettings: userSettings)
+//
+//		if featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
+//
+//			return possiblyCombineWithReturnToCTB(
+//				PagedAnnoucementItem(
+//					title: L.holder_newintheapp_content_only1G_title(),
+//					content: L.holder_newintheapp_content_only1G_body(),
+//					image: I.disclosurePolicy.newInTheApp(),
+//					tagline: L.general_newpolicy(),
+//					step: returningFromNoDisclosurePolicies ? 1 : 0,
+//					nextButtonTitle: returningFromNoDisclosurePolicies ? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates() : nil
+//				),
+//				userSettings: userSettings
+//			)
+//		} else if featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
+//
+//			return possiblyCombineWithReturnToCTB(
+//				PagedAnnoucementItem(
+//					title: L.holder_newintheapp_content_only3G_title(),
+//					content: L.holder_newintheapp_content_only3G_body(),
+//					image: I.disclosurePolicy.newInTheApp(),
+//					tagline: L.general_newpolicy(),
+//					step: returningFromNoDisclosurePolicies ? 1 : 0,
+//					nextButtonTitle: returningFromNoDisclosurePolicies
+//						? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
+//						: nil
+//				),
+//				userSettings: userSettings
+//			)
+//		} else if featureFlagManager.areBothDisclosurePoliciesEnabled() {
+//
+//			return possiblyCombineWithReturnToCTB(
+//				PagedAnnoucementItem(
+//					title: L.holder_newintheapp_content_3Gand1G_title(),
+//					content: L.holder_newintheapp_content_3Gand1G_body(),
+//					image: I.disclosurePolicy.newInTheApp(),
+//					tagline: L.general_newpolicy(),
+//					step: returningFromNoDisclosurePolicies ? 1 : 0,
+//					nextButtonTitle: returningFromNoDisclosurePolicies
+//						? L.holder_newintheapp_content_dutchAndInternationalCertificates_button_toMyCertificates()
+//						: nil
+//				),
+//				userSettings: userSettings
+//			)
+//
+//		} else if featureFlagManager.areZeroDisclosurePoliciesEnabled() {
+//
+//			return [PagedAnnoucementItem(
+//				title: L.holder_newintheapp_content_onlyInternationalCertificates_0G_title(),
+//				content: L.holder_newintheapp_content_onlyInternationalCertificates_0G_body(),
+//				image: I.onboarding.validity(),
+//				tagline: L.general_newintheapp(),
+//				step: 0
+//			)]
+//		} else {
+//
 			return []
-		}
+//		}
 	}
 	
 	static private func possiblyCombineWithReturnToCTB(_ item: PagedAnnoucementItem, userSettings: UserSettingsProtocol) -> [PagedAnnoucementItem] {

@@ -39,10 +39,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_content_withDomesticGreenCard() throws {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
-		
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -69,10 +65,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_content_withDomesticGreenCard_1Gmode_1Gpolicy() throws {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = true
-		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = false
-		
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -90,7 +82,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title_1g()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
@@ -99,10 +91,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_content_withDomesticGreenCard_1Gmode_1GAnd3Gpolicy() throws {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = false
-		
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -120,7 +108,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title_1g()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))
@@ -129,10 +117,6 @@ class ShowQRViewModelTests: XCTestCase {
 	func test_content_withDomesticGreenCard_3Gmode_1GAnd3Gpolicy() throws {
 
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = true
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = false
-		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = false
-
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
@@ -150,7 +134,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title_3g()
+		expect(self.sut.title) == L.holder_showQR_domestic_title()
 		expect(self.sut.dosage) == nil
 		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
 		expect(self.sut.items).toEventually(haveCount(1))

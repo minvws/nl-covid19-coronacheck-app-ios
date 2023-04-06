@@ -25,9 +25,6 @@ public protocol FeatureFlagManaging {
 	
 	// Holder
 	func areZeroDisclosurePoliciesEnabled() -> Bool
-	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
-	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
-	func areBothDisclosurePoliciesEnabled() -> Bool
 	func isGGDPortalEnabled() -> Bool
 }
 
@@ -92,58 +89,6 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	// Holder
 	
 	public func areZeroDisclosurePoliciesEnabled() -> Bool {
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies.isEmpty || userSettings.overrideDisclosurePolicies == ["0G"]
-	}
-	
-	public func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
-		
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies == [DisclosurePolicy.policy3G.featureFlag]
-	}
-	
-	public func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
-		
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies == [DisclosurePolicy.policy1G.featureFlag]
-	}
-	
-	public func areBothDisclosurePoliciesEnabled() -> Bool {
-		
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
-		disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
+		return true
 	}
 }

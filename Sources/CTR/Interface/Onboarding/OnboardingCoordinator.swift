@@ -53,7 +53,7 @@ class OnboardingCoordinator: Coordinator, OpenUrlProtocol {
 		self.onboardingDelegate = onboardingDelegate
 		self.appFlavor = appFlavor
 		onboardingFactory = factory
-		onboardingPages = onboardingFactory.create(featureFlagManager: Current.featureFlagManager)
+		onboardingPages = onboardingFactory.create()
 	}
 	
 	/// The onboarding pages

@@ -14,7 +14,7 @@ public protocol OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
-	func create(featureFlagManager: FeatureFlagManaging) -> [PagedAnnoucementItem]
+	func create() -> [PagedAnnoucementItem]
 
 	/// Get the Consent Title
 	func getConsentTitle() -> String
@@ -44,18 +44,9 @@ public struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
-	public func create(featureFlagManager: FeatureFlagManaging) -> [PagedAnnoucementItem] {
+	public func create() -> [PagedAnnoucementItem] {
 		
-		var pages = [PagedAnnoucementItem]()
-		
-		if featureFlagManager.areZeroDisclosurePoliciesEnabled() {
-			pages = getOnboardingPagesForZeroDisclosurePolicies()
-		} else {
-			pages = getOnboardingPages()
-		}
-		if let policyPage = getDisclosurePolicyPage(featureFlagManager: featureFlagManager) {
-			pages.append(policyPage)
-		}
+		let pages = getOnboardingPagesForZeroDisclosurePolicies()
 		return pages.sorted { $0.step < $1.step }
 	}
 	
@@ -84,64 +75,8 @@ public struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		]
 	}
 	
-	private func getOnboardingPages() -> [PagedAnnoucementItem] {
+	private func getDisclosurePolicyPage() -> PagedAnnoucementItem? {
 		
-		return [
-			PagedAnnoucementItem(
-				title: L.holderOnboardingTitleSafely(),
-				content: L.holderOnboardingMessageSafely(),
-				image: I.onboarding.safely(),
-				step: 1
-			),
-			PagedAnnoucementItem(
-				title: L.holderOnboardingTitleYourqr(),
-				content: L.holderOnboardingMessageYourqr(),
-				image: I.onboarding.yourQR(),
-				step: 2
-			),
-			PagedAnnoucementItem(
-				title: L.holderOnboardingTitleValidity(),
-				content: L.holderOnboardingMessageValidity(),
-				image: I.onboarding.validity(),
-				step: 3
-			),
-			PagedAnnoucementItem(
-				title: L.holderOnboardingTitlePrivacy(),
-				content: L.holderOnboardingMessagePrivacy(),
-				image: I.onboarding.international(),
-				step: 4,
-				nextButtonTitle: L.generalNext()
-			)
-		]
-	}
-	
-	private func getDisclosurePolicyPage(featureFlagManager: FeatureFlagManaging) -> PagedAnnoucementItem? {
-		
-		if featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-			return PagedAnnoucementItem(
-				title: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_title(),
-				content: L.holder_onboarding_disclosurePolicyChanged_only1GAccess_message(),
-				image: I.onboarding.disclosurePolicy(),
-				step: 5,
-				nextButtonTitle: L.generalNext()
-			)
-		} else if featureFlagManager.is3GExclusiveDisclosurePolicyEnabled() {
-			return PagedAnnoucementItem(
-				title: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_title(),
-				content: L.holder_onboarding_disclosurePolicyChanged_only3GAccess_message(),
-				image: I.onboarding.disclosurePolicy(),
-				step: 5,
-				nextButtonTitle: L.generalNext()
-			)
-		} else if featureFlagManager.areBothDisclosurePoliciesEnabled() {
-			return PagedAnnoucementItem(
-				title: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_title(),
-				content: L.holder_onboarding_disclosurePolicyChanged_3Gand1GAccess_message(),
-				image: I.onboarding.disclosurePolicy(),
-				step: 5,
-				nextButtonTitle: L.generalNext()
-			)
-		}
 		// No disclosure page for zero G
 		return nil
 	}
@@ -193,7 +128,7 @@ public struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	
 	/// Generate an array of onboarding steps
 	/// - Returns: an array of onboarding steps
-	public func create(featureFlagManager: FeatureFlagManaging) -> [PagedAnnoucementItem] {
+	public func create() -> [PagedAnnoucementItem] {
 
 		let pages = [
 			PagedAnnoucementItem(

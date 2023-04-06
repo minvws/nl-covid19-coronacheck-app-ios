@@ -110,26 +110,11 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.invokedPresent) == false
 	}
 	
-	func test_handleDisclosurePolicyUpdates_shouldShow() {
-		
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
-		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = true
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = ["3G"]
-		
-		// When
-		sut.handleDisclosurePolicyUpdates()
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == true
-	}
-	
 	func test_handleDisclosurePolicyUpdates_shouldNotShow() {
 		
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = false
+		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
 		
 		// When
 		sut.handleDisclosurePolicyUpdates()

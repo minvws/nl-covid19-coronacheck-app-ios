@@ -69,36 +69,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedAreZeroDisclosurePoliciesEnabledResult
 	}
 
-	var invokedIs1GExclusiveDisclosurePolicyEnabled = false
-	var invokedIs1GExclusiveDisclosurePolicyEnabledCount = 0
-	var stubbedIs1GExclusiveDisclosurePolicyEnabledResult: Bool! = false
-
-	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
-		invokedIs1GExclusiveDisclosurePolicyEnabled = true
-		invokedIs1GExclusiveDisclosurePolicyEnabledCount += 1
-		return stubbedIs1GExclusiveDisclosurePolicyEnabledResult
-	}
-
-	var invokedIs3GExclusiveDisclosurePolicyEnabled = false
-	var invokedIs3GExclusiveDisclosurePolicyEnabledCount = 0
-	var stubbedIs3GExclusiveDisclosurePolicyEnabledResult: Bool! = false
-
-	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
-		invokedIs3GExclusiveDisclosurePolicyEnabled = true
-		invokedIs3GExclusiveDisclosurePolicyEnabledCount += 1
-		return stubbedIs3GExclusiveDisclosurePolicyEnabledResult
-	}
-
-	var invokedAreBothDisclosurePoliciesEnabled = false
-	var invokedAreBothDisclosurePoliciesEnabledCount = 0
-	var stubbedAreBothDisclosurePoliciesEnabledResult: Bool! = false
-
-	func areBothDisclosurePoliciesEnabled() -> Bool {
-		invokedAreBothDisclosurePoliciesEnabled = true
-		invokedAreBothDisclosurePoliciesEnabledCount += 1
-		return stubbedAreBothDisclosurePoliciesEnabledResult
-	}
-
 	var invokedIsGGDPortalEnabled = false
 	var invokedIsGGDPortalEnabledCount = 0
 	var stubbedIsGGDPortalEnabledResult: Bool! = false
