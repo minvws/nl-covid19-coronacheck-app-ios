@@ -54,8 +54,6 @@ public protocol WalletManaging: AnyObject {
 	
 	func removeVaccinationAssessmentEventGroups()
 
-	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
-
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 	
 	@discardableResult

@@ -112,7 +112,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// Given
 		setupSut()
-		
+
 		// When
 		sut.warnBeforeGoBack()
 
@@ -120,7 +120,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
 		expect(self.sut.alert) != nil
 	}
-	
+
 	// MARK: - Other actions -
 
 	func test_vaccinationrow_actionTapped() {
@@ -131,19 +131,19 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			eventMode: .vaccination,
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
-			
+
 		)
-		
+
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		rows.first?.action?()
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		
+
 		guard case let .showEventDetails(title, _, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
 			fail("wrong delegate callback")
 			return
@@ -165,10 +165,10 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.secondaryAction?()
-		
+
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
@@ -262,9 +262,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 				hideBodyForScreenCapture: false
 			)
 	}
-	
+
 	func test_somethingIsWrong_vaccinationAssessment_tapped() {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -272,15 +272,15 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.secondaryAction?()
-		
+
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
@@ -311,7 +311,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(content.secondaryAction) == nil
 		expect(content.secondaryActionTitle) == nil
 	}
-	
+
 	func test_somethingIsWrong_foreignDccVaccination() {
 
 		// Given
@@ -327,7 +327,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 
 		// Then
@@ -336,7 +336,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	}
 
 	// MARK: - Event Rows -
-	
+
 	func test_oneEvent_oneRow() {
 
 		// Given
@@ -552,7 +552,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Then
 		expect(rows).to(haveCount(2))
 	}
-	
+
 	func test_sixSimilarEvents_withHPKCode_twoRows() {
 
 		// Given
@@ -581,7 +581,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Then
 		expect(rows).to(haveCount(2))
 	}
-	
+
 	func test_sixSimilarEvents_withDuplicates_withHPKCode_twoRows() {
 
 		// Given
@@ -612,7 +612,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Then
 		expect(rows).to(haveCount(2))
 	}
-	
+
 	// MARK: - Error States -
 
 	func test_makeQR_invalidMode() throws {
@@ -652,10 +652,10 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
@@ -748,7 +748,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupError_eventModeGGDTest() throws {
 
 		// Given
@@ -785,9 +785,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupError_eventModeVaccinationAssessmet() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -795,17 +795,17 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
@@ -824,7 +824,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	}
 
 	func test_makeQR_saveEventGroupNoError_storingNewEvent_isDraft() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -832,27 +832,27 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 0
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEventGroupParameters?.isDraft) == true
-		
-		// should not be any drafts left 
+
+		// should not be any drafts left
 	}
 
 	func test_makeQR_saveEventGroupNoError_overwritingExistingNewEvent_isNotDraft() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -860,23 +860,23 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 1
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEventGroupParameters?.isDraft) == false
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidResponse() throws {
 
 		// Given
@@ -886,7 +886,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
@@ -1000,9 +1000,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_noInternet() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -1010,28 +1010,28 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beFalse())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
-		
+
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorNointernetTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorNointernetText()))
@@ -1149,7 +1149,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
@@ -1167,7 +1167,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidResponse() throws {
 
 		// Given
@@ -1193,7 +1193,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
@@ -1255,9 +1255,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_noInternet() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -1265,7 +1265,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
@@ -1273,15 +1273,15 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
@@ -1387,9 +1387,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_authenticationCancelled() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -1397,7 +1397,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
@@ -1405,15 +1405,15 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .authenticationCancelled)), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
@@ -1421,7 +1421,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		
+
 		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
 		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state: \(sut.viewState)")
@@ -1477,7 +1477,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_noSignedEvents() throws {
 
 		// Given
@@ -1518,7 +1518,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.holderVaccinationErrorClose()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderVaccinationErrorAgain()))
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_failedToGenerateCommitmentMessage() throws {
 
 		// Given
@@ -1531,7 +1531,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = false
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -1567,54 +1566,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 	
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveDomesticGreencardError() throws {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccination,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
-			greenCardLoader: greenCardLoader
-		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
-		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = false
-		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
-			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
-		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.networkManagerSpy.invokedPrepareIssue).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-		expect(self.sut.alert) == nil
-		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
-		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 290 000 055")
-		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-	}
-
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveGreencardNoError() throws {
 
 		// Given
@@ -1627,7 +1578,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
+		
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 			environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
@@ -1639,15 +1590,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
@@ -1656,7 +1606,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
-	
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveGreencardNoError_receivedHints() throws {
 
 		// Given
@@ -1669,7 +1619,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 			environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccinationWithHint), ())
@@ -1681,15 +1630,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
@@ -1711,13 +1659,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.multipleDCC), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
@@ -1730,7 +1677,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
@@ -1745,7 +1691,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
@@ -1753,7 +1698,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
-		
+
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
@@ -1773,7 +1718,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
@@ -1782,13 +1726,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			.toEventually(equal(EventScreenResult.continue(eventMode: .paperflow)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
-	
+
 	func test_makeQR_paperflow_recovery() throws {
-		
+
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
@@ -1796,27 +1739,26 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithRecovery())
-		
+
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
@@ -1825,13 +1767,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			.toEventually(equal(EventScreenResult.continue(eventMode: .paperflow)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
-	
+
 	func test_makeQR_paperflow_test() throws {
-		
+
 		// Given
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response.domesticAndInternationalVaccination), ())
@@ -1839,27 +1780,26 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fake(dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithTest())
-		
+
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
 			remoteEvents: [remotePaperFlowEvent],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
@@ -1889,9 +1829,9 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.generalOk()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
-	
+
 	func test_identityMismatched() {
-		
+
 		// Given
 		environmentSpies.identityCheckerSpy.stubbedCompareResult = false
 		sut = ListRemoteEventsViewModel(
@@ -1900,12 +1840,12 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: environmentSpies.greenCardLoaderSpy
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
 
@@ -1917,14 +1857,14 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderEventIdentityAlertOk()))
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == nil
 	}
-	
+
 	func test_duplicateDCC() throws {
-		
+
 		// Given
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper))
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		
+
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .paperflow,
@@ -1935,22 +1875,22 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		guard case let .feedback(content: feedback) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		expect(feedback.title) == L.holder_listRemoteEvents_endStateDuplicate_title()
 		expect(feedback.body) == L.holder_listRemoteEvents_endStateDuplicate_message()
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == nil
 	}
-	
+
 	// MARK: - Open URL -
 
 	func test_openUrl() throws {
@@ -1966,11 +1906,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
-	
+
 	// MARK: - Success Path -
-	
+
 	func test_successVaccination_internationalQROnly_zeroDisclosePolicies() throws {
-		
+
 		// Given
 		sut = ListRemoteEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -1978,60 +1918,55 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalVaccination), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		environmentSpies.cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "test"
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.environmentSpies.walletManagerSpy.invokedStoreDomesticGreenCard).toEventually(beFalse())
 		expect(self.environmentSpies.walletManagerSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedLastSuccessfulCompletionOfAddCertificateFlowDate) == now
 		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKeySetter) == true
-		expect(self.environmentSpies.secureUserSettingsSpy.invokedHolderSecretKey).toEventually(beNil())
-		
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0)
 			.toEventually(equal(EventScreenResult.continue(eventMode: .vaccination)))
 		expect(self.sut.alert).toEventually(beNil())
 	}
-	
+
 	// MARK: - Blocked State -
-	
+
 	// 1. - Add a single DCC that is blocked: show blocked end-state
-	
+
 	func test_singleDCC_whichIsBlocked_showsAnEndState() throws {
-		
+
 		// Arrange
-		
+
 		let fakeEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
-		
+
 		// Save context to order to generate predictable unique identifier:
 		let context = environmentSpies.dataStoreManager.managedObjectContext()
 		environmentSpies.dataStoreManager.save(context)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeEventGroup
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeEventGroup]
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalBlockedVaccination(blockedIdentifier: fakeEventGroup.uniqueIdentifier)), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
@@ -2045,18 +1980,18 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// Act
 		content.primaryAction?()
-		
+
 		// Assert
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
-		
+
 		let feedback: Content? = eventuallyUnwrap(eval: { () -> Content? in
 			if case let ListRemoteEventsViewController.State.feedback(content: feedback) = self.sut.viewState {
 				return feedback
@@ -2074,22 +2009,21 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	}
 
 	// 2. - Have a DCC in database (which is server-side blocked), send a vaccination: persist to DB, no end-state
-	
+
 	func test_singleDCC_whichIsBlockedRemotely_tryToAddVaccination_insertsBlockedEvent() throws {
-		
+
 		// Arrange
-		
+
 		let fakeExistingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
 		let fakeIncomingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
-		
+
 		// Save context to order to generate predictable unique identifier:
 		let context = environmentSpies.dataStoreManager.managedObjectContext()
 		environmentSpies.dataStoreManager.save(context)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeIncomingEventGroup
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeExistingEventGroup, fakeIncomingEventGroup]
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: fakeExistingEventGroup.uniqueIdentifier)), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
@@ -2103,40 +2037,39 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccination],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// Act
 		content.primaryAction?()
-		
+
 		// Assert
-		
+
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.environmentSpies.walletManagerSpy.invokedCreateAndPersistRemovedEventBlockItem).toEventually(beTrue())
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlert) == false // invoked with `false`
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 1 // once
 	}
-	
+
 	// 3. - Have a DCC in database (which is server-side blocked), send a DCC vaccination which is blocked: persist to DB and show blocked end-state
-	
+
 	func test_singleDCC_whichIsBlockedRemotely_tryToAddBlockedVaccination_insertsBlockedEventAndShowsEndState() throws {
-		
+
 		// Arrange
-		
+
 		let fakeExistingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
 		let fakeIncomingEventGroup: EventGroup = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)!
-		
+
 		// Save context to order to generate predictable unique identifier:
 		let context = environmentSpies.dataStoreManager.managedObjectContext()
 		environmentSpies.dataStoreManager.save(context)
-		
+
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = fakeIncomingEventGroup
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [fakeExistingEventGroup, fakeIncomingEventGroup]
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		environmentSpies.walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: fakeExistingEventGroup.uniqueIdentifier, blockedIdentifierForNewVaccination: fakeIncomingEventGroup.uniqueIdentifier)), ())
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
@@ -2150,20 +2083,20 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			remoteEvents: [FakeRemoteEvent.fakeRemoteEventPaperProof],
 			greenCardLoader: greenCardLoader
 		)
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
 			return
 		}
-		
+
 		// Act
 		content.primaryAction?()
-		
+
 		// Assert
-		
+
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
 		expect(self.environmentSpies.walletManagerSpy.invokedCreateAndPersistRemovedEventBlockItem).toEventually(beTrue())
-		
+
 		let feedback: Content? = eventuallyUnwrap(eval: { () -> Content? in
 			if case let ListRemoteEventsViewController.State.feedback(content: feedback) = self.sut.viewState {
 				return feedback

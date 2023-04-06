@@ -117,20 +117,6 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveVaccinationAssessmentEventGroupsCount += 1
 	}
 
-	var invokedStoreDomesticGreenCard = false
-	var invokedStoreDomesticGreenCardCount = 0
-	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)?
-	var invokedStoreDomesticGreenCardParametersList = [(remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)]()
-	var stubbedStoreDomesticGreenCardResult: Bool! = false
-
-	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
-		invokedStoreDomesticGreenCard = true
-		invokedStoreDomesticGreenCardCount += 1
-		invokedStoreDomesticGreenCardParameters = (remoteGreenCard, cryptoManager)
-		invokedStoreDomesticGreenCardParametersList.append((remoteGreenCard, cryptoManager))
-		return stubbedStoreDomesticGreenCardResult
-	}
-
 	var invokedStoreEuGreenCard = false
 	var invokedStoreEuGreenCardCount = 0
 	var invokedStoreEuGreenCardParameters: (remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)?
