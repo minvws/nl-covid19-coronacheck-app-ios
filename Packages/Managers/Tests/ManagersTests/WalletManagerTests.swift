@@ -1014,5 +1014,41 @@ class WalletManagerTests: XCTestCase {
 		expect(persisted) != nil
 	}
 	
+	func test_removeVaccinationAssessments() throws {
+		
+		// Given
+		sut.storeEventGroup(
+			.vaccinationassessment,
+			providerIdentifier: "GGD",
+			jsonData: Data(),
+			expiryDate: nil,
+			isDraft: false
+		)
+		expect(self.sut.listEventGroups()).to(haveCount(1))
+		
+		// When
+		sut.removeVaccinationAssessmentEventGroups()
+		
+		// Then
+		expect(self.sut.listEventGroups()).to(haveCount(0))
+	}
+	
+	func test_removeDomesticGreencards() {
+		
+		// Given
+		cryptoManagerSpy.stubbedCreateCredentialResult = .success(sampleJSONData)
+		_ = sut.storeDomesticGreenCard(
+			RemoteGreenCards.DomesticGreenCard.fakeVaccinationGreenCardExpiresIn30Days,
+			cryptoManager: cryptoManagerSpy
+		)
+		expect(self.sut.listGreenCards()).to(haveCount(1))
+		
+		// When
+		sut.removeDomesticGreenCards()
+		
+		// Then
+		expect(self.sut.listGreenCards()).to(haveCount(0))
+	}
+	
 	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)
 }

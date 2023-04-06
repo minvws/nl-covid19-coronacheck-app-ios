@@ -45,6 +45,8 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.start()
 
 		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
 	}
