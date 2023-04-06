@@ -836,7 +836,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 0
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -864,7 +864,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.walletManagerSpy.stubbedRemoveExistingEventGroupsTypeResult = 1
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -889,7 +889,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult = (.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
-		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -931,7 +931,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+			(.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -973,7 +973,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+			(.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -1015,7 +1015,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 		(.failure(ServerError.error(statusCode: 429, response: nil, error: .noInternetConnection)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+			(.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -1054,7 +1054,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+			(.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
@@ -1096,7 +1096,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		environmentSpies.networkManagerSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99857), error: .serverError)), ())
 		environmentSpies.networkManagerSpy.stubbedFetchGreencardsCompletionResult =
-			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
+			(.success(RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: nil, hints: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state: \(sut.viewState)")
