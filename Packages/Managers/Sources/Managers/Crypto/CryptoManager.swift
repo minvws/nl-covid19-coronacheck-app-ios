@@ -169,21 +169,6 @@ public class CryptoManager: CryptoManaging {
 		return nil
 	}
 	
-	/// Create the credential from the issuer commit message
-	/// - Parameter ism: the issuer commit message (signed testproof)
-	/// - Returns: Credential data if success, error if not
-	public func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-		
-		let result = MobilecoreCreateCredentials(ism)
-		if let credential = result?.value {
-			return .success(credential)
-		} else if let reason = result?.error {
-			logError("Can't create credential: \(String(describing: reason))")
-			return .failure(CryptoError.credentialCreateFail(reason: reason))
-		}
-		return .failure(CryptoError.unknown)
-	}
-	
 	/// Is this data a foreign DCC
 	/// - Parameter data: the data of the DCC
 	/// - Returns: True if the DCC is foreign

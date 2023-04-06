@@ -45,20 +45,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedHasPublicKeysResult
 	}
 
-	var invokedCreateCredential = false
-	var invokedCreateCredentialCount = 0
-	var invokedCreateCredentialParameters: (ism: Data, Void)?
-	var invokedCreateCredentialParametersList = [(ism: Data, Void)]()
-	var stubbedCreateCredentialResult: Result<Data, CryptoError>!
-
-	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-		invokedCreateCredential = true
-		invokedCreateCredentialCount += 1
-		invokedCreateCredentialParameters = (ism, ())
-		invokedCreateCredentialParametersList.append((ism, ()))
-		return stubbedCreateCredentialResult
-	}
-
 	var invokedIsForeignDCC = false
 	var invokedIsForeignDCCCount = 0
 	var invokedIsForeignDCCParameters: (data: Data, Void)?
@@ -71,20 +57,6 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedIsForeignDCCParameters = (data, ())
 		invokedIsForeignDCCParametersList.append((data, ()))
 		return stubbedIsForeignDCCResult
-	}
-
-	var invokedIsPaperBasedDCC = false
-	var invokedIsPaperBasedDCCCount = 0
-	var invokedIsPaperBasedDCCParameters: (data: Data, Void)?
-	var invokedIsPaperBasedDCCParametersList = [(data: Data, Void)]()
-	var stubbedIsPaperBasedDCCResult: Bool! = false
-
-	func isPaperBasedDCC(_ data: Data) -> Bool {
-		invokedIsPaperBasedDCC = true
-		invokedIsPaperBasedDCCCount += 1
-		invokedIsPaperBasedDCCParameters = (data, ())
-		invokedIsPaperBasedDCCParametersList.append((data, ()))
-		return stubbedIsPaperBasedDCCResult
 	}
 
 	var invokedIsDCC = false
