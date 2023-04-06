@@ -527,7 +527,7 @@ extension WalletManager {
 			
 			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
 			
-			for eventGroup in wallet.castEventGroups() where eventGroup.type == "vaccinationassessment"  {
+			for eventGroup in wallet.castEventGroups() where eventGroup.type == "vaccinationassessment" {
 				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 				context.delete(eventGroup)
 			}
