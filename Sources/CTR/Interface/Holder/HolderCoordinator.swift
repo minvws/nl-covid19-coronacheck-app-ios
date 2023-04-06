@@ -206,8 +206,15 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func performAppLaunchCleanup() {
 		
+		// Remove CTB Stuff
+		Current.walletManager.removeDomesticGreenCards()
+		Current.walletManager.removeVaccinationAssessmentEventGroups()
+		
+		// Remove leftovers from previous sessions
 		Current.walletManager.removeDraftEventGroups()
-		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
+		
+		// Remove expired event groups
+		Current.walletManager.expireEventGroups(forDate: Current.now())
 	}
 	
 	// MARK: - Universal Links

@@ -518,6 +518,22 @@ extension WalletManager {
 			dataStoreManager.save(context)
 		}
 	}
+	
+	public func removeVaccinationAssessmentEventGroups() {
+		
+		let context = dataStoreManager.managedObjectContext()
+		
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.type == "vaccinationassessment"  {
+				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				context.delete(eventGroup)
+			}
+			dataStoreManager.save(context)
+		}
+	}
 
 	public func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol) {
 
@@ -539,6 +555,21 @@ extension WalletManager {
 					}
 					dataStoreManager.save(context)
 				}
+			}
+		}
+	}
+	
+	public func removeDomesticGreenCards() {
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let greenCards = wallet.greenCards {
+				for case let greenCard as GreenCard in greenCards.allObjects where greenCard.type == "domestic" {
+					greenCard.delete(context: context)
+				}
+				dataStoreManager.save(context)
 			}
 		}
 	}

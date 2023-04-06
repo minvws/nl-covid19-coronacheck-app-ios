@@ -43,6 +43,14 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedFetchSignedEventsResult
 	}
 
+	var invokedRemoveDomesticGreenCards = false
+	var invokedRemoveDomesticGreenCardsCount = 0
+
+	func removeDomesticGreenCards() {
+		invokedRemoveDomesticGreenCards = true
+		invokedRemoveDomesticGreenCardsCount += 1
+	}
+
 	var invokedRemoveDraftEventGroups = false
 	var invokedRemoveDraftEventGroupsCount = 0
 
@@ -99,6 +107,14 @@ class WalletManagerSpy: WalletManaging {
 	func removeExistingMismatchedIdentityEvents() {
 		invokedRemoveExistingMismatchedIdentityEvents = true
 		invokedRemoveExistingMismatchedIdentityEventsCount += 1
+	}
+
+	var invokedRemoveVaccinationAssessmentEventGroups = false
+	var invokedRemoveVaccinationAssessmentEventGroupsCount = 0
+
+	func removeVaccinationAssessmentEventGroups() {
+		invokedRemoveVaccinationAssessmentEventGroups = true
+		invokedRemoveVaccinationAssessmentEventGroupsCount += 1
 	}
 
 	var invokedStoreDomesticGreenCard = false
