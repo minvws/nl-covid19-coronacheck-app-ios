@@ -152,7 +152,7 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "No international test certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "No Dutch vaccination certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://www.coronacheck.nl//en/guidepost\">Guidepost</a>.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "<p>Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate.</p><p>The reason could be that the type of test is not accepted, or that the test is no longer valid abroad. An international recovery certificate can only be made with a PCR-test that is less than 180 days old. Read more about the possible causes on the <a href=\"https://coronacheck.nl//en/guidepost\">Guidepost</a>.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "No international recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch certificate was created.</p><p>It's possible that your type of test isn't accepted abroad. Please get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "No international test certificate";
@@ -266,8 +266,6 @@
 "holder.errorstate.someresult.title" = "Are these all your vaccinations?";
 "holder.errorstate.test.message" = "<p>Something is going wrong at the test location. Therefore, your details can’t be retrieved.</p><p><b>What's next?</b><br />Contact the test location and give them the following error code:</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.title" = "Sorry, something went wrong";
-"holder.euvaccinationswereupgraded.message" = "<p>We have renewed everyone's vaccination certificate. From now on, you have access to QR codes of earlier vaccinations.</p><p>This can be useful for people who want to go to a place where their latest vaccination is not yet valid.</p><p><a href=\"https://coronacheck.nl/en/faq/3-5-waarom-heb-ik-voor-elke-prik-een-internationale-QR-code/\">Read more about your renewed vaccination certificate here</a>.</p>";
-"holder.euvaccinationswereupgraded.title" = "Renewed vaccination certificate";
 "holder.event.about.recovery.date" = "Test date:";
 "holder.event.about.recovery.dateofbirth" = "Date of birth:";
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
@@ -307,7 +305,7 @@
 "holder.event.identity.alert.message" = "The personal details you just retrieved don't match those in your current certificate. You can either stop and have your details changed by the organisation that registered the details for your certificate, or replace your certificate. Your current certificate will then be removed.";
 "holder.event.identity.alert.ok" = "Replace";
 "holder.event.identity.alert.title" = "Want to replace your certificate?";
-"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.title" = "No test result available";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
@@ -360,7 +358,7 @@
 "holder.provider.message" = "Does the test point out you don't have coronavirus? Then you can use the test result to create a certificate. Please specify where you were tested.";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "Make QR code";
-"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder.recovery.nolist.message" = "<p>Were you just tested? It can take a few hours before your positive test result is available. Please try again later.</p><p>Were you tested longer ago? Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.start.message" = "Have you had coronavirus? Then you can make a recovery certificate of the positive test result. Log in with DigiD to retrieve your test result.";
 "holder.recovery.start.title" = "Retrieve your recovery details";
@@ -426,7 +424,7 @@
 "holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
 "holder.showqr.showqr" = "Show anyway";
 "holder.test.list.title" = "Retrieve test result";
-"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.test.nolist.title" = "No test result available";
 "holder.testresults.alert.cancel" = "No";
 "holder.testresults.alert.message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
@@ -558,7 +556,7 @@
 "holder_completecertificate_body" = "<p>Retrieve a negative test result to complete your visitor pass.</p><p>Didn't do a test yet? Make an appointment at <a href=\"https://www.testenvoortoegang.org/?lang=en\">www.testenvoortoegang.org</a>.</p>";
 "holder_completecertificate_button_fetchnegativetest" = "Retrieve test result";
 "holder_completecertificate_title" = "Complete your visitor pass";
-"holder_contactCoronaCheckHelpdesk_message" = "<p>Request your certificate at the CoronaCheck helpdesk. You can call them %@, between %@ and %@ at: %@ (free).</p>\n<p>Or if you’re calling from abroad: %@. In the menu you can choose “request a certificate”.</p>Please provide the following:<ul><li>your citizen service number (BSN)</li><li>your zipcode</li></ul><p>Your certificate with QR code will be sent by post. This can take up to 7 working days.</p>";
+"holder_contactCoronaCheckHelpdesk_message" = "<p>Request your certificate at the CoronaCheck helpdesk. You can call them %@, between %@ and %@ at: %@ (free, closed on public holidays).</p>\n<p>Or if you’re calling from abroad: %@. In the menu you can choose “request a certificate”.</p>Please provide the following:<ul><li>your citizen service number (BSN)</li><li>your zipcode</li></ul><p>Your certificate with QR code will be sent by post. This can take up to 7 working days.</p>";
 "holder_contactCoronaCheckHelpdesk_message_every_day" = "every day";
 "holder_contactCoronaCheckHelpdesk_message_until" = "%@ until %@";
 "holder_contactCoronaCheckHelpdesk_title" = "Request your certificate via the helpdesk";
@@ -657,7 +655,7 @@
 "holder_helpdesk_configuration_value" = "%@, %@";
 "holder_helpdesk_contact_message_line1" = "<p>If you have any questions or experience problems, you can contact the CoronaCheck helpdesk.</p><p><b>Call the helpdesk:</b><br />%@ (free).</p>";
 "holder_helpdesk_contact_message_line2" = "<p>Or, if you are calling from abroad: %@.</p>";
-"holder_helpdesk_contact_message_line3" = "<p>Open from %@, between %@ and %@.</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
+"holder_helpdesk_contact_message_line3" = "<p>Open from %@, between %@ and %@ (closed on public holidays).</p><p><b>Or send an email to:</b><br /><a href=\"mailto:helpdesk@coronacheck.nl\">helpdesk@coronacheck.nl</a></p>";
 "holder_helpdesk_contact_title" = "Contact";
 "holder_helpdesk_support_message" = "When you contact the CoronaCheck helpdesk, you may be asked for the following information:";
 "holder_helpdesk_support_title" = "Support";
@@ -694,7 +692,7 @@
 "holder_invaliddetailsremoved_banner_title" = "Details have been removed from the app.";
 "holder_invaliddetailsremoved_moreinfo_body" = "<p>Some of your details were declared invalid. They have therefore been removed from the app. It concerns the following details:</p>%@<p>Certificates may have been removed from the app as well. Please add a valid vaccination or test to retrieve certificates again.</p><p>Do you have questions about this? Please contact the CoronaCheck helpdesk via %@ and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
 "holder_invaliddetailsremoved_moreinfo_title" = "Removed details";
-"holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://www.coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
+"holder_listRemoteEvents_endStateCantCreateCertificate_message" = "<p>At this moment, we can't create a certificate from your %@. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p><p><b>Error code:</b><br />%@</p>";
 "holder_listRemoteEvents_endStateCantCreateCertificate_title" = "We can't create a certificate";
 "holder_listRemoteEvents_endStateDuplicate_message" = "The certificate you are trying to add is already in the app. You don’t have to scan it again.";
 "holder_listRemoteEvents_endStateDuplicate_title" = "This certificate is already in the app";
@@ -792,13 +790,13 @@
 "holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired it means your vaccination is still valid, but the certificate that you’ve added isn't. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
 "holder_qr_code_expired_explanation_title" = "Expired QR code";
-"holder_qr_code_expired_explanation_url" = "https://www.coronacheck.nl/en/faq/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
+"holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/en/faq-in-app/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
 "holder_qr_code_expired_overlay_title" = "QR code has expired";
 "holder_qr_code_hidden_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_hidden_explanation_button" = "What does this mean?";
 "holder_qr_code_hidden_explanation_description" = "<p>If the QR code of your vaccination is hidden, you probably don’t need it. This is because there are QR codes of your more recent vaccinations in the app too.</p><p>You can still show and use hidden QR codes if needed.</p>";
 "holder_qr_code_hidden_explanation_title" = "Hidden QR code";
-"holder_qr_code_hidden_explanation_url" = "https://www.coronacheck.nl/en/faq/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
+"holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/en/faq-in-app/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_qr_explanation_description_domestic_1G" = "<p>Your Dutch QR code says you have a valid certificate for 1G access, and contains minimal data.</p><p>The scanner sees only the first letter of your first and last name, and your date and month of birth. This is to make sure the QR code belongs to you.</p><p>Your information*: <b>%@</b></p><p></p><p>* Information can sometimes disappear to protect your privacy. In that case, you will see a dash (_).</p>";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_scanner_cameraBlockedDueToMultitasking" = "Camera can only be used in full screen. Close your tile window view.";
@@ -838,7 +836,7 @@
 "holder_storedEvents_list_noEvents" = "No stored data";
 "holder_storedEvents_message" = "The data below is stored on your phone and is used by CoronaCheck to create your coronavirus pass.";
 "holder_storedEvents_title" = "My stored data";
-"holder_storedEvents_url" = "https://coronacheck.nl/en/privacy";
+"holder_storedEvents_url" = "https://coronacheck.nl/en/privacy-in-app";
 "holder_test_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";
 "holder_updateApp_button" = "Install update";
 "holder_updateApp_content" = "To continue, install the latest version of the app.";

@@ -115,12 +115,30 @@ extension Coordinator {
 			return inApp
 		}()
 		
+		var releaseAdjustedURL: URL? = url
+		switch Configuration().getRelease() {
+			case .production:
+				break
+			case .acceptance, .development:
+				releaseAdjustedURL = URL(string: url.absoluteString
+					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
+					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
+				)
+			case .test:
+				releaseAdjustedURL = URL(string: url.absoluteString
+					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
+					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
+				)
+		}
+		
+		guard let releaseAdjustedURL else { return }
+		
 		guard #available(iOS 13.0, *), shouldOpenInApp else {
-			UIApplication.shared.open(url)
+			UIApplication.shared.open(releaseAdjustedURL)
 			return
 		}
 		
-		let safariController = SFSafariViewController(url: url)
+		let safariController = SFSafariViewController(url: releaseAdjustedURL)
 		
 		if let presentedViewController = navigationController.presentedViewController {
 			presentedViewController.presentingViewController?.dismiss(animated: true) {

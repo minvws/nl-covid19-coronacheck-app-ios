@@ -146,7 +146,7 @@ class AboutThisAppViewModel {
 			AboutThisAppMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
 			AboutThisAppMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
-		if Configuration().getEnvironment() != "production" {
+		if Configuration().getRelease() != .production {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 		
@@ -158,7 +158,7 @@ class AboutThisAppViewModel {
 			AboutThisAppMenuOption(identifier: .useConfigDisclosurePolicy, name: "Use the config Disclosure policy")
 		]
 		
-		if Configuration().getEnvironment() != "production" {
+		if Configuration().getRelease() != .production {
 			menu = [
 				AboutThisAppMenuSection(title: nil, options: list),
 				AboutThisAppMenuSection(title: "Disclosure Policy", options: disclosureOptions)
