@@ -116,6 +116,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		var shouldShowTabBar: Bool = false
 		var shouldShowOnlyInternationalPane: Bool = true
 		
+		var shouldShow0GDisclosurePolicyBecameActiveBanner = false
+		
 		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
@@ -198,7 +200,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	// Observation tokens:
 	private var remoteConfigUpdateObserverToken: Observatory.ObserverToken?
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
-	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken?
 	private var configurationAlmostOutOfDateObserverToken: Observatory.ObserverToken?
 	
 	// Dependencies:
@@ -259,6 +260,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		setupNotificationListeners()
 		setupRecommendedVersion()
 		setupObservers()
+		recalculateDisclosureBannerState()
 
 		didUpdateState(fromOldState: nil)
 	}
@@ -453,6 +455,11 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
 	}
 	
+	fileprivate func recalculateDisclosureBannerState() {
+		
+		state.shouldShow0GDisclosurePolicyBecameActiveBanner = !Current.userSettings.hasDismissedZeroGPolicy
+	}
+	
 	// MARK: - NSNotification
 	
 	fileprivate func setupNotificationListeners() {
@@ -619,8 +626,8 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	}
 	
 	func didTapDisclosurePolicyInformation0GBannerClose() {
+
 		Current.userSettings.hasDismissedZeroGPolicy = true
-		Current.userSettings.lastDismissedDisclosurePolicy = []
-//		recalculateDisclosureBannerState()
+		recalculateDisclosureBannerState()
 	}
 }
