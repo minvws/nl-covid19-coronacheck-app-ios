@@ -163,35 +163,15 @@ extension HolderDashboardViewController.Card {
 		
 		switch validityRegion {
 			case .domestic:
-				let domesticTitle: String
-				switch (state.activeDisclosurePolicyMode, state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion)) {
-					case (.zeroG, _):
-						domesticTitle = "" // isn't shown in zeroG.
-					case(_, true):
-						domesticTitle = L.holder_dashboard_incompleteVisitorPass_message()
-					case (.exclusive1G, _):
-						domesticTitle = L.holder_dashboard_empty_domestic_only1Gaccess_message()
-					case (.exclusive3G, _):
-						domesticTitle = L.holder_dashboard_empty_domestic_only3Gaccess_message()
-					case (.combined1gAnd3g, _):
-						domesticTitle = L.holder_dashboard_empty_domestic_3Gand1Gaccess_message()
-				}
 				return [HolderDashboardViewController.Card.emptyStateDescription(
-					message: domesticTitle,
+					message: "",
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
-			if state.activeDisclosurePolicyMode == .zeroG {
 				return [HolderDashboardViewController.Card.emptyStateDescription(
 					message: L.holder_dashboard_emptyState_international_0G_message(),
 					buttonTitle: L.holder_dashboard_international_0G_action_certificateNeeded()
 				)]
-			} else {
-				return [HolderDashboardViewController.Card.emptyStateDescription(
-					message: L.holderDashboardEmptyInternationalMessage(),
-					buttonTitle: L.holderDashboardEmptyInternationalButton()
-				)]
-			}
 		}
 	}
 	
@@ -260,8 +240,7 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		
 		guard validityRegion == .europeanUnion,
-			  state.shouldShow0GDisclosurePolicyBecameActiveBanner,
-			  state.activeDisclosurePolicyMode == .zeroG else { return [] }
+			  state.shouldShow0GDisclosurePolicyBecameActiveBanner else { return [] }
 
 		return [
 			.disclosurePolicyInformation(
@@ -301,14 +280,12 @@ extension HolderDashboardViewController.Card {
 	static func makeQRCards(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
-		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this group of cards (vs state.activeDisclosurePolicyMode)
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		return state.regionFilteredQRCards(validityRegion: validityRegion)
 			.flatMap { (qrcardDataItem: HolderDashboardViewModel.QRCard) -> [HolderDashboardViewController.Card] in
 				qrcardDataItem.toViewControllerCards(
 					state: state,
-					localDisclosurePolicy: localDisclosurePolicy,
 					actionHandler: actionHandler
 				)
 			}
@@ -319,118 +296,12 @@ extension HolderDashboardViewModel.QRCard {
 
 	fileprivate func toViewControllerCards(
 		state: HolderDashboardViewModel.State,
-		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this card (vs state.activeDisclosurePolicyMode)
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-
-		var cards = [HolderDashboardViewController.Card]()
-		
-		switch self.region {
-			case .netherlands:
-				cards = domesticQRCard(state: state, localDisclosurePolicy: localDisclosurePolicy, actionHandler: actionHandler)
-
-			case .europeanUnion:
-				cards = internationalQRCard(state: state, localDisclosurePolicy: localDisclosurePolicy, actionHandler: actionHandler)
-		}
-		
-		return cards
-	}
-	
-	private func domesticQRCard(
-		state: HolderDashboardViewModel.State,
-		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this card (vs state.activeDisclosurePolicyMode)
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		// Certain combinations preclude showing _any_ QR Cards
-		// , in which case just return nothing
-	
-		switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
-			case (.exclusive1G, .policy1G),
-				(.combined1gAnd3g, .policy1G):
-				guard hasUnexpiredTest(now: Current.now()) else { return [] }
-			case (.exclusive1G, .policy3G):
-				guard hasUnexpiredOriginsWhichAreNotOfTypeTest(now: Current.now()) else { return [] }
-			case (.exclusive3G, .policy3G),
-				(.combined1gAnd3g, .policy3G):
-				break
-			case (.exclusive3G, .policy1G), (.zeroG, _):
-				return []
-		}
-		
-		func isDisabledByDisclosurePolicy() -> Bool {
-			
-			// Whether we should show "Dit bewijs wordt nu niet gebruikt in Nederland."
-			switch (state.activeDisclosurePolicyMode, localDisclosurePolicy) {
-				case (.exclusive1G, .policy1G),
-					(.exclusive3G, .policy1G), // this case is not shown in UI
-					(.exclusive3G, .policy3G),
-					(.combined1gAnd3g, .policy1G),
-					(.combined1gAnd3g, .policy3G),
-					(.zeroG, _):
-					return false
-					
-				case (.exclusive1G, .policy3G):
-					return true
-			}
-		}
-		
-		func buttonIsEnabled(now: Date) -> Bool {
-			
-			// Special case when this is for a 1G card:
-			if localDisclosurePolicy == .policy1G {
-				// If this is the 1G card then the button enabled state should only be determined by tests.
-				// We need to filter the origins on the `QRCard`, as it could have a valid vaccination/recovery (which are not 1G).
-				// (NB: the `QRCard` abstraction is starting to break down now that 1 `QRCard` can be shown split into 1G and 3G cards in the UI..)
-				let hasCurrentlyValidTest = origins
-					.filter { $0.type == .test }
-					.contains(where: { $0.isCurrentlyValid(now: now) })
-				
-				return hasCurrentlyValidTest && evaluateEnabledState(now)
-			}
-			
-			// Default case:
-			return evaluateEnabledState(now)
-		}
-	
-		return [HolderDashboardViewController.Card.domesticQR(
-			disclosurePolicyLabel: localDisclosurePolicy.localization,
-			title: {
-				switch localDisclosurePolicy {
-					case .policy3G: return L.holder_dashboard_domesticQRCard_3G_title()
-					case .policy1G: return L.holder_dashboard_domesticQRCard_1G_title()
-				}
-			}(),
-			isDisabledByDisclosurePolicy: isDisabledByDisclosurePolicy(),
-			validityTexts: validityTextsGenerator(
-				greencards: greencards,
-				localDisclosurePolicy: localDisclosurePolicy,
-				activeDisclosurePolicy: state.activeDisclosurePolicyMode
-			),
-			isLoading: state.isRefreshingStrippen,
-			didTapViewQR: { [weak actionHandler] in
-				guard !isDisabledByDisclosurePolicy() else { return }
-				guard buttonIsEnabled(now: Current.now()) else { return }
-				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: localDisclosurePolicy)
-			},
-			buttonEnabledEvaluator: { buttonIsEnabled(now: $0) },
-			expiryCountdownEvaluator: { now in
-				domesticCountdownText(now: now, origins: origins, localDisclosurePolicy: localDisclosurePolicy)
-			},
-			error: qrCardError(state: state, actionHandler: actionHandler)
-		)]
-	}
-	
-	private func internationalQRCard(
-		state: HolderDashboardViewModel.State,
-		localDisclosurePolicy: DisclosurePolicy, // the disclosure policy for this card (vs state.activeDisclosurePolicyMode)
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
 		return [HolderDashboardViewController.Card.europeanUnionQR(
 			title: {
-				let localizedProof: String? = state.activeDisclosurePolicyMode == .zeroG
-					? self.origins.first?.type.localizedProofInternational0G
-					: self.origins.first?.type.localizedProof
+				let localizedProof: String? = self.origins.first?.type.localizedProofInternational0G
 				return (localizedProof ?? L.holderDashboardQrTitle()).capitalizingFirstLetter()
 			}(),
 			stackSize: {
@@ -439,9 +310,7 @@ extension HolderDashboardViewModel.QRCard {
 				return min(maxStackSize, max(minStackSize, greencards.count))
 			}(),
 			validityTexts: validityTextsGenerator(
-				greencards: greencards,
-				localDisclosurePolicy: localDisclosurePolicy,
-				activeDisclosurePolicy: state.activeDisclosurePolicyMode
+				greencards: greencards
 			),
 			isLoading: state.isRefreshingStrippen,
 			didTapViewQR: { [weak actionHandler] in
@@ -479,9 +348,7 @@ extension HolderDashboardViewModel.QRCard {
 	
 	// Returns a closure that, given a Date, will return the groups of text ("ValidityText") that should be shown per-origin on the QR Card.
 	private func validityTextsGenerator(
-		greencards: [HolderDashboardViewModel.QRCard.GreenCard],
-		localDisclosurePolicy: DisclosurePolicy, // the mode that the specific card being created is in
-		activeDisclosurePolicy: HolderDashboardViewModel.DisclosurePolicyMode // the global active disclosure policy
+		greencards: [HolderDashboardViewModel.QRCard.GreenCard]
 	) -> (Date) -> [HolderDashboardViewController.ValidityText] {
 		
 		return { now in
@@ -497,30 +364,6 @@ extension HolderDashboardViewModel.QRCard {
 						return lhs.1.eventDate > rhs.1.eventDate
 					}
 					return lhs.1.customSortIndex < rhs.1.customSortIndex
-				}
-				.filter { (greenCard: HolderDashboardViewModel.QRCard.GreenCard, origin: GreenCard.Origin) in
-					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
-					
-					// some local disclosure policies cause origins to be hidden, depending on the active disclosure policy:
-					// print("🎏 Filtering origin: [active: .\(activeDisclosurePolicy), local: .\(localDisclosurePolicy), origin: .\(origin.type)]") //swiftlint:disable:this disable_print
-					switch (activeDisclosurePolicy, localDisclosurePolicy, origin.type) {
-
-						case (.combined1gAnd3g, .policy1G, .test): return true
-						case (.combined1gAnd3g, .policy3G, .test):
-							// If there is a test + (some other origin), should show the test only on the 1G card (see `case` above), not this 3G card:
-							return !QRCard.hasUnexpiredOriginThatIsNotATest(greencard: greenCard, now: now)
-						
-						// only tests should ever be shown on a 1G card:
-						case (_, .policy1G, .test): return true
-						case (_, .policy1G, _): return false
-						
-						// no tests should be shown on 3G card whilst in 1G mode
-						case (.exclusive1G, .policy3G, .test): return false
-						case (.exclusive1G, .policy3G, _): return true
-						
-						// allow everything else by default
-						default: return true
-					}
 				}
 				// for NL certificate multiple tests are combined: longest validity is shown.
 				.filter { greenCard, origin in

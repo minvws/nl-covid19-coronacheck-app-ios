@@ -183,13 +183,6 @@ extension HolderDashboardViewModel {
 		let region: QRCodeValidityRegion
 		let type: OriginType
 	}
-	
-	enum DisclosurePolicyMode {
-		case exclusive3G
-		case exclusive1G
-		case combined1gAnd3g
-		case zeroG
-	}
 }
 
 // MARK: - Custom Equatable conformances

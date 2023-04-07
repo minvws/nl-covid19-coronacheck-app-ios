@@ -113,18 +113,6 @@ func beHeaderMessageCard(test: @escaping (String, String?) -> Void = { _, _ in }
 	}
 }
 
-func beDomesticQRCard(test: @escaping (String, String, Bool, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?, HolderDashboardViewController.Card.Error?) -> Void = { _, _, _, _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .domesticQR with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   // Skip buttonEnabledEvaluator because it always comes from the `HolderDashboardViewModel.MyQRCard` itself (which means it is stubbed in the test)
-		   case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator, error) = actual {
-			test(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beEuropeanUnionQRCard(test: @escaping (String, Int, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?, HolderDashboardViewController.Card.Error?) -> Void = { _, _, _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .europeanUnionQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),

@@ -71,7 +71,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	let currentlyPresentedAlert = Observable<AlertContent?>(value: nil)
 	
-	let selectedTab = Observable<DashboardTab>(value: .domestic)
+	let selectedTab = Observable<DashboardTab>(value: .international)
 
 	let shouldShowTabBar = Observable<Bool>(value: false)
 	
@@ -118,8 +118,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		
 		var shouldShow0GDisclosurePolicyBecameActiveBanner = false
 		
-		var activeDisclosurePolicyMode: DisclosurePolicyMode
-		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
 			!qrCards.isEmpty || !regionFilteredExpiredCards(validityRegion: validityRegion).isEmpty
@@ -131,11 +129,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		
 		func dashboardHasEmptyState(for validityRegion: QRCodeValidityRegion) -> Bool {
 			
-			if validityRegion == .europeanUnion && activeDisclosurePolicyMode == .zeroG {
-				return !dashboardHasInternationalQRCards()
-			} else {
-				return !dashboardHasQRCards(for: validityRegion)
-			}
+			return !dashboardHasInternationalQRCards()
 		}
 		
 		func shouldShowCompleteYourVaccinationAssessmentBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -186,11 +180,12 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	}
 	
 	func selectTab(newTab: DashboardTab) {
-		guard state.activeDisclosurePolicyMode != .zeroG else { return }
-		
-		// Handle new value:
-		dashboardRegionToggleValue = newTab.isDomestic ? .domestic : .europeanUnion
-		selectedTab.value = newTab
+		return
+//		guard state.activeDisclosurePolicyMode != .zeroG else { return }
+//
+//		// Handle new value:
+//		dashboardRegionToggleValue = newTab.isDomestic ? .domestic : .europeanUnion
+//		selectedTab.value = newTab
 	}
 
 	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol
@@ -239,18 +234,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
 			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
-			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now()),
-			activeDisclosurePolicyMode: {
-//				if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-//					return .combined1gAnd3g
-//				} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-//					return .exclusive1G
-//				} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
-					return .zeroG
-//				} else {
-//					return .exclusive3G
-//				}
-			}()
+			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 		)
 
 		setupQRCardDatasource()
@@ -538,7 +522,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,
-			localDisclosurePolicy: .policy3G,
 			actionHandler: actionHandler
 		)
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)

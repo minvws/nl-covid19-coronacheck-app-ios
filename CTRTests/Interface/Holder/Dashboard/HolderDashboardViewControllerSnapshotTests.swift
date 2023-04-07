@@ -202,10 +202,9 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		
 		// Act
 		viewModelSpy.stubbedInternationalCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
+			.europeanUnionQR(
 				title: "title",
-				isDisabledByDisclosurePolicy: false,
+				stackSize: 1,
 				validityTexts: { _ in [] },
 				isLoading: false,
 				didTapViewQR: {},
@@ -225,11 +224,11 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
+		
 		viewModelSpy.stubbedInternationalCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
+			.europeanUnionQR(
 				title: "title",
-				isDisabledByDisclosurePolicy: false,
+				stackSize: 1,
 				validityTexts: { _ in [] },
 				isLoading: false,
 				didTapViewQR: {},

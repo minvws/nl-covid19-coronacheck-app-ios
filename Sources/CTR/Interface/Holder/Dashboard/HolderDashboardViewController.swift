@@ -41,7 +41,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
 		
 		// QR Cards:
-		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
 		// Recommendations
@@ -265,23 +264,6 @@ private extension HolderDashboardViewController.Card {
 				view.title = title
 				view.image = image
 				return view
-				
-			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
-				let qrCard = QRCardView(stackSize: 1)
-				qrCard.shouldStyleForEU = false
-				qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
-				qrCard.viewQRButtonCommand = didTapViewQR
-				qrCard.title = title
-				qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
-				qrCard.validityTexts = validityTexts
-				qrCard.expiryEvaluator = expiryCountdownEvaluator
-				qrCard.isLoading = isLoading
-				qrCard.isDisabledByDisclosurePolicy = isDisabledByDisclosurePolicy
-				qrCard.disclosurePolicyLabel = disclosurePolicyLabel
-				qrCard.accessibilityIdentifier = "\(disclosurePolicyLabel)QRCard"
-				qrCard.errorMessage = cardError?.message
-				qrCard.errorMessageTapHandler = cardError?.didTapURL
-				return qrCard
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
 			
