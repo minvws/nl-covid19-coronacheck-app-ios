@@ -31,17 +31,14 @@ public protocol FeatureFlagManaging {
 public class FeatureFlagManager: FeatureFlagManaging {
 	
 	private var remoteConfigManager: RemoteConfigManaging
-	private var disclosurePolicyManager: DisclosurePolicyManaging
 	private var userSettings: UserSettingsProtocol
 	
 	public required init(
 		remoteConfigManager: RemoteConfigManaging,
-		disclosurePolicyManager: DisclosurePolicyManaging,
 		userSettings: UserSettingsProtocol
 	) {
 		
 		self.remoteConfigManager = remoteConfigManager
-		self.disclosurePolicyManager = disclosurePolicyManager
 		self.userSettings = userSettings
 	}
 	

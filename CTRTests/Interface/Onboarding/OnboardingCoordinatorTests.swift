@@ -139,7 +139,6 @@ class OnboardingCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
 		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == true
-		expect(self.environmentSpies.disclosurePolicyManagingSpy.invokedSetDisclosurePolicyUpdateHasBeenSeen) == true
 	}
 
 	/// Test the finish onboarding call
@@ -160,7 +159,6 @@ class OnboardingCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.onboardingDelegateSpy.consentGivenCalled) == false
 		expect(self.onboardingDelegateSpy.finishOnboardingCalled) == true
-		expect(self.environmentSpies.disclosurePolicyManagingSpy.invokedSetDisclosurePolicyUpdateHasBeenSeen) == false
 	}
 	
 	/// Test the consent given call

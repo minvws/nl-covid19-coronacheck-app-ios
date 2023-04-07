@@ -26,7 +26,6 @@ struct Environment {
 	var cryptoManager: CryptoManaging
 	var dataStoreManager: DataStoreManaging
 	var deviceAuthenticationDetector: DeviceAuthenticationProtocol
-	var disclosurePolicyManager: DisclosurePolicyManaging
 	var featureFlagManager: FeatureFlagManaging
 	var greenCardLoader: GreenCardLoading
 	var identityChecker: IdentityCheckerProtocol
@@ -55,7 +54,6 @@ struct Environment {
 		cryptoManager: CryptoManaging,
 		dataStoreManager: DataStoreManaging,
 		deviceAuthenticationDetector: DeviceAuthenticationProtocol,
-		disclosurePolicyManager: DisclosurePolicyManaging,
 		featureFlagManager: FeatureFlagManaging,
 		greenCardLoader: GreenCardLoading,
 		identityChecker: IdentityCheckerProtocol,
@@ -83,7 +81,6 @@ struct Environment {
 		self.cryptoManager = cryptoManager
 		self.dataStoreManager = dataStoreManager
 		self.deviceAuthenticationDetector = deviceAuthenticationDetector
-		self.disclosurePolicyManager = disclosurePolicyManager
 		self.featureFlagManager = featureFlagManager
 		self.greenCardLoader = greenCardLoader
 		self.identityChecker = identityChecker
@@ -157,10 +154,6 @@ private let cryptoManager = CryptoManager(
 )
 
 private let deviceAuthenticationDetector = DeviceAuthenticationDetector()
-private let disclosurePolicyManager = DisclosurePolicyManager(
-	remoteConfigManager: remoteConfigManager,
-	userSettings: userSettings
-)
 
 private let fileStorage = FileStorage()
 private let identityChecker = IdentityChecker(cryptoManager: cryptoManager)
@@ -206,7 +199,6 @@ private let secureUserSettings = SecureUserSettings()
 
 private let featureFlagManager = FeatureFlagManager(
 	remoteConfigManager: remoteConfigManager,
-	disclosurePolicyManager: disclosurePolicyManager,
 	userSettings: userSettings
 )
 
@@ -245,7 +237,6 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 		cryptoManager: cryptoManager,
 		dataStoreManager: datastoreManager,
 		deviceAuthenticationDetector: deviceAuthenticationDetector,
-		disclosurePolicyManager: disclosurePolicyManager,
 		featureFlagManager: featureFlagManager,
 		greenCardLoader: greenCardLoader,
 		identityChecker: identityChecker,

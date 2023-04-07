@@ -15,7 +15,6 @@ class FeatureFlagManagerTests: XCTestCase {
 	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 	private var appVersionSupplierSpy: AppVersionSupplierSpy!
 	private var userSettingsSpy: UserSettingsSpy!
-	private var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy!
 	
 	override func setUp() {
 		
@@ -26,11 +25,8 @@ class FeatureFlagManagerTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		userSettingsSpy.stubbedOverrideDisclosurePolicies = []
 		
-		disclosurePolicyManagingSpy = DisclosurePolicyManagingSpy()
-		
 		sut = FeatureFlagManager(
 			remoteConfigManager: remoteConfigManagerSpy,
-			disclosurePolicyManager: disclosurePolicyManagingSpy,
 			userSettings: userSettingsSpy
 		)
 	}
@@ -100,7 +96,6 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isNoDisclosurePoliciesEnabled_noPoliciesEnabled() {
 		
 		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
 		
 		// When
 		let enabled = sut.areZeroDisclosurePoliciesEnabled()

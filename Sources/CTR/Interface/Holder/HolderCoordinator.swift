@@ -83,13 +83,6 @@ class HolderCoordinator: SharedCoordinator {
 	/// If set, this should be handled at the first opportunity:
 	var unhandledUniversalLink: UniversalLink?
 	
-	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
-		willSet {
-			// Remove any existing observation:
-			disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
-		}
-	}
-	
 	// MARK: - Setup
 	
 	override init(navigationController: UINavigationController, window: UIWindow) {
@@ -107,7 +100,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 	}
 	
 	// MARK: - Starting Coordinator
@@ -138,12 +130,7 @@ class HolderCoordinator: SharedCoordinator {
 			} else {
 				
 				// Start with the holder app
-				navigateToDashboard(replacingWindowRootViewController: true) {
-					self.handleDisclosurePolicyUpdates()
-					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
-						self?.handleDisclosurePolicyUpdates()
-					}
-				}
+				navigateToDashboard(replacingWindowRootViewController: true) { }
 			}
 		}
 	}
@@ -831,51 +818,6 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToChooseQRCodeType()
-	}
-}
-
-extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
-	
-	func showNewDisclosurePolicy(pagedAnnouncmentItems: [PagedAnnoucementItem]) {
-		let coordinator = UpdatedDisclosurePolicyCoordinator(
-			navigationController: navigationController,
-			pagedAnnouncmentItems: pagedAnnouncmentItems,
-			delegate: self
-		)
-		startChildCoordinator(coordinator)
-	}
-	
-	func finishNewDisclosurePolicy() {
-		
-		if let childCoordinator = childCoordinators.first(where: { $0 is UpdatedDisclosurePolicyCoordinator }) {
-			removeChildCoordinator(childCoordinator)
-		}
-	}
-	
-	func handleDisclosurePolicyUpdates() {
-		
-		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
-			// No Disclosure Policy modal if we still need to finish onboarding
-			return
-		}
-		
-		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
-			return
-		}
-		
-		guard Current.disclosurePolicyManager.hasChanges else {
-			return
-		}
-		
-		let pagedAnnouncementItems = type(of: Current.disclosurePolicyManager.factory).create(
-			featureFlagManager: Current.featureFlagManager,
-			userSettings: Current.userSettings
-		)
-		guard pagedAnnouncementItems.isNotEmpty else {
-			return
-		}
-		
-		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
 	}
 }
 

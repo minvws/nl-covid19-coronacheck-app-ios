@@ -374,7 +374,6 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		
 		guard validityRegion == .europeanUnion,
-				state.shouldShow0GDisclosurePolicyBecameActiveBanner,
 				state.activeDisclosurePolicyMode == .zeroG else { return [] }
 
 		return [

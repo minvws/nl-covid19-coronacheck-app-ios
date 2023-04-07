@@ -92,10 +92,6 @@ extension OnboardingCoordinator: PagedAnnouncementDelegate {
 	
 	func didFinishPagedAnnouncement() {
 		
-		if appFlavor == .holder {
-			Current.disclosurePolicyManager.setDisclosurePolicyUpdateHasBeenSeen()
-		}
-
 		// Notify that we finished the onboarding
 		onboardingDelegate?.finishOnboarding()
 

@@ -97,32 +97,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	func test_handleDisclosurePolicyUpdates_needsOnboarding() {
-		
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
-		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
-		
-		// When
-		sut.handleDisclosurePolicyUpdates()
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-	}
-	
-	func test_handleDisclosurePolicyUpdates_shouldNotShow() {
-		
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.disclosurePolicyManagingSpy.stubbedHasChanges = true
-		
-		// When
-		sut.handleDisclosurePolicyUpdates()
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-	}
-	
 	// MARK: - Universal Links -
 	
 	func test_consume_redeemHolder() {

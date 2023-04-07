@@ -134,7 +134,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
 		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
-		var shouldShow0GDisclosurePolicyBecameActiveBanner: Bool = false
+//		var shouldShow0GDisclosurePolicyBecameActiveBanner: Bool = false
 		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
@@ -277,8 +277,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		setupStrippenRefresher()
 		setupNotificationListeners()
 		setupRecommendedVersion()
-		recalculateActiveDisclosurePolicyMode()
-		recalculateDisclosureBannerState()
 		setupObservers()
 
 		didUpdateState(fromOldState: nil)
@@ -298,19 +296,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			self?.setupRecommendedVersion() // Config changed, check recommended version.
 			self?.state.lastKnownConfigHash = hash
 		}
-
-		disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
-			guard let self else { return }
-			// Disclosure Policy has been updated
-			// - Reset any dismissed banners
-			Current.userSettings.lastDismissedDisclosurePolicy = []
-			// - Update the active disclosure policy
-			self.recalculateActiveDisclosurePolicyMode()
-			// - Update the disclosure policy information banners
-			self.recalculateDisclosureBannerState()
-			// - Re-apply the currently selected tab to ensure UI consistency:
-			self.selectTab(newTab: self.selectedTab.value)
-		}
 		
 		configurationAlmostOutOfDateObserverToken = configurationNotificationManager.almostOutOfDateObservatory.append { [weak self] configIsAlmostOutOfDate in
 			guard let self else { return }
@@ -321,7 +306,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	deinit {
 		notificationCenter.removeObserver(self)
 		clockDeviationObserverToken.map(Current.clockDeviationManager.observatory.remove)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 		remoteConfigUpdateObserverToken.map(Current.remoteConfigManager.observatoryForUpdates.remove)
 	}
 
@@ -379,7 +363,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	func viewWillAppear() {
 		qrcardDatasource.reload()
-		recalculateActiveDisclosurePolicyMode()
 	}
 
 	// MARK: - Receive Updates
@@ -519,45 +502,15 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.state.shouldShowRecommendedUpdateBanner = recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending
 	}
 	
-	fileprivate func recalculateDisclosureBannerState() {
-
-		let lastDismissedDisclosurePolicy = Current.userSettings.lastDismissedDisclosurePolicy
-		state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy1G]
-		state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner = lastDismissedDisclosurePolicy != [DisclosurePolicy.policy3G]
-		state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner = !(lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy1G) && lastDismissedDisclosurePolicy.contains(DisclosurePolicy.policy3G))
-		
-		state.shouldShow0GDisclosurePolicyBecameActiveBanner = !Current.userSettings.hasDismissedZeroGPolicy
-	}
-	
-	fileprivate func recalculateActiveDisclosurePolicyMode() {
-		
-//		if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-//			state.activeDisclosurePolicyMode = .combined1gAnd3g
-//		} else if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-//			state.activeDisclosurePolicyMode = .exclusive1G
-//		} else if Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() {
-			state.activeDisclosurePolicyMode = .zeroG
-//		} else {
-//			state.activeDisclosurePolicyMode = .exclusive3G
-//		}
-	}
-	
 	// MARK: - NSNotification
 	
 	fileprivate func setupNotificationListeners() {
 
 		notificationCenter.addObserver(self, selector: #selector(receiveDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
-		notificationCenter.addObserver(self, selector: #selector(userDefaultsDidChange), name: Foundation.UserDefaults.didChangeNotification, object: nil)
 	}
 
 	@objc func receiveDidBecomeActiveNotification() {
 		qrcardDatasource.reload()
-	}
-
-	@objc func userDefaultsDidChange() {
-		DispatchQueue.main.async {
-			self.recalculateActiveDisclosurePolicyMode()
-		}
 	}
 
 	// MARK: - Present alerts
@@ -855,24 +808,24 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	func didTapDisclosurePolicyInformation1GBannerClose() {
 
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
-		recalculateDisclosureBannerState()
+//		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation3GBannerClose() {
 
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
-		recalculateDisclosureBannerState()
+//		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
 
 		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
-		recalculateDisclosureBannerState()
+//		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation0GBannerClose() {
 		Current.userSettings.hasDismissedZeroGPolicy = true
 		Current.userSettings.lastDismissedDisclosurePolicy = []
-		recalculateDisclosureBannerState()
+//		recalculateDisclosureBannerState()
 	}
 }
