@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length type_body_length type_name
+// swiftlint:disable type_body_length type_name
 
 import UIKit
 import XCTest
@@ -26,14 +26,13 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		viewModelSpy = HolderDashboardViewModelSpy()
 		viewModelSpy.stubbedTitle = Observable(value: L.holderDashboardTitle())
 		viewModelSpy.stubbedSelectedTab = Observable(value: .domestic)
-		viewModelSpy.stubbedDomesticCards = Observable(value: [])
 		viewModelSpy.stubbedInternationalCards = Observable(value: [])
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
 		viewModelSpy.stubbedShouldShowTabBar = Observable(value: false)
 		viewModelSpy.stubbedCurrentlyPresentedAlert = Observable(value: nil)
 		viewModelSpy.stubbedDashboardRegionToggleValue = .domestic
 		viewModelSpy.stubbedShouldShowAddCertificateFooter = Observable(value: false)
-		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: false)
+		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: true)
 	}
 	
 	func testInitial() {
@@ -48,7 +47,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.headerMessage(message: "Message", buttonTitle: nil)
 		]
 
@@ -62,7 +61,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.headerMessage(message: "Message", buttonTitle: "Button title")
 		]
 		
@@ -76,7 +75,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.emptyStateDescription(message: "Message", buttonTitle: nil)
 		]
 		
@@ -90,22 +89,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.emptyStateDescription(message: "Message", buttonTitle: "Button title")
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_emptyStatePlaceholdImage_domestic() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.emptyStatePlaceholderImage(image: I.dashboard.domestic()!, title: L.holderDashboardEmptyDomesticTitle())
 		]
 		
 		// Assert
@@ -118,7 +103,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.emptyStatePlaceholderImage(image: I.dashboard.international()!, title: L.holderDashboardEmptyInternationalTitle())
 		]
 		
@@ -132,7 +117,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.addCertificate(title: "Title", didTapAdd: {})
 		]
 		
@@ -146,7 +131,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.expiredQR(message: "Title", didTapClose: {})
 		]
 		
@@ -160,7 +145,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.expiredVaccinationQR(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {}, didTapClose: {})
 		]
 		
@@ -174,7 +159,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.originNotValidInThisRegion(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {})
 		]
 		
@@ -188,7 +173,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.deviceHasClockDeviation(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {})
 		]
 		
@@ -202,7 +187,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.configAlmostOutOfDate(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {})
 		]
 		
@@ -216,7 +201,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.domesticQR(
 				disclosurePolicyLabel: "NL",
 				title: "title",
@@ -240,7 +225,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.domesticQR(
 				disclosurePolicyLabel: "NL",
 				title: "title",
@@ -264,7 +249,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.newValidityInfoForVaccinationAndRecoveries(title: "title", buttonText: "buttonText", didTapCallToAction: {}, didTapClose: {})
 		]
 		
@@ -278,7 +263,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.completeYourVaccinationAssessment(title: "title", buttonText: "buttonText", didTapCallToAction: {})
 		]
 		
@@ -292,7 +277,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.vaccinationAssessmentInvalidOutsideNL(title: "title", buttonText: "buttonText", didTapCallToAction: {})
 		]
 		
@@ -306,7 +291,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.recommendedUpdate(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {})
 		]
 		
@@ -320,332 +305,8 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.disclosurePolicyInformation(title: "title", buttonText: "buttonText", accessibilityIdentifier: "accessibilityIdentifier", didTapCallToAction: {}, didTapClose: {})
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	// MARK: - Domestic QR -
-	
-	func test_domesticQR_staticTexts() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_buttonEnabled() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_buttonEnabled_butDisabledByDisclosurePolicy() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: true,
-				validityTexts: { _ in [] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_buttonDisabled_loading() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [] },
-				isLoading: true,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_buttonEnabled_loading() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [] },
-				isLoading: true,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_expiryCountdown() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: { _ in "Expiry text" },
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_validityText_past() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [
-					HolderDashboardViewController.ValidityText(
-						lines: ["line"],
-						kind: .past
-					)
-				] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_validityText_current_longline() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [
-					HolderDashboardViewController.ValidityText(
-						lines: ["line is very very very very very very very very long "],
-						kind: .current
-					)
-				] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_validityText_current_longlines() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [
-					HolderDashboardViewController.ValidityText(
-						lines: ["line is very very very very very very very very long "],
-						kind: .current
-					),
-					HolderDashboardViewController.ValidityText(
-						lines: ["line is very very very very very very very very long "],
-						kind: .current
-					)
-				] },
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_validityText_future() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [
-					HolderDashboardViewController.ValidityText(
-						lines: ["line"],
-						kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false)
-					)
-				]},
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_validityText_future_desiresToShowAutomaticallyBecomesValidFooter_buttonDisabled() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [
-					HolderDashboardViewController.ValidityText(
-						lines: ["line"],
-						kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-					)
-				]},
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in false },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_domesticQR_validityText_future_desiresToShowAutomaticallyBecomesValidFooter_buttonEnabled() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
-			.domesticQR(
-				disclosurePolicyLabel: "NL",
-				title: "title",
-				isDisabledByDisclosurePolicy: false,
-				validityTexts: { _ in [
-					HolderDashboardViewController.ValidityText(
-						lines: ["line"],
-						kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-					)
-				]},
-				isLoading: false,
-				didTapViewQR: {},
-				buttonEnabledEvaluator: { _ in true },
-				expiryCountdownEvaluator: nil,
-				error: nil
-			)
 		]
 		
 		// Assert
@@ -660,7 +321,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -683,7 +344,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 2,
@@ -706,7 +367,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 3,
@@ -729,7 +390,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 4,
@@ -752,7 +413,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -775,7 +436,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -798,7 +459,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -821,7 +482,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -846,7 +507,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -871,7 +532,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,
@@ -898,7 +559,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		viewModelSpy.stubbedDomesticCards.value = [
+		viewModelSpy.stubbedInternationalCards.value = [
 			.europeanUnionQR(
 				title: "title",
 				stackSize: 1,

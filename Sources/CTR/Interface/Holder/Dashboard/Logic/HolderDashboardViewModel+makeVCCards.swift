@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import Foundation
 import Shared
@@ -23,27 +22,14 @@ extension HolderDashboardViewController.Card {
 
 		switch validityRegion {
 			case .domestic:
-				let domesticTitle: String
-				switch state.activeDisclosurePolicyMode {
-					case .exclusive1G:
-						domesticTitle = L.holder_dashboard_intro_domestic_only1Gaccess()
-					case .exclusive3G:
-						domesticTitle = L.holder_dashboard_intro_domestic_only3Gaccess()
-					case .combined1gAnd3g:
-						domesticTitle = L.holder_dashboard_intro_domestic_3Gand1Gaccess()
-					case .zeroG:
-						domesticTitle = "" // isn't shown in zeroG.
-				}
 				return [.headerMessage(
-					message: domesticTitle,
+					message: "",
 					buttonTitle: nil
 				)]
 			case .europeanUnion:
 				return [
 					.headerMessage(
-						message: state.activeDisclosurePolicyMode == .zeroG
-							? L.holder_dashboard_filledState_international_0G_message()
-							: L.holderDashboardIntroInternational(),
+						message: L.holder_dashboard_filledState_international_0G_message(),
 						buttonTitle: L.holderDashboardEmptyInternationalButton()
 					)
 				]
@@ -233,31 +219,6 @@ extension HolderDashboardViewController.Card {
 		}
 	}
 	
-	/// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
-	/// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-	static func makeOriginNotValidInThisRegionCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		now: Date,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		return localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: state.qrCards, thisRegion: validityRegion, now: now)
-			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
-			.map { originType, message in
-				return .originNotValidInThisRegion(
-					message: message,
-					callToActionButtonText: L.general_readmore(),
-					didTapCallToAction: { [weak actionHandler] in
-						actionHandler?.didTapOriginNotValidInThisRegionMoreInfo(
-							originType: originType,
-							validityRegion: validityRegion
-						)
-					}
-				)
-			}
-	}
-	
 	static func makeRecommendedUpdateCard(
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
@@ -287,81 +248,6 @@ extension HolderDashboardViewController.Card {
 				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapCompleteYourVaccinationAssessmentMoreInfo()
-				}
-			)
-		]
-	}
-	
-	static func makeDisclosurePolicyInformation1GBanner(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard validityRegion == .domestic,
-				state.shouldShow1GOnlyDisclosurePolicyBecameActiveBanner,
-			  state.activeDisclosurePolicyMode == .exclusive1G else { return [] }
-		
-		return [
-			.disclosurePolicyInformation(
-				title: L.holder_dashboard_only1GaccessBanner_title(),
-				buttonText: L.general_readmore(),
-				accessibilityIdentifier: "disclosurePolicy_informationBanner",
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation1GBannerMoreInformation()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation1GBannerClose()
-				}
-			)
-		]
-	}
-	
-	static func makeDisclosurePolicyInformation3GBanner(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard validityRegion == .domestic,
-			  state.shouldShow3GOnlyDisclosurePolicyBecameActiveBanner,
-			  state.activeDisclosurePolicyMode == .exclusive3G else { return [] }
-		
-		return [
-			.disclosurePolicyInformation(
-				title: L.holder_dashboard_only3GaccessBanner_title(),
-				buttonText: L.general_readmore(),
-				accessibilityIdentifier: "disclosurePolicy_informationBanner",
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation3GBannerMoreInformation()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation3GBannerClose()
-				}
-			)
-		]
-	}
-	
-	static func makeDisclosurePolicyInformation1GWith3GBanner(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard validityRegion == .domestic,
-				state.shouldShow3GWith1GDisclosurePolicyBecameActiveBanner,
-				state.activeDisclosurePolicyMode == .combined1gAnd3g else { return [] }
-
-		return [
-			.disclosurePolicyInformation(
-				title: L.holder_dashboard_3Gand1GaccessBanner_title(),
-				buttonText: L.general_readmore(),
-				accessibilityIdentifier: "disclosurePolicy_informationBanner",
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
-				},
-				didTapClose: { [weak actionHandler] in
-					actionHandler?.didTapDisclosurePolicyInformation1GWith3GBannerClose()
 				}
 			)
 		]
@@ -662,51 +548,6 @@ extension HolderDashboardViewModel.QRCard {
 				}
 		}
 	}
-}
-
-private func localizedOriginsValidOnlyInOtherRegionsMessages(qrCards: [QRCard], thisRegion: QRCodeValidityRegion, now: Date) -> [(originType: OriginType, message: String)] {
-
-	// Calculate origins which exist in the other region but are not in this region:
-	let originTypesForCurrentRegion = Set(
-		qrCards
-			.filter { $0.isOfRegion(region: thisRegion) }
-			.flatMap { $0.origins }
-			.filter {
-				$0.isNotYetExpired(now: now)
-			}
-			.compactMap { $0.type }
-	)
-
-	let originTypesForOtherRegion = Set(
-		qrCards
-			.filter { !$0.isOfRegion(region: thisRegion) }
-			.flatMap { $0.origins }
-			.filter {
-				$0.isNotYetExpired(now: now)
-			}
-			.compactMap { $0.type }
-	)
-
-	let originTypesOnlyInOtherRegion = originTypesForOtherRegion
-		.subtracting(originTypesForCurrentRegion)
-
-	// Map it to user messages:
-	let userMessages = originTypesOnlyInOtherRegion.compactMap { (originType: OriginType) -> (originType: OriginType, message: String)? in
-		switch (originType, thisRegion) {
-			case (.test, .domestic):
-				let containsDomesticVaccinationAssessment = qrCards.contains(where: { $0.origins.contains { $0.type == .vaccinationassessment } })
-				guard !containsDomesticVaccinationAssessment else { return nil }
-				fallthrough // continue to next case for regular .domestic behavior:
-			case (_, .domestic):
-				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
-			case (.vaccinationassessment, .europeanUnion):
-				return (originType, L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title())
-			case (_, .europeanUnion):
-				return (originType, L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(originType.localizedProof))
-		}
-	}
-
-	return userMessages
 }
 
 /// For a given `[QRCard.GreenCard.Origin]`, determines which origin expires furthest into future, and

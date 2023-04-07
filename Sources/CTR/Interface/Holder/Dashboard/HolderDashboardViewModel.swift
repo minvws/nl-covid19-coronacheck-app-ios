@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -28,18 +27,11 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapExpiredDomesticVaccinationQRMoreInfo()
 	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem])
 	func didTapMismatchedIdentityEventsDeletedDismiss(items: [RemovedEventItem])
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion)
 	func didTapRecommendedUpdate()
 	func didTapRetryLoadQRCards()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
 	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
-	func didTapDisclosurePolicyInformation1GBannerMoreInformation()
-	func didTapDisclosurePolicyInformation3GBannerMoreInformation()
-	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation0GBannerMoreInformation()
-	func didTapDisclosurePolicyInformation1GBannerClose()
-	func didTapDisclosurePolicyInformation3GBannerClose()
-	func didTapDisclosurePolicyInformation1GWith3GBannerClose()
 	func didTapDisclosurePolicyInformation0GBannerClose()
 	func openUrl(_ url: URL)
 }
@@ -47,7 +39,6 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 protocol HolderDashboardViewModelType: AnyObject {
 
 	var title: Observable<String> { get }
-	var domesticCards: Observable<[HolderDashboardViewController.Card]> { get }
 	var internationalCards: Observable<[HolderDashboardViewController.Card]> { get }
 	var primaryButtonTitle: Observable<String> { get }
 	var shouldShowAddCertificateFooter: Observable<Bool> { get }
@@ -72,7 +63,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	/// The title of the scene
 	let title = Observable<String>(value: L.holderDashboardTitle())
 
-	let domesticCards = Observable<[HolderDashboardViewController.Card]>(value: [])
 	let internationalCards = Observable<[HolderDashboardViewController.Card]>(value: [])
 	
 	let primaryButtonTitle = Observable<String>(value: L.holderMenuProof())
@@ -85,7 +75,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	let shouldShowTabBar = Observable<Bool>(value: false)
 	
-	let shouldShowOnlyInternationalPane = Observable<Bool>(value: false)
+	let shouldShowOnlyInternationalPane = Observable<Bool>(value: true)
 
 	// MARK: - Private types
 
@@ -123,18 +113,9 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			(qrCards.isEmpty || (shouldShowOnlyInternationalPane && !dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
 		
-		var shouldShowTabBar: Bool {
-			activeDisclosurePolicyMode != .zeroG
-		}
+		var shouldShowTabBar: Bool = false
+		var shouldShowOnlyInternationalPane: Bool = true
 		
-		var shouldShowOnlyInternationalPane: Bool {
-			activeDisclosurePolicyMode == .zeroG
-		}
-		
-		var shouldShow3GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
-		var shouldShow1GOnlyDisclosurePolicyBecameActiveBanner: Bool = false
-		var shouldShow3GWith1GDisclosurePolicyBecameActiveBanner: Bool = false
-//		var shouldShow0GDisclosurePolicyBecameActiveBanner: Bool = false
 		var activeDisclosurePolicyMode: DisclosurePolicyMode
 		
 		// Has QR Cards or expired QR Cards
@@ -372,36 +353,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		guard state != oldState // save recomputation effort if `==`
 		else { return }
 		
-//		if Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() {
-//			// 1G-only
-//			domesticCards.value = HolderDashboardViewModel.assemble1gOnlyCards(
-//				forValidityRegion: .domestic,
-//				state: state,
-//				actionHandler: self,
-//				now: Current.now()
-//			)
-//		} else if Current.featureFlagManager.areBothDisclosurePoliciesEnabled() {
-//			// 3G + 1G
-//			domesticCards.value = HolderDashboardViewModel.assemble3gWith1GCards(
-//				forValidityRegion: .domestic,
-//				state: state,
-//				actionHandler: self,
-//				now: Current.now()
-//			)
-//		} else
-		if state.shouldShowOnlyInternationalPane {
-			// 0G
-			domesticCards.value = []
-		} else {
-			// 3G-only fallback
-			domesticCards.value = HolderDashboardViewModel.assemble3gOnlyCards(
-				forValidityRegion: .domestic,
-				state: state,
-				actionHandler: self,
-				now: Current.now()
-			)
-		}
-
 		internationalCards.value = HolderDashboardViewModel.assembleInternationalCards(
 			forValidityRegion: .europeanUnion,
 			state: state,
@@ -555,114 +506,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	 
 	// MARK: - Static Methods
 	
-	private static func assemble3gOnlyCards(
-		forValidityRegion validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling,
-		now: Date
-	) -> [HolderDashboardViewController.Card] {
-		typealias VCCard = HolderDashboardViewController.Card
-		
-		var cards = [VCCard]()
-		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(
-			validityRegion: validityRegion,
-			state: state,
-			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler
-		)
-		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		return cards
-	}
-	
-	private static func assemble1gOnlyCards(
-		forValidityRegion validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling,
-		now: Date
-	) -> [HolderDashboardViewController.Card] {
-		typealias VCCard = HolderDashboardViewController.Card
-		
-		var cards = [VCCard]()
-		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformation1GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(
-			validityRegion: validityRegion,
-			state: state,
-			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler
-		)
-		cards += VCCard.makeQRCards(
-			validityRegion: validityRegion,
-			state: state,
-			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler
-		)
-		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		return cards
-	}
-	
-	private static func assemble3gWith1GCards(
-		forValidityRegion validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling,
-		now: Date
-	) -> [HolderDashboardViewController.Card] {
-		typealias VCCard = HolderDashboardViewController.Card
-		
-		var cards = [VCCard]()
-		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformation1GWith3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeQRCards(
-			validityRegion: validityRegion,
-			state: state,
-			localDisclosurePolicy: .policy3G,
-			actionHandler: actionHandler
-		)
-		cards += VCCard.makeQRCards(
-			validityRegion: validityRegion,
-			state: state,
-			localDisclosurePolicy: .policy1G,
-			actionHandler: actionHandler
-		)
-		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
-		return cards
-	}
-	
 	private static func assembleInternationalCards(
 		forValidityRegion validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -683,14 +526,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformation3GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		
-		if state.activeDisclosurePolicyMode == .zeroG {
-			cards += VCCard.makeDisclosurePolicyInformation0GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		} else {
-			cards += VCCard.makeOriginNotValidInThisRegionCard(validityRegion: validityRegion, state: state, now: now, actionHandler: actionHandler)
-		}
-		
+		cards += VCCard.makeDisclosurePolicyInformation0GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
@@ -701,7 +537,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeAddCertificateCard(state: state, actionHandler: actionHandler)
 		return cards
 	}
-	
 }
 
 // MARK: - HolderDashboardCardUserActionHandling
@@ -747,10 +582,6 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		Current.secureUserSettings.selectedIdentity = nil
 	}
 	
-	func didTapOriginNotValidInThisRegionMoreInfo(originType: OriginType, validityRegion: QRCodeValidityRegion) {
-		coordinator?.userWishesMoreInfoAboutUnavailableQR( originType: originType, currentRegion: validityRegion)
-	}
-	
 	func didTapDeviceHasClockDeviationMoreInfo() {
 		coordinator?.userWishesMoreInfoAboutClockDeviation()
 	}
@@ -780,47 +611,11 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 		
 		coordinator?.userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	}
-		
-	func didTapDisclosurePolicyInformation1GBannerMoreInformation() {
-
-		guard let url = URL(string: L.holder_dashboard_only1GaccessBanner_link()) else { return }
-		openUrl(url)
-	}
-	
-	func didTapDisclosurePolicyInformation3GBannerMoreInformation() {
-
-		guard let url = URL(string: L.holder_dashboard_only3GaccessBanner_link()) else { return }
-		openUrl(url)
-	}
-	
-	func didTapDisclosurePolicyInformation1GWith3GBannerMoreInformation() {
-
-		guard let url = URL(string: L.holder_dashboard_3Gand1GaccessBanner_link()) else { return }
-		openUrl(url)
-	}
 	
 	func didTapDisclosurePolicyInformation0GBannerMoreInformation() {
 		
 		guard let url = URL(string: L.holder_dashboard_noDomesticCertificatesBanner_url()) else { return }
 		openUrl(url)
-	}
-	
-	func didTapDisclosurePolicyInformation1GBannerClose() {
-
-		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G]
-//		recalculateDisclosureBannerState()
-	}
-	
-	func didTapDisclosurePolicyInformation3GBannerClose() {
-
-		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy3G]
-//		recalculateDisclosureBannerState()
-	}
-	
-	func didTapDisclosurePolicyInformation1GWith3GBannerClose() {
-
-		Current.userSettings.lastDismissedDisclosurePolicy = [DisclosurePolicy.policy1G, DisclosurePolicy.policy3G]
-//		recalculateDisclosureBannerState()
 	}
 	
 	func didTapDisclosurePolicyInformation0GBannerClose() {

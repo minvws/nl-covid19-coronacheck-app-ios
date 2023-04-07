@@ -599,23 +599,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	func test_userWishesMoreInfoAboutUnavailableQR() throws {
-		
-		// Given
-		let viewControllerSpy = ViewControllerSpy()
-		navigationSpy.viewControllers = [
-			viewControllerSpy
-		]
-		
-		// When
-		sut.userWishesMoreInfoAboutUnavailableQR(originType: .vaccination, currentRegion: .domestic)
-		
-		// Then
-		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Geen Nederlands vaccinatiebewijs"
-	}
-	
 	func test_userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
 		// Given

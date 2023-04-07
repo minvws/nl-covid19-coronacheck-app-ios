@@ -134,8 +134,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		didSetInitialStartingTabOnSceneView = true
 		
 		// Select start tab after layouting is done to be able to update scroll position
-		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.selectTab(tab: selectedTab)
+		sceneView.selectTab(tab: .international)
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -152,7 +151,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		if #available(iOS 13.0, *),
 			traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
 			
-			setup(cards: viewModel.domesticCards.value, with: sceneView.domesticScrollView.stackView)
 			setup(cards: viewModel.internationalCards.value, with: sceneView.internationalScrollView.stackView)
 		}
 	}
@@ -162,12 +160,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 	private func setupBindings() {
 
 		viewModel.title.observe { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
-		
-		viewModel.domesticCards.observe { [sceneView, weak self] cards in
-			performUIUpdate {
-				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
-			}
-		}
 		
 		viewModel.internationalCards.observe { [sceneView, weak self] cards in
 			performUIUpdate {

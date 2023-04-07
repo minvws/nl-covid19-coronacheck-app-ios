@@ -23,16 +23,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		return stubbedTitle
 	}
 
-	var invokedDomesticCardsGetter = false
-	var invokedDomesticCardsGetterCount = 0
-	var stubbedDomesticCards: Observable<[HolderDashboardViewController.Card]>!
-
-	var domesticCards: Observable<[HolderDashboardViewController.Card]> {
-		invokedDomesticCardsGetter = true
-		invokedDomesticCardsGetterCount += 1
-		return stubbedDomesticCards
-	}
-
 	var invokedInternationalCardsGetter = false
 	var invokedInternationalCardsGetterCount = 0
 	var stubbedInternationalCards: Observable<[HolderDashboardViewController.Card]>!

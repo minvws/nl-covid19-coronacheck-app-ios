@@ -48,7 +48,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion)
 	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	func userWishesToAddPaperProof()
 	func userWishesToAddVisitorPass()
@@ -618,13 +617,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
-	}
-	
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
-		
-		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion)
-		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 	
 	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
