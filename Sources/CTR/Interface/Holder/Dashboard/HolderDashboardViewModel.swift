@@ -42,8 +42,6 @@ protocol HolderDashboardViewModelType: AnyObject {
 	var primaryButtonTitle: Observable<String> { get }
 	var shouldShowAddCertificateFooter: Observable<Bool> { get }
 	var currentlyPresentedAlert: Observable<AlertContent?> { get }
-	var selectedTab: Observable<DashboardTab> { get }
-	var shouldShowTabBar: Observable<Bool> { get }
 	var shouldShowOnlyInternationalPane: Observable<Bool> { get }
 
 	func selectTab(newTab: DashboardTab)
@@ -68,10 +66,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	let shouldShowAddCertificateFooter = Observable<Bool>(value: false)
 
 	let currentlyPresentedAlert = Observable<AlertContent?>(value: nil)
-	
-	let selectedTab = Observable<DashboardTab>(value: .international)
-
-	let shouldShowTabBar = Observable<Bool>(value: false)
 	
 	let shouldShowOnlyInternationalPane = Observable<Bool>(value: true)
 
@@ -111,7 +105,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			(qrCards.isEmpty || (shouldShowOnlyInternationalPane && !dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
 		
-		var shouldShowTabBar: Bool = false
 		var shouldShowOnlyInternationalPane: Bool = true
 		
 		var shouldShow0GDisclosurePolicyBecameActiveBanner = false
@@ -331,7 +324,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		)
 
 		shouldShowAddCertificateFooter.value = state.shouldShowAddCertificateFooter
-		shouldShowTabBar.value = state.shouldShowTabBar
 		shouldShowOnlyInternationalPane.value = state.shouldShowOnlyInternationalPane
 	}
 

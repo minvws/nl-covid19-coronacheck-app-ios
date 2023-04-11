@@ -129,16 +129,13 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		guard !didSetInitialStartingTabOnSceneView else { return }
 		didSetInitialStartingTabOnSceneView = true
-		
-		// Select start tab after layouting is done to be able to update scroll position
-		sceneView.selectTab(tab: .international)
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
 		
 		coordinator.animate { _ in
-			self.sceneView.updateScrollPosition()
+//			self.sceneView.updateScrollPosition()
 		}
 	}
 	
@@ -167,15 +164,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		viewModel.primaryButtonTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
-		viewModel.selectedTab.observe { [weak self, sceneView] region in
-			guard let self, self.didSetInitialStartingTabOnSceneView else { return }
-			sceneView.selectTab(tab: region)
-		}
-		
-		viewModel.shouldShowTabBar.observe { [sceneView] in
-			sceneView.shouldShowTabBar = $0
-		}
-		
 		viewModel.shouldShowOnlyInternationalPane.observe { [sceneView] in
 			sceneView.shouldShowOnlyInternationalPane = $0
 		}

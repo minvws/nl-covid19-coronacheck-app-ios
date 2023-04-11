@@ -63,26 +63,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		return stubbedCurrentlyPresentedAlert
 	}
 
-	var invokedSelectedTabGetter = false
-	var invokedSelectedTabGetterCount = 0
-	var stubbedSelectedTab: Observable<DashboardTab>!
-
-	var selectedTab: Observable<DashboardTab> {
-		invokedSelectedTabGetter = true
-		invokedSelectedTabGetterCount += 1
-		return stubbedSelectedTab
-	}
-
-	var invokedShouldShowTabBarGetter = false
-	var invokedShouldShowTabBarGetterCount = 0
-	var stubbedShouldShowTabBar: Observable<Bool>!
-
-	var shouldShowTabBar: Observable<Bool> {
-		invokedShouldShowTabBarGetter = true
-		invokedShouldShowTabBarGetterCount += 1
-		return stubbedShouldShowTabBar
-	}
-
 	var invokedShouldShowOnlyInternationalPaneGetter = false
 	var invokedShouldShowOnlyInternationalPaneGetterCount = 0
 	var stubbedShouldShowOnlyInternationalPane: Observable<Bool>!

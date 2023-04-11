@@ -28,7 +28,6 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut()
 
 		// Assert
-		expect(self.sut.shouldShowTabBar.value) == false
 		expect(self.sut.shouldShowOnlyInternationalPane.value) == true
 		
 		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
