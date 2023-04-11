@@ -75,12 +75,6 @@ public struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		]
 	}
 	
-	private func getDisclosurePolicyPage() -> PagedAnnoucementItem? {
-		
-		// No disclosure page for zero G
-		return nil
-	}
-	
 	/// Get the Consent Title
 	public func getConsentTitle() -> String {
 

@@ -318,50 +318,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastKnownConfigDisclosurePolicySetter = false
-	var invokedLastKnownConfigDisclosurePolicySetterCount = 0
-	var invokedLastKnownConfigDisclosurePolicy: [String]?
-	var invokedLastKnownConfigDisclosurePolicyList = [[String]]()
-	var invokedLastKnownConfigDisclosurePolicyGetter = false
-	var invokedLastKnownConfigDisclosurePolicyGetterCount = 0
-	var stubbedLastKnownConfigDisclosurePolicy: [String]! = []
-
-	var lastKnownConfigDisclosurePolicy: [String] {
-		set {
-			invokedLastKnownConfigDisclosurePolicySetter = true
-			invokedLastKnownConfigDisclosurePolicySetterCount += 1
-			invokedLastKnownConfigDisclosurePolicy = newValue
-			invokedLastKnownConfigDisclosurePolicyList.append(newValue)
-		}
-		get {
-			invokedLastKnownConfigDisclosurePolicyGetter = true
-			invokedLastKnownConfigDisclosurePolicyGetterCount += 1
-			return stubbedLastKnownConfigDisclosurePolicy
-		}
-	}
-
-	var invokedOverrideDisclosurePoliciesSetter = false
-	var invokedOverrideDisclosurePoliciesSetterCount = 0
-	var invokedOverrideDisclosurePolicies: [String]?
-	var invokedOverrideDisclosurePoliciesList = [[String]]()
-	var invokedOverrideDisclosurePoliciesGetter = false
-	var invokedOverrideDisclosurePoliciesGetterCount = 0
-	var stubbedOverrideDisclosurePolicies: [String]! = []
-
-	var overrideDisclosurePolicies: [String] {
-		set {
-			invokedOverrideDisclosurePoliciesSetter = true
-			invokedOverrideDisclosurePoliciesSetterCount += 1
-			invokedOverrideDisclosurePolicies = newValue
-			invokedOverrideDisclosurePoliciesList.append(newValue)
-		}
-		get {
-			invokedOverrideDisclosurePoliciesGetter = true
-			invokedOverrideDisclosurePoliciesGetterCount += 1
-			return stubbedOverrideDisclosurePolicies
-		}
-	}
-
 	var invokedHasShownBlockedEventsAlertSetter = false
 	var invokedHasShownBlockedEventsAlertSetterCount = 0
 	var invokedHasShownBlockedEventsAlert: Bool?

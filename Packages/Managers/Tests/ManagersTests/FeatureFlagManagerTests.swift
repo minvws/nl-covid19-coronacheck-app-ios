@@ -23,7 +23,6 @@ class FeatureFlagManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		
 		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedOverrideDisclosurePolicies = []
 		
 		sut = FeatureFlagManager(
 			remoteConfigManager: remoteConfigManagerSpy,

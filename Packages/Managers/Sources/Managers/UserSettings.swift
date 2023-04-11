@@ -38,8 +38,6 @@ public protocol UserSettingsProtocol: AnyObject {
 	var policyInformationShown: Bool { get set }
 
 	var hasDismissedZeroGPolicy: Bool { get set }
-	var lastKnownConfigDisclosurePolicy: [String] { get set }
-	var overrideDisclosurePolicies: [String] { get set }
 
 	var hasShownBlockedEventsAlert: Bool { get set }
 	
@@ -86,17 +84,11 @@ public class UserSettings: UserSettingsProtocol {
 	@Shared.UserDefaults(key: "configVerificationPolicies")
 	public var configVerificationPolicies: [VerificationPolicy] = []
 	
-	@Shared.UserDefaults(key: "policyInformationShown", defaultValue: false)
+	@Shared.UserDefaults(key: "policyInformationShown", defaultValue: false) // Verifier
 	public var policyInformationShown: Bool
 
 	@Shared.UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
 	public var hasDismissedZeroGPolicy: Bool = false
-	
-	@Shared.UserDefaults(key: "overrideDisclosurePolicies")
-	public var overrideDisclosurePolicies: [String] = []
-	
-	@Shared.UserDefaults(key: "lastKnownConfigDisclosurePolicy")
-	public var lastKnownConfigDisclosurePolicy: [String] = ["3G"]
 	
 	// The alert which tells the user that one of their certificates has been blocked:
 	@Shared.UserDefaults(key: "hasShownBlockedEventsAlert")
@@ -125,22 +117,22 @@ extension UserSettings {
 			"shouldCheckRecoveryGreenCardRevisedValidity",
 			"configVerificationPolicies",
 			"policyInformationShown",
-			"overrideDisclosurePolicies",
-			"lastKnownConfigDisclosurePolicy",
 			"hasDismissedZeroGPolicy",
 			"hasShownBlockedEventsAlert",
 
 			// Deprecated keys
-			"lastDismissedDisclosurePolicy",
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner",
 			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"lastRecommendToAddYourBoosterDismissalDate",
-			"shouldShowRecoveryValidityExtensionCard",
-			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",
 			"hasDismissedRecoveryValidityReinstationCompletionCard",
-			"didCompleteEUVaccinationMigration",
-			"didDismissEUVaccinationMigrationSuccessBanner"
+			"lastDismissedDisclosurePolicy",
+			"lastKnownConfigDisclosurePolicy",
+			"lastRecommendToAddYourBoosterDismissalDate",
+			"overrideDisclosurePolicies",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldShowRecoveryValidityExtensionCard",
+			"shouldShowRecoveryValidityReinstationCard"
 		].forEach(userDefaults.removeObject(forKey:))
 	}
 }
