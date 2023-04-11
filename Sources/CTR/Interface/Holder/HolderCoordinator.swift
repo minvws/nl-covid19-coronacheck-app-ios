@@ -40,7 +40,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
 	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
-	func userWishesMoreInfoAboutExpiredDomesticVaccination()
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
@@ -497,34 +496,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			allowsSwipeBack: true,
 			animated: true
 		)
-	}
-	
-	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
-		
-		let viewModel = BottomSheetContentViewModel(
-			content: Content(
-				title: L.holder_expiredDomesticVaccinationModal_title(),
-				body: L.holder_expiredDomesticVaccinationModal_body(),
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
-				secondaryAction: { [weak self] in
-					guard let self else { return }
-					self.navigationController.dismiss(
-						animated: true,
-						completion: self.userWishesToCreateAVaccinationQR
-					)
-				}
-			),
-			screenCaptureDetector: ScreenCaptureDetector(),
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			},
-			hideBodyForScreenCapture: false
-		)
-		
-		let viewController = BottomSheetContentViewController(viewModel: viewModel)
-		presentAsBottomSheet(viewController)
 	}
 	
 	func userWishesMoreInfoAboutExpiredQR() {

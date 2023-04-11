@@ -60,6 +60,8 @@ class NetworkManagerCredentialsTests: XCTestCase {
 			// Return valid greencards
 			return HTTPStubsResponse(
 				jsonObject: [
+					// Domestic is no longer used, just to check if
+					// thing do not break when it is included. 
 					"domesticGreencard": [
 						"origins": [
 							["type": "vaccination",

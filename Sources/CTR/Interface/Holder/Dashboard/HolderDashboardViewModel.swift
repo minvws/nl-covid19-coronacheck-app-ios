@@ -24,7 +24,6 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapDeviceHasClockDeviationMoreInfo()
-	func didTapExpiredDomesticVaccinationQRMoreInfo()
 	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem])
 	func didTapMismatchedIdentityEventsDeletedDismiss(items: [RemovedEventItem])
 	func didTapRecommendedUpdate()
@@ -557,10 +556,6 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [RemovedEventItem]) {
 		Current.walletManager.removeExistingBlockedEvents()
 		Current.userSettings.hasShownBlockedEventsAlert = false
-	}
-	
-	func didTapExpiredDomesticVaccinationQRMoreInfo() {
-		coordinator?.userWishesMoreInfoAboutExpiredDomesticVaccination()
 	}
 	
 	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem]) {

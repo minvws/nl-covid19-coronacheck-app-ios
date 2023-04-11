@@ -662,23 +662,6 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Maak verbinding met het internet"
 	}
-	
-	func test_userWishesMoreInfoAboutExpiredDomesticVaccination() throws {
-		
-		// Given
-		let viewControllerSpy = ViewControllerSpy()
-		navigationSpy.viewControllers = [
-			viewControllerSpy
-		]
-		
-		// When
-		sut.userWishesMoreInfoAboutExpiredDomesticVaccination()
-		
-		// Then
-		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Verlopen vaccinatiebewijs"
-	}
 
 	func test_userWishesMoreInfoAboutExpiredQR() throws {
 		

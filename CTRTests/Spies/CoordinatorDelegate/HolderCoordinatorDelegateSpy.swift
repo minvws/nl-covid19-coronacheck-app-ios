@@ -116,14 +116,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = false
-	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount = 0
-
-	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
-		invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = true
-		invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutExpiredQR = false
 	var invokedUserWishesMoreInfoAboutExpiredQRCount = 0
 

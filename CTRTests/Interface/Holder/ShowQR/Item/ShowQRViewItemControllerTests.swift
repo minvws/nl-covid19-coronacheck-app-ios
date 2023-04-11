@@ -37,7 +37,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
+				type: .eu,
 				withValidCredential: true
 			)
 		)

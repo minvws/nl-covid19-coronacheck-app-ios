@@ -19,21 +19,13 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 
 		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
-
-		switch validityRegion {
-			case .domestic:
-				return [.headerMessage(
-					message: "",
-					buttonTitle: nil
-				)]
-			case .europeanUnion:
-				return [
-					.headerMessage(
-						message: L.holder_dashboard_filledState_international_0G_message(),
-						buttonTitle: L.holderDashboardEmptyInternationalButton()
-					)
-				]
-		}
+		
+		return [
+			.headerMessage(
+				message: L.holder_dashboard_filledState_international_0G_message(),
+				buttonTitle: L.holderDashboardEmptyInternationalButton()
+			)
+		]
 	}
 
 	static func makeAddCertificateCard(
@@ -139,19 +131,7 @@ extension HolderDashboardViewController.Card {
 				let didTapClose: () -> Void = { [weak actionHandler] in
 					actionHandler?.didTapCloseExpiredQR(expiredQR: expiredQR)
 				}
-				
-				if case .vaccination = expiredQR.type, case .domestic = expiredQR.region {
-					return .expiredVaccinationQR(
-						message: message,
-						callToActionButtonText: L.general_readmore(),
-						didTapCallToAction: { [weak actionHandler] in
-							actionHandler?.didTapExpiredDomesticVaccinationQRMoreInfo()
-						},
-						didTapClose: didTapClose
-					)
-				} else {
-					return .expiredQR(message: message, didTapClose: didTapClose)
-				}
+				return .expiredQR(message: message, didTapClose: didTapClose)
 			}
 	}
 	
@@ -161,18 +141,10 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		
-		switch validityRegion {
-			case .domestic:
-				return [HolderDashboardViewController.Card.emptyStateDescription(
-					message: "",
-					buttonTitle: nil
-				)]
-			case .europeanUnion:
-				return [HolderDashboardViewController.Card.emptyStateDescription(
-					message: L.holder_dashboard_emptyState_international_0G_message(),
-					buttonTitle: L.holder_dashboard_international_0G_action_certificateNeeded()
-				)]
-		}
+		return [HolderDashboardViewController.Card.emptyStateDescription(
+			message: L.holder_dashboard_emptyState_international_0G_message(),
+			buttonTitle: L.holder_dashboard_international_0G_action_certificateNeeded()
+		)]
 	}
 	
 	static func makeEmptyStatePlaceholderImageCard(
@@ -182,21 +154,12 @@ extension HolderDashboardViewController.Card {
 		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
 		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
 		guard !state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
-	
-		switch validityRegion {
-			case .domestic:
-				guard let domesticImage = I.dashboard.domestic() else { return [] }
-				return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
-					image: domesticImage,
-					title: L.holderDashboardEmptyDomesticTitle()
-				)]
-			case .europeanUnion:
-				guard let internationalImage = I.dashboard.international() else { return [] }
-				return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
-					image: internationalImage,
-					title: L.holderDashboardEmptyInternationalTitle()
-				)]
-		}
+		
+		guard let internationalImage = I.dashboard.international() else { return [] }
+		return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
+			image: internationalImage,
+			title: L.holderDashboardEmptyInternationalTitle()
+		)]
 	}
 	
 	static func makeRecommendedUpdateCard(

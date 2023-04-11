@@ -32,20 +32,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		viewModel = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
-		)
-		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 

@@ -564,12 +564,6 @@ extension RemoteGreenCards.Response {
 
 	static var domesticAndInternationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-//				origins: [
-//					RemoteGreenCards.Origin.fakeVaccinationOrigin
-//				],
-//				createCredentialMessages: "test"
-//			),
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -585,12 +579,6 @@ extension RemoteGreenCards.Response {
 
 	static var domesticAndInternationalVaccinationWithHint: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-//				origins: [
-//					RemoteGreenCards.Origin.fakeVaccinationOrigin
-//				],
-//				createCredentialMessages: "test"
-//			),
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -606,7 +594,6 @@ extension RemoteGreenCards.Response {
 
 	static var internationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: nil,
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -628,7 +615,6 @@ extension RemoteGreenCards.Response {
 
 	static func internationalBlockedVaccination(blockedIdentifier: String) -> RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: nil,
 			euGreenCards: [],
 			blobExpireDates: [
 				RemoteGreenCards.BlobExpiry(
@@ -647,7 +633,6 @@ extension RemoteGreenCards.Response {
 
 	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String) -> RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: nil,
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -673,7 +658,6 @@ extension RemoteGreenCards.Response {
 
 	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String, blockedIdentifierForNewVaccination: String) -> RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: nil,
 			euGreenCards: [],
 			blobExpireDates: [
 				RemoteGreenCards.BlobExpiry(
@@ -697,12 +681,6 @@ extension RemoteGreenCards.Response {
 
 	static var multipleDCC: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-//			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-//				origins: [
-//					RemoteGreenCards.Origin.fakeVaccinationOrigin
-//				],
-//				createCredentialMessages: "test"
-//			),
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [

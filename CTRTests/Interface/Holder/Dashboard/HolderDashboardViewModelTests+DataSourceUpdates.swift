@@ -2386,47 +2386,6 @@ extension HolderDashboardViewModelTests {
 //
 //	// MARK: - Expired cards
 //
-//	func test_datasourceupdate_domesticExpired() {
-//
-//		// Arrange
-//		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-//		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [.policy3G])
-//
-//		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
-//			.init(region: .domestic, type: .recovery),
-//			.init(region: .domestic, type: .test),
-//			.init(region: .domestic, type: .vaccination),
-//			.init(region: .domestic, type: .vaccinationassessment)
-//		]
-//
-//		// Act
-//		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
-//
-//		// Assert
-//		expect(self.sut.domesticCards.value).toEventually(haveCount(6))
-//		expect(self.sut.domesticCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
-//			expect(message) == L.holder_dashboard_intro_domestic_only3Gaccess()
-//			expect(buttonTitle) == nil
-//		}))
-//		expect(self.sut.domesticCards.value[1]).toEventually(beExpiredQRCard(test: { message, _ in
-//			expect(message) == L.holder_dashboard_originExpiredBanner_domesticRecovery_title()
-//		}))
-//		expect(self.sut.domesticCards.value[2]).toEventually(beExpiredQRCard(test: { message, _ in
-//			expect(message) == L.holder_dashboard_originExpiredBanner_domesticTest_title()
-//		}))
-//		expect(self.sut.domesticCards.value[3]).toEventually(beExpiredVaccinationQRCard(test: { message, callToActionButtonText, callToAction, _ in
-//			expect(message) == L.holder_dashboard_originExpiredBanner_domesticVaccine_title()
-//			expect(callToActionButtonText) == L.general_readmore()
-//
-//			callToAction() // user taps..
-//
-//			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutExpiredDomesticVaccination) == true
-//		}))
-//		expect(self.sut.domesticCards.value[4]).toEventually(beExpiredQRCard(test: { message, _ in
-//			expect(message) == L.holder_dashboard_originExpiredBanner_visitorPass_title()
-//		}))
-//	}
-//
 //	func test_datasourceupdate_domesticExpired_tapForMoreInfo() {
 //
 //		// Arrange
