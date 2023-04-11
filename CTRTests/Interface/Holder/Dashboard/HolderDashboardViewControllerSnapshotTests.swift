@@ -30,7 +30,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
 		viewModelSpy.stubbedShouldShowTabBar = Observable(value: false)
 		viewModelSpy.stubbedCurrentlyPresentedAlert = Observable(value: nil)
-		viewModelSpy.stubbedDashboardRegionToggleValue = .domestic
 		viewModelSpy.stubbedShouldShowAddCertificateFooter = Observable(value: false)
 		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: true)
 	}

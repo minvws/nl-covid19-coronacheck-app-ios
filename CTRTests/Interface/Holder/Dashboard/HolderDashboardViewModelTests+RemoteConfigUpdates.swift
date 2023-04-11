@@ -25,7 +25,7 @@ extension HolderDashboardViewModelTests {
 		var sendUpdate: ((RemoteConfigManager.ConfigNotification) -> Void)?
 		(environmentSpies.remoteConfigManagerSpy.stubbedObservatoryForUpdates, sendUpdate) = Observatory<RemoteConfigManager.ConfigNotification>.create()
 
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		sendUpdate?((RemoteConfiguration.default, Data(), URLResponse(), "hash"))
@@ -43,7 +43,7 @@ extension HolderDashboardViewModelTests {
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = true
 
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Assert
 		expect(self.sut.internationalCards.value[1]).to(beConfigurationAlmostOutOfDateCard())
@@ -61,7 +61,7 @@ extension HolderDashboardViewModelTests {
 		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = almostOutOfDateObservatory
 
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		almostOutOfDateObservatoryUpdates(true)
 		
 		// Assert
@@ -76,7 +76,7 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		configurationNotificationManagerSpy.stubbedShouldShowAlmostOutOfDateBanner = true
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		// Act
 		if case let .configAlmostOutOfDate(_, _, action) = sut.internationalCards.value[1] {
@@ -93,7 +93,7 @@ extension HolderDashboardViewModelTests {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.2.0"
 
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, appVersion: "1.1.0")
+		sut = vendSut(appVersion: "1.1.0")
 
 		// Assert
 		expect(self.sut.internationalCards.value[1]).toEventually(beRecommendedUpdateCard())
@@ -105,7 +105,7 @@ extension HolderDashboardViewModelTests {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.0.0"
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, appVersion: "1.1.0")
+		sut = vendSut(appVersion: "1.1.0")
 		
 		// Assert
 		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
@@ -117,7 +117,7 @@ extension HolderDashboardViewModelTests {
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.recommendedVersion = "1.1.0"
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion, appVersion: "1.1.0")
+		sut = vendSut(appVersion: "1.1.0")
 		
 		// Assert
 		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())

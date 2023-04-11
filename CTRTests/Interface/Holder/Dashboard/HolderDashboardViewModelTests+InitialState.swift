@@ -18,7 +18,7 @@ extension HolderDashboardViewModelTests {
 	// MARK: - Initial State
 
 	func test_initialStateBeforeDatasourceReload_International() {
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		expect(self.sut.title.value) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle.value) == L.holderMenuProof()
 		expect(self.sut.shouldShowAddCertificateFooter.value) == true
@@ -38,7 +38,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_initialStateAfterEmptyDatasourceLoad() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		// Act
 		qrCardDatasourceSpy.invokedDidUpdate?([], [])

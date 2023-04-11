@@ -45,8 +45,7 @@ protocol HolderDashboardViewModelType: AnyObject {
 	var selectedTab: Observable<DashboardTab> { get }
 	var shouldShowTabBar: Observable<Bool> { get }
 	var shouldShowOnlyInternationalPane: Observable<Bool> { get }
-	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
-	
+
 	func selectTab(newTab: DashboardTab)
 	func viewWillAppear()
 	func addCertificateFooterTapped()
@@ -162,14 +161,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	// MARK: - Private properties
 
-	var dashboardRegionToggleValue: QRCodeValidityRegion {
-		didSet {
-			DispatchQueue.global().async {
-				Current.userSettings.dashboardRegionToggleValue = self.dashboardRegionToggleValue
-			}
-		}
-	}
-
 	private var state: State {
 		didSet {
 			performUIUpdate {
@@ -215,7 +206,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.blockedEventsDatasource = blockedEventsDatasource
 		self.mismatchedIdentityDatasource = mismatchedIdentityDatasource
 		self.strippenRefresher = strippenRefresher
-		self.dashboardRegionToggleValue = Current.featureFlagManager.areZeroDisclosurePoliciesEnabled() ? .europeanUnion : Current.userSettings.dashboardRegionToggleValue
 		self.configurationNotificationManager = configurationNotificationManager
 		self.vaccinationAssessmentNotificationManager = vaccinationAssessmentNotificationManager
 		self.versionSupplier = versionSupplier

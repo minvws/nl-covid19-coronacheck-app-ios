@@ -21,7 +21,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_stopsLoading_shouldTriggerDatasourceReload() {
 
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
@@ -48,7 +48,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippen_international_startLoading_shouldClearError() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -95,7 +95,7 @@ extension HolderDashboardViewModelTests {
 	// MARK: - Strippen Alerts
 
 	func test_strippen_expired_noInternetError_shouldPresentError() {
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -122,7 +122,7 @@ extension HolderDashboardViewModelTests {
 	func test_strippenkaart_noInternet_expired_previouslyDismissed_shouldDisplayError() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -159,7 +159,7 @@ extension HolderDashboardViewModelTests {
 	}
 
 	func test_strippen_noInternet_expiring_shouldPresentErrorAlert() {
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -186,7 +186,7 @@ extension HolderDashboardViewModelTests {
 	func test_strippenkaart_noInternet_expiring_hasPreviouslyDismissed_shouldDoNothing() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -209,7 +209,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippenkaart_serverError_expiring_shouldDoNothing() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 
 		let strippenState = DashboardStrippenRefresher.State(
@@ -233,7 +233,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippenkaart_mismatchedIdentity_expiring_shouldInvokeFuzzyMatchingFlow() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		let error = DashboardStrippenRefresher.Error.greencardLoaderError(
 			error: .credentials(
 				.error(
@@ -267,7 +267,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippenkaart_mismatchedIdentity_expired_shouldInvokeFuzzyMatchingFlow() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		let error = DashboardStrippenRefresher.Error.greencardLoaderError(
 			error: .credentials(
 				.error(
@@ -301,7 +301,7 @@ extension HolderDashboardViewModelTests {
 	}
 
 	func test_strippen_expired_serverError_firstTime_shouldDisplayErrorWithRetry() {
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let newStrippenState = DashboardStrippenRefresher.State(
@@ -339,7 +339,7 @@ extension HolderDashboardViewModelTests {
 	func test_strippen_expired_serverError_secondTime_shouldDisplayErrorWithHelpdesk() {
 		// Arrange
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -379,7 +379,7 @@ extension HolderDashboardViewModelTests {
 	func test_strippen_international_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
 		// Arrange
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest, timestamp: now)
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -417,7 +417,7 @@ extension HolderDashboardViewModelTests {
 
 	func test_strippenkaart_noActionNeeded_shouldDoNothing() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .idle,

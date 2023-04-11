@@ -27,7 +27,6 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
 		viewModelSpy.stubbedShouldShowTabBar = Observable(value: false)
 		viewModelSpy.stubbedCurrentlyPresentedAlert = Observable(value: nil)
-		viewModelSpy.stubbedDashboardRegionToggleValue = .domestic
 		viewModelSpy.stubbedShouldShowAddCertificateFooter = Observable(value: false)
 		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: false)
 	}
@@ -69,16 +68,5 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		
 		// Assert
 		expect(self.viewModelSpy.invokedViewWillAppear) == true
-	}
-
-	func test_didDisplayTab() {
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		sut.holderDashboardView(didDisplay: .international)
-		
-		// Assert
-		expect(self.viewModelSpy.invokedDashboardRegionToggleValueList.first!) == .europeanUnion
 	}
 }

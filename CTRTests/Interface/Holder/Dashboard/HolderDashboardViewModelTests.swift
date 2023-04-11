@@ -60,9 +60,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
-	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0") -> HolderDashboardViewModel {
+	func vendSut(appVersion: String = "1.0.0") -> HolderDashboardViewModel {
 
-		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
 		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,

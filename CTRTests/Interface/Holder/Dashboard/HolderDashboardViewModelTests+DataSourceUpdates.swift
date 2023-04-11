@@ -24,7 +24,7 @@ extension HolderDashboardViewModelTests {
 	func test_didBecomeActiveNotification_triggersDatasourceReload() {
 		// Arrange
 
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		// Act
@@ -37,7 +37,7 @@ extension HolderDashboardViewModelTests {
 	func test_viewWillAppear_triggersDatasourceReload() {
 		// Arrange
 
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		expect(self.qrCardDatasourceSpy.invokedReload) == false
 
 		// Act
@@ -51,7 +51,7 @@ extension HolderDashboardViewModelTests {
 
 		// Arrange
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "<a href=\"tel:TEST\">TEST</a>"
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -90,7 +90,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_1_of_2() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -144,7 +144,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_ExpiringSoon() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -197,7 +197,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_multipleCurrentlyValidDCCs_IssuedAbroad() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -279,7 +279,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_0_of_2() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -327,7 +327,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_nil_of_2() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -380,7 +380,7 @@ extension HolderDashboardViewModelTests {
 		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "PCR (NAAT)"
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -432,7 +432,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleCurrentlyValidInternationalRecovery() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -485,7 +485,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let vaccineGreenCardID = NSManagedObjectID()
 		let testGreenCardID = NSManagedObjectID()
@@ -572,7 +572,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleNotYetValidInternationalVaccination() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -616,7 +616,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_singleNotYetValidInternationalRecovery() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let qrCards = [
 			HolderDashboardViewModel.QRCard(
@@ -664,7 +664,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_internationalExpired() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .europeanUnion, type: .recovery),
@@ -699,7 +699,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_multipleDCC_1of2_2of2() {
 
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		let oneOfTwoGreencardObjectID = NSManagedObjectID()
 		let twoOfTwoGreencardObjectID = NSManagedObjectID()
@@ -766,7 +766,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_multipleDCC_1of2_2of2_3of2_3of3() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		let oneOfTwoGreencardObjectID = NSManagedObjectID()
 		let twoOfTwoGreencardObjectID = NSManagedObjectID()

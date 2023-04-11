@@ -15,8 +15,6 @@ public protocol UserSettingsProtocol: AnyObject {
 
 	var jailbreakWarningShown: Bool { get set }
 
-	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
-
 	var configFetchedTimestamp: TimeInterval? { get set }
 
 	var configFetchedHash: String? { get set }
@@ -53,9 +51,6 @@ public class UserSettings: UserSettingsProtocol {
 
 	@Shared.UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
 	public var jailbreakWarningShown: Bool
-
-	@Shared.UserDefaults(key: "dashboardRegionToggleValue")
-	public var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic
 
 	@Shared.UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
 	public var configFetchedTimestamp: TimeInterval?
@@ -104,7 +99,6 @@ extension UserSettings {
 		let userDefaults = Foundation.UserDefaults.standard
 		[	"scanInstructionShown",
 			"jailbreakWarningShown",
-			"dashboardRegionToggleValue",
 			"configFetchedTimestamp",
 			"configFetchedHash",
 			"issuerKeysFetchedTimestamp",
@@ -121,6 +115,7 @@ extension UserSettings {
 			"hasShownBlockedEventsAlert",
 
 			// Deprecated keys
+			"dashboardRegionToggleValue",
 			"didCompleteEUVaccinationMigration",
 			"didDismissEUVaccinationMigrationSuccessBanner",
 			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",

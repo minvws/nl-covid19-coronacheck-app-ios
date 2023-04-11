@@ -19,7 +19,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_openURL_callsCoordinator() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 
 		// Act
@@ -31,7 +31,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_addCertificateFooterTapped_callsCoordinator() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == false
 
 		// Act
@@ -47,7 +47,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedConfigFetchedTimestamp = now.timeIntervalSince1970
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		sut.didTapConfigAlmostOutOfDateCTA()
@@ -60,7 +60,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapDeviceHasClockDeviationMoreInfo() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		sut.didTapDeviceHasClockDeviationMoreInfo()
@@ -72,7 +72,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapShowQR() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		let value = NSManagedObjectID()
@@ -86,7 +86,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapRetryLoadQRCards() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		sut.didTapRetryLoadQRCards()
@@ -98,7 +98,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_didTapRecommendedUpdate_noUrl() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		sut.didTapRecommendedUpdate()
@@ -111,7 +111,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Arrange
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.appStoreURL = URL(string: "https://apple.com")
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		sut.didTapRecommendedUpdate()
@@ -123,7 +123,7 @@ extension HolderDashboardViewModelTests {
 	func test_actionhandling_disclosurePolicyInformationCard_0g() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		// Act
 		qrCardDatasourceSpy.invokedDidUpdate?([], [])

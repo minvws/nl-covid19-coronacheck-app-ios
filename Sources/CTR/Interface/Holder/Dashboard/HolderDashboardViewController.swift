@@ -73,8 +73,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		setupBindings()
 		
-		sceneView.delegate = self
-
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.addCertificateFooterTapped()
 		}
@@ -195,14 +193,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		}
 
 		UIAccessibility.post(notification: .layoutChanged, argument: view)
-	}
-}
-
-extension HolderDashboardViewController: HolderDashboardViewDelegate {
-	
-	func holderDashboardView(didDisplay tab: DashboardTab) {
-		let changedRegion: QRCodeValidityRegion = tab.isDomestic ? .domestic : .europeanUnion
-		viewModel.dashboardRegionToggleValue = changedRegion
 	}
 }
 

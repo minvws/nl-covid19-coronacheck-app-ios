@@ -25,7 +25,7 @@ extension HolderDashboardViewModelTests {
 	func test_zeroG_initialState_hasCorrectValues() {
 		
 		// Act
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 
 		// Assert
 		expect(self.sut.shouldShowTabBar.value) == false
@@ -46,7 +46,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_domesticExpiredButOnInternationalTab_zeroG_shouldShowEmptyState() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery),
@@ -70,7 +70,7 @@ extension HolderDashboardViewModelTests {
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination_0G() {
 		
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		sut = vendSut()
 		
 		let vaccineGreenCardID = NSManagedObjectID()
 		let testGreenCardID = NSManagedObjectID()

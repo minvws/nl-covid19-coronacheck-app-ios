@@ -10,14 +10,7 @@ import Shared
 import ReusableViews
 import Resources
 
-protocol HolderDashboardViewDelegate: AnyObject {
-	
-	func holderDashboardView(didDisplay tab: DashboardTab)
-}
-
 final class HolderDashboardView: BaseView {
-	
-	weak var delegate: HolderDashboardViewDelegate?
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -198,7 +191,6 @@ final class HolderDashboardView: BaseView {
 			}
 		}() {
 			selectTab(tab: tab)
-			delegate?.holderDashboardView(didDisplay: tab)
 		}
 		
 		// Scroll via swipe gesture
@@ -349,7 +341,6 @@ extension HolderDashboardView: UIScrollViewDelegate {
 		tabBar.select(tab: selectedTab, animated: true)
 		
 		updateScrollViewContentOffsetObserver(for: selectedTab)
-		delegate?.holderDashboardView(didDisplay: selectedTab)
 	}
 }
 
@@ -361,7 +352,6 @@ extension HolderDashboardView: DashboardTabBarDelegate {
 		UIAccessibility.post(notification: .pageScrolled, argument: nil)
 				
 		updateScrollViewContentOffsetObserver(for: tab)
-		delegate?.holderDashboardView(didDisplay: tab)
 	}
 }
 

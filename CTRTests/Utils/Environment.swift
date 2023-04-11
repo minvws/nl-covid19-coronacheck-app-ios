@@ -158,7 +158,6 @@ final class EnvironmentSpies {
 	var userSettingsSpy: UserSettingsSpy = {
 		let spy = UserSettingsSpy()
 		spy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
-		spy.stubbedDashboardRegionToggleValue = .domestic
 		return spy
 	}()
 	

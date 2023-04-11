@@ -93,28 +93,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		return stubbedShouldShowOnlyInternationalPane
 	}
 
-	var invokedDashboardRegionToggleValueSetter = false
-	var invokedDashboardRegionToggleValueSetterCount = 0
-	var invokedDashboardRegionToggleValue: QRCodeValidityRegion?
-	var invokedDashboardRegionToggleValueList = [QRCodeValidityRegion]()
-	var invokedDashboardRegionToggleValueGetter = false
-	var invokedDashboardRegionToggleValueGetterCount = 0
-	var stubbedDashboardRegionToggleValue: QRCodeValidityRegion!
-
-	var dashboardRegionToggleValue: QRCodeValidityRegion {
-		set {
-			invokedDashboardRegionToggleValueSetter = true
-			invokedDashboardRegionToggleValueSetterCount += 1
-			invokedDashboardRegionToggleValue = newValue
-			invokedDashboardRegionToggleValueList.append(newValue)
-		}
-		get {
-			invokedDashboardRegionToggleValueGetter = true
-			invokedDashboardRegionToggleValueGetterCount += 1
-			return stubbedDashboardRegionToggleValue
-		}
-	}
-
 	var invokedSelectTab = false
 	var invokedSelectTabCount = 0
 	var invokedSelectTabParameters: (newTab: DashboardTab, Void)?
