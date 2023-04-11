@@ -37,7 +37,6 @@ public protocol UserSettingsProtocol: AnyObject {
 	
 	var policyInformationShown: Bool { get set }
 
-	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
 	var hasDismissedZeroGPolicy: Bool { get set }
 	var lastKnownConfigDisclosurePolicy: [String] { get set }
 	var overrideDisclosurePolicies: [String] { get set }
@@ -90,9 +89,6 @@ public class UserSettings: UserSettingsProtocol {
 	@Shared.UserDefaults(key: "policyInformationShown", defaultValue: false)
 	public var policyInformationShown: Bool
 
-	@Shared.UserDefaults(key: "lastDismissedDisclosurePolicy")
-	public var lastDismissedDisclosurePolicy: [DisclosurePolicy] = []
-
 	@Shared.UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
 	public var hasDismissedZeroGPolicy: Bool = false
 	
@@ -129,13 +125,13 @@ extension UserSettings {
 			"shouldCheckRecoveryGreenCardRevisedValidity",
 			"configVerificationPolicies",
 			"policyInformationShown",
-			"lastDismissedDisclosurePolicy",
 			"overrideDisclosurePolicies",
 			"lastKnownConfigDisclosurePolicy",
 			"hasDismissedZeroGPolicy",
 			"hasShownBlockedEventsAlert",
 
 			// Deprecated keys
+			"lastDismissedDisclosurePolicy",
 			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
 			"lastRecommendToAddYourBoosterDismissalDate",

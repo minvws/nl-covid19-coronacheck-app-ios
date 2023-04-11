@@ -141,11 +141,8 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_noDomesticCertificatesBanner_url()
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
 			
-			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == nil
 			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy) == nil
-			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = []
 			didTapClose()
-			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == nil
 			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy) == true
 		}))
 		expect(self.sut.internationalCards.value[2]).to(beEmptyStatePlaceholderImage())

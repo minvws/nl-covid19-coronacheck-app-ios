@@ -112,7 +112,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beFalse())
 		expect(self.sut.visibilityState).toEventually(beVisible())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
@@ -143,7 +142,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beFalse())
 		expect(self.sut.visibilityState).toEventually(beOverlay())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
@@ -174,7 +172,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.environmentSpies.cryptoManagerSpy.invokedDiscloseCredential).toEventually(beFalse())
 		expect(self.sut.visibilityState).toEventually(beOverlay())
 		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.delegateSpy.invokedItemIsNotValid) == false
@@ -212,7 +209,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testTakingAScreenshotPersistsDate() throws {
 
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
@@ -238,7 +234,6 @@ class ShowQRItemViewModelTests: XCTestCase {
 	func testHavingAPriorUnexpiredScreenshotStartsScreenshotBlocker() throws {
 
 		// Given
-		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
 		environmentSpies.userSettingsSpy.stubbedLastScreenshotTime = now.addingTimeInterval(-10)
 
 		let greenCard = try XCTUnwrap(
@@ -277,8 +272,7 @@ class ShowQRItemViewModelTests: XCTestCase {
 			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
-		environmentSpies.cryptoManagerSpy.stubbedDiscloseCredentialResult = Data()
-
+		
 		// When
 		sut?.checkQRValidity()
 

@@ -296,28 +296,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastDismissedDisclosurePolicySetter = false
-	var invokedLastDismissedDisclosurePolicySetterCount = 0
-	var invokedLastDismissedDisclosurePolicy: [DisclosurePolicy]?
-	var invokedLastDismissedDisclosurePolicyList = [[DisclosurePolicy]]()
-	var invokedLastDismissedDisclosurePolicyGetter = false
-	var invokedLastDismissedDisclosurePolicyGetterCount = 0
-	var stubbedLastDismissedDisclosurePolicy: [DisclosurePolicy]! = []
-
-	var lastDismissedDisclosurePolicy: [DisclosurePolicy] {
-		set {
-			invokedLastDismissedDisclosurePolicySetter = true
-			invokedLastDismissedDisclosurePolicySetterCount += 1
-			invokedLastDismissedDisclosurePolicy = newValue
-			invokedLastDismissedDisclosurePolicyList.append(newValue)
-		}
-		get {
-			invokedLastDismissedDisclosurePolicyGetter = true
-			invokedLastDismissedDisclosurePolicyGetterCount += 1
-			return stubbedLastDismissedDisclosurePolicy
-		}
-	}
-
 	var invokedHasDismissedZeroGPolicySetter = false
 	var invokedHasDismissedZeroGPolicySetterCount = 0
 	var invokedHasDismissedZeroGPolicy: Bool?

@@ -115,20 +115,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedReadEuCredentialsResult
 	}
 
-	var invokedDiscloseCredential = false
-	var invokedDiscloseCredentialCount = 0
-	var invokedDiscloseCredentialParameters: (credential: Data, disclosurePolicy: DisclosurePolicy, holderSecretKey: Data)?
-	var invokedDiscloseCredentialParametersList = [(credential: Data, disclosurePolicy: DisclosurePolicy, holderSecretKey: Data)]()
-	var stubbedDiscloseCredentialResult: Data!
-
-	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
-		invokedDiscloseCredential = true
-		invokedDiscloseCredentialCount += 1
-		invokedDiscloseCredentialParameters = (credential, disclosurePolicy, holderSecretKey)
-		invokedDiscloseCredentialParametersList.append((credential, disclosurePolicy, holderSecretKey))
-		return stubbedDiscloseCredentialResult
-	}
-
 	var invokedVerifyQRMessage = false
 	var invokedVerifyQRMessageCount = 0
 	var invokedVerifyQRMessageParameters: (message: String, Void)?

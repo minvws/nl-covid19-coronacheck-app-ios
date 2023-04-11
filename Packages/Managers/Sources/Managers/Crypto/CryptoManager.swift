@@ -67,23 +67,6 @@ public class CryptoManager: CryptoManaging {
 	
 	// MARK: - QR
 	
-	public func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
-
-		if hasPublicKeys() {
-			logVerbose("Disclosing with policy: \(disclosurePolicy)")
-			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
-			if let payload = disclosed?.value {
-				let message = String(decoding: payload, as: UTF8.self)
-				logVerbose("QR message: \(message)")
-				return payload
-			} else if let error = disclosed?.error {
-				logError("generateQRmessage: \(error)")
-			}
-		}
-		
-		return nil
-	}
-	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Verification result if the QR is valid or error if not

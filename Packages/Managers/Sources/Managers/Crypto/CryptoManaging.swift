@@ -59,14 +59,6 @@ public protocol CryptoManaging: AnyObject {
 	
 	// MARK: QR
 	
-	/// Disclose the credential
-	/// - Parameters:
-	///   - credential: the (domestic) credential to generate the QR from
-	///   - forPolicy: the disclosure policy (1G / 3G) to genearte the QR with
-	///   - withKey: the holder secret key
-	/// - Returns: the QR message
-	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data?
-	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Verification result if the QR is valid or error if not

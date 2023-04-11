@@ -359,18 +359,13 @@ extension HolderDashboardViewModel.QRCard {
 
 /// For a given `[QRCard.GreenCard.Origin]`, determines which origin expires furthest into future, and
 /// if the date is within the threshold, will return a localized string indicating how long until that origin expires.
-private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin], localDisclosurePolicy: DisclosurePolicy) -> String? {
+private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]) -> String? {
 	
 	let expiringMostDistantlyInFutureOrigin: QRCard.GreenCard.Origin? = {
-		if localDisclosurePolicy == .policy1G {
-			return origins.first(where: { $0.type == .test })
-		} else {
-			
-			// Calculate which is the origin with the furthest future expiration:
-			return origins.reduce(QRCard.GreenCard.Origin?.none) { previous, next in
-				guard let previous = previous else { return next }
-				return next.expirationTime > previous.expirationTime ? next : previous
-			}
+		// Calculate which is the origin with the furthest future expiration:
+		return origins.reduce(QRCard.GreenCard.Origin?.none) { previous, next in
+			guard let previous = previous else { return next }
+			return next.expirationTime > previous.expirationTime ? next : previous
 		}
 	}()
 	
