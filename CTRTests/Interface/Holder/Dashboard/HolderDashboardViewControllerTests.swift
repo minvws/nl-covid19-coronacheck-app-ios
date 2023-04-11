@@ -76,9 +76,9 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
 		
 		// Act
-		sut.holderDashboardView(didDisplay: .domestic)
+		sut.holderDashboardView(didDisplay: .international)
 		
 		// Assert
-		expect(self.viewModelSpy.invokedDashboardRegionToggleValueList.first!) == .domestic
+		expect(self.viewModelSpy.invokedDashboardRegionToggleValueList.first!) == .europeanUnion
 	}
 }

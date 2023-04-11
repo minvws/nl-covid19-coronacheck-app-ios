@@ -25,7 +25,7 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		_ = setupEnvironmentSpies()
 		viewModelSpy = HolderDashboardViewModelSpy()
 		viewModelSpy.stubbedTitle = Observable(value: L.holderDashboardTitle())
-		viewModelSpy.stubbedSelectedTab = Observable(value: .domestic)
+		viewModelSpy.stubbedSelectedTab = Observable(value: .international)
 		viewModelSpy.stubbedInternationalCards = Observable(value: [])
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
 		viewModelSpy.stubbedShouldShowTabBar = Observable(value: false)
