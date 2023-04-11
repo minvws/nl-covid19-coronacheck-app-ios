@@ -42,7 +42,6 @@ protocol HolderDashboardViewModelType: AnyObject {
 	var primaryButtonTitle: Observable<String> { get }
 	var shouldShowAddCertificateFooter: Observable<Bool> { get }
 	var currentlyPresentedAlert: Observable<AlertContent?> { get }
-	var shouldShowOnlyInternationalPane: Observable<Bool> { get }
 
 	func selectTab(newTab: DashboardTab)
 	func viewWillAppear()
@@ -66,8 +65,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	let shouldShowAddCertificateFooter = Observable<Bool>(value: false)
 
 	let currentlyPresentedAlert = Observable<AlertContent?>(value: nil)
-	
-	let shouldShowOnlyInternationalPane = Observable<Bool>(value: true)
 
 	// MARK: - Private types
 
@@ -102,10 +99,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		var shouldShowCompleteYourVaccinationAssessmentBanner: Bool = false
 		
 		var shouldShowAddCertificateFooter: Bool {
-			(qrCards.isEmpty || (shouldShowOnlyInternationalPane && !dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
+			(qrCards.isEmpty || (!dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
 		}
-		
-		var shouldShowOnlyInternationalPane: Bool = true
 		
 		var shouldShow0GDisclosurePolicyBecameActiveBanner = false
 		
@@ -323,7 +318,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		)
 
 		shouldShowAddCertificateFooter.value = state.shouldShowAddCertificateFooter
-		shouldShowOnlyInternationalPane.value = state.shouldShowOnlyInternationalPane
 	}
 
 	fileprivate func strippenRefresherDidUpdate(oldRefresherState: DashboardStrippenRefresher.State?, refresherState: DashboardStrippenRefresher.State) {

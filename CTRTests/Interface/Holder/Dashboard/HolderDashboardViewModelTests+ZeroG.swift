@@ -28,8 +28,6 @@ extension HolderDashboardViewModelTests {
 		sut = vendSut()
 
 		// Assert
-		expect(self.sut.shouldShowOnlyInternationalPane.value) == true
-		
 		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_emptyState_international_0G_message()

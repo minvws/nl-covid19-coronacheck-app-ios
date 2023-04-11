@@ -63,16 +63,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		return stubbedCurrentlyPresentedAlert
 	}
 
-	var invokedShouldShowOnlyInternationalPaneGetter = false
-	var invokedShouldShowOnlyInternationalPaneGetterCount = 0
-	var stubbedShouldShowOnlyInternationalPane: Observable<Bool>!
-
-	var shouldShowOnlyInternationalPane: Observable<Bool> {
-		invokedShouldShowOnlyInternationalPaneGetter = true
-		invokedShouldShowOnlyInternationalPaneGetterCount += 1
-		return stubbedShouldShowOnlyInternationalPane
-	}
-
 	var invokedSelectTab = false
 	var invokedSelectTabCount = 0
 	var invokedSelectTabParameters: (newTab: DashboardTab, Void)?

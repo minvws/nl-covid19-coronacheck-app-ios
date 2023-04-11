@@ -145,17 +145,6 @@ func beExpiredVaccinationQRCard(test: @escaping (String, String, () -> Void, () 
 	}
 }
 
-func beOriginNotValidInThisRegionCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .originNotValidInThisRegion with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .originNotValidInThisRegion(message2, callToActionButtonText, didTapCallToAction) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .configAlmostOutOfDate with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
@@ -172,17 +161,6 @@ func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Voi
 		if let actual = try expression.evaluate(),
 		   case let .recommendedUpdate(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
-func beNewValidityInfoForVaccinationAndRecoveriesCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beNewValidityInfoForVaccinationAndRecoveriesCard with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .newValidityInfoForVaccinationAndRecoveries(message2, callToActionButtonText, didTapCallToAction, didTapToClose) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction, didTapToClose)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

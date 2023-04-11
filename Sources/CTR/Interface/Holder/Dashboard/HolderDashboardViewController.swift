@@ -28,13 +28,9 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		// Warnings:
 		case expiredQR(message: String, didTapClose: () -> Void)
 		case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-		case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case eventsWereRemoved(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-		
-		// Vaccination & Recovery Validity
-		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
 		// Vaccination Assessment
 		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
@@ -134,9 +130,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
 		
-		coordinator.animate { _ in
-//			self.sceneView.updateScrollPosition()
-		}
+		coordinator.animate { _ in }
 	}
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -163,10 +157,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		viewModel.primaryButtonTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
-
-		viewModel.shouldShowOnlyInternationalPane.observe { [sceneView] in
-			sceneView.shouldShowOnlyInternationalPane = $0
-		}
 	}
 
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
@@ -203,8 +193,7 @@ private extension HolderDashboardViewController.Card {
 				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
 
 			// Message Cards with a message + CTA button
-			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
-				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
+			case let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
 				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
@@ -217,8 +206,7 @@ private extension HolderDashboardViewController.Card {
 				))
 				
 			// Message Cards with a message + CTA button + close button
-			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
+			case let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
 				let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(

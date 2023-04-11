@@ -29,7 +29,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
 		viewModelSpy.stubbedCurrentlyPresentedAlert = Observable(value: nil)
 		viewModelSpy.stubbedShouldShowAddCertificateFooter = Observable(value: false)
-		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: true)
 	}
 	
 	func testInitial() {
@@ -150,20 +149,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image)
 	}
 	
-	func test_originNotValidInThisRegion() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedInternationalCards.value = [
-			.originNotValidInThisRegion(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {})
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
 	func test_deviceHasClockDeviation() {
 
 		// Arrange
@@ -233,20 +218,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 				expiryCountdownEvaluator: nil,
 				error: .init(message: "Here is a much longer error message that almost certainly takes up numerous many or several lines", didTapURL: { _ in })
 			)
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_newValidityInfoForVaccinationAndRecoveries() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedInternationalCards.value = [
-			.newValidityInfoForVaccinationAndRecoveries(title: "title", buttonText: "buttonText", didTapCallToAction: {}, didTapClose: {})
 		]
 		
 		// Assert

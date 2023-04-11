@@ -26,7 +26,6 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
 		viewModelSpy.stubbedCurrentlyPresentedAlert = Observable(value: nil)
 		viewModelSpy.stubbedShouldShowAddCertificateFooter = Observable(value: false)
-		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: false)
 	}
 	
 	func test_footerButtonPrimaryButtonTap() {
