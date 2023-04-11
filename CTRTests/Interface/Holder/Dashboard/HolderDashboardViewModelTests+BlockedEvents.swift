@@ -23,7 +23,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_blockedEvent_zeroInDB_doesntShowBanner() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Act
 		blockedEventsSpy.invokedDidUpdate?([])
@@ -39,7 +39,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_blockedEvent_eventBeingAdded_hasNotSeenAlert_triggersBannerAndShowsAlert() throws {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Act
 		expect(self.environmentSpies.userSettingsSpy.invokedHasShownBlockedEventsAlertSetterCount) == 0
@@ -96,7 +96,7 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		environmentSpies.userSettingsSpy.stubbedHasShownBlockedEventsAlert = true
 		
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Act
 		blockedEventsSpy.invokedDidUpdate?([RemovedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
@@ -123,7 +123,7 @@ extension HolderDashboardViewModelTests {
 	
 	func test_mismatchedIdentityEvent_zeroInDB_doesntShowBanner() {
 		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Act
 		mismatchedIdentityEventsSpy.invokedDidUpdate?([])
@@ -140,7 +140,7 @@ extension HolderDashboardViewModelTests {
 	func test_mismatchedIdentityEvent_eventBeingAdded_triggersBanner() throws {
 		// Arrange
 		environmentSpies.secureUserSettingsSpy.stubbedSelectedIdentity = "de Tester, Test"
-		sut = vendSut(dashboardRegionToggleValue: .domestic, activeDisclosurePolicies: [])
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		
 		// Act
 		mismatchedIdentityEventsSpy.invokedDidUpdate?([RemovedEventItem(objectID: NSManagedObjectID(), eventDate: now, reason: "the reason", type: .vaccination)])
