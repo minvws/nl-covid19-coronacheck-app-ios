@@ -43,7 +43,6 @@ protocol HolderDashboardViewModelType: AnyObject {
 	var shouldShowAddCertificateFooter: Observable<Bool> { get }
 	var currentlyPresentedAlert: Observable<AlertContent?> { get }
 
-	func selectTab(newTab: DashboardTab)
 	func viewWillAppear()
 	func addCertificateFooterTapped()
 	func userTappedMenuButton()
@@ -154,10 +153,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				self.didUpdateState(fromOldState: oldValue)
 			}
 		}
-	}
-	
-	func selectTab(newTab: DashboardTab) {
-		return
 	}
 
 	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol

@@ -63,18 +63,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		return stubbedCurrentlyPresentedAlert
 	}
 
-	var invokedSelectTab = false
-	var invokedSelectTabCount = 0
-	var invokedSelectTabParameters: (newTab: DashboardTab, Void)?
-	var invokedSelectTabParametersList = [(newTab: DashboardTab, Void)]()
-
-	func selectTab(newTab: DashboardTab) {
-		invokedSelectTab = true
-		invokedSelectTabCount += 1
-		invokedSelectTabParameters = (newTab, ())
-		invokedSelectTabParametersList.append((newTab, ()))
-	}
-
 	var invokedViewWillAppear = false
 	var invokedViewWillAppearCount = 0
 
