@@ -180,11 +180,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	
 	func selectTab(newTab: DashboardTab) {
 		return
-//		guard state.activeDisclosurePolicyMode != .zeroG else { return }
-//
-//		// Handle new value:
-//		dashboardRegionToggleValue = newTab.isDomestic ? .domestic : .europeanUnion
-//		selectedTab.value = newTab
 	}
 
 	private let qrcardDatasource: HolderDashboardQRCardDatasourceProtocol
