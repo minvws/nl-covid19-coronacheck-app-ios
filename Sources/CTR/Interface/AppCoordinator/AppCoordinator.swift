@@ -290,7 +290,6 @@ class AppCoordinator: Coordinator {
 		
 		switch universalLink {
 			case .redeemHolderToken,
-					.redeemVaccinationAssessment,
 					.thirdPartyTicketApp,
 					.tvsAuth,
 					.thirdPartyScannerApp:

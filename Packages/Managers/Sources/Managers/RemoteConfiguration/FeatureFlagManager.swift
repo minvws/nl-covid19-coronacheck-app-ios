@@ -17,7 +17,6 @@ public protocol FeatureFlagManaging {
 	///  Should we use the luhn check for tokens?
 	/// - Returns: True if we can
 	func isLuhnCheckEnabled() -> Bool
-	func isVisitorPassEnabled() -> Bool
 	
 	// Verifier
 	func areMultipleVerificationPoliciesEnabled() -> Bool
@@ -61,11 +60,6 @@ public class FeatureFlagManager: FeatureFlagManaging {
 		return remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 	
-	public func isVisitorPassEnabled() -> Bool {
-		
-		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
-	}
-	
 	public func areMultipleVerificationPoliciesEnabled() -> Bool {
 		
 		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
@@ -75,7 +69,7 @@ public class FeatureFlagManager: FeatureFlagManaging {
 		verificationPolicies.contains(VerificationPolicy.policy1G.featureFlag)
 	}
 	
-	public func is1GVerificationPolicyEnabled() -> Bool {
+	public func is1GVerificationPolicyEnabled() -> Bool { // Verifier
 		
 		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
 			return false

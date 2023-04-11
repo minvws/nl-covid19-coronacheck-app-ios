@@ -210,40 +210,4 @@ class FeatureFlagManagerTests: XCTestCase {
 		// Then
 		expect(flag) == true
 	}
-	
-	func test_isVisitorPassEnabled_visitorPassDisabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.visitorPassEnabled = false
-		
-		// When
-		let flag = sut.isVisitorPassEnabled()
-		
-		// Then
-		expect(flag) == false
-	}
-	
-	func test_isVisitorPassEnabled_defaultToFalseWhenNil() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.visitorPassEnabled = nil
-		
-		// When
-		let flag = sut.isVisitorPassEnabled()
-		
-		// Then
-		expect(flag) == false
-	}
-	
-	func test_isVisitorPassEnabled_visitorPassEnabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.visitorPassEnabled = true
-		
-		// When
-		let flag = sut.isVisitorPassEnabled()
-		
-		// Then
-		expect(flag) == true
-	}
 }

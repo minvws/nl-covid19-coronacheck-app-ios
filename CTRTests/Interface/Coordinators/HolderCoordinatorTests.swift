@@ -185,91 +185,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.unhandledUniversalLink) == universalLink
 	}
 	
-	func test_consume_redeemVaccinationAssessment() {
-		
-		// Given
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
-		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
-		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
-			token: "STXT2VF3389TJ2",
-			protocolVersion: "3.0",
-			providerIdentifier: "XXX"
-		))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
-		expect(self.sut.unhandledUniversalLink) == nil
-	}
-	
-	func test_consume_redeemVaccinationAssessment_needsOnboarding() {
-		
-		// Given
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
-		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
-			token: "STXT2VF3389TJ2",
-			protocolVersion: "3.0",
-			providerIdentifier: "XXX"
-		))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == universalLink
-	}
-	
-	func test_consume_redeemVaccinationAssessment_needsConsent() {
-		
-		// Given
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
-		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
-		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
-			token: "STXT2VF3389TJ2",
-			protocolVersion: "3.0",
-			providerIdentifier: "XXX"
-		))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == universalLink
-	}
-	
-	func test_consume_redeemVaccinationAssessment_needsUpdating() {
-		
-		// Given
-		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
-		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
-		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
-		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
-			token: "STXT2VF3389TJ2",
-			protocolVersion: "3.0",
-			providerIdentifier: "XXX"
-		))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == universalLink
-	}
-	
 	func test_consume_thirdPartyTicketApp() {
 		
 		// Given
@@ -350,19 +265,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
 		expect(self.sut.childCoordinators).to(haveCount(1))
-	}
-	
-	func test_navigateToAddVisitorPass() {
-		
-		// Given
-		
-		// When
-		sut.navigateToAddVisitorPass()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is VisitorPassStartViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAboutThisApp() {

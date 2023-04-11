@@ -356,39 +356,6 @@ class EventCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
 	}
-	
-	func test_authenticationScreenDidFinish_back_vaccinationAssessment() {
-		
-		// Given
-		navigationSpy.viewControllers = [
-			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationassessment, authenticationMode: .manyAuthenticationExchange))
-		]
-		
-		// When
-		sut.authenticationScreenDidFinish(.back(eventMode: .vaccinationassessment))
-		
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
-	}
-	
-	func test_authenticationScreenDidFinish_back_vaccinationAssessment_visitorpass() {
-		
-		// Given
-		navigationSpy.viewControllers = [
-			VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: HolderCoordinatorDelegateSpy())),
-			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationassessment, authenticationMode: .manyAuthenticationExchange))
-		]
-		
-		// When
-		sut.authenticationScreenDidFinish(.back(eventMode: .vaccinationassessment))
-		
-		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is VisitorPassStartViewController) == true
-	}
 
 	func test_authenticationScreenDidFinish_back_test() {
 		

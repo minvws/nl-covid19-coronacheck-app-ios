@@ -224,34 +224,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image)
 	}
 	
-	func test_completeYourVaccinationAssessment() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedInternationalCards.value = [
-			.completeYourVaccinationAssessment(title: "title", buttonText: "buttonText", didTapCallToAction: {})
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
-	func test_vaccinationAssessmentInvalidOutsideNL() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedInternationalCards.value = [
-			.vaccinationAssessmentInvalidOutsideNL(title: "title", buttonText: "buttonText", didTapCallToAction: {})
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
 	func test_recommendedUpdate() {
 
 		// Arrange

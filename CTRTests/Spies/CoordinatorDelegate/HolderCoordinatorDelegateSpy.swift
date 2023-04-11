@@ -180,14 +180,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToAddPaperProofCount += 1
 	}
 
-	var invokedUserWishesToAddVisitorPass = false
-	var invokedUserWishesToAddVisitorPassCount = 0
-
-	func userWishesToAddVisitorPass() {
-		invokedUserWishesToAddVisitorPass = true
-		invokedUserWishesToAddVisitorPassCount += 1
-	}
-
 	var invokedUserWishesToChooseTestLocation = false
 	var invokedUserWishesToChooseTestLocationCount = 0
 

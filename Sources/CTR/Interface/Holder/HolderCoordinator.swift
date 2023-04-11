@@ -46,7 +46,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	func userWishesToAddPaperProof()
-	func userWishesToAddVisitorPass()
 	func userWishesToChooseTestLocation()
 	func userWishesToCreateANegativeTestQR()
 	func userWishesToCreateANegativeTestQRFromGGD()
@@ -208,8 +207,6 @@ class HolderCoordinator: SharedCoordinator {
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
 				return consumeToken(requestToken, retrievalMode: .negativeTest, universalLink: universalLink)
-			case .redeemVaccinationAssessment(let requestToken):
-				return consumeToken(requestToken, retrievalMode: .visitorPass, universalLink: universalLink)
 			case .thirdPartyTicketApp(let returnURL):
 				return consumeThirdPartyTicket(returnURL)
 			case .tvsAuth(let returnURL):
@@ -333,11 +330,6 @@ class HolderCoordinator: SharedCoordinator {
 		
 		let paperProofCoordinator = PaperProofCoordinator(navigationController: navigationController, delegate: self)
 		startChildCoordinator(paperProofCoordinator)
-	}
-	
-	func navigateToAddVisitorPass() {
-		let viewController = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	func navigateToAboutThisApp() {
@@ -563,11 +555,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesToAddPaperProof() {
 		
 		navigateToAddPaperProof()
-	}
-	
-	func userWishesToAddVisitorPass() {
-
-		navigateToAddVisitorPass()
 	}
 	
 	func userWishesToChooseTestLocation() {

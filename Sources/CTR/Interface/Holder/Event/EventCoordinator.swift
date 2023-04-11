@@ -338,20 +338,6 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 			)
 		}
 	}
-	
-	private func navigateBackToVisitorPassStart() -> Bool {
-		
-		if let eventStartViewController = navigationController.viewControllers
-			.first(where: { $0 is VisitorPassStartViewController }) {
-			
-			navigationController.popToViewController(
-				eventStartViewController,
-				animated: true
-			)
-			return true
-		}
-		return false
-	}
 
 	private func displayError(content: Content, allowsSwipeBack: Bool = false, backAction: @escaping () -> Void) {
 
@@ -429,9 +415,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch eventMode {
 			case .vaccinationassessment:
-				if !navigateBackToVisitorPassStart() {
-					navigateBackToTestStart()
-				}
+				break
 			case .recovery, .vaccination, .vaccinationAndPositiveTest:
 				navigateBackToEventStart()
 			case .test:

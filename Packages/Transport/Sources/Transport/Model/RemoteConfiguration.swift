@@ -149,8 +149,6 @@ public struct RemoteConfiguration: Codable, Equatable {
 	/// The number of seconds to keep scan entries in the log
 	public var scanLogStorageSeconds: Int?
 	
-	public var visitorPassEnabled: Bool?
-	
 	public var shouldShowCoronaMelderRecommendation: Bool?
 	
 	public var verificationPolicies: [String]?
@@ -191,7 +189,6 @@ public struct RemoteConfiguration: Codable, Equatable {
 		case scanLockSeconds = "scanLockSeconds"
 		case scanLockWarningSeconds = "scanLockWarningSeconds"
 		case scanLogStorageSeconds = "scanLogStorageSeconds"
-		case visitorPassEnabled = "visitorPassEnabled"
 		case verificationPolicies = "verificationPolicies"
 		case backendTLSCertificates = "backendTLSCertificates"
 		case providerIdentifiers = "providerIdentifiers"
@@ -227,7 +224,6 @@ public struct RemoteConfiguration: Codable, Equatable {
 		config.scanLockSeconds = 300
 		config.scanLockWarningSeconds = 3600
 		config.scanLogStorageSeconds = 3600
-		config.visitorPassEnabled = true
 		config.verificationPolicies = ["3G"]
 		config.backendTLSCertificates = []
 		return config

@@ -32,10 +32,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case eventsWereRemoved(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
-		// Vaccination Assessment
-		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
-		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
-		
 		// QR Cards:
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
@@ -195,9 +191,7 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button
 			case let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
-				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
-				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
-				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
