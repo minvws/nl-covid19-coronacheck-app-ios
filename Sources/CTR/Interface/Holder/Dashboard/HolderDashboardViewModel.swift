@@ -140,7 +140,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		func regionFilteredQRCards(validityRegion: QRCodeValidityRegion) -> [QRCard] {
 			qrCards.filter { (qrCard: QRCard) in
 				switch (qrCard.region, validityRegion) {
-					case (.netherlands, .domestic): return true
 					case (.europeanUnion, .europeanUnion): return true
 					default: return false
 				}

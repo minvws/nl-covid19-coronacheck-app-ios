@@ -328,25 +328,6 @@ extension HolderDashboardViewModel.QRCard {
 					}
 					return lhs.1.customSortIndex < rhs.1.customSortIndex
 				}
-				// for NL certificate multiple tests are combined: longest validity is shown.
-				.filter { greenCard, origin in
-					guard case .netherlands = self.region else { return true } // can just skip this logic for DCCs
-					guard origin.type == .test else { return true } // We can skip visitorpass, recovery and vaccination
-
-					// Test origins sorted by longest validity
-					let sortedTestOrigins = greenCard.origins
-						.sorted { lhs, rhs in
-							return lhs.customSortIndex < rhs.customSortIndex
-						}
-						.filter { $0.isValid(duringDate: Current.now()) }
-						.filter { $0.type == .test }
-
-					guard sortedTestOrigins.count > 1 else { return true } // We can skip greencards with just one test origin
-
-					// So if we have multiple valid test origins, we only thow the one with the longest validity
-					// By only returning the longest validty, we only get one ValidityText line for the test.
-					return origin == sortedTestOrigins.first
-				}
 				// Map to the ValidityText
 				.map { greencard, origin -> HolderDashboardViewController.ValidityText in
 					let validityType = QRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)

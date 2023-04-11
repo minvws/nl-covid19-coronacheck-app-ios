@@ -71,47 +71,6 @@ extension QRCard {
 						expirationTime: origin.expirationTime
 					)
 					
-				// -- Domestic Vaccinations --
-					
-				case (.validityHasBegun, .netherlands, .vaccination):
-					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
-					return validityText_hasBegun_domestic_vaccination(
-						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
-						doseNumber: origin.doseNumber,
-						validFrom: origin.validFromDate,
-						expirationTime: origin.expirationTime
-					)
-				
-				case (.validityHasNotYetBegun, .netherlands, .vaccination):
-					let expiryIsBeyondThreeYearsFromNow = origin.expiryIsBeyondThreeYearsFromNow(now: now)
-					return validityText_hasNotYetBegun_netherlands_vaccination(
-						expiryIsBeyondThreeYearsFromNow: expiryIsBeyondThreeYearsFromNow,
-						doseNumber: origin.doseNumber,
-						validFrom: origin.validFromDate,
-						expirationTime: origin.expirationTime
-					)
-				
-				// -- Domestic Tests --
-					
-				case (.validityHasBegun, .netherlands, .test):
-					return validityText_hasBegun_domestic_test(
-						expirationTime: origin.expirationTime
-					)
-					
-				case (.validityHasNotYetBegun, .netherlands, .test):
-					return validityText_hasNotYetBegun_netherlands_test(origin: origin)
-					
-				// -- Domestic Recoveries --
-					
-				case (.validityHasBegun, .netherlands, .recovery):
-					return validityText_hasBegun_domestic_recovery(expirationTime: origin.expirationTime)
-					
-				case (.validityHasNotYetBegun, .netherlands, .recovery):
-					return validityText_hasNotYetBegun_domestic_recovery(
-						validFrom: origin.validFromDate,
-						expirationTime: origin.expirationTime
-					)
-					
 					// -- Domestic Vaccination Assessements --
 				case (.validityHasBegun, _, .vaccinationassessment):
 					return validityText_hasBegun_domestic_vaccinationAssessment(expirationTime: origin.expirationTime)
