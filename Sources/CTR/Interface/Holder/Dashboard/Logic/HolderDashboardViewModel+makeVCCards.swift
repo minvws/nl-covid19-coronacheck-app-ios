@@ -315,7 +315,7 @@ extension HolderDashboardViewModel.QRCard {
 			isLoading: state.isRefreshingStrippen,
 			didTapViewQR: { [weak actionHandler] in
 				guard evaluateEnabledState(Current.now()) else { return }
-				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id }, disclosurePolicy: nil)
+				actionHandler?.didTapShowQR(greenCardObjectIDs: greencards.compactMap { $0.id })
 			},
 			buttonEnabledEvaluator: evaluateEnabledState,
 			expiryCountdownEvaluator: { now in

@@ -719,7 +719,7 @@ class HolderCoordinatorTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.userWishesToViewQRs(greenCardObjectIDs: [], disclosurePolicy: nil)
+		sut.userWishesToViewQRs(greenCardObjectIDs: [])
 		
 		// Then
 		expect(self.navigationSpy.invokedPresent) == true
@@ -743,7 +743,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let greenCardObjectID = try XCTUnwrap(greenCard?.objectID)
 		
 		// When
-		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID], disclosurePolicy: nil)
+		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID])
 		
 		// Then
 		expect(self.navigationSpy.invokedPresent) == true
@@ -766,7 +766,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let greenCardObjectID = try XCTUnwrap(greenCard?.objectID)
 		
 		// When
-		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID], disclosurePolicy: nil)
+		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID])
 		
 		// Then
 		expect(self.navigationSpy.invokedPresent) == false

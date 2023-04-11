@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import UIKit
 import XCTest
@@ -36,137 +35,6 @@ class ShowQRViewModelTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test all the default content
-	func test_content_withDomesticGreenCard() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// When
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.dosage) == nil
-		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
-		expect(self.sut.items).toEventually(haveCount(1))
-	}
-	
-	func test_content_withDomesticGreenCard_1Gmode_1Gpolicy() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// When
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy1G,
-			thirdPartyTicketAppName: nil
-		)
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.dosage) == nil
-		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
-		expect(self.sut.items).toEventually(haveCount(1))
-	}
-	
-	func test_content_withDomesticGreenCard_1Gmode_1GAnd3Gpolicy() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// When
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy1G,
-			thirdPartyTicketAppName: nil
-		)
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.dosage) == nil
-		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
-		expect(self.sut.items).toEventually(haveCount(1))
-	}
-	
-	func test_content_withDomesticGreenCard_3Gmode_1GAnd3Gpolicy() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// When
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.dosage) == nil
-		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
-		expect(self.sut.items).toEventually(haveCount(1))
-	}
-
-	func test_multiple_domesticGreenCards() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// When
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard, greenCard, greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.dosage) == nil
-		expect(self.sut.infoButtonAccessibility) == L.holder_showqr_domestic_accessibility_button_details()
-		expect(self.sut.items).toEventually(haveCount(3))
-	}
-
-	/// Test all the default content
 	func test_content_withEuGreenCard() throws {
 
 		// Given
@@ -182,7 +50,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -209,7 +76,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -226,7 +92,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 
@@ -249,150 +114,8 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
-
-		// When
-		sut?.showMoreInformation()
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == false
-	}
-
-	func test_moreInformation_domesticGreenCard_validCredential_vaccination() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true,
-				originType: .vaccination
-			)
-		)
-
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
-			birthDay: "30",
-			birthMonth: "5",
-			firstNameInitial: "R",
-			lastNameInitial: "P",
-			credentialVersion: "2",
-			category: "3",
-			specimen: "0",
-			paperProof: "0",
-			validFrom: "\(Date())",
-			validForHours: "24"
-		)
-
-		// When
-		sut?.showMoreInformation()
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.holderShowqrDomesticAboutMessage("R P 30 MEI")
-	}
-
-	func test_moreInformation_domesticGreenCard_validCredential_disclosurePolicy1GEnabled() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true,
-				originType: .test
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy1G,
-			thirdPartyTicketAppName: nil
-		)
-		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
-			birthDay: "30",
-			birthMonth: "5",
-			firstNameInitial: "R",
-			lastNameInitial: "P",
-			credentialVersion: "2",
-			category: "1",
-			specimen: "0",
-			paperProof: "0",
-			validFrom: "\(Date())",
-			validForHours: "24"
-		)
-
-		// When
-		sut?.showMoreInformation()
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.holder_qr_explanation_description_domestic_1G("R P 30 MEI")
-	}
-
-	func test_moreInformation_domesticGreenCard_validCredential() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
-			birthDay: "30",
-			birthMonth: "5",
-			firstNameInitial: "R",
-			lastNameInitial: "P",
-			credentialVersion: "2",
-			category: "2",
-			specimen: "0",
-			paperProof: "0",
-			validFrom: "\(Date())",
-			validForHours: "24"
-		)
-
-		// When
-		sut?.showMoreInformation()
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body) == L.holderShowqrDomesticAboutMessage("R P 30 MEI")
-	}
-
-	func test_moreInformation_domesticGreenCard_validCredential_unreadableData() throws {
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-		environmentSpies.cryptoManagerSpy.stubbedReadDomesticCredentialsResult = nil
 
 		// When
 		sut?.showMoreInformation()
@@ -415,7 +138,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 2, totalDose: 2))
@@ -458,7 +180,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: "RollerDiscoParties"
 		)
 
@@ -475,7 +196,7 @@ class ShowQRViewModelTests: XCTestCase {
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
+				type: .eu,
 				withValidCredential: true
 			)
 		)
@@ -485,7 +206,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: "RollerDiscoParties",
 			notificationCenter: notificationCenterSpy
 		)
@@ -494,54 +214,6 @@ class ShowQRViewModelTests: XCTestCase {
 		expect(name) == UIApplication.didEnterBackgroundNotification
 
 		expect(self.sut.thirdPartyTicketAppButtonTitle) == nil
-	}
-
-	func test_selectedanimation_domesticsummer() throws {
-		
-		// Arrange
-		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 3, day: 21).date! }
-		
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// Act
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-		
-		expect(self.sut.animationStyle) == .domestic(isWithinWinterPeriod: false)
-	}
-	
-	func test_selectedanimation_domesticwinter() throws {
-		
-		// Arrange
-		Current.now = { DateComponents(calendar: .autoupdatingCurrent, month: 12, day: 21).date! }
-		
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		// Act
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: nil
-		)
-		
-		expect(self.sut.animationStyle) == .domestic(isWithinWinterPeriod: true)
 	}
 
 	func test_selectedanimation_internationalsummer() throws {
@@ -561,7 +233,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		
@@ -585,7 +256,6 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		

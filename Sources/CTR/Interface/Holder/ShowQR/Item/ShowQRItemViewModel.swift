@@ -27,7 +27,6 @@ class ShowQRItemViewModel {
 	
 	// MARK: - Static
 	
-	static let domesticCorrectionLevel = CorrectionLevel.medium
 	static let internationalCorrectionLevel = CorrectionLevel.quartile
 	static let screenshotWarningMessageDuration: TimeInterval = 3 * 60
 	
@@ -44,7 +43,6 @@ class ShowQRItemViewModel {
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 	private var qrShouldBeHidden: Bool = false
 	private let qrShouldInitiallyBeHidden: Bool
-	private let disclosusePolicy: DisclosurePolicy?
 	private let state: ShowQRState
 	
 	private var currentQRImage: UIImage? {
@@ -68,7 +66,7 @@ class ShowQRItemViewModel {
 	@Bindable private(set) var overlayIcon: UIImage?
 	@Bindable private(set) var overlayRevealTitle: String?
 	@Bindable private(set) var overlayInfoTitle: String?
-	@Bindable private(set) var qrAccessibility: String?
+	@Bindable private(set) var qrAccessibility: String? = L.holderShowqrEuQrTitle()
 	@Bindable private(set) var visibilityState: ShowQRItemView.VisibilityState = .loading
 	
 	private var clockDeviationObserverToken: Observatory.ObserverToken?
@@ -77,20 +75,17 @@ class ShowQRItemViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - greenCard: a greencard to display
-	///   - disclosurePolicy: the policy to disclose the QR with (1G / 3G)
 	///   - state: ShowQR State (normal, irrelevant, expired)
 	///   - screenCaptureDetector: the screen capture detector
 	init(
 		delegate: ShowQRItemViewModelDelegate,
 		greenCard: GreenCard,
-		disclosurePolicy: DisclosurePolicy?,
 		state: ShowQRState,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()
 	) {
 		
 		self.delegate = delegate
 		self.greenCard = greenCard
-		self.disclosusePolicy = disclosurePolicy
 		self.screenCaptureDetector = screenCaptureDetector
 		self.state = state
 		switch self.state {
@@ -103,12 +98,6 @@ class ShowQRItemViewModel {
 			case .regular:
 				self.qrShouldBeHidden = false
 				self.qrShouldInitiallyBeHidden = false
-		}
-		
-		if greenCard.getType() == GreenCardType.domestic {
-			qrAccessibility = L.holderShowqrDomesticQrTitle()
-		} else if greenCard.getType() == GreenCardType.eu {
-			qrAccessibility = L.holderShowqrEuQrTitle()
 		}
 		
 		screenIsBeingCaptured = screenCaptureDetector.screenIsBeingCaptured
@@ -221,29 +210,8 @@ class ShowQRItemViewModel {
 	@objc func checkQRValidity() {
 		
 		switch greenCard.getType() {
-			case .none:
-				setQRNotValid()
-			case .domestic:
-				guard let data = greenCard.getActiveDomesticCredential()?.data else {
-					setQRNotValid()
-					return
-				}
-				DispatchQueue.global(qos: .userInitiated).async {
-					
-					if let policy = self.disclosusePolicy,
-					   let key = Current.secureUserSettings.holderSecretKey,
-					   let message = self.cryptoManager?.discloseCredential(data, forPolicy: policy, withKey: key),
-					   let image = message.generateQRCode(correctionLevel: ShowQRItemViewModel.domesticCorrectionLevel) {
-						DispatchQueue.main.async {
-							logVerbose("Update message \(String(decoding: message, as: UTF8.self).prefix(20))")
-							self.setQRValid(image: image)
-						}
-					} else {
-						DispatchQueue.main.async {
-							self.setQRNotValid()
-						}
-					}
-				}
+			case .none, .domestic:
+				self.setQRNotValid()
 			case .eu:
 				guard let data = greenCard.getLatestInternationalCredential()?.data else {
 					setQRNotValid()

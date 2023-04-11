@@ -43,7 +43,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -58,53 +57,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
-	/// Test all the default content
-	func test_content_domesticGreenCard() {
-
-		// Given
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == true
-		expect(self.sut.sceneView.navigationInfoView.nextButton.isHidden) == true
-		expect(self.sut.sceneView.navigationInfoView.previousButton.isHidden) == true
-		expect(self.sut.sceneView.pageControl.isHidden) == true
-	}
-
-	/// Test all the default content
-	func test_content_domesticGreenCard_withThirdPartyApp() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-
-		viewModel = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			disclosurePolicy: .policy3G,
-			thirdPartyTicketAppName: "RollerDiscoParties"
-		)
-		sut = ShowQRViewController(viewModel: viewModel)
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.title) == L.holder_showQR_domestic_title()
-		expect(self.sut.sceneView.returnToThirdPartyAppButton.isHidden) == false
-		expect(self.sut.sceneView.navigationInfoView.nextButton.isHidden) == true
-		expect(self.sut.sceneView.navigationInfoView.previousButton.isHidden) == true
-		expect(self.sut.sceneView.pageControl.isHidden) == true
-	}
-
 	func test_content_euGreenCard() throws {
 
 		// Given
@@ -118,7 +70,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: nil,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -148,7 +99,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard],
-			disclosurePolicy: nil,
 			thirdPartyTicketAppName: "RollerDiscoParties"
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -178,7 +128,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard, greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
@@ -208,7 +157,6 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCards: [greenCard, greenCard],
-			disclosurePolicy: .policy3G,
 			thirdPartyTicketAppName: nil
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
