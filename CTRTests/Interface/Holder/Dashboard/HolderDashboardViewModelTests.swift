@@ -25,7 +25,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 	var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	var sampleGreencardObjectID: NSManagedObjectID!
 	var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
-	var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	var environmentSpies: EnvironmentSpies!
 
 	private static var initialTimeZone: TimeZone?
@@ -56,7 +55,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = Observatory.create().0
-		vaccinationAssessmentNotificationManagerSpy = VaccinationAssessmentNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
@@ -70,7 +68,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			mismatchedIdentityDatasource: mismatchedIdentityEventsSpy,
 			strippenRefresher: strippenRefresherSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
-			vaccinationAssessmentNotificationManager: vaccinationAssessmentNotificationManagerSpy,
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
 		)
 	}

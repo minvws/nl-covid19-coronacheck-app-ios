@@ -108,14 +108,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = false
-	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount = 0
-
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
-		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = true
-		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutExpiredQR = false
 	var invokedUserWishesMoreInfoAboutExpiredQRCount = 0
 
@@ -178,14 +170,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigCount += 1
 		invokedUserWishesMoreInfoAboutOutdatedConfigParameters = (validUntil, ())
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
-	}
-
-	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = false
-	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount = 0
-
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
-		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = true
-		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
 	}
 
 	var invokedUserWishesToAddPaperProof = false

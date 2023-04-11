@@ -598,36 +598,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
-	
-	func test_userWishesMoreInfoAboutCompletingVaccinationAssessment() {
-		
-		// Given
-		
-		// When
-		sut.userWishesMoreInfoAboutCompletingVaccinationAssessment()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
-	func test_userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() throws {
-		
-		// Given
-		let viewControllerSpy = ViewControllerSpy()
-		navigationSpy.viewControllers = [
-			viewControllerSpy
-		]
-		
-		// When
-		sut.userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
-		
-		// Then
-		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Over je bezoekersbewijs"
-	}
 
 	func test_userWishesMoreInfoAboutClockDeviation() throws {
 		

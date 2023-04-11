@@ -53,7 +53,6 @@ public enum OriginType: String, Codable, Equatable {
 	case recovery
 	case test
 	case vaccination
-	case vaccinationassessment
 }
 
 extension Array {

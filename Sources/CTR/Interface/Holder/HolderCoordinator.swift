@@ -4,7 +4,6 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -39,7 +38,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
@@ -47,7 +45,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutNoTestToken()
 	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	func userWishesToAddPaperProof()
 	func userWishesToAddVisitorPass()
 	func userWishesToChooseTestLocation()
@@ -294,7 +291,6 @@ class HolderCoordinator: SharedCoordinator {
 						reachability: try? Reachability()
 					),
 					configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-					vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 					versionSupplier: versionSupplier
 				)
 			)
@@ -472,28 +468,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
-	
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		presentContent(
-			content: Content(
-				title: L.holder_completecertificate_title(),
-				body: L.holder_completecertificate_body(),
-				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
-				primaryAction: { [weak self] in
-					self?.userWishesToCreateANegativeTestQR()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			),
-			backAction: { [weak navigationController] in
-				navigationController?.popViewController(animated: true, completion: {})
-			},
-			allowsSwipeBack: true,
-			animated: true
-		)
-	}
-	
 	func userWishesMoreInfoAboutExpiredQR() {
 	
 		let viewModel = BottomSheetContentViewModel(
@@ -582,12 +557,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
-	}
-	
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
-		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
-		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 	

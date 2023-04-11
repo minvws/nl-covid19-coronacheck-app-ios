@@ -21,7 +21,6 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapBlockedEventsDeletedMoreInfo(blockedEventItems: [RemovedEventItem])
 	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [RemovedEventItem])
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
-	func didTapCompleteYourVaccinationAssessmentMoreInfo()
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapDeviceHasClockDeviationMoreInfo()
 	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem])
@@ -29,7 +28,6 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapRecommendedUpdate()
 	func didTapRetryLoadQRCards()
 	func didTapShowQR(greenCardObjectIDs: [NSManagedObjectID])
-	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 	func didTapDisclosurePolicyInformation0GBannerMoreInformation()
 	func didTapDisclosurePolicyInformation0GBannerClose()
 	func openUrl(_ url: URL)
@@ -49,7 +47,6 @@ protocol HolderDashboardViewModelType: AnyObject {
 	func openUrl(_ url: URL)
 }
 
-// swiftlint:disable:next type_body_length
 final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	// MARK: - Public properties
@@ -95,10 +92,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	
 		var shouldShowRecommendedUpdateBanner: Bool = false
 		
-		var shouldShowCompleteYourVaccinationAssessmentBanner: Bool = false
-		
 		var shouldShowAddCertificateFooter: Bool {
-			(qrCards.isEmpty || (!dashboardHasInternationalQRCards())) && !shouldShowCompleteYourVaccinationAssessmentBanner
+			(qrCards.isEmpty || (!dashboardHasInternationalQRCards()))
 		}
 		
 		var shouldShow0GDisclosurePolicyBecameActiveBanner = false
@@ -115,20 +110,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		func dashboardHasEmptyState(for validityRegion: QRCodeValidityRegion) -> Bool {
 			
 			return !dashboardHasInternationalQRCards()
-		}
-		
-		func shouldShowCompleteYourVaccinationAssessmentBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
-			guard validityRegion == .domestic else {
-				return false
-			}
-			return shouldShowCompleteYourVaccinationAssessmentBanner
-		}
-		
-		func shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for validityRegion: QRCodeValidityRegion) -> Bool {
-			guard validityRegion == .europeanUnion else {
-				return false
-			}
-			return shouldShowCompleteYourVaccinationAssessmentBanner
 		}
 		
 		func regionFilteredQRCards(validityRegion: QRCodeValidityRegion) -> [QRCard] {
@@ -169,7 +150,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private let strippenRefresher: DashboardStrippenRefreshing
 	private var configurationNotificationManager: ConfigurationNotificationManagerProtocol
-	private var vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol
 	private var versionSupplier: AppVersionSupplierProtocol?
 
 	// MARK: - Initializer
@@ -180,7 +160,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		mismatchedIdentityDatasource: HolderDashboardRemovedEventsDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		configurationNotificationManager: ConfigurationNotificationManagerProtocol,
-		vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManagerProtocol,
 		versionSupplier: AppVersionSupplierProtocol?
 	) {
 		self.coordinator = coordinator
@@ -189,7 +168,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		self.mismatchedIdentityDatasource = mismatchedIdentityDatasource
 		self.strippenRefresher = strippenRefresher
 		self.configurationNotificationManager = configurationNotificationManager
-		self.vaccinationAssessmentNotificationManager = vaccinationAssessmentNotificationManager
 		self.versionSupplier = versionSupplier
 
 		self.state = State(
@@ -199,8 +177,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			mismatchedIdentityItems: [],
 			isRefreshingStrippen: false,
 			deviceHasClockDeviation: Current.clockDeviationManager.hasSignificantDeviation ?? false,
-			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner,
-			shouldShowCompleteYourVaccinationAssessmentBanner: vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
+			shouldShowConfigurationIsAlmostOutOfDateBanner: configurationNotificationManager.shouldShowAlmostOutOfDateBanner
 		)
 
 		setupQRCardDatasource()
@@ -252,7 +229,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 				var state = self.state
 				state.qrCards = qrCardDataItems
 				state.expiredGreenCards += expiredGreenCards
-				state.shouldShowCompleteYourVaccinationAssessmentBanner = self.vaccinationAssessmentNotificationManager.hasVaccinationAssessmentEventButNoOrigin(now: Current.now())
 				self.state = state
 			}
 		}
@@ -476,8 +452,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
-		cards += VCCard.makeCompleteYourVaccinationAssessmentCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeVaccinationAssessmentInvalidOutsideNLCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -550,16 +524,6 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 			return
 		}
 		openUrl(url)
-	}
-	
-	func didTapCompleteYourVaccinationAssessmentMoreInfo() {
-		
-		coordinator?.userWishesMoreInfoAboutCompletingVaccinationAssessment()
-	}
-	
-	func didTapVaccinationAssessmentInvalidOutsideNLMoreInfo() {
-		
-		coordinator?.userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	}
 	
 	func didTapDisclosurePolicyInformation0GBannerMoreInformation() {

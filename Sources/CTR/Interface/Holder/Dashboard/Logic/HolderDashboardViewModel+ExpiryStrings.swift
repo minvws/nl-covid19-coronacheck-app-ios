@@ -12,25 +12,22 @@ import Models
 import Resources
 
 extension String {
-
-  static func holderDashboardQRExpired(originType: OriginType, region: QRCodeValidityRegion) -> String {
-	  switch (originType, region) {
-		  case (.test, .domestic):
-			  return L.holder_dashboard_originExpiredBanner_domesticTest_title()
-		  case (.vaccination, .domestic):
-			  return L.holder_dashboard_originExpiredBanner_domesticVaccine_title()
-		  case (.recovery, .domestic):
-			  return L.holder_dashboard_originExpiredBanner_domesticRecovery_title()
-		  
-		  case (.test, .europeanUnion):
-			  return L.holder_dashboard_originExpiredBanner_internationalTest_title()
-		  case (.vaccination, .europeanUnion):
-			  return L.holder_dashboard_originExpiredBanner_internationalVaccine_title()
-		  case (.recovery, .europeanUnion):
-			  return L.holder_dashboard_originExpiredBanner_internationalRecovery_title()
-		  
-		  case (.vaccinationassessment, _):
-			  return L.holder_dashboard_originExpiredBanner_visitorPass_title()
-	  }
-  }
+	
+	static func holderDashboardQRExpired(originType: OriginType, region: QRCodeValidityRegion) -> String {
+		switch (originType, region) {
+			case (.test, .domestic):
+				return L.holder_dashboard_originExpiredBanner_domesticTest_title()
+			case (.vaccination, .domestic):
+				return L.holder_dashboard_originExpiredBanner_domesticVaccine_title()
+			case (.recovery, .domestic):
+				return L.holder_dashboard_originExpiredBanner_domesticRecovery_title()
+				
+			case (.test, .europeanUnion):
+				return L.holder_dashboard_originExpiredBanner_internationalTest_title()
+			case (.vaccination, .europeanUnion):
+				return L.holder_dashboard_originExpiredBanner_internationalVaccine_title()
+			case (.recovery, .europeanUnion):
+				return L.holder_dashboard_originExpiredBanner_internationalRecovery_title()
+		}
+	}
 }

@@ -163,7 +163,6 @@ extension HolderDashboardViewModel {
 		static func hasUnexpiredOriginThatIsNotATest(greencard: HolderDashboardViewModel.QRCard.GreenCard, now: Date) -> Bool {
 			return greencard.hasUnexpiredOrigin(ofType: .vaccination, now: now)
 				|| greencard.hasUnexpiredOrigin(ofType: .recovery, now: now)
-				|| greencard.hasUnexpiredOrigin(ofType: .vaccinationassessment, now: now)
 		}
 	}
 

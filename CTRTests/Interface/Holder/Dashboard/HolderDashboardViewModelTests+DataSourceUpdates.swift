@@ -669,15 +669,14 @@ extension HolderDashboardViewModelTests {
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .europeanUnion, type: .recovery),
 			.init(region: .europeanUnion, type: .test),
-			.init(region: .europeanUnion, type: .vaccination),
-			.init(region: .europeanUnion, type: .vaccinationassessment)
+			.init(region: .europeanUnion, type: .vaccination)
 		]
 
 		// Act
 		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(6))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard { message, buttonTitle in
 			expect(message) == L.holder_dashboard_filledState_international_0G_message()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
@@ -690,9 +689,6 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.internationalCards.value[3]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holder_dashboard_originExpiredBanner_internationalVaccine_title()
-		}))
-		expect(self.sut.internationalCards.value[4]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holder_dashboard_originExpiredBanner_visitorPass_title()
 		}))
 	}
 

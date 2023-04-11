@@ -152,8 +152,6 @@ extension HolderDashboardViewController.Card {
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
-		guard !state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
-		guard !state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
 		
 		guard let internationalImage = I.dashboard.international() else { return [] }
 		return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
@@ -178,24 +176,6 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
-	static func makeCompleteYourVaccinationAssessmentCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-	
-		guard state.shouldShowCompleteYourVaccinationAssessmentBanner(for: validityRegion) else { return [] }
-		return [
-			.completeYourVaccinationAssessment(
-				title: L.holder_dashboard_visitorpassincompletebanner_title(),
-				buttonText: L.holder_dashboard_visitorpassincompletebanner_button_makecomplete(),
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapCompleteYourVaccinationAssessmentMoreInfo()
-				}
-			)
-		]
-	}
-	
 	static func makeDisclosurePolicyInformation0GBanner(
 		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
@@ -215,25 +195,6 @@ extension HolderDashboardViewController.Card {
 				},
 				didTapClose: { [weak actionHandler] in
 					actionHandler?.didTapDisclosurePolicyInformation0GBannerClose()
-				}
-			)
-		]
-	}
-	
-	static func makeVaccinationAssessmentInvalidOutsideNLCard(
-		validityRegion: QRCodeValidityRegion,
-		state: HolderDashboardViewModel.State,
-		actionHandler: HolderDashboardCardUserActionHandling
-	) -> [HolderDashboardViewController.Card] {
-		
-		guard state.shouldShowVaccinationAssessmentInvalidOutsideNLBanner(for: validityRegion) else { return [] }
-		
-		return [
-			.vaccinationAssessmentInvalidOutsideNL(
-				title: L.holder_dashboard_visitorPassInvalidOutsideNLBanner_title(),
-				buttonText: L.general_readmore(),
-				didTapCallToAction: { [weak actionHandler] in
-					actionHandler?.didTapVaccinationAssessmentInvalidOutsideNLMoreInfo()
 				}
 			)
 		]
