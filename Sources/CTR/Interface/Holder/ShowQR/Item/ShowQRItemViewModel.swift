@@ -210,7 +210,7 @@ class ShowQRItemViewModel {
 	@objc func checkQRValidity() {
 		
 		switch greenCard.getType() {
-			case .none, .domestic:
+			case .none:
 				self.setQRNotValid()
 			case .eu:
 				guard let data = greenCard.getLatestInternationalCredential()?.data else {

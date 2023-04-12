@@ -41,9 +41,9 @@ class HolderDashboardDatasourceTests: XCTestCase {
 	
 	func test_fetching_removes_expired_greencards() {
 		// Arrange
-		_ = GreenCard.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		_ = GreenCard.sampleInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.walletManagerSpy.stubbedRemoveExpiredGreenCardsResult = [
-			(greencardType: "domestic", originType: "vaccination")
+			(greencardType: "eu", originType: "vaccination")
 		]
 		
 		sut = HolderDashboardQRCardDatasource()

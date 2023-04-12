@@ -36,7 +36,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	func test_expiring_calculates_state_expiring_and_loads() {
 		
 		// Arrange
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -54,7 +54,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	
 	func test_expired_calculates_state_expired_and_loads() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -72,7 +72,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	
 	func test_expiring_with_expiring_origin_calculates_state_noActionNeeded_and_doesnt_load() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithNoMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiredWithNoMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -117,7 +117,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_loadingSuccess_setsNewState_becoming_noActionNeeded() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		
 		sut = DashboardStrippenRefresher(
@@ -125,7 +125,7 @@ extension HolderDashboardStrippenRefresherTests {
 			reachability: reachabilitySpy
 		)
 		
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		// Act
 		sut.load()
@@ -138,7 +138,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_loadingSuccess_persistsMatchingBlockedEvents() throws {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -153,7 +153,7 @@ extension HolderDashboardStrippenRefresherTests {
 			reason: RemovalReason.blockedEvent.rawValue
 		)]
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(greencardResponse), ())
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup!]
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
@@ -169,7 +169,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_loadingFailure_setsErrorFlags_canBeRecovered() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(GreenCardLoader.Error.failedToParsePrepareIssue), ())
 		
 		sut = DashboardStrippenRefresher(
@@ -190,7 +190,7 @@ extension HolderDashboardStrippenRefresherTests {
 		
 		// Fix network
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut.load()
 		
@@ -208,7 +208,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_serverError_serverBusy() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 		
@@ -230,7 +230,7 @@ extension HolderDashboardStrippenRefresherTests {
 		
 		// Fix network
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut.load()
 		
@@ -243,7 +243,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_serverError_mismatchedIdentity() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		let serverResponse = ServerResponse(status: "error", code: 99790, context: ServerResponseContext(matchingBlobIds: [["123"]]))
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.credentials(.error(statusCode: nil, response: serverResponse, error: .serverError))), ())
@@ -263,7 +263,7 @@ extension HolderDashboardStrippenRefresherTests {
 	
 	func test_serverResponseDidNotChangeExpiredOrExpiringState() {
 		// Arrange
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
 		
 		sut = DashboardStrippenRefresher(
@@ -283,7 +283,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_serverError_shouldRetryIfAppReturnsFromBackgroundAfterTenMinutes() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: 429, response: nil, error: .serverBusy))), ())
 		
@@ -317,7 +317,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_serverError_invalidSignature() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature))), ())
 		
@@ -339,7 +339,7 @@ extension HolderDashboardStrippenRefresherTests {
 		
 		// Fix network
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut.load()
 		
@@ -352,7 +352,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_failedToSave() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.failedToSaveGreenCards), ())
 		
@@ -375,7 +375,7 @@ extension HolderDashboardStrippenRefresherTests {
 		
 		// Fix network
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut.load()
 		
@@ -388,7 +388,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_serverError_noInternetConnection() {
 		
 		// Arrange `expiring` starting state
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult =
 		(.failure(GreenCardLoader.Error.preparingIssue(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection))), ())
 		
@@ -408,7 +408,7 @@ extension HolderDashboardStrippenRefresherTests {
 		// simulate reachability restoration
 		
 		environmentSpies.greenCardLoaderSpy.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(validGreenCardResponse), ())
-		environmentSpies.walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		// Callback is set on `invokedWhenReachable`:
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
@@ -427,7 +427,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_greencard_withZeroInitialCredentials_shouldNotBeReloadedWhenOutsideTheThreshold() {
 		
 		// Arrange with zero initial credentials
-		environmentSpies.walletManagerSpy.loadDomesticEmptyCredentialsWithDistantFutureValidity(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalEmptyCredentialsWithDistantFutureValidity(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -448,7 +448,7 @@ extension HolderDashboardStrippenRefresherTests {
 	func test_greencard_withZeroInitialCredentials_shouldBeReloadedWhenInsideTheThreshold() {
 		
 		// Arrange with zero initial credentials
-		environmentSpies.walletManagerSpy.loadDomesticEmptyCredentialsWithImminentFutureValidity(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.loadInternationalEmptyCredentialsWithImminentFutureValidity(dataStoreManager: environmentSpies.dataStoreManager)
 		
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,

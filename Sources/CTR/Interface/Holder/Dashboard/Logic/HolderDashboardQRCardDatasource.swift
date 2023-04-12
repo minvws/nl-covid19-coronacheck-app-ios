@@ -134,7 +134,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		let grouped = Dictionary(
 			grouping: dbGreencards,
 			by: { (dbGreencard: DBGreenCard, origins: [DBOrigin]) -> String in
-				guard dbGreencard.getType() != .domestic, // we don't currently group domestic QR Cards
+				guard dbGreencard.getType() == .eu, // we don't currently group domestic QR Cards
 					  origins.count == 1, let type = origins.first?.type
 				else { return UUID().uuidString } // use a random string as grouping key, - i.e. forces own group
 
@@ -169,12 +169,8 @@ extension QRCard {
 					return hasValidOrigin
 				}
 				return hasValidOrigin && hasValidCredential
-			} else {
-				
-				let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
-				let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
-				return enabled
 			}
+			return false
 		}
 
 		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI): (might be expired)
@@ -189,19 +185,6 @@ extension QRCard {
 			}
 			return euCredentialAttributes
 		}
-
-		/// For a given date and greencard, return the DomesticCredentialAttributes:
-		static func evaluateDomesticCredentialAttributes(date: Date, dbGreencard: DBGreenCard) -> DomesticCredentialAttributes? {
-			guard !dbGreencard.isDeleted else { return nil }
-
-			guard dbGreencard.getType() == GreenCardType.domestic,
-				  let credentialData = dbGreencard.currentOrNextActiveCredential(forDate: date)?.data,
-				  let domesticCredentialAttributes = Current.cryptoManager.readDomesticCredentials(credentialData)
-			else {
-				return nil
-			}
-			return domesticCredentialAttributes
-		}
 	}
 
 	fileprivate static func euQRCards(
@@ -210,7 +193,7 @@ extension QRCard {
 	) -> [QRCard] {
 
 		// Check that no domestic cards slipped through (logical error if so)
-		guard !dbGreencardGroup.contains(where: { $0.0.getType() == GreenCardType.domestic }) else { return [] }
+		guard !dbGreencardGroup.contains(where: { $0.0.getType() != GreenCardType.eu }) else { return [] }
 
 		// Create "UI Greencards" from the DBGreenCard+DBOrigin pairs
 		let uiGreencards = dbGreencardGroup.map { pair -> GreenCard in
