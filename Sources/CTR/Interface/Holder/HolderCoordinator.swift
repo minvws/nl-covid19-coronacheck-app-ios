@@ -681,13 +681,6 @@ extension HolderCoordinator: EventFlowDelegate {
 		navigateToDashboard()
 	}
 	
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
-		removeChildCoordinator()
-		navigationController.popToRootViewController(animated: false)
-	}
-	
 	func eventFlowDidCancel() {
 		
 		// The user cancelled the event flow.

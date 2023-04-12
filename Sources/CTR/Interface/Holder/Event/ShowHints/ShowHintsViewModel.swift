@@ -152,12 +152,7 @@ final class ShowHintsViewModel {
 	
 	func userTappedCallToActionButton() {
 		
-		switch endState {
-			case .addVaccinationAssessment:
-				coordinator?.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
-			default:
-				coordinator?.showHintsScreenDidFinish(.stop)
-		}
+		coordinator?.showHintsScreenDidFinish(.stop)
 	}
 	
 	// `throws` if it's an unknown hint combination

@@ -249,21 +249,7 @@ class EventCoordinatorTests: XCTestCase {
 		sut.showHintsScreenDidFinish(.continue(eventMode: .vaccination))
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == false
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
-	}
-
-	func test_showHintsScreenDidFinish_shouldCompleteVaccinationAssessment() {
-		
-		// Given
-		
-		// When
-		sut.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
-		
-		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
 	}
 	
@@ -279,17 +265,6 @@ class EventCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController) == true
-	}
-	
-	func test_eventStartScreenDidFinish_default() {
-		
-		// Given
-		
-		// When
-		sut.eventStartScreenDidFinish(.shouldCompleteVaccinationAssessment)
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
 	}
 	
 	// MARK: - authenticationScreenDidFinish
@@ -502,17 +477,6 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
-	func test_authenticationScreenDidFinish_default() {
-		
-		// Given
-		
-		// When
-		sut.authenticationScreenDidFinish(.shouldCompleteVaccinationAssessment)
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
-	}
-	
 	// MARK: - fetchEventsScreenDidFinish
 	
 	func test_fetchEventsScreenDidFinish_showEvents() throws {
@@ -579,7 +543,7 @@ class EventCoordinatorTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.fetchEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
+		sut.fetchEventsScreenDidFinish(.alternativeRoute(eventMode: .recovery))
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 0
@@ -686,17 +650,6 @@ class EventCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? RemoteEventDetailsViewController)?.viewModel)
 		expect(viewModel.title) == "test title"
 		expect(viewModel.footer) == "test footer"
-	}
-
-	func test_listEventsScreenDidFinish_shouldCompleteVaccinationAssessment() {
-		
-		// Given
-		
-		// When
-		sut.listEventsScreenDidFinish(.shouldCompleteVaccinationAssessment)
-		
-		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCompleteButVisitorPassNeedsCompletion) == true
 	}
 	
 	func test_listEventsScreenDidFinish_showHints_invalidHint() throws {

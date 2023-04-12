@@ -422,26 +422,6 @@ class ShowHintsViewModelTests: XCTestCase {
 
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
 	}
-
-	// Visitor Flow
-	func testEndstate210() throws { // matches: .addVaccinationAssessment
-		// Arrange
-		let hints = try XCTUnwrap(NonemptyArray(["negativetest_without_vaccinationassessment"]))
-		
-		// Act
-		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub))
-		sut.userTappedCallToActionButton()
-		
-		// Assert
-		expect(self.sut.title) == L.holder_event_negativeTestEndstate_addVaccinationAssessment_title()
-		expect(self.sut.message) == L.holder_event_negativeTestEndstate_addVaccinationAssessment_body()
-		expect(self.sut.buttonTitle) == L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
-	
-		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1
-		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishParameters?.result) == .shouldCompleteVaccinationAssessment
-		
-		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
-	}
 	
 	func testEndstate023() throws { // matches: .noEndState
 		// Arrange
