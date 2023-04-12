@@ -29,16 +29,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIsLuhnCheckEnabledResult
 	}
 
-	var invokedIsVisitorPassEnabled = false
-	var invokedIsVisitorPassEnabledCount = 0
-	var stubbedIsVisitorPassEnabledResult: Bool! = false
-
-	func isVisitorPassEnabled() -> Bool {
-		invokedIsVisitorPassEnabled = true
-		invokedIsVisitorPassEnabledCount += 1
-		return stubbedIsVisitorPassEnabledResult
-	}
-
 	var invokedAreMultipleVerificationPoliciesEnabled = false
 	var invokedAreMultipleVerificationPoliciesEnabledCount = 0
 	var stubbedAreMultipleVerificationPoliciesEnabledResult: Bool! = false

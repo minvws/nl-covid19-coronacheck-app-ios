@@ -27,7 +27,6 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	override func setUp() {
 		
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.featureFlagManagerSpy.stubbedIsVisitorPassEnabledResult = true
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		
