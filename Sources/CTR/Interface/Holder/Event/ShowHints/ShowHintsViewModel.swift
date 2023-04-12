@@ -246,7 +246,6 @@ private extension EventMode {
 			case .recovery: return L.general_positiveTest() // positive testuitslag
 			case .test: return L.general_negativeTest() // negative testuitslag
 			case .vaccination: return L.general_vaccination() // vaccinatie
-			case .vaccinationassessment: return L.general_vaccinationAssessment() // vaccinatiebeoordeling
 		}
 	}
 }

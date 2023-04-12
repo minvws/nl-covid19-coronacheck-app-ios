@@ -194,21 +194,12 @@ extension EventFlow.EventResultWrapper {
 		events: [EventFlow.Event.paperProofEvent]
 	)
 
-	static var fakeVaccinationAssessmentResultWrapper = EventFlow.EventResultWrapper(
-		providerIdentifier: "CC",
-		protocolVersion: "3.0",
-		identity: EventFlow.Identity.fakeIdentity,
-		status: .complete,
-		events: [EventFlow.Event.vaccinationAssessmentEvent]
-	)
-
 	static var fakeMultipleEventsResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
 		events: [
-			EventFlow.Event.vaccinationAssessmentEvent,
 			EventFlow.Event.vaccinationEvent,
 			EventFlow.Event.negativeTestEvent,
 			EventFlow.Event.expiredPositiveTestEvent,
@@ -323,8 +314,7 @@ extension EventFlow.Event {
 			),
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -346,8 +336,7 @@ extension EventFlow.Event {
 				country: "NL"
 			),
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -369,8 +358,7 @@ extension EventFlow.Event {
 				country: "NL"
 			),
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -395,8 +383,7 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -421,8 +408,7 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -447,8 +433,7 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -465,8 +450,7 @@ extension EventFlow.Event {
 				validFrom: "2021-07-12",
 				validUntil: "2022-12-31"
 			),
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -482,43 +466,6 @@ extension EventFlow.Event {
 			dccEvent: EventFlow.DccEvent(
 				credential: "test",
 				couplingCode: "test"
-			),
-			vaccinationAssessment: nil
-		)
-	}
-
-	static var vaccinationAssessmentEvent: EventFlow.Event {
-		EventFlow.Event(
-			type: "vaccinationassessment",
-			unique: "1234",
-			isSpecimen: true,
-			vaccination: nil,
-			negativeTest: nil,
-			positiveTest: nil,
-			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: EventFlow.VaccinationAssessment(
-				dateTimeString: "2022-01-05T12:42:42Z",
-				country: "NLD",
-				verified: true
-			)
-		)
-	}
-
-	static var vaccinationAssessmentEventWithoutCountry: EventFlow.Event {
-		EventFlow.Event(
-			type: "vaccinationassessment",
-			unique: "1234",
-			isSpecimen: true,
-			vaccination: nil,
-			negativeTest: nil,
-			positiveTest: nil,
-			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: EventFlow.VaccinationAssessment(
-				dateTimeString: "2022-01-05T12:42:42Z",
-				country: nil,
-				verified: true
 			)
 		)
 	}

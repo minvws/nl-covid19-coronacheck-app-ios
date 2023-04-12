@@ -119,21 +119,6 @@ class EventCoordinatorTests: XCTestCase {
 		expect(viewModel.title) == L.holderRecoveryStartTitle()
 	}
 	
-	func test_startWithListTestEvents_vaccinationAssessment() throws {
-		
-		// Given
-		let event = FakeRemoteEvent.fakeRemoteEventVaccinationAssessment
-		
-		// When
-		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
-		expect(viewModel.eventMode) == EventMode.vaccinationassessment
-	}
-	
 	func test_startWithListTestEvents_paperProof() throws {
 		
 		// Given

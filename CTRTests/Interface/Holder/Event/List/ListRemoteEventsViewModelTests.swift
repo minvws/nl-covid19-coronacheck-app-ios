@@ -263,34 +263,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			)
 	}
 
-	func test_somethingIsWrong_vaccinationAssessment_tapped() {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccinationassessment,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
-			greenCardLoader: greenCardLoader
-		)
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-
-		// When
-		content.secondaryAction?()
-
-		// Then
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) ==
-			.moreInformation(
-				title: L.holder_listRemoteEvents_somethingWrong_title(),
-				body: L.holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body(),
-				hideBodyForScreenCapture: false
-			)
-	}
-
 	func test_somethingIsWrong_dccVaccination_notAvailable() {
 
 		// Given
@@ -782,43 +754,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.body) == L.holderErrorstateClientMessage("i 460 000 056")
-		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
-	}
-
-	func test_makeQR_saveEventGroupError_eventModeVaccinationAssessmet() throws {
-
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccinationassessment,
-			remoteEvents: [FakeRemoteEvent.fakeRemoteEventVaccinationAssessment],
-			greenCardLoader: greenCardLoader
-		)
-
-		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = nil
-
-		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-
-		// When
-		content.primaryAction?()
-
-		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroupsType) == true
-		expect(self.environmentSpies.networkManagerSpy.invokedFetchGreencards) == false
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.sut.alert) == nil
-		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
-		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-		expect(feedback.title) == L.holderErrorstateTitle()
-		expect(feedback.body) == L.holderErrorstateClientMessage("i 960 000 056")
 		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -2199,27 +2134,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == nil
 	}
 	
-	func test_emptyState_vaccinationAssessement() throws {
-		
-		// Given
-		sut = ListRemoteEventsViewModel(
-			coordinator: coordinatorSpy,
-			eventMode: .vaccinationassessment,
-			remoteEvents: [],
-			greenCardLoader: greenCardLoader
-		)
-		
-		guard case let .feedback(content: feedback) = sut.viewState else {
-			fail("wrong state: \(sut.viewState)")
-			return
-		}
-		
-		expect(feedback.title) == L.holder_event_vaccination_assessment_nolist_title()
-		expect(feedback.body) == L.holder_event_vaccination_assessment_nolist_message()
-		expect(feedback.primaryActionTitle) == L.general_toMyOverview()
-		expect(feedback.secondaryActionTitle) == nil
-	}
-	
 	// MARK: Helper
 
 	private func remoteVaccinationEvent(providerIdentifier: String = "CC", vaccinationDate: String, hpkCode: String? = nil) -> RemoteEvent {
@@ -2252,8 +2166,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 						negativeTest: nil,
 						positiveTest: nil,
 						recovery: nil,
-						dccEvent: nil,
-						vaccinationAssessment: nil
+						dccEvent: nil
 					)
 				]
 			),
@@ -2280,8 +2193,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 						dccEvent: EventFlow.DccEvent(
 							credential: CouplingManager.vaccinationDCC,
 							couplingCode: "NDREB5"
-						),
-						vaccinationAssessment: nil
+						)
 					)
 				]
 			),

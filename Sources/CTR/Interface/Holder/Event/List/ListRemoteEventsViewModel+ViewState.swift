@@ -56,7 +56,6 @@ extension ListRemoteEventsViewModel {
 	private func isEventAllowed(_ event: EventFlow.Event) -> Bool {
 
 		switch eventMode {
-			case .vaccinationassessment: return event.hasVaccinationAssessment
 			case .paperflow: return event.hasPaperCertificate
 			case .vaccinationAndPositiveTest: return event.hasPositiveTest || event.hasVaccination || event.hasRecovery
 			case .recovery: return event.hasPositiveTest || event.hasRecovery
@@ -182,8 +181,6 @@ extension ListRemoteEventsViewModel {
 			
 			if currentRow.event.hasRecovery {
 				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
-			} else if currentRow.event.hasVaccinationAssessment {
-				rows.append(getRowFromAssessementEvent(dataRow: currentRow))
 			} else if currentRow.event.hasPositiveTest {
 				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
 			} else if currentRow.event.hasVaccination {
@@ -304,36 +301,6 @@ extension ListRemoteEventsViewModel {
 					.showEventDetails(
 						title: L.holderEventAboutTitle(),
 						details: details,
-						footer: nil
-					)
-				)
-			}
-		)
-	}
-
-	private func getRowFromAssessementEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
-
-		let formattedBirthDate: String = dataRow.identity.birthDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonth.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
-		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
-
-		return ListRemoteEventsViewController.Row(
-			title: L.holder_event_vaccination_assessment_element_title(),
-			details: [
-				L.holder_listRemoteEvents_listElement_assessmentDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
-				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
-			],
-			action: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(
-						title: L.holderEventAboutTitle(),
-						details: VaccinationAssessementDetailsGenerator.getDetails(identity: dataRow.identity, event: dataRow.event),
 						footer: nil
 					)
 				)

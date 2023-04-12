@@ -265,9 +265,7 @@ extension WalletManager {
 		
 		var eventMode: EventMode?
 		if let event = events.first {
-			if event.hasVaccinationAssessment {
-				eventMode = .vaccinationassessment
-			} else if event.hasPaperCertificate {
+			if event.hasPaperCertificate {
 				eventMode = .paperflow
 			} else if event.hasPositiveTest {
 				eventMode = .recovery

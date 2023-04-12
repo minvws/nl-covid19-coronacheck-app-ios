@@ -149,8 +149,6 @@ class ListRemoteEventsViewModel {
 				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
 				logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
 				return paperFlowEmbeddedEventMode
-			} else if originalEventMode == .vaccinationassessment {
-				return .vaccinationassessment
 			} else {
 				return eventMode
 			}
@@ -394,9 +392,6 @@ extension EventFlow.Event {
 		}
 		if hasNegativeTest {
 			return .test(.ggd)
-		}
-		if hasVaccinationAssessment {
-			return .vaccinationassessment
 		}
 		if hasPaperCertificate {
 			return .paperflow

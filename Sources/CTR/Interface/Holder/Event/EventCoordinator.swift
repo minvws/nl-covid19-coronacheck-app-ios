@@ -170,9 +170,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		if let event = events.first?.wrapper.events?.first {
 			
-			if event.hasVaccinationAssessment {
-				mode = .vaccinationassessment
-			} else if event.hasPaperCertificate {
+			if event.hasPaperCertificate {
 				mode = .paperflow
 			} else if event.hasPositiveTest {
 				mode = .recovery
@@ -403,8 +401,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .vaccinationassessment:
-				break
 			case .recovery, .vaccination, .vaccinationAndPositiveTest:
 				navigateBackToEventStart()
 			case .test:

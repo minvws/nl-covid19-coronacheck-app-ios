@@ -389,7 +389,7 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 	}
 
-	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_oneVaccinationAssessment_notExpired() {
+	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_notExpired() {
 
 		// Given
 		sut.storeEventGroup(
@@ -416,19 +416,11 @@ class WalletManagerTests: XCTestCase {
 			isDraft: false
 		)
 
-		sut.storeEventGroup(
-			.vaccinationassessment,
-			providerIdentifier: "GDD",
-			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours),
-			isDraft: false
-		)
-
 		// When
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(4))
+		expect(self.sut.listEventGroups()).to(haveCount(3))
 	}
 
 	func test_expireEventGroups_oneVaccination_expired_oneRecovery_notExpired_oneTest_notExpired() {
@@ -499,7 +491,7 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listEventGroups()).to(haveCount(1))
 	}
 
-	func test_expireEventGroups_oneVaccination_oneRecovery_oneTest_oneVaccinationAssessment_allExpired() {
+	func test_expireEventGroups_oneVaccination_oneRecovery_oneTest_allExpired() {
 
 		// Given
 		sut.storeEventGroup(
@@ -520,14 +512,6 @@ class WalletManagerTests: XCTestCase {
 
 		sut.storeEventGroup(
 			.test(.ggd),
-			providerIdentifier: "GDD",
-			jsonData: Data(),
-			expiryDate: now.addingTimeInterval(10 * hours * ago),
-			isDraft: false
-		)
-
-		sut.storeEventGroup(
-			.vaccinationassessment,
 			providerIdentifier: "GDD",
 			jsonData: Data(),
 			expiryDate: now.addingTimeInterval(10 * hours * ago),
@@ -950,25 +934,6 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(persisted) != nil
-	}
-
-	func test_removeVaccinationAssessments() throws {
-
-		// Given
-		sut.storeEventGroup(
-			.vaccinationassessment,
-			providerIdentifier: "GGD",
-			jsonData: Data(),
-			expiryDate: nil,
-			isDraft: false
-		)
-		expect(self.sut.listEventGroups()).to(haveCount(1))
-
-		// When
-		sut.removeVaccinationAssessmentEventGroups()
-
-		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(0))
 	}
 	
 	let sampleJSONData = Data("[{\"credential\":{\"signature\":{\"A\":\"test\",\"e\":\"test\",\"v\":\"test\",\"KeyshareP\":null},\"attributes\":[null,\"YBwIAgYmEqyuplqChoZaYQ==\",\"Yw==\",\"YQ==\",\"YmxsYmhgbmRgYQ==\",\"ZGk=\",\"hw==\",\"jw==\",\"AQ==\",\"Yw==\",\"Yw==\"]},\"attributes\":{\"birthDay\":\"\",\"birthMonth\":\"1\",\"category\":\"3\",\"credentialVersion\":\"3\",\"firstNameInitial\":\"C\",\"isPaperProof\":\"0\",\"isSpecimen\":\"1\",\"lastNameInitial\":\"G\",\"validForHours\":\"24\",\"validFrom\":\"1661407200\"}}]".utf8)

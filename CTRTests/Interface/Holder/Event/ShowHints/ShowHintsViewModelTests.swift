@@ -422,46 +422,4 @@ class ShowHintsViewModelTests: XCTestCase {
 
 		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
 	}
-	
-	func testEndstate023() throws { // matches: .noEndState
-		// Arrange
-		let hints = try XCTUnwrap(NonemptyArray(["Vaccinationassessment_missing_supporting_negative_test"]))
-		
-		// Act
-		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub)
-		
-		// Assert
-		expect(self.sut) == nil
-	}
-	
-	func testEndstate024() throws { // matches: .noEndState
-		// Arrange
-		let hints = try XCTUnwrap(NonemptyArray(["Domestic_vaccinationassessment_created"]))
-		
-		// Act
-		sut = ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub)
-		
-		// Assert
-		expect(self.sut) == nil
-	}
-	
-	func testEndstate025() throws { // matches: .weCouldntMakeACertificate
-		// Arrange
-		let hints = try XCTUnwrap(NonemptyArray(["Domestic_vaccinationassessment_rejected"]))
-		
-		// Act
-		sut = try XCTUnwrap(ShowHintsViewModel(hints: hints, eventMode: EventMode.vaccinationassessment, coordinator: coordinatorStub))
-		sut.userTappedCallToActionButton()
-		
-		// Assert
-		expect(self.sut.title) == L.holder_listRemoteEvents_endStateCantCreateCertificate_title()
-		expect(self.sut.message) == L.holder_listRemoteEvents_endStateCantCreateCertificate_message("vaccinatiebeoordeling", "i 980 000 0513")
-		expect(self.sut.buttonTitle) == L.general_toMyOverview()
-		
-		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishCount) == 1
-		expect(self.coordinatorStub.invokedShowHintsScreenDidFinishParameters?.result) == .stop
-
-		assertSnapshot(matching: ShowHintsViewController(viewModel: sut), as: .image)
-	}
-
 }

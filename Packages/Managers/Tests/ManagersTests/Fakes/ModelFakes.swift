@@ -193,13 +193,6 @@ struct FakeRemoteEvent {
 		)
 	}
 	
-	static var fakeRemoteEventVaccinationAssessment: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-	
 	static var fakeRemoteEventPaperProof: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakePaperProofResultWrapper,

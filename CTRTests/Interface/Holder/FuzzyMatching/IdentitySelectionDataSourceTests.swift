@@ -111,7 +111,7 @@ final class IdentitySelectionDataSourceTests: XCTestCase {
 		expect(tuples).to(haveCount(1))
 		expect(tuples.first?.blobIds) == ["test"]
 		expect(tuples.first?.name) == "Check, Corona"
-		expect(tuples.first?.eventCountInformation) == "1 vaccinatie en 3 testuitslagen en 1 vaccinatiebeoordeling"
+		expect(tuples.first?.eventCountInformation) == "1 vaccinatie en 3 testuitslagen"
 	}
 	
 	func test_getIdentityInformation_fromEUCredentials() {
@@ -151,20 +151,19 @@ final class IdentitySelectionDataSourceTests: XCTestCase {
 		let overview = sut.getEventOveriew(blobIds: ["test"])
 		
 		// Then
-		expect(overview).to(haveCount(5))
-		expect(overview[0][0]) == "Vaccinatiebeoordeling"
-		expect(overview[1][0]) == "Negatieve testuitslag"
+		expect(overview).to(haveCount(4))
+		expect(overview[0][0]) == "Negatieve testuitslag"
+		expect(overview[0][1]) == "Opgehaald bij CC"
+		expect(overview[0][2]) == "1 juli 2021"
+		expect(overview[1][0]) == "Herstelbewijs"
 		expect(overview[1][1]) == "Opgehaald bij CC"
 		expect(overview[1][2]) == "1 juli 2021"
-		expect(overview[2][0]) == "Herstelbewijs"
+		expect(overview[2][0]) == "Vaccinatie"
 		expect(overview[2][1]) == "Opgehaald bij CC"
-		expect(overview[2][2]) == "1 juli 2021"
-		expect(overview[3][0]) == "Vaccinatie"
+		expect(overview[2][2]) == "16 mei 2021"
+		expect(overview[3][0]) == "Positieve testuitslag"
 		expect(overview[3][1]) == "Opgehaald bij CC"
-		expect(overview[3][2]) == "16 mei 2021"
-		expect(overview[4][0]) == "Positieve testuitslag"
-		expect(overview[4][1]) == "Opgehaald bij CC"
-		expect(overview[4][2]) == "1 juli 2020"
+		expect(overview[3][2]) == "1 juli 2020"
 	}
 	
 	func test_getEventOverview_vaccinationFromEUCredential() {

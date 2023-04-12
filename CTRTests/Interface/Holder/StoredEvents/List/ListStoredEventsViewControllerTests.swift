@@ -191,32 +191,13 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 
 		sut.assertImage()
 	}
-
-	func test_content_vaccinationAssessmentEvent() throws {
-		
-		// Given
-		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper))
-		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
-		setupSut()
-
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.holder_storedEvents_title()
-		expect(self.sut.sceneView.message) == L.holder_storedEvents_message()
-		expect(self.sut.sceneView.secondaryButtonTitle) == L.holder_storedEvents_button_handleData()
-
-		sut.assertImage()
-	}
 	
 	func test_content_combinedEvents() throws {
 		
 		// Given
-		let assessmentGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper))
 		let multipleVaccinationsGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeMultipleVaccinationResultWrapper))
 		let postiviteTestGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper))
-		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [postiviteTestGroup, assessmentGroup, multipleVaccinationsGroup]
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [postiviteTestGroup, multipleVaccinationsGroup]
 		setupSut()
 
 		// When
