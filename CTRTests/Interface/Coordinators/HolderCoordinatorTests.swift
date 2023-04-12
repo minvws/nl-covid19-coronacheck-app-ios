@@ -386,20 +386,7 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
-	
-	func test_userWishesToCreateAVisitorPass() {
-		
-		// Given
-		
-		// When
-		sut.userWishesToCreateAVisitorPass()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
+
 	func test_userWishesToChooseTestLocation_GGDenabled() {
 		
 		// Given
@@ -663,23 +650,6 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Heb je geen ophaalcode?"
 	}
-
-	func test_userWishesMoreInfoAboutNoVisitorPassToken() throws {
-		
-		// Given
-		let viewControllerSpy = ViewControllerSpy()
-		navigationSpy.viewControllers = [
-			viewControllerSpy
-		]
-		
-		// When
-		sut.userWishesMoreInfoAboutNoVisitorPassToken()
-		
-		// Then
-		expect(viewControllerSpy.presentCalled) == true
-		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Heb je geen beoordelingscode?"
-	}
 	
 	func test_userWishesToSeeStoredEvents() {
 		
@@ -720,20 +690,6 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
-	}
-	
-	func test_eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// Given
-		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-		
-		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 
 	func test_eventFlowDidCancel() {

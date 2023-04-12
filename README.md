@@ -66,8 +66,6 @@ This is a general overview of the features that are available in the app:
 
   * **Scan to add certificate**: the user can import a paper copy of a various types of certificate by scanning it using the phone's camera.
 
-  * **Add visitor pass**: for users who were vaccinated outside the EU and are visiting the Netherlands, they can obtain a "vaccine approval" code and use it - together with a negative test - to create a visitor pass in the app.
-
   * **Frequently asked questions**: a webview 
 
   * **About this app**:

@@ -43,7 +43,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem])
 	func userWishesMoreInfoAboutNoTestToken()
-	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
 	func userWishesToAddPaperProof()
 	func userWishesToChooseTestLocation()
@@ -52,7 +51,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
-	func userWishesToCreateAVisitorPass()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToOpenTheMenu()
@@ -206,7 +204,7 @@ class HolderCoordinator: SharedCoordinator {
 	override func consume(universalLink: UniversalLink) -> Bool {
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
-				return consumeToken(requestToken, retrievalMode: .negativeTest, universalLink: universalLink)
+				return consumeToken(requestToken, universalLink: universalLink)
 			case .thirdPartyTicketApp(let returnURL):
 				return consumeThirdPartyTicket(returnURL)
 			case .tvsAuth(let returnURL):
@@ -216,7 +214,7 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 	
-	private func consumeToken(_ requestToken: RequestToken, retrievalMode: InputRetrievalCodeMode, universalLink: UniversalLink) -> Bool {
+	private func consumeToken(_ requestToken: RequestToken, universalLink: UniversalLink) -> Bool {
 		
 		// Need to handle two situations:
 		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
@@ -229,7 +227,7 @@ class HolderCoordinator: SharedCoordinator {
 		} else {
 			// Do it on the next runloop, to standardise all the entry points to this function:
 			DispatchQueue.main.async { [self] in
-				navigateToTokenEntry(requestToken, retrievalMode: retrievalMode)
+				navigateToTokenEntry(requestToken)
 			}
 		}
 		return true
@@ -301,14 +299,13 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil) {
 		
 		let destination = InputRetrievalCodeViewController(
 			viewModel: InputRetrievalCodeViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
-				inputRetrievalCodeMode: retrievalMode
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
 			)
 		)
 		
@@ -536,16 +533,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 	}
 	
-	func userWishesMoreInfoAboutNoVisitorPassToken() {
-		
-		presentInformationPage(
-			title: L.visitorpass_token_modal_notoken_title(),
-			body: L.visitorpass_token_modal_notoken_details(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
@@ -584,11 +571,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToCreateAVaccinationQR() {
 		startEventFlowForVaccination()
-	}
-	
-	func userWishesToCreateAVisitorPass() {
-		
-		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 	
 	func userWishesToLaunchThirdPartyTicketApp() {
@@ -704,7 +686,6 @@ extension HolderCoordinator: EventFlowDelegate {
 		// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
 		removeChildCoordinator()
 		navigationController.popToRootViewController(animated: false)
-		userWishesToCreateAVisitorPass()
 	}
 	
 	func eventFlowDidCancel() {

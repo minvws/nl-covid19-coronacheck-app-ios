@@ -152,14 +152,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutNoTestTokenCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutNoVisitorPassToken = false
-	var invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount = 0
-
-	func userWishesMoreInfoAboutNoVisitorPassToken() {
-		invokedUserWishesMoreInfoAboutNoVisitorPassToken = true
-		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
 	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
 	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
@@ -226,14 +218,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToCreateAVaccinationQR() {
 		invokedUserWishesToCreateAVaccinationQR = true
 		invokedUserWishesToCreateAVaccinationQRCount += 1
-	}
-
-	var invokedUserWishesToCreateAVisitorPass = false
-	var invokedUserWishesToCreateAVisitorPassCount = 0
-
-	func userWishesToCreateAVisitorPass() {
-		invokedUserWishesToCreateAVisitorPass = true
-		invokedUserWishesToCreateAVisitorPassCount += 1
 	}
 
 	var invokedUserWishesToLaunchThirdPartyTicketApp = false
