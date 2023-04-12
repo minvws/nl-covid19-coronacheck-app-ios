@@ -114,7 +114,6 @@ extension HolderDashboardViewModel {
 		func isOfRegion(region: QRCodeValidityRegion) -> Bool {
 			switch (self.region, region) {
 				case (.europeanUnion, .europeanUnion): return true
-				default: return false
 			}
 		}
 

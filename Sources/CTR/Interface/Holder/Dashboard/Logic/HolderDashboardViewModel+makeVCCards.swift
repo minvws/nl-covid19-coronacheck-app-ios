@@ -125,8 +125,7 @@ extension HolderDashboardViewController.Card {
 			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 				
 				let message = String.holderDashboardQRExpired(
-					originType: expiredQR.type,
-					region: expiredQR.region
+					originType: expiredQR.type
 				)
 				let didTapClose: () -> Void = { [weak actionHandler] in
 					actionHandler?.didTapCloseExpiredQR(expiredQR: expiredQR)

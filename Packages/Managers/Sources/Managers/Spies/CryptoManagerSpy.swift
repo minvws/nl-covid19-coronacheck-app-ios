@@ -87,20 +87,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedHasDomesticPrefixResult
 	}
 
-	var invokedReadDomesticCredentials = false
-	var invokedReadDomesticCredentialsCount = 0
-	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?
-	var invokedReadDomesticCredentialsParametersList = [(data: Data, Void)]()
-	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes!
-
-	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
-		invokedReadDomesticCredentials = true
-		invokedReadDomesticCredentialsCount += 1
-		invokedReadDomesticCredentialsParameters = (data, ())
-		invokedReadDomesticCredentialsParametersList.append((data, ()))
-		return stubbedReadDomesticCredentialsResult
-	}
-
 	var invokedReadEuCredentials = false
 	var invokedReadEuCredentialsCount = 0
 	var invokedReadEuCredentialsParameters: (data: Data, Void)?

@@ -47,11 +47,6 @@ public protocol CryptoManaging: AnyObject {
 	/// - Returns: True if the data looks like a domestic credential
 	func hasDomesticPrefix(_ data: Data) -> Bool
 	
-	/// Get the domestic credential attributes
-	/// - Parameter data: the incoming domestic ctb
-	/// - Returns: optional domstic credential attributes
-	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
-	
 	/// Get the eu credential attributes
 	/// - Parameter data: the incoming eu dcc
 	/// - Returns: optional eu credential attributes

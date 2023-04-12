@@ -103,25 +103,6 @@ public class CryptoManager: CryptoManaging {
 	}
 	
 	// MARK: - Credential
-
-	/// Read the crypto credential
-	/// - Returns: the crypto attributes
-	public func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
-
-		if let response = MobilecoreReadDomesticCredential(data) {
-			if let value = response.value {
-				do {
-					let object = try JSONDecoder().decode(DomesticCredentialAttributes.self, from: value)
-					return object
-				} catch {
-					logError("Error Deserializing \(DomesticCredentialAttributes.self): \(error)")
-				}
-			} else {
-				logError("Can't read credential: \(String(describing: response.error))")
-			}
-		}
-		return nil
-	}
 	
 	public var euCredentialAttributesCache = ThreadSafeCache<Data, EuCredentialAttributes?>()
 	

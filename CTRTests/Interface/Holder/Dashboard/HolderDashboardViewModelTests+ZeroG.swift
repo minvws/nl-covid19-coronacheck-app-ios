@@ -40,30 +40,6 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
 	}
 	
-	func test_datasourceupdate_domesticExpiredButOnInternationalTab_zeroG_shouldShowEmptyState() {
-		
-		// Arrange
-		sut = vendSut()
-		
-		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
-			.init(region: .domestic, type: .recovery),
-			.init(region: .domestic, type: .test),
-			.init(region: .domestic, type: .vaccination)
-		]
-		
-		// Act
-		qrCardDatasourceSpy.invokedDidUpdate?([], expiredCards)
-		
-		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
-		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription())
-		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard(test: { title, buttonText, _, _ in
-			expect(title) == L.holder_dashboard_noDomesticCertificatesBanner_0G_title()
-			expect(buttonText) == L.holder_dashboard_noDomesticCertificatesBanner_0G_action_linkToRijksoverheid()
-		}))
-		expect(self.sut.internationalCards.value[2]).toEventually(beEmptyStatePlaceholderImage())
-	}
-	
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination_0G() {
 		
 		// Arrange
