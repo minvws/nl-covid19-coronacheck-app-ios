@@ -649,7 +649,7 @@ extension InputRetrievalCodeViewModel {
 					return
 				}
 
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		coordinator?.presentError(content: content) { [weak self] in

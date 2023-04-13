@@ -20,7 +20,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameter result: the result of the start scene
 	func didFinish(_ result: VerifierStartResult)
 	
-	func openUrl(_ url: URL, inApp: Bool)
+	func openUrl(_ url: URL)
 	
 	func navigateToAboutThisApp()
 	
@@ -231,7 +231,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				flavor: AppFlavor.flavor,
 				versionSupplier: self.versionSupplier,
 				urlHandler: { [weak self] url in
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url)
 				}
 			)
 		)
@@ -241,7 +241,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.verifierClockDeviationDetectedTitle()
 		let message: String = L.verifierClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 	
 	func userWishesToOpenScanLog() {
@@ -267,8 +267,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
 			guard let self else { return }
 			switch outcome {
-				case let .openURL(url, inApp):
-					self.openUrl(url, inApp: inApp)
+				case let .openURL(url):
+					self.openUrl(url)
 				case .userWishesToOpenScanLog:
 					self.userWishesToOpenScanLog()
 				case .coordinatorShouldRestart:
@@ -292,7 +292,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	func userWishesToLaunchThirdPartyScannerApp() {
 		if let thirdPartyScannerApp {
-			openUrl(thirdPartyScannerApp.returnURL, inApp: false)
+			openUrl(thirdPartyScannerApp.returnURL)
 		} else {
 			navigateToScan()
 		}

@@ -25,14 +25,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
-	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
-	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
 
-	func openUrl(_ url: URL, inApp: Bool) {
+	func openUrl(_ url: URL) {
 		invokedOpenUrl = true
 		invokedOpenUrlCount += 1
-		invokedOpenUrlParameters = (url, inApp)
-		invokedOpenUrlParametersList.append((url, inApp))
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
 
 	var invokedNavigateToAboutThisApp = false

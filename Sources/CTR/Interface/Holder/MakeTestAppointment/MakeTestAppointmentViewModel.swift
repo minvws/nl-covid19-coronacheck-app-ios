@@ -52,7 +52,7 @@ final class MakeTestAppointmentViewModel {
 
 		// Notify the coordinator
 		if let url = URL(string: L.holderUrlAppointment()) {
-			coordinator?.openUrl(url, inApp: true)
+			coordinator?.openUrl(url)
 		}
 	}
 }

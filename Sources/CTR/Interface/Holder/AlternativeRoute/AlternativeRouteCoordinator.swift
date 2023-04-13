@@ -94,7 +94,7 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 	
 	func userWishesToRequestADigiD() {
 		if let url = URL(string: L.holder_noDigiD_url()) {
-			openUrl(url, inApp: true)
+			openUrl(url)
 		}
 	}
 

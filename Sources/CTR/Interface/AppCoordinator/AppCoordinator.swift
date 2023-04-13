@@ -352,7 +352,7 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		
 		let errorCodes = ErrorCode.mapServerErrors(errorTuples, for: .onboarding)
 		let viewModel = LaunchErrorViewModel(errorCodes: errorCodes) { [weak self] url in
-			self?.openUrl(url, inApp: true)
+			self?.openUrl(url)
 		} closeHandler: {
 			self.closeTheApp()
 		}

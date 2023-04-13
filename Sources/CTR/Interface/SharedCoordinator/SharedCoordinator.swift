@@ -23,8 +23,7 @@ protocol OpenUrlProtocol: AnyObject {
 	/// Open a url
 	/// - Parameters:
 	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool)
+	func openUrl(_ url: URL)
 }
 
 /// The shared base class for the holder and verifier coordinator.
@@ -59,7 +58,7 @@ class SharedCoordinator: Coordinator, OpenUrlProtocol {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 
 		let viewController = BottomSheetContentViewController(
 			viewModel: BottomSheetContentViewModel(
@@ -70,7 +69,7 @@ class SharedCoordinator: Coordinator, OpenUrlProtocol {
 				screenCaptureDetector: ScreenCaptureDetector(),
  				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: openURLsInApp)
+					self?.openUrl(url)
 				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)

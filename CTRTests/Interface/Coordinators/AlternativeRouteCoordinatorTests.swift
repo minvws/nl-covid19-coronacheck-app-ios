@@ -96,17 +96,6 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.alternativeRouteFlowDelegateSpy.invokedBackToMyOverview) == false
 	}
 	
-	func test_userWishesToRequestADigiD() {
-		
-		// Given
-		
-		// When
-		sut.userWishesToRequestADigiD()
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == true
-	}
-	
 	func test_userWishesToContactHelpDeksWithBSN() throws {
 
 		// Given

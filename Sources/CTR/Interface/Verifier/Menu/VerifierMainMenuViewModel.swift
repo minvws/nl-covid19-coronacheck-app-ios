@@ -35,7 +35,7 @@ class VerifierMainMenuViewModel: MenuViewModelProtocol {
 		
 		let itemFAQ: Item = .row(title: L.verifierMenuSupport(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak coordinator] in
 			guard let faqUrl = URL(string: L.verifierUrlFaq()) else { return }
-			coordinator?.openUrl(faqUrl, inApp: true)
+			coordinator?.openUrl(faqUrl)
 		}
 		
 		let itemHelpdesk: Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak coordinator] in

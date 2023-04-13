@@ -41,7 +41,7 @@ class ListStoredEventsViewModel {
 
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 	
 	fileprivate func getEventGroupListViewState() -> ListStoredEventsViewController.State {
@@ -55,7 +55,7 @@ class ListStoredEventsViewModel {
 				secondaryActionTitle: L.holder_storedEvents_button_handleData(),
 				secondaryAction: { [weak self] in
 					guard let url = URL(string: L.holder_storedEvents_url()) else { return }
-					self?.coordinator?.openUrl(url, inApp: true)
+					self?.coordinator?.openUrl(url)
 				}),
 			groups: getEventGroups()
 		)
@@ -389,7 +389,7 @@ class ListStoredEventsViewModel {
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {

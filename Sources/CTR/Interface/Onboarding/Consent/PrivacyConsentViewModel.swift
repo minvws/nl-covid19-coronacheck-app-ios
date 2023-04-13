@@ -53,7 +53,7 @@ final class PrivacyConsentViewModel {
 	
 	func openUrl(_ url: URL) {
 		
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 
 	/// The user tapped on the primary button

@@ -207,7 +207,6 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 			didTapCallToAction()
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_only3GaccessBanner_link()
-			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
 			
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == nil
 			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = [.policy3G]
@@ -235,7 +234,6 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 			didTapCallToAction()
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_only1GaccessBanner_link()
-			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
 			
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == nil
 			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = [.policy1G]
@@ -263,7 +261,6 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 			didTapCallToAction()
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_3Gand1GaccessBanner_link()
-			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
 			
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == nil
 			self.environmentSpies.userSettingsSpy.stubbedLastDismissedDisclosurePolicy = [.policy1G, .policy3G]
@@ -295,7 +292,6 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 			didTapCallToAction()
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_noDomesticCertificatesBanner_url()
-			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
 			
 			expect(self.environmentSpies.userSettingsSpy.invokedLastDismissedDisclosurePolicy) == nil
 			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy) == nil

@@ -97,7 +97,7 @@ extension ListRemoteEventsViewModel {
 					return
 				}
 				
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))

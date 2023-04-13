@@ -248,7 +248,7 @@ extension AuthenticationViewModel {
 					return
 				}
 
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		self.coordinator?.authenticationScreenDidFinish(.error(content: content, backAction: loginCancelled))

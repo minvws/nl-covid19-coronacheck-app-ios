@@ -132,7 +132,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 				screenCaptureDetector: ScreenCaptureDetector(),
 				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url)
 				},
 				hideBodyForScreenCapture: false
 			)

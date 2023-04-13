@@ -104,16 +104,7 @@ extension Coordinator {
 	/// Open a url
 	/// - Parameters:
 	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-		
-		let shouldOpenInApp = {
-			// Other URL schemes can't be opened in SFSafariViewController, - it doesn't work & will crash.
-			guard url.scheme == "http" || url.scheme == "https" else {
-				return false
-			}
-			return inApp
-		}()
+	func openUrl(_ url: URL) {
 		
 		var releaseAdjustedURL: URL? = url
 		switch Configuration().getRelease() {
@@ -132,21 +123,7 @@ extension Coordinator {
 		}
 		
 		guard let releaseAdjustedURL else { return }
-		
-		guard #available(iOS 13.0, *), shouldOpenInApp else {
-			UIApplication.shared.open(releaseAdjustedURL)
-			return
-		}
-		
-		let safariController = SFSafariViewController(url: releaseAdjustedURL)
-		
-		if let presentedViewController = navigationController.presentedViewController {
-			presentedViewController.presentingViewController?.dismiss(animated: true) {
-				self.navigationController.present(safariController, animated: true)
-			}
-		} else {
-			navigationController.present(safariController, animated: true)
-		}
+		UIApplication.shared.open(releaseAdjustedURL)
 	}
 }
 
@@ -164,7 +141,7 @@ extension Coordinator {
 				backAction: backAction,
 				allowsSwipeBack: allowsSwipeBack,
 				linkTapHander: { [weak self] url in
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url)
 				}
 			)
 		)

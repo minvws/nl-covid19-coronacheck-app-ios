@@ -53,7 +53,7 @@ struct AboutThisAppMenuSection {
 class AboutThisAppViewModel {
 
 	enum Outcome: Equatable {
-		case openURL(_: URL, inApp: Bool)
+		case openURL(_: URL)
 		case userWishesToOpenScanLog
 		case coordinatorShouldRestart
 	}
@@ -119,7 +119,7 @@ class AboutThisAppViewModel {
 			case .reset:
 				didTapResetApp()
 			case .deeplink:
-				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
+				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test")
 			case .scanlog:
 				openScanLog()
 			case .useNoDisclosurePolicy:
@@ -209,10 +209,10 @@ class AboutThisAppViewModel {
 		}
 	}
 
-	private func openUrlString(_ urlString: String, inApp: Bool = true) {
+	private func openUrlString(_ urlString: String) {
 
 		if let url = URL(string: urlString) {
-			outcomeHandler(.openURL(url, inApp: inApp))
+			outcomeHandler(.openURL(url))
 		}
 	}
 

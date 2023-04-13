@@ -77,7 +77,7 @@ class ScanLogViewModel {
 
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 }
 

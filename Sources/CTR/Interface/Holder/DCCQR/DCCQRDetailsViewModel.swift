@@ -4,6 +4,8 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+
+import Foundation
 import Shared
 
 final class DCCQRDetailsViewModel {
@@ -52,6 +54,6 @@ final class DCCQRDetailsViewModel {
 	
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 }

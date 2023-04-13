@@ -268,8 +268,7 @@ class ShowQRViewModel {
 			coordinator?.presentInformationPage(
 				title: L.holderShowqrDomesticAboutTitle(),
 				body: getDomesticDetailsBody(domesticCredentialAttributes),
-				hideBodyForScreenCapture: true,
-				openURLsInApp: true
+				hideBodyForScreenCapture: true
 			)
 		} else {
 			logError("Can't read the domestic credentials")

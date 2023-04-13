@@ -55,7 +55,7 @@ final class RiskSettingInstructionViewModel {
 	func showReadMore() {
 		guard let url = URL(string: L.verifier_risksetting_readmore_url()) else { return }
 		
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 	
 	func startScanner() {
