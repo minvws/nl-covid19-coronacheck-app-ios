@@ -131,17 +131,6 @@ func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _, _ in })
 	}
 }
 
-func beExpiredVaccinationQRCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .expiredVaccinationQR with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .expiredVaccinationQR(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2) = actual {
-			test(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .configAlmostOutOfDate with matching values") { expression, message in
 		if let actual = try expression.evaluate(),

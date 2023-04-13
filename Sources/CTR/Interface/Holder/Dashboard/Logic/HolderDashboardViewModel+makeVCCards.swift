@@ -14,11 +14,10 @@ import Resources
 extension HolderDashboardViewController.Card {
 
 	static func makeHeaderMessageCard(
-		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
 
-		guard !state.dashboardHasEmptyState(for: validityRegion) else { return [] }
+		guard !state.dashboardHasEmptyState() else { return [] }
 		
 		return [
 			.headerMessage(
@@ -135,10 +134,9 @@ extension HolderDashboardViewController.Card {
 	}
 	
 	static func makeEmptyStateDescriptionCard(
-		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
+		guard state.dashboardHasEmptyState() else { return [] }
 		
 		return [HolderDashboardViewController.Card.emptyStateDescription(
 			message: L.holder_dashboard_emptyState_international_0G_message(),
@@ -147,10 +145,9 @@ extension HolderDashboardViewController.Card {
 	}
 	
 	static func makeEmptyStatePlaceholderImageCard(
-		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State
 	) -> [HolderDashboardViewController.Card] {
-		guard state.dashboardHasEmptyState(for: validityRegion) else { return [] }
+		guard state.dashboardHasEmptyState() else { return [] }
 		
 		guard let internationalImage = I.dashboard.international() else { return [] }
 		return [HolderDashboardViewController.Card.emptyStatePlaceholderImage(
@@ -176,13 +173,11 @@ extension HolderDashboardViewController.Card {
 	}
 	
 	static func makeDisclosurePolicyInformation0GBanner(
-		validityRegion: QRCodeValidityRegion,
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling
 	) -> [HolderDashboardViewController.Card] {
 		
-		guard validityRegion == .europeanUnion,
-			  state.shouldShow0GDisclosurePolicyBecameActiveBanner else { return [] }
+		guard state.shouldShow0GDisclosurePolicyBecameActiveBanner else { return [] }
 
 		return [
 			.disclosurePolicyInformation(
@@ -296,30 +291,6 @@ extension HolderDashboardViewModel.QRCard {
 				}
 		}
 	}
-}
-
-/// For a given `[QRCard.GreenCard.Origin]`, determines which origin expires furthest into future, and
-/// if the date is within the threshold, will return a localized string indicating how long until that origin expires.
-private func domesticCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]) -> String? {
-	
-	let expiringMostDistantlyInFutureOrigin: QRCard.GreenCard.Origin? = {
-		// Calculate which is the origin with the furthest future expiration:
-		return origins.reduce(QRCard.GreenCard.Origin?.none) { previous, next in
-			guard let previous = previous else { return next }
-			return next.expirationTime > previous.expirationTime ? next : previous
-		}
-	}()
-	
-	guard let expiringMostDistantlyInFutureOrigin = expiringMostDistantlyInFutureOrigin,
-		  let countdownTimerVisibleThreshold: TimeInterval = expiringMostDistantlyInFutureOrigin.countdownTimerVisibleThreshold(isInternational: false)
-	else { return nil }
-	
-	let expirationTime: Date = expiringMostDistantlyInFutureOrigin.expirationTime
-	
-	guard expirationTime > now && expirationTime < now.addingTimeInterval(countdownTimerVisibleThreshold)
-	else { return nil }
-
-	return countdownText(now: now, to: expirationTime)
 }
 
 private func internationalCountdownText(now: Date, origins: [QRCard.GreenCard.Origin]) -> String? {

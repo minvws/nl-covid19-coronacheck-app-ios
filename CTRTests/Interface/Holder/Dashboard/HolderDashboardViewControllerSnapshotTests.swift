@@ -135,20 +135,6 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image)
 	}
 	
-	func test_expiredVaccinationQR() {
-
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		viewModelSpy.stubbedInternationalCards.value = [
-			.expiredVaccinationQR(message: "message", callToActionButtonText: "callToActionButtonText", didTapCallToAction: {}, didTapClose: {})
-		]
-		
-		// Assert
-		assertSnapshot(matching: sut, as: .image)
-	}
-	
 	func test_deviceHasClockDeviation() {
 
 		// Arrange

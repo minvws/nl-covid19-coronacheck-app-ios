@@ -107,7 +107,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			qrCards.filter({ $0.isOfRegion(region: .europeanUnion) }).isNotEmpty || regionFilteredExpiredCards(validityRegion: .europeanUnion).isNotEmpty
 		}
 		
-		func dashboardHasEmptyState(for validityRegion: QRCodeValidityRegion) -> Bool {
+		func dashboardHasEmptyState() -> Bool {
 			
 			return !dashboardHasInternationalQRCards()
 		}
@@ -116,7 +116,6 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 			qrCards.filter { (qrCard: QRCard) in
 				switch (qrCard.region, validityRegion) {
 					case (.europeanUnion, .europeanUnion): return true
-					default: return false
 				}
 			}
 		}
@@ -447,16 +446,16 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		typealias VCCard = HolderDashboardViewController.Card
 		
 		var cards = [VCCard]()
-		cards += VCCard.makeEmptyStateDescriptionCard(validityRegion: validityRegion, state: state)
-		cards += VCCard.makeHeaderMessageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeEmptyStateDescriptionCard(state: state)
+		cards += VCCard.makeHeaderMessageCard(state: state)
 		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeDisclosurePolicyInformation0GBanner(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
-		cards += VCCard.makeEmptyStatePlaceholderImageCard(validityRegion: validityRegion, state: state)
+		cards += VCCard.makeDisclosurePolicyInformation0GBanner(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeEmptyStatePlaceholderImageCard(state: state)
 		cards += VCCard.makeQRCards(
 			validityRegion: validityRegion,
 			state: state,

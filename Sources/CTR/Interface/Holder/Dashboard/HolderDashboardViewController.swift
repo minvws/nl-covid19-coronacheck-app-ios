@@ -27,7 +27,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		// Warnings:
 		case expiredQR(message: String, didTapClose: () -> Void)
-		case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case eventsWereRemoved(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
@@ -200,14 +199,14 @@ private extension HolderDashboardViewController.Card {
 				))
 				
 			// Message Cards with a message + CTA button + close button
-			case let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+			case let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
 					closeButtonCommand: didTapCloseAction,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
+				
 			case let .disclosurePolicyInformation(message, callToActionButtonText, accessibilityIdentifier, didTapCallToAction, didTapCloseAction):
 				return MessageCardView(config: .init(
 					title: message,
@@ -228,7 +227,6 @@ private extension HolderDashboardViewController.Card {
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
 			
 				let qrCard = QRCardView(stackSize: stackSize)
-				qrCard.shouldStyleForEU = true
 				qrCard.viewQRButtonTitle = stackSize == 1 ? L.holderDashboardQrButtonViewQR() : L.holderDashboardQrButtonViewQRs()
 				qrCard.viewQRButtonCommand = didTapViewQR
 				qrCard.title = title

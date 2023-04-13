@@ -135,8 +135,8 @@ class QRCardView: BaseView {
 	
 	private let largeIconImageView: UIImageView = {
 
-		let view = UIImageView(image: I.dashboard.domestic())
-		view.accessibilityLabel = L.generalNetherlands()
+		let view = UIImageView(image: I.dashboard.international())
+		view.accessibilityLabel = L.generalEuropean()
 		view.isAccessibilityElement = false
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -438,9 +438,6 @@ class QRCardView: BaseView {
 		if let buttonEnabledEvaluator {
 			let enabledState = buttonEnabledEvaluator(Current.now())
 			viewQRButton.isEnabled = enabledState
-			if shouldStyleForEU && enabledState {
-				applyEUStyle()
-			}
 			loadingButtonOverlay.buttonAppearsEnabled = enabledState
 		}
 	}
@@ -480,12 +477,6 @@ class QRCardView: BaseView {
 		view.layer.rasterizationScale = UIScreen.main.scale
 	}
 
-	private func applyEUStyle() {
-		largeIconImageView.image = I.dashboard.international()
-		largeIconImageView.accessibilityLabel = L.generalEuropean()
-		titleLabel.accessibilityLabel = (title ?? "") + ", " + L.generalEuropean()
-	}
-
 	// MARK: - Callbacks
 
 	@objc func viewQRButtonTapped() {
@@ -518,7 +509,7 @@ class QRCardView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
-			titleLabel.accessibilityLabel = (title ?? "") + ", " + L.generalNetherlands()
+			titleLabel.accessibilityLabel = (title ?? "") + ", " + L.generalEuropean()
 		}
 	}
 
@@ -536,14 +527,6 @@ class QRCardView: BaseView {
 	}
 
 	var viewQRButtonCommand: (() -> Void)?
-
-	/// currently ignores `false`
-	var shouldStyleForEU: Bool = false {
-		didSet {
-			guard shouldStyleForEU else { return }
-			applyEUStyle()
-		}
-	}
 	
 	var isDisabledByDisclosurePolicy: Bool = false {
 		didSet {
