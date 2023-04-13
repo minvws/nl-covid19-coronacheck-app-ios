@@ -9,7 +9,7 @@ import UIKit
 import Shared
 import ReusableViews
 
-class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
+class MenuViewController: GenericViewController<MenuView, MenuViewModelProtocol> {
 	
 	enum Item {
 		case row(title: String, subTitle: String?, icon: UIImage, overrideColor: UIColor?, action: () -> Void)
@@ -25,11 +25,9 @@ class MenuViewController: GenericViewController<MenuView, MenuViewModel> {
 	
 	private func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] title in
-			self?.title = title
-		}
+		viewModel.title.observe { [weak self] in self?.title = $0 }
 		
-		viewModel.$items.binding = { [weak self] items in
+		viewModel.items.observe { [weak self] items in
 			guard let self else { return }
 			self.sceneView.stackView.removeArrangedSubviews()
 			

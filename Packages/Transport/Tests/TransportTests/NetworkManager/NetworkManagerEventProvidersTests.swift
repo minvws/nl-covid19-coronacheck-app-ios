@@ -193,7 +193,7 @@ class NetworkManagerEventProvidersTests: XCTestCase {
 							"usage": [
 								"v"
 							]
-						]
+						] as [String: Any]
 					]
 				],
 				statusCode: 200,

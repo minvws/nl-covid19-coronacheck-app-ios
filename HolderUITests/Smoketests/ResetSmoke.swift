@@ -32,7 +32,6 @@ class ResetSmoke: BaseTest {
 		
 		resetApp(confirm: false)
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		
 		viewWallet()

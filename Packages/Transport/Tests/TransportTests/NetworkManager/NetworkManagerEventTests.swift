@@ -282,10 +282,10 @@ extension NetworkManagerEventTests {
 								"country": "NL",
 								"doseNumber": nil,
 								"totalDoses": nil
-							]
-						]
+							] as [String: Any?]
+						] as [String: Any]
 					]
-				],
+				] as [String: Any],
 				statusCode: 200,
 				headers: nil
 			)

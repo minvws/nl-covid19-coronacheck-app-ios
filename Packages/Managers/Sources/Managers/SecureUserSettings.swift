@@ -42,28 +42,28 @@ public class SecureUserSettings: SecureUserSettingsProtocol {
 	
 	public init() {}
 	
-	@Keychain(name: "scanLockUntil", service: "ScanLockManager" + Configuration().getEnvironment(), clearOnReinstall: false)
+	@Keychain(name: "scanLockUntil", service: "ScanLockManager" + Configuration().getRelease().rawValue, clearOnReinstall: false)
 	public var scanLockUntil: Date = Defaults.scanLockUntil
 	
-	@Keychain(name: "appInstalledDate", service: "AppInstalledSinceManager" + Configuration().getEnvironment(), clearOnReinstall: true)
+	@Keychain(name: "appInstalledDate", service: "AppInstalledSinceManager" + Configuration().getRelease().rawValue, clearOnReinstall: true)
 	public var appInstalledDate: Date? = Defaults.appInstalledDate
 	
-	@Keychain(name: "data", service: "ForcedInformationManager" + Configuration().getEnvironment(), clearOnReinstall: true)
+	@Keychain(name: "data", service: "ForcedInformationManager" + Configuration().getRelease().rawValue, clearOnReinstall: true)
 	public var forcedInformationData: ForcedInformationData = Defaults.forcedInformationData
 	
-	@Keychain(name: "holderSecretKey", service: "CryptoManager" + Configuration().getEnvironment(), clearOnReinstall: true)
+	@Keychain(name: "holderSecretKey", service: "CryptoManager" + Configuration().getRelease().rawValue, clearOnReinstall: true)
 	public var holderSecretKey: Data? = Defaults.holderSecretKey
 
-	@Keychain(name: "onboardingData", service: "OnboardingManager" + Configuration().getEnvironment(), clearOnReinstall: true)
+	@Keychain(name: "onboardingData", service: "OnboardingManager" + Configuration().getRelease().rawValue, clearOnReinstall: true)
 	public var onboardingData: OnboardingData = Defaults.onboardingData
 
-	@Keychain(name: "storedConfiguration", service: "RemoteConfigManager" + Configuration().getEnvironment(), clearOnReinstall: false)
+	@Keychain(name: "storedConfiguration", service: "RemoteConfigManager" + Configuration().getRelease().rawValue, clearOnReinstall: false)
 	public var storedConfiguration: RemoteConfiguration = Defaults.storedConfiguration
 
-	@Keychain(name: "verificationPolicy", service: "RiskLevelManager" + Configuration().getEnvironment(), clearOnReinstall: false)
+	@Keychain(name: "verificationPolicy", service: "RiskLevelManager" + Configuration().getRelease().rawValue, clearOnReinstall: false)
 	public var verificationPolicy: VerificationPolicy? = Defaults.verificationPolicy
 	
-	@Keychain(name: "selectedIdentity", service: "FuzzyMatching" + Configuration().getEnvironment(), clearOnReinstall: false)
+	@Keychain(name: "selectedIdentity", service: "FuzzyMatching" + Configuration().getRelease().rawValue, clearOnReinstall: false)
 	public var selectedIdentity: String? = Defaults.selectedIdentity
 }
 

@@ -255,7 +255,7 @@ class NetworkManagerUnomiTests: XCTestCase {
 					"provider_identifier": "CC",
 					"protocolVersion": "3.0",
 					"informationAvailable": true
-				],
+				] as [String: Any],
 				statusCode: 200,
 				headers: nil
 			)

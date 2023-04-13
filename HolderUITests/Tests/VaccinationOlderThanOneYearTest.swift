@@ -13,7 +13,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -22,7 +21,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -32,7 +30,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -41,7 +38,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -50,7 +46,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -60,7 +55,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addRetrievedCertificateToApp()
 		assertCertificateIsOnlyValidInternationally()
 		
-		assertNoValidDutchCertificate(ofType: .vaccination)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -69,7 +63,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 	
@@ -78,7 +71,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
 }

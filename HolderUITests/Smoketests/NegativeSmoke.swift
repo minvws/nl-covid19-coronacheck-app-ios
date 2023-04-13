@@ -14,7 +14,6 @@ class NegativeSmoke: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 		assertInternationalTestQRDetails(for: person, testType: .pcr)
 	}
@@ -24,7 +23,6 @@ class NegativeSmoke: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .rat)
 		assertInternationalTestQRDetails(for: person, testType: .rat)
 	}
@@ -33,7 +31,6 @@ class NegativeSmoke: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negAgob.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 	
@@ -53,7 +50,6 @@ class NegativeSmoke: BaseTest {
 		addTestCertificateFromGGD(for: TestData.negPrematurePcr.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertDutchCertificateIsNotYetValid(ofType: .test, validFromOffsetInDays: person.testFrom)
 		assertCertificateIsNotValidInternationally(ofType: .test)
 	}
 }

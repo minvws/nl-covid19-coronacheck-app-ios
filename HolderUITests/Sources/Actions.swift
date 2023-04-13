@@ -42,7 +42,7 @@ extension BaseTest {
 		app.containsText("Wat betekent dit?")
 		app.containsText("Laat toch zien")
 		app.tapButton("Wat betekent dit?")
-		app.textExists("Verborgen QR-code")
+		app.containsText("Verborgen QR-code")
 		app.tapButton("Sluiten")
 		app.tapButton("Laat toch zien")
 		app.textNotExists("QR-code is verborgen")
@@ -52,7 +52,7 @@ extension BaseTest {
 		viewQR(of: certificate, label: "Bekijk QR", hiddenQR: hiddenQR)
 	}
 	
-	func viewQRCodes(of	certificate: CertificateType, hiddenQR: Bool = false) {
+	func viewQRCodes(of certificate: CertificateType, hiddenQR: Bool = false) {
 		viewQR(of: certificate, label: "Bekijk QR-codes", hiddenQR: hiddenQR)
 	}
 	
@@ -130,10 +130,10 @@ extension BaseTest {
 	
 	private func retrieveCertificateFromServer(for bsn: String) {
 		
-		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: self.loginTimeout))
+		XCTAssertTrue(safari.wait(for: .runningForeground, timeout: loginTimeout))
 		makeScreenShot(name: "Safari is ready")
 		
-		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: self.loginTimeout)
+		let loggedIn = safari.webViews.staticTexts["DigiD MOCK"].waitForExistence(timeout: loginTimeout)
 		makeScreenShot(name: "Logged in: \(loggedIn.description)")
 		
 		if !loggedIn { loginToServer() }
@@ -179,7 +179,7 @@ extension BaseTest {
 	
 	func addRetrievedCertificateToApp() {
 		makeScreenShot(name: "Back in app")
-		app.textExists("Kloppen de gegevens?")
+		app.containsText("Kloppen de gegevens?")
 		waitUntilSpinnerIsGone()
 		makeScreenShot(name: "Data retrieval screen")
 		app.tapButton("Maak bewijs")
@@ -189,8 +189,8 @@ extension BaseTest {
 	private func waitUntilSpinnerIsGone() {
 		let element = app.descendants(matching: .activityIndicator).firstMatch
 		let predicate = NSPredicate(format: "exists == false")
-		self.expectation(for: predicate, evaluatedWith: element, handler: nil)
-		self.waitForExpectations(timeout: 2.0, handler: nil)
+		expectation(for: predicate, evaluatedWith: element, handler: nil)
+		waitForExpectations(timeout: 2.0, handler: nil)
 	}
 	
 	func replaceExistingCertificate(_ replace: Bool) {
@@ -217,7 +217,7 @@ extension BaseTest {
 	func viewWallet() {
 		app.tapButton("Open menu")
 		app.tapButton("Opgeslagen gegevens")
-		app.textExists("Mijn opgeslagen gegevens")
+		app.containsText("Mijn opgeslagen gegevens")
 	}
 	
 	func returnFromWalletToOverview() {

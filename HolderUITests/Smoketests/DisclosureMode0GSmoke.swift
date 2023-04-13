@@ -8,13 +8,9 @@
 class DisclosureMode0GSmoke: BaseTest {
 	
 	override func setUpWithError() throws {
-		self.disclosureMode = DisclosureMode.mode0G
+		disclosureMode = DisclosureMode.mode0G
 		
 		try super.setUpWithError()
-	}
-	
-	func test_mode0G_messages() {
-		assertDisclosureMessages()
 	}
 	
 	func test_mode0G_negPcr() {
@@ -22,7 +18,6 @@ class DisclosureMode0GSmoke: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchTestCertificate()
 		assertValidInternationalTestCertificate(testType: .pcr)
 	}
 	
@@ -31,7 +26,6 @@ class DisclosureMode0GSmoke: BaseTest {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchVaccinationCertificate(doses: person.dose, validFromOffsetInDays: person.vacFrom)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
 	
@@ -40,7 +34,6 @@ class DisclosureMode0GSmoke: BaseTest {
 		addRecoveryCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertValidDutchRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 		assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: person.recUntil)
 	}
 }

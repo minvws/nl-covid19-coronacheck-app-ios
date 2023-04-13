@@ -149,7 +149,7 @@ class WalletTest: BaseTest {
 		let retrievalCode = "ZZZ-FZB3CUYL55U7ZT-R2"
 		addCommercialTestCertificate(for: retrievalCode)
 		
-		app.textExists("Kloppen de gegevens?")
+		app.containsText("Kloppen de gegevens?")
 		app.tapButton("Maak bewijs")
 		
 		viewWallet()

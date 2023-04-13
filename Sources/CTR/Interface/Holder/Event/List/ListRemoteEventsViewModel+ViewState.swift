@@ -234,13 +234,15 @@ extension ListRemoteEventsViewModel {
 		let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
-
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
+		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			details: [
 				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
+				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -317,13 +319,15 @@ extension ListRemoteEventsViewModel {
 		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayNameDayNumericMonth.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		return ListRemoteEventsViewController.Row(
 			title: L.holder_event_vaccination_assessment_element_title(),
 			details: [
 				L.holder_listRemoteEvents_listElement_assessmentDate(formattedTestDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
+				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -345,13 +349,15 @@ extension ListRemoteEventsViewModel {
 		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			details: [
 				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
+				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -373,13 +379,15 @@ extension ListRemoteEventsViewModel {
 		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(DateFormatter.Format.dayNameDayNumericMonthYearWithTime.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
-
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
+		
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			details: [
 				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
 				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
+				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(

@@ -12,6 +12,6 @@ import Models
 extension ScreenCaptureDetector {
 	
 	convenience init() {
-		self.init(environmentIsProduction: Configuration().getEnvironment() == "production")
+		self.init(environmentIsProduction: Configuration().getRelease() == .production)
 	}
 }

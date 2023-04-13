@@ -15,9 +15,10 @@ class Person {
 	init(
 		bsn: String? = nil,
 		name: String = "van Geer, Corrie",
-		birthDate: Date = Date("1960-01-01")) {
-			self.bsn = bsn
-			self.name = name
-			self.birthDate = birthDate
-		}
+		birthDate: Date = Date("1960-01-01")
+	) {
+		self.bsn = bsn
+		self.name = name
+		self.birthDate = birthDate
+	}
 }

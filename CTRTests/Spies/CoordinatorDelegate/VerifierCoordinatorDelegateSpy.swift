@@ -23,12 +23,40 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedDidFinishParametersList.append((result, ()))
 	}
 
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
+	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+
+	func openUrl(_ url: URL, inApp: Bool) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, inApp)
+		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedNavigateToAboutThisApp = false
+	var invokedNavigateToAboutThisAppCount = 0
+
+	func navigateToAboutThisApp() {
+		invokedNavigateToAboutThisApp = true
+		invokedNavigateToAboutThisAppCount += 1
+	}
+
 	var invokedNavigateToVerifierWelcome = false
 	var invokedNavigateToVerifierWelcomeCount = 0
 
 	func navigateToVerifierWelcome() {
 		invokedNavigateToVerifierWelcome = true
 		invokedNavigateToVerifierWelcomeCount += 1
+	}
+
+	var invokedNavigateToOpenRiskLevelSettings = false
+	var invokedNavigateToOpenRiskLevelSettingsCount = 0
+
+	func navigateToOpenRiskLevelSettings() {
+		invokedNavigateToOpenRiskLevelSettings = true
+		invokedNavigateToOpenRiskLevelSettingsCount += 1
 	}
 
 	var invokedNavigateToScan = false
@@ -135,16 +163,12 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedUserWishesMoreInfoAboutDeniedQRScanCount += 1
 	}
 
-	var invokedOpenUrl = false
-	var invokedOpenUrlCount = 0
-	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
-	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+	var invokedUserWishesToSeeHelpdesk = false
+	var invokedUserWishesToSeeHelpdeskCount = 0
 
-	func openUrl(_ url: URL, inApp: Bool) {
-		invokedOpenUrl = true
-		invokedOpenUrlCount += 1
-		invokedOpenUrlParameters = (url, inApp)
-		invokedOpenUrlParametersList.append((url, inApp))
+	func userWishesToSeeHelpdesk() {
+		invokedUserWishesToSeeHelpdesk = true
+		invokedUserWishesToSeeHelpdeskCount += 1
 	}
 
 	var invokedDismiss = false

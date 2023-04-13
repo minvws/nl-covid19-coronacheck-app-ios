@@ -70,10 +70,10 @@ class NetworkManagerCredentialsTests: XCTestCase {
 							 "hints": [
 								"test_fetchGreencards_validResponse"
 							 ]
-							]
+							] as [String: Any]
 						],
 						"createCredentialMessages": "test domestic credentials"
-					],
+					] as [String: Any],
 					"euGreencards": [
 						[
 							"origins": [
@@ -82,13 +82,13 @@ class NetworkManagerCredentialsTests: XCTestCase {
 								 "expirationTime": "2025-11-30T00:00:00+00:00",
 								 "validFrom": "2021-12-28T00:00:00+00:00",
 								 "doseNumber": 1,
-								 "hints": []
-								]
+								 "hints": [] as [Any]
+								] as [String: Any]
 							],
 							"credential": "test eu credentials"
-						]
+						] as [String: Any]
 					]
-				],
+				] as [String: Any],
 				statusCode: 200,
 				headers: nil
 			)
@@ -116,7 +116,7 @@ class NetworkManagerCredentialsTests: XCTestCase {
 		
 		stub(condition: isPath(path)) { _ in
 			// Return status accepted
-			return HTTPStubsResponse(jsonObject: [], statusCode: 200, headers: nil)
+			return HTTPStubsResponse(jsonObject: [] as [Any], statusCode: 200, headers: nil)
 		}
 		
 		// When
@@ -290,7 +290,7 @@ class NetworkManagerCredentialsTests: XCTestCase {
 		let testDictionary: [String: AnyObject] = ["test": "test" as AnyObject]
 		
 		stub(condition: isPath(path)) { _ in
-			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702], statusCode: 500, headers: nil)
+			return HTTPStubsResponse(jsonObject: ["status": "error", "code": 99702] as [String: Any], statusCode: 500, headers: nil)
 		}
 		
 		// When

@@ -14,7 +14,6 @@ class BaseTest: XCTestCase {
 	let loginTimeout = 15.0
 	
 	var disclosureMode = DisclosureMode.mode0G
-	let ctbInUse = true
 	
 	override func setUpWithError() throws {
 		try super.setUpWithError()
@@ -25,7 +24,7 @@ class BaseTest: XCTestCase {
 		app.launchArguments.append(disclosureMode.rawValue)
 		app.launch()
 		XCTAssertTrue(app.waitForExistence(timeout: loginTimeout), "App did not start")
-		XCTAssertTrue(app.staticTexts["Mijn bewijzen"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
+		XCTAssertTrue(app.buttons["Mijn bewijzen"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
 		
 		continueAfterFailure = false
 	}

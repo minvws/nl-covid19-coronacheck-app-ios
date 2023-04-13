@@ -192,7 +192,7 @@ class NetworkManagerTestProvidersTests: XCTestCase {
 							"usage": [
 								"nt"
 							]
-						]
+						] as [String: Any]
 					]
 				],
 				statusCode: 200,

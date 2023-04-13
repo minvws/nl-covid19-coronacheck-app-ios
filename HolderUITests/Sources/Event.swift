@@ -19,7 +19,7 @@ open class Event {
 	let couplingCode: String?
 	
 	var eventCertificate: String {
-		switch self.type {
+		switch type {
 			case .vaccination:
 				return "Vaccinatiebewijs"
 			case .positiveTest:
@@ -30,7 +30,7 @@ open class Event {
 	}
 	
 	var internationalEventCertificate: String {
-		switch self.type {
+		switch type {
 			case .vaccination:
 				return "Internationaal vaccinatiebewijs"
 			case .positiveTest:
@@ -69,8 +69,8 @@ open class Event {
 	) {
 		self.type = type
 		self.eventDate = eventDate
-		self.countryCode = country
-		self.disease = "COVID-19"
+		countryCode = country
+		disease = "COVID-19"
 		self.validFrom = validFrom
 		self.validUntil = validUntil
 		self.dcc = dcc
