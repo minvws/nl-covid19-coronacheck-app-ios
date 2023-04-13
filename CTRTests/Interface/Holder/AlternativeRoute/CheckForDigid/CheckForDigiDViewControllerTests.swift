@@ -11,6 +11,7 @@ import SnapshotTesting
 @testable import CTR
 import TestingShared
 import ReusableViews
+import Resources
 
 class CheckForDigidViewControllerTests: XCTestCase {
 
@@ -50,7 +51,8 @@ class CheckForDigidViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToRequestADigiD) == true
+		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
+		expect(self.coordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_noDigiD_url()
 	}
 
 	func test_noDigid_tapped() {

@@ -21,12 +21,10 @@ protocol AlternativeRouteFlowDelegate: AnyObject {
 	func continueToPap(eventMode: EventMode)
 }
 
-protocol AlternativeRouteCoordinatorDelegate: AnyObject {
+protocol AlternativeRouteCoordinatorDelegate: AnyObject, OpenUrlProtocol {
 	
 	func userWishesToCheckForBSN()
-	
-	func userWishesToRequestADigiD()
-	
+		
 	func userWishesToContactHelpDeksWithBSN()
 	
 	func userHasNoBSN()
@@ -90,12 +88,6 @@ extension AlternativeRouteCoordinator: AlternativeRouteCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
-	}
-	
-	func userWishesToRequestADigiD() {
-		if let url = URL(string: L.holder_noDigiD_url()) {
-			openUrl(url)
-		}
 	}
 
 	func userWishesToContactHelpDeksWithBSN() {
