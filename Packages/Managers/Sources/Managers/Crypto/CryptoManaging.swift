@@ -32,11 +32,6 @@ public protocol CryptoManaging: AnyObject {
 	
 	// MARK: Credential
 	
-	/// Create the credential from the issuer commit message
-	/// - Parameter ism: the issuer commit message (signed testproof)
-	/// - Returns: Credential data if success, error if not
-	func createCredential(_ ism: Data) -> Result<Data, CryptoError>
-	
 	/// Is this data a foreign DCC
 	/// - Parameter data: the data of the DCC
 	/// - Returns: True if the DCC is foreign
@@ -52,25 +47,12 @@ public protocol CryptoManaging: AnyObject {
 	/// - Returns: True if the data looks like a domestic credential
 	func hasDomesticPrefix(_ data: Data) -> Bool
 	
-	/// Get the domestic credential attributes
-	/// - Parameter data: the incoming domestic ctb
-	/// - Returns: optional domstic credential attributes
-	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
-	
 	/// Get the eu credential attributes
 	/// - Parameter data: the incoming eu dcc
 	/// - Returns: optional eu credential attributes
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
 	
 	// MARK: QR
-	
-	/// Disclose the credential
-	/// - Parameters:
-	///   - credential: the (domestic) credential to generate the QR from
-	///   - forPolicy: the disclosure policy (1G / 3G) to genearte the QR with
-	///   - withKey: the holder secret key
-	/// - Returns: the QR message
-	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data?
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code

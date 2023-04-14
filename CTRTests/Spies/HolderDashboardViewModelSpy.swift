@@ -23,16 +23,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		return stubbedTitle
 	}
 
-	var invokedDomesticCardsGetter = false
-	var invokedDomesticCardsGetterCount = 0
-	var stubbedDomesticCards: Observable<[HolderDashboardViewController.Card]>!
-
-	var domesticCards: Observable<[HolderDashboardViewController.Card]> {
-		invokedDomesticCardsGetter = true
-		invokedDomesticCardsGetterCount += 1
-		return stubbedDomesticCards
-	}
-
 	var invokedInternationalCardsGetter = false
 	var invokedInternationalCardsGetterCount = 0
 	var stubbedInternationalCards: Observable<[HolderDashboardViewController.Card]>!
@@ -71,70 +61,6 @@ class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 		invokedCurrentlyPresentedAlertGetter = true
 		invokedCurrentlyPresentedAlertGetterCount += 1
 		return stubbedCurrentlyPresentedAlert
-	}
-
-	var invokedSelectedTabGetter = false
-	var invokedSelectedTabGetterCount = 0
-	var stubbedSelectedTab: Observable<DashboardTab>!
-
-	var selectedTab: Observable<DashboardTab> {
-		invokedSelectedTabGetter = true
-		invokedSelectedTabGetterCount += 1
-		return stubbedSelectedTab
-	}
-
-	var invokedShouldShowTabBarGetter = false
-	var invokedShouldShowTabBarGetterCount = 0
-	var stubbedShouldShowTabBar: Observable<Bool>!
-
-	var shouldShowTabBar: Observable<Bool> {
-		invokedShouldShowTabBarGetter = true
-		invokedShouldShowTabBarGetterCount += 1
-		return stubbedShouldShowTabBar
-	}
-
-	var invokedShouldShowOnlyInternationalPaneGetter = false
-	var invokedShouldShowOnlyInternationalPaneGetterCount = 0
-	var stubbedShouldShowOnlyInternationalPane: Observable<Bool>!
-
-	var shouldShowOnlyInternationalPane: Observable<Bool> {
-		invokedShouldShowOnlyInternationalPaneGetter = true
-		invokedShouldShowOnlyInternationalPaneGetterCount += 1
-		return stubbedShouldShowOnlyInternationalPane
-	}
-
-	var invokedDashboardRegionToggleValueSetter = false
-	var invokedDashboardRegionToggleValueSetterCount = 0
-	var invokedDashboardRegionToggleValue: QRCodeValidityRegion?
-	var invokedDashboardRegionToggleValueList = [QRCodeValidityRegion]()
-	var invokedDashboardRegionToggleValueGetter = false
-	var invokedDashboardRegionToggleValueGetterCount = 0
-	var stubbedDashboardRegionToggleValue: QRCodeValidityRegion!
-
-	var dashboardRegionToggleValue: QRCodeValidityRegion {
-		set {
-			invokedDashboardRegionToggleValueSetter = true
-			invokedDashboardRegionToggleValueSetterCount += 1
-			invokedDashboardRegionToggleValue = newValue
-			invokedDashboardRegionToggleValueList.append(newValue)
-		}
-		get {
-			invokedDashboardRegionToggleValueGetter = true
-			invokedDashboardRegionToggleValueGetterCount += 1
-			return stubbedDashboardRegionToggleValue
-		}
-	}
-
-	var invokedSelectTab = false
-	var invokedSelectTabCount = 0
-	var invokedSelectTabParameters: (newTab: DashboardTab, Void)?
-	var invokedSelectTabParametersList = [(newTab: DashboardTab, Void)]()
-
-	func selectTab(newTab: DashboardTab) {
-		invokedSelectTab = true
-		invokedSelectTabCount += 1
-		invokedSelectTabParameters = (newTab, ())
-		invokedSelectTabParametersList.append((newTab, ()))
 	}
 
 	var invokedViewWillAppear = false

@@ -129,7 +129,6 @@ public extension ErrorCode.Flow {
 	static let paperproof = ErrorCode.Flow(value: "5")
 	static let qr = ErrorCode.Flow(value: "6")
 	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
-	static let visitorPass = ErrorCode.Flow(value: "9")
 	static let dashboard = ErrorCode.Flow(value: "12")
 }
 

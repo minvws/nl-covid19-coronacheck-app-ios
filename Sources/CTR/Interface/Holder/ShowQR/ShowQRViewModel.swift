@@ -88,7 +88,6 @@ class ShowQRViewModel {
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	private let notificationCenter: NotificationCenterProtocol
 	private let screenBrightnessManager: ScreenBrightnessManager
-	private let disclosurePolicy: DisclosurePolicy?
 
 	private var dataSource: ShowQRDatasourceProtocol
 
@@ -123,7 +122,7 @@ class ShowQRViewModel {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var animationStyle: ShowQRView.AnimationStyle = .domestic(isWithinWinterPeriod: false)
+	@Bindable private(set) var animationStyle: ShowQRView.AnimationStyle = .international(isWithinWinterPeriod: false)
 
 	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
 
@@ -139,20 +138,18 @@ class ShowQRViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
-		disclosurePolicy: DisclosurePolicy?,
 		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 		
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
-		self.dataSource = ShowQRDatasource(greenCards: greenCards, disclosurePolicy: disclosurePolicy)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
 		self.currentPage = mostRelevantPage
-		self.disclosurePolicy = disclosurePolicy
 
 		displayQRInformation()
 		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
@@ -165,37 +162,14 @@ class ShowQRViewModel {
 
 	private func setupContent(greenCards: [GreenCard], thirdPartyTicketAppName: String?) {
 
-		if let greenCard = greenCards.first {
-			if greenCard.getType() == GreenCardType.domestic {
-				setDomesticTitle()
-				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
-				animationStyle = .domestic(isWithinWinterPeriod: isWithinWinterPeriod)
-				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
-			} else if greenCard.getType() == GreenCardType.eu {
-				title = L.holderShowqrEuTitle()
-				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
-				animationStyle = .international(isWithinWinterPeriod: isWithinWinterPeriod)
-			}
+		if let greenCard = greenCards.first,
+			greenCard.getType() == GreenCardType.eu {
+			title = L.holderShowqrEuTitle()
+			infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
+			animationStyle = .international(isWithinWinterPeriod: isWithinWinterPeriod)
 		}
 		
 		pageButtonAccessibility = (L.holderShowqrPreviousbutton(), L.holderShowqrNextbutton())
-	}
-	
-	private func setDomesticTitle() {
-		
-		guard Current.featureFlagManager.areBothDisclosurePoliciesEnabled() || Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() else {
-			title = L.holder_showQR_domestic_title()
-			return
-		}
-		
-		switch disclosurePolicy {
-			case .policy3G:
-				title = L.holder_showQR_domestic_title_3g()
-			case .policy1G:
-				title = L.holder_showQR_domestic_title_1g()
-			case .none:
-				title = L.holder_showQR_domestic_title()
-		}
 	}
 
 	private func setupListeners() {
@@ -230,11 +204,7 @@ class ShowQRViewModel {
 			return
 		}
 		
-		if greenCard.getType() == GreenCardType.domestic {
-			guard let credentialData = greenCard.getActiveDomesticCredential()?.data else { return }
-			
-			showDomesticDetails(credentialData)
-		} else if greenCard.getType() == GreenCardType.eu {
+		if greenCard.getType() == GreenCardType.eu {
 			guard let credentialData = greenCard.getLatestInternationalCredential()?.data else { return }
 			
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
@@ -260,32 +230,6 @@ class ShowQRViewModel {
 		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
 			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
-	}
-	
-	private func showDomesticDetails(_ data: Data) {
-		
-		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
-			coordinator?.presentInformationPage(
-				title: L.holderShowqrDomesticAboutTitle(),
-				body: getDomesticDetailsBody(domesticCredentialAttributes),
-				hideBodyForScreenCapture: true
-			)
-		} else {
-			logError("Can't read the domestic credentials")
-		}
-	}
-	
-	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes) -> String {
-		
-		let identity = domesticCredentialAttributes
-			.mapIdentity(months: String.shortMonths)
-			.map({ $0.isEmpty ? "_" : $0 })
-			.joined(separator: " ")
-		
-		if disclosurePolicy == .policy1G {
-			return L.holder_qr_explanation_description_domestic_1G(identity)
-		}
-		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
 	private func showInternationalDetails(_ euCredentialAttributes: EuCredentialAttributes) {
@@ -339,7 +283,6 @@ class ShowQRViewModel {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
-				disclosurePolicy: item.policy,
 				state: dataSource.getState(item.greenCard)
 			)
 		)

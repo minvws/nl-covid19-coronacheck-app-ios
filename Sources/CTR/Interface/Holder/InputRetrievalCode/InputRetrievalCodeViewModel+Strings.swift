@@ -14,208 +14,172 @@ extension InputRetrievalCodeViewModel {
 	
 	struct Strings {
 		
-		static func title(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func title(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowTitle()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTitle()
-				case (_, .visitorPass):
-					return L.visitorpass_code_title()
 			}
 		}
 
-		static func text(forMode initializationMode: InitializationMode, inputMode: InputMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String? {
-			switch (initializationMode, inputMode, retrievalMode) {
-					
-				case (_, .none, _):
+		static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
+			switch (initializationMode, inputMode) {
+				case (_, .none):
 					return nil
-				case (.regular, _, .negativeTest):
+				case (.regular, _):
 					return L.holderTokenentryRegularflowText()
-				case (.withRequestTokenProvided, _, .negativeTest):
+				case (.withRequestTokenProvided, _):
 					return L.holderTokenentryUniversallinkflowText()
-				case (.regular, _, .visitorPass):
-					return L.visitorpass_code_description()
-				case (.withRequestTokenProvided, _, .visitorPass):
-					return L.visitorpass_code_description_deeplink()
 			}
 		}
 		
 		// Secondary button: No token
-		static func notokenButtonTitle(forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch retrievalMode {
-				case .negativeTest:
-					return L.holderTokenentryButtonNotoken()
-				case .visitorPass:
-					return L.visitorpass_code_review_button()
-			}
+		static func notokenButtonTitle() -> String {
+			return L.holderTokenentryButtonNotoken()
 		}
 		
 		// Secondary button: No verification code
-		static func resendVerificationButtonTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowRetryTitle()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowRetryTitle()
 			}
 		}
 		
-		static func errorInvalidCode(forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch retrievalMode {
-				case .negativeTest:
-					return L.holderTokenentryRegularflowErrorInvalidCode()
-				case .visitorPass:
-					return L.visitorpass_token_error_invalid_code()
-			}
+		static func errorInvalidCode() -> String {
+			return L.holderTokenentryRegularflowErrorInvalidCode()
 		}
 		
-		static func errorInvalidCombination(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (_, .negativeTest):
-					return L.holderTokenentryRegularflowErrorInvalidCombination()
-				case (_, .visitorPass):
-					return L.visitorpass_token_error_invalid_combination()
-			}
+		static func errorInvalidCombination() -> String {
+			return L.holderTokenentryRegularflowErrorInvalidCombination()
 		}
 		
-		static func tokenIsEmpty(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func tokenIsEmpty(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowErrorEmptytoken()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorEmptytoken()
-				case (_, .visitorPass):
-					return L.visitorpass_token_error_empty_token()
 			}
 		}
 		
-		static func codeIsEmpty(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func codeIsEmpty(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowErrorEmptycode()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorEmptycode()
 			}
 		}
 		
-		static func unknownProvider(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func unknownProvider(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowErrorUnknownprovider()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorUnknownprovider()
-				case (_, .visitorPass):
-					return L.visitorpass_token_error_unknown_provider()
 			}
 		}
 		
-		static func tokenEntryHeaderTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func tokenEntryHeaderTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowTokenTitle()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTokenTitle()
-				case (_, .visitorPass):
-					return L.visitorpass_code_review_input()
 			}
 		}
 		
-		static func tokenEntryPlaceholder(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					if UIAccessibility.isVoiceOverRunning {
 						return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
 					} else {
 						return L.holderTokenentryRegularflowTokenPlaceholder()
 					}
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					if UIAccessibility.isVoiceOverRunning {
 						return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
 					} else {
 						return L.holderTokenentryUniversallinkflowTokenPlaceholder()
 					}
-				case (_, .visitorPass):
-					if UIAccessibility.isVoiceOverRunning {
-						return L.visitorpass_code_review_placeholder_screenreader()
-					} else {
-						return L.visitorpass_code_review_placeholder()
-					}
 			}
 		}
 		
-		static func verificationEntryHeaderTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowVerificationTitle()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationTitle()
 			}
 		}
 		
-		static func verificationInfo(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func verificationInfo(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowVerificationInfo()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationInfo()
 			}
 		}
 		
-		static func verificationPlaceholder(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func verificationPlaceholder(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowVerificationPlaceholder()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
 			}
 		}
 		
-		static func primaryTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest):
+		static func primaryTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowNext()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowNext()
-				case (_, .visitorPass):
-					return L.visitorpass_token_next()
 			}
 		}
 		
 		// SMS Resend Verification Alert
 		
-		static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
 			}
 		}
 		
-		static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
 			}
 		}
 		
-		static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
 			}
 		}
 		
-		static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode, forInputRetrievalCodeMode retrievalMode: InputRetrievalCodeMode) -> String {
-			switch (mode, retrievalMode) {
-				case (.regular, .negativeTest), (_, .visitorPass):
+		static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
 					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
-				case (.withRequestTokenProvided, .negativeTest):
+				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
 			}
 		}

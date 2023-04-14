@@ -171,88 +171,6 @@ public class WalletManager: WalletManaging {
 
 extension WalletManager {
 	
-	public func storeDomesticGreenCard(_ remoteDomesticGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
-		
-		if remoteDomesticGreenCard.origins.isEmpty {
-			return false
-		}
-		
-		var result = true
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-			
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-				
-				let greenCard = GreenCard(type: .domestic, wallet: wallet, managedContext: context)
-				for remoteOrigin in remoteDomesticGreenCard.origins {
-					result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
-				}
-				if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
-					switch convertToDomesticCredentials(cryptoManager: cryptoManager, data: data) {
-						case .failure:
-							result = false
-						case let .success(domesticCredentials):
-							for domesticCredential in domesticCredentials {
-								result = result && storeDomesticCredential(domesticCredential, greenCard: greenCard, context: context)
-							}
-					}
-				}
-			} else {
-				result = false
-			}
-			if result {
-				dataStoreManager.save(context)
-			}
-		}
-		return result
-	}
-	
-	/// Store a credential in CoreData from a Domestic Credential
-	/// - Parameters:
-	///   - domesticCredential: the domestic credential
-	///   - greenCard: the green card
-	///   - context: the managed object context
-	/// - Returns: True if storing was successful
-	private func storeDomesticCredential(_ domesticCredential: DomesticCredential, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
-		
-		if let version = Int32(domesticCredential.attributes.credentialVersion),
-		   let validFromTimeInterval = TimeInterval(domesticCredential.attributes.validFrom),
-		   let validHoursInt = Int( domesticCredential.attributes.validForHours),
-		   let data = domesticCredential.credential {
-			
-			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
-			if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
-				
-				Credential(
-					data: data,
-					validFrom: validFromDate,
-					expirationTime: expireDate,
-					version: version,
-					greenCard: greenCard,
-					managedContext: context)
-			}
-		}
-		return true
-	}
-	
-	private func convertToDomesticCredentials(cryptoManager: CryptoManaging, data: Data) -> Result<[DomesticCredential], Error> {
-		
-		let createCredentialResult = cryptoManager.createCredential(data)
-		switch createCredentialResult {
-			case let .success(credentials):
-				do {
-					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
-					logVerbose("object: \(objects)")
-					return .success(objects)
-				} catch {
-					logError("Error Deserializing: \(error)")
-					return .failure(error)
-				}
-			case let .failure(error):
-				return .failure(error)
-		}
-	}
-	
 	public func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
 		
 		var result = true
@@ -347,9 +265,7 @@ extension WalletManager {
 		
 		var eventMode: EventMode?
 		if let event = events.first {
-			if event.hasVaccinationAssessment {
-				eventMode = .vaccinationassessment
-			} else if event.hasPaperCertificate {
+			if event.hasPaperCertificate {
 				eventMode = .paperflow
 			} else if event.hasPositiveTest {
 				eventMode = .recovery
@@ -518,6 +434,22 @@ extension WalletManager {
 			dataStoreManager.save(context)
 		}
 	}
+	
+	public func removeVaccinationAssessmentEventGroups() {
+		
+		let context = dataStoreManager.managedObjectContext()
+		
+		context.performAndWait {
+			
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) else { return }
+			
+			for eventGroup in wallet.castEventGroups() where eventGroup.type == "vaccinationassessment" {
+				logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+				context.delete(eventGroup)
+			}
+			dataStoreManager.save(context)
+		}
+	}
 
 	public func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol) {
 
@@ -528,17 +460,26 @@ extension WalletManager {
 
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
-
-						if greenCard.type == GreenCardType.domestic.rawValue {
-							// Reset the secret key to nil if the domestic greencard is deleted.
-							secureUserSettings.holderSecretKey = nil
-						}
-				
 						greenCard.delete(context: context)
 							
 					}
 					dataStoreManager.save(context)
 				}
+			}
+		}
+	}
+	
+	public func removeDomesticGreenCards() {
+		
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let greenCards = wallet.greenCards {
+				for case let greenCard as GreenCard in greenCards.allObjects where greenCard.type == "domestic" {
+					greenCard.delete(context: context)
+				}
+				dataStoreManager.save(context)
 			}
 		}
 	}

@@ -4,7 +4,6 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
-// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -39,26 +38,19 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
-	func userWishesMoreInfoAboutExpiredDomesticVaccination()
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem])
 	func userWishesMoreInfoAboutNoTestToken()
-	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion)
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	func userWishesToAddPaperProof()
-	func userWishesToAddVisitorPass()
 	func userWishesToChooseTestLocation()
 	func userWishesToCreateANegativeTestQR()
 	func userWishesToCreateANegativeTestQRFromGGD()
 	func userWishesToCreateAQR()
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
-	func userWishesToCreateAVisitorPass()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToOpenTheMenu()
@@ -68,7 +60,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToSeeHelpAndInfoMenu()
 	func userWishesToSeeHelpdesk()
 	func userWishesToSeeStoredEvents()
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
 }
 
 class HolderCoordinator: SharedCoordinator {
@@ -82,13 +74,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	/// If set, this should be handled at the first opportunity:
 	var unhandledUniversalLink: UniversalLink?
-	
-	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
-		willSet {
-			// Remove any existing observation:
-			disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
-		}
-	}
 	
 	// MARK: - Setup
 	
@@ -107,7 +92,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 	}
 	
 	// MARK: - Starting Coordinator
@@ -138,12 +122,7 @@ class HolderCoordinator: SharedCoordinator {
 			} else {
 				
 				// Start with the holder app
-				navigateToDashboard(replacingWindowRootViewController: true) {
-					self.handleDisclosurePolicyUpdates()
-					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
-						self?.handleDisclosurePolicyUpdates()
-					}
-				}
+				navigateToDashboard(replacingWindowRootViewController: true) { }
 			}
 		}
 	}
@@ -206,8 +185,15 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func performAppLaunchCleanup() {
 		
+		// Remove CTB Stuff
+		Current.walletManager.removeDomesticGreenCards()
+		Current.walletManager.removeVaccinationAssessmentEventGroups()
+		
+		// Remove leftovers from previous sessions
 		Current.walletManager.removeDraftEventGroups()
-		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
+		
+		// Remove expired event groups
+		Current.walletManager.expireEventGroups(forDate: Current.now())
 	}
 	
 	// MARK: - Universal Links
@@ -218,9 +204,7 @@ class HolderCoordinator: SharedCoordinator {
 	override func consume(universalLink: UniversalLink) -> Bool {
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
-				return consumeToken(requestToken, retrievalMode: .negativeTest, universalLink: universalLink)
-			case .redeemVaccinationAssessment(let requestToken):
-				return consumeToken(requestToken, retrievalMode: .visitorPass, universalLink: universalLink)
+				return consumeToken(requestToken, universalLink: universalLink)
 			case .thirdPartyTicketApp(let returnURL):
 				return consumeThirdPartyTicket(returnURL)
 			case .tvsAuth(let returnURL):
@@ -230,7 +214,7 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 	
-	private func consumeToken(_ requestToken: RequestToken, retrievalMode: InputRetrievalCodeMode, universalLink: UniversalLink) -> Bool {
+	private func consumeToken(_ requestToken: RequestToken, universalLink: UniversalLink) -> Bool {
 		
 		// Need to handle two situations:
 		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
@@ -243,7 +227,7 @@ class HolderCoordinator: SharedCoordinator {
 		} else {
 			// Do it on the next runloop, to standardise all the entry points to this function:
 			DispatchQueue.main.async { [self] in
-				navigateToTokenEntry(requestToken, retrievalMode: retrievalMode)
+				navigateToTokenEntry(requestToken)
 			}
 		}
 		return true
@@ -261,10 +245,6 @@ class HolderCoordinator: SharedCoordinator {
 		
 		thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
 		
-		// Reset the dashboard back to the domestic tab:
-		if let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
-			dashboardViewController.viewModel.selectTab(newTab: .domestic)
-		}
 		return true
 	}
 	
@@ -306,7 +286,6 @@ class HolderCoordinator: SharedCoordinator {
 						reachability: try? Reachability()
 					),
 					configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-					vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 					versionSupplier: versionSupplier
 				)
 			)
@@ -320,14 +299,13 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil) {
 		
 		let destination = InputRetrievalCodeViewController(
 			viewModel: InputRetrievalCodeViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
-				inputRetrievalCodeMode: retrievalMode
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
 			)
 		)
 		
@@ -351,11 +329,6 @@ class HolderCoordinator: SharedCoordinator {
 		startChildCoordinator(paperProofCoordinator)
 	}
 	
-	func navigateToAddVisitorPass() {
-		let viewController = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
-	}
-	
 	func navigateToAboutThisApp() {
 		
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
@@ -375,13 +348,12 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to enlarged QR
-	func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	func navigateToShowQRs(_ greenCards: [GreenCard]) {
 		
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCards: greenCards,
-				disclosurePolicy: disclosurePolicy,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
@@ -485,56 +457,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
-	
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		presentContent(
-			content: Content(
-				title: L.holder_completecertificate_title(),
-				body: L.holder_completecertificate_body(),
-				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
-				primaryAction: { [weak self] in
-					self?.userWishesToCreateANegativeTestQR()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			),
-			backAction: { [weak navigationController] in
-				navigationController?.popViewController(animated: true, completion: {})
-			},
-			allowsSwipeBack: true,
-			animated: true
-		)
-	}
-	
-	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
-		
-		let viewModel = BottomSheetContentViewModel(
-			content: Content(
-				title: L.holder_expiredDomesticVaccinationModal_title(),
-				body: L.holder_expiredDomesticVaccinationModal_body(),
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
-				secondaryAction: { [weak self] in
-					guard let self else { return }
-					self.navigationController.dismiss(
-						animated: true,
-						completion: self.userWishesToCreateAVaccinationQR
-					)
-				}
-			),
-			screenCaptureDetector: ScreenCaptureDetector(),
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url)
-			},
-			hideBodyForScreenCapture: false
-		)
-		
-		let viewController = BottomSheetContentViewController(viewModel: viewModel)
-		presentAsBottomSheet(viewController)
-	}
-	
 	func userWishesMoreInfoAboutExpiredQR() {
 	
 		let viewModel = BottomSheetContentViewModel(
@@ -609,42 +532,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 	}
 	
-	func userWishesMoreInfoAboutNoVisitorPassToken() {
-		
-		presentInformationPage(
-			title: L.visitorpass_token_modal_notoken_title(),
-			body: L.visitorpass_token_modal_notoken_details(),
-			hideBodyForScreenCapture: false
-		)
-	}
-	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 	
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
-		
-		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion)
-		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
-	}
-	
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
-		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
-		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
-	}
-	
 	func userWishesToAddPaperProof() {
 		
 		navigateToAddPaperProof()
-	}
-	
-	func userWishesToAddVisitorPass() {
-
-		navigateToAddVisitorPass()
 	}
 	
 	func userWishesToChooseTestLocation() {
@@ -674,11 +570,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToCreateAVaccinationQR() {
 		startEventFlowForVaccination()
-	}
-	
-	func userWishesToCreateAVisitorPass() {
-		
-		navigateToTokenEntry(retrievalMode: .visitorPass)
 	}
 	
 	func userWishesToLaunchThirdPartyTicketApp() {
@@ -752,7 +643,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
 		
 		func presentAlertWithErrorCode(_ code: ErrorCode) {
 			
@@ -772,7 +663,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				if greenCards.isEmpty {
 					presentAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
 				} else {
-					navigateToShowQRs(greenCards, disclosurePolicy: disclosurePolicy)
+					navigateToShowQRs(greenCards)
 				}
 			case .failure:
 				presentAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
@@ -787,14 +678,6 @@ extension HolderCoordinator: EventFlowDelegate {
 		// The user completed the event flow. Go back to the dashboard.
 		removeChildCoordinator()
 		navigateToDashboard()
-	}
-	
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
-		removeChildCoordinator()
-		navigationController.popToRootViewController(animated: false)
-		userWishesToCreateAVisitorPass()
 	}
 	
 	func eventFlowDidCancel() {
@@ -822,51 +705,6 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 		
 		removeChildCoordinator()
 		navigateToChooseQRCodeType()
-	}
-}
-
-extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
-	
-	func showNewDisclosurePolicy(pagedAnnouncmentItems: [PagedAnnoucementItem]) {
-		let coordinator = UpdatedDisclosurePolicyCoordinator(
-			navigationController: navigationController,
-			pagedAnnouncmentItems: pagedAnnouncmentItems,
-			delegate: self
-		)
-		startChildCoordinator(coordinator)
-	}
-	
-	func finishNewDisclosurePolicy() {
-		
-		if let childCoordinator = childCoordinators.first(where: { $0 is UpdatedDisclosurePolicyCoordinator }) {
-			removeChildCoordinator(childCoordinator)
-		}
-	}
-	
-	func handleDisclosurePolicyUpdates() {
-		
-		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
-			// No Disclosure Policy modal if we still need to finish onboarding
-			return
-		}
-		
-		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
-			return
-		}
-		
-		guard Current.disclosurePolicyManager.hasChanges else {
-			return
-		}
-		
-		let pagedAnnouncementItems = type(of: Current.disclosurePolicyManager.factory).create(
-			featureFlagManager: Current.featureFlagManager,
-			userSettings: Current.userSettings
-		)
-		guard pagedAnnouncementItems.isNotEmpty else {
-			return
-		}
-		
-		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
 	}
 }
 

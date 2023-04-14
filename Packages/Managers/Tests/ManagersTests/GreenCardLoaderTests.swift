@@ -158,7 +158,7 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(result?.failureError) == GreenCardLoader.Error.credentials(serverError)
 	}
 	
-	func test_signTheEvents_storeGreenCards_withEmptyResponse_clearsHolderSecretKey() {
+	func test_signTheEvents_storeGreenCards_withEmptyResponse() {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
@@ -178,10 +178,9 @@ class GreenCardLoaderTests: XCTestCase {
 		// Assert
 		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
 		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.secureUserSettingsSpy.invokedHolderSecretKeyList.last) == nil
 	}
 	
-	func test_signTheEvents_storeGreenCards_withOnlyInternationalGreenCard_clearsHolderSecretKey() {
+	func test_signTheEvents_storeGreenCards_withOnlyInternationalGreenCard() {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
@@ -201,72 +200,6 @@ class GreenCardLoaderTests: XCTestCase {
 		// Assert
 		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
 		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.secureUserSettingsSpy.invokedHolderSecretKeyList.last) == nil
-	}
-	
-	func test_signTheEvents_storeGreenCards_withDomestic_failToSave() {
-		// Arrange
-		let secretKey = "secretKey".data(using: .utf8)
-		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
-		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
-		networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ()))
-		walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "works"
-		networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(RemoteGreenCards.Response.domesticRecovery), ())
-		walletManagerSpy.stubbedStoreDomesticGreenCardResult = false
-		
-		// Act
-		waitUntil { done in
-			self.sut.signTheEventsIntoGreenCardsAndCredentials(
-				eventMode: nil,
-				completion: { result = $0; done() }
-			)
-		}
-		
-		// Assert
-		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
-		expect(self.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 1
-		expect(self.walletManagerSpy.invokedStoreEuGreenCardCount) == 0
-		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.secureUserSettingsSpy.invokedHolderSecretKeyList.last) != nil
-		
-		expect(result?.failureError) == .failedToSaveGreenCards
-	}
-	func test_signTheEvents_storeGreenCards_withDomestic_success() throws {
-		// Arrange
-		let secretKey = "secretKey".data(using: .utf8)
-		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
-		let response = RemoteGreenCards.Response.domesticRecovery
-		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
-		networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ()))
-		walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "works"
-		networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(response), ())
-		walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
-		
-		// Act
-		waitUntil { done in
-			self.sut.signTheEventsIntoGreenCardsAndCredentials(
-				eventMode: .vaccination,
-				completion: { result = $0; done() }
-			)
-		}
-		
-		// Assert
-		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
-		expect(self.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 1
-		expect(self.walletManagerSpy.invokedStoreEuGreenCardCount) == 0
-		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.secureUserSettingsSpy.invokedHolderSecretKeyList.last) != nil
-		
-		let sentRequestParameters = try XCTUnwrap(self.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
-		expect(sentRequestParameters).to(haveCount(4))
-		expect(sentRequestParameters["events"] as? [String]) == ["test"]
-		expect(sentRequestParameters["issueCommitmentMessage"] as? String) == "d29ya3M="
-		expect(sentRequestParameters["flows"] as? [String]) == ["vaccination"]
-		expect(sentRequestParameters["stoken"] as? String) == "test"
-		
-		expect(result?.successValue) == response
 	}
 
 	func test_signTheEvents_storeGreenCards_withInternational_success() throws {
@@ -291,10 +224,8 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Assert
 		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
-		expect(self.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 0
 		expect(self.walletManagerSpy.invokedStoreEuGreenCardCount) == 1
 		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.secureUserSettingsSpy.invokedHolderSecretKeyList.last) == nil
 		
 		let sentRequestParameters = try XCTUnwrap(self.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
 		expect(sentRequestParameters).to(haveCount(4))
@@ -306,55 +237,16 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(result?.successValue) == response
 	}
 
-	func test_signTheEvents_storeGreenCards_withDomesticAndInternational_success() throws {
-		// Arrange
-		let secretKey = "secretKey".data(using: .utf8)
-		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
-		let response = RemoteGreenCards.Response.domesticAndInternationalVaccination
-		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
-		networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ()))
-		walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
-		cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "works"
-		networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(response), ())
-		walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
-		walletManagerSpy.stubbedStoreEuGreenCardResult = true
-		
-		// Act
-		waitUntil { done in
-			self.sut.signTheEventsIntoGreenCardsAndCredentials(
-				eventMode: .test(.ggd),
-				completion: { result = $0; done() }
-			)
-		}
-		
-		// Assert
-		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
-		expect(self.walletManagerSpy.invokedStoreDomesticGreenCardCount) == 1
-		expect(self.walletManagerSpy.invokedStoreEuGreenCardCount) == 1
-		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.secureUserSettingsSpy.invokedHolderSecretKeyList.last) != nil
-		
-		let sentRequestParameters = try XCTUnwrap(self.networkManagerSpy.invokedFetchGreencardsParameters?.dictionary)
-		expect(sentRequestParameters).to(haveCount(4))
-		expect(sentRequestParameters["events"] as? [String]) == ["test"]
-		expect(sentRequestParameters["issueCommitmentMessage"] as? String) == "d29ya3M="
-		expect(sentRequestParameters["flows"] as? [String]) == ["negativetest"]
-		expect(sentRequestParameters["stoken"] as? String) == "test"
-		
-		expect(result?.successValue) == response
-	}
-
 	func test_signTheEvents_storeGreenCards_withBlobExpireDates_success() {
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
-		let response = RemoteGreenCards.Response(domesticGreenCard: .fakeVaccinationAssessmentGreenCardExpiresIn14Days, euGreenCards: nil, blobExpireDates: [RemoteGreenCards.BlobExpiry(identifier: "id", expirationDate: Date(), reason: "")], hints: nil)
+		let response = RemoteGreenCards.Response(euGreenCards: nil, blobExpireDates: [RemoteGreenCards.BlobExpiry(identifier: "id", expirationDate: Date(), reason: "")], hints: nil)
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
 		networkManagerSpy.stubbedPrepareIssueCompletionResult = .some((Result<PrepareIssueEnvelope, ServerError>.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ()))
 		walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]
 		cryptoManagerSpy.stubbedGenerateCommitmentMessageResult = "works"
 		networkManagerSpy.stubbedFetchGreencardsCompletionResult = (.success(response), ())
-		walletManagerSpy.stubbedStoreDomesticGreenCardResult = true
 		walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		
 		// Act

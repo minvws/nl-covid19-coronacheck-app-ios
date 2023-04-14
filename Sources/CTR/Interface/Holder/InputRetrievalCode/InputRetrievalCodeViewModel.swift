@@ -15,20 +15,6 @@ import Models
 import Managers
 import Resources
 
-enum InputRetrievalCodeMode {
-	case negativeTest
-	case visitorPass
-	
-	func getFlow() -> ErrorCode.Flow {
-		switch self {
-			case .negativeTest:
-				return .commercialTest
-			case .visitorPass:
-				return .visitorPass
-		}
-	}
-}
-
 class InputRetrievalCodeViewModel {
 
 	/// There are four "modes" for user entry
@@ -112,7 +98,6 @@ class InputRetrievalCodeViewModel {
 		}
 	}
 	private var initializationMode: InitializationMode
-	private var inputRetrievalCodeMode: InputRetrievalCodeMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
 	/// Instead of updating `shouldEnableNextButton` directly, internal logic
@@ -157,8 +142,7 @@ class InputRetrievalCodeViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		requestToken: RequestToken?,
-		tokenValidator: TokenValidatorProtocol,
-		inputRetrievalCodeMode: InputRetrievalCodeMode = .negativeTest) {
+		tokenValidator: TokenValidatorProtocol) {
 		
 		self.coordinator = coordinator
 		self.requestToken = requestToken
@@ -170,7 +154,6 @@ class InputRetrievalCodeViewModel {
 		} else {
 			self.initializationMode = .regular
 		}
-		self.inputRetrievalCodeMode = inputRetrievalCodeMode
 		
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken, verificationCode: nil)
@@ -259,12 +242,7 @@ class InputRetrievalCodeViewModel {
 
 		guard progressIndicationCounter.isInactive else { return }
 		
-		switch inputRetrievalCodeMode {
-			case .negativeTest:
-				coordinator?.userWishesMoreInfoAboutNoTestToken()
-			case .visitorPass:
-				coordinator?.userWishesMoreInfoAboutNoVisitorPassToken()
-		}
+		coordinator?.userWishesMoreInfoAboutNoTestToken()
 	}
 
 	// MARK: - Private tap handlers:
@@ -274,7 +252,7 @@ class InputRetrievalCodeViewModel {
 
 		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode {
 			guard let verification = verificationInput, !verification.isEmpty else {
-				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+				fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
 				return
 			}
 			fieldErrorMessage = nil
@@ -284,7 +262,7 @@ class InputRetrievalCodeViewModel {
 		} else {
 
 			guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
-				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+				fieldErrorMessage = Strings.tokenIsEmpty(forMode: initializationMode)
 				return
 			}
 
@@ -292,7 +270,7 @@ class InputRetrievalCodeViewModel {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {
-				fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
+				fieldErrorMessage = Strings.errorInvalidCode()
 			}
 		}
 	}
@@ -308,7 +286,7 @@ class InputRetrievalCodeViewModel {
 			fieldErrorMessage = nil
 			fetchProviders(requestToken, verificationCode: sanitizedVerification)
 		} else {
-			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+			fieldErrorMessage = Strings.codeIsEmpty(forMode: initializationMode)
 		}
 	}
 
@@ -334,7 +312,7 @@ class InputRetrievalCodeViewModel {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
 							case .serverUnreachableInvalidHost, .serverUnreachableTimedOut, .serverUnreachableConnectionLost:
-								let errorCode = ErrorCode(flow: self.inputRetrievalCodeMode.getFlow(), step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
 								self.displayServerUnreachable(errorCode)
 							default:
 								self.displayError(serverError)
@@ -352,14 +330,14 @@ class InputRetrievalCodeViewModel {
 
 		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
 		guard let provider = provider.first else {
-			fieldErrorMessage = Strings.unknownProvider(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+			fieldErrorMessage = Strings.unknownProvider(forMode: initializationMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 		logVerbose("fetching result with \(provider.resultURLString)")
 
 		if provider.resultURL == nil {
-			fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: inputRetrievalCodeMode)
+			fieldErrorMessage = Strings.errorInvalidCode()
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
@@ -388,7 +366,7 @@ class InputRetrievalCodeViewModel {
 							case .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .serverUnreachableTimedOut:
 								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							case .invalidRequest:
-								self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
+								self.fieldErrorMessage = Strings.errorInvalidCode()
 							default:
 								self.displayError(ServerError.provider(
 									provider: provider.identifier,
@@ -409,19 +387,19 @@ class InputRetrievalCodeViewModel {
 		switch remoteEvent.0.status {
 			case .complete, .pending:
 				self.screenHasCompleted = true
-				let originalMode: EventMode = inputRetrievalCodeMode == .negativeTest ? .test(.commercial) : .vaccinationassessment
+				let originalMode: EventMode = .test(.commercial)
 				self.coordinator?.userWishesToMakeQRFromRemoteEvent(
 					RemoteEvent(wrapper: remoteEvent.0, signedResponse: remoteEvent.1), originalMode: originalMode)
 			case .verificationRequired:
 				if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 					// the user has just submitted a wrong verification code & should see an error message
-					self.fieldErrorMessage = Strings.errorInvalidCombination(forMode: self.initializationMode, forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
+					self.fieldErrorMessage = Strings.errorInvalidCombination()
 				}
 				self.allowEnablingOfNextButton = true
 				self.verificationCodeIsKnownToBeRequired = true
 
 			case .invalid:
-				self.fieldErrorMessage = Strings.errorInvalidCode(forInputRetrievalCodeMode: self.inputRetrievalCodeMode)
+				self.fieldErrorMessage = Strings.errorInvalidCode()
 				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 			case .blocked:
@@ -532,20 +510,20 @@ class InputRetrievalCodeViewModel {
 
 	private func updateText(_ newInputMode: InputMode) {
 
-		message = Strings.text(forMode: initializationMode, inputMode: newInputMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		title = Strings.title(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		verificationInfo = Strings.verificationInfo(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		primaryTitle = Strings.primaryTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		userNeedsATokenButtonTitle = Strings.notokenButtonTitle(forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
-		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode, forInputRetrievalCodeMode: inputRetrievalCodeMode)
+		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
+		title = Strings.title(forMode: initializationMode)
+		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
+		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
+		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
+		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
+		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
+		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
+		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = Strings.notokenButtonTitle()
+		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
+		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
+		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
+		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
 	}
 
 	// MARK: - Static private functions
@@ -675,19 +653,17 @@ extension InputRetrievalCodeViewModel {
 	}
 
 	private func getBodyForError(_ serverError: ServerError) -> String {
-		
-		let flow = inputRetrievalCodeMode.getFlow()
 
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			// this is an error fetching the providers
 			switch error {
 				case .serverBusy:
-					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: flow, step: .providers, errorCode: "429"))")
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .providers, errorCode: "429"))")
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					let errorCode = ErrorCode(flow: flow, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateServerMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
-					let errorCode = ErrorCode(flow: flow, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateClientMessage("\(errorCode)")
 				default:
 					break
@@ -697,12 +673,12 @@ extension InputRetrievalCodeViewModel {
 			// this is an error getting the test result.
 			switch error {
 				case .serverBusy:
-					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "429"))")
+					return L.generalNetworkwasbusyErrorcode("\(ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "429"))")
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
-					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize, .authenticationCancelled:
-					let errorCode = ErrorCode(flow: flow, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				default:
 					break

@@ -32,13 +32,10 @@ class ShowQRView: BaseView {
 	
 	enum AnimationStyle: Equatable {
 		
-		case domestic(isWithinWinterPeriod: Bool = false)
 		case international(isWithinWinterPeriod: Bool = false)
 		
 		var animation: SecurityAnimation {
 			switch self {
-				case let .domestic(isWithinWinterPeriod):
-					return isWithinWinterPeriod ? .domesticWinterAnimation : .domesticSummerAnimation
 				case let .international(isWithinWinterPeriod):
 					return isWithinWinterPeriod ? .internationalWinterAnimation : .internationalSummerAnimation
 			}
@@ -47,8 +44,6 @@ class ShowQRView: BaseView {
 		/// Value to set on `securityViewTopConstraint?.constant` when QR takes up most of the screen
 		var animationTopOffsetWhenQRMostOfScreen: CGFloat {
 			switch self {
-				case let .domestic(isWithinWinterPeriod):
-					return isWithinWinterPeriod ? -140 : -175
 				case let .international(isWithinWinterPeriod):
 					return isWithinWinterPeriod ? 0 : -300
 			}
@@ -57,8 +52,6 @@ class ShowQRView: BaseView {
 		/// Value to set on `securityViewTopConstraint?.constant` when QR does not take up most of the screen
 		var animationTopOffsetWhenQRNotMostOfScreen: CGFloat {
 			switch self {
-				case let .domestic(isWithinWinterPeriod):
-					return isWithinWinterPeriod ? -310 : -400
 				case let .international(isWithinWinterPeriod):
 					return isWithinWinterPeriod ? -60 : -150
 			}
@@ -67,8 +60,6 @@ class ShowQRView: BaseView {
 		/// The default ratio of width to height of the animation:
 		var ratioWidthToHeight: CGFloat {
 			switch self {
-				case .domestic:
-					return 1.33
 				case let .international(isWithinWinterPeriod):
 					return isWithinWinterPeriod ? 1.768 : 1.34
 			}
@@ -316,7 +307,7 @@ class ShowQRView: BaseView {
 		securityAnimationView.resume()
 	}
 
-	var animationStyle: AnimationStyle = .domestic(isWithinWinterPeriod: false) {
+	var animationStyle: AnimationStyle = .international(isWithinWinterPeriod: false) {
 		didSet {
 			securityAnimationView.currentAnimation = animationStyle.animation
  

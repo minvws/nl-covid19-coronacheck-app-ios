@@ -295,9 +295,6 @@ final class FetchRemoteEventsViewModel {
 				}
 				return providers
 
-			case .vaccinationassessment, .paperflow:
-				return [] // flow is not part of FetchEvents.
-
 			case .vaccinationAndPositiveTest:
 				var vaccinationProviders = eventProviders.filter { $0.usages.contains(EventFlow.ProviderUsage.vaccination) }
 				for index in 0 ..< vaccinationProviders.count {
@@ -326,6 +323,8 @@ final class FetchRemoteEventsViewModel {
 					providers[index].queryFilter = EventMode.vaccination.queryFilter
 				}
 				return providers
+			default:
+				return [] // Not part of this flow
 		}
 	}
 
@@ -334,7 +333,7 @@ final class FetchRemoteEventsViewModel {
 		switch eventMode {
 			case .recovery:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
-			case .vaccinationassessment, .paperflow:
+			case .paperflow:
 				return nil
 			case .test, .vaccinationAndPositiveTest:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)

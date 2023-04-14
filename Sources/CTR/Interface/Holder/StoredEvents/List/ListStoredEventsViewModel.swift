@@ -132,8 +132,6 @@ class ListStoredEventsViewModel {
 					return getRowFromRecoveryEvent(event, date: dateString, identity: identity)
 				} else if event.hasVaccination {
 					return getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier)
-				} else if event.hasVaccinationAssessment {
-					return getRowFromAssessementEvent(event, date: dateString, identity: identity)
 				}
 				return nil
 			})
@@ -212,20 +210,6 @@ class ListStoredEventsViewModel {
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_vaccination().capitalizingFirstLetter(),
 					details: VaccinationDetailsGenerator.getDetails(identity: identity, event: event, providerIdentifier: providerName)
-				)
-			}
-		)
-	}
-	
-	private func getRowFromAssessementEvent(_ event: EventFlow.Event, date: String, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
-
-		return ListStoredEventsViewController.Row(
-			title: L.general_vaccinationAssessment().capitalizingFirstLetter(),
-			details: date,
-			action: { [weak self] in
-				self?.coordinator?.userWishesToSeeEventDetails(
-					L.general_vaccinationAssessment().capitalizingFirstLetter(),
-					details: VaccinationAssessementDetailsGenerator.getDetails(identity: identity, event: event)
 				)
 			}
 		)

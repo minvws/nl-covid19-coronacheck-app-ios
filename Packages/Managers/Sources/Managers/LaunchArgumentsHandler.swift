@@ -47,24 +47,4 @@ public class LaunchArgumentsHandler {
 		
 		return CommandLine.arguments.contains("-skipOnboarding")
 	}
-	
-	public static func shouldUseDisclosurePolicyMode0G() -> Bool {
-		
-		return CommandLine.arguments.contains("-disclosurePolicyMode0G")
-	}
-	
-	public static func shouldUseDisclosurePolicyMode1G() -> Bool {
-		
-		return CommandLine.arguments.contains("-disclosurePolicyMode1G")
-	}
-	
-	public static func shouldUseDisclosurePolicyMode1GWith3G() -> Bool {
-		
-		return CommandLine.arguments.contains("-disclosurePolicyMode1GWith3G")
-	}
-	
-	public static func shouldUseDisclosurePolicyMode3G() -> Bool {
-		
-		return CommandLine.arguments.contains("-disclosurePolicyMode3G")
-	}
 }
