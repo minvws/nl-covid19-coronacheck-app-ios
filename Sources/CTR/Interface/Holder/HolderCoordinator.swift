@@ -653,7 +653,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				preferredStyle: .alert
 			)
 			
-			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+			alertController.addAction(UIAlertAction(title: L.generalOk(), style: .default, handler: nil))
 			navigationController.present(alertController, animated: true, completion: nil)
 		}
 		
