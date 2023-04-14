@@ -29,16 +29,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIsLuhnCheckEnabledResult
 	}
 
-	var invokedIsVisitorPassEnabled = false
-	var invokedIsVisitorPassEnabledCount = 0
-	var stubbedIsVisitorPassEnabledResult: Bool! = false
-
-	func isVisitorPassEnabled() -> Bool {
-		invokedIsVisitorPassEnabled = true
-		invokedIsVisitorPassEnabledCount += 1
-		return stubbedIsVisitorPassEnabledResult
-	}
-
 	var invokedAreMultipleVerificationPoliciesEnabled = false
 	var invokedAreMultipleVerificationPoliciesEnabledCount = 0
 	var stubbedAreMultipleVerificationPoliciesEnabledResult: Bool! = false
@@ -67,36 +57,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedAreZeroDisclosurePoliciesEnabled = true
 		invokedAreZeroDisclosurePoliciesEnabledCount += 1
 		return stubbedAreZeroDisclosurePoliciesEnabledResult
-	}
-
-	var invokedIs1GExclusiveDisclosurePolicyEnabled = false
-	var invokedIs1GExclusiveDisclosurePolicyEnabledCount = 0
-	var stubbedIs1GExclusiveDisclosurePolicyEnabledResult: Bool! = false
-
-	func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
-		invokedIs1GExclusiveDisclosurePolicyEnabled = true
-		invokedIs1GExclusiveDisclosurePolicyEnabledCount += 1
-		return stubbedIs1GExclusiveDisclosurePolicyEnabledResult
-	}
-
-	var invokedIs3GExclusiveDisclosurePolicyEnabled = false
-	var invokedIs3GExclusiveDisclosurePolicyEnabledCount = 0
-	var stubbedIs3GExclusiveDisclosurePolicyEnabledResult: Bool! = false
-
-	func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
-		invokedIs3GExclusiveDisclosurePolicyEnabled = true
-		invokedIs3GExclusiveDisclosurePolicyEnabledCount += 1
-		return stubbedIs3GExclusiveDisclosurePolicyEnabledResult
-	}
-
-	var invokedAreBothDisclosurePoliciesEnabled = false
-	var invokedAreBothDisclosurePoliciesEnabledCount = 0
-	var stubbedAreBothDisclosurePoliciesEnabledResult: Bool! = false
-
-	func areBothDisclosurePoliciesEnabled() -> Bool {
-		invokedAreBothDisclosurePoliciesEnabled = true
-		invokedAreBothDisclosurePoliciesEnabledCount += 1
-		return stubbedAreBothDisclosurePoliciesEnabledResult
 	}
 
 	var invokedIsGGDPortalEnabled = false

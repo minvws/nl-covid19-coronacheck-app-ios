@@ -12,15 +12,11 @@ class OnboardingFactorySpy: OnboardingFactoryProtocol {
 
 	var invokedCreate = false
 	var invokedCreateCount = 0
-	var invokedCreateParameters: (featureFlagManager: FeatureFlagManaging, Void)?
-	var invokedCreateParametersList = [(featureFlagManager: FeatureFlagManaging, Void)]()
 	var stubbedCreateResult: [PagedAnnoucementItem]! = []
 
-	func create(featureFlagManager: FeatureFlagManaging) -> [PagedAnnoucementItem] {
+	func create() -> [PagedAnnoucementItem] {
 		invokedCreate = true
 		invokedCreateCount += 1
-		invokedCreateParameters = (featureFlagManager, ())
-		invokedCreateParametersList.append((featureFlagManager, ()))
 		return stubbedCreateResult
 	}
 

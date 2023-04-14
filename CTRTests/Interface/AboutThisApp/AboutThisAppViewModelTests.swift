@@ -59,19 +59,13 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		expect(sut.title) == L.holderAboutTitle()
 		expect(sut.message) == L.holderAboutText()
-		expect(sut.menu).to(haveCount(2))
+		expect(sut.menu).to(haveCount(1))
 		expect(sut.menu[0].title) == nil
 		expect(sut.menu[0].options).to(haveCount(4))
 		expect(sut.menu[0].options[0].identifier) == .privacyStatement
 		expect(sut.menu[0].options[1].identifier) == .accessibility
 		expect(sut.menu[0].options[2].identifier) == .colophon
 		expect(sut.menu[0].options[3].identifier) == .deeplink
-		
-		expect(sut.menu[1].options[0].identifier) == .useNoDisclosurePolicy
-		expect(sut.menu[1].options[1].identifier) == .use1GDisclosurePolicy
-		expect(sut.menu[1].options[2].identifier) == .use3GDisclosurePolicy
-		expect(sut.menu[1].options[3].identifier) == .use1GAnd3GDisclosurePolicy
-		expect(sut.menu[1].options[4].identifier) == .useConfigDisclosurePolicy
 		
 		expect(outcomes).to(beEmpty())
 	}

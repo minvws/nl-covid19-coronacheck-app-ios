@@ -67,23 +67,6 @@ public class CryptoManager: CryptoManaging {
 	
 	// MARK: - QR
 	
-	public func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
-
-		if hasPublicKeys() {
-			logVerbose("Disclosing with policy: \(disclosurePolicy)")
-			let disclosed = MobilecoreDisclose(holderSecretKey, credential, disclosurePolicy.mobileDisclosurePolicy)
-			if let payload = disclosed?.value {
-				let message = String(decoding: payload, as: UTF8.self)
-				logVerbose("QR message: \(message)")
-				return payload
-			} else if let error = disclosed?.error {
-				logError("generateQRmessage: \(error)")
-			}
-		}
-		
-		return nil
-	}
-	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Verification result if the QR is valid or error if not
@@ -120,25 +103,6 @@ public class CryptoManager: CryptoManaging {
 	}
 	
 	// MARK: - Credential
-
-	/// Read the crypto credential
-	/// - Returns: the crypto attributes
-	public func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
-
-		if let response = MobilecoreReadDomesticCredential(data) {
-			if let value = response.value {
-				do {
-					let object = try JSONDecoder().decode(DomesticCredentialAttributes.self, from: value)
-					return object
-				} catch {
-					logError("Error Deserializing \(DomesticCredentialAttributes.self): \(error)")
-				}
-			} else {
-				logError("Can't read credential: \(String(describing: response.error))")
-			}
-		}
-		return nil
-	}
 	
 	public var euCredentialAttributesCache = ThreadSafeCache<Data, EuCredentialAttributes?>()
 	
@@ -167,21 +131,6 @@ public class CryptoManager: CryptoManaging {
 			}
 		}
 		return nil
-	}
-	
-	/// Create the credential from the issuer commit message
-	/// - Parameter ism: the issuer commit message (signed testproof)
-	/// - Returns: Credential data if success, error if not
-	public func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-		
-		let result = MobilecoreCreateCredentials(ism)
-		if let credential = result?.value {
-			return .success(credential)
-		} else if let reason = result?.error {
-			logError("Can't create credential: \(String(describing: reason))")
-			return .failure(CryptoError.credentialCreateFail(reason: reason))
-		}
-		return .failure(CryptoError.unknown)
 	}
 	
 	/// Is this data a foreign DCC

@@ -19,7 +19,6 @@ extension EventMode {
 			case .recovery: return L.general_recoverycertificate()
 			case .test: return L.general_testresult()
 			case .vaccination: return L.general_vaccination()
-			case .vaccinationassessment: return L.general_visitorPass()
 		}
 	}
 
@@ -30,7 +29,6 @@ extension EventMode {
 			case .recovery, .vaccinationAndPositiveTest: return L.holder_recovery_alert_message()
 			case .test: return L.holder_test_alert_message()
 			case .vaccination: return L.holder_vaccination_alert_message()
-			case .vaccinationassessment: return L.holder_event_vaccination_assessment_alert_message()
 		}
 	}
 }
@@ -55,7 +53,6 @@ extension EventMode {
 						return .commercialTest
 				}
 			case .vaccination: return .vaccination
-			case .vaccinationassessment: return .visitorPass
 		}
 	}
 }

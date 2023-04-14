@@ -22,15 +22,10 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		super.setUp()
 		viewModelSpy = HolderDashboardViewModelSpy()
 		viewModelSpy.stubbedTitle = Observable(value: L.holderDashboardTitle())
-		viewModelSpy.stubbedSelectedTab = Observable(value: .domestic)
-		viewModelSpy.stubbedDomesticCards = Observable(value: [])
 		viewModelSpy.stubbedInternationalCards = Observable(value: [])
 		viewModelSpy.stubbedPrimaryButtonTitle = Observable(value: L.holderMenuProof())
-		viewModelSpy.stubbedShouldShowTabBar = Observable(value: false)
 		viewModelSpy.stubbedCurrentlyPresentedAlert = Observable(value: nil)
-		viewModelSpy.stubbedDashboardRegionToggleValue = .domestic
 		viewModelSpy.stubbedShouldShowAddCertificateFooter = Observable(value: false)
-		viewModelSpy.stubbedShouldShowOnlyInternationalPane = Observable(value: false)
 	}
 	
 	func test_footerButtonPrimaryButtonTap() {
@@ -70,16 +65,5 @@ class HolderDashboardViewControllerTests: XCTestCase {
 		
 		// Assert
 		expect(self.viewModelSpy.invokedViewWillAppear) == true
-	}
-
-	func test_didDisplayTab() {
-		// Arrange
-		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
-		
-		// Act
-		sut.holderDashboardView(didDisplay: .domestic)
-		
-		// Assert
-		expect(self.viewModelSpy.invokedDashboardRegionToggleValueList.first!) == .domestic
 	}
 }

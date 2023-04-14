@@ -15,10 +15,6 @@ import Models
 
 extension HolderDashboardViewModel {
 
-	// Domestic:
-	//  - A single greencard
-	//  - An array of Origins
-
 	// International:
 	//  - Multiple greencards
 	//  - each with an array of origins
@@ -29,7 +25,6 @@ extension HolderDashboardViewModel {
 
 		/// Represents the region that the Greencard applies to
 		enum Region {
-			case netherlands(evaluateCredentialAttributes: (QRCard.GreenCard, Date) -> DomesticCredentialAttributes?)
 			case europeanUnion(evaluateCredentialAttributes: (QRCard.GreenCard, Date) -> EuCredentialAttributes?)
 		}
 
@@ -39,7 +34,7 @@ extension HolderDashboardViewModel {
 
 			struct Origin: Equatable, Hashable { // swiftlint:disable:this nesting
 
-				let type: OriginType // vaccination | test | recovery | vaccinationassessment
+				let type: OriginType // vaccination | test | recovery 
 				let eventDate: Date
 				let expirationTime: Date
 				let validFromDate: Date
@@ -119,8 +114,6 @@ extension HolderDashboardViewModel {
 		func isOfRegion(region: QRCodeValidityRegion) -> Bool {
 			switch (self.region, region) {
 				case (.europeanUnion, .europeanUnion): return true
-				case (.netherlands, .domestic): return true
-				default: return false
 			}
 		}
 
@@ -131,12 +124,7 @@ extension HolderDashboardViewModel {
 			else { return .greatestFiniteMagnitude }
 
 			// DCCs and CTBs should be grouped when the GreenCards are sorted:
-			let regionModifier: Double = {
-				switch self.region {
-					case .europeanUnion: return 1
-					case .netherlands: return 0
-				}
-			}()
+			let regionModifier: Double = 1
 			
 			return firstOrigin.customSortIndex + regionModifier
 		}
@@ -174,7 +162,6 @@ extension HolderDashboardViewModel {
 		static func hasUnexpiredOriginThatIsNotATest(greencard: HolderDashboardViewModel.QRCard.GreenCard, now: Date) -> Bool {
 			return greencard.hasUnexpiredOrigin(ofType: .vaccination, now: now)
 				|| greencard.hasUnexpiredOrigin(ofType: .recovery, now: now)
-				|| greencard.hasUnexpiredOrigin(ofType: .vaccinationassessment, now: now)
 		}
 	}
 
@@ -183,36 +170,15 @@ extension HolderDashboardViewModel {
 		let region: QRCodeValidityRegion
 		let type: OriginType
 	}
-	
-	enum DisclosurePolicyMode {
-		case exclusive3G
-		case exclusive1G
-		case combined1gAnd3g
-		case zeroG
-	}
 }
 
 // MARK: - Custom Equatable conformances
 
-extension QRCard.Region: Equatable {
-	static func == (lhs: HolderDashboardViewModel.QRCard.Region, rhs: HolderDashboardViewModel.QRCard.Region) -> Bool {
-		switch (lhs, rhs) {
-			case (.netherlands, .netherlands): return true
-			case (.europeanUnion, .europeanUnion):
-				// No need to compare the associated-value `evaluate` functions
-				return true
-			default:
-				return false
-		}
-	}
-}
-
 extension QRCard: Equatable {
 	static func == (lhs: HolderDashboardViewModel.QRCard, rhs: HolderDashboardViewModel.QRCard) -> Bool {
-		let regionsMatch = lhs.region == rhs.region
 		let greencardsMatch = lhs.greencards == rhs.greencards
 		let shouldShowErrorBeneathCardMatch = lhs.shouldShowErrorBeneathCard == rhs.shouldShowErrorBeneathCard
 
-		return regionsMatch && greencardsMatch && shouldShowErrorBeneathCardMatch
+		return greencardsMatch && shouldShowErrorBeneathCardMatch
 	}
 }

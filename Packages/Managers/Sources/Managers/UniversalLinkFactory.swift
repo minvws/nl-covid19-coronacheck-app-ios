@@ -36,10 +36,6 @@ public final class HolderUniversalLinkFactory {
 			
 			guard let requestToken = createRequestToken(fragment: fragment, featureFlagManager: featureFlagManager) else { return nil }
 			return UniversalLink.redeemHolderToken(requestToken: requestToken)
-		} else if (url.path == "/app/redeem/assessment" || url.path == "/app/redeem-assessment"), let fragment = url.fragment {
-			
-			guard let requestToken = createRequestToken(fragment: fragment, featureFlagManager: featureFlagManager) else { return nil }
-			return UniversalLink.redeemVaccinationAssessment(requestToken: requestToken)
 		} else if url.path == "/app/open" {
 			
 			return UniversalLink.thirdPartyTicketApp(returnURL: createReturnURL(for: url))

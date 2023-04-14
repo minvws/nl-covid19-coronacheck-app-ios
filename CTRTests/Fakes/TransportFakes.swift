@@ -4,10 +4,12 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
+
 import Foundation
 @testable import Transport
 import TestingShared
+
+// MARK: CTRTests
 
 extension TestProvider {
 
@@ -54,40 +56,10 @@ extension EventFlow.EventProvider {
 			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
 		)
 	}
-
-	static var recoveryProvider: EventFlow.EventProvider {
-		EventFlow.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiUrl: URL(string: "https://coronacheck.nl"),
-			eventUrl: URL(string: "https://coronacheck.nl"),
-			cmsCertificates: [],
-			tlsCertificates: [],
-			accessToken: nil,
-			eventInformationAvailable: nil,
-			usages: [.recovery],
-			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
-		)
-	}
-
-	static var negativeTestProvider: EventFlow.EventProvider {
-		EventFlow.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiUrl: URL(string: "https://coronacheck.nl"),
-			eventUrl: URL(string: "https://coronacheck.nl"),
-			cmsCertificates: [],
-			tlsCertificates: [],
-			accessToken: nil,
-			eventInformationAvailable: nil,
-			usages: [.negativeTest],
-			providerAuthentication: [.manyAuthenticationExchange, .patientAuthenticationProvider]
-		)
-	}
 }
 
 extension EventFlow.EventResultWrapper {
-	
+
 	static var fakeComplete: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
@@ -96,7 +68,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakePending: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
@@ -114,7 +86,7 @@ extension EventFlow.EventResultWrapper {
 			status: .blocked
 		)
 	}
-	
+
 	static var fakeVerificationRequired: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
@@ -123,7 +95,7 @@ extension EventFlow.EventResultWrapper {
 			status: .verificationRequired
 		)
 	}
-	
+
 	static var fakeInvalid: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
@@ -132,7 +104,7 @@ extension EventFlow.EventResultWrapper {
 			status: .invalid
 		)
 	}
-	
+
 	static var fakeUnknown: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "",
@@ -149,7 +121,7 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.vaccinationEvent]
 	)
-	
+
 	static var fakeVaccinationResultWrapperOtherProvider = EventFlow.EventResultWrapper(
 		providerIdentifier: "GGD",
 		protocolVersion: "3.0",
@@ -157,7 +129,7 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.vaccinationEvent]
 	)
-	
+
 	static var fakeBoosterResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -165,7 +137,7 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.boosterEvent]
 	)
-	
+
 	static var fakeMultipleVaccinationResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -189,7 +161,7 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.positiveTestEvent]
 	)
-	
+
 	static var fakeExpiredPositiveTestResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -213,7 +185,7 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.negativeTestEvent]
 	)
-	
+
 	static var fakePaperProofResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -221,29 +193,20 @@ extension EventFlow.EventResultWrapper {
 		status: .complete,
 		events: [EventFlow.Event.paperProofEvent]
 	)
-	
-	static var fakeVaccinationAssessmentResultWrapper = EventFlow.EventResultWrapper(
-		providerIdentifier: "CC",
-		protocolVersion: "3.0",
-		identity: EventFlow.Identity.fakeIdentity,
-		status: .complete,
-		events: [EventFlow.Event.vaccinationAssessmentEvent]
-	)
-	
+
 	static var fakeMultipleEventsResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
 		identity: EventFlow.Identity.fakeIdentity,
 		status: .complete,
 		events: [
-			EventFlow.Event.vaccinationAssessmentEvent,
 			EventFlow.Event.vaccinationEvent,
 			EventFlow.Event.negativeTestEvent,
 			EventFlow.Event.expiredPositiveTestEvent,
 			EventFlow.Event.recoveryEvent
 		]
 	)
-	
+
 	static var fakeWithV3Identity: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -252,7 +215,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakeWithV3IdentityAlternative: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -261,7 +224,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakeWithV3IdentityAlternativeLowerCase: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -270,7 +233,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakeWithV3IdentityAlternative2: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -279,7 +242,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakeWithV3IdentityAlternative2LowerCase: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -288,7 +251,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakeWithV3IdentityFirstNameWithDiacritic: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -297,7 +260,7 @@ extension EventFlow.EventResultWrapper {
 			status: .complete
 		)
 	}
-	
+
 	static var fakeWithV3IdentityFirstNameWithDiacriticAlternative: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -309,7 +272,7 @@ extension EventFlow.EventResultWrapper {
 }
 
 extension RequestToken {
-	
+
 	static var fake: RequestToken {
 		return RequestToken(
 			token: "BBBBBBBBBBBB",
@@ -351,8 +314,7 @@ extension EventFlow.Event {
 			),
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -374,11 +336,10 @@ extension EventFlow.Event {
 				country: "NL"
 			),
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
-	
+
 	static var expiredPositiveTestEvent: EventFlow.Event {
 		EventFlow.Event(
 			type: "test",
@@ -397,8 +358,7 @@ extension EventFlow.Event {
 				country: "NL"
 			),
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -423,11 +383,10 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
-	
+
 	static var vaccinationEventWithHPKCode: EventFlow.Event {
 		EventFlow.Event(
 			type: "vaccination",
@@ -449,11 +408,10 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
-	
+
 	static var boosterEvent: EventFlow.Event {
 		EventFlow.Event(
 			type: "vaccination",
@@ -475,8 +433,7 @@ extension EventFlow.Event {
 			negativeTest: nil,
 			positiveTest: nil,
 			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
 
@@ -493,11 +450,10 @@ extension EventFlow.Event {
 				validFrom: "2021-07-12",
 				validUntil: "2022-12-31"
 			),
-			dccEvent: nil,
-			vaccinationAssessment: nil
+			dccEvent: nil
 		)
 	}
-	
+
 	static var paperProofEvent: EventFlow.Event {
 		EventFlow.Event(
 			type: "vaccination",
@@ -510,43 +466,6 @@ extension EventFlow.Event {
 			dccEvent: EventFlow.DccEvent(
 				credential: "test",
 				couplingCode: "test"
-			),
-			vaccinationAssessment: nil
-		)
-	}
-	
-	static var vaccinationAssessmentEvent: EventFlow.Event {
-		EventFlow.Event(
-			type: "vaccinationassessment",
-			unique: "1234",
-			isSpecimen: true,
-			vaccination: nil,
-			negativeTest: nil,
-			positiveTest: nil,
-			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: EventFlow.VaccinationAssessment(
-				dateTimeString: "2022-01-05T12:42:42Z",
-				country: "NLD",
-				verified: true
-			)
-		)
-	}
-	
-	static var vaccinationAssessmentEventWithoutCountry: EventFlow.Event {
-		EventFlow.Event(
-			type: "vaccinationassessment",
-			unique: "1234",
-			isSpecimen: true,
-			vaccination: nil,
-			negativeTest: nil,
-			positiveTest: nil,
-			recovery: nil,
-			dccEvent: nil,
-			vaccinationAssessment: EventFlow.VaccinationAssessment(
-				dateTimeString: "2022-01-05T12:42:42Z",
-				country: nil,
-				verified: true
 			)
 		)
 	}
@@ -557,45 +476,6 @@ extension SignedResponse {
 		SignedResponse(
 			payload: "payload",
 			signature: "signature"
-		)
-	}
-}
-
-extension RemoteGreenCards.DomesticGreenCard {
-	
-	static var fakeVaccinationGreenCardExpiresIn30Days: RemoteGreenCards.DomesticGreenCard {
-		RemoteGreenCards.DomesticGreenCard(
-			origins: [
-				RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
-			],
-			createCredentialMessages: "test"
-		)
-	}
-	
-	static var fakeVaccinationGreenCardExpired30DaysAgo: RemoteGreenCards.DomesticGreenCard {
-		RemoteGreenCards.DomesticGreenCard(
-			origins: [
-				RemoteGreenCards.Origin.fakeVaccinationOriginExpired30DaysAgo
-			],
-			createCredentialMessages: "test"
-		)
-	}
-	
-	static var fakeRecoveryGreenCardExpiresIn30Days: RemoteGreenCards.DomesticGreenCard {
-		RemoteGreenCards.DomesticGreenCard(
-			origins: [
-				RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-			],
-			createCredentialMessages: "test"
-		)
-	}
-	
-	static var fakeVaccinationAssessmentGreenCardExpiresIn14Days: RemoteGreenCards.DomesticGreenCard {
-		RemoteGreenCards.DomesticGreenCard(
-			origins: [
-				RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days
-			],
-			createCredentialMessages: "test"
 		)
 	}
 }
@@ -620,10 +500,9 @@ extension EventFlow.AccessToken {
 	}
 }
 extension RemoteGreenCards.Response {
-	
+
 	static var emptyResponse: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: nil,
 			euGreenCards: [],
 			blobExpireDates: [],
 			hints: nil
@@ -632,12 +511,6 @@ extension RemoteGreenCards.Response {
 
 	static var domesticAndInternationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOrigin
-				],
-				createCredentialMessages: "test"
-			),
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -653,12 +526,6 @@ extension RemoteGreenCards.Response {
 
 	static var domesticAndInternationalVaccinationWithHint: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOrigin
-				],
-				createCredentialMessages: "test"
-			),
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -671,10 +538,9 @@ extension RemoteGreenCards.Response {
 			hints: ["some_test_hint_key"]
 		)
 	}
-	
+
 	static var internationalVaccination: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: nil,
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -693,10 +559,9 @@ extension RemoteGreenCards.Response {
 			hints: nil
 		)
 	}
-	
+
 	static func internationalBlockedVaccination(blockedIdentifier: String) -> RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: nil,
 			euGreenCards: [],
 			blobExpireDates: [
 				RemoteGreenCards.BlobExpiry(
@@ -712,10 +577,9 @@ extension RemoteGreenCards.Response {
 			]
 		)
 	}
-	
+
 	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String) -> RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: nil,
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -741,7 +605,6 @@ extension RemoteGreenCards.Response {
 
 	static func internationalBlockedExistingVaccinationWhilstAddingVaccination(blockedIdentifierForExistingVaccination: String, blockedIdentifierForNewVaccination: String) -> RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: nil,
 			euGreenCards: [],
 			blobExpireDates: [
 				RemoteGreenCards.BlobExpiry(
@@ -765,12 +628,6 @@ extension RemoteGreenCards.Response {
 
 	static var multipleDCC: RemoteGreenCards.Response {
 		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOrigin
-				],
-				createCredentialMessages: "test"
-			),
 			euGreenCards: [
 				RemoteGreenCards.EuGreenCard(
 					origins: [
@@ -789,281 +646,10 @@ extension RemoteGreenCards.Response {
 			hints: nil
 		)
 	}
-
-	static var noOrigins: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-
-	static var domesticAndInternationalVaccinationAndRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
-					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				),
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var domesticAndInternationalVaccinationAndRecoveryBeforeVaccination: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
-					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				),
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var internationalVaccinationAndRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				),
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var domesticAndInternationalVaccinationAndDomesticRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
-					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var internationalRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: nil,
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var domesticRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var domesticVaccinationAssessment: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var domesticVaccinationAssessmentAndNegativeTest: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationAssessmentOriginExpiringIn14Days,
-					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-
-	static var domesticAndInternationalRecovery: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-	
-	static var domesticAndInternationalTest: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeTesttOriginExpiringIn1Day
-					],
-					credential: "test credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
-
-	static var domesticAndInternationalExpiredRecoveryValidVaccination: RemoteGreenCards.Response {
-		RemoteGreenCards.Response(
-			domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
-				origins: [
-					RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days,
-					RemoteGreenCards.Origin(
-						type: "recovery",
-						eventTime: now.addingTimeInterval(400 * days * ago),
-						expirationTime: now.addingTimeInterval(30 * days * ago),
-						validFrom: now.addingTimeInterval(400 * days * ago),
-						doseNumber: nil,
-						hints: []
-					)
-				],
-				createCredentialMessages: "test"
-			),
-			euGreenCards: [
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days
-					],
-					credential: "vaccination credential"
-				),
-				RemoteGreenCards.EuGreenCard(
-					origins: [
-						RemoteGreenCards.Origin(
-							type: "recovery",
-							eventTime: now.addingTimeInterval(400 * days * ago),
-							expirationTime: now.addingTimeInterval(30 * days * ago),
-							validFrom: now.addingTimeInterval(400 * days * ago),
-							doseNumber: nil,
-							hints: []
-						)
-					],
-					credential: "recovery credential"
-				)
-			],
-			blobExpireDates: [],
-			hints: nil
-		)
-	}
 }
+
 extension RemoteGreenCards.Origin {
-	
+
 	static var fakeVaccinationOrigin: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccination",
@@ -1074,7 +660,7 @@ extension RemoteGreenCards.Origin {
 			hints: ["fakeVaccinationOrigin"]
 		)
 	}
-	
+
 	static var fakeVaccinationOriginExpiringIn30Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "vaccination",
@@ -1085,56 +671,12 @@ extension RemoteGreenCards.Origin {
 			hints: ["fakeVaccinationOriginExpiringIn30Days"]
 		)
 	}
-	
-	static var fakeVaccinationOriginExpired30DaysAgo: RemoteGreenCards.Origin {
-		RemoteGreenCards.Origin(
-			type: "vaccination",
-			eventTime: now.addingTimeInterval(60 * days * ago),
-			expirationTime: now.addingTimeInterval(30 * days * ago),
-			validFrom: now.addingTimeInterval(60 * days * ago),
-			doseNumber: 1,
-			hints: []
-		)
-	}
-	
+
 	static var fakeRecoveryOriginExpiringIn30Days: RemoteGreenCards.Origin {
 		RemoteGreenCards.Origin(
 			type: "recovery",
 			eventTime: now,
 			expirationTime: now.addingTimeInterval(30 * days),
-			validFrom: now,
-			doseNumber: nil,
-			hints: []
-		)
-	}
-	
-	static var fakeRecoveryOriginExpiringIn30DaysEvent30DaysAgo: RemoteGreenCards.Origin {
-		RemoteGreenCards.Origin(
-			type: "recovery",
-			eventTime: now.addingTimeInterval(30 * days * ago),
-			expirationTime: now.addingTimeInterval(30 * days),
-			validFrom: now,
-			doseNumber: nil,
-			hints: []
-		)
-	}
-	
-	static var fakeVaccinationAssessmentOriginExpiringIn14Days: RemoteGreenCards.Origin {
-		RemoteGreenCards.Origin(
-			type: "vaccinationassessment",
-			eventTime: now,
-			expirationTime: now.addingTimeInterval(14 * days),
-			validFrom: now,
-			doseNumber: nil,
-			hints: []
-		)
-	}
-	
-	static var fakeTesttOriginExpiringIn1Day: RemoteGreenCards.Origin {
-		RemoteGreenCards.Origin(
-			type: "test",
-			eventTime: now,
-			expirationTime: now.addingTimeInterval(1 * days),
 			validFrom: now,
 			doseNumber: nil,
 			hints: []

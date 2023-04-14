@@ -33,10 +33,6 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 			coordinator?.userWishesToAddPaperProof()
 		}
 		
-		let itemAddVisitorPass: Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, overrideColor: nil) { [weak coordinator] in
-			coordinator?.userWishesToAddVisitorPass()
-		}
-		
 		let itemStoredData: Item = .row(title: L.holder_menu_storedEvents(), subTitle: nil, icon: I.icon_menu_storeddata()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeStoredEvents()
 		}
@@ -53,9 +49,6 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		var holderItems = [Item]()
 		holderItems += [itemAddCertificate]
 		holderItems += [itemAddPaperCertificate]
-		if Current.featureFlagManager.isVisitorPassEnabled() {
-			holderItems += [itemAddVisitorPass]
-		}
 		
 		holderItems += [.sectionBreak]
 		holderItems += [itemStoredData]

@@ -26,12 +26,6 @@ enum AboutThisAppMenuIdentifier: String {
 	case deeplink
 
 	case scanlog
-	
-	case useNoDisclosurePolicy
-	case use1GDisclosurePolicy
-	case use3GDisclosurePolicy
-	case use1GAnd3GDisclosurePolicy
-	case useConfigDisclosurePolicy
 }
 
 ///// Struct for information to display the different test providers
@@ -122,16 +116,6 @@ class AboutThisAppViewModel {
 				openUrlString("https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test", inApp: false)
 			case .scanlog:
 				openScanLog()
-			case .useNoDisclosurePolicy:
-				setDisclosurePolicy(["0G"], message: "New policy: No policy")
-			case .use1GDisclosurePolicy:
-				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag], message: "New policy: 1G")
-			case .use3GDisclosurePolicy:
-				setDisclosurePolicy([DisclosurePolicy.policy3G.featureFlag], message: "New policy: 3G")
-			case .use1GAnd3GDisclosurePolicy:
-				setDisclosurePolicy([DisclosurePolicy.policy1G.featureFlag, DisclosurePolicy.policy3G.featureFlag], message: "New policy: 1G + 3G")
-			case .useConfigDisclosurePolicy:
-				setDisclosurePolicy([], message: "New policy: use the config")
 		}
 	}
 	
@@ -150,22 +134,7 @@ class AboutThisAppViewModel {
 			list.append(AboutThisAppMenuOption(identifier: .deeplink, name: L.holderMenuVerifierdeeplink()))
 		}
 		
-		let disclosureOptions: [AboutThisAppMenuOption] = [
-			AboutThisAppMenuOption(identifier: .useNoDisclosurePolicy, name: "Use no Disclosure policy"),
-			AboutThisAppMenuOption(identifier: .use1GDisclosurePolicy, name: "Use 1G Disclosure policy"),
-			AboutThisAppMenuOption(identifier: .use3GDisclosurePolicy, name: "Use 3G Disclosure policy"),
-			AboutThisAppMenuOption(identifier: .use1GAnd3GDisclosurePolicy, name: "Use 1G and 3G Disclosure policy"),
-			AboutThisAppMenuOption(identifier: .useConfigDisclosurePolicy, name: "Use the config Disclosure policy")
-		]
-		
-		if Configuration().getRelease() != .production {
-			menu = [
-				AboutThisAppMenuSection(title: nil, options: list),
-				AboutThisAppMenuSection(title: "Disclosure Policy", options: disclosureOptions)
-			]
-		} else {
-			menu = [AboutThisAppMenuSection(title: nil, options: list)]
-		}
+		menu = [AboutThisAppMenuSection(title: nil, options: list)]
 	}
 
 	private func setupMenuVerifier() {
@@ -241,22 +210,5 @@ class AboutThisAppViewModel {
 	private func openScanLog() {
 
 		outcomeHandler(.userWishesToOpenScanLog)
-	}
-	
-	private func setDisclosurePolicy(_ newPolicy: [String], message: String) {
-		
-		Current.userSettings.overrideDisclosurePolicies = newPolicy
-		Current.userSettings.lastDismissedDisclosurePolicy = []
-		
-		alert = AlertContent(
-			title: "Disclosure policy updated",
-			subTitle: message,
-			okAction: AlertContent.Action(
-				title: L.generalOk(),
-				action: { [weak self] _ in
-					self?.outcomeHandler(.coordinatorShouldRestart)
-				}
-			)
-		)
 	}
 }

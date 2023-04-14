@@ -7,12 +7,6 @@
 
 class DisclosureMode0GSmoke: BaseTest {
 	
-	override func setUpWithError() throws {
-		disclosureMode = DisclosureMode.mode0G
-		
-		try super.setUpWithError()
-	}
-	
 	func test_mode0G_negPcr() {
 		let person = TestData.negPcr
 		addTestCertificateFromGGD(for: person.bsn)

@@ -17,7 +17,6 @@ public protocol FeatureFlagManaging {
 	///  Should we use the luhn check for tokens?
 	/// - Returns: True if we can
 	func isLuhnCheckEnabled() -> Bool
-	func isVisitorPassEnabled() -> Bool
 	
 	// Verifier
 	func areMultipleVerificationPoliciesEnabled() -> Bool
@@ -25,26 +24,20 @@ public protocol FeatureFlagManaging {
 	
 	// Holder
 	func areZeroDisclosurePoliciesEnabled() -> Bool
-	func is1GExclusiveDisclosurePolicyEnabled() -> Bool
-	func is3GExclusiveDisclosurePolicyEnabled() -> Bool
-	func areBothDisclosurePoliciesEnabled() -> Bool
 	func isGGDPortalEnabled() -> Bool
 }
 
 public class FeatureFlagManager: FeatureFlagManaging {
 	
 	private var remoteConfigManager: RemoteConfigManaging
-	private var disclosurePolicyManager: DisclosurePolicyManaging
 	private var userSettings: UserSettingsProtocol
 	
 	public required init(
 		remoteConfigManager: RemoteConfigManaging,
-		disclosurePolicyManager: DisclosurePolicyManaging,
 		userSettings: UserSettingsProtocol
 	) {
 		
 		self.remoteConfigManager = remoteConfigManager
-		self.disclosurePolicyManager = disclosurePolicyManager
 		self.userSettings = userSettings
 	}
 	
@@ -67,11 +60,6 @@ public class FeatureFlagManager: FeatureFlagManaging {
 		return remoteConfigManager.storedConfiguration.isLuhnCheckEnabled ?? false
 	}
 	
-	public func isVisitorPassEnabled() -> Bool {
-		
-		return remoteConfigManager.storedConfiguration.visitorPassEnabled ?? false
-	}
-	
 	public func areMultipleVerificationPoliciesEnabled() -> Bool {
 		
 		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
@@ -81,7 +69,7 @@ public class FeatureFlagManager: FeatureFlagManaging {
 		verificationPolicies.contains(VerificationPolicy.policy1G.featureFlag)
 	}
 	
-	public func is1GVerificationPolicyEnabled() -> Bool {
+	public func is1GVerificationPolicyEnabled() -> Bool { // Verifier
 		
 		guard let verificationPolicies = remoteConfigManager.storedConfiguration.verificationPolicies else {
 			return false
@@ -92,58 +80,6 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	// Holder
 	
 	public func areZeroDisclosurePoliciesEnabled() -> Bool {
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies.isEmpty || userSettings.overrideDisclosurePolicies == ["0G"]
-	}
-	
-	public func is3GExclusiveDisclosurePolicyEnabled() -> Bool {
-		
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies == [DisclosurePolicy.policy3G.featureFlag]
-	}
-	
-	public func is1GExclusiveDisclosurePolicyEnabled() -> Bool {
-		
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies == [DisclosurePolicy.policy1G.featureFlag]
-	}
-	
-	public func areBothDisclosurePoliciesEnabled() -> Bool {
-		
-		if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1GWith3G() {
-			return true
-		} else if LaunchArgumentsHandler.shouldUseDisclosurePolicyMode1G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode3G() ||
-			LaunchArgumentsHandler.shouldUseDisclosurePolicyMode0G() {
-			return false
-		}
-		
-		let disclosurePolicies = disclosurePolicyManager.getDisclosurePolicies()
-		return disclosurePolicies.contains(DisclosurePolicy.policy3G.featureFlag) &&
-		disclosurePolicies.contains(DisclosurePolicy.policy1G.featureFlag)
+		return true
 	}
 }

@@ -72,7 +72,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 			var fullName: String?
 			var vaccinationCount = 0
 			var testCount = 0
-			var assessmentCount = 0
 			
 			if let primaryId = blobIds.first, let identity = getIdentity(primaryId) {
 				fullName = identity.fullName
@@ -82,7 +81,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 				let count = getEventCount(blobId)
 				vaccinationCount += count.vaccinationCount
 				testCount += count.testCount
-				assessmentCount += count.assessmentCount
 			}
 			
 			if let fullName {
@@ -91,8 +89,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 					 name: fullName,
 					 eventCountInformation: getEventOverview(
 						vaccinationCount: vaccinationCount,
-						testCount: testCount,
-						assessmentCount: assessmentCount)
+						testCount: testCount)
 					)
 				)
 			}
@@ -121,8 +118,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 						summaries.append(getRowFromRecoveryEvent(event, providerName: providerName))
 					} else if event.hasVaccination {
 						summaries.append(getRowFromVaccinationEvent(event, providerName: providerName))
-					} else if event.hasVaccinationAssessment {
-						summaries.append(getRowFromAssessementEvent(event))
 					}
 				}
 			} else if let euCredentialAttributes = cache.getEUCreditialAttributes(blobId) {
@@ -245,16 +240,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 		)
 	}
 	
-	private func getRowFromAssessementEvent(_ event: EventFlow.Event) -> EventSummary {
-		
-		return EventSummary(
-			event: event,
-			dateString: event.vaccinationAssessment?.dateTimeString ?? "",
-			provider: nil,
-			type: L.general_vaccinationAssessment().capitalizingFirstLetter()
-		)
-	}
-	
 	// MARK: - Details From DCC
 	
 	private func getDetailsFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination) -> EventSummary {
@@ -292,11 +277,10 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 	
 	// MARK: - helpers
 	
-	private func getEventCount(_ uniqueIdentifier: String) -> (vaccinationCount: Int, testCount: Int, assessmentCount: Int) {
+	private func getEventCount(_ uniqueIdentifier: String) -> (vaccinationCount: Int, testCount: Int) {
 		
 		var vaccinationCount = 0
 		var testCount = 0
-		var assessmentCount = 0
 		
 		if let wrapper = cache.getEventResultWrapper(uniqueIdentifier) {
 			wrapper.events?.forEach { event in
@@ -306,9 +290,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 				if event.hasRecovery || event.hasNegativeTest || event.hasPositiveTest {
 					testCount += 1
 				}
-				if event.hasVaccinationAssessment {
-					assessmentCount += 1
-				}
 			}
 		} else if let euCredentialAttributes = cache.getEUCreditialAttributes(uniqueIdentifier) {
 			
@@ -316,10 +297,10 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 			euCredentialAttributes.digitalCovidCertificate.recoveries?.forEach { _ in testCount += 1 }
 			euCredentialAttributes.digitalCovidCertificate.tests?.forEach { _ in testCount += 1 }
 		}
-		return (vaccinationCount: vaccinationCount, testCount: testCount, assessmentCount: assessmentCount)
+		return (vaccinationCount: vaccinationCount, testCount: testCount)
 	}
 	
-	private func getEventOverview(vaccinationCount: Int, testCount: Int, assessmentCount: Int) -> String {
+	private func getEventOverview(vaccinationCount: Int, testCount: Int) -> String {
 		
 		var result = ""
 		if vaccinationCount > 0 {
@@ -330,12 +311,6 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 				result += " \(L.general_and()) "
 			}
 			result += "\(testCount) \(L.general_testresults(testCount))"
-		}
-		if assessmentCount > 0 {
-			if result.isNotEmpty {
-				result += " \(L.general_and()) "
-			}
-			result += "\(assessmentCount) \(L.general_vaccinationAssessments(assessmentCount))"
 		}
 		return result
 	}

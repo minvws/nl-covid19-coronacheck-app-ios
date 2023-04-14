@@ -187,11 +187,6 @@ extension BaseTest {
 		app.containsText("Wordt automatisch geldig")
 	}
 	
-	func assertAssessmentNotValidInternationally() {
-		tapOnInternationalTab()
-		app.textExists("Je bezoekersbewijs is niet geldig buiten Nederland")
-	}
-	
 	// MARK: - International QR Details
 	
 	func assertInternationalVaccinationQRDetails(for person: TestPerson, vaccinationDateOffsetInDays: Int = -30) {

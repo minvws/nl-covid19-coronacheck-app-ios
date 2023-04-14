@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+
 import Foundation
 import Models
 
@@ -51,28 +51,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedJailbreakWarningShownGetter = true
 			invokedJailbreakWarningShownGetterCount += 1
 			return stubbedJailbreakWarningShown
-		}
-	}
-
-	var invokedDashboardRegionToggleValueSetter = false
-	var invokedDashboardRegionToggleValueSetterCount = 0
-	var invokedDashboardRegionToggleValue: QRCodeValidityRegion?
-	var invokedDashboardRegionToggleValueList = [QRCodeValidityRegion]()
-	var invokedDashboardRegionToggleValueGetter = false
-	var invokedDashboardRegionToggleValueGetterCount = 0
-	var stubbedDashboardRegionToggleValue: QRCodeValidityRegion!
-
-	var dashboardRegionToggleValue: QRCodeValidityRegion {
-		set {
-			invokedDashboardRegionToggleValueSetter = true
-			invokedDashboardRegionToggleValueSetterCount += 1
-			invokedDashboardRegionToggleValue = newValue
-			invokedDashboardRegionToggleValueList.append(newValue)
-		}
-		get {
-			invokedDashboardRegionToggleValueGetter = true
-			invokedDashboardRegionToggleValueGetterCount += 1
-			return stubbedDashboardRegionToggleValue
 		}
 	}
 
@@ -296,28 +274,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastDismissedDisclosurePolicySetter = false
-	var invokedLastDismissedDisclosurePolicySetterCount = 0
-	var invokedLastDismissedDisclosurePolicy: [DisclosurePolicy]?
-	var invokedLastDismissedDisclosurePolicyList = [[DisclosurePolicy]]()
-	var invokedLastDismissedDisclosurePolicyGetter = false
-	var invokedLastDismissedDisclosurePolicyGetterCount = 0
-	var stubbedLastDismissedDisclosurePolicy: [DisclosurePolicy]! = []
-
-	var lastDismissedDisclosurePolicy: [DisclosurePolicy] {
-		set {
-			invokedLastDismissedDisclosurePolicySetter = true
-			invokedLastDismissedDisclosurePolicySetterCount += 1
-			invokedLastDismissedDisclosurePolicy = newValue
-			invokedLastDismissedDisclosurePolicyList.append(newValue)
-		}
-		get {
-			invokedLastDismissedDisclosurePolicyGetter = true
-			invokedLastDismissedDisclosurePolicyGetterCount += 1
-			return stubbedLastDismissedDisclosurePolicy
-		}
-	}
-
 	var invokedHasDismissedZeroGPolicySetter = false
 	var invokedHasDismissedZeroGPolicySetterCount = 0
 	var invokedHasDismissedZeroGPolicy: Bool?
@@ -337,50 +293,6 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedHasDismissedZeroGPolicyGetter = true
 			invokedHasDismissedZeroGPolicyGetterCount += 1
 			return stubbedHasDismissedZeroGPolicy
-		}
-	}
-
-	var invokedLastKnownConfigDisclosurePolicySetter = false
-	var invokedLastKnownConfigDisclosurePolicySetterCount = 0
-	var invokedLastKnownConfigDisclosurePolicy: [String]?
-	var invokedLastKnownConfigDisclosurePolicyList = [[String]]()
-	var invokedLastKnownConfigDisclosurePolicyGetter = false
-	var invokedLastKnownConfigDisclosurePolicyGetterCount = 0
-	var stubbedLastKnownConfigDisclosurePolicy: [String]! = []
-
-	var lastKnownConfigDisclosurePolicy: [String] {
-		set {
-			invokedLastKnownConfigDisclosurePolicySetter = true
-			invokedLastKnownConfigDisclosurePolicySetterCount += 1
-			invokedLastKnownConfigDisclosurePolicy = newValue
-			invokedLastKnownConfigDisclosurePolicyList.append(newValue)
-		}
-		get {
-			invokedLastKnownConfigDisclosurePolicyGetter = true
-			invokedLastKnownConfigDisclosurePolicyGetterCount += 1
-			return stubbedLastKnownConfigDisclosurePolicy
-		}
-	}
-
-	var invokedOverrideDisclosurePoliciesSetter = false
-	var invokedOverrideDisclosurePoliciesSetterCount = 0
-	var invokedOverrideDisclosurePolicies: [String]?
-	var invokedOverrideDisclosurePoliciesList = [[String]]()
-	var invokedOverrideDisclosurePoliciesGetter = false
-	var invokedOverrideDisclosurePoliciesGetterCount = 0
-	var stubbedOverrideDisclosurePolicies: [String]! = []
-
-	var overrideDisclosurePolicies: [String] {
-		set {
-			invokedOverrideDisclosurePoliciesSetter = true
-			invokedOverrideDisclosurePoliciesSetterCount += 1
-			invokedOverrideDisclosurePolicies = newValue
-			invokedOverrideDisclosurePoliciesList.append(newValue)
-		}
-		get {
-			invokedOverrideDisclosurePoliciesGetter = true
-			invokedOverrideDisclosurePoliciesGetterCount += 1
-			return stubbedOverrideDisclosurePolicies
 		}
 	}
 

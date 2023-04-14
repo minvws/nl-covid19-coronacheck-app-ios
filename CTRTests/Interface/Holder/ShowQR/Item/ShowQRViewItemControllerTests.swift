@@ -37,7 +37,7 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createFakeGreenCard(
 				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
+				type: .eu,
 				withValidCredential: true
 			)
 		)
@@ -45,7 +45,6 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			disclosurePolicy: .policy3G,
 			state: .regular,
 			screenCaptureDetector: screenCaptureDetector
 		)
@@ -61,31 +60,6 @@ class ShowQRViewItemControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
-	func test_content_domestic() throws {
-
-		// Given
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .domestic,
-				withValidCredential: true
-			)
-		)
-		viewModel = ShowQRItemViewModel(
-			delegate: delegateSpy,
-			greenCard: greenCard,
-			disclosurePolicy: .policy3G,
-			state: .regular
-		)
-		sut = ShowQRItemViewController(viewModel: viewModel)
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.sceneView.accessibilityDescription) == L.holderShowqrDomesticQrTitle()
-	}
-
 	/// Test the validity of the credential without credential
 	func test_content_euGreenCard() throws {
 
@@ -100,7 +74,6 @@ class ShowQRViewItemControllerTests: XCTestCase {
 		viewModel = ShowQRItemViewModel(
 			delegate: delegateSpy,
 			greenCard: greenCard,
-			disclosurePolicy: nil,
 			state: .regular
 		)
 		sut = ShowQRItemViewController(viewModel: viewModel)

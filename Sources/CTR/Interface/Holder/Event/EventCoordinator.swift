@@ -44,16 +44,13 @@ enum EventScreenResult: Equatable {
 	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 	
-	case shouldCompleteVaccinationAssessment
-	
 	case showHints(NonemptyArray<String>, eventMode: EventMode)
 	
 	case mismatchedIdentity(matchingBlobIds: [[String]])
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop),
-				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop):
 				return true
 				
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
@@ -120,9 +117,6 @@ protocol EventFlowDelegate: AnyObject {
 
 	/// The event flow is finished
 	func eventFlowDidComplete()
-	
-	/// The event flow is finished, but go to the vaccination assessment entry
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
 
 	func eventFlowDidCancel()
 }
@@ -176,9 +170,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		if let event = events.first?.wrapper.events?.first {
 			
-			if event.hasVaccinationAssessment {
-				mode = .vaccinationassessment
-			} else if event.hasPaperCertificate {
+			if event.hasPaperCertificate {
 				mode = .paperflow
 			} else if event.hasPositiveTest {
 				mode = .recovery
@@ -338,20 +330,6 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 			)
 		}
 	}
-	
-	private func navigateBackToVisitorPassStart() -> Bool {
-		
-		if let eventStartViewController = navigationController.viewControllers
-			.first(where: { $0 is VisitorPassStartViewController }) {
-			
-			navigationController.popToViewController(
-				eventStartViewController,
-				animated: true
-			)
-			return true
-		}
-		return false
-	}
 
 	private func displayError(content: Content, allowsSwipeBack: Bool = false, backAction: @escaping () -> Void) {
 
@@ -362,12 +340,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 extension EventCoordinator: EventCoordinatorDelegate {
 	
 	func showHintsScreenDidFinish(_ result: EventScreenResult) {
-		switch result {
-			case .shouldCompleteVaccinationAssessment:
-				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-			default:
-				delegate?.eventFlowDidComplete()
-		}
+		delegate?.eventFlowDidComplete()
 	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
@@ -428,10 +401,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .vaccinationassessment:
-				if !navigateBackToVisitorPassStart() {
-					navigateBackToTestStart()
-				}
 			case .recovery, .vaccination, .vaccinationAndPositiveTest:
 				navigateBackToEventStart()
 			case .test:
@@ -458,8 +427,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details, footer):
 				navigateToEventDetails(title, details: details, footer: footer)
-			case .shouldCompleteVaccinationAssessment:
-				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			case let .showHints(hints, eventMode):
 				navigateToShowHints(hints: hints, eventMode: eventMode)
 			case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
