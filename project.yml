@@ -35,10 +35,12 @@ packages:
     path: ./Packages/Models
   Persistence:
     path: ./Packages/Persistence
-  ReusableViews:
-    path: ./Packages/ReusableViews
   Resources:
     path: ./Packages/Resources
+  ReusableViews:
+    path: ./Packages/ReusableViews
+  RestrictedBrowser:
+    path: ./Packages/RestrictedBrowser
   Shared:
     path: ./Packages/Shared
   TestingShared:
@@ -146,9 +148,10 @@ targetTemplates:
       - package: Models
       - package: Persistence
       - package: Resources
+      - package: ReusableViews
+      - package: RestrictedBrowser
       - package: Shared
       - package: Transport
-      - package: ReusableViews
       - package: Lottie
       - package: RDOModules
         product: QRGenerator

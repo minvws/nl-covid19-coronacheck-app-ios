@@ -10,6 +10,7 @@ import SafariServices
 import Shared
 import ReusableViews
 import Models
+import RestrictedBrowser
 
 protocol Coordinator: AnyObject {
 	
@@ -123,7 +124,16 @@ extension Coordinator {
 		}
 		
 		guard let releaseAdjustedURL else { return }
-		UIApplication.shared.open(releaseAdjustedURL)
+		let browser = ROBrowser(
+			navigationController: navigationController,
+			title: "CoronaCheck",
+			allowedDomains: [
+				"coronacheck.nl",
+//				"web.acc.coronacheck.nl",
+//				"web.test.coronacheck.nl"
+			]
+		)
+		browser.openUrl(url)
 	}
 }
 
