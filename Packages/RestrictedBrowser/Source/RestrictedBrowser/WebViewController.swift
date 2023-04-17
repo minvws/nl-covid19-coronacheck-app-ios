@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import Resources
 import ReusableViews
 import Shared
 
@@ -17,7 +18,6 @@ class WebViewController: TraitWrappedGenericViewController<WebView, WebViewModel
 		super.viewDidLoad()
 		
 		addBackButton()
-		sceneView.webView.uiDelegate = self
 		sceneView.webView.navigationDelegate = self
 		
 		viewModel.title.observe { [weak self] title in
@@ -30,6 +30,8 @@ class WebViewController: TraitWrappedGenericViewController<WebView, WebViewModel
 		}
 	}
 }
+
+// MARK: - WKNavigationDelegate -
 
 extension WebViewController: WKNavigationDelegate {
 	
@@ -45,5 +47,17 @@ extension WebViewController: WKNavigationDelegate {
 			return
 		}
 		decisionHandler(.cancel)
+	}
+	
+	func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+		
+		guard let authPassword = ProcessInfo.processInfo.environment["ACCEPTANCE_BASIC_AUTH_PASSWORD"] else {
+			completionHandler(.cancelAuthenticationChallenge, nil)
+			return
+		}
+		
+		let credential = URLCredential(user: "coronacheck", password: authPassword, persistence: .forSession)
+		logDebug("WebViewController \(challenge.protectionSpace.authenticationMethod)")
+		completionHandler(.useCredential, credential)
 	}
 }

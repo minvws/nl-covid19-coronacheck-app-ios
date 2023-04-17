@@ -108,6 +108,7 @@ extension Coordinator {
 	func openUrl(_ url: URL) {
 		
 		var releaseAdjustedURL: URL? = url
+		var allowedDomains: [String] = ["coronacheck.nl"]
 		switch Configuration().getRelease() {
 			case .production:
 				break
@@ -116,24 +117,22 @@ extension Coordinator {
 					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
 					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
 				)
+				allowedDomains.append("web.acc.coronacheck.nl")
 			case .test:
 				releaseAdjustedURL = URL(string: url.absoluteString
 					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
 					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
 				)
+				allowedDomains.append("web.test.coronacheck.nl")
 		}
 		
 		guard let releaseAdjustedURL else { return }
 		let browser = ROBrowser(
 			navigationController: navigationController,
 			title: "CoronaCheck",
-			allowedDomains: [
-				"coronacheck.nl",
-//				"web.acc.coronacheck.nl",
-//				"web.test.coronacheck.nl"
-			]
+			allowedDomains: allowedDomains
 		)
-		browser.openUrl(url)
+		browser.openUrl(releaseAdjustedURL)
 	}
 }
 
