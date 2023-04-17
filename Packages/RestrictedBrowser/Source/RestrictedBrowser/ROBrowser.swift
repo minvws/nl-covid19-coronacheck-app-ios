@@ -6,6 +6,7 @@
  */
 
 import UIKit
+import Shared
 
 public protocol AllowedDomain {
 	func isDomainAllowed(_ url: URL) -> Bool
@@ -27,11 +28,11 @@ public class ROBrowser: AllowedDomain {
 	public func openUrl(_ url: URL) {
 		
 		if isDomainAllowed(url) {
-			print("Domain \(url.absoluteString) is allowed")
+			logDebug("Domain \(url.absoluteString) is allowed")
 			let viewController = WebViewController(viewModel: WebViewModel(url: url, title: title, domainDecider: self))
 			navigationController.pushViewController(viewController, animated: true)
 		} else {
-			print("Domain \(url.absoluteString) is NOT allowed")
+			logDebug("Domain \(url.absoluteString) is NOT allowed")
 			handleUnallowedDomain(url)
 		}
 	}
