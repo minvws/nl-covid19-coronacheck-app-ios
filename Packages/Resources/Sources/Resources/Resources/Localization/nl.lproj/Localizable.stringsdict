@@ -18,22 +18,6 @@
         <string>testuitslagen</string>
       </dict>
     </dict>
-    <key>general_vaccinationAssessments</key>
-    <dict>
-      <key>NSStringLocalizedFormatKey</key>
-      <string>%#@format@</string>
-      <key>format</key>
-      <dict>
-        <key>NSStringFormatSpecTypeKey</key>
-        <string>NSStringPluralRuleType</string>
-        <key>NSStringFormatValueTypeKey</key>
-        <string>li</string>
-        <key>one</key>
-        <string>vaccinatiebeoordeling</string>
-        <key>other</key>
-        <string>vaccinatiebeoordelingen</string>
-      </dict>
-    </dict>
     <key>general_vaccinations</key>
     <dict>
       <key>NSStringLocalizedFormatKey</key>
