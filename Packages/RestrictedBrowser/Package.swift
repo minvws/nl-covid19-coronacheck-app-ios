@@ -33,7 +33,7 @@ let package = Package(
 			name: "RestrictedBrowserTests",
 			dependencies: [
 				"RestrictedBrowser",
-//				.product(name: "Nimble", package: "Nimble")
+				.product(name: "Nimble", package: "Nimble")
 			])
 	]
 )
