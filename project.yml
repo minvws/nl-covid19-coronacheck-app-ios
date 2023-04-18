@@ -504,10 +504,12 @@ schemes:
           parallelizable: false        
         - package: Resources/ResourcesTests
           randomExecutionOrder: true
-          parallelizable: false        
+          parallelizable: false
+        - package: RestrictedBrowser/RestrictedBrowserTests
+          randomExecutionOrder: true
         - package: ReusableViews/ReusableViewsTests
           randomExecutionOrder: true
-          parallelizable: false        
+          parallelizable: false
         - package: Shared/SharedTests
           randomExecutionOrder: true
           parallelizable: false
