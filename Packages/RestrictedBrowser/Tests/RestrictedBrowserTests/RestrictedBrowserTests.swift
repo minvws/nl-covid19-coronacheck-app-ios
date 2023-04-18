@@ -7,6 +7,6 @@
 
 import XCTest
 
-final class ROBrowserTests: XCTestCase {
+final class RestrictedBrowserTests: XCTestCase {
 
 }
