@@ -543,8 +543,6 @@ schemes:
   Holder Acceptance:
     templates:
       - ConfigScheme
-    environmentVariables:
-        ACCEPTANCE_BASIC_AUTH_PASSWORD: "$(ACCEPTANCE_BASIC_AUTH_PASSWORD)"
     templateAttributes:
       appTargetName: Holder
       configEnvironment: FirebaseAcceptance
@@ -552,8 +550,6 @@ schemes:
   Holder Test:
     templates:
       - ConfigScheme
-    environmentVariables:
-        ACCEPTANCE_BASIC_AUTH_PASSWORD: "$(ACCEPTANCE_BASIC_AUTH_PASSWORD)"
     templateAttributes:
       appTargetName: Holder
       configEnvironment: FirebaseTest
@@ -584,8 +580,6 @@ schemes:
   Verifier Acceptance:
     templates:
       - ConfigScheme
-    environmentVariables:
-        ACCEPTANCE_BASIC_AUTH_PASSWORD: "$(ACCEPTANCE_BASIC_AUTH_PASSWORD)"
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: FirebaseAcceptance
@@ -593,8 +587,6 @@ schemes:
   Verifier Test:
     templates:
       - ConfigScheme
-    environmentVariables:
-        ACCEPTANCE_BASIC_AUTH_PASSWORD: "$(ACCEPTANCE_BASIC_AUTH_PASSWORD)"
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: FirebaseTest

@@ -50,6 +50,8 @@
 "general.uptoandincluding" = "until";
 "general.url.link" = "Link";
 "general.vaccinationdate" = "Vaccination date";
+"generalPassword" = "password";
+"generalUsername" = "username";
 "general_and" = "and";
 /* MARK: - General */
 "general_cancel" = "Cancel";
@@ -737,6 +739,7 @@
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoteEvents_vaccinationAssessment_message" = "If the details are correct, you can add your vaccination approval to the app.";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
+"holder_login" = "Sign in to %@";
 "holder_menu_helpInfo" = "Help & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 "holder_menu_paperproof_subTitle" = "Add (paper) certificate";

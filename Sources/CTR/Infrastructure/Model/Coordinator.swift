@@ -127,7 +127,7 @@ extension Coordinator {
 		}
 		
 		guard let releaseAdjustedURL else { return }
-		let browser = ROBrowser(
+		let browser = RestrictedBrowser(
 			navigationController: navigationController,
 			title: "CoronaCheck",
 			allowedDomains: allowedDomains

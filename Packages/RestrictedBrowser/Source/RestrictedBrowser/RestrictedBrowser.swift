@@ -8,12 +8,12 @@
 import UIKit
 import Shared
 
-public protocol AllowedDomain {
+public protocol DomainDecider {
 	func isDomainAllowed(_ url: URL) -> Bool
 	func handleUnallowedDomain(_ url: URL)
 }
 
-public class ROBrowser: AllowedDomain {
+public class RestrictedBrowser: DomainDecider {
 	
 	private let navigationController: UINavigationController
 	private let allowedDomains: [String]

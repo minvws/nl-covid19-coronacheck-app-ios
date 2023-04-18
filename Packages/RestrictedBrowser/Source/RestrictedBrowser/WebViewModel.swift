@@ -12,9 +12,9 @@ class WebViewModel {
 	
 	var title: Observable<String?>
 	var url: Observable<URL>
-	private var decider: AllowedDomain
+	private var decider: DomainDecider
 	
-	init(url: URL, title: String?, domainDecider: AllowedDomain) {
+	init(url: URL, title: String?, domainDecider: DomainDecider) {
 		
 		self.title = Observable(value: title)
 		self.url = Observable(value: url)
