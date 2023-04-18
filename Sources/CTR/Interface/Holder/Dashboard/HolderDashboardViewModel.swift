@@ -426,7 +426,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 	
 	@objc func userTappedMenuButton() {

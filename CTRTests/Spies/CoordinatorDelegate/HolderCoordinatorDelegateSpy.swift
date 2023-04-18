@@ -38,14 +38,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
-	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
-	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
 
-	func openUrl(_ url: URL, inApp: Bool) {
+	func openUrl(_ url: URL) {
 		invokedOpenUrl = true
 		invokedOpenUrlCount += 1
-		invokedOpenUrlParameters = (url, inApp)
-		invokedOpenUrlParametersList.append((url, inApp))
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
 
 	var invokedPresentError = false
@@ -66,14 +66,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture, openURLsInApp)
-		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
 	var invokedPresentDCCQRDetails = false

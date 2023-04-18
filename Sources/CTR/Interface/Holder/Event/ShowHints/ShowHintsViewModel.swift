@@ -147,7 +147,7 @@ final class ShowHintsViewModel {
 	
 	func openUrl(_ url: URL) {
 		
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 	
 	func userTappedCallToActionButton() {

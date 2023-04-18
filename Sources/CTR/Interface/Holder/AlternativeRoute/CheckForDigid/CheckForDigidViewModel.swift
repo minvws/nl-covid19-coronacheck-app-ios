@@ -26,7 +26,7 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: AlternativeRouteCoordinatorDelegate) {
+	init(coordinator: AlternativeRouteCoordinatorDelegate & OpenUrlProtocol) {
 		
 		self.coordinator = coordinator
 		
@@ -34,7 +34,11 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 			ListOptionsViewController.OptionModel(
 				title: L.holder_noDigiD_buttonTitle_requestDigiD(),
 				image: I.digid(),
-				action: { [weak self] in self?.coordinator?.userWishesToRequestADigiD() }
+				action: { [weak self] in
+					if let url = URL(string: L.holder_noDigiD_url()) {
+						self?.coordinator?.openUrl(url)
+					}
+				}
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_noDigiD_buttonTitle_continueWithoutDigiD(),

@@ -143,7 +143,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: L.holderUrlPrivacy())!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url, inApp: true)
+		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url)
 	}
 	
 	func test_menuOptionSelected_terms() {
@@ -164,7 +164,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: L.holderUrlColophon())!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url, inApp: true)
+		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url)
 	}
 	
 	func test_menuOptionSelected_accessibility_forHolder() {
@@ -185,7 +185,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: L.holderUrlAccessibility())!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url, inApp: true)
+		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url)
 	}
 
 	func test_menuOptionSelected_colophon_forHolder() {
@@ -205,7 +205,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: L.holderUrlColophon())!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url, inApp: true)
+		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url)
 	}
 
 	func test_menuOptionSelected_accessibility_forVerifier() {
@@ -226,7 +226,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: L.verifierUrlAccessibility())!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url, inApp: true)
+		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url)
 	}
 
 	func test_menuOptionSelected_colophon_forVerifier() {
@@ -246,7 +246,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: L.holderUrlColophon())!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url, inApp: true)
+		expect(outcomes[0]) == AboutThisAppViewModel.Outcome.openURL(url)
 	}
 		
 	func test_menuOptionSelected_clearData_forHolder() {
@@ -288,7 +288,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		let url = URL(string: "https://web.acc.coronacheck.nl/verifier/scan?returnUri=https://web.acc.coronacheck.nl/app/open?returnUri=scanner-test")!
 		expect(outcomes).to(haveCount(1))
-		expect(outcomes[0]) == .openURL(url, inApp: false)
+		expect(outcomes[0]) == .openURL(url)
 	}
 	
 	func test_resetData_holder() {

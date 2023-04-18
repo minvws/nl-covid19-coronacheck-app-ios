@@ -42,7 +42,7 @@ class ScanPermissionViewModel {
 	func gotoSettings() {
 
 		if let url = URL(string: UIApplication.openSettingsURLString) {
-			coordinator?.openUrl(url, inApp: false)
+			coordinator?.openUrl(url)
 		}
 	}
 }

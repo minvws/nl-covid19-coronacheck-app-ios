@@ -24,7 +24,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func handleMismatchedIdentityError(matchingBlobIds: [[String]])
 	
-	func openUrl(_ url: URL, inApp: Bool)
+	func openUrl(_ url: URL)
 	
 	func presentError(content: Content, backAction: (() -> Void)?)
 	
@@ -33,7 +33,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
@@ -334,8 +334,8 @@ class HolderCoordinator: SharedCoordinator {
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
 			guard let self else { return }
 			switch outcome {
-				case let .openURL(url, inApp):
-					self.openUrl(url, inApp: inApp)
+				case let .openURL(url):
+					self.openUrl(url)
 				case .coordinatorShouldRestart:
 					self.restart()
 				case .userWishesToOpenScanLog:
@@ -420,7 +420,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(
 			bulletpoints, Current.contactInformationProvider.phoneNumberLink, errorCode.description)
 
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true)
 	}
 	
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem]) {
@@ -432,7 +432,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = L.holder_identityRemoved_moreinfo_title()
 		let message: String = L.holder_identityRemoved_moreinfo_body(persistentName, bulletpoints)
 
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true)
 	}
 
 	private func compactRemovedEventItems(_ items: [RemovedEventItem]) -> String {
@@ -455,7 +455,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 		
 	func userWishesMoreInfoAboutExpiredQR() {
@@ -470,12 +470,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				secondaryAction: { [weak self] in
 					guard let self,
 						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
-					self.openUrl(url, inApp: true)
+					self.openUrl(url)
 				}
 			),
 			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
+				self?.openUrl(url)
 			},
 			hideBodyForScreenCapture: false
 		)
@@ -496,12 +496,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				secondaryAction: { [weak self] in
 					guard let self,
 							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
-					self.openUrl(url, inApp: true)
+					self.openUrl(url)
 				}
 			),
 			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
+				self?.openUrl(url)
 			},
 			hideBodyForScreenCapture: false
 		)
@@ -528,15 +528,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(
 			title: L.holderTokenentryModalNotokenTitle(),
 			body: L.holderTokenentryModalNotokenDetails(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
+			hideBodyForScreenCapture: false
 		)
 	}
 	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 	
 	func userWishesToAddPaperProof() {
@@ -575,7 +574,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToLaunchThirdPartyTicketApp() {
 		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
-		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
+		openUrl(thirdpartyTicketApp.returnURL)
 	}
 	
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
@@ -637,7 +636,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			flavor: AppFlavor.flavor,
 			versionSupplier: self.versionSupplier,
 			urlHandler: { [weak self] url in
-				self?.openUrl(url, inApp: true)
+				self?.openUrl(url)
 			}
 		))
 		
@@ -654,7 +653,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				preferredStyle: .alert
 			)
 			
-			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+			alertController.addAction(UIAlertAction(title: L.generalOk(), style: .default, handler: nil))
 			navigationController.present(alertController, animated: true, completion: nil)
 		}
 		

@@ -26,7 +26,7 @@ class HolderHelpAndInfoMenuViewModel: MenuViewModelProtocol {
 		
 		let itemFAQ: Item = .row(title: L.holderMenuFaq(), subTitle: nil, icon: I.icon_menu_faq()!, overrideColor: nil) { [weak coordinator] in
 			guard let faqUrl = URL(string: L.holderUrlFaq()) else { return }
-			coordinator?.openUrl(faqUrl, inApp: true)
+			coordinator?.openUrl(faqUrl)
 		}
 		
 		let itemHelpdesk: Item = .row(title: L.holder_helpInfo_helpdesk(), subTitle: nil, icon: I.icon_menu_call()!, overrideColor: nil) { [weak coordinator] in

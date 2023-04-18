@@ -97,7 +97,7 @@ class PaperProofScanViewModel: ScanPermissionViewModel {
 				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 				secondaryAction: { [weak self] in
 					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
-					self?.theCoordinator?.openUrl(url, inApp: true)
+					self?.theCoordinator?.openUrl(url)
 				}
 			),
 			backAction: { [weak self] in

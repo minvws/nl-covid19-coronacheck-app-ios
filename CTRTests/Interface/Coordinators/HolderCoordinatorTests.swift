@@ -5,7 +5,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
-// swiftlint:disable file_length
 
 import XCTest
 @testable import CTR
@@ -277,22 +276,6 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is AboutThisAppViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
-	func test_navigateToAboutThisApp_openURL() throws {
-		
-		// Given
-		sut.navigateToAboutThisApp()
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
-		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
-		
-		// When
-		viewModel.outcomeHandler(.openURL(url, inApp: true))
-		
-		// Then
-		expect(self.navigationSpy.invokedPresent) == true
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	

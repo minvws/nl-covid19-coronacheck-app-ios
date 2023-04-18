@@ -196,7 +196,7 @@ class PaperProofCheckViewModel {
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {

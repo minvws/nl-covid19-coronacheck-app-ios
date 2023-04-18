@@ -139,7 +139,6 @@ extension HolderDashboardViewModelTests {
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 			didTapCallToAction()
 			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_dashboard_noDomesticCertificatesBanner_url()
-			expect(self.holderCoordinatorDelegateSpy.invokedOpenUrlParameters?.inApp) == true
 			
 			expect(self.environmentSpies.userSettingsSpy.invokedHasDismissedZeroGPolicy) == nil
 			didTapClose()

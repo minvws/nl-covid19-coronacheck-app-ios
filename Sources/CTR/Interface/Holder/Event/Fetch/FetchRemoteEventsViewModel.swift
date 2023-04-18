@@ -624,7 +624,7 @@ private extension FetchRemoteEventsViewModel {
 					return
 				}
 
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
@@ -692,7 +692,7 @@ private extension FetchRemoteEventsViewModel {
 					return
 				}
 
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
