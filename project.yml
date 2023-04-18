@@ -507,6 +507,7 @@ schemes:
           parallelizable: false
         - package: RestrictedBrowser/RestrictedBrowserTests
           randomExecutionOrder: true
+          parallelizable: false
         - package: ReusableViews/ReusableViewsTests
           randomExecutionOrder: true
           parallelizable: false
