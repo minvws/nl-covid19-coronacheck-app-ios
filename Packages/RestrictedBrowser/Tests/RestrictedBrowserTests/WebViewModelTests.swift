@@ -23,7 +23,6 @@ final class WebViewModelTests: XCTestCase {
 	func testAllowedDomains_allowed() throws {
 		
 		// Given
-		let allowedDomains = ["apple.com", "coronacheck.nl"]
 		let url = try XCTUnwrap(URL(string: "https://apple.com"))
 		sut = WebViewModel(url: url, title: "testAllowedDomains_allowed", domainDecider: domainDeciderSpy)
 		domainDeciderSpy.stubbedIsDomainAllowedResult = true
@@ -39,7 +38,6 @@ final class WebViewModelTests: XCTestCase {
 	func testAllowedDomains_notAllowed() throws {
 		
 		// Given
-		let allowedDomains = ["coronacheck.nl"]
 		let url = try XCTUnwrap(URL(string: "https://apple.com"))
 		sut = WebViewModel(url: url, title: "testAllowedDomains_notAllowed", domainDecider: domainDeciderSpy)
 		domainDeciderSpy.stubbedIsDomainAllowedResult = false
@@ -55,7 +53,6 @@ final class WebViewModelTests: XCTestCase {
 	func testHandleUnallowedDomain() throws {
 		
 		// Given
-		let allowedDomains = ["apple.com"]
 		let url = try XCTUnwrap(URL(string: "https://apple.com"))
 		sut = WebViewModel(url: url, title: "testAllowedDomains_notAllowed", domainDecider: domainDeciderSpy)
 		
