@@ -20,7 +20,7 @@ final class WebViewModelTests: XCTestCase {
 		domainDeciderSpy = DomainDeciderSpy()
 	}
 	
-	func testAllowedDomains_allowed() throws{
+	func testAllowedDomains_allowed() throws {
 		
 		// Given
 		let allowedDomains = ["apple.com", "coronacheck.nl"]
@@ -36,7 +36,7 @@ final class WebViewModelTests: XCTestCase {
 		expect(self.domainDeciderSpy.invokedIsDomainAllowed) == true
 	}
 	
-	func testAllowedDomains_notAllowed() throws{
+	func testAllowedDomains_notAllowed() throws {
 		
 		// Given
 		let allowedDomains = ["coronacheck.nl"]
@@ -51,9 +51,8 @@ final class WebViewModelTests: XCTestCase {
 		expect(result) == false
 		expect(self.domainDeciderSpy.invokedIsDomainAllowed) == true
 	}
-
 	
-	func testHandleUnallowedDomain() throws{
+	func testHandleUnallowedDomain() throws {
 		
 		// Given
 		let allowedDomains = ["apple.com"]
