@@ -642,7 +642,7 @@ private final class DisclosurePolicyIndicatorView: BaseView {
 	
 	private let iconImageView: UIImageView = {
 		
-		let view = UIImageView(image: I.dashboard.domestic())
+		let view = UIImageView(image: I.dashboard.international())
 		view.accessibilityIdentifier = "DisclosurePolicyIndicatorView/iconImageView"
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
