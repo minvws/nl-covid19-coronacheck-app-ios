@@ -20,6 +20,8 @@ protocol MigrationFlowDelegate: AnyObject {
 }
 //
 protocol MigrationCoordinatorDelegate: AnyObject {
+	
+	func userCompletedStart()
 //
 //	func userWishesToSeeImportInstructions()
 //
@@ -54,8 +56,12 @@ class MigrationCoordinator: NSObject, Coordinator {
 	
 	func start() {
 		
-		//		let viewController = ListOptionsViewController(viewModel: StartMigrationViewModel(self))
-		//		navigationController.pushViewController(viewController, animated: true)	}
+		let viewController = ContentWithImageViewController(
+			viewModel: MigrationStartViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 	// MARK: - Universal Link handling
 	
@@ -66,7 +72,11 @@ class MigrationCoordinator: NSObject, Coordinator {
 }
 
 extension MigrationCoordinator: MigrationCoordinatorDelegate {
-
+	
+	func userCompletedStart() {
+		logDebug("userCompletedStart")
+	}
+	
 //	func userWishesToSeeImportInstructions() {
 //
 //		logDebug("userWishesToSeeImportInstructions")
@@ -91,11 +101,11 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 extension MigrationCoordinator: UINavigationControllerDelegate {
 
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-//
-//		if !navigationController.viewControllers.contains(where: { $0.isKind(of: ListOptionsViewController.self) }) {
-//			// If there is no more MenuViewController in the stack, we are done here.
-//			// Works for both back swipe and back button
-//			delegate?.dataMigrationCancelled()
-//		}
+
+		if !navigationController.viewControllers.contains(where: { $0.isKind(of: ContentWithImageViewController.self) }) {
+			// If there is no more ContentWithIconViewController in the stack, we are done here.
+			// Works for both back swipe and back button
+			delegate?.dataMigrationCancelled()
+		}
 	}
 }
