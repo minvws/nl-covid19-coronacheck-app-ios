@@ -240,6 +240,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, originalMode))
 	}
 
+	var invokedUserWishesToMigrate = false
+	var invokedUserWishesToMigrateCount = 0
+
+	func userWishesToMigrate() {
+		invokedUserWishesToMigrate = true
+		invokedUserWishesToMigrateCount += 1
+	}
+
 	var invokedUserWishesToOpenTheMenu = false
 	var invokedUserWishesToOpenTheMenuCount = 0
 

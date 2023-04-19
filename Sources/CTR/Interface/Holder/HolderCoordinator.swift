@@ -53,6 +53,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAVaccinationQR()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
+	func userWishesToMigrate()
 	func userWishesToOpenTheMenu()
 	func userWishesToRestart()
 	func userWishesToSeeAboutThisApp()
@@ -585,6 +586,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		addChildCoordinator(eventCoordinator)
 		eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
+	}
+	
+	func userWishesToMigrate() {
+		
+		logDebug("userWishesToMigrate")
 	}
 	
 	func userWishesToOpenTheMenu() {
