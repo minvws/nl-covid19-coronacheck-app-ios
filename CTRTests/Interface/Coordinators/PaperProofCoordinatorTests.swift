@@ -42,7 +42,9 @@ class PaperProofCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ContentWithImageViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ContentWithImageViewController)?.viewModel)
+					.to(beAnInstanceOf(PaperProofStartScanningViewModel.self))
 	}
 	
 	func test_consumeLink() {
@@ -202,7 +204,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		sut.scannedDCC = "test"
 		sut.childCoordinators.append(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		navigationSpy.viewControllers = [
-			PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
+			ContentWithImageViewController(viewModel: PaperProofStartScanningViewModel(coordinator: sut)),
 			PaperProofInputCouplingCodeViewController(viewModel: PaperProofInputCouplingCodeViewModel(coordinator: sut)),
 			PaperProofScanViewController(viewModel: PaperProofScanViewModel(coordinator: sut))
 		]
