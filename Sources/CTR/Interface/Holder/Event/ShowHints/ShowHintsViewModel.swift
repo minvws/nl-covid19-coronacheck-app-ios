@@ -74,7 +74,7 @@ final class ShowHintsViewModel {
 				case .recoveryTooOld:
 					return L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
 				case .addVaccinationAssessment:
-					return L.holder_event_negativeTestEndstate_addVaccinationAssessment_title()
+					return ""
 				case .cantCreateCertificate:
 					return L.holder_listRemoteEvents_endStateCantCreateCertificate_title()
 			}
@@ -98,7 +98,7 @@ final class ShowHintsViewModel {
 				case .recoveryTooOld:
 					return L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 				case .addVaccinationAssessment:
-					return L.holder_event_negativeTestEndstate_addVaccinationAssessment_body()
+					return ""
 				case .cantCreateCertificate(let errorCode):
 					return L.holder_listRemoteEvents_endStateCantCreateCertificate_message(
 						eventMode.errorStateLocalization.lowercased(),
@@ -108,11 +108,7 @@ final class ShowHintsViewModel {
 		}
 		
 		var buttonTitle: String {
-			if case .addVaccinationAssessment = self {
-				return L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
-			} else {
-				return L.general_toMyOverview()
-			}
+			return L.general_toMyOverview()
 		}
 	}
 	

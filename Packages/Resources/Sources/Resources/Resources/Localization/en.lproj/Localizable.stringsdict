@@ -18,22 +18,6 @@
         <string>test results</string>
       </dict>
     </dict>
-    <key>general_vaccinationAssessments</key>
-    <dict>
-      <key>NSStringLocalizedFormatKey</key>
-      <string>%#@format@</string>
-      <key>format</key>
-      <dict>
-        <key>NSStringFormatSpecTypeKey</key>
-        <string>NSStringPluralRuleType</string>
-        <key>NSStringFormatValueTypeKey</key>
-        <string>li</string>
-        <key>one</key>
-        <string>vaccination approval</string>
-        <key>other</key>
-        <string>vaccination approvals</string>
-      </dict>
-    </dict>
     <key>general_vaccinations</key>
     <dict>
       <key>NSStringLocalizedFormatKey</key>
