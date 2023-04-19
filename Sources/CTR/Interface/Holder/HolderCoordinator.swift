@@ -590,7 +590,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToMigrate() {
 		
-		logDebug("userWishesToMigrate")
+		let migrationCoordinator = MigrationCoordinator(navigationController: navigationController, delegate: self)
+		startChildCoordinator(migrationCoordinator)
 	}
 	
 	func userWishesToOpenTheMenu() {
@@ -733,6 +734,23 @@ extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 			removeChildCoordinator(childCoordinator)
 		}
 		navigateBackToStart()
+	}
+}
+
+extension HolderCoordinator: MigrationFlowDelegate {
+	
+	func dataMigrationCancelled() {
+		
+		removeMigrationCoordinator()
+		// No additional navigation required,
+		logInfo("HolderCoordinator: dataMigrationCancelled")
+	}
+	
+	private func removeMigrationCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 	}
 }
 
