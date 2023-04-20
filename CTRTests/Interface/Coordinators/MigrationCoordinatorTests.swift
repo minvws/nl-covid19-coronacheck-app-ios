@@ -11,14 +11,17 @@ import Nimble
 import Transport
 @testable import Models
 @testable import ReusableViews
+import TestingShared
+import Persistence
+@testable import Managers
 
 class MigrationCoordinatorTests: XCTestCase {
 	
-	var sut: MigrationCoordinator!
+	private var sut: MigrationCoordinator!
 
-	var navigationSpy: NavigationControllerSpy!
-
-	var delegateSpy: MigrationFlowDelegateSpy!
+	private var navigationSpy: NavigationControllerSpy!
+	private var environmentSpies: EnvironmentSpies!
+	private var delegateSpy: MigrationFlowDelegateSpy!
 
 	override func setUp() {
 
@@ -26,7 +29,7 @@ class MigrationCoordinatorTests: XCTestCase {
 
 		navigationSpy = NavigationControllerSpy()
 		delegateSpy = MigrationFlowDelegateSpy()
-		_ = setupEnvironmentSpies()
+		environmentSpies = setupEnvironmentSpies()
 		sut = MigrationCoordinator(navigationController: navigationSpy, delegate: delegateSpy)
 	}
 
@@ -64,6 +67,22 @@ class MigrationCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(consumed) == false
+	}
+	
+	func test_userCompletedStart_withEvents() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		
+		// When
+		sut.userCompletedStart()
+		
+		// Then
+		expect(self.navigationSpy.viewControllers).to(haveCount(1))
+		expect(self.navigationSpy.viewControllers.first is ListOptionsViewController) == true
+		expect((self.navigationSpy.viewControllers.first as? ListOptionsViewController)?.viewModel)
+			.to(beAnInstanceOf(MigrationTransferOptionsViewModel.self))
 	}
 }
 
