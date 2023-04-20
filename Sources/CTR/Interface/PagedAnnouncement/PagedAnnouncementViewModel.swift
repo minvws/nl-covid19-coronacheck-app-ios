@@ -45,7 +45,8 @@ class PagedAnnouncementViewModel {
 		
 		let viewController = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(
-				item: item
+				item: item,
+				enableSwipeBack: item == pages.first && enableSwipeBack
 			),
 			shouldShowWithFullWidthHeaderImage: itemsShouldShowWithFullWidthHeaderImage
 		)
