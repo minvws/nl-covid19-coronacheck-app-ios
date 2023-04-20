@@ -53,6 +53,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAVaccinationQR()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
+	func userWishesToMigrate()
 	func userWishesToOpenTheMenu()
 	func userWishesToRestart()
 	func userWishesToSeeAboutThisApp()
@@ -587,6 +588,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
 	}
 	
+	func userWishesToMigrate() {
+		
+		let migrationCoordinator = MigrationCoordinator(navigationController: navigationController, delegate: self)
+		startChildCoordinator(migrationCoordinator)
+	}
+	
 	func userWishesToOpenTheMenu() {
 		
 		let viewController = MenuViewController(viewModel: HolderMainMenuViewModel(self))
@@ -727,6 +734,23 @@ extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 			removeChildCoordinator(childCoordinator)
 		}
 		navigateBackToStart()
+	}
+}
+
+extension HolderCoordinator: MigrationFlowDelegate {
+	
+	func dataMigrationCancelled() {
+		
+		removeMigrationCoordinator()
+		// No additional navigation required,
+		logInfo("HolderCoordinator: dataMigrationCancelled")
+	}
+	
+	private func removeMigrationCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 	}
 }
 

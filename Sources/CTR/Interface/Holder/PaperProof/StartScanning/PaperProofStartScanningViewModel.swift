@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -8,41 +8,32 @@
 import Foundation
 import Shared
 import Resources
+import ReusableViews
 
-final class PaperProofStartScanningViewModel {
+class PaperProofStartScanningViewModel: ContentWithImageProtocol {
 	
-	@Bindable private(set) var title: String = L.holder_paperproof_startscanning_title()
-	@Bindable private(set) var message: String = L.holder_paperproof_startscanning_body()
-	@Bindable private(set) var nextButtonTitle = L.holder_paperproof_startscanning_button_startScanning()
-	@Bindable private(set) var secondaryButtonTitle = L.holder_paperproof_startscanning_button_whichProofs()
-	@Bindable private(set) var internationalQROnly = I.scannableQRs()
-
-	private weak var coordinator: PaperProofCoordinatorDelegate?
+	var content: Shared.Observable<ReusableViews.ContentWithImageViewController.Content>
 	
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
 	init(coordinator: PaperProofCoordinatorDelegate) {
 		
-		self.coordinator = coordinator
-	}
-	
-	func backButtonTapped() {
-		
-		coordinator?.userWishesToCancelPaperProofFlow()
-	}
-	
-	func backSwipe() {
-		
-		coordinator?.userWishesToCancelPaperProofFlow()
-	}
-	
-	func userTappedNextButton() {
-		
-		coordinator?.userWishesToScanCertificate()
-	}
-
-	func userTappedSecondaryButton() {
-
-		coordinator?.userWishesMoreInformationOnWhichProofsCanBeUsed()
+		content = Shared.Observable(
+			value: ReusableViews.ContentWithImageViewController.Content(
+				title: L.holder_paperproof_startscanning_title(),
+				body: L.holder_paperproof_startscanning_body(),
+				primaryAction: ContentWithImageViewController.Action(
+					title: L.holder_paperproof_startscanning_button_startScanning(),
+					action: { [weak coordinator] in
+						coordinator?.userWishesToScanCertificate()
+					}
+				),
+				secondaryAction: ContentWithImageViewController.Action(
+					title: L.holder_paperproof_startscanning_button_whichProofs(),
+					action: { [weak coordinator] in
+						coordinator?.userWishesMoreInformationOnWhichProofsCanBeUsed()
+					}
+				),
+				image: I.scannableQRs()
+			)
+		)
 	}
 }

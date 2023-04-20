@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -7,10 +7,9 @@
 
 import UIKit
 import Shared
-import ReusableViews
 import Resources
 
-final class PaperProofStartScanningView: ScrolledStackWithButtonView {
+final public class ContentWithImageView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -47,7 +46,7 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 		return view
 	}()
 
-	let secondaryButton: Button = {
+	public let secondaryButton: Button = {
 
 		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -55,16 +54,17 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 		return button
 	}()
 	
-	override func setupViews() {
+	public override func setupViews() {
+		
 		super.setupViews()
 		
 		backgroundColor = C.white()
 		secondaryButton.addTarget(self, action: #selector(secondaryButtonTapped), for: .touchUpInside)
-		
 		stackView.distribution = .fill
 	}
 	
-	override func setupViewHierarchy() {
+	override public func setupViewHierarchy() {
+		
 		super.setupViewHierarchy()
 		
 		stackView.addArrangedSubview(titleLabel)
@@ -86,7 +86,7 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 	// MARK: Public Access
 
 	/// The title
-	var title: String? {
+	public var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
 				ViewTraits.Title.lineHeight,
@@ -96,7 +96,7 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 	}
 	
 	/// The message
-	var message: String? {
+	public var message: String? {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: message,
@@ -111,11 +111,26 @@ final class PaperProofStartScanningView: ScrolledStackWithButtonView {
 		}
 	}
 
-	var icon: UIImage? {
+	public var image: UIImage? {
 		didSet {
-			iconView.image = icon
+			iconView.image = image
+		}
+	}
+	
+	public var secondaryTitle: String? {
+		didSet {
+			secondaryButton.title = secondaryTitle
+			if secondaryTitle == nil {
+				// Hide secondary button, but increase the spacing
+				secondaryButton.isHidden = true
+				stackView.setCustomSpacing(ViewTraits.Spacing.icon, after: messageTextView)
+			} else {
+				// Show the secondary button
+				secondaryButton.isHidden = false
+				stackView.setCustomSpacing(ViewTraits.Spacing.message, after: messageTextView)
+			}
 		}
 	}
 
-	var secondaryButtonCommand: (() -> Void)?
+	public var secondaryButtonCommand: (() -> Void)?
 }

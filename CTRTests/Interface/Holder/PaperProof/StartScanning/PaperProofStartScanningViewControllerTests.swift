@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import XCTest
 import Nimble
@@ -12,27 +12,29 @@ import SnapshotTesting
 import Shared
 import TestingShared
 @testable import Resources
+@testable import ReusableViews
 
 // swiftlint:disable:next type_name
 class PaperProofStartScanningViewControllerTests: XCTestCase {
-
-	private var sut: PaperProofStartScanningViewController!
+	
+	private var sut: ContentWithImageViewController!
 	private var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 	var window = UIWindow()
-
+	
 	override func setUp() {
+		
 		super.setUp()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
-		sut = PaperProofStartScanningViewController(viewModel: PaperProofStartScanningViewModel(coordinator: coordinatorDelegateSpy))
+		sut = ContentWithImageViewController(viewModel: PaperProofStartScanningViewModel(coordinator: coordinatorDelegateSpy))
 		window = UIWindow()
 	}
-
+	
 	func loadView() {
-
+		
 		window.addSubview(sut.view)
 		RunLoop.current.run(until: Date())
 	}
-
+	
 	// MARK: - Tests
 	
 	func test_content() {
@@ -46,22 +48,10 @@ class PaperProofStartScanningViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.title) == L.holder_paperproof_startscanning_title()
 		expect(self.sut.sceneView.message) == L.holder_paperproof_startscanning_body()
 		expect(self.sut.sceneView.primaryTitle) == L.holder_paperproof_startscanning_button_startScanning()
-		expect(self.sut.sceneView.secondaryButton.title) == L.holder_paperproof_startscanning_button_whichProofs()
-		expect(self.sut.sceneView.icon) == I.scannableQRs()
+		expect(self.sut.sceneView.secondaryTitle) == L.holder_paperproof_startscanning_button_whichProofs()
+		expect(self.sut.sceneView.image) == I.scannableQRs()
 		
 		sut.assertImage(containedInNavigationController: true)
-	}
-
-	func test_backButton() {
-		
-		// Given
-		loadView()
-		
-		// When
-		sut.backButtonTapped()
-		
-		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToCancelPaperProofFlow) == true
 	}
 	
 	func test_nextButton() {

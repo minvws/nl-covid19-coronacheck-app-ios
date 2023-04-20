@@ -37,6 +37,10 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 			coordinator?.userWishesToSeeStoredEvents()
 		}
 		
+		let itemDataMigration: Item = .row(title: L.holder_menu_migration(), subTitle: nil, icon: I.icon_menu_migration()!, overrideColor: nil) { [weak coordinator] in
+			coordinator?.userWishesToMigrate()
+		}
+		
 		let itemHelpAndInfo: Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeHelpAndInfoMenu()
 		}
@@ -52,6 +56,9 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		
 		holderItems += [.sectionBreak]
 		holderItems += [itemStoredData]
+		holderItems += [itemDataMigration]
+
+		holderItems += [.sectionBreak]
 		holderItems += [itemHelpAndInfo]
 		
 		if Configuration().getRelease() != .production {

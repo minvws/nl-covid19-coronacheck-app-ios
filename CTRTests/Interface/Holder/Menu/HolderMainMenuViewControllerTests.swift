@@ -87,6 +87,18 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeStoredEvents) == true
 	}
+
+	func test_userWishesToMigrate() {
+		
+		// Given
+		loadView()
+		
+		// When
+		(sut.sceneView.stackView.arrangedSubviews[4] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToMigrate) == true
+	}
 	
 	func test_userWishesToSeeHelpAndInfoMenu() {
 		
@@ -94,7 +106,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		(sut.sceneView.stackView.arrangedSubviews[4] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		(sut.sceneView.stackView.arrangedSubviews[6] as? MenuRowView)?.sendActions(for: .touchUpInside)
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeHelpAndInfoMenu) == true
@@ -106,7 +118,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		(sut.sceneView.stackView.arrangedSubviews[6] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		(sut.sceneView.stackView.arrangedSubviews[8] as? MenuRowView)?.sendActions(for: .touchUpInside)
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToRestart) == true

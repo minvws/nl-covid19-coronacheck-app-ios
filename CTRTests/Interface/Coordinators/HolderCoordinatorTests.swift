@@ -249,7 +249,8 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
+		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel)
+			.to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
@@ -262,7 +263,9 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PaperProofStartScanningViewController) == true
+		expect(self.navigationSpy.viewControllers.last is ContentWithImageViewController) == true
+		expect((self.navigationSpy.viewControllers.last as? ContentWithImageViewController)?.viewModel)
+			.to(beAnInstanceOf(PaperProofStartScanningViewModel.self))
 		expect(self.sut.childCoordinators).to(haveCount(1))
 	}
 	
