@@ -17,4 +17,20 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 		invokedUserCompletedStart = true
 		invokedUserCompletedStartCount += 1
 	}
+
+	var invokedUserWishesToSeeImportInstructions = false
+	var invokedUserWishesToSeeImportInstructionsCount = 0
+
+	func userWishesToSeeImportInstructions() {
+		invokedUserWishesToSeeImportInstructions = true
+		invokedUserWishesToSeeImportInstructionsCount += 1
+	}
+
+	var invokedUserWishesToSeeExportInstructions = false
+	var invokedUserWishesToSeeExportInstructionsCount = 0
+
+	func userWishesToSeeExportInstructions() {
+		invokedUserWishesToSeeExportInstructions = true
+		invokedUserWishesToSeeExportInstructionsCount += 1
+	}
 }

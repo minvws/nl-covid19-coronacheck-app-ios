@@ -44,7 +44,7 @@ open class DisclosureSubtitleButton: BaseView {
 	/// The title label
 	let titleLabel: Label = {
 		
-		return Label(calloutSemiBold: nil).multiline()
+		return Label(bodySemiBold: nil).multiline()
 	}()
 	
 	/// The sub title label

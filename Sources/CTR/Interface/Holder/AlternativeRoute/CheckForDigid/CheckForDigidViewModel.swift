@@ -34,6 +34,7 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 			ListOptionsViewController.OptionModel(
 				title: L.holder_noDigiD_buttonTitle_requestDigiD(),
 				image: I.digid(),
+				type: .singleWithIcon,
 				action: { [weak self] in
 					if let url = URL(string: L.holder_noDigiD_url()) {
 						self?.coordinator?.openUrl(url)
@@ -43,6 +44,7 @@ class CheckForDigidViewModel: ListOptionsProtocol {
 			ListOptionsViewController.OptionModel(
 				title: L.holder_noDigiD_buttonTitle_continueWithoutDigiD(),
 				subTitle: L.holder_noDigiD_buttonSubTitle_continueWithoutDigiD(),
+				type: .multiLine,
 				action: { [weak self] in self?.coordinator?.userWishesToCheckForBSN() }
 			)
 		]
