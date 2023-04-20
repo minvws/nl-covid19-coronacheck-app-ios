@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 import Models
 
 protocol MigrationFlowDelegate: AnyObject {
@@ -41,6 +42,8 @@ class MigrationCoordinator: NSObject, Coordinator {
 	var navigationController: UINavigationController
 	
 	weak var delegate: MigrationFlowDelegate?
+	
+	var onboardingFactory: MigrationOnboardingFactory = MigrationOnboardingFactory()
 	
 	/// Initializer
 	/// - Parameters:
@@ -88,15 +91,18 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 	
 	func userWishesToSeeImportInstructions() {
-
+		
 		logDebug("userWishesToSeeImportInstructions")
+		userWishesToSeeOnboarding(pages: onboardingFactory.getImportInstructions())
+
 	}
 
 	func userWishesToSeeExportInstructions() {
 
 		logDebug("userWishesToSeeExportInstructions")
+		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
 	}
-//
+
 //	func userWishesToStartImport() {
 //
 //		logDebug("userWishesToStartImport")
@@ -106,7 +112,38 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 //
 //		logDebug("userWishesToStartExport")
 //	}
+	
+	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
+		
+		let viewController = PagedAnnouncementViewController(
+			title: L.holder_startMigration_onboarding_title(),
+			viewModel: PagedAnnouncementViewModel(
+				delegate: self,
+				pages: pages,
+				itemsShouldShowWithFullWidthHeaderImage: true,
+				shouldShowWithVWSRibbon: false,
+				enableSwipeBack: true
+			),
+			allowsPreviousPageButton: true,
+			allowsCloseButton: false,
+			allowsNextPageButton: true) { [weak self] in
+				// Remove from the navigation stack
+				self?.navigationController.popViewController(animated: true)
+			}
+		navigationController.pushViewController(viewController, animated: true)
+	}
 }
+
+// MARK: - PagedAnnouncementDelegate
+
+extension MigrationCoordinator: PagedAnnouncementDelegate {
+
+	func didFinishPagedAnnouncement() {
+		logDebug("todo: didFinishPagedAnnouncement")
+	}
+}
+
+// MARK: - UINavigationControllerDelegate
 
 extension MigrationCoordinator: UINavigationControllerDelegate {
 

@@ -16,7 +16,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
 	/// Disable swiping to launch screen
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { viewModel.enableSwipeBack }
 	
 	var showsBackButton: Bool {
 		backButtonAction != nil
@@ -28,7 +28,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsPreviousPageButton: Bool, allowsCloseButton: Bool, allowsNextPageButton: Bool, backButtonAction: (() -> Void)? = nil) {
+	init(title: String? = nil, viewModel: PagedAnnouncementViewModel, allowsPreviousPageButton: Bool, allowsCloseButton: Bool, allowsNextPageButton: Bool, backButtonAction: (() -> Void)? = nil) {
 		
 		self.backButtonAction = backButtonAction
 		self.allowsPreviousPageButton = allowsPreviousPageButton
@@ -39,6 +39,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 			sceneView: PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon),
 			viewModel: viewModel
 		)
+		self.title = title
 	}
 	
 	private var backButton: UIBarButtonItem?
