@@ -27,13 +27,13 @@ class MigrationTransferOptionsViewModel: ListOptionsProtocol {
 				title: L.holder_startMigration_option_toOtherDevice_title(),
 				image: I.icon_menu_export(),
 				type: .singleWithImage,
-				action: { [weak coordinator] in coordinator?.userWishesToSeeExportInstructions() }
+				action: { [weak coordinator] in coordinator?.userWishesToSeeToOtherDeviceInstructions() }
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_startMigration_option_toThisDevice_title(),
 				image: I.icon_menu_import(),
 				type: .singleWithImage,
-				action: { [weak coordinator] in coordinator?.userWishesToSeeImportInstructions() }
+				action: { [weak coordinator] in coordinator?.userWishesToSeeToThisDeviceInstructions() }
 			)
 		]
 	}

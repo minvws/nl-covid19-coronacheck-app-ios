@@ -21,7 +21,7 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 	var invokedUserWishesToSeeImportInstructions = false
 	var invokedUserWishesToSeeImportInstructionsCount = 0
 
-	func userWishesToSeeImportInstructions() {
+	func userWishesToSeeToThisDeviceInstructions() {
 		invokedUserWishesToSeeImportInstructions = true
 		invokedUserWishesToSeeImportInstructionsCount += 1
 	}
@@ -29,7 +29,7 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 	var invokedUserWishesToSeeExportInstructions = false
 	var invokedUserWishesToSeeExportInstructionsCount = 0
 
-	func userWishesToSeeExportInstructions() {
+	func userWishesToSeeToOtherDeviceInstructions() {
 		invokedUserWishesToSeeExportInstructions = true
 		invokedUserWishesToSeeExportInstructionsCount += 1
 	}

@@ -24,18 +24,23 @@ protocol MigrationCoordinatorDelegate: AnyObject {
 	
 	func userCompletedStart()
 
-	func userWishesToSeeImportInstructions()
+	func userWishesToSeeToThisDeviceInstructions()
 
-	func userWishesToSeeExportInstructions()
-//
-//	func userWishesToStartImport()
-//
-//	func userWishesToStartExport()
+	func userWishesToSeeToOtherDeviceInstructions()
+
+	func userWishesToStartMigrationToThisDevice()
+
+	func userWishesToStartMigrationToOtherDevice()
 }
 
 class MigrationCoordinator: NSObject, Coordinator {
 
 //	private let version: String = "CC1"
+	
+	enum MigrationFlow {
+		case toThisDevice
+		case toOtherDevice
+	}
 	
 	var childCoordinators: [Coordinator] = []
 	
@@ -44,6 +49,8 @@ class MigrationCoordinator: NSObject, Coordinator {
 	weak var delegate: MigrationFlowDelegate?
 	
 	var onboardingFactory: MigrationOnboardingFactory = MigrationOnboardingFactory()
+	
+	var flow: MigrationFlow?
 	
 	/// Initializer
 	/// - Parameters:
@@ -86,32 +93,31 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 		} else {
 			
 			// We have no events -> import only
-			userWishesToSeeImportInstructions()
+			userWishesToSeeToThisDeviceInstructions()
 		}
 	}
 	
-	func userWishesToSeeImportInstructions() {
+	func userWishesToSeeToThisDeviceInstructions() {
 		
-		logDebug("userWishesToSeeImportInstructions")
+		flow = .toThisDevice
 		userWishesToSeeOnboarding(pages: onboardingFactory.getImportInstructions())
-
 	}
 
-	func userWishesToSeeExportInstructions() {
+	func userWishesToSeeToOtherDeviceInstructions() {
 
-		logDebug("userWishesToSeeExportInstructions")
+		flow = .toOtherDevice
 		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
 	}
+	
+	func userWishesToStartMigrationToThisDevice() {
 
-//	func userWishesToStartImport() {
-//
-//		logDebug("userWishesToStartImport")
-//	}
-//
-//	func userWishesToStartExport() {
-//
-//		logDebug("userWishesToStartExport")
-//	}
+		logDebug("userWishesToStartMigrationToThisDevice")
+	}
+
+	func userWishesToStartMigrationToOtherDevice() {
+
+		logDebug("userWishesToStartMigrationToOtherDevice")
+	}
 	
 	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
 		
@@ -139,7 +145,15 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 extension MigrationCoordinator: PagedAnnouncementDelegate {
 
 	func didFinishPagedAnnouncement() {
-		logDebug("todo: didFinishPagedAnnouncement")
+		
+		switch flow {
+			case .none:
+				logError("No flow selected for migration")
+			case .toOtherDevice:
+				userWishesToStartMigrationToOtherDevice()
+			case .toThisDevice:
+				userWishesToStartMigrationToThisDevice()
+		}
 	}
 }
 
