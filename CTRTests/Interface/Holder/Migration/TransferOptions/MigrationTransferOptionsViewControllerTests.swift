@@ -48,7 +48,7 @@ class MigrationTransferOptionsViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews.first as? DisclosureLeadingImageButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeExportInstructions) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeToOtherDeviceInstructions) == true
 	}
 
 	func test_toThisDevice_tapped() {
@@ -60,7 +60,7 @@ class MigrationTransferOptionsViewControllerTests: XCTestCase {
 		(self.sut.sceneView.optionStackView.arrangedSubviews[1] as? DisclosureLeadingImageButton)?.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeImportInstructions) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeToThisDeviceInstructions) == true
 	}
 
 }

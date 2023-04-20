@@ -36,7 +36,8 @@ class PagedAnnouncementItemViewControllerTests: XCTestCase {
 		coordinatorSpy = OnboardingCoordinatorSpy()
 		sut = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(
-				item: page
+				item: page,
+				enableSwipeBack: false
 			),
 			shouldShowWithFullWidthHeaderImage: false
 		)
