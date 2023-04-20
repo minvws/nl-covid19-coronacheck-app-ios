@@ -25,7 +25,7 @@ struct MigrationOnboardingFactory: MigrationOnboardingFactoryProtocol {
 			PagedAnnoucementItem(
 				title: L.holder_startMigration_toThisDevice_onboarding_step1_title(),
 				content: L.holder_startMigration_toThisDevice_onboarding_step1_message(),
-				image: I.fuzzyOnboardingPage1(),
+				image: I.migrationInstruction1(),
 				tagline: L.holder_startMigration_onboarding_step("1"),
 				step: 0,
 				nextButtonTitle: L.holder_startMigration_toThisDevice_onboarding_nextButton()
@@ -33,7 +33,7 @@ struct MigrationOnboardingFactory: MigrationOnboardingFactoryProtocol {
 			PagedAnnoucementItem(
 				title: L.holder_startMigration_toThisDevice_onboarding_step2_title(),
 				content: L.holder_startMigration_toThisDevice_onboarding_step2_message(),
-				image: I.fuzzyOnboardingPage2(),
+				image: I.migrationInstruction2(),
 				tagline: L.holder_startMigration_onboarding_step("2"),
 				step: 1,
 				nextButtonTitle: L.holder_startMigration_toThisDevice_onboarding_nextButton()
@@ -47,7 +47,7 @@ struct MigrationOnboardingFactory: MigrationOnboardingFactoryProtocol {
 			PagedAnnoucementItem(
 				title: L.holder_startMigration_toOtherDevice_onboarding_step1_title(),
 				content: L.holder_startMigration_toOtherDevice_onboarding_step1_message(),
-				image: I.fuzzyOnboardingPage1(),
+				image: I.migrationInstruction1(),
 				tagline: L.holder_startMigration_onboarding_step("1"),
 				step: 0,
 				nextButtonTitle: L.holder_startMigration_toOtherDevice_onboarding_nextButton()
@@ -55,7 +55,7 @@ struct MigrationOnboardingFactory: MigrationOnboardingFactoryProtocol {
 			PagedAnnoucementItem(
 				title: L.holder_startMigration_toOtherDevice_onboarding_step2_title(),
 				content: L.holder_startMigration_toOtherDevice_onboarding_step2_message(),
-				image: I.fuzzyOnboardingPage2(),
+				image: I.migrationInstruction2(),
 				tagline: L.holder_startMigration_onboarding_step("2"),
 				step: 1,
 				nextButtonTitle: L.holder_startMigration_toOtherDevice_onboarding_nextButton()
