@@ -36,11 +36,13 @@ class ChooseEventLocationViewModel: ListOptionsProtocol {
 			ListOptionsViewController.OptionModel(
 				title: L.holder_chooseEventLocation_buttonTitle_GGD(),
 				subTitle: L.holder_chooseEventLocation_buttonSubTitle_GGD(),
+				type: .multiLine,
 				action: { [weak self] in self?.coordinator?.userWishedToGoToGGDPortal() }
 			),
 			ListOptionsViewController.OptionModel(
 				title: L.holder_chooseEventLocation_buttonTitle_other(),
 				subTitle: L.holder_chooseEventLocation_buttonSubTitle_other(),
+				type: .multiLine,
 				action: { [weak self] in self?.coordinator?.userWishesToContactProviderHelpDeskWhilePortalEnabled() }
 			)
 		]

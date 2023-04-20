@@ -8,18 +8,27 @@
 import UIKit
 
 open class ListOptionsViewController: TraitWrappedGenericViewController<ListOptionsView, ListOptionsProtocol> {
+	
+	public enum OptionType: String {
+		case singleLine
+		case multiLine
+		case singleWithIcon
+		case singleWithImage
+	}
 
 	public struct OptionModel {
-		public init(title: String, subTitle: String? = nil, image: UIImage? = nil, action: @escaping () -> Void) {
+		public init(title: String, subTitle: String? = nil, image: UIImage? = nil, type: ListOptionsViewController.OptionType, action: @escaping () -> Void) {
 			self.title = title
 			self.subTitle = subTitle
 			self.image = image
+			self.type = type
 			self.action = action
 		}
 		
 		public let title: String
 		public let subTitle: String?
 		public let image: UIImage?
+		public let type: OptionType
 		public let action: () -> Void
 	}
 
@@ -55,18 +64,25 @@ open class ListOptionsViewController: TraitWrappedGenericViewController<ListOpti
 			// Add new buttons:
 			buttons
 				.map { optionModel -> UIView in
-					if let subTitle = optionModel.subTitle {
-						return DisclosureSubtitleButton.makeButton(
-							title: optionModel.title,
-							subtitle: subTitle,
-							command: optionModel.action
-						)
-					} else {
-						return DisclosureButton.makeButton(
-							title: optionModel.title,
-							icon: optionModel.image,
-							command: optionModel.action
-						)
+					switch optionModel.type {
+						case .singleLine, .singleWithIcon:
+							return DisclosureButton.makeButton(
+								title: optionModel.title,
+								icon: optionModel.image,
+								command: optionModel.action
+							)
+						case .multiLine:
+							return DisclosureSubtitleButton.makeButton(
+								title: optionModel.title,
+								subtitle: optionModel.subTitle,
+								command: optionModel.action
+							)
+						case .singleWithImage:
+							return DisclosureLeadingImageButton.makeButton(
+								title: optionModel.title,
+								image: optionModel.image,
+								command: optionModel.action
+							)
 					}
 				}
 				.forEach(self.sceneView.optionStackView.addArrangedSubview)
@@ -110,13 +126,35 @@ extension DisclosureSubtitleButton {
 	/// - Returns: A disclosure button
 	public static func makeButton(
 		title: String,
-		subtitle: String,
+		subtitle: String?,
 		command: (() -> Void)? ) -> DisclosureSubtitleButton {
 
 		let button = DisclosureSubtitleButton()
 		button.isUserInteractionEnabled = true
 		button.title = title
 		button.subtitle = subtitle
+		button.primaryButtonTappedCommand = command
+		return button
+	}
+}
+
+extension DisclosureLeadingImageButton {
+
+	/// Create a disclosure button with subtitle and an image
+	/// - Parameters:
+	///   - title: the title of the button
+	///   - image: the image
+	///   - command: the command to execute when tapped
+	/// - Returns: A disclosure button
+	public static func makeButton(
+		title: String,
+		image: UIImage?,
+		command: (() -> Void)? ) -> DisclosureLeadingImageButton {
+		
+		let button = DisclosureLeadingImageButton()
+		button.isUserInteractionEnabled = true
+		button.title = title
+		button.image = image
 		button.primaryButtonTappedCommand = command
 		return button
 	}

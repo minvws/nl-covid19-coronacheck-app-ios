@@ -33,19 +33,22 @@ class ChooseProofTypeViewModel: ListOptionsProtocol {
 		optionModels.value = [
 			ListOptionsViewController.OptionModel(
 				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
-				subTitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
+				subTitle: L.holderChooseqrcodetypeOptionVaccineSubtitle(),
+				type: .multiLine) { [weak self] in
 					
 					self?.coordinator?.userWishesToCreateAVaccinationQR()
 				},
 			ListOptionsViewController.OptionModel(
 				title: L.holderChooseqrcodetypeOptionRecoveryTitle(),
-				subTitle: L.holderChooseqrcodetypeOptionRecoverySubtitle()) { [weak self] in
+				subTitle: L.holderChooseqrcodetypeOptionRecoverySubtitle(),
+				type: .multiLine) { [weak self] in
 					
 					self?.coordinator?.userWishesToCreateARecoveryQR()
 				},
 			ListOptionsViewController.OptionModel(
 				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
-				subTitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
+				subTitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle(),
+				type: .multiLine) { [weak self] in
 					
 					self?.coordinator?.userWishesToChooseTestLocation()
 				}

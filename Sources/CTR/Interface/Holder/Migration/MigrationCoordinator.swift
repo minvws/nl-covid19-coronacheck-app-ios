@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -22,10 +22,10 @@ protocol MigrationFlowDelegate: AnyObject {
 protocol MigrationCoordinatorDelegate: AnyObject {
 	
 	func userCompletedStart()
-//
-//	func userWishesToSeeImportInstructions()
-//
-//	func userWishesToSeeExportInstructions()
+
+	func userWishesToSeeImportInstructions()
+
+	func userWishesToSeeExportInstructions()
 //
 //	func userWishesToStartImport()
 //
@@ -74,18 +74,28 @@ class MigrationCoordinator: NSObject, Coordinator {
 extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	
 	func userCompletedStart() {
-		logDebug("userCompletedStart")
+		
+		if Current.walletManager.listEventGroups().isNotEmpty {
+
+			// We have events -> make the user choose
+			let viewController = ListOptionsViewController(viewModel: MigrationTransferOptionsViewModel(self))
+			navigationController.pushViewController(viewController, animated: true)
+		} else {
+			
+			// We have no events -> import only
+			userWishesToSeeImportInstructions()
+		}
 	}
 	
-//	func userWishesToSeeImportInstructions() {
-//
-//		logDebug("userWishesToSeeImportInstructions")
-//	}
-//
-//	func userWishesToSeeExportInstructions() {
-//
-//		logDebug("userWishesToSeeExportInstructions")
-//	}
+	func userWishesToSeeImportInstructions() {
+
+		logDebug("userWishesToSeeImportInstructions")
+	}
+
+	func userWishesToSeeExportInstructions() {
+
+		logDebug("userWishesToSeeExportInstructions")
+	}
 //
 //	func userWishesToStartImport() {
 //
