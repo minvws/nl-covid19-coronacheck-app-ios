@@ -40,5 +40,5 @@ final class MigrationOnboardingFactoryTests: XCTestCase {
 		expect(pages).to(haveCount(2))
 		expect(pages.first?.title) == L.holder_startMigration_toOtherDevice_onboarding_step1_title()
 		expect(pages.last?.title) == L.holder_startMigration_toOtherDevice_onboarding_step2_title()
-	}	
+	}
 }
