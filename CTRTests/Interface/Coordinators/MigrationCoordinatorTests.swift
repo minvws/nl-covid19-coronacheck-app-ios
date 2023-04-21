@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -11,6 +11,7 @@ import Nimble
 import Transport
 @testable import Models
 @testable import ReusableViews
+@testable import Resources
 import TestingShared
 import Persistence
 @testable import Managers
@@ -84,6 +85,56 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.first as? ListOptionsViewController)?.viewModel)
 			.to(beAnInstanceOf(MigrationTransferOptionsViewModel.self))
 	}
+	
+	func test_userCompletedStart_noEvents() throws {
+		
+		// Given
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = []
+		
+		// When
+		sut.userCompletedStart()
+		
+		// Then
+		expect(self.navigationSpy.viewControllers).to(haveCount(1))
+		expect(self.navigationSpy.viewControllers.first is PagedAnnouncementViewController) == true
+		let pages = try XCTUnwrap((self.navigationSpy.viewControllers.first as? PagedAnnouncementViewController)?.viewModel.pages)
+		expect(pages).to(haveCount(2))
+		expect(pages.first?.title) == L.holder_startMigration_toThisDevice_onboarding_step1_title()
+		expect(pages.last?.title) == L.holder_startMigration_toThisDevice_onboarding_step2_title()
+	}
+	
+	func test_userWishesToSeeToThisDeviceInstructions() throws {
+		
+		// Given
+		
+		// When
+		sut.userWishesToSeeToThisDeviceInstructions()
+		
+		// Then
+		expect(self.navigationSpy.viewControllers).to(haveCount(1))
+		expect(self.navigationSpy.viewControllers.first is PagedAnnouncementViewController) == true
+		let pages = try XCTUnwrap((self.navigationSpy.viewControllers.first as? PagedAnnouncementViewController)?.viewModel.pages)
+		expect(pages).to(haveCount(2))
+		expect(pages.first?.title) == L.holder_startMigration_toThisDevice_onboarding_step1_title()
+		expect(pages.last?.title) == L.holder_startMigration_toThisDevice_onboarding_step2_title()
+	}
+
+	func test_userWishesToSeeToOtherDeviceInstructions() throws {
+		
+		// Given
+		
+		// When
+		sut.userWishesToSeeToOtherDeviceInstructions()
+		
+		// Then
+		expect(self.navigationSpy.viewControllers).to(haveCount(1))
+		expect(self.navigationSpy.viewControllers.first is PagedAnnouncementViewController) == true
+		let pages = try XCTUnwrap((self.navigationSpy.viewControllers.first as? PagedAnnouncementViewController)?.viewModel.pages)
+		expect(pages).to(haveCount(2))
+		expect(pages.first?.title) == L.holder_startMigration_toOtherDevice_onboarding_step1_title()
+		expect(pages.last?.title) == L.holder_startMigration_toOtherDevice_onboarding_step2_title()
+	}
+	
 }
 
 class MigrationFlowDelegateSpy: MigrationFlowDelegate {
