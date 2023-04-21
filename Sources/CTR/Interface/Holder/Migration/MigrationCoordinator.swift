@@ -8,6 +8,7 @@
 import UIKit
 import Shared
 import ReusableViews
+import Resources
 import Models
 
 protocol MigrationFlowDelegate: AnyObject {
@@ -23,24 +24,33 @@ protocol MigrationCoordinatorDelegate: AnyObject {
 	
 	func userCompletedStart()
 
-	func userWishesToSeeImportInstructions()
+	func userWishesToSeeToThisDeviceInstructions()
 
-	func userWishesToSeeExportInstructions()
-//
-//	func userWishesToStartImport()
-//
-//	func userWishesToStartExport()
+	func userWishesToSeeToOtherDeviceInstructions()
+
+	func userWishesToStartMigrationToThisDevice()
+
+	func userWishesToStartMigrationToOtherDevice()
 }
 
 class MigrationCoordinator: NSObject, Coordinator {
 
 //	private let version: String = "CC1"
 	
+	enum MigrationFlow {
+		case toThisDevice
+		case toOtherDevice
+	}
+	
 	var childCoordinators: [Coordinator] = []
 	
 	var navigationController: UINavigationController
 	
 	weak var delegate: MigrationFlowDelegate?
+	
+	var onboardingFactory: MigrationOnboardingFactory = MigrationOnboardingFactory()
+	
+	var flow: MigrationFlow?
 	
 	/// Initializer
 	/// - Parameters:
@@ -83,30 +93,71 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 		} else {
 			
 			// We have no events -> import only
-			userWishesToSeeImportInstructions()
+			userWishesToSeeToThisDeviceInstructions()
 		}
 	}
 	
-	func userWishesToSeeImportInstructions() {
-
-		logDebug("userWishesToSeeImportInstructions")
+	func userWishesToSeeToThisDeviceInstructions() {
+		
+		flow = .toThisDevice
+		userWishesToSeeOnboarding(pages: onboardingFactory.getImportInstructions())
 	}
 
-	func userWishesToSeeExportInstructions() {
+	func userWishesToSeeToOtherDeviceInstructions() {
 
-		logDebug("userWishesToSeeExportInstructions")
+		flow = .toOtherDevice
+		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
 	}
-//
-//	func userWishesToStartImport() {
-//
-//		logDebug("userWishesToStartImport")
-//	}
-//
-//	func userWishesToStartExport() {
-//
-//		logDebug("userWishesToStartExport")
-//	}
+	
+	func userWishesToStartMigrationToThisDevice() {
+
+		logDebug("userWishesToStartMigrationToThisDevice")
+	}
+
+	func userWishesToStartMigrationToOtherDevice() {
+
+		logDebug("userWishesToStartMigrationToOtherDevice")
+	}
+	
+	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
+		
+		let viewController = PagedAnnouncementViewController(
+			title: L.holder_startMigration_onboarding_title(),
+			viewModel: PagedAnnouncementViewModel(
+				delegate: self,
+				pages: pages,
+				itemsShouldShowWithFullWidthHeaderImage: true,
+				shouldShowWithVWSRibbon: false,
+				enableSwipeBack: true
+			),
+			allowsPreviousPageButton: true,
+			allowsCloseButton: false,
+			allowsNextPageButton: true) { [weak self] in
+				// Remove from the navigation stack
+				self?.navigationController.popViewController(animated: true)
+			}
+		navigationController.pushViewController(viewController, animated: true)
+	}
 }
+
+// MARK: - PagedAnnouncementDelegate
+
+extension MigrationCoordinator: PagedAnnouncementDelegate {
+
+	func didFinishPagedAnnouncement() {
+		
+		switch flow {
+			case .none:
+				logError("No flow selected for migration")
+			case .toOtherDevice:
+				userWishesToStartMigrationToOtherDevice()
+			case .toThisDevice:
+				userWishesToStartMigrationToThisDevice()
+		}
+	}
+}
+
+// MARK: - UINavigationControllerDelegate
 
 extension MigrationCoordinator: UINavigationControllerDelegate {
 

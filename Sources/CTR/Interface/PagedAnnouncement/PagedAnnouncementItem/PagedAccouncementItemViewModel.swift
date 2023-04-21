@@ -11,16 +11,19 @@ import Models
 
 class PagedAnnouncementItemViewModel {
 	
+	let enableSwipeBack: Bool
+	
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var tagline: String?
 	@Bindable private(set) var title: String
 	@Bindable private(set) var content: String
 	
-	init(item: PagedAnnoucementItem) {
+	init(item: PagedAnnoucementItem, enableSwipeBack: Bool) {
 		
 		image = item.image
 		tagline = item.tagline
 		title = item.title
 		content = item.content
+		self.enableSwipeBack = enableSwipeBack
 	}
 }

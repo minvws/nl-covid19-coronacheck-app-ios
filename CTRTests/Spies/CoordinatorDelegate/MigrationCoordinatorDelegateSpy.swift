@@ -18,19 +18,35 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 		invokedUserCompletedStartCount += 1
 	}
 
-	var invokedUserWishesToSeeImportInstructions = false
-	var invokedUserWishesToSeeImportInstructionsCount = 0
+	var invokedUserWishesToSeeToThisDeviceInstructions = false
+	var invokedUserWishesToSeeToThisDeviceInstructionsCount = 0
 
-	func userWishesToSeeImportInstructions() {
-		invokedUserWishesToSeeImportInstructions = true
-		invokedUserWishesToSeeImportInstructionsCount += 1
+	func userWishesToSeeToThisDeviceInstructions() {
+		invokedUserWishesToSeeToThisDeviceInstructions = true
+		invokedUserWishesToSeeToThisDeviceInstructionsCount += 1
 	}
 
-	var invokedUserWishesToSeeExportInstructions = false
-	var invokedUserWishesToSeeExportInstructionsCount = 0
+	var invokedUserWishesToSeeToOtherDeviceInstructions = false
+	var invokedUserWishesToSeeToOtherDeviceInstructionsCount = 0
 
-	func userWishesToSeeExportInstructions() {
-		invokedUserWishesToSeeExportInstructions = true
-		invokedUserWishesToSeeExportInstructionsCount += 1
+	func userWishesToSeeToOtherDeviceInstructions() {
+		invokedUserWishesToSeeToOtherDeviceInstructions = true
+		invokedUserWishesToSeeToOtherDeviceInstructionsCount += 1
+	}
+
+	var invokedUserWishesToStartMigrationToThisDevice = false
+	var invokedUserWishesToStartMigrationToThisDeviceCount = 0
+
+	func userWishesToStartMigrationToThisDevice() {
+		invokedUserWishesToStartMigrationToThisDevice = true
+		invokedUserWishesToStartMigrationToThisDeviceCount += 1
+	}
+
+	var invokedUserWishesToStartMigrationToOtherDevice = false
+	var invokedUserWishesToStartMigrationToOtherDeviceCount = 0
+
+	func userWishesToStartMigrationToOtherDevice() {
+		invokedUserWishesToStartMigrationToOtherDevice = true
+		invokedUserWishesToStartMigrationToOtherDeviceCount += 1
 	}
 }

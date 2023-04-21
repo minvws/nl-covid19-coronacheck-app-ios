@@ -17,6 +17,7 @@ class PagedAnnouncementViewModel {
 	
 	let shouldShowWithVWSRibbon: Bool
 	private let itemsShouldShowWithFullWidthHeaderImage: Bool
+	let enableSwipeBack: Bool
 	
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [PagedAnnoucementItem]
@@ -26,7 +27,8 @@ class PagedAnnouncementViewModel {
 		delegate: PagedAnnouncementDelegate,
 		pages: [PagedAnnoucementItem],
 		itemsShouldShowWithFullWidthHeaderImage: Bool,
-		shouldShowWithVWSRibbon: Bool
+		shouldShowWithVWSRibbon: Bool,
+		enableSwipeBack: Bool = false
 	) {
 		
 		self.delegate = delegate
@@ -34,6 +36,7 @@ class PagedAnnouncementViewModel {
 		self.enabled = true
 		self.shouldShowWithVWSRibbon = shouldShowWithVWSRibbon
 		self.itemsShouldShowWithFullWidthHeaderImage = itemsShouldShowWithFullWidthHeaderImage
+		self.enableSwipeBack = enableSwipeBack
 	}
 	
 	/// Add an onboarding step
@@ -42,7 +45,8 @@ class PagedAnnouncementViewModel {
 		
 		let viewController = PagedAnnouncementItemViewController(
 			viewModel: PagedAnnouncementItemViewModel(
-				item: item
+				item: item,
+				enableSwipeBack: item == pages.first && enableSwipeBack
 			),
 			shouldShowWithFullWidthHeaderImage: itemsShouldShowWithFullWidthHeaderImage
 		)

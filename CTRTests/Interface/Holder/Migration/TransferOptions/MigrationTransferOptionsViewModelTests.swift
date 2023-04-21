@@ -43,7 +43,7 @@ class MigrationTransferOptionsViewModelTests: XCTestCase {
 		self.sut.optionModels.value[0].action()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeExportInstructions) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeToOtherDeviceInstructions) == true
 	}
 	
 	func test_toThisDevice() {
@@ -53,6 +53,6 @@ class MigrationTransferOptionsViewModelTests: XCTestCase {
 		self.sut.optionModels.value[1].action()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeImportInstructions) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeToThisDeviceInstructions) == true
 	}
 }

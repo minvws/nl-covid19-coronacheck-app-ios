@@ -22,7 +22,7 @@ class PagedAnnouncementItemViewController: TraitWrappedGenericViewController<Pag
 	weak var delegate: PagedAnnouncementItemViewControllerDelegate?
 	
 	/// Disable swiping to launch screen
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { viewModel.enableSwipeBack }
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
