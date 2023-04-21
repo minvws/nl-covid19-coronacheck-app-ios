@@ -23,6 +23,7 @@ open class Label: UILabel {
 		self.textColor = textColor
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.adjustsFontForContentSizeCategory = true
+		self.accessibilityTraits = .staticText
 		self.isSelectable = true // Default all labels are selectable.
 	}
 	
