@@ -40,7 +40,7 @@ struct MigrationOnboardingFactory: MigrationOnboardingFactoryProtocol {
 			)
 		]
 	}
-	
+
 	func getExportInstructions() -> [Models.PagedAnnoucementItem] {
 		
 		return [
