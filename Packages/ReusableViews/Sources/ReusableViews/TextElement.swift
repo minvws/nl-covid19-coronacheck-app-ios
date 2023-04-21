@@ -77,6 +77,7 @@ open class TextElement: UITextView, UITextViewDelegate {
 			.foregroundColor: C.primaryBlue()!,
 			.underlineColor: C.primaryBlue()!
 		]
+		accessibilityTraits = .staticText
 	}
 	
 	private func setupAttributedStringLinks() {

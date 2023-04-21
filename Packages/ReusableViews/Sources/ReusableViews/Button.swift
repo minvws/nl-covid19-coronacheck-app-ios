@@ -172,6 +172,7 @@ open class Button: TappableButton {
 		self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 		
 		self.translatesAutoresizingMaskIntoConstraints = false
+		self.accessibilityTraits = .button
 		
 		setupAccessibility()
 	}
