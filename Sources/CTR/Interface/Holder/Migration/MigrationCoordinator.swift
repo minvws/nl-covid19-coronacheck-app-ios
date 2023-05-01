@@ -154,7 +154,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 		
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			body: L.holderErrorstateClientMessage("\(errorCode)"),
+			body: L.holder_migration_errorcode_message("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.delegate?.dataMigrationCancelled()
