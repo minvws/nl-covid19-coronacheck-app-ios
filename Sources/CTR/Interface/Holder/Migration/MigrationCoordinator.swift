@@ -106,10 +106,9 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 
 	func userWishesToSeeToOtherDeviceInstructions() {
-
-		userWishesToStartMigrationToOtherDevice()
-//		flow = .toOtherDevice
-//		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
+		
+		flow = .toOtherDevice
+		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
 	}
 	
 	func userWishesToStartMigrationToThisDevice() {
