@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Transport
 
 class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 
