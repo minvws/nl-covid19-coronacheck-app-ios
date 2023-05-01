@@ -15,8 +15,8 @@ protocol MigrationFlowDelegate: AnyObject {
 
 	func dataMigrationCancelled()
 
-//	func dataMigrationExportCompleted()
-//
+	func dataMigrationExportCompleted()
+
 //	func dataMigrationImportCompleted()
 }
 //
@@ -31,11 +31,13 @@ protocol MigrationCoordinatorDelegate: AnyObject {
 	func userWishesToStartMigrationToThisDevice()
 
 	func userWishesToStartMigrationToOtherDevice()
+	
+	func userCompletedMigrationToOtherDevice()
 }
 
 class MigrationCoordinator: NSObject, Coordinator {
 
-//	private let version: String = "CC1"
+	private let version: String = "CC1"
 	
 	enum MigrationFlow {
 		case toThisDevice
@@ -105,8 +107,9 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 
 	func userWishesToSeeToOtherDeviceInstructions() {
 
-		flow = .toOtherDevice
-		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
+		userWishesToStartMigrationToOtherDevice()
+//		flow = .toOtherDevice
+//		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
 	}
 	
 	func userWishesToStartMigrationToThisDevice() {
@@ -115,8 +118,10 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 
 	func userWishesToStartMigrationToOtherDevice() {
-
+		
 		logDebug("userWishesToStartMigrationToOtherDevice")
+		let destination = ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: self, version: version))
+		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
@@ -137,6 +142,11 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 				self?.navigationController.popViewController(animated: true)
 			}
 		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userCompletedMigrationToOtherDevice() {
+
+		delegate?.dataMigrationExportCompleted()
 	}
 }
 

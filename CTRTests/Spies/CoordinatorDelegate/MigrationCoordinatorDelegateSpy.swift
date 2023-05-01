@@ -49,4 +49,12 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 		invokedUserWishesToStartMigrationToOtherDevice = true
 		invokedUserWishesToStartMigrationToOtherDeviceCount += 1
 	}
+
+	var invokedUserCompletedMigrationToOtherDevice = false
+	var invokedUserCompletedMigrationToOtherDeviceCount = 0
+
+	func userCompletedMigrationToOtherDevice() {
+		invokedUserCompletedMigrationToOtherDevice = true
+		invokedUserCompletedMigrationToOtherDeviceCount += 1
+	}
 }

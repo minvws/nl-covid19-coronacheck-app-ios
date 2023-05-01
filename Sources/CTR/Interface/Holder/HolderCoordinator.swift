@@ -742,8 +742,13 @@ extension HolderCoordinator: MigrationFlowDelegate {
 	func dataMigrationCancelled() {
 		
 		removeMigrationCoordinator()
-		// No additional navigation required,
-		logInfo("HolderCoordinator: dataMigrationCancelled")
+	}
+	
+	func dataMigrationExportCompleted() {
+		
+		navigateToDashboard()
+		removeMigrationCoordinator()
+		logInfo("Todo: Popup with clear option")
 	}
 	
 	private func removeMigrationCoordinator() {

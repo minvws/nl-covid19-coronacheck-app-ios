@@ -135,6 +135,16 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect(pages.last?.title) == L.holder_startMigration_toOtherDevice_onboarding_step2_title()
 	}
 	
+	func test_userCompletedMigrationToOtherDevice() {
+		
+		// Given
+		
+		// When
+		sut.userCompletedMigrationToOtherDevice()
+		
+		// Then
+		expect(self.delegateSpy.invokedDataMigrationExportCompleted) == true
+	}
 }
 
 class MigrationFlowDelegateSpy: MigrationFlowDelegate {
@@ -145,5 +155,13 @@ class MigrationFlowDelegateSpy: MigrationFlowDelegate {
 	func dataMigrationCancelled() {
 		invokedDataMigrationCancelled = true
 		invokedDataMigrationCancelledCount += 1
+	}
+
+	var invokedDataMigrationExportCompleted = false
+	var invokedDataMigrationExportCompletedCount = 0
+
+	func dataMigrationExportCompleted() {
+		invokedDataMigrationExportCompleted = true
+		invokedDataMigrationExportCompletedCount += 1
 	}
 }
