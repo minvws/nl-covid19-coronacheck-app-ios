@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -30,5 +30,18 @@ final public class ThreadSafeCache<Key: Hashable, Value> {
 		return storage
 	}
 	
+	public var isEmpty: Bool {
+		return storage.isEmpty
+	}
+
+	public var isNotEmpty: Bool {
+		return !storage.isEmpty
+	}
+	
 	public init() { }
+	
+	public func clear() {
+		
+		storage = [:]
+	}
 }
