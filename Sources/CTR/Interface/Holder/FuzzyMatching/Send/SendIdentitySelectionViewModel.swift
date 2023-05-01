@@ -194,13 +194,6 @@ class SendIdentitySelectionViewModel {
 	}
 }
 
-// MARK: - ErrorCode.Flow
-
-extension ErrorCode.Flow {
-
-	static let fuzzyMatching = ErrorCode.Flow(value: "13")
-}
-
 // MARK: ErrorCode.ClientCode
 
 extension ErrorCode.ClientCode {

@@ -26,10 +26,10 @@ public class DataExporter {
 		let compressed = try compress(rawData)
 		
 		let base64 = compressed.base64EncodedString()
-		logDebug("Data export: size (raw) \(compressed.count) -> (b64) \(base64.count)")
+		logVerbose("Data export: size (raw) \(compressed.count) -> (b64) \(base64.count)")
 		
 		let compChunks = compressed.toChunks(by: maxPackageSize)
-		logDebug("Data export: \(compChunks.count) parcels")
+		logVerbose("Data export: \(compChunks.count) parcels")
 		
 		var result: [String] = []
 		compChunks.enumerated().forEach { index, data in
@@ -39,7 +39,7 @@ public class DataExporter {
 				
 				let enbase64 = encoded.base64EncodedString()
 				
-				logDebug("Parcel encodign: size (raw) \(encoded.count) -> (b64) \(enbase64.count)")
+				logVerbose("Parcel encodign: size (raw) \(encoded.count) -> (b64) \(enbase64.count)")
 				
 				result.append(enbase64)
 			}

@@ -10,6 +10,7 @@ import Shared
 import DataMigration
 import Resources
 import QRGenerator
+import Transport
 
 class ExportLoopViewModel {
 	
@@ -50,9 +51,40 @@ class ExportLoopViewModel {
 	deinit {
 		stopTimer()
 	}
-
+	
 	func exportEventGroups() {
 
+		let eventGroupParcels = listEventGroupParcels()
+
+		let encoder = JSONEncoder()
+		logDebug("We got \(eventGroupParcels.count) event group parcels")
+
+		if let encoded = try? encoder.encode(eventGroupParcels) {
+
+			do {
+				let items = try DataExporter(maxPackageSize: 800, version: version).export(encoded)
+
+				items.forEach { item in
+					DispatchQueue.global(qos: .userInitiated).async {
+						if let image = item.generateQRCode(correctionLevel: QRGenerator.CorrectionLevel.medium) {
+							self.imageList.append(image)
+						}
+						if self.imageList.count == items.count {
+							logDebug("All converted to QR, start animation")
+							DispatchQueue.main.async {
+								self.startTimer()
+							}
+						}
+					}
+				}
+			} catch let error {
+				presentError(error)
+			}
+		}
+	}
+	
+	private func listEventGroupParcels() -> [EventGroupParcel] {
+		
 		let eventGroupParcels: [EventGroupParcel] = Current.walletManager.listEventGroups()
 			.compactMap { eventGroup -> EventGroupParcel? in
 
@@ -73,36 +105,20 @@ class ExportLoopViewModel {
 					type: type
 				)
 			}
-
-		let encoder = JSONEncoder()
-		logDebug("We got \(eventGroupParcels.count) event group parcels")
-
-		if let encoded = try? encoder.encode(eventGroupParcels) {
-			
-			do {
-				let items = try DataExporter(maxPackageSize: 800, version: version).export(encoded)
-				
-				items.forEach { item in
-					DispatchQueue.global(qos: .userInitiated).async {
-						if let image = item.generateQRCode(correctionLevel: QRGenerator.CorrectionLevel.medium) {
-							self.imageList.append(image)
-						}
-						if self.imageList.count == items.count {
-							logDebug("All converted to QR, start animation")
-							DispatchQueue.main.async {
-								self.startTimer()
-							}
-						}
-					}
-				}
-			} catch let error {
-				logError("error: \(error)")
-//				switch error {
-//					case DataMigrationError.compressionError: title = "*** Export Compression Error ***"
-//					default: title = "*** Export Error ***"
-//				}
-			}
+		return eventGroupParcels
+	}
+	
+	private func presentError(_ error: Error) {
+		
+		logError("exportEventGroups error: \(error)")
+		let errorCode: ErrorCode
+		switch error {
+			case DataMigrationError.compressionError:
+				errorCode = ErrorCode(flow: .migration, step: .export, clientCode: .compressionError)
+			default:
+				errorCode = ErrorCode(flow: .migration, step: .export, clientCode: .other)
 		}
+		delegate?.presentError(errorCode)
 	}
 	
 	@objc func alterImage() {

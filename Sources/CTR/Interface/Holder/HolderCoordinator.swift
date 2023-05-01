@@ -741,6 +741,7 @@ extension HolderCoordinator: MigrationFlowDelegate {
 	
 	func dataMigrationCancelled() {
 		
+		navigateToDashboard()
 		removeMigrationCoordinator()
 	}
 	
