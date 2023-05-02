@@ -164,4 +164,12 @@ class MigrationFlowDelegateSpy: MigrationFlowDelegate {
 		invokedDataMigrationExportCompleted = true
 		invokedDataMigrationExportCompletedCount += 1
 	}
+
+	var invokedDataMigrationImportCompleted = false
+	var invokedDataMigrationImportCompletedCount = 0
+
+	func dataMigrationImportCompleted() {
+		invokedDataMigrationImportCompleted = true
+		invokedDataMigrationImportCompletedCount += 1
+	}
 }
