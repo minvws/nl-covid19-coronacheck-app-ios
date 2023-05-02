@@ -130,6 +130,8 @@ public extension ErrorCode.Flow {
 	static let qr = ErrorCode.Flow(value: "6")
 	static let vaccinationAndPositiveTest = ErrorCode.Flow(value: "8")
 	static let dashboard = ErrorCode.Flow(value: "12")
+	static let fuzzyMatching = ErrorCode.Flow(value: "13")
+	static let migration = ErrorCode.Flow(value: "14")
 }
 
 // MARK: ErrorCode.Step (Startup)
@@ -182,4 +184,12 @@ public extension ErrorCode.Step {
 public extension ErrorCode.Step {
 
 	static let showQR = ErrorCode.Step(value: "10")
+}
+
+// MARK: ErrorCode.Step (Migration flow)
+
+public extension ErrorCode.Step {
+
+	static let `import` = ErrorCode.Step(value: "10")
+	static let export = ErrorCode.Step(value: "20")
 }

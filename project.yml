@@ -29,6 +29,8 @@ packages:
     exactVersion: 1.9.0
   CryptoCore:
     path: ./Packages/CryptoCore
+  DataMigration:
+    path: ./Packages/DataMigration
   Managers:
     path: ./Packages/Managers
   Models:
@@ -144,6 +146,7 @@ targetTemplates:
     dependencies:
       # SPM:
       - package: CryptoCore
+      - package: DataMigration
       - package: Managers
       - package: Models
       - package: Persistence

@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Transport
 
 class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 
@@ -48,5 +49,25 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 	func userWishesToStartMigrationToOtherDevice() {
 		invokedUserWishesToStartMigrationToOtherDevice = true
 		invokedUserWishesToStartMigrationToOtherDeviceCount += 1
+	}
+
+	var invokedUserCompletedMigrationToOtherDevice = false
+	var invokedUserCompletedMigrationToOtherDeviceCount = 0
+
+	func userCompletedMigrationToOtherDevice() {
+		invokedUserCompletedMigrationToOtherDevice = true
+		invokedUserCompletedMigrationToOtherDeviceCount += 1
+	}
+
+	var invokedPresentError = false
+	var invokedPresentErrorCount = 0
+	var invokedPresentErrorParameters: (errorCode: ErrorCode, Void)?
+	var invokedPresentErrorParametersList = [(errorCode: ErrorCode, Void)]()
+
+	func presentError(_ errorCode: ErrorCode) {
+		invokedPresentError = true
+		invokedPresentErrorCount += 1
+		invokedPresentErrorParameters = (errorCode, ())
+		invokedPresentErrorParametersList.append((errorCode, ()))
 	}
 }

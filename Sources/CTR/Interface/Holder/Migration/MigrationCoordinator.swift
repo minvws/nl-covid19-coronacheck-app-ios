@@ -5,18 +5,19 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
-import Shared
-import ReusableViews
-import Resources
 import Models
+import Resources
+import ReusableViews
+import Shared
+import Transport
+import UIKit
 
 protocol MigrationFlowDelegate: AnyObject {
 
 	func dataMigrationCancelled()
 
-//	func dataMigrationExportCompleted()
-//
+	func dataMigrationExportCompleted()
+
 //	func dataMigrationImportCompleted()
 }
 //
@@ -31,11 +32,15 @@ protocol MigrationCoordinatorDelegate: AnyObject {
 	func userWishesToStartMigrationToThisDevice()
 
 	func userWishesToStartMigrationToOtherDevice()
+	
+	func userCompletedMigrationToOtherDevice()
+	
+	func presentError(_ errorCode: ErrorCode)
 }
 
 class MigrationCoordinator: NSObject, Coordinator {
 
-//	private let version: String = "CC1"
+	private let version: String = "CC1"
 	
 	enum MigrationFlow {
 		case toThisDevice
@@ -86,7 +91,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	func userCompletedStart() {
 		
 		if Current.walletManager.listEventGroups().isNotEmpty {
-
+			
 			// We have events -> make the user choose
 			let viewController = ListOptionsViewController(viewModel: MigrationTransferOptionsViewModel(self))
 			navigationController.pushViewController(viewController, animated: true)
@@ -104,7 +109,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 
 	func userWishesToSeeToOtherDeviceInstructions() {
-
+		
 		flow = .toOtherDevice
 		userWishesToSeeOnboarding(pages: onboardingFactory.getExportInstructions())
 	}
@@ -115,8 +120,9 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 
 	func userWishesToStartMigrationToOtherDevice() {
-
-		logDebug("userWishesToStartMigrationToOtherDevice")
+		
+		let destination = ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: self, version: version))
+		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
@@ -137,6 +143,26 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 				self?.navigationController.popViewController(animated: true)
 			}
 		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func userCompletedMigrationToOtherDevice() {
+
+		delegate?.dataMigrationExportCompleted()
+	}
+	
+	func presentError(_ errorCode: ErrorCode) {
+		
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			body: L.holder_migration_errorcode_message("\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview(),
+			primaryAction: {[weak self] in
+				self?.delegate?.dataMigrationCancelled()
+			}
+		)
+		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {
+			self.presentContent(content: content)
+		}
 	}
 }
 
@@ -169,4 +195,12 @@ extension MigrationCoordinator: UINavigationControllerDelegate {
 			delegate?.dataMigrationCancelled()
 		}
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+	
+	static let compressionError = ErrorCode.ClientCode(value: "110")
+	static let other = ErrorCode.ClientCode(value: "111")
 }

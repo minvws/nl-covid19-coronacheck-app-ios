@@ -49,7 +49,7 @@ class MigrationStartViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.primaryTitle) == L.holder_startMigration_onboarding_nextButton()
 		expect(self.sut.sceneView.secondaryTitle) == nil
 		expect(self.sut.sceneView.image) == I.migration()
-
+		
 		sut.assertImage(containedInNavigationController: true)
 	}
 

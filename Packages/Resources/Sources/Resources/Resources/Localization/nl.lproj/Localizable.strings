@@ -455,6 +455,7 @@
 "holder_dashboard_accessibility_access" = "Toegangsbewijs";
 "holder_dashboard_accessibility_notification" = "Notificatie";
 "holder_dashboard_addCard_title" = "Nieuwe vaccinatie of test toevoegen";
+"holder_dashboard_domesticQRCard_3G_inactive_label" = "Dit bewijs wordt nu niet gebruikt in Nederland";
 "holder_dashboard_emptyState_international_0G_message" = "Ga je naar het buitenland? Controleer altijd voor vertrek of je een coronabewijs nodig hebt.";
 "holder_dashboard_filledState_international_0G_message" = "Ga je naar een land waar een coronabewijs nodig is? Controleer altijd voor vertrek of je het goede bewijs hebt.";
 "holder_dashboard_international_0G_action_certificateNeeded" = "Is een bewijs nodig op mijn bestemming?";
@@ -595,6 +596,7 @@
 "holder_migrationFlow_migrationSuccessful_title" = "Overzetten gelukt!";
 "holder_migrationFlow_scannedDetailsOverview_message" = "Als onderstaande gegevens kloppen kun je ze overzetten naar deze telefoon.";
 "holder_migrationFlow_scannedDetailsOverview_transferButton" = "Overzetten";
+"holder_migration_errorcode_message" = "<p>Er gaat iets mis met het exporteren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
 "holder_negativetest_ggd_title" = "Gegevens van je test ophalen";
 "holder_newintheapp_foreignproofs_body" = "Heb je een coronabewijs met QR-code van een test of vaccinatie uit het buitenland? Dan kun je jouw bewijs nu toevoegen aan CoronaCheck. Kies in het menu voor “Coronabewijs inscannen”.";
@@ -648,7 +650,7 @@
 "holder_startMigration_onboarding_message" = "Heb je een andere telefoon waar je jouw bewijzen (ook) op wilt gebruiken? Dan kun je jouw gegevens in één keer overzetten.";
 "holder_startMigration_onboarding_nextButton" = "Volgende";
 "holder_startMigration_onboarding_step" = "Stap %@";
-"holder_startMigration_onboarding_title" = "Bewijzen overzetten";
+"holder_startMigration_onboarding_title" = "Bewijzen in één keer overzetten";
 "holder_startMigration_onboarding_toolbar" = "Bewijzen overzetten";
 "holder_startMigration_option_toOtherDevice_title" = "Naar mijn andere telefoon";
 "holder_startMigration_option_toThisDevice_title" = "Naar deze telefoon";
