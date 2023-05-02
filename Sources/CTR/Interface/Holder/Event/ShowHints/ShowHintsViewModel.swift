@@ -237,7 +237,7 @@ private extension EventMode {
 	/// Op dit moment kunnen we geen bewijs maken van je _____.
 	var errorStateLocalization: String {
 		switch self {
-			case .paperflow: return L.general_scannedQRCode() // gescande QR-code
+			case .paperflow, .migration: return L.general_scannedQRCode() // gescande QR-code
 			case .vaccinationAndPositiveTest: return L.general_retrievedDetails() // opgehaalde gegevens
 			case .recovery: return L.general_positiveTest() // positive testuitslag
 			case .test: return L.general_negativeTest() // negative testuitslag

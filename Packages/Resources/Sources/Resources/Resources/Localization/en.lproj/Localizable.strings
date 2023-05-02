@@ -596,6 +596,8 @@
 "holder_migrationFlow_migrationSuccessful_title" = "Transfer successful!";
 "holder_migrationFlow_scannedDetailsOverview_message" = "If the details below are correct, you can transfer them to this phone.";
 "holder_migrationFlow_scannedDetailsOverview_transferButton" = "Transfer";
+"holder_migration_emptylist_message" = "<p>There are no available details. This can have various causes. Find more information on the <a href=\"https://coronacheck.nl/en/guidepost\">Guidepost</a>.</p>";
+"holder_migration_emptylist_title" = "No data available";
 "holder_migration_export_errorcode_message" = "<p>Something is going wrong while exporting your details.</p><p><b>Error code:</b><br /> %@ </p>";
 "holder_migration_import_errorcode_message" = "<p>Something is going wrong while importing your details.</p><p><b>Error code:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";

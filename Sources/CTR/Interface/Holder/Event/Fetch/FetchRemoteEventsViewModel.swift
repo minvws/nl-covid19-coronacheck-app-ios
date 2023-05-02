@@ -333,7 +333,7 @@ final class FetchRemoteEventsViewModel {
 		switch eventMode {
 			case .recovery:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noRecoveryProviderAvailable)
-			case .paperflow:
+			case .paperflow, .migration:
 				return nil
 			case .test, .vaccinationAndPositiveTest:
 				return ErrorCode(flow: eventMode.flow, step: .providers, clientCode: ErrorCode.ClientCode.noTestProviderAvailable)

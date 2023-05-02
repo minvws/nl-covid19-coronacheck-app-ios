@@ -168,7 +168,9 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		var mode: EventMode = .test(.ggd)
 		
-		if let event = events.first?.wrapper.events?.first {
+		if originalMode == .migration {
+			mode = .migration
+		} else if let event = events.first?.wrapper.events?.first {
 			
 			if event.hasPaperCertificate {
 				mode = .paperflow
@@ -184,7 +186,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 				mode = .vaccination
 			}
 		}
-
+		
 		navigateToListEvents(events, eventMode: mode, originalMode: originalMode, eventsMightBeMissing: false)
 	}
 
@@ -407,7 +409,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				if !navigateBackToEventStart() {
 					navigateBackToTestStart()
 				}
-			case .paperflow:
+			case .paperflow, .migration:
 				delegate?.eventFlowDidCancel()
 		}
 	}

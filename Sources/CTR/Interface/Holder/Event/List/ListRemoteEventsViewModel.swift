@@ -88,21 +88,39 @@ class ListRemoteEventsViewModel {
 
 	func warnBeforeGoBack() {
 		
-		alert = AlertContent(
-			title: L.holderVaccinationAlertTitle(),
-			subTitle: eventMode.alertBody,
-			okAction: AlertContent.Action(
-				title: L.holderVaccinationAlertContinue(),
-				isPreferred: true
-			),
-			cancelAction: AlertContent.Action(
-				title: L.holderVaccinationAlertStop(),
-				action: { [weak self] _ in
-					self?.goBack()
-				},
-				isDestructive: true
+		if eventMode == .migration {
+			alert = AlertContent(
+				title: L.holder_migrationFlow_goBack_dialog_title(),
+				subTitle: L.holder_migrationFlow_goBack_dialog_message(),
+				okAction: AlertContent.Action(
+					title: L.holder_migrationFlow_goBack_dialog_noButton(),
+					isPreferred: true
+				),
+				cancelAction: AlertContent.Action(
+					title: L.holder_migrationFlow_goBack_dialog_yesButton(),
+					action: { [weak self] _ in
+						self?.goBack()
+					},
+					isDestructive: true
+				)
 			)
-		)
+		} else {
+			alert = AlertContent(
+				title: L.holderVaccinationAlertTitle(),
+				subTitle: eventMode.alertBody,
+				okAction: AlertContent.Action(
+					title: L.holderVaccinationAlertContinue(),
+					isPreferred: true
+				),
+				cancelAction: AlertContent.Action(
+					title: L.holderVaccinationAlertStop(),
+					action: { [weak self] _ in
+						self?.goBack()
+					},
+					isDestructive: true
+				)
+			)
+		}
 	}
 
 	func goBack() {

@@ -596,6 +596,8 @@
 "holder_migrationFlow_migrationSuccessful_title" = "Overzetten gelukt!";
 "holder_migrationFlow_scannedDetailsOverview_message" = "Als onderstaande gegevens kloppen kun je ze overzetten naar deze telefoon.";
 "holder_migrationFlow_scannedDetailsOverview_transferButton" = "Overzetten";
+"holder_migration_emptylist_message" = "<p>Er zijn geen gegevens beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p>";
+"holder_migration_emptylist_title" = "Geen gegevens beschikbaar";
 "holder_migration_export_errorcode_message" = "<p>Er gaat iets mis met het exporteren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "holder_migration_import_errorcode_message" = "<p>Er gaat iets mis met het importeren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";

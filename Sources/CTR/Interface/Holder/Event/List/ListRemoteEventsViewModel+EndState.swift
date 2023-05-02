@@ -50,6 +50,7 @@ extension ListRemoteEventsViewModel {
 			case .vaccinationAndPositiveTest, .vaccination: return emptyVaccinationState()
 			case .recovery: return emptyRecoveryState()
 			case .test: return emptyTestState()
+			case .migration: return emptyMigrationState()
 		}
 	}
 
@@ -64,6 +65,17 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
+	// MARK: Migration End State
+	
+	internal func emptyMigrationState() -> ListRemoteEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_migration_emptylist_title(),
+			body: L.holder_migration_emptylist_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
+	
 	// MARK: Negative Test End State
 
 	internal func emptyTestState() -> ListRemoteEventsViewController.State {
