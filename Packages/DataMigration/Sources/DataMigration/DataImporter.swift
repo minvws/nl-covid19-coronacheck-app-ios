@@ -34,6 +34,7 @@ public class DataImporter {
 	public func importData(_ parcel: MigrationParcel) throws {
 		
 		guard parcel.version == version else { throw DataMigrationError.invalidVersion }
+		guard parcel.index < parcel.numberOfPackages else { throw DataMigrationError.invalidNumberOfPackages }
 
 		if parcelCache[parcel.index] == nil {
 			parcelCache[parcel.index] = parcel
@@ -42,11 +43,8 @@ public class DataImporter {
 
 		if parcelCache.values.count == parcel.numberOfPackages {
 			logDebug("We got them all")
-			if let combinedData = combine() {
-				delegate?.completed(combinedData)
-			} else {
-				logDebug("Failed to combine them all")
-			}
+			let combinedData = try combine()
+			delegate?.completed(combinedData)
 		}
 	}
 	
@@ -63,7 +61,7 @@ public class DataImporter {
 		delegate?.progress(percentage)
 	}
 	
-	private func combine() -> Data? {
+	private func combine() throws -> Data {
 		
 		let zipped = parcelCache.values
 			.map { _, parcel in return parcel }
@@ -76,11 +74,11 @@ public class DataImporter {
 				return unzipped
 			} catch let error {
 				logError(error.localizedDescription)
+				throw error
 			}
 		} else {
-			logError("Not GZIPPED")
+			throw DataMigrationError.compressionError
 		}
-		return nil
 	}
 	
 	private func clear() {

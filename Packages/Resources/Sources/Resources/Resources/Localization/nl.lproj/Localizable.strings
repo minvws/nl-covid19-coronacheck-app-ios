@@ -596,7 +596,8 @@
 "holder_migrationFlow_migrationSuccessful_title" = "Overzetten gelukt!";
 "holder_migrationFlow_scannedDetailsOverview_message" = "Als onderstaande gegevens kloppen kun je ze overzetten naar deze telefoon.";
 "holder_migrationFlow_scannedDetailsOverview_transferButton" = "Overzetten";
-"holder_migration_errorcode_message" = "<p>Er gaat iets mis met het exporteren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
+"holder_migration_export_errorcode_message" = "<p>Er gaat iets mis met het exporteren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
+"holder_migration_import_errorcode_message" = "<p>Er gaat iets mis met het importeren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
 "holder_negativetest_ggd_title" = "Gegevens van je test ophalen";
 "holder_newintheapp_foreignproofs_body" = "Heb je een coronabewijs met QR-code van een test of vaccinatie uit het buitenland? Dan kun je jouw bewijs nu toevoegen aan CoronaCheck. Kies in het menu voor “Coronabewijs inscannen”.";

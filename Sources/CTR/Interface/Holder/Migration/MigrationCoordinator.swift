@@ -153,10 +153,10 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 	
 	func presentError(_ errorCode: ErrorCode) {
-		
+
 		let content = Content(
 			title: L.holderErrorstateTitle(),
-			body: L.holder_migration_errorcode_message("\(errorCode)"),
+			body: errorCode.step == ErrorCode.Step.import.value ? L.holder_migration_import_errorcode_message("\(errorCode)") : L.holder_migration_export_errorcode_message("\(errorCode)"),
 			primaryActionTitle: L.general_toMyOverview(),
 			primaryAction: {[weak self] in
 				self?.delegate?.dataMigrationCancelled()
@@ -205,4 +205,7 @@ extension ErrorCode.ClientCode {
 	
 	static let compressionError = ErrorCode.ClientCode(value: "110")
 	static let other = ErrorCode.ClientCode(value: "111")
+	static let invalidVersion = ErrorCode.ClientCode(value: "112")
+	static let invalidNumberOfPackages = ErrorCode.ClientCode(value: "113")
+	static let decodingError = ErrorCode.ClientCode(value: "114")
 }

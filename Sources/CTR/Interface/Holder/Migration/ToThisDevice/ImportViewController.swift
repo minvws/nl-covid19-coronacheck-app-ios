@@ -57,8 +57,8 @@ class ImportViewController: ScanViewController {
 			}
 		}
 
-		viewModel.torchLabels.observe { [weak self] in
-			guard let strongSelf = self, let enableLabel = $0.first, let disableLabel = $0.last else { return }
+		viewModel.torchLabels.observe { [weak self] labels in
+			guard let strongSelf = self, let enableLabel = labels.first, let disableLabel = labels.last else { return }
 			strongSelf.addTorchButton(
 				action: #selector(strongSelf.toggleTorch),
 				enableLabel: enableLabel,

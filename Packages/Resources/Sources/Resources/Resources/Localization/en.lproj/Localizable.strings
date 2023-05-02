@@ -596,7 +596,8 @@
 "holder_migrationFlow_migrationSuccessful_title" = "Transfer successful!";
 "holder_migrationFlow_scannedDetailsOverview_message" = "If the details below are correct, you can transfer them to this phone.";
 "holder_migrationFlow_scannedDetailsOverview_transferButton" = "Transfer";
-"holder_migration_errorcode_message" = "<p>Something is going wrong while exporting your details.</p><p><b>Error code:</b><br /> %@ </p>";
+"holder_migration_export_errorcode_message" = "<p>Something is going wrong while exporting your details.</p><p><b>Error code:</b><br /> %@ </p>";
+"holder_migration_import_errorcode_message" = "<p>Something is going wrong while importing your details.</p><p><b>Error code:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
 "holder_negativetest_ggd_title" = "Retrieve your test details";
 "holder_newintheapp_foreignproofs_body" = "Do you have a coronavirus certificate with QR code of a test or vaccination from abroad? Now you can add your certificate to CoronaCheck. Choose “Scan to add certificate” in the menu.";

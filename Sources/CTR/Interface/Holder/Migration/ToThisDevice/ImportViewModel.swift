@@ -11,6 +11,7 @@ import Persistence
 import Managers
 import Resources
 import DataMigration
+import Transport
 
 class ImportViewModel: ScanPermissionViewModel {
 
@@ -46,13 +47,23 @@ class ImportViewModel: ScanPermissionViewModel {
 	func parseQRMessage(_ qrMessage: String) {
 		
 		guard !shouldStopScanning.value else { return }
-		
 		logVerbose("Scanned \(qrMessage)")
 		do {
 			try dataImporter?.importString(qrMessage)
-		} catch {
-			// Todo: Catch the different errors
-			message.value = "Failed to decode QR"
+		} catch let error {
+			shouldStopScanning.value = true
+			let errorCode: ErrorCode
+			switch error {
+				case DataMigrationError.compressionError:
+					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .compressionError)
+				case DataMigrationError.invalidVersion:
+					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .invalidVersion)
+				case DataMigrationError.invalidNumberOfPackages:
+					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .invalidNumberOfPackages)
+				default:
+					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .other)
+			}
+			theCoordinator?.presentError(errorCode)
 		}
 	}
 }
@@ -68,27 +79,8 @@ extension ImportViewModel: DataImportDelegate {
 			let parcels = try decoder.decode([EventGroupParcel].self, from: value)
 			message.value = "We got \(parcels.count) EventGroupParcels"
 			
-//			Current.walletManager.removeExistingEventGroups()
-//			parcels.forEach { parcel in
-//				if let eventMode = EventMode(rawValue: parcel.type) {
-//
-//					var expiryDate: Date?
-//					if let epoch = parcel.expiryDate {
-//						expiryDate = Date(timeIntervalSince1970: epoch)
-//					}
-//
-//					Current.walletManager.storeEventGroup(
-//						eventMode,
-//						providerIdentifier: parcel.providerIdentifier,
-//						jsonData: parcel.jsonData,
-//						expiryDate: expiryDate,
-//						isDraft: true
-//					)
-//				}
-//			}
-//			sendEventsToTheSigner()
 		} catch {
-			message.value = "Failed to decode EventGroups"
+			theCoordinator?.presentError(ErrorCode(flow: .migration, step: .import, clientCode: .decodingError))
 		}
 	}
 	
