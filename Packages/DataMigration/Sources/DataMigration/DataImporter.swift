@@ -59,7 +59,7 @@ public class DataImporter {
 		
 		let numberOfPackages = parcelCache.values.first?.value.numberOfPackages ?? 1
 		let percentage = Float(parcelCache.values.count) / Float(numberOfPackages) * 100
-		logDebug("percent: \(percentage)")
+		logVerbose("percent: \(percentage)")
 		delegate?.progress(percentage)
 	}
 	

@@ -38,13 +38,15 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 	
 	private let captureQueue = DispatchQueue(label: "nl.coronacheck.capturesession.\(UUID().uuidString)")
 
+	var continuesScanning: Bool = false
+	
 	// MARK: View lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		navigationItem.largeTitleDisplayMode = .never
 
 		navigationControllerTeardown = { [weak self] in
-			// Reset navigation title color			
+			// Reset navigation title color
 			self?.overrideNavigationBarTitleColor(with: C.black()!)
 		}
 		
@@ -99,11 +101,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 			captureSession.addOutput(metadataOutput)
 
 			metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-			if Configuration().getRelease() == .test {
-				metadataOutput.metadataObjectTypes = [.qr, .aztec]
-			} else {
-				metadataOutput.metadataObjectTypes = [.qr]
-			}
+			metadataOutput.metadataObjectTypes = [.qr]
 		} else {
 			failed()
 			return
@@ -178,11 +176,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 
-		captureQueue.async {
-			if !Platform.isSimulator, self.captureSession?.isRunning == true {
-				self.captureSession.stopRunning()
-			}
-		}
+		stopScanning()
 
 		navigationControllerTeardown?()
 	}
@@ -214,6 +208,15 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 		return false
 	}
 
+	func stopScanning() {
+		
+		captureQueue.async {
+			if !Platform.isSimulator, self.captureSession?.isRunning == true {
+				self.captureSession.stopRunning()
+			}
+		}
+	}
+	
 	func failed() {
 		
 		showAlert(
@@ -231,13 +234,15 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 		didOutput metadataObjects: [AVMetadataObject],
 		from connection: AVCaptureConnection) {
 
-		captureQueue.async {
-			self.captureSession.stopRunning()
+		if !continuesScanning {
+			stopScanning()
 		}
 		if let metadataObject = metadataObjects.first {
 			guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
 			guard let stringValue = readableObject.stringValue else { return }
-			AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+			if !continuesScanning {
+				AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+			}
 			found(code: stringValue)
 		}
 	}

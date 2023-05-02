@@ -38,7 +38,7 @@ protocol MigrationCoordinatorDelegate: AnyObject {
 	func presentError(_ errorCode: ErrorCode)
 }
 
-class MigrationCoordinator: NSObject, Coordinator {
+class MigrationCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	private let version: String = "CC1"
 	
@@ -117,6 +117,8 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	func userWishesToStartMigrationToThisDevice() {
 
 		logDebug("userWishesToStartMigrationToThisDevice")
+		let destination = ImportViewController(viewModel: ImportViewModel(coordinator: self, version: version))
+		navigationController.pushViewController(destination, animated: true)
 	}
 
 	func userWishesToStartMigrationToOtherDevice() {
