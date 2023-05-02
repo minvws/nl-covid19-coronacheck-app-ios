@@ -13,33 +13,35 @@ import Transport
 import UIKit
 
 protocol MigrationFlowDelegate: AnyObject {
-
+	
 	func dataMigrationCancelled()
-
+	
 	func dataMigrationExportCompleted()
-
-//	func dataMigrationImportCompleted()
+	
+	//	func dataMigrationImportCompleted()
 }
-//
+
 protocol MigrationCoordinatorDelegate: AnyObject {
 	
 	func userCompletedStart()
-
+	
 	func userWishesToSeeToThisDeviceInstructions()
-
+	
 	func userWishesToSeeToOtherDeviceInstructions()
-
+	
 	func userWishesToStartMigrationToThisDevice()
-
+	
 	func userWishesToStartMigrationToOtherDevice()
 	
 	func userCompletedMigrationToOtherDevice()
 	
 	func presentError(_ errorCode: ErrorCode)
+	
+	func userWishesToSeeScannedEvents(_ parcels: [EventGroupParcel])
 }
 
 class MigrationCoordinator: NSObject, Coordinator, OpenUrlProtocol {
-
+	
 	private let version: String = "CC1"
 	
 	enum MigrationFlow {
@@ -107,7 +109,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 		flow = .toThisDevice
 		userWishesToSeeOnboarding(pages: onboardingFactory.getImportInstructions())
 	}
-
+	
 	func userWishesToSeeToOtherDeviceInstructions() {
 		
 		flow = .toOtherDevice
@@ -115,12 +117,11 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 	
 	func userWishesToStartMigrationToThisDevice() {
-
-		logDebug("userWishesToStartMigrationToThisDevice")
+		
 		let destination = ImportViewController(viewModel: ImportViewModel(coordinator: self, version: version))
 		navigationController.pushViewController(destination, animated: true)
 	}
-
+	
 	func userWishesToStartMigrationToOtherDevice() {
 		
 		let destination = ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: self, version: version))
@@ -148,12 +149,12 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	}
 	
 	func userCompletedMigrationToOtherDevice() {
-
+		
 		delegate?.dataMigrationExportCompleted()
 	}
 	
 	func presentError(_ errorCode: ErrorCode) {
-
+		
 		let content = Content(
 			title: L.holderErrorstateTitle(),
 			body: errorCode.step == ErrorCode.Step.import.value ? L.holder_migration_import_errorcode_message("\(errorCode)") : L.holder_migration_export_errorcode_message("\(errorCode)"),
@@ -166,12 +167,19 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 			self.presentContent(content: content)
 		}
 	}
+	
+	func userWishesToSeeScannedEvents(_ parcels: [EventGroupParcel]) {
+		
+		logDebug("userWishesToSeeScannedEvent")
+		logDebug("We got \(parcels.count) EventGroupParcels")
+		
+	}
 }
 
 // MARK: - PagedAnnouncementDelegate
 
 extension MigrationCoordinator: PagedAnnouncementDelegate {
-
+	
 	func didFinishPagedAnnouncement() {
 		
 		switch flow {
@@ -188,9 +196,9 @@ extension MigrationCoordinator: PagedAnnouncementDelegate {
 // MARK: - UINavigationControllerDelegate
 
 extension MigrationCoordinator: UINavigationControllerDelegate {
-
+	
 	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-
+		
 		if !navigationController.viewControllers.contains(where: { $0.isKind(of: ContentWithImageViewController.self) }) {
 			// If there is no more ContentWithIconViewController in the stack, we are done here.
 			// Works for both back swipe and back button

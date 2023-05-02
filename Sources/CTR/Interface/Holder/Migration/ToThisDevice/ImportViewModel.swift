@@ -77,8 +77,7 @@ extension ImportViewModel: DataImportDelegate {
 		let decoder = JSONDecoder()
 		do {
 			let parcels = try decoder.decode([EventGroupParcel].self, from: value)
-			message.value = "We got \(parcels.count) EventGroupParcels"
-			
+			theCoordinator?.userWishesToSeeScannedEvents(parcels)
 		} catch {
 			theCoordinator?.presentError(ErrorCode(flow: .migration, step: .import, clientCode: .decodingError))
 		}
