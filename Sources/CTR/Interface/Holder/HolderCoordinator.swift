@@ -374,7 +374,7 @@ class HolderCoordinator: SharedCoordinator {
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
-	func showMigrationDialog() {
+	func showMigrationSuccessfulDialog() {
 		
 		let alertController = UIAlertController(
 			title: L.holder_migrationFlow_deleteDetails_dialog_title(),
@@ -385,14 +385,8 @@ class HolderCoordinator: SharedCoordinator {
 			UIAlertAction(
 				title: L.holder_migrationFlow_deleteDetails_dialog_deleteButton(),
 				style: .destructive,
-				handler: { _ in
-					// Remove Data
-					Current.walletManager.removeExistingGreenCards()
-					Current.walletManager.removeExistingEventGroups()
-					Current.walletManager.removeExistingBlockedEvents()
-					Current.walletManager.removeExistingMismatchedIdentityEvents()
-					// Trigger a reload
-					NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+				handler: { [weak self] _ in
+					self?.removeDataAfterMigration()
 				}
 			)
 		)
@@ -404,6 +398,16 @@ class HolderCoordinator: SharedCoordinator {
 			)
 		)
 		navigationController.present(alertController, animated: true, completion: nil)
+	}
+	
+	private func removeDataAfterMigration() {
+		// Remove Data
+		Current.walletManager.removeExistingGreenCards()
+		Current.walletManager.removeExistingEventGroups()
+		Current.walletManager.removeExistingBlockedEvents()
+		Current.walletManager.removeExistingMismatchedIdentityEvents()
+		// Trigger a reload
+		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
 	}
 }
 
@@ -778,7 +782,7 @@ extension HolderCoordinator: MigrationFlowDelegate {
 		
 		navigateToDashboard()
 		removeMigrationCoordinator()
-		showMigrationDialog()
+		showMigrationSuccessfulDialog()
 	}
 	
 	func dataMigrationImportCompleted() {
