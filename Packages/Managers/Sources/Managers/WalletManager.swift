@@ -451,20 +451,17 @@ extension WalletManager {
 		}
 	}
 
-	public func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol) {
+	public func removeExistingGreenCards() {
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				if let greenCards = wallet.greenCards {
-					for case let greenCard as GreenCard in greenCards.allObjects {
-						greenCard.delete(context: context)
-							
-					}
-					dataStoreManager.save(context)
+			
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let greenCards = wallet.greenCards {
+				for case let greenCard as GreenCard in greenCards.allObjects {
+					greenCard.delete(context: context)
 				}
+				dataStoreManager.save(context)
 			}
 		}
 	}

@@ -20,14 +20,12 @@ class WalletManagerTests: XCTestCase {
 	private var sut: WalletManager!
 	private var dataStoreManager: DataStoreManaging!
 	private var cryptoManagerSpy: CryptoManagerSpy!
-	private var secureUserSettingsSpy: SecureUserSettingsSpy!
 	
 	override func setUp() {
 
 		super.setUp()
 		
 		cryptoManagerSpy = CryptoManagerSpy()
-		secureUserSettingsSpy = SecureUserSettingsSpy()
 		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		sut = WalletManager(dataStoreManager: dataStoreManager)
 	}
@@ -561,7 +559,7 @@ class WalletManagerTests: XCTestCase {
 		
 		// Given
 		// When
-		sut.removeExistingGreenCards(secureUserSettings: secureUserSettingsSpy)
+		sut.removeExistingGreenCards()
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(beEmpty())
@@ -581,7 +579,7 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listGreenCards()).to(haveCount(1))
 		
 		// When
-		sut.removeExistingGreenCards(secureUserSettings: secureUserSettingsSpy)
+		sut.removeExistingGreenCards()
 		
 		// Then
 		expect(self.sut.listGreenCards()).to(beEmpty())
@@ -602,7 +600,7 @@ class WalletManagerTests: XCTestCase {
 		expect(self.sut.listGreenCards()).to(haveCount(2))
 
 		// When
-		sut.removeExistingGreenCards(secureUserSettings: secureUserSettingsSpy)
+		sut.removeExistingGreenCards()
 
 		// Then
 		expect(self.sut.listGreenCards()).to(beEmpty())

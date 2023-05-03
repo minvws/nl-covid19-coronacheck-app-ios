@@ -276,7 +276,7 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
-						Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
+						Current.walletManager.removeExistingGreenCards()
 						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
 					
 						showEventError()

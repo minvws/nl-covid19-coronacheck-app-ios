@@ -4,6 +4,7 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
+// swiftlint:disable file_length
 
 import UIKit
 import CoreData
@@ -372,6 +373,42 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		navigationController.pushViewController(destination, animated: true)
 	}
+	
+	func showMigrationSuccessfulDialog() {
+		
+		let alertController = UIAlertController(
+			title: L.holder_migrationFlow_deleteDetails_dialog_title(),
+			message: L.holder_migrationFlow_deleteDetails_dialog_message(),
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.holder_migrationFlow_deleteDetails_dialog_deleteButton(),
+				style: .destructive,
+				handler: { [weak self] _ in
+					self?.removeDataAfterMigration()
+				}
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.holder_migrationFlow_deleteDetails_dialog_retainButton(),
+				style: .default,
+				handler: nil
+			)
+		)
+		navigationController.present(alertController, animated: true, completion: nil)
+	}
+	
+	private func removeDataAfterMigration() {
+		// Remove Data
+		Current.walletManager.removeExistingGreenCards()
+		Current.walletManager.removeExistingEventGroups()
+		Current.walletManager.removeExistingBlockedEvents()
+		Current.walletManager.removeExistingMismatchedIdentityEvents()
+		// Trigger a reload
+		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -659,7 +696,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				message: L.generalErrorTechnicalCustom("\(code)"),
 				preferredStyle: .alert
 			)
-			
 			alertController.addAction(UIAlertAction(title: L.generalOk(), style: .default, handler: nil))
 			navigationController.present(alertController, animated: true, completion: nil)
 		}
@@ -682,16 +718,13 @@ extension HolderCoordinator: EventFlowDelegate {
 	
 	func eventFlowDidComplete() {
 		
-		// The user completed the event flow. Go back to the dashboard.
 		removeChildCoordinator()
 		navigateToDashboard()
 	}
 	
 	func eventFlowDidCancel() {
 		
-		// The user cancelled the event flow.
 		removeChildCoordinator()
-		logInfo("HolderCoordinator: eventFlowDidCancel")
 	}
 }
 
@@ -749,7 +782,7 @@ extension HolderCoordinator: MigrationFlowDelegate {
 		
 		navigateToDashboard()
 		removeMigrationCoordinator()
-		logInfo("Todo: Popup with clear option")
+		showMigrationSuccessfulDialog()
 	}
 	
 	func dataMigrationImportCompleted() {
