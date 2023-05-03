@@ -57,6 +57,7 @@ class ExportLoopViewModel {
 		let eventGroupParcels = listEventGroupParcels()
 
 		let encoder = JSONEncoder()
+		encoder.dateEncodingStrategy = .iso8601
 		logDebug("We got \(eventGroupParcels.count) event group parcels")
 
 		if let encoded = try? encoder.encode(eventGroupParcels) {
@@ -96,10 +97,8 @@ class ExportLoopViewModel {
 					  eventGroup.isDraft == false
 				else { return nil }
 
-				let expiryDate: Double? = eventGroup.expiryDate?.timeIntervalSince1970 ?? nil
-
 				return EventGroupParcel(
-					expiryDate: expiryDate,
+					expiryDate: eventGroup.expiryDate,
 					jsonData: fixedJSONData,
 					providerIdentifier: providerIdentifier,
 					type: type

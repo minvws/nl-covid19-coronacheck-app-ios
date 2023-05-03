@@ -75,6 +75,7 @@ extension ImportViewModel: DataImportDelegate {
 		shouldStopScanning.value = true
 
 		let decoder = JSONDecoder()
+		decoder.dateDecodingStrategy = .iso8601
 		do {
 			let parcels = try decoder.decode([EventGroupParcel].self, from: value)
 			theCoordinator?.userWishesToSeeScannedEvents(parcels)
