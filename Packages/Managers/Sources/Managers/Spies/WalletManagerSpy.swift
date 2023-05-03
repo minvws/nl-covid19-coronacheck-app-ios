@@ -83,14 +83,10 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingGreenCards = false
 	var invokedRemoveExistingGreenCardsCount = 0
-	var invokedRemoveExistingGreenCardsParameters: (secureUserSettings: SecureUserSettingsProtocol, Void)?
-	var invokedRemoveExistingGreenCardsParametersList = [(secureUserSettings: SecureUserSettingsProtocol, Void)]()
 
-	func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol) {
+	func removeExistingGreenCards() {
 		invokedRemoveExistingGreenCards = true
 		invokedRemoveExistingGreenCardsCount += 1
-		invokedRemoveExistingGreenCardsParameters = (secureUserSettings, ())
-		invokedRemoveExistingGreenCardsParametersList.append((secureUserSettings, ()))
 	}
 
 	var invokedRemoveExistingBlockedEvents = false

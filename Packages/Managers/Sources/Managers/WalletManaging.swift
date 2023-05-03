@@ -46,7 +46,7 @@ public protocol WalletManaging: AnyObject {
 	/// Remove any existing event groups
 	func removeExistingEventGroups()
 
-	func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol)
+	func removeExistingGreenCards()
 	
 	func removeExistingBlockedEvents()
 	

@@ -146,7 +146,7 @@ public class GreenCardLoader: GreenCardLoading {
 
 		var success = true
 
-		walletManager.removeExistingGreenCards(secureUserSettings: secureUserSettings)
+		walletManager.removeExistingGreenCards()
 		
 		// Store the new secret key
 		secureUserSettings.holderSecretKey = secretKey
