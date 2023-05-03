@@ -58,6 +58,7 @@
 "general_pagecontrol_accessibility_value" = "Pagina %d van %d";
 /* Positieve test */
 "general_positiveTest" = "Positieve testuitslag";
+"general_proofs" = "bewijzen";
 "general_readmore" = "Lees meer";
 "general_recoverycertificate" = "herstelbewijs";
 "general_recoverycertificate_0G" = "Internationaal herstelbewijs";

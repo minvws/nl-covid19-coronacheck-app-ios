@@ -419,8 +419,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
-			case .continue:
-				delegate?.eventFlowDidComplete()
+			case .continue( let eventMode):
+				if eventMode == .migration {
+					showMigrationEndState()
+				} else {
+					delegate?.eventFlowDidComplete()
+				}
 			case .back(let eventMode):
 				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):
@@ -509,6 +513,21 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			shouldAllowBackNavigationToExitFlow: true
 		)
 		startChildCoordinator(fmCoordinator)
+	}
+	
+	private func showMigrationEndState() {
+		
+		presentContent(
+			content: Content(
+				title: L.holder_migrationFlow_migrationSuccessful_title(),
+				body: L.holder_migrationFlow_migrationSuccessful_message(),
+				primaryActionTitle: L.general_toMyOverview(),
+				primaryAction: { [weak self] in
+					self?.delegate?.eventFlowDidComplete()
+				}
+			),
+			allowsSwipeBack: false
+		)
 	}
 }
 
