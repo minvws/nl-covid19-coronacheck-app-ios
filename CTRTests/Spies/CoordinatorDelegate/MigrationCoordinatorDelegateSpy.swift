@@ -70,4 +70,16 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 		invokedPresentErrorParameters = (errorCode, ())
 		invokedPresentErrorParametersList.append((errorCode, ()))
 	}
+
+	var invokedUserWishesToSeeScannedEvents = false
+	var invokedUserWishesToSeeScannedEventsCount = 0
+	var invokedUserWishesToSeeScannedEventsParameters: (parcels: [EventGroupParcel], Void)?
+	var invokedUserWishesToSeeScannedEventsParametersList = [(parcels: [EventGroupParcel], Void)]()
+
+	func userWishesToSeeScannedEvents(_ parcels: [EventGroupParcel]) {
+		invokedUserWishesToSeeScannedEvents = true
+		invokedUserWishesToSeeScannedEventsCount += 1
+		invokedUserWishesToSeeScannedEventsParameters = (parcels, ())
+		invokedUserWishesToSeeScannedEventsParametersList.append((parcels, ()))
+	}
 }

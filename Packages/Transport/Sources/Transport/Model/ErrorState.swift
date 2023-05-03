@@ -14,7 +14,7 @@ public struct ErrorCode: CustomStringConvertible {
 			self.value = value
 		}
 		
-		var value: String
+		public var value: String
 	}
 	
 	public struct Step {
@@ -22,7 +22,7 @@ public struct ErrorCode: CustomStringConvertible {
 			self.value = value
 		}
 		
-		var value: String
+		public var value: String
 	}
 	
 	public struct ClientCode: Equatable {
@@ -30,7 +30,7 @@ public struct ErrorCode: CustomStringConvertible {
 			self.value = value
 		}
 		
-		var value: String
+		public var value: String
 	}
 	
 	public var flow: String
