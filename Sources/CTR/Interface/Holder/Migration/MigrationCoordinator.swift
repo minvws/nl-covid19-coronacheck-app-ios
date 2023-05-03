@@ -131,7 +131,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
 		
 		let viewController = PagedAnnouncementViewController(
-			title: L.holder_startMigration_onboarding_title(),
+			title: L.holder_startMigration_onboarding_toolbar(),
 			viewModel: PagedAnnouncementViewModel(
 				delegate: self,
 				pages: pages,

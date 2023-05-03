@@ -28,7 +28,7 @@ class ExportLoopViewModel {
 	
 	// MARK: - Observable
 
-	var title = Observable<String>(value: L.holder_startMigration_onboarding_title())
+	var title = Observable<String>(value: L.holder_startMigration_onboarding_toolbar())
 	var step = Observable<String>(value: L.holder_startMigration_onboarding_step("3"))
 	var header = Observable<String>(value: L.holder_startMigration_toOtherDevice_onboarding_step3_title())
 	var message = Observable<String>(value: L.holder_startMigration_toOtherDevice_onboarding_step3_message())
