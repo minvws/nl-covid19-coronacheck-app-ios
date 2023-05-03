@@ -18,7 +18,7 @@ protocol MigrationFlowDelegate: AnyObject {
 	
 	func dataMigrationExportCompleted()
 	
-	//	func dataMigrationImportCompleted()
+	func dataMigrationImportCompleted()
 }
 
 protocol MigrationCoordinatorDelegate: AnyObject {
@@ -131,7 +131,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
 		
 		let viewController = PagedAnnouncementViewController(
-			title: L.holder_startMigration_onboarding_title(),
+			title: L.holder_startMigration_onboarding_toolbar(),
 			viewModel: PagedAnnouncementViewModel(
 				delegate: self,
 				pages: pages,
@@ -171,8 +171,26 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	func userWishesToSeeScannedEvents(_ parcels: [EventGroupParcel]) {
 		
 		logDebug("userWishesToSeeScannedEvent")
-		logDebug("We got \(parcels.count) EventGroupParcels")
+		let remoteEvents = parcels.compactMap { parcel in
+			
+			let decoder = JSONDecoder()
+			do {
+				let signedResponse = try decoder.decode(SignedResponse.self, from: parcel.jsonData)
+				let wrapper = try decoder.decode(EventFlow.EventResultWrapper.self, from: signedResponse.decodedPayload!)
+				return RemoteEvent(wrapper: wrapper, signedResponse: signedResponse)
+			} catch {
+				logError("error: \(error)")
+			}
+			return nil
+		}
 		
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		
+		eventCoordinator.startWithListTestEvents(remoteEvents, originalMode: .migration)
 	}
 }
 
@@ -203,6 +221,39 @@ extension MigrationCoordinator: UINavigationControllerDelegate {
 			// If there is no more ContentWithIconViewController in the stack, we are done here.
 			// Works for both back swipe and back button
 			delegate?.dataMigrationCancelled()
+		}
+	}
+}
+
+// MARK: - EventFlowDelegate
+
+extension MigrationCoordinator: EventFlowDelegate {
+
+	func eventFlowDidComplete() {
+
+		removeEventCoordinator()
+		delegate?.dataMigrationImportCompleted()
+	}
+
+	func eventFlowDidCancel() {
+
+		removeEventCoordinator()
+		
+		if let instructionsViewController = navigationController.viewControllers
+			.first(where: { $0 is PagedAnnouncementViewController }) {
+
+			navigationController.popToViewController(
+				instructionsViewController,
+				animated: false
+			)
+		}
+		userWishesToStartMigrationToThisDevice()
+	}
+
+	private func removeEventCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is EventCoordinator }) {
+			removeChildCoordinator(childCoordinator)
 		}
 	}
 }

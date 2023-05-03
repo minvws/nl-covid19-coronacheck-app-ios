@@ -752,6 +752,12 @@ extension HolderCoordinator: MigrationFlowDelegate {
 		logInfo("Todo: Popup with clear option")
 	}
 	
+	func dataMigrationImportCompleted() {
+
+		navigateToDashboard()
+		removeMigrationCoordinator()
+	}
+	
 	private func removeMigrationCoordinator() {
 		
 		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {

@@ -168,7 +168,9 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		var mode: EventMode = .test(.ggd)
 		
-		if let event = events.first?.wrapper.events?.first {
+		if originalMode == .migration {
+			mode = .migration
+		} else if let event = events.first?.wrapper.events?.first {
 			
 			if event.hasPaperCertificate {
 				mode = .paperflow
@@ -184,7 +186,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 				mode = .vaccination
 			}
 		}
-
+		
 		navigateToListEvents(events, eventMode: mode, originalMode: originalMode, eventsMightBeMissing: false)
 	}
 
@@ -407,7 +409,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				if !navigateBackToEventStart() {
 					navigateBackToTestStart()
 				}
-			case .paperflow:
+			case .paperflow, .migration:
 				delegate?.eventFlowDidCancel()
 		}
 	}
@@ -417,8 +419,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
-			case .continue:
-				delegate?.eventFlowDidComplete()
+			case .continue( let eventMode):
+				if eventMode == .migration {
+					showMigrationEndState()
+				} else {
+					delegate?.eventFlowDidComplete()
+				}
 			case .back(let eventMode):
 				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):
@@ -507,6 +513,21 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			shouldAllowBackNavigationToExitFlow: true
 		)
 		startChildCoordinator(fmCoordinator)
+	}
+	
+	private func showMigrationEndState() {
+		
+		presentContent(
+			content: Content(
+				title: L.holder_migrationFlow_migrationSuccessful_title(),
+				body: L.holder_migrationFlow_migrationSuccessful_message(),
+				primaryActionTitle: L.general_toMyOverview(),
+				primaryAction: { [weak self] in
+					self?.delegate?.eventFlowDidComplete()
+				}
+			),
+			allowsSwipeBack: false
+		)
 	}
 }
 

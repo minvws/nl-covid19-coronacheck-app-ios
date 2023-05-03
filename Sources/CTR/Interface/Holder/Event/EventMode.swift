@@ -19,6 +19,7 @@ extension EventMode {
 			case .recovery: return L.general_recoverycertificate()
 			case .test: return L.general_testresult()
 			case .vaccination: return L.general_vaccination()
+			case .migration: return L.general_proofs()
 		}
 	}
 
@@ -29,6 +30,7 @@ extension EventMode {
 			case .recovery, .vaccinationAndPositiveTest: return L.holder_recovery_alert_message()
 			case .test: return L.holder_test_alert_message()
 			case .vaccination: return L.holder_vaccination_alert_message()
+			case .migration: return L.holder_migrationFlow_goBack_dialog_message()
 		}
 	}
 }
@@ -53,6 +55,7 @@ extension EventMode {
 						return .commercialTest
 				}
 			case .vaccination: return .vaccination
+			case .migration: return .migration
 		}
 	}
 }

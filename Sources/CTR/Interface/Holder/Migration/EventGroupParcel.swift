@@ -9,7 +9,7 @@ import Foundation
 
 public struct EventGroupParcel: Codable {
 	
-	public let expiryDate: Double?
+	public let expiryDate: Date?
 		
 	public let jsonData: Data
 	

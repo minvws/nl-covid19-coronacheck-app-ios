@@ -61,6 +61,7 @@ extension ListRemoteEventsViewModel {
 			case .recovery: return event.hasPositiveTest || event.hasRecovery
 			case .test: return event.hasNegativeTest
 			case .vaccination: return event.hasVaccination
+			case .migration: return true
 		}
 	}
 
@@ -73,8 +74,9 @@ extension ListRemoteEventsViewModel {
 			return emptyEventsState()
 		}
 		// No secondary action for scanned paperflow, that is moved to the body of the details.
+		// No secondary action for the migration flow. 
 		let secondaryActionTitle: String? = {
-			guard !(eventMode == .paperflow) else { return nil }
+			guard eventMode != .paperflow && eventMode != .migration else { return nil }
 			return L.holderVaccinationListWrong()
 		}()
 
