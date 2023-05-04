@@ -80,11 +80,6 @@ public class DataImporter {
 			throw DataMigrationError.compressionError
 		}
 	}
-	
-	private func clear() {
-	
-		parcelCache.clear()
-	}
 }
 
 public protocol DataImportDelegate: AnyObject {

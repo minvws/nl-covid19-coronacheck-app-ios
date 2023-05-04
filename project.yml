@@ -496,6 +496,9 @@ schemes:
       language: nl
     test:
       targets:
+        - package: DataMigration/DataMigrationTests
+          randomExecutionOrder: true
+          parallelizable: false
         - package: Managers/ManagersTests
           randomExecutionOrder: true
           parallelizable: false  
