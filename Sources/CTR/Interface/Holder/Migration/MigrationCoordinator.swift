@@ -170,28 +170,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	
 	func userWishesToSeeScannedEvents(_ parcels: [EventGroupParcel]) {
 		
-		logDebug("userWishesToSeeScannedEvent")
-		let remoteEvents = parcels.compactMap { parcel in
-			
-			let decoder = JSONDecoder()
-			do {
-				let signedResponse = try decoder.decode(SignedResponse.self, from: parcel.jsonData)
-				let wrapper = try decoder.decode(EventFlow.EventResultWrapper.self, from: signedResponse.decodedPayload!)
-				return RemoteEvent(wrapper: wrapper, signedResponse: signedResponse)
-			} catch {
-				do {
-					let dccEvent = try decoder.decode(EventFlow.DccEvent.self, from: parcel.jsonData)
-					if let wrapper = Current.couplingManager.convert(dccEvent.credential, couplingCode: dccEvent.couplingCode) {
-						return RemoteEvent(wrapper: wrapper, signedResponse: nil)
-					}
-				} catch {
-					logError("Migration Coordinator: DCC parse error: \(error)")
-				}
-				logError("Migration Coordinator: SignedResponse parse error: \(error)")
-			}
-			return nil
-		}
-		
+		let remoteEvents = parcels.compactMap { $0.asRemoteEvent() }
 		let eventCoordinator = EventCoordinator(
 			navigationController: navigationController,
 			delegate: self
@@ -275,4 +254,45 @@ extension ErrorCode.ClientCode {
 	static let invalidVersion = ErrorCode.ClientCode(value: "112")
 	static let invalidNumberOfPackages = ErrorCode.ClientCode(value: "113")
 	static let decodingError = ErrorCode.ClientCode(value: "114")
+}
+
+
+extension EventGroupParcel {
+	
+	func asRemoteEvent() -> RemoteEvent? {
+		
+		if let remoteEvent = asRemoteEventFromSignedResponse() {
+			return remoteEvent
+		} else if let remoteEvent = asRemoteEventFromDCCEvent() {
+			return remoteEvent
+		}
+		return nil
+	}
+	
+	private func asRemoteEventFromSignedResponse() -> RemoteEvent? {
+		
+		let decoder = JSONDecoder()
+		do {
+			let signedResponse = try decoder.decode(SignedResponse.self, from: jsonData)
+			let wrapper = try decoder.decode(EventFlow.EventResultWrapper.self, from: signedResponse.decodedPayload!)
+			return RemoteEvent(wrapper: wrapper, signedResponse: signedResponse)
+		} catch {
+			logError("EventGroupParcel: SignedResponse parse error: \(error)")
+		}
+		return nil
+	}
+	
+	private func asRemoteEventFromDCCEvent() -> RemoteEvent? {
+		
+		let decoder = JSONDecoder()
+		do {
+			let dccEvent = try decoder.decode(EventFlow.DccEvent.self, from: jsonData)
+			if let wrapper = Current.couplingManager.convert(dccEvent.credential, couplingCode: dccEvent.couplingCode) {
+				return RemoteEvent(wrapper: wrapper, signedResponse: nil)
+			}
+		} catch {
+			logError("EventGroupParcel: DCC parse error: \(error)")
+		}
+		return nil
+	}
 }
