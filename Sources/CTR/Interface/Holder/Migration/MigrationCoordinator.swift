@@ -179,7 +179,15 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 				let wrapper = try decoder.decode(EventFlow.EventResultWrapper.self, from: signedResponse.decodedPayload!)
 				return RemoteEvent(wrapper: wrapper, signedResponse: signedResponse)
 			} catch {
-				logError("error: \(error)")
+				do {
+					let dccEvent = try decoder.decode(EventFlow.DccEvent.self, from: parcel.jsonData)
+					if let wrapper = Current.couplingManager.convert(dccEvent.credential, couplingCode: dccEvent.couplingCode) {
+						return RemoteEvent(wrapper: wrapper, signedResponse: nil)
+					}
+				} catch {
+					logError("Migration Coordinator: DCC parse error: \(error)")
+				}
+				logError("Migration Coordinator: SignedResponse parse error: \(error)")
 			}
 			return nil
 		}
