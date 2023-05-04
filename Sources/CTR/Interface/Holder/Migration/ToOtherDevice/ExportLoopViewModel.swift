@@ -74,7 +74,6 @@ class ExportLoopViewModel {
 		let eventGroupParcels = listEventGroupParcels()
 
 		let encoder = JSONEncoder()
-		encoder.dateEncodingStrategy = .iso8601
 		logDebug("We got \(eventGroupParcels.count) event group parcels")
 
 		if let encoded = try? encoder.encode(eventGroupParcels) {
