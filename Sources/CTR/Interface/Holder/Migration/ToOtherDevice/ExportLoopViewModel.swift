@@ -109,17 +109,10 @@ class ExportLoopViewModel {
 				guard let slashedJSONData = eventGroup.jsonData,
 					  let removedSlashesJSONString = String(data: slashedJSONData, encoding: .utf8)?.replacingOccurrences(of: "\\/", with: "/"),
 					  let fixedJSONData = removedSlashesJSONString.data(using: .utf8),
-					  let providerIdentifier = eventGroup.providerIdentifier,
-					  let type = eventGroup.type,
 					  eventGroup.isDraft == false
 				else { return nil }
 
-				return EventGroupParcel(
-					expiryDate: eventGroup.expiryDate,
-					jsonData: fixedJSONData,
-					providerIdentifier: providerIdentifier,
-					type: type
-				)
+				return EventGroupParcel( jsonData: fixedJSONData)
 			}
 		return eventGroupParcels
 	}
@@ -138,8 +131,6 @@ class ExportLoopViewModel {
 	}
 	
 	@objc func alterImage() {
-		
-//		logDebug("Alter Image, current: \(currentPage), total: \(imageList.count)")
 		
 		guard imageList.isNotEmpty else { return }
 		
