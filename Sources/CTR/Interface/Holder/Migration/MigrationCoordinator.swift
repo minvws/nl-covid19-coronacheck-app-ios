@@ -256,7 +256,6 @@ extension ErrorCode.ClientCode {
 	static let decodingError = ErrorCode.ClientCode(value: "114")
 }
 
-
 extension EventGroupParcel {
 	
 	func asRemoteEvent() -> RemoteEvent? {
