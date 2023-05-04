@@ -30,17 +30,19 @@ class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
-
+		
 		super.viewWillAppear(animated)
+		viewModel.viewWillAppear()
 		if UIDevice.current.userInterfaceIdiom == .phone {
 			OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 		}
 		sceneView.layoutForOrientation(isLandScape: UIApplication.shared.isLandscape)
 	}
-
+	
 	override func viewDidDisappear(_ animated: Bool) {
-
+		
 		super.viewDidDisappear(animated)
+		viewModel.viewWillDisappear()
 		if UIDevice.current.userInterfaceIdiom == .phone {
 			OrientationUtility.unlockOrientation()
 		}

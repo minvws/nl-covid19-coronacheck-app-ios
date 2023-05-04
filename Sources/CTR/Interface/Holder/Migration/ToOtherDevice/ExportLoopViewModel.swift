@@ -11,6 +11,7 @@ import DataMigration
 import Resources
 import QRGenerator
 import Transport
+import Managers
 
 class ExportLoopViewModel {
 	
@@ -26,6 +27,8 @@ class ExportLoopViewModel {
 
 	private let frequency: Double = 3.0
 	
+	private let screenBrightnessManager: ScreenBrightnessManager
+	
 	// MARK: - Observable
 
 	var title = Observable<String>(value: L.holder_startMigration_onboarding_toolbar())
@@ -38,14 +41,28 @@ class ExportLoopViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - delegate: the Data Migration Coordinator Delegate
-	///   - version: the version of the data parcels.
-	init(delegate: MigrationCoordinatorDelegate?, version: String) {
-
+	///   - version:  the version of the data parcels.
+	///   - notificationCenter: the notification center
+	init(
+		delegate: MigrationCoordinatorDelegate?,
+		version: String,
+		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	) {
+		
 		self.delegate = delegate
 		self.version = version
+		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
 		currentPage = 0
 		imageList = []
 		exportEventGroups()
+	}
+	
+	func viewWillAppear() {
+		screenBrightnessManager.animateToFullBrightness()
+	}
+	
+	func viewWillDisappear() {
+		screenBrightnessManager.animateToInitialBrightness()
 	}
 	
 	deinit {
