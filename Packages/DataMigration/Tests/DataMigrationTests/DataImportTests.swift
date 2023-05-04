@@ -44,6 +44,26 @@ class DataImportTests: XCTestCase {
 		expect { try self.sut.importString("eyJpIjowLCJuIjoxLCJwIjoiVG05MElFZDZhWEJ3WldRPSIsInYiOiJURVNUIn0=") }
 			.to(throwError(DataMigrationError.compressionError))
 	}
+	
+	func test_import_invalidVersion() {
+		
+		// Given
+		sut = DataImporter(version: "TEST", delegate: delegateSpy)
+		
+		// When
+		expect { try self.sut.importString("eyJpIjowLCJuIjoxLCJwIjoiSDRzSUFBQUFBQUFDRXd2SnlDeFdBS0pFaFpMVTRoSUFNcDk2d0E0QUFBQT0iLCJ2IjoiV1JPTkcifQ===") }
+			.to(throwError(DataMigrationError.invalidVersion))
+	}
+	
+	func test_import_invalidNumberOfPackages() {
+		
+		// Given
+		sut = DataImporter(version: "TEST", delegate: delegateSpy)
+		
+		// When
+		expect { try self.sut.importString("eyJpIjoxLCJuIjoxLCJwIjoiSDRzSUFBQUFBQUFDRXd2SnlDeFdBS0pFaFpMVTRoSUFNcDk2d0E0QUFBQT0iLCJ2IjoiVEVTVCJ9") }
+			.to(throwError(DataMigrationError.invalidNumberOfPackages))
+	}
 }
 
 class DataImportDelegateSpy: DataImportDelegate {
