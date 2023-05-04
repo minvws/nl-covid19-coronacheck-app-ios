@@ -16,7 +16,6 @@ let package = Package(
 		.package(url: "https://github.com/1024jp/GzipSwift", from: "5.2.0"),
 		
 		// testing:
-		// .package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [
@@ -33,7 +32,6 @@ let package = Package(
 			name: "DataMigrationTests",
 			dependencies: [
 				"DataMigration",
-				// .product(name: "TestingShared", package: "TestingShared"),
 				.product(name: "Nimble", package: "Nimble")
 			]
 		)
