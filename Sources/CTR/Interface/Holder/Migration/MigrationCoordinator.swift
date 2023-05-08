@@ -120,7 +120,12 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	
 	func userWishesToStartMigrationToThisDevice() {
 		
-		let destination = ImportViewController(viewModel: ImportViewModel(coordinator: self, version: version))
+		let destination = ImportViewController(
+			viewModel: ImportViewModel(
+				coordinator: self,
+				dataImporter: DataImporter(version: version)
+			)
+		)
 		navigationController.pushViewController(destination, animated: true)
 	}
 	

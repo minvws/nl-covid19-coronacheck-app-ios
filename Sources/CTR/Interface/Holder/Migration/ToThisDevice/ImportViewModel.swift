@@ -18,7 +18,7 @@ class ImportViewModel: ScanPermissionViewModel {
 	/// Coordination Delegate
 	weak var theCoordinator: (MigrationCoordinatorDelegate & OpenUrlProtocol)?
 	
-	var dataImporter: DataImporter?
+	weak var dataImporter: DataImportProtocol?
 
 	var title = Observable<String>(value: L.holder_scanner_title())
 	var step = Observable<String>(value: L.holder_startMigration_onboarding_step("3"))
@@ -34,12 +34,13 @@ class ImportViewModel: ScanPermissionViewModel {
 	///   - scanner: the paper proof scanner
 	init(
 		coordinator: (MigrationCoordinatorDelegate & OpenUrlProtocol),
-		version: String
+		dataImporter: DataImportProtocol
 	) {
 		
 		self.theCoordinator = coordinator
 		super.init(coordinator: coordinator)
-		self.dataImporter = DataImporter(version: version, delegate: self)
+		self.dataImporter = dataImporter
+		self.dataImporter?.delegate = self
 	}
 
 	/// Parse the scanned QR-code

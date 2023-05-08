@@ -8,13 +8,25 @@
 import Foundation
 import Shared
 
-public class DataImporter {
+public protocol DataImportProtocol: AnyObject {
+	
+	var delegate: DataImportDelegate? { get set }
+	
+	func importString(_ string: String) throws
+}
+
+public class DataImporter: DataImportProtocol {
 	
 	private var parcelCache = ThreadSafeCache<Int, MigrationParcel>()
 	
 	private var version: String
 	
-	private weak var delegate: DataImportDelegate?
+	public weak var delegate: DataImportDelegate?
+
+	public init(version: String) {
+
+		self.version = version
+	}
 	
 	public init(version: String, delegate: DataImportDelegate?) {
 
@@ -31,7 +43,7 @@ public class DataImporter {
 		}
 	}
 	
-	public func importData(_ parcel: MigrationParcel) throws {
+	private func importData(_ parcel: MigrationParcel) throws {
 		
 		guard parcel.version == version else { throw DataMigrationError.invalidVersion }
 		guard parcel.index < parcel.numberOfPackages else { throw DataMigrationError.invalidNumberOfPackages }
@@ -42,7 +54,7 @@ public class DataImporter {
 		}
 
 		if parcelCache.values.count == parcel.numberOfPackages {
-			logDebug("We got them all")
+			logDebug("DataImporter - We got them all")
 			let combinedData = try combine()
 			delegate?.completed(combinedData)
 		}

@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import Transport
+@testable import DataMigration
 @testable import Models
 @testable import ReusableViews
 @testable import Resources
@@ -265,7 +266,7 @@ class MigrationCoordinatorTests: XCTestCase {
 		sut.childCoordinators = [EventCoordinator(navigationController: navigationSpy, delegate: sut)]
 		navigationSpy.viewControllers = [
 			PagedAnnouncementViewController(viewModel: PagedAnnouncementViewModel(delegate: sut, pages: [], itemsShouldShowWithFullWidthHeaderImage: false, shouldShowWithVWSRibbon: false), allowsPreviousPageButton: false, allowsCloseButton: false, allowsNextPageButton: false),
-			ImportViewController(viewModel: ImportViewModel(coordinator: sut, version: "TEST")),
+			ImportViewController(viewModel: ImportViewModel(coordinator: sut, dataImporter: DataImportSpy())),
 			ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: sut, dataExporter: DataExporterSpy(), screenBrightness: ScreenBrightnessProtocolSpy()))
 		]
 		
@@ -277,32 +278,5 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.navigationSpy.viewControllers).toEventually(haveCount(2))
 		expect(self.navigationSpy.viewControllers.last is ImportViewController).toEventually(beTrue())
-	}
-}
-
-class MigrationFlowDelegateSpy: MigrationFlowDelegate {
-
-	var invokedDataMigrationCancelled = false
-	var invokedDataMigrationCancelledCount = 0
-
-	func dataMigrationCancelled() {
-		invokedDataMigrationCancelled = true
-		invokedDataMigrationCancelledCount += 1
-	}
-
-	var invokedDataMigrationExportCompleted = false
-	var invokedDataMigrationExportCompletedCount = 0
-
-	func dataMigrationExportCompleted() {
-		invokedDataMigrationExportCompleted = true
-		invokedDataMigrationExportCompletedCount += 1
-	}
-
-	var invokedDataMigrationImportCompleted = false
-	var invokedDataMigrationImportCompletedCount = 0
-
-	func dataMigrationImportCompleted() {
-		invokedDataMigrationImportCompleted = true
-		invokedDataMigrationImportCompletedCount += 1
 	}
 }
