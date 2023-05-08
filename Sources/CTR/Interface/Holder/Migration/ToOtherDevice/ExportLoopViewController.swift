@@ -27,6 +27,13 @@ class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
 		viewModel.actionTitle.observe { [weak self] in self?.sceneView.primaryTitle = $0 }
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.done() }
+		viewModel.pageControlCount.observe { [weak self] in
+			self?.sceneView.pageControl.numberOfPages = $0
+			guard $0 > 0 else { return }
+			// Pin page control to the last dot.
+			self?.sceneView.pageControl.update(for: $0 - 1)
+		}
+		sceneView.pageControl.delegate = self
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +59,16 @@ class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView
 		
 		self.sceneView.layoutForOrientation(isLandScape: UIApplication.shared.isLandscape)
 		self.sceneView.setNeedsLayout()
+	}
+}
+
+// PageControlDelegate
+
+extension ExportLoopViewController: PageControlDelegate {
+	func pageControl(didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
+		
+		// the pageControl is fixed in the last page. So any click means go one page back.
+		viewModel.backToPreviousScreen()
 	}
 }
 

@@ -37,6 +37,7 @@ class ExportLoopViewModel {
 	var message = Observable<String>(value: L.holder_startMigration_toOtherDevice_onboarding_step3_message())
 	var actionTitle = Observable<String>(value: L.holder_startMigration_onboarding_doneButton())
 	var image = Observable<UIImage?>(value: nil)
+	var pageControlCount = Observable<Int>(value: 0)
 
 	/// Initializer
 	/// - Parameters:
@@ -52,6 +53,7 @@ class ExportLoopViewModel {
 		self.delegate = delegate
 		self.dataExporter = dataExporter
 		self.screenBrightnessManager = screenBrightness
+		pageControlCount.value = MigrationOnboardingFactory().getExportInstructions().count + 1
 		currentPage = 0
 		imageList = []
 		exportEventGroups()
@@ -160,5 +162,11 @@ class ExportLoopViewModel {
 		
 		stopTimer()
 		delegate?.userCompletedMigrationToOtherDevice()
+	}
+	
+	func backToPreviousScreen() {
+		
+		stopTimer()
+		delegate?.userWishesToGoBackToPreviousScreen(animated: false)
 	}
 }

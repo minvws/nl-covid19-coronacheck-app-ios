@@ -37,6 +37,8 @@ protocol MigrationCoordinatorDelegate: AnyObject {
 	
 	func userCompletedMigrationToOtherDevice()
 	
+	func userWishesToGoBackToPreviousScreen(animated: Bool)
+	
 	func presentError(_ errorCode: ErrorCode)
 	
 	func userWishesToSeeScannedEvents(_ parcels: [EventGroupParcel])
@@ -138,7 +140,7 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 				screenBrightness: ScreenBrightnessManager(notificationCenter: NotificationCenter.default)
 			)
 		)
-		navigationController.pushViewController(destination, animated: true)
+		navigationController.pushViewController(destination, animated: false)
 	}
 	
 	private func userWishesToSeeOnboarding(pages: [PagedAnnoucementItem]) {
@@ -150,7 +152,8 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 				pages: pages,
 				itemsShouldShowWithFullWidthHeaderImage: true,
 				shouldShowWithVWSRibbon: false,
-				enableSwipeBack: true
+				enableSwipeBack: true,
+				hasPhantomTrailingPage: true
 			),
 			allowsPreviousPageButton: true,
 			allowsCloseButton: false,
@@ -191,6 +194,11 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 		addChildCoordinator(eventCoordinator)
 		
 		eventCoordinator.startWithListTestEvents(remoteEvents, originalMode: .migration)
+	}
+	
+	func userWishesToGoBackToPreviousScreen(animated: Bool = false) {
+		
+		navigationController.popViewController(animated: animated)
 	}
 }
 
