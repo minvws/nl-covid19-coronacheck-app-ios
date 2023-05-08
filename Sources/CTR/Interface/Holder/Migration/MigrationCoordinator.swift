@@ -5,9 +5,11 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import DataMigration
 import Models
 import Resources
 import ReusableViews
+import Managers
 import Shared
 import Transport
 import UIKit
@@ -124,7 +126,13 @@ extension MigrationCoordinator: MigrationCoordinatorDelegate {
 	
 	func userWishesToStartMigrationToOtherDevice() {
 		
-		let destination = ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: self, version: version))
+		let destination = ExportLoopViewController(
+			viewModel: ExportLoopViewModel(
+				delegate: self,
+				dataExporter: DataExporter(maxPackageSize: 800, version: version),
+				screenBrightness: ScreenBrightnessManager(notificationCenter: NotificationCenter.default)
+			)
+		)
 		navigationController.pushViewController(destination, animated: true)
 	}
 	

@@ -9,7 +9,12 @@ import Foundation
 import Shared
 import Gzip
 
-public class DataExporter {
+public protocol DataExporterProtocol {
+	
+	func export(_ rawData: Data) throws -> [String]
+}
+
+public class DataExporter: DataExporterProtocol {
 	
 	private var maxPackageSize: Int
 	

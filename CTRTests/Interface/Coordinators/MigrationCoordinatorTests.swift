@@ -263,6 +263,11 @@ class MigrationCoordinatorTests: XCTestCase {
 		
 		// Given
 		sut.childCoordinators = [EventCoordinator(navigationController: navigationSpy, delegate: sut)]
+		navigationSpy.viewControllers = [
+			PagedAnnouncementViewController(viewModel: PagedAnnouncementViewModel(delegate: sut, pages: [], itemsShouldShowWithFullWidthHeaderImage: false, shouldShowWithVWSRibbon: false), allowsPreviousPageButton: false, allowsCloseButton: false, allowsNextPageButton: false),
+			ImportViewController(viewModel: ImportViewModel(coordinator: sut, version: "TEST")),
+			ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: sut, dataExporter: DataExporterSpy(), screenBrightness: ScreenBrightnessProtocolSpy()))
+		]
 		
 		// When
 		sut.eventFlowDidCancel()
@@ -270,8 +275,8 @@ class MigrationCoordinatorTests: XCTestCase {
 		// Then
 		expect(self.delegateSpy.invokedDataMigrationImportCompleted) == false
 		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers).to(haveCount(1))
-		expect(self.navigationSpy.viewControllers.first is ImportViewController) == true
+		expect(self.navigationSpy.viewControllers).toEventually(haveCount(2))
+		expect(self.navigationSpy.viewControllers.last is ImportViewController).toEventually(beTrue())
 	}
 }
 
