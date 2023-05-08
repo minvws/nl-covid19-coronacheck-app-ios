@@ -660,7 +660,7 @@
 "holder_startMigration_option_toThisDevice_title" = "To this phone";
 "holder_startMigration_title" = "To which phone do you want to transfer?";
 "holder_startMigration_toOtherDevice_onboarding_nextButton" = "Next";
-"holder_startMigration_toOtherDevice_onboarding_step1_message" = "Take the phone you want to transfer your details to. From there, also go to 'Transfer my certificates' and go through the corresponding steps.";
+"holder_startMigration_toOtherDevice_onboarding_step1_message" = "Take the phone you want to transfer your details to. From there, also go to 'Transfer my certificate' and go through the corresponding steps.";
 "holder_startMigration_toOtherDevice_onboarding_step1_title" = "Grab your other phone too";
 "holder_startMigration_toOtherDevice_onboarding_step2_message" = "A special QR code will be created with your details. You’ll find this in the next step.";
 "holder_startMigration_toOtherDevice_onboarding_step2_title" = "Scan the QR code with that phone";

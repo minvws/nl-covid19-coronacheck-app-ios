@@ -9,7 +9,12 @@ import Foundation
 import Shared
 import Gzip
 
-public class DataExporter {
+public protocol DataExporterProtocol {
+	
+	func export(_ rawData: Data) throws -> [String]
+}
+
+public class DataExporter: DataExporterProtocol {
 	
 	private var maxPackageSize: Int
 	
@@ -58,22 +63,6 @@ public class DataExporter {
 			logError("DataExporter: encounter error while compressing: \(error)")
 			throw DataMigrationError.compressionError
 		}
-	}
-}
-
-extension String {
-	
-	func split(by length: Int) -> [String] {
-		var startIndex = self.startIndex
-		var results = [Substring]()
-
-		while startIndex < self.endIndex {
-			let endIndex = self.index(startIndex, offsetBy: length, limitedBy: self.endIndex) ?? self.endIndex
-			results.append(self[startIndex..<endIndex])
-			startIndex = endIndex
-		}
-
-		return results.map { String($0) }
 	}
 }
 

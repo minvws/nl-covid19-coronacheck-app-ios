@@ -9,7 +9,7 @@ import XCTest
 @testable import CTR
 import Transport
 
-class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
+class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedUserCompletedStart = false
 	var invokedUserCompletedStartCount = 0
@@ -81,5 +81,17 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate {
 		invokedUserWishesToSeeScannedEventsCount += 1
 		invokedUserWishesToSeeScannedEventsParameters = (parcels, ())
 		invokedUserWishesToSeeScannedEventsParametersList.append((parcels, ()))
+	}
+
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
+
+	func openUrl(_ url: URL) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
 }

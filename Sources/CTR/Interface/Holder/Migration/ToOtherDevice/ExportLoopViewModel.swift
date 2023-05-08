@@ -17,9 +17,7 @@ class ExportLoopViewModel {
 	
 	weak var delegate: MigrationCoordinatorDelegate?
 
-	private var version: String
-
-	private var imageList: [UIImage]
+	internal var imageList: [UIImage]
 	
 	private var currentPage: Int
 
@@ -27,7 +25,9 @@ class ExportLoopViewModel {
 
 	private let frequency: Double = 3.0
 	
-	private let screenBrightnessManager: ScreenBrightnessManager
+	private let screenBrightnessManager: ScreenBrightnessProtocol
+	
+	private let dataExporter: DataExporterProtocol
 	
 	// MARK: - Observable
 
@@ -41,27 +41,29 @@ class ExportLoopViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - delegate: the Data Migration Coordinator Delegate
-	///   - version:  the version of the data parcels.
-	///   - notificationCenter: the notification center
+	///   - dataExporter:  the data exporter class
+	///   - screenBrightness: the screen brightness manager
 	init(
 		delegate: MigrationCoordinatorDelegate?,
-		version: String,
-		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+		dataExporter: DataExporterProtocol,
+		screenBrightness: ScreenBrightnessProtocol
 	) {
 		
 		self.delegate = delegate
-		self.version = version
-		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
+		self.dataExporter = dataExporter
+		self.screenBrightnessManager = screenBrightness
 		currentPage = 0
 		imageList = []
 		exportEventGroups()
 	}
 	
 	func viewWillAppear() {
+		
 		screenBrightnessManager.animateToFullBrightness()
 	}
 	
 	func viewWillDisappear() {
+		
 		screenBrightnessManager.animateToInitialBrightness()
 	}
 	
@@ -79,7 +81,7 @@ class ExportLoopViewModel {
 		if let encoded = try? encoder.encode(eventGroupParcels) {
 
 			do {
-				let items = try DataExporter(maxPackageSize: 800, version: version).export(encoded)
+				let items = try dataExporter.export(encoded)
 
 				items.forEach { item in
 					DispatchQueue.global(qos: .userInitiated).async {

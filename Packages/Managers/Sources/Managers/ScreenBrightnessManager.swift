@@ -8,8 +8,14 @@
 import UIKit
 import Shared
 
-// MARK: - Private types
-final public class ScreenBrightnessManager {
+public protocol ScreenBrightnessProtocol {
+	
+	func animateToFullBrightness()
+	
+	func animateToInitialBrightness()
+}
+
+final public class ScreenBrightnessManager: ScreenBrightnessProtocol {
 	
 	private let initialBrightness: CGFloat
 	private var latestAnimation: UUID?
