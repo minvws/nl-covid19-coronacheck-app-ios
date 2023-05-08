@@ -59,6 +59,6 @@ class ExportLoopViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holder_startMigration_toOtherDevice_onboarding_step3_message()
 		expect(self.sut.sceneView.imageView.image).toEventuallyNot(beNil())
 		
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 }
