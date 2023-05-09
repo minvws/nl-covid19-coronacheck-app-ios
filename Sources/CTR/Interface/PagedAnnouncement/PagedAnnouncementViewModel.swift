@@ -18,6 +18,7 @@ class PagedAnnouncementViewModel {
 	let shouldShowWithVWSRibbon: Bool
 	private let itemsShouldShowWithFullWidthHeaderImage: Bool
 	let enableSwipeBack: Bool
+	let hasPhantomTrailingPage: Bool
 	
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [PagedAnnoucementItem]
@@ -28,7 +29,8 @@ class PagedAnnouncementViewModel {
 		pages: [PagedAnnoucementItem],
 		itemsShouldShowWithFullWidthHeaderImage: Bool,
 		shouldShowWithVWSRibbon: Bool,
-		enableSwipeBack: Bool = false
+		enableSwipeBack: Bool = false,
+		hasPhantomTrailingPage: Bool = false
 	) {
 		
 		self.delegate = delegate
@@ -37,6 +39,7 @@ class PagedAnnouncementViewModel {
 		self.shouldShowWithVWSRibbon = shouldShowWithVWSRibbon
 		self.itemsShouldShowWithFullWidthHeaderImage = itemsShouldShowWithFullWidthHeaderImage
 		self.enableSwipeBack = enableSwipeBack
+		self.hasPhantomTrailingPage = hasPhantomTrailingPage
 	}
 	
 	/// Add an onboarding step

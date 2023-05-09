@@ -59,6 +59,18 @@ class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate, OpenUrlProt
 		invokedUserCompletedMigrationToOtherDeviceCount += 1
 	}
 
+	var invokedUserWishesToGoBackToPreviousScreen = false
+	var invokedUserWishesToGoBackToPreviousScreenCount = 0
+	var invokedUserWishesToGoBackToPreviousScreenParameters: (animated: Bool, Void)?
+	var invokedUserWishesToGoBackToPreviousScreenParametersList = [(animated: Bool, Void)]()
+
+	func userWishesToGoBackToPreviousScreen(animated: Bool) {
+		invokedUserWishesToGoBackToPreviousScreen = true
+		invokedUserWishesToGoBackToPreviousScreenCount += 1
+		invokedUserWishesToGoBackToPreviousScreenParameters = (animated, ())
+		invokedUserWishesToGoBackToPreviousScreenParametersList.append((animated, ()))
+	}
+
 	var invokedPresentError = false
 	var invokedPresentErrorCount = 0
 	var invokedPresentErrorParameters: (errorCode: ErrorCode, Void)?

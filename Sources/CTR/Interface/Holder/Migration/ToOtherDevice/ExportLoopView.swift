@@ -30,6 +30,10 @@ class ExportLoopView: ScrolledStackWithButtonView {
 			static let landscape: CGFloat = 0.66
 			static let portrait: CGFloat = 1
 		}
+		enum PageControl {
+			static let spacing: CGFloat = 16.0
+			static let spacingSmallScreen: CGFloat = 8.0
+		}
 	}
 	
 	private let containerView: UIView = {
@@ -63,6 +67,14 @@ class ExportLoopView: ScrolledStackWithButtonView {
 		return TextView()
 	}()
 	
+	/// The control buttons
+	let pageControl: PageControl = {
+
+		let view = PageControl()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
 	private var containerHeightPortraitConstraint: NSLayoutConstraint?
 	private var containerHeightLandscapeConstraint: NSLayoutConstraint?
 	private var imageHeightPortraitConstraint: NSLayoutConstraint?
@@ -81,6 +93,9 @@ class ExportLoopView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(headerLabel)
 		stackView.setCustomSpacing(ViewTraits.Header.bottomMargin, after: headerLabel)
 		stackView.addArrangedSubview(messageLabel)
+		
+		footerButtonView.buttonStackView.alignment = .center
+		footerButtonView.buttonStackView.insertArrangedSubview(pageControl, at: 0)
 	}
 
 	/// Setup all the views
@@ -121,6 +136,12 @@ class ExportLoopView: ScrolledStackWithButtonView {
 			equalTo: stackView.widthAnchor,
 			multiplier: ViewTraits.Orientation.landscape
 		)
+		
+		let smallOrLandscape = UIDevice.current.isSmallScreen || UIDevice.current.isLandscape
+		footerButtonView.buttonStackView.spacing = smallOrLandscape ? ViewTraits.PageControl.spacingSmallScreen : ViewTraits.PageControl.spacing
+		if smallOrLandscape {
+			footerButtonView.topButtonConstraint?.constant = ViewTraits.PageControl.spacingSmallScreen
+		}
 	}
 
 	// Public

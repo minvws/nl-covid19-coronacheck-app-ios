@@ -279,4 +279,21 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers).toEventually(haveCount(2))
 		expect(self.navigationSpy.viewControllers.last is ImportViewController).toEventually(beTrue())
 	}
+	
+	func test_userWishesToGoBackToPreviousScreen() {
+		
+		// Given
+		navigationSpy.viewControllers = [
+			PagedAnnouncementViewController(viewModel: PagedAnnouncementViewModel(delegate: sut, pages: [], itemsShouldShowWithFullWidthHeaderImage: false, shouldShowWithVWSRibbon: false), allowsPreviousPageButton: false, allowsCloseButton: false, allowsNextPageButton: false),
+			ImportViewController(viewModel: ImportViewModel(coordinator: sut, dataImporter: DataImportSpy())),
+			ExportLoopViewController(viewModel: ExportLoopViewModel(delegate: sut, dataExporter: DataExporterSpy(), screenBrightness: ScreenBrightnessProtocolSpy()))
+		]
+		
+		// When
+		sut.userWishesToGoBackToPreviousScreen()
+		
+		// Then
+		expect(self.navigationSpy.invokedPopViewController) == true
+		expect(self.navigationSpy.viewControllers).to(haveCount(2))
+	}
 }

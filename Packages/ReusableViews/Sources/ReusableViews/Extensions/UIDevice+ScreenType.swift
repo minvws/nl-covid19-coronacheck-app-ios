@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -21,5 +21,13 @@ extension UIDevice {
 		
 		let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
 		return bottom > 0
+	}
+	
+	public var isLandscape: Bool {
+		if #available(iOS 13.0, *) {
+			return UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape ?? false
+		} else {
+			return UIApplication.shared.statusBarOrientation.isLandscape
+		}
 	}
 }

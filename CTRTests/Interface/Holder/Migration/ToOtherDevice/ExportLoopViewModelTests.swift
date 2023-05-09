@@ -125,4 +125,15 @@ final class ExportLoopViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorDelegate.invokedUserCompletedMigrationToOtherDevice) == true
 	}
+	
+	func test_back() {
+		
+		// Given
+		
+		// When
+		sut.backToPreviousScreen()
+		
+		// Then
+		expect(self.coordinatorDelegate.invokedUserWishesToGoBackToPreviousScreen) == true
+	}
 }
