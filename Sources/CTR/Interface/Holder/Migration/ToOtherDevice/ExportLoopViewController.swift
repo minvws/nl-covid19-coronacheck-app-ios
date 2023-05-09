@@ -43,7 +43,7 @@ class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView
 		if UIDevice.current.userInterfaceIdiom == .phone {
 			OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 		}
-		sceneView.layoutForOrientation(isLandScape: UIApplication.shared.isLandscape)
+		sceneView.layoutForOrientation(isLandScape: UIDevice.current.isLandscape)
 	}
 	
 	override func viewDidDisappear(_ animated: Bool) {
@@ -57,7 +57,7 @@ class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView
 	
 	override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
 		
-		self.sceneView.layoutForOrientation(isLandScape: UIApplication.shared.isLandscape)
+		self.sceneView.layoutForOrientation(isLandScape: UIDevice.current.isLandscape)
 		self.sceneView.setNeedsLayout()
 	}
 }
@@ -69,16 +69,5 @@ extension ExportLoopViewController: PageControlDelegate {
 		
 		// the pageControl is fixed in the last page. So any click means go one page back.
 		viewModel.backToPreviousScreen()
-	}
-}
-
-extension UIApplication {
-	
-	var isLandscape: Bool {
-		if #available(iOS 13.0, *) {
-			return UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isLandscape ?? false
-		} else {
-			return UIApplication.shared.statusBarOrientation.isLandscape
-		}
 	}
 }

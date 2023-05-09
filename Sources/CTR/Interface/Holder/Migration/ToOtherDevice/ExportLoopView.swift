@@ -30,6 +30,10 @@ class ExportLoopView: ScrolledStackWithButtonView {
 			static let landscape: CGFloat = 0.66
 			static let portrait: CGFloat = 1
 		}
+		enum PageControl {
+			static let spacing: CGFloat = 16.0
+			static let spacingSmallScreen: CGFloat = 8.0
+		}
 	}
 	
 	private let containerView: UIView = {
@@ -132,6 +136,12 @@ class ExportLoopView: ScrolledStackWithButtonView {
 			equalTo: stackView.widthAnchor,
 			multiplier: ViewTraits.Orientation.landscape
 		)
+		
+		let smallOrLandscape = UIDevice.current.isSmallScreen || UIDevice.current.isLandscape
+		footerButtonView.buttonStackView.spacing = smallOrLandscape ? ViewTraits.PageControl.spacingSmallScreen : ViewTraits.PageControl.spacing
+		if smallOrLandscape {
+			footerButtonView.topButtonConstraint?.constant = ViewTraits.PageControl.spacingSmallScreen
+		}
 	}
 
 	// Public
