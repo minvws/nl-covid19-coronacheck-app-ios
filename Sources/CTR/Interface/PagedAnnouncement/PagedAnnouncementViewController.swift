@@ -61,7 +61,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 				return viewController
 			}
 			
-			self.sceneView.pageControl.numberOfPages = $0.count + (viewModel.hasPhantomTrailingPage ? 1 : 0)
+			self.sceneView.pageControl.numberOfPages = $0.count + (self.viewModel.hasPhantomTrailingPage ? 1 : 0)
 			
 			self.updateFooterView(for: 0)
 		}
