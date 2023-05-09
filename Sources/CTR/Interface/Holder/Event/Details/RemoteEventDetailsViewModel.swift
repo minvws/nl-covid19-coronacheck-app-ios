@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import ReusableViews
+import Resources
 
 final class RemoteEventDetailsViewModel {
 	
@@ -45,7 +46,7 @@ final class RemoteEventDetailsViewModel {
 			
 			var field = $0.field.displayTitle
 			if let value = $0.value, !value.isEmpty {
-				field += " <b>\(value)</b>"
+				field += " <b>\(Resources.Sanitizer.sanitize(value))</b>"
 			}
 			return (field, $0.field.isPrecededByLineBreak, $0.field.isFollowedByLineBreak, $0.field.isSeparator)
 		}
