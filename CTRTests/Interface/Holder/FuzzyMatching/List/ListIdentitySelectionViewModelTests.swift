@@ -220,7 +220,6 @@ final class ListIdentitySelectionViewModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeIdentitySelectionDetails) == true
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeIdentitySelectionDetailsParameters?.identitySelectionDetails) == IdentitySelectionDetails(name: "Rool", details: [["Vaccination", "Today"]])
 	}
-
 	
 	func test_list_twoItems_showDetails_lastItem() {
 		
