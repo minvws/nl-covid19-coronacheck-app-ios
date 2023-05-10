@@ -468,7 +468,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		guard let persistentName = Current.secureUserSettings.selectedIdentity else { return }
 
 		let title: String = L.holder_identityRemoved_moreinfo_title()
-		let message: String = L.holder_identityRemoved_moreinfo_body(persistentName, bulletpoints)
+		let sanitizedName = Resources.Sanitizer.sanitize(persistentName)
+		let message: String = L.holder_identityRemoved_moreinfo_body(sanitizedName, bulletpoints)
 
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true)
 	}
@@ -478,7 +479,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		return items
 			.compactMap { item -> String? in
 				guard let localizedDateLabel = item.type.localizedDateLabel else { return nil }
-				let dateString = DateFormatter.Format.dayMonthYear.string(from: item.eventDate)
+				let dateString = Resources.Sanitizer.sanitize(DateFormatter.Format.dayMonthYear.string(from: item.eventDate))
 				return """
 				<p>
 					<b>\(item.type.localized.capitalizingFirstLetter())</b>

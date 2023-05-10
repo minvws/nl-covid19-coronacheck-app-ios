@@ -138,6 +138,14 @@ extension EventFlow.EventResultWrapper {
 		events: [EventFlow.Event.boosterEvent]
 	)
 
+	static var fakeBoosterWithTaggedIdentityResultWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: EventFlow.Identity.identityWithTags,
+		status: .complete,
+		events: [EventFlow.Event.boosterEvent]
+	)
+
 	static var fakeMultipleVaccinationResultWrapper = EventFlow.EventResultWrapper(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
@@ -289,6 +297,15 @@ extension EventFlow.Identity {
 			infix: "",
 			firstName: "Corona",
 			lastName: "Check",
+			birthDateString: "1980-05-16"
+		)
+	}
+	
+	static var identityWithTags: EventFlow.Identity {
+		EventFlow.Identity(
+			infix: "",
+			firstName: "<b>Corona</b>",
+			lastName: "<p>Check</p>",
 			birthDateString: "1980-05-16"
 		)
 	}

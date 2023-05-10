@@ -1,11 +1,12 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
 import Foundation
+import Resources
 import Shared
 
 final class DCCQRDetailsViewModel {
@@ -44,7 +45,7 @@ final class DCCQRDetailsViewModel {
 			guard let value = $0.value, value.isNotEmpty else {
 				return nil
 			}
-			return (field: $0.field.displayTitle, value: value, dosageMessage: $0.dosageMessage)
+			return (field: $0.field.displayTitle, value: Resources.Sanitizer.sanitize(value), dosageMessage: $0.dosageMessage)
 		}
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in

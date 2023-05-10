@@ -69,4 +69,25 @@ class RemoteEventDetailsViewModelTests: XCTestCase {
 		expect(self.sut.footer) == "Footer Positive Test"
 		expect(self.sut.details).to(haveCount(10))
 	}
+	
+	func test_positiveTest_withInvalidTags() {
+		
+		// Given
+		let identity = EventFlow.Identity.identityWithTags
+		let event = EventFlow.Event.positiveTestEvent
+		environmentSpies.mappingManagerSpy.stubbedGetTestManufacturerResult = "<i>testPositiveTest<a/>Generator</i>"
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "Sneltest (RAT)"
+		let details = PositiveTestDetailsGenerator.getDetails(identity: identity, event: event)
+		
+		// When
+		sut = RemoteEventDetailsViewModel(
+			title: "Title Positive Test",
+			details: details,
+			footer: "Footer Positive Test"
+		)
+		
+		// Then
+		expect(self.sut.details[1].detail) == "Naam: <b>Check, Corona</b>"
+		expect(self.sut.details[7].detail) == "Testproducent: <b>testPositiveTestGenerator</b>"
+	}
 }

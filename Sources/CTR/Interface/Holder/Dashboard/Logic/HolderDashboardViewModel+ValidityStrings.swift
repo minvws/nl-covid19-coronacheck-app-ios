@@ -95,8 +95,8 @@ private func validityText_hasBegun_eu_vaccination(doseNumber: String, totalDoses
 	
 	return .init(
 		lines: [
-			dosesAndCountryLine,
-			"\(L.generalVaccinationdate()): \(formatter.string(from: validFrom))"
+			Resources.Sanitizer.sanitize(dosesAndCountryLine),
+			Resources.Sanitizer.sanitize("\(L.generalVaccinationdate()): \(formatter.string(from: validFrom))")
 		],
 		kind: .current
 	)
@@ -139,7 +139,7 @@ private func validityText_hasBegun_eu_fallback(origin: QRCard.GreenCard.Origin, 
 	let dateString = formatter.string(from: origin.validFromDate)
 
 	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
-	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	let valueString = Resources.Sanitizer.sanitize((prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines))
 
 	return .init(
 		lines: [titleString, valueString],
@@ -169,7 +169,7 @@ private func validityText_hasNotYetBegun_netherlands_vaccination(expiryIsBeyondT
 	}
 	
 	return .init(
-		lines: [titleString, valueString],
+		lines: [titleString, Resources.Sanitizer.sanitize(valueString)],
 		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
 	)
 }
@@ -180,7 +180,7 @@ private func validityText_hasBegun_eu_recovery(expirationTime: Date) -> HolderDa
 	let formatter = DateFormatter.Format.dayMonthYear
 	let dateString = formatter.string(from: expirationTime)
 
-	let valueString = (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	let valueString = Resources.Sanitizer.sanitize((prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines))
 	return .init(
 		lines: [valueString],
 		kind: .current
@@ -193,7 +193,7 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: validFrom)
 	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
 
-	let valueString = "\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
+	let valueString = Resources.Sanitizer.sanitize("\(prefix) \(validFromDateString) \(L.generalUptoandincluding()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines))
 	return .init(
 		// geldig vanaf 17 juli t/m 11 mei 2022
 		lines: [valueString],
@@ -207,7 +207,7 @@ private func validityText_hasNotYetBegun_netherlands_test(origin: QRCard.GreenCa
 	let validFromDateString = DateFormatter.Format.dayMonthWithTime.string(from: origin.validFromDate)
 
 	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
-	let valueString = (prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+	let valueString = Resources.Sanitizer.sanitize((prefix + " " + validFromDateString).trimmingCharacters(in: .whitespacesAndNewlines))
 	return .init(
 		lines: [titleString, valueString],
 		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
