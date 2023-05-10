@@ -310,4 +310,28 @@ class DCCQRDetailsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
+	
+	func test_tagsInValue_shouldBeStripped() {
+		
+		// Given
+		
+		// When
+		sut = DCCQRDetailsViewModel(
+			coordinator: coordinatorSpy,
+			title: "title",
+			description: "body",
+			details: [
+				DCCQRDetails(field: DCCQRDetailsTest.name, value: "<b>Corona, Check</b>"),
+				DCCQRDetails(field: DCCQRDetailsTest.issuer, value: "Issuer <a href=\"https://coronacheck.nl\">CoronaCheck</a>")
+			],
+			dateInformation: "information"
+		)
+		
+		// THen
+		expect(self.sut.details).to(haveCount(2))
+		expect(self.sut.details[0].field) == "Naam / Name:"
+		expect(self.sut.details[0].value) == "Corona, Check"
+		expect(self.sut.details[1].field) == "Afgever certificaat / Certificate issuer:"
+		expect(self.sut.details[1].value) == "Issuer CoronaCheck"
+	}
 }

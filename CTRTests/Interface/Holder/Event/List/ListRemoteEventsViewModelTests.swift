@@ -328,6 +328,27 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		// Then
 		expect(rows).to(haveCount(1))
 	}
+	
+	func test_oneEvent_oneRow_shouldStripTags() {
+
+		// Given
+		sut = ListRemoteEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01", identity: EventFlow.Identity.identityWithTags)],
+			greenCardLoader: greenCardLoader
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state: \(sut.viewState)")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+		expect(rows[0].details[1]) == "Naam: Check, Corona"
+	}
 
 	func test_twoDifferentEvents_twoRows() {
 
@@ -2136,7 +2157,11 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 	
 	// MARK: Helper
 
-	private func remoteVaccinationEvent(providerIdentifier: String = "CC", vaccinationDate: String, hpkCode: String? = nil) -> RemoteEvent {
+	private func remoteVaccinationEvent(
+		providerIdentifier: String = "CC",
+		vaccinationDate: String,
+		hpkCode: String? = nil,
+		identity: EventFlow.Identity = EventFlow.Identity.fakeIdentity) -> RemoteEvent {
 
 		let vaccinationEvent = EventFlow.VaccinationEvent(
 			dateString: vaccinationDate,
@@ -2155,7 +2180,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: providerIdentifier,
 				protocolVersion: "3.0",
-				identity: EventFlow.Identity.fakeIdentity,
+				identity: identity,
 				status: .complete,
 				events: [
 					EventFlow.Event(

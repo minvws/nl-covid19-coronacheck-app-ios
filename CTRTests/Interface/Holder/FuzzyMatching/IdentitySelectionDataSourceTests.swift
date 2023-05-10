@@ -99,6 +99,21 @@ final class IdentitySelectionDataSourceTests: XCTestCase {
 		expect(tuples.first?.eventCountInformation) == "1 vaccinatie"
 	}
 	
+	func test_getIdentityInformation_fromWrapper_shouldStripTags() {
+		
+		// Given
+		cacheSpy.stubbedGetEventResultWrapperResult = EventFlow.EventResultWrapper.fakeBoosterWithTaggedIdentityResultWrapper
+		
+		// When
+		let tuples = sut.getIdentityInformation(matchingBlobIds: [["test"]])
+		
+		// Then
+		expect(tuples).to(haveCount(1))
+		expect(tuples.first?.blobIds) == ["test"]
+		expect(tuples.first?.name) == "Check, Corona"
+		expect(tuples.first?.eventCountInformation) == "1 vaccinatie"
+	}
+	
 	func test_getIdentityInformation_fromWrapper_multipleEvents() {
 		
 		// Given
