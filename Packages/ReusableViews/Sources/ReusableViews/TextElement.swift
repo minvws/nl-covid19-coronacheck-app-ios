@@ -38,8 +38,8 @@ open class TextElement: UITextView, UITextViewDelegate {
 		
 		self.attributedText = attributedText
 		
-		// Strip the HTML
-		let strippedText = Resources.Sanitizer.sanitize(attributedText.string)
+		// Strip the HTML, trim 
+		let strippedText = Resources.Sanitizer.sanitize(attributedText.string).trimmingCharacters(in: .whitespacesAndNewlines)
 		// Strip the bullets
 		accessibilityValue = strippedText.replacingOccurrences(of: NSAttributedString.listBulletCharacter, with: "")
 		
