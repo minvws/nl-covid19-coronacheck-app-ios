@@ -238,10 +238,10 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			details: [
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -273,9 +273,9 @@ extension ListRemoteEventsViewModel {
 
 		let title = L.holder_listRemoteEvents_listElement_title_vaccination()
 		var listDetails: [String] = [
-			Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_vaccinationDate(formattedShotDate)),
-			Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-			Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
+			Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_vaccinationDate(formattedShotDate)),
+			Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+			Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 		]
 		
 		var retrievedFrom = L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
@@ -293,7 +293,7 @@ extension ListRemoteEventsViewModel {
 				)
 			}
 		}
-		listDetails.append(Resources.Sanitizer.sanitize(retrievedFrom))
+		listDetails.append(Shared.Sanitizer.sanitize(retrievedFrom))
 		
 		return ListRemoteEventsViewController.Row(
 			title: title,
@@ -323,10 +323,10 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			details: [
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -353,10 +353,10 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			details: [
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -388,11 +388,11 @@ extension ListRemoteEventsViewModel {
 		}
 
 		return ListRemoteEventsViewController.Row(
-			title: Resources.Sanitizer.sanitize(title),
+			title: Shared.Sanitizer.sanitize(title),
 			details: [
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_vaccinationDate(formattedVaccinationDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_vaccinationDate(formattedVaccinationDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -421,9 +421,9 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
 			details: [
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -452,9 +452,9 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
 			details: [
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
-				Resources.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(

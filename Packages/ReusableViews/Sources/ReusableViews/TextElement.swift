@@ -39,7 +39,7 @@ open class TextElement: UITextView, UITextViewDelegate {
 		self.attributedText = attributedText
 		
 		// Strip the HTML, trim 
-		let strippedText = Resources.Sanitizer.sanitize(attributedText.string).trimmingCharacters(in: .whitespacesAndNewlines)
+		let strippedText = Shared.Sanitizer.sanitize(attributedText.string).trimmingCharacters(in: .whitespacesAndNewlines)
 		// Strip the bullets
 		accessibilityValue = strippedText.replacingOccurrences(of: NSAttributedString.listBulletCharacter, with: "")
 		

@@ -46,7 +46,7 @@ final class RemoteEventDetailsViewModel {
 			
 			var field = $0.field.displayTitle
 			if let value = $0.value, !value.isEmpty {
-				field += " <b>\(Resources.Sanitizer.sanitize(value))</b>"
+				field += " <b>\(Shared.Sanitizer.sanitize(value))</b>"
 			}
 			return (field, $0.field.isPrecededByLineBreak, $0.field.isFollowedByLineBreak, $0.field.isSeparator)
 		}
