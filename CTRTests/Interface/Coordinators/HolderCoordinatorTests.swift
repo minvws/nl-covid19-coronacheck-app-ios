@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -17,13 +17,14 @@ import Persistence
 @testable import Models
 @testable import Managers
 @testable import Resources
+import ViewControllerPresentationSpy
 
 class HolderCoordinatorTests: XCTestCase {
 
 	var sut: HolderCoordinator!
 
 	var navigationSpy: NavigationControllerSpy!
-	private var environmentSpies: EnvironmentSpies!
+	var environmentSpies: EnvironmentSpies!
 	var window = UIWindow()
 
 	override func setUp() {
@@ -663,125 +664,55 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	// MARK: - EventFlowDelegate -
-	
-	func test_eventFlowDidComplete() throws {
+	func test_migrationIsSuccessful() {
 		
 		// Given
-		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
+		let alertVerifier = AlertVerifier()
 		
 		// When
-		sut.eventFlowDidComplete()
+		sut.showMigrationSuccessfulDialog()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
-	}
-
-	func test_eventFlowDidCancel() {
-		
-		// Given
-		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
-		
-		// When
-		sut.eventFlowDidCancel()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopViewController) == false
-	}
-	
-	// MARK: - PaperProofFlowDelegate -
-	
-	func test_addPaperProofFlowDidCancel() throws {
-		
-		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
-		
-		// When
-		sut.addPaperProofFlowDidCancel()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
-	func test_addPaperProofFlowDidFinish() throws {
-		
-		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
-		
-		// When
-		sut.addPaperProofFlowDidFinish()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
-	}
-	
-	func test_switchToAddRegularProof() throws {
-		
-		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
-		
-		// When
-		sut.switchToAddRegularProof()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
-	}
-	
-	func test_handleMismatchedIdentityError() {
-		
-		// Given
-		
-		// When
-		sut.handleMismatchedIdentityError(matchingBlobIds: [["123"]])
-		
-		// Then
-		expect(self.sut.childCoordinators).to(haveCount(1))
-		expect(self.sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
-		expect(self.navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
-	}
-	
-	func test_fuzzyMatchingFlowDidStop() {
-		
-		// Given
-		
-		let fmCoordinator = FuzzyMatchingCoordinator(
-			navigationController: sut.navigationController,
-			matchingBlobIds: [[]],
-			onboardingFactory: FuzzyMatchingOnboardingFactory(),
-			delegate: sut
+		alertVerifier.verify(
+			title: L.holder_migrationFlow_deleteDetails_dialog_title(),
+			message: L.holder_migrationFlow_deleteDetails_dialog_message(),
+			animated: true,
+			actions: [
+				.destructive(L.holder_migrationFlow_deleteDetails_dialog_deleteButton()),
+				.default(L.holder_migrationFlow_deleteDetails_dialog_retainButton())
+			]
 		)
-		sut.childCoordinators = [fmCoordinator]
-		
-		// When
-		fmCoordinator.userHasStoppedTheFlow()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopToRootViewController) == true
 	}
 	
-	func test_fuzzyMatchingFlowDidFinish() {
+	func test_removeDataAfterMigration_cancel() throws {
 		
 		// Given
-		
-		let fmCoordinator = FuzzyMatchingCoordinator(
-			navigationController: sut.navigationController,
-			matchingBlobIds: [[]],
-			onboardingFactory: FuzzyMatchingOnboardingFactory(),
-			delegate: sut
-		)
-		sut.childCoordinators = [fmCoordinator]
+		let alertVerifier = AlertVerifier()
+		sut.showMigrationSuccessfulDialog()
 		
 		// When
-		fmCoordinator.userHasFinishedTheFlow()
+		try alertVerifier.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_retainButton())
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToRootViewController) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == false
+	}
+	
+	func test_removeDataAfterMigration_remove() throws {
+		
+		// Given
+		let alertVerifier = AlertVerifier()
+		sut.showMigrationSuccessfulDialog()
+		
+		// When
+		try alertVerifier.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_deleteButton())
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
 	}
 }

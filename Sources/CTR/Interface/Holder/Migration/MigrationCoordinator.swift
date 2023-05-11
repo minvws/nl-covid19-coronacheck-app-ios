@@ -16,6 +16,8 @@ import UIKit
 
 protocol MigrationFlowDelegate: AnyObject {
 	
+	func dataMigrationBackAction()
+	
 	func dataMigrationCancelled()
 	
 	func dataMigrationExportCompleted()
@@ -228,7 +230,7 @@ extension MigrationCoordinator: UINavigationControllerDelegate {
 		if !navigationController.viewControllers.contains(where: { $0.isKind(of: ContentWithImageViewController.self) }) {
 			// If there is no more ContentWithIconViewController in the stack, we are done here.
 			// Works for both back swipe and back button
-			delegate?.dataMigrationCancelled()
+			delegate?.dataMigrationBackAction()
 		}
 	}
 }

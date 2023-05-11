@@ -773,6 +773,11 @@ extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 
 extension HolderCoordinator: MigrationFlowDelegate {
 	
+	func dataMigrationBackAction() {
+	
+		removeMigrationCoordinator()
+	}
+	
 	func dataMigrationCancelled() {
 		
 		navigateToDashboard()
