@@ -38,12 +38,10 @@ open class TextElement: UITextView, UITextViewDelegate {
 		
 		self.attributedText = attributedText
 		
-		// Improve accessibility by trimming whitespace and newline characters
-		if let mutableAttributedTextForAccessibility = attributedText.mutableCopy() as? NSMutableAttributedString {
-			mutableAttributedTextForAccessibility.stripParagraphStyle()
-			mutableAttributedTextForAccessibility.trim()
-			accessibilityAttributedValue = mutableAttributedTextForAccessibility
-		}
+		// Strip the HTML
+		var textForAccessibilityValue = Resources.Sanitizer.sanitize(attributedText.string)
+		// Strip the bullets
+		accessibilityValue = textForAccessibilityValue.replacingOccurrences(of: NSAttributedString.listBulletCharacter, with: "")
 		
 		setupAttributedStringLinks()
 	}
