@@ -16,7 +16,6 @@ let package = Package(
 		// Dependencies declare other packages that this package depends on.
 		.package(name: "Shared", path: "../Shared"),
 		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.0.0"),
-		.package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
 		
 		// testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
@@ -29,8 +28,7 @@ let package = Package(
 			name: "Resources",
 			dependencies: [
 				.product(name: "Shared", package: "Shared"),
-				.product(name: "RswiftLibrary", package: "R.swift"),
-				"SwiftSoup"
+				.product(name: "RswiftLibrary", package: "R.swift")
 			],
 			resources: 	[
 				.copy("Resources/Animations"),

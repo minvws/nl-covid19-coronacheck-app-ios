@@ -74,7 +74,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 			var testCount = 0
 			
 			if let primaryId = blobIds.first, let identity = getIdentity(primaryId) {
-				fullName = Resources.Sanitizer.sanitize(identity.fullName)
+				fullName = Shared.Sanitizer.sanitize(identity.fullName)
 			}
 			
 			blobIds.forEach { blobId in
@@ -159,7 +159,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 					info = L.holder_identitySelection_details_scannedPaperProof()
 				} else if let providerName = summary.provider {
 					// Show the provider (Opgehaald bij RIVM etc)
-					info = L.holder_identitySelection_details_fetchedFromProvider(Resources.Sanitizer.sanitize(providerName))
+					info = L.holder_identitySelection_details_fetchedFromProvider(Shared.Sanitizer.sanitize(providerName))
 					
 					// if we are a vaccination
 					if let summaryVaccination = summary.event?.vaccination {
@@ -172,7 +172,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 							   // Exclude ourself from the match.
 							   summaryVaccination != combinedWithVaccination {
 								// We can combine this summary! Append the provider, mark as processed.
-								info += Resources.Sanitizer.sanitize(" \(L.general_and()) \(cominedProvider)")
+								info += Shared.Sanitizer.sanitize(" \(L.general_and()) \(cominedProvider)")
 								processedSummaries.append(vaccination)
 							}
 						}
@@ -182,7 +182,7 @@ class IdentitySelectionDataSource: IdentitySelectionDataSourceProtocol {
 				return [
 					summary.type,
 					info,
-					Resources.Sanitizer.sanitize(Formatter.getDateFrom(dateString8601: summary.dateString).map(DateFormatter.Format.dayMonthYear.string) ?? summary.dateString)
+					Shared.Sanitizer.sanitize(Formatter.getDateFrom(dateString8601: summary.dateString).map(DateFormatter.Format.dayMonthYear.string) ?? summary.dateString)
 				]
 			}
 		return result.compactMap { $0 }

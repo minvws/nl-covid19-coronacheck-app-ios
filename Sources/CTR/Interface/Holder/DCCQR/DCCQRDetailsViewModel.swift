@@ -45,7 +45,7 @@ final class DCCQRDetailsViewModel {
 			guard let value = $0.value, value.isNotEmpty else {
 				return nil
 			}
-			return (field: $0.field.displayTitle, value: Resources.Sanitizer.sanitize(value), dosageMessage: $0.dosageMessage)
+			return (field: $0.field.displayTitle, value: Shared.Sanitizer.sanitize(value), dosageMessage: $0.dosageMessage)
 		}
 		
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in

@@ -97,7 +97,7 @@ class ListStoredEventsViewModel {
 		
 		let providerName = Current.mappingManager.getProviderIdentifierMapping(shortProvider)
 		
-		return Resources.Sanitizer.sanitize(L.holder_storedEvents_listHeader_fetchedFromProvider(providerName ?? provider))
+		return Shared.Sanitizer.sanitize(L.holder_storedEvents_listHeader_fetchedFromProvider(providerName ?? provider))
 	}
 	
 	private func getEventRows(_ storedEvent: EventGroup) -> [ListStoredEventsViewController.Row] {
@@ -122,7 +122,7 @@ class ListStoredEventsViewModel {
 						let identity = wrapper.identity else {
 					return nil
 				}
-				let dateString = Resources.Sanitizer.sanitize(DateFormatter.Format.dayMonthYear.string(from: date))
+				let dateString = Shared.Sanitizer.sanitize(DateFormatter.Format.dayMonthYear.string(from: date))
 				
 				if event.hasNegativeTest {
 					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
@@ -224,7 +224,7 @@ class ListStoredEventsViewModel {
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_vaccination().capitalizingFirstLetter(),
-			details: Resources.Sanitizer.sanitize(formattedVaccinationDate),
+			details: Shared.Sanitizer.sanitize(formattedVaccinationDate),
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_vaccination().capitalizingFirstLetter(),
@@ -241,7 +241,7 @@ class ListStoredEventsViewModel {
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
-			details: Resources.Sanitizer.sanitize(formattedTestDate),
+			details: Shared.Sanitizer.sanitize(formattedTestDate),
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -258,7 +258,7 @@ class ListStoredEventsViewModel {
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_negativeTest().capitalizingFirstLetter(),
-			details: Resources.Sanitizer.sanitize(formattedTestDate),
+			details: Shared.Sanitizer.sanitize(formattedTestDate),
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_negativeTest().capitalizingFirstLetter(),

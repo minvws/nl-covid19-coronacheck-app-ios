@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 import Nimble
-import Resources
+import Shared
 
 final class SanitizerTests: XCTestCase {
 
