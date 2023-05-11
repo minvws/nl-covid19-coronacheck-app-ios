@@ -25,6 +25,7 @@ class HolderCoordinatorTests: XCTestCase {
 
 	var navigationSpy: NavigationControllerSpy!
 	var environmentSpies: EnvironmentSpies!
+	var alertVerifier: AlertVerifier?
 	var window = UIWindow()
 
 	override func setUp() {
@@ -32,10 +33,16 @@ class HolderCoordinatorTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		navigationSpy = NavigationControllerSpy()
+		alertVerifier = AlertVerifier()
 		sut = HolderCoordinator(
 			navigationController: navigationSpy,
 			window: window
 		)
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
 	}
 
 	// MARK: - Tests
@@ -667,13 +674,12 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_migrationIsSuccessful() {
 		
 		// Given
-		let alertVerifier = AlertVerifier()
 		
 		// When
 		sut.showMigrationSuccessfulDialog()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holder_migrationFlow_deleteDetails_dialog_title(),
 			message: L.holder_migrationFlow_deleteDetails_dialog_message(),
 			animated: true,
@@ -687,11 +693,10 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_removeDataAfterMigration_cancel() throws {
 		
 		// Given
-		let alertVerifier = AlertVerifier()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
-		try alertVerifier.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_retainButton())
+		try alertVerifier?.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_retainButton())
 		
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
@@ -703,11 +708,10 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_removeDataAfterMigration_remove() throws {
 		
 		// Given
-		let alertVerifier = AlertVerifier()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
-		try alertVerifier.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_deleteButton())
+		try alertVerifier?.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_deleteButton())
 		
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
