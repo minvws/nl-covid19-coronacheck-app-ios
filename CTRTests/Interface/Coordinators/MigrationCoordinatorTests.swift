@@ -50,7 +50,7 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect((self.navigationSpy.viewControllers.first as? ContentWithImageViewController)?.viewModel)
 			.to(beAnInstanceOf(MigrationStartViewModel.self))
 		expect(self.delegateSpy.invokedDataMigrationCancelled) == false
-		
+		expect(self.delegateSpy.invokedDataMigrationBackAction) == false
 	}
 	
 	func test_consume_redeemHolder() {

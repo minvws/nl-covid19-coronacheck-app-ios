@@ -11,6 +11,14 @@ import DataMigration
 
 class MigrationFlowDelegateSpy: MigrationFlowDelegate {
 
+	var invokedDataMigrationBackAction = false
+	var invokedDataMigrationBackActionCount = 0
+
+	func dataMigrationBackAction() {
+		invokedDataMigrationBackAction = true
+		invokedDataMigrationBackActionCount += 1
+	}
+
 	var invokedDataMigrationCancelled = false
 	var invokedDataMigrationCancelledCount = 0
 
