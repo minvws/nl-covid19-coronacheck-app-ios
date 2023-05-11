@@ -180,7 +180,7 @@ public extension NSAttributedString {
 		}
 	}
 
-	public static let listBulletCharacter = "\u{25CF}"
+	static let listBulletCharacter = "\u{25CF}"
 
 	private static func replaceBullets(in text: NSMutableAttributedString, style: HTMLStyle) {
 

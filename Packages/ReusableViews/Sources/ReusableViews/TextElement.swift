@@ -39,9 +39,9 @@ open class TextElement: UITextView, UITextViewDelegate {
 		self.attributedText = attributedText
 		
 		// Strip the HTML
-		var textForAccessibilityValue = Resources.Sanitizer.sanitize(attributedText.string)
+		let strippedText = Resources.Sanitizer.sanitize(attributedText.string)
 		// Strip the bullets
-		accessibilityValue = textForAccessibilityValue.replacingOccurrences(of: NSAttributedString.listBulletCharacter, with: "")
+		accessibilityValue = strippedText.replacingOccurrences(of: NSAttributedString.listBulletCharacter, with: "")
 		
 		setupAttributedStringLinks()
 	}
