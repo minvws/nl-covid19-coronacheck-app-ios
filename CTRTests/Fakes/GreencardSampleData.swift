@@ -14,96 +14,37 @@ import Persistence
 
 extension GreenCard {
 
-	static func sampleDomesticCredentialsVaccinationExpiringIn10DaysWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 40 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 
 		greencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * ago, expirationTime: 0 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 0 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * fromNow, expirationTime: 2 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * fromNow, expirationTime: 3 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * fromNow, expirationTime: 4 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * fromNow, expirationTime: 5 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * fromNow, expirationTime: 6 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * fromNow, expirationTime: 7 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * fromNow, expirationTime: 8 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 8 * days * fromNow, expirationTime: 9 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 9 * days * fromNow, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
+			Credential.sample(validFrom: 8 * days * ago, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 		return greencard
 	}
 
-	static func sampleDomesticCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
-
-		greencard.origins = [
-			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 40 * days * fromNow, dataStoreManager: dataStoreManager),
-			Origin.sampleTest(eventTime: 4 * hours * ago, expirationTime: 20 * hours * fromNow, dataStoreManager: dataStoreManager)
-		]
-
-		greencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * ago, expirationTime: 0 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 0 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * fromNow, expirationTime: 2 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * fromNow, expirationTime: 3 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * fromNow, expirationTime: 4 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * fromNow, expirationTime: 5 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * fromNow, expirationTime: 6 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * fromNow, expirationTime: 7 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * fromNow, expirationTime: 8 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 8 * days * fromNow, expirationTime: 9 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 9 * days * fromNow, expirationTime: 10 * days * fromNow, dataStoreManager: dataStoreManager)
-		]
-		return greencard
-	}
-
-	static func sampleDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
-		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 30 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 
 		greencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * ago, expirationTime: 0 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 0 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * fromNow, expirationTime: 2 * days * fromNow, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * fromNow, expirationTime: 3 * days * fromNow, dataStoreManager: dataStoreManager)
+			Credential.sample(validFrom: 8 * days * ago, expirationTime: 3 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 		return greencard
 	}
 
-	static func sampleDomesticCredentialsBecomingValidIn28DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsBecomingValidIn28DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 2 * hours * ago, validFromDate: 28 * days * fromNow, expirationTime: 1 * years * fromNow, dataStoreManager: dataStoreManager)
@@ -154,9 +95,9 @@ extension GreenCard {
 		return greencard
 	}
 	
-	static func sampleDomesticCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 25 * days * ago, validFromDate: 3 * days * fromNow, expirationTime: 1 * years * fromNow, dataStoreManager: dataStoreManager)
@@ -167,64 +108,44 @@ extension GreenCard {
 		return greencard
 	}
 
-	static func sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 30 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 
 		greencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
+			Credential.sample(validFrom: 8 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
 		]
 		return greencard
 	}
 
-	static func sampleDomesticCredentialsExpiringWithNoMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsExpiringWithNoMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 
 		greencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * ago, expirationTime: 0 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 1 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager)
+			Credential.sample(validFrom: 8 * days * ago, expirationTime: 1 * days * fromNow, dataStoreManager: dataStoreManager)
 		]
 		return greencard
 	}
 
-	static func sampleDomesticCredentialsExpiredWithNoMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
+	static func sampleInternationalCredentialsExpiredWithNoMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
-		greencard.type = GreenCardType.domestic.rawValue
+		greencard.type = GreenCardType.eu.rawValue
 
 		greencard.origins = [
 			Origin.sampleVaccination(eventTime: 8 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
 		]
 
 		greencard.credentials = [
-			Credential.sample(validFrom: 8 * days * ago, expirationTime: 7 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 7 * days * ago, expirationTime: 6 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 6 * days * ago, expirationTime: 5 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 5 * days * ago, expirationTime: 4 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 4 * days * ago, expirationTime: 3 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 3 * days * ago, expirationTime: 2 * days * ago, dataStoreManager: dataStoreManager),
-			Credential.sample(validFrom: 2 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
+			Credential.sample(validFrom: 8 * days * ago, expirationTime: 1 * days * ago, dataStoreManager: dataStoreManager)
 		]
 		return greencard
 	}
@@ -377,52 +298,52 @@ extension Credential {
 
 extension WalletManagerSpy {
 
-	func loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: DataStoreManager) {
+	func loadInternationalCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsVaccinationExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 		]
 	}
 
-	func loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: DataStoreManager) {
+	func loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
 		]
 	}
 
-	func loadDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: DataStoreManager) {
+	func loadInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: dataStoreManager)
 		]
 	}
 
-	func loadDomesticCredentialsExpiredWithNoMoreToFetch(dataStoreManager: DataStoreManager) {
+	func loadInternationalCredentialsExpiredWithNoMoreToFetch(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsExpiredWithNoMoreToFetch(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsExpiredWithNoMoreToFetch(dataStoreManager: dataStoreManager)
 		]
 	}
 
-	func loadDomesticCredentialsExpiringWithNoMoreToFetch(dataStoreManager: DataStoreManager) {
+	func loadInternationalCredentialsExpiringWithNoMoreToFetch(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsExpiringWithNoMoreToFetch(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsExpiringWithNoMoreToFetch(dataStoreManager: dataStoreManager)
 		]
 	}
 
-	func loadDomesticEmptyCredentialsWithDistantFutureValidity(dataStoreManager: DataStoreManager) {
+	func loadInternationalEmptyCredentialsWithDistantFutureValidity(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsBecomingValidIn28DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsBecomingValidIn28DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
 		]
 	}
 
-	func loadDomesticEmptyCredentialsWithImminentFutureValidity(dataStoreManager: DataStoreManager) {
+	func loadInternationalEmptyCredentialsWithImminentFutureValidity(dataStoreManager: DataStoreManager) {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
-			.sampleDomesticCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
+			.sampleInternationalCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
 		]
 	}
 	

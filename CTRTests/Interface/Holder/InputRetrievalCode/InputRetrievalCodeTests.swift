@@ -1650,8 +1650,7 @@ class InputRetrievalCodeViewModelTests: XCTestCase {
 		return InputRetrievalCodeViewModel(
 			coordinator: holderCoordinatorSpy,
 			requestToken: requestToken,
-			tokenValidator: tokenValidatorSpy,
-			inputRetrievalCodeMode: .negativeTest
+			tokenValidator: tokenValidatorSpy
 		)
 	}
 }

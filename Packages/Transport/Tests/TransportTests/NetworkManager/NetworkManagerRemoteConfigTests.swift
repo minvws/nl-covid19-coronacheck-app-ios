@@ -360,7 +360,6 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 				expect(result.successValue?.0.configTTL) == 300
 				expect(result.successValue?.0.isGGDEnabled) == true
 				expect(result.successValue?.0.configAlmostOutOfDateWarningSeconds) == 240
-				expect(result.successValue?.0.disclosurePolicies).to(beEmpty())
 				expect(result.successValue?.0.hpkCodes).to(haveCount(11))
 				done()
 			}

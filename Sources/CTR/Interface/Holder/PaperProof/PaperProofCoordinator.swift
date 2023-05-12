@@ -49,7 +49,7 @@ protocol PaperProofCoordinatorDelegate: AnyObject {
 	func displayErrorForPaperProofCheck(content: Content)
 }
 
-final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
+final class PaperProofCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 	
@@ -71,12 +71,14 @@ final class PaperProofCoordinator: Coordinator, OpenUrlProtocol {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
+		super.init()
+		self.navigationController.delegate = self
 	}
 	
 	/// Start the scene
 	func start() {
 		
-		let destination = PaperProofStartScanningViewController(
+		let destination = ContentWithImageViewController(
 			viewModel: PaperProofStartScanningViewModel(
 				coordinator: self
 			)
@@ -132,7 +134,7 @@ extension PaperProofCoordinator: PaperProofCoordinatorDelegate {
 				screenCaptureDetector: ScreenCaptureDetector(),
 				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url)
 				},
 				hideBodyForScreenCapture: false
 			)
@@ -288,17 +290,11 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		delegate?.addPaperProofFlowDidFinish()
 	}
 
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-
-		// Should not happen.
-		eventFlowDidComplete()
-	}
-
 	func eventFlowDidCancel() {
 
 		cleanup()
 		if let viewController = navigationController.viewControllers
-			.first(where: { $0 is PaperProofStartScanningViewController }) {
+			.first(where: { $0 is ContentWithImageViewController }) {
 
 			navigationController.popToViewController(
 				viewController,
@@ -317,5 +313,17 @@ extension PaperProofCoordinator: EventFlowDelegate {
 		removeChildCoordinator()
 		scannedDCC = nil
 		token = nil
+	}
+}
+
+extension PaperProofCoordinator: UINavigationControllerDelegate {
+
+	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+
+		if !navigationController.viewControllers.contains(where: { $0.isKind(of: ContentWithImageViewController.self) }) {
+			// If there is no more ContentWithIconViewController in the stack, we are done here.
+			// Works for both back swipe and back button
+			delegate?.addPaperProofFlowDidCancel()
+		}
 	}
 }

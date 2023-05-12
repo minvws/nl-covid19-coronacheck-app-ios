@@ -10,7 +10,6 @@ import CoreData
 
 public enum GreenCardType: String {
 
-	case domestic
 	case eu
 }
 
@@ -32,27 +31,6 @@ extension GreenCard {
 		
 		if let type {
 			return GreenCardType(rawValue: type)
-		}
-		return nil
-	}
-
-	/// Get the active credential with the longest lifetime for a date
-	/// - Parameter now: the date for the credential (defaults to now)
-	/// - Returns: the active credential
-	public func getActiveDomesticCredential(forDate now: Date = Date()) -> Credential? {
-		
-		guard getType() == GreenCardType.domestic else {
-			return nil
-		}
-
-		if let list = credentials?.allObjects as? [Credential] {
-			return list
-				.filter { $0.expirationTime != nil }
-				.filter { $0.validFrom != nil }
-				.filter { $0.expirationTime! > now }
-				.filter { $0.validFrom! <= now }
-				.sorted { $0.validFrom! < $1.validFrom! }
-				.last
 		}
 		return nil
 	}

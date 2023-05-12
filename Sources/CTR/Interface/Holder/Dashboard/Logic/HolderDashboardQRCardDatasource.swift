@@ -98,32 +98,19 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		let qrCards = groupedGreenCards
 			.flatMap { (greencardsGroup: [(DBGreenCard, [DBOrigin])]) -> [QRCard] in
 
-				// If this iteration has a `.domestic`, then it goes to its own QRCard function:
-				if let firstPair = greencardsGroup.first,
-				   let firstType = firstPair.0.getType(),
-				   firstType == GreenCardType.domestic {
-
-					// For each domestic greencard (Note: there should only be one), convert it to a domestic QRCard:
-					return greencardsGroup.flatMap { greencard, origins in
-						QRCard.domesticQRCards(forGreencard: greencard, withOrigins: origins, now: now)
-					}
-
-				// Otherwise, (for international greencards) the group gets wrangled into a set of europeanUnion QR Cards:
-				} else {
-					var cards = [QRCard]()
-					greencardsGroup.forEach { greenCard, origins in
-						if !origins.contains(where: { $0.type == OriginType.vaccination.rawValue }) {
-							// Make individual cards for the international recovery and test cards
-							origins.forEach { origin in
-								cards += QRCard.euQRCards(forGreencardGroup: [(greenCard, [origin])], now: now)
-							}
-						} else {
-							// Combine the international vaccination cards
-							cards = QRCard.euQRCards(forGreencardGroup: greencardsGroup, now: now)
+				var cards = [QRCard]()
+				greencardsGroup.forEach { greenCard, origins in
+					if !origins.contains(where: { $0.type == OriginType.vaccination.rawValue }) {
+						// Make individual cards for the international recovery and test cards
+						origins.forEach { origin in
+							cards += QRCard.euQRCards(forGreencardGroup: [(greenCard, [origin])], now: now)
 						}
+					} else {
+						// Combine the international vaccination cards
+						cards = QRCard.euQRCards(forGreencardGroup: greencardsGroup, now: now)
 					}
-					return cards
 				}
+				return cards
 			}
 
 		return qrCards
@@ -147,7 +134,7 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 		let grouped = Dictionary(
 			grouping: dbGreencards,
 			by: { (dbGreencard: DBGreenCard, origins: [DBOrigin]) -> String in
-				guard dbGreencard.getType() != .domestic, // we don't currently group domestic QR Cards
+				guard dbGreencard.getType() == .eu, // we don't currently group domestic QR Cards
 					  origins.count == 1, let type = origins.first?.type
 				else { return UUID().uuidString } // use a random string as grouping key, - i.e. forces own group
 
@@ -182,12 +169,8 @@ extension QRCard {
 					return hasValidOrigin
 				}
 				return hasValidOrigin && hasValidCredential
-			} else {
-				
-				let activeCredential: Credential? = dbGreencard.getActiveDomesticCredential(forDate: date)
-				let enabled = !(activeCredential == nil || origins.isEmpty) && origins.contains(where: { $0.isCurrentlyValid(now: date) })
-				return enabled
 			}
+			return false
 		}
 
 		/// For a given date and greencard, return the DCC (used to calculate "X of Y doses" labels in the UI): (might be expired)
@@ -202,44 +185,6 @@ extension QRCard {
 			}
 			return euCredentialAttributes
 		}
-
-		/// For a given date and greencard, return the DomesticCredentialAttributes:
-		static func evaluateDomesticCredentialAttributes(date: Date, dbGreencard: DBGreenCard) -> DomesticCredentialAttributes? {
-			guard !dbGreencard.isDeleted else { return nil }
-
-			guard dbGreencard.getType() == GreenCardType.domestic,
-				  let credentialData = dbGreencard.currentOrNextActiveCredential(forDate: date)?.data,
-				  let domesticCredentialAttributes = Current.cryptoManager.readDomesticCredentials(credentialData)
-			else {
-				return nil
-			}
-			return domesticCredentialAttributes
-		}
-	}
-
-	// (should only be one index in the array,
-	// but better to code defensively..)
-	fileprivate static func domesticQRCards(
-		forGreencard dbGreencard: DBGreenCard,
-		withOrigins dbOrigins: [DBOrigin],
-		now: () -> Date
-	) -> [QRCard] {
-		guard dbGreencard.getType() == GreenCardType.domestic else { return [] }
-
-		// Entries on the Card that represent an Origin.
-		let origins = QRCard.GreenCard.Origin.origins(fromDBOrigins: dbOrigins, now: now())
-
-		return [QRCard(
-			region: .netherlands(evaluateCredentialAttributes: { greencard, date in
-				// Dig around to match the `UI Greencard` back with the `DB Greencard`:
-				return Evaluators.evaluateDomesticCredentialAttributes(date: date, dbGreencard: dbGreencard)
-			}),
-			greencards: [GreenCard(id: dbGreencard.objectID, origins: origins)],
-			shouldShowErrorBeneathCard: !dbGreencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
-			evaluateEnabledState: { date in
-				Evaluators.evaluateButtonEnabledState(date: date, dbGreencard: dbGreencard, origins: origins)
-			}
-		)]
 	}
 
 	fileprivate static func euQRCards(
@@ -248,7 +193,7 @@ extension QRCard {
 	) -> [QRCard] {
 
 		// Check that no domestic cards slipped through (logical error if so)
-		guard !dbGreencardGroup.contains(where: { $0.0.getType() == GreenCardType.domestic }) else { return [] }
+		guard !dbGreencardGroup.contains(where: { $0.0.getType() != GreenCardType.eu }) else { return [] }
 
 		// Create "UI Greencards" from the DBGreenCard+DBOrigin pairs
 		let uiGreencards = dbGreencardGroup.map { pair -> GreenCard in

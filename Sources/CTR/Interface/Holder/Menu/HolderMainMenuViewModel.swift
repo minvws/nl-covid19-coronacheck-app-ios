@@ -33,12 +33,12 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 			coordinator?.userWishesToAddPaperProof()
 		}
 		
-		let itemAddVisitorPass: Item = .row(title: L.holder_menu_visitorpass(), subTitle: nil, icon: I.icon_menu_addvisitorpass()!, overrideColor: nil) { [weak coordinator] in
-			coordinator?.userWishesToAddVisitorPass()
-		}
-		
 		let itemStoredData: Item = .row(title: L.holder_menu_storedEvents(), subTitle: nil, icon: I.icon_menu_storeddata()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToSeeStoredEvents()
+		}
+		
+		let itemDataMigration: Item = .row(title: L.holder_menu_migration(), subTitle: nil, icon: I.icon_menu_migration()!, overrideColor: nil) { [weak coordinator] in
+			coordinator?.userWishesToMigrate()
 		}
 		
 		let itemHelpAndInfo: Item = .row(title: L.holder_menu_helpInfo(), subTitle: nil, icon: I.icon_menu_exclamation()!, overrideColor: nil) { [weak coordinator] in
@@ -53,12 +53,12 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		var holderItems = [Item]()
 		holderItems += [itemAddCertificate]
 		holderItems += [itemAddPaperCertificate]
-		if Current.featureFlagManager.isVisitorPassEnabled() {
-			holderItems += [itemAddVisitorPass]
-		}
 		
 		holderItems += [.sectionBreak]
 		holderItems += [itemStoredData]
+		holderItems += [itemDataMigration]
+
+		holderItems += [.sectionBreak]
 		holderItems += [itemHelpAndInfo]
 		
 		if Configuration().getRelease() != .production {

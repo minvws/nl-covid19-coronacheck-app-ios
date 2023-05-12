@@ -43,6 +43,14 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedFetchSignedEventsResult
 	}
 
+	var invokedRemoveDomesticGreenCards = false
+	var invokedRemoveDomesticGreenCardsCount = 0
+
+	func removeDomesticGreenCards() {
+		invokedRemoveDomesticGreenCards = true
+		invokedRemoveDomesticGreenCardsCount += 1
+	}
+
 	var invokedRemoveDraftEventGroups = false
 	var invokedRemoveDraftEventGroupsCount = 0
 
@@ -75,14 +83,10 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingGreenCards = false
 	var invokedRemoveExistingGreenCardsCount = 0
-	var invokedRemoveExistingGreenCardsParameters: (secureUserSettings: SecureUserSettingsProtocol, Void)?
-	var invokedRemoveExistingGreenCardsParametersList = [(secureUserSettings: SecureUserSettingsProtocol, Void)]()
 
-	func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol) {
+	func removeExistingGreenCards() {
 		invokedRemoveExistingGreenCards = true
 		invokedRemoveExistingGreenCardsCount += 1
-		invokedRemoveExistingGreenCardsParameters = (secureUserSettings, ())
-		invokedRemoveExistingGreenCardsParametersList.append((secureUserSettings, ()))
 	}
 
 	var invokedRemoveExistingBlockedEvents = false
@@ -101,18 +105,12 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveExistingMismatchedIdentityEventsCount += 1
 	}
 
-	var invokedStoreDomesticGreenCard = false
-	var invokedStoreDomesticGreenCardCount = 0
-	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)?
-	var invokedStoreDomesticGreenCardParametersList = [(remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)]()
-	var stubbedStoreDomesticGreenCardResult: Bool! = false
+	var invokedRemoveVaccinationAssessmentEventGroups = false
+	var invokedRemoveVaccinationAssessmentEventGroupsCount = 0
 
-	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
-		invokedStoreDomesticGreenCard = true
-		invokedStoreDomesticGreenCardCount += 1
-		invokedStoreDomesticGreenCardParameters = (remoteGreenCard, cryptoManager)
-		invokedStoreDomesticGreenCardParametersList.append((remoteGreenCard, cryptoManager))
-		return stubbedStoreDomesticGreenCardResult
+	func removeVaccinationAssessmentEventGroups() {
+		invokedRemoveVaccinationAssessmentEventGroups = true
+		invokedRemoveVaccinationAssessmentEventGroupsCount += 1
 	}
 
 	var invokedStoreEuGreenCard = false

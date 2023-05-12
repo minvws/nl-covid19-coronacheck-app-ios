@@ -31,6 +31,8 @@ public protocol WalletManaging: AnyObject {
 
 	func fetchSignedEvents() -> [String]
 
+	func removeDomesticGreenCards()
+
 	/// Deletes any EventGroups marked as `draft=true`
 	func removeDraftEventGroups()
 	
@@ -44,13 +46,13 @@ public protocol WalletManaging: AnyObject {
 	/// Remove any existing event groups
 	func removeExistingEventGroups()
 
-	func removeExistingGreenCards(secureUserSettings: SecureUserSettingsProtocol)
+	func removeExistingGreenCards()
 	
 	func removeExistingBlockedEvents()
 	
 	func removeExistingMismatchedIdentityEvents()
-
-	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
+	
+	func removeVaccinationAssessmentEventGroups()
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 	
@@ -86,4 +88,5 @@ public protocol WalletManaging: AnyObject {
 	func updateEventGroup(identifier: String, expiryDate: Date)
 	
 	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool)
+	
 }

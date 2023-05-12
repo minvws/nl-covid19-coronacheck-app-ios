@@ -11,5 +11,4 @@ import Models
 
 struct ShowQRItem {
 	let greenCard: GreenCard
-	let policy: DisclosurePolicy?
 }

@@ -11,35 +11,21 @@ public struct RemoteGreenCards: Codable, Equatable {
 
 	public struct Response: Codable, Equatable {
 
-		public var domesticGreenCard: DomesticGreenCard?
 		public var euGreenCards: [EuGreenCard]?
 		public var blobExpireDates: [BlobExpiry]?
 		public var hints: [String]?
 		
 		enum CodingKeys: String, CodingKey {
 
-			case domesticGreenCard = "domesticGreencard"
 			case euGreenCards = "euGreencards"
 			case blobExpireDates
 			case hints
 		}
 		
-		public init(domesticGreenCard: DomesticGreenCard? = nil, euGreenCards: [EuGreenCard]? = nil, blobExpireDates: [BlobExpiry]? = nil, hints: [String]? = nil) {
-			self.domesticGreenCard = domesticGreenCard
+		public init(euGreenCards: [EuGreenCard]? = nil, blobExpireDates: [BlobExpiry]? = nil, hints: [String]? = nil) {
 			self.euGreenCards = euGreenCards
 			self.blobExpireDates = blobExpireDates
 			self.hints = hints
-		}
-	}
-
-	public struct DomesticGreenCard: Codable, Equatable {
-
-		public let origins: [RemoteGreenCards.Origin]
-		public let createCredentialMessages: String?
-		
-		public init(origins: [RemoteGreenCards.Origin], createCredentialMessages: String?) {
-			self.origins = origins
-			self.createCredentialMessages = createCredentialMessages
 		}
 	}
 

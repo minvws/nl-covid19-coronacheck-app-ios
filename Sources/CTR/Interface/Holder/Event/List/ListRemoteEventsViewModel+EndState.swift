@@ -46,11 +46,11 @@ extension ListRemoteEventsViewModel {
 	internal func emptyEventsState() -> ListRemoteEventsViewController.State {
 
 		switch eventMode {
-			case .vaccinationassessment: return emptyAssessmentState()
 			case .paperflow: return emptyDccState()
 			case .vaccinationAndPositiveTest, .vaccination: return emptyVaccinationState()
 			case .recovery: return emptyRecoveryState()
 			case .test: return emptyTestState()
+			case .migration: return emptyMigrationState()
 		}
 	}
 
@@ -65,6 +65,17 @@ extension ListRemoteEventsViewModel {
 		)
 	}
 
+	// MARK: Migration End State
+	
+	internal func emptyMigrationState() -> ListRemoteEventsViewController.State {
+
+		return feedbackWithDefaultPrimaryAction(
+			title: L.holder_migration_emptylist_title(),
+			body: L.holder_migration_emptylist_message(),
+			primaryActionTitle: L.general_toMyOverview()
+		)
+	}
+	
 	// MARK: Negative Test End State
 
 	internal func emptyTestState() -> ListRemoteEventsViewController.State {
@@ -72,17 +83,6 @@ extension ListRemoteEventsViewModel {
 		return feedbackWithDefaultPrimaryAction(
 			title: L.holderTestNolistTitle(),
 			body: L.holderTestNolistMessage(),
-			primaryActionTitle: L.general_toMyOverview()
-		)
-	}
-	
-	// MARK: Assessment End State
-	
-	internal func emptyAssessmentState() -> ListRemoteEventsViewController.State {
-		
-		return feedbackWithDefaultPrimaryAction(
-			title: L.holder_event_vaccination_assessment_nolist_title(),
-			body: L.holder_event_vaccination_assessment_nolist_message(),
 			primaryActionTitle: L.general_toMyOverview()
 		)
 	}

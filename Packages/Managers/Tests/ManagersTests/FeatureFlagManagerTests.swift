@@ -15,7 +15,6 @@ class FeatureFlagManagerTests: XCTestCase {
 	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 	private var appVersionSupplierSpy: AppVersionSupplierSpy!
 	private var userSettingsSpy: UserSettingsSpy!
-	private var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy!
 	
 	override func setUp() {
 		
@@ -24,13 +23,9 @@ class FeatureFlagManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		
 		userSettingsSpy = UserSettingsSpy()
-		userSettingsSpy.stubbedOverrideDisclosurePolicies = []
-		
-		disclosurePolicyManagingSpy = DisclosurePolicyManagingSpy()
 		
 		sut = FeatureFlagManager(
 			remoteConfigManager: remoteConfigManagerSpy,
-			disclosurePolicyManager: disclosurePolicyManagingSpy,
 			userSettings: userSettingsSpy
 		)
 	}
@@ -97,211 +92,15 @@ class FeatureFlagManagerTests: XCTestCase {
 	
 	// MARK: - Disclosure -
 	
-	func test_is1GExclusiveDisclosurePolicyEnabled_enabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
-		
-		// When
-		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_is1GExclusiveDisclosurePolicyEnabled_disabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
-		
-		// When
-		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_is1GExclusiveDisclosurePolicyEnabled_disabled_bothPoliciesEnabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G", "1G"]
-		
-		// When
-		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_is1GExclusiveDisclosurePolicyEnabled_disabled_noPoliciesEnabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
-		
-		// When
-		let enabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_is3GExclusiveDisclosurePolicyEnabled_enabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
-		
-		// When
-		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_is3GExclusiveDisclosurePolicyEnabled_disabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
-		
-		// When
-		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_is3GExclusiveDisclosurePolicyEnabled_disabled_bothPoliciesEnabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G", "1G"]
-		
-		// When
-		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_is3GExclusiveDisclosurePolicyDisabled_disabled_noPoliciesEnabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
-		
-		// When
-		let enabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
 	func test_isNoDisclosurePoliciesEnabled_noPoliciesEnabled() {
 		
 		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
 		
 		// When
 		let enabled = sut.areZeroDisclosurePoliciesEnabled()
 		
 		// Then
 		expect(enabled) == true
-	}
-	
-	func test_areBothDisclosurePoliciesEnabled_disabled_only1G() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
-		
-		// When
-		let enabled = sut.areBothDisclosurePoliciesEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_areBothDisclosurePoliciesEnabled_disabled_only3G() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
-		
-		// When
-		let enabled = sut.areBothDisclosurePoliciesEnabled()
-		
-		// Then
-		expect(enabled) == false
-	}
-	
-	func test_areBothDisclosurePoliciesEnabled_enabled() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G", "3G"]
-		
-		// When
-		let enabled = sut.areBothDisclosurePoliciesEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_areBothDisclosurePoliciesEnabled_enabled_orderIndependent() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G", "1G"]
-		
-		// When
-		let enabled = sut.areBothDisclosurePoliciesEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override1G() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["1G"]
-		
-		// When
-		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
-		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(bothPoliciesEnabled) == false
-		expect(only1GEnabled) == true
-		expect(only3GEnabled) == false
-	}
-	
-	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override3G() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = ["3G"]
-		
-		// When
-		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
-		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		
-		// Then
-		expect(bothPoliciesEnabled) == false
-		expect(only1GEnabled) == false
-		expect(only3GEnabled) == true
-	}
-	
-	func test_overrideDisclosurePolicy_bothPoliciesEnabled_override0G() {
-		
-		// Given
-		disclosurePolicyManagingSpy.stubbedGetDisclosurePoliciesResult = []
-		userSettingsSpy.stubbedOverrideDisclosurePolicies = ["0G"]
-		
-		// When
-		let bothPoliciesEnabled = sut.areBothDisclosurePoliciesEnabled()
-		let only1GEnabled = sut.is1GExclusiveDisclosurePolicyEnabled()
-		let only3GEnabled = sut.is3GExclusiveDisclosurePolicyEnabled()
-		let noPoliciesEnabled = sut.areZeroDisclosurePoliciesEnabled()
-		
-		// Then
-		expect(bothPoliciesEnabled) == false
-		expect(only1GEnabled) == false
-		expect(only3GEnabled) == false
-		expect(noPoliciesEnabled) == true
 	}
 	
 	func test_isGGDEnabled_GGDDisabled() {
@@ -407,42 +206,6 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// When
 		let flag = sut.isLuhnCheckEnabled()
-		
-		// Then
-		expect(flag) == true
-	}
-	
-	func test_isVisitorPassEnabled_visitorPassDisabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.visitorPassEnabled = false
-		
-		// When
-		let flag = sut.isVisitorPassEnabled()
-		
-		// Then
-		expect(flag) == false
-	}
-	
-	func test_isVisitorPassEnabled_defaultToFalseWhenNil() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.visitorPassEnabled = nil
-		
-		// When
-		let flag = sut.isVisitorPassEnabled()
-		
-		// Then
-		expect(flag) == false
-	}
-	
-	func test_isVisitorPassEnabled_visitorPassEnabled() {
-		
-		// Given
-		remoteConfigManagerSpy.stubbedStoredConfiguration.visitorPassEnabled = true
-		
-		// When
-		let flag = sut.isVisitorPassEnabled()
 		
 		// Then
 		expect(flag) == true

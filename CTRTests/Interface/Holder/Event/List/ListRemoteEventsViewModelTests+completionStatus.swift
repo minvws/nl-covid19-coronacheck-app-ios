@@ -447,8 +447,7 @@ extension ListRemoteEventsViewModelCompletionStatusTests {
 						negativeTest: nil,
 						positiveTest: nil,
 						recovery: nil,
-						dccEvent: nil,
-						vaccinationAssessment: nil
+						dccEvent: nil
 					)
 				]
 			),

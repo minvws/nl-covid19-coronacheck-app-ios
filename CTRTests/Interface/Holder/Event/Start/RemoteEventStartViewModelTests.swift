@@ -78,18 +78,6 @@ class RemoteEventStartViewModelTests: XCTestCase {
 		expect(self.sut.primaryButtonIcon) == nil
 	}
 	
-	func test_content_vaccinationAssessment() {
-		
-		// When
-		sut = RemoteEventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccinationassessment)
-		
-		// Then
-		expect(self.sut.title) == nil
-		expect(self.sut.message) == nil
-		expect(self.sut.combineVaccinationAndPositiveTest) == nil
-		expect(self.sut.primaryButtonIcon) == nil
-	}
-	
 	func test_content_negativeTestMode() {
 		
 		// When

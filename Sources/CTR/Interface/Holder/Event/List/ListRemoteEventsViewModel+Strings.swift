@@ -16,9 +16,7 @@ extension ListRemoteEventsViewModel {
 
 		static func somethingIsWrongBody(forEventMode mode: EventMode) -> String? {
 			switch mode {
-				case .vaccinationassessment:
-					return L.holder_listRemoteEvents_somethingWrong_vaccinationAssessment_body()
-				case .paperflow:
+				case .paperflow, .migration:
 					return nil
 				case .recovery:
 					return L.holder_listRemoteEvents_somethingWrong_recovery_body()
@@ -42,14 +40,14 @@ extension ListRemoteEventsViewModel {
 					return L.holder_listRemoteEvents_vaccination_message()
 				case .test:
 					return L.holder_listRemoteEvents_negativeTest_message()
-				case .vaccinationassessment:
-					return L.holder_listRemoteEvents_vaccinationAssessment_message()
+				case .migration:
+					return L.holder_migrationFlow_scannedDetailsOverview_message()
 			}
 		}
 		
 		static func title(forEventMode mode: EventMode) -> String {
 			switch mode {
-				case .paperflow:
+				case .paperflow, .migration:
 					return L.holder_listRemoteEvents_paperflow_title()
 				default:
 					return L.holder_listRemoteEvents_title()
@@ -60,8 +58,8 @@ extension ListRemoteEventsViewModel {
 			switch mode {
 				case .paperflow:
 					return L.holderDccListAction()
-				case .vaccinationassessment:
-					return L.holder_event_vaccination_assessment_action_title()
+				case .migration:
+					return L.holder_migrationFlow_scannedDetailsOverview_transferButton()
 				default:
 					return L.holderVaccinationListAction()
 			}

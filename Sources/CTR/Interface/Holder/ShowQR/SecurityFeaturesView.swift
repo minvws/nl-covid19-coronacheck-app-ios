@@ -26,7 +26,7 @@ class SecurityFeaturesView: BaseView {
 	}()
 
 	/// The current animation
-	var currentAnimation: SecurityAnimation = .domesticSummerAnimation {
+	var currentAnimation: SecurityAnimation = .internationalSummerAnimation {
 		didSet {
 			updateAccessibility()
 		}
@@ -113,8 +113,6 @@ private extension SecurityAnimation {
 	
 	var localizedLabel: String? {
 		switch self {
-			case .domesticSummerAnimation: return L.holder_showqr_animation_summerctb_voiceover_label()
-			case .domesticWinterAnimation: return L.holder_showqr_animation_winterctb_voiceover_label()
 			case .internationalSummerAnimation: return L.holder_showqr_animation_summerdcc_voiceover_label()
 			case .internationalWinterAnimation: return L.holder_showqr_animation_winterdcc_voiceover_label()
 			default: return nil

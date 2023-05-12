@@ -33,7 +33,7 @@ class OriginHintModelTests: XCTestCase {
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: wallet,
 					managedContext: context
 				)
@@ -74,7 +74,7 @@ class OriginHintModelTests: XCTestCase {
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: wallet,
 					managedContext: context
 				)

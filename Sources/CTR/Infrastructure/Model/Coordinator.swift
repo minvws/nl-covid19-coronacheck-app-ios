@@ -10,6 +10,7 @@ import SafariServices
 import Shared
 import ReusableViews
 import Models
+import RestrictedBrowser
 
 protocol Coordinator: AnyObject {
 	
@@ -104,18 +105,10 @@ extension Coordinator {
 	/// Open a url
 	/// - Parameters:
 	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-		
-		let shouldOpenInApp = {
-			// Other URL schemes can't be opened in SFSafariViewController, - it doesn't work & will crash.
-			guard url.scheme == "http" || url.scheme == "https" else {
-				return false
-			}
-			return inApp
-		}()
+	func openUrl(_ url: URL) {
 		
 		var releaseAdjustedURL: URL? = url
+		var allowedDomains: [String] = ["coronacheck.nl"]
 		switch Configuration().getRelease() {
 			case .production:
 				break
@@ -124,29 +117,22 @@ extension Coordinator {
 					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
 					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
 				)
+				allowedDomains.append("web.acc.coronacheck.nl")
 			case .test:
 				releaseAdjustedURL = URL(string: url.absoluteString
 					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
 					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
 				)
+				allowedDomains.append("web.test.coronacheck.nl")
 		}
 		
 		guard let releaseAdjustedURL else { return }
-		
-		guard #available(iOS 13.0, *), shouldOpenInApp else {
-			UIApplication.shared.open(releaseAdjustedURL)
-			return
-		}
-		
-		let safariController = SFSafariViewController(url: releaseAdjustedURL)
-		
-		if let presentedViewController = navigationController.presentedViewController {
-			presentedViewController.presentingViewController?.dismiss(animated: true) {
-				self.navigationController.present(safariController, animated: true)
-			}
-		} else {
-			navigationController.present(safariController, animated: true)
-		}
+		let browser = RestrictedBrowser(
+			navigationController: navigationController,
+			title: "CoronaCheck",
+			allowedDomains: allowedDomains
+		)
+		browser.openUrl(releaseAdjustedURL)
 	}
 }
 
@@ -164,7 +150,7 @@ extension Coordinator {
 				backAction: backAction,
 				allowsSwipeBack: allowsSwipeBack,
 				linkTapHander: { [weak self] url in
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url)
 				}
 			)
 		)

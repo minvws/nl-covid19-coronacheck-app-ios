@@ -45,7 +45,8 @@ class CheckForDigidViewModelTests: XCTestCase {
 		self.sut.optionModels.value[0].action()
 
 		// Assert
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToRequestADigiD) == true
+		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
+		expect(self.coordinatorDelegateSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holder_noDigiD_url()
 	}
 
 	func test_doesNotHaveDigid() {

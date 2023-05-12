@@ -212,27 +212,4 @@ class StoredEventDetailsViewControllerTests: XCTestCase {
 		
 		sut.assertImage(containedInNavigationController: true)
 	}
-	
-	func test_content_vaccinationAssessment() {
-		
-		// Given
-		let identity = EventFlow.Identity.fakeIdentity
-		let event = EventFlow.Event.vaccinationAssessmentEvent
-		environmentSpies.mappingManagerSpy.stubbedGetDisplayCountryResult = "NL"
-		let details = VaccinationAssessementDetailsGenerator.getDetails(identity: identity, event: event)
-		viewModel = RemoteEventDetailsViewModel(
-			title: L.general_vaccinationAssessment().capitalizingFirstLetter(),
-			details: details,
-			footer: nil
-		)
-		sut = StoredEventDetailsViewController(viewModel: viewModel)
-		
-		// When
-		loadView()
-		
-		// Then
-		expect(self.sut.sceneView.title) == L.general_vaccinationAssessment().capitalizingFirstLetter()
-		
-		sut.assertImage(containedInNavigationController: true)
-	}
 }

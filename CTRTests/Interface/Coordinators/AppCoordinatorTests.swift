@@ -771,23 +771,6 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.unhandledUniversalLink) == universalLink
 	}
 	
-	func test_consume_redeemVaccinationAssessment() {
-		
-		// Given
-		let universalLink = UniversalLink.redeemVaccinationAssessment(requestToken: RequestToken(
-			token: "STXT2VF3389TJ2",
-			protocolVersion: "3.0",
-			providerIdentifier: "XXX"
-		))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.sut.unhandledUniversalLink) == universalLink
-	}
-	
 	func test_consume_thirdPartyTicketApp() {
 		
 		// Given

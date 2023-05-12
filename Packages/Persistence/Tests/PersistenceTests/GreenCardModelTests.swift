@@ -21,32 +21,6 @@ class GreenCardModelTests: XCTestCase {
 	
 	// MARK: Tests
 	
-	func test_createGreenCard_domesticType() {
-		
-		// Given
-		var wallet: Wallet?
-		var greenCard: GreenCard?
-		let context = dataStoreManager.managedObjectContext()
-		context.performAndWait {
-			wallet = WalletModel.createTestWallet(managedContext: context)
-			if let unwrappedWallet = wallet {
-				
-				// When
-				greenCard = GreenCard(
-					type: .domestic,
-					wallet: unwrappedWallet,
-					managedContext: context
-				)
-			}
-		}
-		
-		// Then
-		expect(greenCard?.type).toEventually(equal(GreenCardType.domestic.rawValue))
-		expect(greenCard?.getType()).toEventually(equal(GreenCardType.domestic))
-		expect(greenCard?.wallet).toEventually(equal(wallet))
-		expect(wallet?.greenCards).toEventually(haveCount(1))
-	}
-	
 	func test_createGreenCard_euType() {
 		
 		// Given
@@ -111,7 +85,7 @@ class GreenCardModelTests: XCTestCase {
 				
 				// When
 				GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
@@ -144,7 +118,7 @@ extension GreenCardModelTests {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let unwrappedJson = json {
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: wallet,
 					managedContext: context
 				)
@@ -221,7 +195,7 @@ extension GreenCardModelTests {
 			
 			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: wallet,
 					managedContext: context
 				)
@@ -301,7 +275,7 @@ extension GreenCardModelTests {
 				
 				// When
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
@@ -328,7 +302,7 @@ extension GreenCardModelTests {
 				
 				// When
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
@@ -350,7 +324,7 @@ extension GreenCardModelTests {
 		expect(greenCard?.activeCredentialsNowOrInFuture(forDate: now)).to(haveCount(1))
 		expect(greenCard?.hasActiveCredentialNowOrInFuture(forDate: now)) == true
 		expect(greenCard?.currentOrNextActiveCredential(forDate: now)) == credential
-		expect(greenCard?.getLatestInternationalCredential()) == nil
+		expect(greenCard?.getLatestInternationalCredential()) == credential
 	}
 	
 	func test_activeCredentialsNowOrInFuture_singleExpiredCredential() throws {
@@ -407,7 +381,7 @@ extension GreenCardModelTests {
 				
 				// When
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)

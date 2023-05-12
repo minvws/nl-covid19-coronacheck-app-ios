@@ -33,7 +33,7 @@ class CredentialModelTests: XCTestCase {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let unwrappedJson = json {
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: wallet,
 					managedContext: context
 				)
@@ -68,7 +68,7 @@ class CredentialModelTests: XCTestCase {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let json = "test_createTwoCredentials".data(using: .utf8) {
 				greenCard = GreenCard(
-					type: .domestic,
+					type: .eu,
 					wallet: wallet,
 					managedContext: context
 				)

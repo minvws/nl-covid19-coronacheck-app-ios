@@ -1,86 +1,18 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import UIKit
-import Shared
-import Persistence
-import Models
 import Managers
+import Models
+import Persistence
 import Resources
+import Shared
+import UIKit
 
 class ShowQRViewModel {
-
-	// MARK: - Private types
-	final private class ScreenBrightnessManager {
-		
-		private let initialBrightness: CGFloat
-		private var latestAnimation: UUID?
-		
-		init(initialBrightness: CGFloat = UIScreen.main.brightness, notificationCenter: NotificationCenterProtocol) {
-			self.initialBrightness = initialBrightness
-			
-			notificationCenter.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-				self?.animateToFullBrightness()
-			}
-			notificationCenter.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
-				guard let self else { return }
-				self.revertToInitialBrightness()
-			}
-		}
-		
-		func revertToInitialBrightness() {
-			// Extracted from the closure, due to Swift 5.7, where the addObserver closure is Sendable:
-			// Main actor-isolated class property 'main' can not be mutated from a Sendable closure
-			// Main actor-isolated property 'brightness' can not be mutated from a Sendable closure
-			
-			// Immediately back to initial brightness as we left the app:
-			UIScreen.main.brightness = self.initialBrightness
-		}
-		
-		func animateToFullBrightness() {
-
-			let brightnessStep: CGFloat = 0.03
-			var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
-			let animationID = UUID()
-			latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
-			Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
-				guard iterationsPermitted > 0,
-					self.latestAnimation == animationID,
-					UIScreen.main.brightness < 1
-				else { timer.invalidate(); return }
-				
-				iterationsPermitted -= 1
-				UIScreen.main.brightness += brightnessStep
-			}
-		}
-		
-		func animateToInitialBrightness() {
-			guard (0...1).contains(initialBrightness) else {
-				UIScreen.main.brightness = 1
-				return
-			}
-			
-			let brightnessStep: CGFloat = 0.03
-			var iterationsPermitted = 1 / brightnessStep // a basic guard against fighting with another (unknown, external) brightness loop to change brightness (preventing infinite loop)
-			let animationID = UUID()
-			latestAnimation = animationID // if we're no longer the latest animation, abort the loop.
-			Timer.scheduledTimer(withTimeInterval: 0.016, repeats: true) { timer in
-				guard iterationsPermitted > 0,
-					self.latestAnimation == animationID,
-					self.initialBrightness < UIScreen.main.brightness,
-					UIScreen.main.brightness > brightnessStep
-				else { timer.invalidate(); return }
-				
-				iterationsPermitted -= 1
-				UIScreen.main.brightness -= brightnessStep
-			}
-		}
-	}
 
 	// MARK: - private variables
 
@@ -88,7 +20,6 @@ class ShowQRViewModel {
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	private let notificationCenter: NotificationCenterProtocol
 	private let screenBrightnessManager: ScreenBrightnessManager
-	private let disclosurePolicy: DisclosurePolicy?
 
 	private var dataSource: ShowQRDatasourceProtocol
 
@@ -123,7 +54,7 @@ class ShowQRViewModel {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var animationStyle: ShowQRView.AnimationStyle = .domestic(isWithinWinterPeriod: false)
+	@Bindable private(set) var animationStyle: ShowQRView.AnimationStyle = .international(isWithinWinterPeriod: false)
 
 	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
 
@@ -139,20 +70,18 @@ class ShowQRViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
-		disclosurePolicy: DisclosurePolicy?,
 		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 		
 		self.coordinator = coordinator
 		self.screenBrightnessManager = ScreenBrightnessManager(notificationCenter: notificationCenter)
-		self.dataSource = ShowQRDatasource(greenCards: greenCards, disclosurePolicy: disclosurePolicy)
+		self.dataSource = ShowQRDatasource(greenCards: greenCards)
 		self.notificationCenter = notificationCenter
 		self.items = dataSource.items
 		let mostRelevantPage = dataSource.getIndexForMostRelevantGreenCard()
 		self.startingPage = mostRelevantPage
 		self.currentPage = mostRelevantPage
-		self.disclosurePolicy = disclosurePolicy
 
 		displayQRInformation()
 		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
@@ -165,37 +94,14 @@ class ShowQRViewModel {
 
 	private func setupContent(greenCards: [GreenCard], thirdPartyTicketAppName: String?) {
 
-		if let greenCard = greenCards.first {
-			if greenCard.getType() == GreenCardType.domestic {
-				setDomesticTitle()
-				infoButtonAccessibility = L.holder_showqr_domestic_accessibility_button_details()
-				animationStyle = .domestic(isWithinWinterPeriod: isWithinWinterPeriod)
-				thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
-			} else if greenCard.getType() == GreenCardType.eu {
-				title = L.holderShowqrEuTitle()
-				infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
-				animationStyle = .international(isWithinWinterPeriod: isWithinWinterPeriod)
-			}
+		if let greenCard = greenCards.first,
+			greenCard.getType() == GreenCardType.eu {
+			title = L.holderShowqrEuTitle()
+			infoButtonAccessibility = L.holder_showqr_international_accessibility_button_details()
+			animationStyle = .international(isWithinWinterPeriod: isWithinWinterPeriod)
 		}
 		
 		pageButtonAccessibility = (L.holderShowqrPreviousbutton(), L.holderShowqrNextbutton())
-	}
-	
-	private func setDomesticTitle() {
-		
-		guard Current.featureFlagManager.areBothDisclosurePoliciesEnabled() || Current.featureFlagManager.is1GExclusiveDisclosurePolicyEnabled() else {
-			title = L.holder_showQR_domestic_title()
-			return
-		}
-		
-		switch disclosurePolicy {
-			case .policy3G:
-				title = L.holder_showQR_domestic_title_3g()
-			case .policy1G:
-				title = L.holder_showQR_domestic_title_1g()
-			case .none:
-				title = L.holder_showQR_domestic_title()
-		}
 	}
 
 	private func setupListeners() {
@@ -230,11 +136,7 @@ class ShowQRViewModel {
 			return
 		}
 		
-		if greenCard.getType() == GreenCardType.domestic {
-			guard let credentialData = greenCard.getActiveDomesticCredential()?.data else { return }
-			
-			showDomesticDetails(credentialData)
-		} else if greenCard.getType() == GreenCardType.eu {
+		if greenCard.getType() == GreenCardType.eu {
 			guard let credentialData = greenCard.getLatestInternationalCredential()?.data else { return }
 			
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(credentialData) {
@@ -260,33 +162,6 @@ class ShowQRViewModel {
 		   let doseNumber = euVaccination.doseNumber, let totalDose = euVaccination.totalDose {
 			dosage = L.holderShowqrQrEuVaccinecertificatedoses("\(doseNumber)", "\(totalDose)")
 		}
-	}
-	
-	private func showDomesticDetails(_ data: Data) {
-		
-		if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
-			coordinator?.presentInformationPage(
-				title: L.holderShowqrDomesticAboutTitle(),
-				body: getDomesticDetailsBody(domesticCredentialAttributes),
-				hideBodyForScreenCapture: true,
-				openURLsInApp: true
-			)
-		} else {
-			logError("Can't read the domestic credentials")
-		}
-	}
-	
-	private func getDomesticDetailsBody(_ domesticCredentialAttributes: DomesticCredentialAttributes) -> String {
-		
-		let identity = domesticCredentialAttributes
-			.mapIdentity(months: String.shortMonths)
-			.map({ $0.isEmpty ? "_" : $0 })
-			.joined(separator: " ")
-		
-		if disclosurePolicy == .policy1G {
-			return L.holder_qr_explanation_description_domestic_1G(identity)
-		}
-		return L.holderShowqrDomesticAboutMessage(identity)
 	}
 
 	private func showInternationalDetails(_ euCredentialAttributes: EuCredentialAttributes) {
@@ -340,7 +215,6 @@ class ShowQRViewModel {
 			viewModel: ShowQRItemViewModel(
 				delegate: self,
 				greenCard: item.greenCard,
-				disclosurePolicy: item.policy,
 				state: dataSource.getState(item.greenCard)
 			)
 		)

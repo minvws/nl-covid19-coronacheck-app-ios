@@ -158,27 +158,4 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 			]
 		)
 	}
-	
-	func test_backActionWarning_vaccinationassessment() {
-		
-		// Given
-		setupSut(eventMode: .vaccinationassessment, authenticationMode: .manyAuthenticationExchange)
-		viewModel.viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		let alertVerifier = AlertVerifier()
-		loadView()
-		
-		// When
-		sut.backButtonTapped()
-		
-		// Then
-		alertVerifier.verify(
-			title: L.holderVaccinationAlertTitle(),
-			message: L.holder_event_vaccination_assessment_alert_message(),
-			animated: true,
-			actions: [
-				.default(L.holderVaccinationAlertContinue()),
-				.cancel(L.holderVaccinationAlertStop())
-			]
-		)
-	}
 }

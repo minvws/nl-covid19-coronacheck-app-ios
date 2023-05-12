@@ -25,7 +25,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func handleMismatchedIdentityError(matchingBlobIds: [[String]])
 	
-	func openUrl(_ url: URL, inApp: Bool)
+	func openUrl(_ url: URL)
 	
 	func presentError(content: Content, backAction: (() -> Void)?)
 	
@@ -34,33 +34,27 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment()
-	func userWishesMoreInfoAboutExpiredDomesticVaccination()
 	func userWishesMoreInfoAboutExpiredQR()
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem])
 	func userWishesMoreInfoAboutNoTestToken()
-	func userWishesMoreInfoAboutNoVisitorPassToken()
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String)
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion)
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL()
 	func userWishesToAddPaperProof()
-	func userWishesToAddVisitorPass()
 	func userWishesToChooseTestLocation()
 	func userWishesToCreateANegativeTestQR()
 	func userWishesToCreateANegativeTestQRFromGGD()
 	func userWishesToCreateAQR()
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
-	func userWishesToCreateAVisitorPass()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
+	func userWishesToMigrate()
 	func userWishesToOpenTheMenu()
 	func userWishesToRestart()
 	func userWishesToSeeAboutThisApp()
@@ -68,7 +62,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToSeeHelpAndInfoMenu()
 	func userWishesToSeeHelpdesk()
 	func userWishesToSeeStoredEvents()
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID])
 }
 
 class HolderCoordinator: SharedCoordinator {
@@ -82,13 +76,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	/// If set, this should be handled at the first opportunity:
 	var unhandledUniversalLink: UniversalLink?
-	
-	private var disclosurePolicyUpdateObserverToken: Observatory.ObserverToken? {
-		willSet {
-			// Remove any existing observation:
-			disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
-		}
-	}
 	
 	// MARK: - Setup
 	
@@ -107,7 +94,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
-		disclosurePolicyUpdateObserverToken.map(Current.disclosurePolicyManager.observatory.remove)
 	}
 	
 	// MARK: - Starting Coordinator
@@ -138,12 +124,7 @@ class HolderCoordinator: SharedCoordinator {
 			} else {
 				
 				// Start with the holder app
-				navigateToDashboard(replacingWindowRootViewController: true) {
-					self.handleDisclosurePolicyUpdates()
-					self.disclosurePolicyUpdateObserverToken = Current.disclosurePolicyManager.observatory.append { [weak self] in
-						self?.handleDisclosurePolicyUpdates()
-					}
-				}
+				navigateToDashboard(replacingWindowRootViewController: true) { }
 			}
 		}
 	}
@@ -206,8 +187,15 @@ class HolderCoordinator: SharedCoordinator {
 	
 	func performAppLaunchCleanup() {
 		
+		// Remove CTB Stuff
+		Current.walletManager.removeDomesticGreenCards()
+		Current.walletManager.removeVaccinationAssessmentEventGroups()
+		
+		// Remove leftovers from previous sessions
 		Current.walletManager.removeDraftEventGroups()
-		Current.walletManager.expireEventGroups(forDate: Current.now()) // Vaccineassessment expiration can leave some events lingering - when reloading, make sure they are cleaned up also.
+		
+		// Remove expired event groups
+		Current.walletManager.expireEventGroups(forDate: Current.now())
 	}
 	
 	// MARK: - Universal Links
@@ -218,9 +206,7 @@ class HolderCoordinator: SharedCoordinator {
 	override func consume(universalLink: UniversalLink) -> Bool {
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
-				return consumeToken(requestToken, retrievalMode: .negativeTest, universalLink: universalLink)
-			case .redeemVaccinationAssessment(let requestToken):
-				return consumeToken(requestToken, retrievalMode: .visitorPass, universalLink: universalLink)
+				return consumeToken(requestToken, universalLink: universalLink)
 			case .thirdPartyTicketApp(let returnURL):
 				return consumeThirdPartyTicket(returnURL)
 			case .tvsAuth(let returnURL):
@@ -230,7 +216,7 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 	
-	private func consumeToken(_ requestToken: RequestToken, retrievalMode: InputRetrievalCodeMode, universalLink: UniversalLink) -> Bool {
+	private func consumeToken(_ requestToken: RequestToken, universalLink: UniversalLink) -> Bool {
 		
 		// Need to handle two situations:
 		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
@@ -243,7 +229,7 @@ class HolderCoordinator: SharedCoordinator {
 		} else {
 			// Do it on the next runloop, to standardise all the entry points to this function:
 			DispatchQueue.main.async { [self] in
-				navigateToTokenEntry(requestToken, retrievalMode: retrievalMode)
+				navigateToTokenEntry(requestToken)
 			}
 		}
 		return true
@@ -261,10 +247,6 @@ class HolderCoordinator: SharedCoordinator {
 		
 		thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
 		
-		// Reset the dashboard back to the domestic tab:
-		if let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
-			dashboardViewController.viewModel.selectTab(newTab: .domestic)
-		}
 		return true
 	}
 	
@@ -306,7 +288,6 @@ class HolderCoordinator: SharedCoordinator {
 						reachability: try? Reachability()
 					),
 					configurationNotificationManager: ConfigurationNotificationManager(userSettings: Current.userSettings, remoteConfigManager: Current.remoteConfigManager, now: Current.now),
-					vaccinationAssessmentNotificationManager: VaccinationAssessmentNotificationManager(),
 					versionSupplier: versionSupplier
 				)
 			)
@@ -320,14 +301,13 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil, retrievalMode: InputRetrievalCodeMode = .negativeTest) {
+	func navigateToTokenEntry(_ token: RequestToken? = nil) {
 		
 		let destination = InputRetrievalCodeViewController(
 			viewModel: InputRetrievalCodeViewModel(
 				coordinator: self,
 				requestToken: token,
-				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled()),
-				inputRetrievalCodeMode: retrievalMode
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: Current.featureFlagManager.isLuhnCheckEnabled())
 			)
 		)
 		
@@ -351,18 +331,13 @@ class HolderCoordinator: SharedCoordinator {
 		startChildCoordinator(paperProofCoordinator)
 	}
 	
-	func navigateToAddVisitorPass() {
-		let viewController = VisitorPassStartViewController(viewModel: VisitorPassStartViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
-	}
-	
 	func navigateToAboutThisApp() {
 		
 		let viewModel = AboutThisAppViewModel(versionSupplier: versionSupplier, flavor: AppFlavor.flavor) { [weak self] outcome in
 			guard let self else { return }
 			switch outcome {
-				case let .openURL(url, inApp):
-					self.openUrl(url, inApp: inApp)
+				case let .openURL(url):
+					self.openUrl(url)
 				case .coordinatorShouldRestart:
 					self.restart()
 				case .userWishesToOpenScanLog:
@@ -375,13 +350,12 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	/// Navigate to enlarged QR
-	func navigateToShowQRs(_ greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	func navigateToShowQRs(_ greenCards: [GreenCard]) {
 		
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCards: greenCards,
-				disclosurePolicy: disclosurePolicy,
 				thirdPartyTicketAppName: thirdpartyTicketApp?.name
 			)
 		)
@@ -398,6 +372,42 @@ class HolderCoordinator: SharedCoordinator {
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	func showMigrationSuccessfulDialog() {
+		
+		let alertController = UIAlertController(
+			title: L.holder_migrationFlow_deleteDetails_dialog_title(),
+			message: L.holder_migrationFlow_deleteDetails_dialog_message(),
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.holder_migrationFlow_deleteDetails_dialog_deleteButton(),
+				style: .destructive,
+				handler: { [weak self] _ in
+					self?.removeDataAfterMigration()
+				}
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.holder_migrationFlow_deleteDetails_dialog_retainButton(),
+				style: .default,
+				handler: nil
+			)
+		)
+		navigationController.present(alertController, animated: true, completion: nil)
+	}
+	
+	private func removeDataAfterMigration() {
+		// Remove Data
+		Current.walletManager.removeExistingGreenCards()
+		Current.walletManager.removeExistingEventGroups()
+		Current.walletManager.removeExistingBlockedEvents()
+		Current.walletManager.removeExistingMismatchedIdentityEvents()
+		// Trigger a reload
+		NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
 	}
 }
 
@@ -448,7 +458,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let message: String = L.holder_invaliddetailsremoved_moreinfo_body(
 			bulletpoints, Current.contactInformationProvider.phoneNumberLink, errorCode.description)
 
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true)
 	}
 	
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem]) {
@@ -458,9 +468,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		guard let persistentName = Current.secureUserSettings.selectedIdentity else { return }
 
 		let title: String = L.holder_identityRemoved_moreinfo_title()
-		let message: String = L.holder_identityRemoved_moreinfo_body(persistentName, bulletpoints)
+		let sanitizedName = Shared.Sanitizer.sanitize(persistentName)
+		let message: String = L.holder_identityRemoved_moreinfo_body(sanitizedName, bulletpoints)
 
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: true)
 	}
 
 	private func compactRemovedEventItems(_ items: [RemovedEventItem]) -> String {
@@ -468,7 +479,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		return items
 			.compactMap { item -> String? in
 				guard let localizedDateLabel = item.type.localizedDateLabel else { return nil }
-				let dateString = DateFormatter.Format.dayMonthYear.string(from: item.eventDate)
+				let dateString = Shared.Sanitizer.sanitize(DateFormatter.Format.dayMonthYear.string(from: item.eventDate))
 				return """
 				<p>
 					<b>\(item.type.localized.capitalizingFirstLetter())</b>
@@ -483,58 +494,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesMoreInfoAboutClockDeviation() {
 		let title: String = L.holderClockDeviationDetectedTitle()
 		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
-	
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
 		
-		presentContent(
-			content: Content(
-				title: L.holder_completecertificate_title(),
-				body: L.holder_completecertificate_body(),
-				primaryActionTitle: L.holder_completecertificate_button_fetchnegativetest(),
-				primaryAction: { [weak self] in
-					self?.userWishesToCreateANegativeTestQR()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			),
-			backAction: { [weak navigationController] in
-				navigationController?.popViewController(animated: true, completion: {})
-			},
-			allowsSwipeBack: true,
-			animated: true
-		)
-	}
-	
-	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
-		
-		let viewModel = BottomSheetContentViewModel(
-			content: Content(
-				title: L.holder_expiredDomesticVaccinationModal_title(),
-				body: L.holder_expiredDomesticVaccinationModal_body(),
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: L.holder_expiredDomesticVaccinationModal_button_addBoosterVaccination(),
-				secondaryAction: { [weak self] in
-					guard let self else { return }
-					self.navigationController.dismiss(
-						animated: true,
-						completion: self.userWishesToCreateAVaccinationQR
-					)
-				}
-			),
-			screenCaptureDetector: ScreenCaptureDetector(),
-			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
-			},
-			hideBodyForScreenCapture: false
-		)
-		
-		let viewController = BottomSheetContentViewController(viewModel: viewModel)
-		presentAsBottomSheet(viewController)
-	}
-	
 	func userWishesMoreInfoAboutExpiredQR() {
 	
 		let viewModel = BottomSheetContentViewModel(
@@ -547,12 +509,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				secondaryAction: { [weak self] in
 					guard let self,
 						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
-					self.openUrl(url, inApp: true)
+					self.openUrl(url)
 				}
 			),
 			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
+				self?.openUrl(url)
 			},
 			hideBodyForScreenCapture: false
 		)
@@ -573,12 +535,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				secondaryAction: { [weak self] in
 					guard let self,
 							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
-					self.openUrl(url, inApp: true)
+					self.openUrl(url)
 				}
 			),
 			screenCaptureDetector: ScreenCaptureDetector(),
 			linkTapHander: { [weak self] url in
-				self?.openUrl(url, inApp: true)
+				self?.openUrl(url)
 			},
 			hideBodyForScreenCapture: false
 		)
@@ -605,48 +567,19 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(
 			title: L.holderTokenentryModalNotokenTitle(),
 			body: L.holderTokenentryModalNotokenDetails(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
-	}
-	
-	func userWishesMoreInfoAboutNoVisitorPassToken() {
-		
-		presentInformationPage(
-			title: L.visitorpass_token_modal_notoken_title(),
-			body: L.visitorpass_token_modal_notoken_details(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
+			hideBodyForScreenCapture: false
 		)
 	}
 	
 	func userWishesMoreInfoAboutOutdatedConfig(validUntil: String) {
 		let title: String = L.holderDashboardConfigIsAlmostOutOfDatePageTitle()
 		let message: String = L.holderDashboardConfigIsAlmostOutOfDatePageMessage(validUntil)
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
-	}
-	
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
-		
-		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion)
-		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
-	}
-	
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
-		let title: String = L.holder_notvalidinthisregionmodal_visitorpass_international_title()
-		let message: String = L.holder_notvalidinthisregionmodal_visitorpass_international_body()
-		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: true)
 	}
 	
 	func userWishesToAddPaperProof() {
 		
 		navigateToAddPaperProof()
-	}
-	
-	func userWishesToAddVisitorPass() {
-
-		navigateToAddVisitorPass()
 	}
 	
 	func userWishesToChooseTestLocation() {
@@ -678,14 +611,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		startEventFlowForVaccination()
 	}
 	
-	func userWishesToCreateAVisitorPass() {
-		
-		navigateToTokenEntry(retrievalMode: .visitorPass)
-	}
-	
 	func userWishesToLaunchThirdPartyTicketApp() {
 		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
-		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
+		openUrl(thirdpartyTicketApp.returnURL)
 	}
 	
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {
@@ -696,6 +624,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		addChildCoordinator(eventCoordinator)
 		eventCoordinator.startWithListTestEvents([remoteEvent], originalMode: originalMode)
+	}
+	
+	func userWishesToMigrate() {
+		
+		let migrationCoordinator = MigrationCoordinator(navigationController: navigationController, delegate: self)
+		startChildCoordinator(migrationCoordinator)
 	}
 	
 	func userWishesToOpenTheMenu() {
@@ -747,14 +681,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			flavor: AppFlavor.flavor,
 			versionSupplier: self.versionSupplier,
 			urlHandler: { [weak self] url in
-				self?.openUrl(url, inApp: true)
+				self?.openUrl(url)
 			}
 		))
 		
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
 		
 		func presentAlertWithErrorCode(_ code: ErrorCode) {
 			
@@ -763,8 +697,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				message: L.generalErrorTechnicalCustom("\(code)"),
 				preferredStyle: .alert
 			)
-			
-			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+			alertController.addAction(UIAlertAction(title: L.generalOk(), style: .default, handler: nil))
 			navigationController.present(alertController, animated: true, completion: nil)
 		}
 		
@@ -774,7 +707,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				if greenCards.isEmpty {
 					presentAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .noGreenCardsAvailable))
 				} else {
-					navigateToShowQRs(greenCards, disclosurePolicy: disclosurePolicy)
+					navigateToShowQRs(greenCards)
 				}
 			case .failure:
 				presentAlertWithErrorCode(ErrorCode(flow: .qr, step: .showQR, clientCode: .coreDataFetchError))
@@ -786,24 +719,13 @@ extension HolderCoordinator: EventFlowDelegate {
 	
 	func eventFlowDidComplete() {
 		
-		// The user completed the event flow. Go back to the dashboard.
 		removeChildCoordinator()
 		navigateToDashboard()
 	}
 	
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion() {
-		
-		// The user completed the event flow, but needs to add a vaccination assessment test (visitor pass flow)
-		removeChildCoordinator()
-		navigationController.popToRootViewController(animated: false)
-		userWishesToCreateAVisitorPass()
-	}
-	
 	func eventFlowDidCancel() {
 		
-		// The user cancelled the event flow.
 		removeChildCoordinator()
-		logInfo("HolderCoordinator: eventFlowDidCancel")
 	}
 }
 
@@ -827,51 +749,6 @@ extension HolderCoordinator: PaperProofFlowDelegate {
 	}
 }
 
-extension HolderCoordinator: UpdatedDisclosurePolicyDelegate {
-	
-	func showNewDisclosurePolicy(pagedAnnouncmentItems: [PagedAnnoucementItem]) {
-		let coordinator = UpdatedDisclosurePolicyCoordinator(
-			navigationController: navigationController,
-			pagedAnnouncmentItems: pagedAnnouncmentItems,
-			delegate: self
-		)
-		startChildCoordinator(coordinator)
-	}
-	
-	func finishNewDisclosurePolicy() {
-		
-		if let childCoordinator = childCoordinators.first(where: { $0 is UpdatedDisclosurePolicyCoordinator }) {
-			removeChildCoordinator(childCoordinator)
-		}
-	}
-	
-	func handleDisclosurePolicyUpdates() {
-		
-		guard !Current.onboardingManager.needsConsent, !Current.onboardingManager.needsOnboarding else {
-			// No Disclosure Policy modal if we still need to finish onboarding
-			return
-		}
-		
-		guard Current.remoteConfigManager.storedConfiguration.disclosurePolicies != nil else {
-			return
-		}
-		
-		guard Current.disclosurePolicyManager.hasChanges else {
-			return
-		}
-		
-		let pagedAnnouncementItems = type(of: Current.disclosurePolicyManager.factory).create(
-			featureFlagManager: Current.featureFlagManager,
-			userSettings: Current.userSettings
-		)
-		guard pagedAnnouncementItems.isNotEmpty else {
-			return
-		}
-		
-		showNewDisclosurePolicy(pagedAnnouncmentItems: pagedAnnouncementItems)
-	}
-}
-
 extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 	
 	func fuzzyMatchingUserBackedOutOfFlow() {
@@ -891,6 +768,40 @@ extension HolderCoordinator: FuzzyMatchingFlowDelegate {
 			removeChildCoordinator(childCoordinator)
 		}
 		navigateBackToStart()
+	}
+}
+
+extension HolderCoordinator: MigrationFlowDelegate {
+	
+	func dataMigrationBackAction() {
+	
+		removeMigrationCoordinator()
+	}
+	
+	func dataMigrationCancelled() {
+		
+		navigateToDashboard()
+		removeMigrationCoordinator()
+	}
+	
+	func dataMigrationExportCompleted() {
+		
+		navigateToDashboard()
+		removeMigrationCoordinator()
+		showMigrationSuccessfulDialog()
+	}
+	
+	func dataMigrationImportCompleted() {
+
+		navigateToDashboard()
+		removeMigrationCoordinator()
+	}
+	
+	private func removeMigrationCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
 	}
 }
 

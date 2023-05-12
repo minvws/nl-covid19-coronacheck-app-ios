@@ -38,14 +38,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
-	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
-	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
 
-	func openUrl(_ url: URL, inApp: Bool) {
+	func openUrl(_ url: URL) {
 		invokedOpenUrl = true
 		invokedOpenUrlCount += 1
-		invokedOpenUrlParameters = (url, inApp)
-		invokedOpenUrlParametersList.append((url, inApp))
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
 
 	var invokedPresentError = false
@@ -66,14 +66,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture, openURLsInApp)
-		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
 	var invokedPresentDCCQRDetails = false
@@ -106,22 +106,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesMoreInfoAboutClockDeviation() {
 		invokedUserWishesMoreInfoAboutClockDeviation = true
 		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = false
-	var invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount = 0
-
-	func userWishesMoreInfoAboutCompletingVaccinationAssessment() {
-		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessment = true
-		invokedUserWishesMoreInfoAboutCompletingVaccinationAssessmentCount += 1
-	}
-
-	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = false
-	var invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount = 0
-
-	func userWishesMoreInfoAboutExpiredDomesticVaccination() {
-		invokedUserWishesMoreInfoAboutExpiredDomesticVaccination = true
-		invokedUserWishesMoreInfoAboutExpiredDomesticVaccinationCount += 1
 	}
 
 	var invokedUserWishesMoreInfoAboutExpiredQR = false
@@ -168,14 +152,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutNoTestTokenCount += 1
 	}
 
-	var invokedUserWishesMoreInfoAboutNoVisitorPassToken = false
-	var invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount = 0
-
-	func userWishesMoreInfoAboutNoVisitorPassToken() {
-		invokedUserWishesMoreInfoAboutNoVisitorPassToken = true
-		invokedUserWishesMoreInfoAboutNoVisitorPassTokenCount += 1
-	}
-
 	var invokedUserWishesMoreInfoAboutOutdatedConfig = false
 	var invokedUserWishesMoreInfoAboutOutdatedConfigCount = 0
 	var invokedUserWishesMoreInfoAboutOutdatedConfigParameters: (validUntil: String, Void)?
@@ -188,40 +164,12 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutOutdatedConfigParametersList.append((validUntil, ()))
 	}
 
-	var invokedUserWishesMoreInfoAboutUnavailableQR = false
-	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
-	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: OriginType, currentRegion: QRCodeValidityRegion)?
-	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: OriginType, currentRegion: QRCodeValidityRegion)]()
-
-	func userWishesMoreInfoAboutUnavailableQR(originType: OriginType, currentRegion: QRCodeValidityRegion) {
-		invokedUserWishesMoreInfoAboutUnavailableQR = true
-		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
-		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion)
-		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion))
-	}
-
-	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = false
-	var invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount = 0
-
-	func userWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL() {
-		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNL = true
-		invokedUserWishesMoreInfoAboutVaccinationAssessmentInvalidOutsideNLCount += 1
-	}
-
 	var invokedUserWishesToAddPaperProof = false
 	var invokedUserWishesToAddPaperProofCount = 0
 
 	func userWishesToAddPaperProof() {
 		invokedUserWishesToAddPaperProof = true
 		invokedUserWishesToAddPaperProofCount += 1
-	}
-
-	var invokedUserWishesToAddVisitorPass = false
-	var invokedUserWishesToAddVisitorPassCount = 0
-
-	func userWishesToAddVisitorPass() {
-		invokedUserWishesToAddVisitorPass = true
-		invokedUserWishesToAddVisitorPassCount += 1
 	}
 
 	var invokedUserWishesToChooseTestLocation = false
@@ -272,14 +220,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateAVaccinationQRCount += 1
 	}
 
-	var invokedUserWishesToCreateAVisitorPass = false
-	var invokedUserWishesToCreateAVisitorPassCount = 0
-
-	func userWishesToCreateAVisitorPass() {
-		invokedUserWishesToCreateAVisitorPass = true
-		invokedUserWishesToCreateAVisitorPassCount += 1
-	}
-
 	var invokedUserWishesToLaunchThirdPartyTicketApp = false
 	var invokedUserWishesToLaunchThirdPartyTicketAppCount = 0
 
@@ -298,6 +238,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToMakeQRFromRemoteEventCount += 1
 		invokedUserWishesToMakeQRFromRemoteEventParameters = (remoteEvent, originalMode)
 		invokedUserWishesToMakeQRFromRemoteEventParametersList.append((remoteEvent, originalMode))
+	}
+
+	var invokedUserWishesToMigrate = false
+	var invokedUserWishesToMigrateCount = 0
+
+	func userWishesToMigrate() {
+		invokedUserWishesToMigrate = true
+		invokedUserWishesToMigrateCount += 1
 	}
 
 	var invokedUserWishesToOpenTheMenu = false
@@ -362,14 +310,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesToViewQRs = false
 	var invokedUserWishesToViewQRsCount = 0
-	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)?
-	var invokedUserWishesToViewQRsParametersList = [(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?)]()
+	var invokedUserWishesToViewQRsParameters: (greenCardObjectIDs: [NSManagedObjectID], Void)?
+	var invokedUserWishesToViewQRsParametersList = [(greenCardObjectIDs: [NSManagedObjectID], Void)]()
 
-	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID], disclosurePolicy: DisclosurePolicy?) {
+	func userWishesToViewQRs(greenCardObjectIDs: [NSManagedObjectID]) {
 		invokedUserWishesToViewQRs = true
 		invokedUserWishesToViewQRsCount += 1
-		invokedUserWishesToViewQRsParameters = (greenCardObjectIDs, disclosurePolicy)
-		invokedUserWishesToViewQRsParametersList.append((greenCardObjectIDs, disclosurePolicy))
+		invokedUserWishesToViewQRsParameters = (greenCardObjectIDs, ())
+		invokedUserWishesToViewQRsParametersList.append((greenCardObjectIDs, ()))
 	}
 
 	var invokedDismiss = false

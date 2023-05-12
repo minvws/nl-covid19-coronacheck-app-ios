@@ -7,7 +7,7 @@
 
 @testable import CTR
 
-class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegate {
+class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedUserWishesToCheckForBSN = false
 	var invokedUserWishesToCheckForBSNCount = 0
@@ -15,14 +15,6 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 	func userWishesToCheckForBSN() {
 		invokedUserWishesToCheckForBSN = true
 		invokedUserWishesToCheckForBSNCount += 1
-	}
-
-	var invokedUserWishesToRequestADigiD = false
-	var invokedUserWishesToRequestADigiDCount = 0
-
-	func userWishesToRequestADigiD() {
-		invokedUserWishesToRequestADigiD = true
-		invokedUserWishesToRequestADigiDCount += 1
 	}
 
 	var invokedUserWishesToContactHelpDeksWithBSN = false
@@ -55,5 +47,17 @@ class AlternativeRouteCoordinatorDelegateSpy: AlternativeRouteCoordinatorDelegat
 	func userWishesToContactProviderHelpDeskWhilePortalEnabled() {
 		invokedUserWishesToContactProviderHelpDeskWhilePortalEnabled = true
 		invokedUserWishesToContactProviderHelpDeskWhilePortalEnabledCount += 1
+	}
+
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
+
+	func openUrl(_ url: URL) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
 }

@@ -27,7 +27,6 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	override func setUp() {
 		
 		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.featureFlagManagerSpy.stubbedIsVisitorPassEnabledResult = true
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		
@@ -77,19 +76,19 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToAddPaperProof) == true
 	}
 	
-	func test_userWishesToAddVisitorPass() {
+	func test_userWishesToSeeStoredEvents() {
 		
 		// Given
 		loadView()
 		
 		// When
-		(sut.sceneView.stackView.arrangedSubviews[2] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		(sut.sceneView.stackView.arrangedSubviews[3] as? MenuRowView)?.sendActions(for: .touchUpInside)
 		
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToAddVisitorPass) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeStoredEvents) == true
 	}
-	
-	func test_userWishesToSeeStoredEvents() {
+
+	func test_userWishesToMigrate() {
 		
 		// Given
 		loadView()
@@ -98,7 +97,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		(sut.sceneView.stackView.arrangedSubviews[4] as? MenuRowView)?.sendActions(for: .touchUpInside)
 		
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeStoredEvents) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToMigrate) == true
 	}
 	
 	func test_userWishesToSeeHelpAndInfoMenu() {
@@ -107,7 +106,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		(sut.sceneView.stackView.arrangedSubviews[5] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		(sut.sceneView.stackView.arrangedSubviews[6] as? MenuRowView)?.sendActions(for: .touchUpInside)
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeHelpAndInfoMenu) == true
@@ -119,7 +118,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		(sut.sceneView.stackView.arrangedSubviews[7] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		(sut.sceneView.stackView.arrangedSubviews[8] as? MenuRowView)?.sendActions(for: .touchUpInside)
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToRestart) == true

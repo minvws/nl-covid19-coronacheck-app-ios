@@ -41,7 +41,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 	private var fullyVaccinatedGreenCards = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 	private var greencardsWithDosage = [(greenCard: GreenCard, doseNumber: Int, totalDose: Int)]()
 
-	init(greenCards: [GreenCard], disclosurePolicy: DisclosurePolicy?) {
+	init(greenCards: [GreenCard]) {
 
 		self.items = greenCards
 			.compactMap { greenCard in
@@ -58,7 +58,7 @@ class ShowQRDatasource: ShowQRDatasourceProtocol {
 				}
 				return false
 			}
-			.map { ShowQRItem(greenCard: $0.greenCard, policy: disclosurePolicy) }
+			.map { ShowQRItem(greenCard: $0.greenCard) }
 
 		self.prepareVaccinatedGreenCards()
 	}

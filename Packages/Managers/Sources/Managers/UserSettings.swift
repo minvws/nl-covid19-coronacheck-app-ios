@@ -15,8 +15,6 @@ public protocol UserSettingsProtocol: AnyObject {
 
 	var jailbreakWarningShown: Bool { get set }
 
-	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
-
 	var configFetchedTimestamp: TimeInterval? { get set }
 
 	var configFetchedHash: String? { get set }
@@ -37,10 +35,7 @@ public protocol UserSettingsProtocol: AnyObject {
 	
 	var policyInformationShown: Bool { get set }
 
-	var lastDismissedDisclosurePolicy: [DisclosurePolicy] { get set }
 	var hasDismissedZeroGPolicy: Bool { get set }
-	var lastKnownConfigDisclosurePolicy: [String] { get set }
-	var overrideDisclosurePolicies: [String] { get set }
 
 	var hasShownBlockedEventsAlert: Bool { get set }
 	
@@ -56,9 +51,6 @@ public class UserSettings: UserSettingsProtocol {
 
 	@Shared.UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
 	public var jailbreakWarningShown: Bool
-
-	@Shared.UserDefaults(key: "dashboardRegionToggleValue")
-	public var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic
 
 	@Shared.UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
 	public var configFetchedTimestamp: TimeInterval?
@@ -87,20 +79,11 @@ public class UserSettings: UserSettingsProtocol {
 	@Shared.UserDefaults(key: "configVerificationPolicies")
 	public var configVerificationPolicies: [VerificationPolicy] = []
 	
-	@Shared.UserDefaults(key: "policyInformationShown", defaultValue: false)
+	@Shared.UserDefaults(key: "policyInformationShown", defaultValue: false) // Verifier
 	public var policyInformationShown: Bool
-
-	@Shared.UserDefaults(key: "lastDismissedDisclosurePolicy")
-	public var lastDismissedDisclosurePolicy: [DisclosurePolicy] = []
 
 	@Shared.UserDefaults(key: "hasDismissedZeroGPolicy") // special-case because `lastDismissedDisclosurePolicy` was released with `defaultValue: []`
 	public var hasDismissedZeroGPolicy: Bool = false
-	
-	@Shared.UserDefaults(key: "overrideDisclosurePolicies")
-	public var overrideDisclosurePolicies: [String] = []
-	
-	@Shared.UserDefaults(key: "lastKnownConfigDisclosurePolicy")
-	public var lastKnownConfigDisclosurePolicy: [String] = ["3G"]
 	
 	// The alert which tells the user that one of their certificates has been blocked:
 	@Shared.UserDefaults(key: "hasShownBlockedEventsAlert")
@@ -116,7 +99,6 @@ extension UserSettings {
 		let userDefaults = Foundation.UserDefaults.standard
 		[	"scanInstructionShown",
 			"jailbreakWarningShown",
-			"dashboardRegionToggleValue",
 			"configFetchedTimestamp",
 			"configFetchedHash",
 			"issuerKeysFetchedTimestamp",
@@ -129,22 +111,23 @@ extension UserSettings {
 			"shouldCheckRecoveryGreenCardRevisedValidity",
 			"configVerificationPolicies",
 			"policyInformationShown",
-			"lastDismissedDisclosurePolicy",
-			"overrideDisclosurePolicies",
-			"lastKnownConfigDisclosurePolicy",
 			"hasDismissedZeroGPolicy",
 			"hasShownBlockedEventsAlert",
 
 			// Deprecated keys
+			"dashboardRegionToggleValue",
+			"didCompleteEUVaccinationMigration",
+			"didDismissEUVaccinationMigrationSuccessBanner",
 			"hasDismissedNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
-			"lastRecommendToAddYourBoosterDismissalDate",
-			"shouldShowRecoveryValidityExtensionCard",
-			"shouldShowRecoveryValidityReinstationCard",
 			"hasDismissedRecoveryValidityExtensionCompletionCard",
 			"hasDismissedRecoveryValidityReinstationCompletionCard",
-			"didCompleteEUVaccinationMigration",
-			"didDismissEUVaccinationMigrationSuccessBanner"
+			"lastDismissedDisclosurePolicy",
+			"lastKnownConfigDisclosurePolicy",
+			"lastRecommendToAddYourBoosterDismissalDate",
+			"overrideDisclosurePolicies",
+			"shouldCheckNewValidityInfoForVaccinationsAndRecoveriesCard",
+			"shouldShowRecoveryValidityExtensionCard",
+			"shouldShowRecoveryValidityReinstationCard"
 		].forEach(userDefaults.removeObject(forKey:))
 	}
 }

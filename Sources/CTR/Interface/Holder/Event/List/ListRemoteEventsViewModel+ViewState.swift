@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -56,12 +56,12 @@ extension ListRemoteEventsViewModel {
 	private func isEventAllowed(_ event: EventFlow.Event) -> Bool {
 
 		switch eventMode {
-			case .vaccinationassessment: return event.hasVaccinationAssessment
 			case .paperflow: return event.hasPaperCertificate
 			case .vaccinationAndPositiveTest: return event.hasPositiveTest || event.hasVaccination || event.hasRecovery
 			case .recovery: return event.hasPositiveTest || event.hasRecovery
 			case .test: return event.hasNegativeTest
 			case .vaccination: return event.hasVaccination
+			case .migration: return true
 		}
 	}
 
@@ -74,8 +74,9 @@ extension ListRemoteEventsViewModel {
 			return emptyEventsState()
 		}
 		// No secondary action for scanned paperflow, that is moved to the body of the details.
+		// No secondary action for the migration flow. 
 		let secondaryActionTitle: String? = {
-			guard !(eventMode == .paperflow) else { return nil }
+			guard eventMode != .paperflow && eventMode != .migration else { return nil }
 			return L.holderVaccinationListWrong()
 		}()
 
@@ -182,8 +183,6 @@ extension ListRemoteEventsViewModel {
 			
 			if currentRow.event.hasRecovery {
 				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
-			} else if currentRow.event.hasVaccinationAssessment {
-				rows.append(getRowFromAssessementEvent(dataRow: currentRow))
 			} else if currentRow.event.hasPositiveTest {
 				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
 			} else if currentRow.event.hasVaccination {
@@ -239,10 +238,10 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			details: [
-				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
-				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -274,9 +273,9 @@ extension ListRemoteEventsViewModel {
 
 		let title = L.holder_listRemoteEvents_listElement_title_vaccination()
 		var listDetails: [String] = [
-			L.holder_listRemoteEvents_listElement_vaccinationDate(formattedShotDate),
-			L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-			L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+			Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_vaccinationDate(formattedShotDate)),
+			Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+			Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 		]
 		
 		var retrievedFrom = L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
@@ -294,7 +293,7 @@ extension ListRemoteEventsViewModel {
 				)
 			}
 		}
-		listDetails.append(retrievedFrom)
+		listDetails.append(Shared.Sanitizer.sanitize(retrievedFrom))
 		
 		return ListRemoteEventsViewController.Row(
 			title: title,
@@ -304,36 +303,6 @@ extension ListRemoteEventsViewModel {
 					.showEventDetails(
 						title: L.holderEventAboutTitle(),
 						details: details,
-						footer: nil
-					)
-				)
-			}
-		)
-	}
-
-	private func getRowFromAssessementEvent(dataRow: EventDataTuple) -> ListRemoteEventsViewController.Row {
-
-		let formattedBirthDate: String = dataRow.identity.birthDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedTestDate: String = dataRow.event.vaccinationAssessment?.dateTimeString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonth.string) ?? (dataRow.event.vaccinationAssessment?.dateTimeString ?? "")
-		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
-
-		return ListRemoteEventsViewController.Row(
-			title: L.holder_event_vaccination_assessment_element_title(),
-			details: [
-				L.holder_listRemoteEvents_listElement_assessmentDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
-				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
-			],
-			action: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(
-						title: L.holderEventAboutTitle(),
-						details: VaccinationAssessementDetailsGenerator.getDetails(identity: dataRow.identity, event: dataRow.event),
 						footer: nil
 					)
 				)
@@ -354,10 +323,10 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			details: [
-				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
-				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -384,10 +353,10 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
 			details: [
-				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate),
-				L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider)
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_retrievedFrom_single(provider))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -419,11 +388,11 @@ extension ListRemoteEventsViewModel {
 		}
 
 		return ListRemoteEventsViewController.Row(
-			title: title,
+			title: Shared.Sanitizer.sanitize(title),
 			details: [
-				L.holder_listRemoteEvents_listElement_vaccinationDate(formattedVaccinationDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_vaccinationDate(formattedVaccinationDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -452,9 +421,9 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
 			details: [
-				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
@@ -483,9 +452,9 @@ extension ListRemoteEventsViewModel {
 		return ListRemoteEventsViewController.Row(
 			title: L.general_testcertificate().capitalizingFirstLetter(),
 			details: [
-				L.holder_listRemoteEvents_listElement_testDate(formattedTestDate),
-				L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName),
-				L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate)
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_testDate(formattedTestDate)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_name(dataRow.identity.fullName)),
+				Shared.Sanitizer.sanitize(L.holder_listRemoteEvents_listElement_birthDate(formattedBirthDate))
 			],
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(

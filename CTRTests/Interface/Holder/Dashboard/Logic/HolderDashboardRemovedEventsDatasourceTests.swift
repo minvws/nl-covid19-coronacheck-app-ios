@@ -28,11 +28,10 @@ class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 		
 		// Arrange
  		let context = environmentSpies.dataStoreManager.managedObjectContext()
-		var blockedEvent: RemovedEvent?
 		
 		context.performAndWait {
 			
-			blockedEvent = RemovedEvent(
+			_ = RemovedEvent(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: RemovalReason.blockedEvent.rawValue,
@@ -60,11 +59,10 @@ class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
 		
 		// Arrange
 		let context = environmentSpies.dataStoreManager.managedObjectContext()
-		var blockedEvent: RemovedEvent?
 		
 		context.performAndWait {
 			
-			blockedEvent = RemovedEvent(
+			_ = RemovedEvent(
 				type: EventMode.vaccination,
 				eventDate: now,
 				reason: RemovalReason.mismatchedIdentity.rawValue,

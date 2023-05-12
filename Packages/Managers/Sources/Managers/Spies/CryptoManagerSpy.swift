@@ -45,20 +45,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedHasPublicKeysResult
 	}
 
-	var invokedCreateCredential = false
-	var invokedCreateCredentialCount = 0
-	var invokedCreateCredentialParameters: (ism: Data, Void)?
-	var invokedCreateCredentialParametersList = [(ism: Data, Void)]()
-	var stubbedCreateCredentialResult: Result<Data, CryptoError>!
-
-	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-		invokedCreateCredential = true
-		invokedCreateCredentialCount += 1
-		invokedCreateCredentialParameters = (ism, ())
-		invokedCreateCredentialParametersList.append((ism, ()))
-		return stubbedCreateCredentialResult
-	}
-
 	var invokedIsForeignDCC = false
 	var invokedIsForeignDCCCount = 0
 	var invokedIsForeignDCCParameters: (data: Data, Void)?
@@ -71,20 +57,6 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedIsForeignDCCParameters = (data, ())
 		invokedIsForeignDCCParametersList.append((data, ()))
 		return stubbedIsForeignDCCResult
-	}
-
-	var invokedIsPaperBasedDCC = false
-	var invokedIsPaperBasedDCCCount = 0
-	var invokedIsPaperBasedDCCParameters: (data: Data, Void)?
-	var invokedIsPaperBasedDCCParametersList = [(data: Data, Void)]()
-	var stubbedIsPaperBasedDCCResult: Bool! = false
-
-	func isPaperBasedDCC(_ data: Data) -> Bool {
-		invokedIsPaperBasedDCC = true
-		invokedIsPaperBasedDCCCount += 1
-		invokedIsPaperBasedDCCParameters = (data, ())
-		invokedIsPaperBasedDCCParametersList.append((data, ()))
-		return stubbedIsPaperBasedDCCResult
 	}
 
 	var invokedIsDCC = false
@@ -115,20 +87,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedHasDomesticPrefixResult
 	}
 
-	var invokedReadDomesticCredentials = false
-	var invokedReadDomesticCredentialsCount = 0
-	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?
-	var invokedReadDomesticCredentialsParametersList = [(data: Data, Void)]()
-	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes!
-
-	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
-		invokedReadDomesticCredentials = true
-		invokedReadDomesticCredentialsCount += 1
-		invokedReadDomesticCredentialsParameters = (data, ())
-		invokedReadDomesticCredentialsParametersList.append((data, ()))
-		return stubbedReadDomesticCredentialsResult
-	}
-
 	var invokedReadEuCredentials = false
 	var invokedReadEuCredentialsCount = 0
 	var invokedReadEuCredentialsParameters: (data: Data, Void)?
@@ -141,20 +99,6 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedReadEuCredentialsParameters = (data, ())
 		invokedReadEuCredentialsParametersList.append((data, ()))
 		return stubbedReadEuCredentialsResult
-	}
-
-	var invokedDiscloseCredential = false
-	var invokedDiscloseCredentialCount = 0
-	var invokedDiscloseCredentialParameters: (credential: Data, disclosurePolicy: DisclosurePolicy, holderSecretKey: Data)?
-	var invokedDiscloseCredentialParametersList = [(credential: Data, disclosurePolicy: DisclosurePolicy, holderSecretKey: Data)]()
-	var stubbedDiscloseCredentialResult: Data!
-
-	func discloseCredential(_ credential: Data, forPolicy disclosurePolicy: DisclosurePolicy, withKey holderSecretKey: Data) -> Data? {
-		invokedDiscloseCredential = true
-		invokedDiscloseCredentialCount += 1
-		invokedDiscloseCredentialParameters = (credential, disclosurePolicy, holderSecretKey)
-		invokedDiscloseCredentialParametersList.append((credential, disclosurePolicy, holderSecretKey))
-		return stubbedDiscloseCredentialResult
 	}
 
 	var invokedVerifyQRMessage = false

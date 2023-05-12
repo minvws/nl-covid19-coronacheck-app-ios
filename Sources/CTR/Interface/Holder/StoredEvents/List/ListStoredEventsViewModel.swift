@@ -41,7 +41,7 @@ class ListStoredEventsViewModel {
 
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 	
 	fileprivate func getEventGroupListViewState() -> ListStoredEventsViewController.State {
@@ -55,7 +55,7 @@ class ListStoredEventsViewModel {
 				secondaryActionTitle: L.holder_storedEvents_button_handleData(),
 				secondaryAction: { [weak self] in
 					guard let url = URL(string: L.holder_storedEvents_url()) else { return }
-					self?.coordinator?.openUrl(url, inApp: true)
+					self?.coordinator?.openUrl(url)
 				}),
 			groups: getEventGroups()
 		)
@@ -97,7 +97,7 @@ class ListStoredEventsViewModel {
 		
 		let providerName = Current.mappingManager.getProviderIdentifierMapping(shortProvider)
 		
-		return L.holder_storedEvents_listHeader_fetchedFromProvider(providerName ?? provider)
+		return Shared.Sanitizer.sanitize(L.holder_storedEvents_listHeader_fetchedFromProvider(providerName ?? provider))
 	}
 	
 	private func getEventRows(_ storedEvent: EventGroup) -> [ListStoredEventsViewController.Row] {
@@ -122,7 +122,7 @@ class ListStoredEventsViewModel {
 						let identity = wrapper.identity else {
 					return nil
 				}
-				let dateString = DateFormatter.Format.dayMonthYear.string(from: date)
+				let dateString = Shared.Sanitizer.sanitize(DateFormatter.Format.dayMonthYear.string(from: date))
 				
 				if event.hasNegativeTest {
 					return getRowFromNegativeTestEvent(event, date: dateString, identity: identity)
@@ -132,8 +132,6 @@ class ListStoredEventsViewModel {
 					return getRowFromRecoveryEvent(event, date: dateString, identity: identity)
 				} else if event.hasVaccination {
 					return getRowFromVaccinationEvent(event, date: dateString, identity: identity, providerName: wrapper.providerIdentifier)
-				} else if event.hasVaccinationAssessment {
-					return getRowFromAssessementEvent(event, date: dateString, identity: identity)
 				}
 				return nil
 			})
@@ -217,20 +215,6 @@ class ListStoredEventsViewModel {
 		)
 	}
 	
-	private func getRowFromAssessementEvent(_ event: EventFlow.Event, date: String, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
-
-		return ListStoredEventsViewController.Row(
-			title: L.general_vaccinationAssessment().capitalizingFirstLetter(),
-			details: date,
-			action: { [weak self] in
-				self?.coordinator?.userWishesToSeeEventDetails(
-					L.general_vaccinationAssessment().capitalizingFirstLetter(),
-					details: VaccinationAssessementDetailsGenerator.getDetails(identity: identity, event: event)
-				)
-			}
-		)
-	}
-	
 	// MARK: - DCC Row Helper Methods
 	
 	private func getRowFromVaccinationDCC(_ vaccination: EuCredentialAttributes.Vaccination, identity: EventFlow.Identity) -> ListStoredEventsViewController.Row {
@@ -240,7 +224,7 @@ class ListStoredEventsViewModel {
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_vaccination().capitalizingFirstLetter(),
-			details: formattedVaccinationDate,
+			details: Shared.Sanitizer.sanitize(formattedVaccinationDate),
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_vaccination().capitalizingFirstLetter(),
@@ -257,7 +241,7 @@ class ListStoredEventsViewModel {
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_recoverycertificate().capitalizingFirstLetter(),
-			details: formattedTestDate,
+			details: Shared.Sanitizer.sanitize(formattedTestDate),
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_recoverycertificate().capitalizingFirstLetter(),
@@ -274,7 +258,7 @@ class ListStoredEventsViewModel {
 		
 		return ListStoredEventsViewController.Row(
 			title: L.general_negativeTest().capitalizingFirstLetter(),
-			details: formattedTestDate,
+			details: Shared.Sanitizer.sanitize(formattedTestDate),
 			action: { [weak self] in
 				self?.coordinator?.userWishesToSeeEventDetails(
 					L.general_negativeTest().capitalizingFirstLetter(),
@@ -342,7 +326,7 @@ class ListStoredEventsViewModel {
 							
 						case .noSignedEvents:
 							// No more stored events. Remove existing greencards.
-							Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
+							Current.walletManager.removeExistingGreenCards()
 							self.viewState = self.getEventGroupListViewState()
 							
 						case let .customError(title: title, message: message):
@@ -389,7 +373,7 @@ class ListStoredEventsViewModel {
 			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 			secondaryAction: { [weak self] in
 				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else { return }
-				self?.coordinator?.openUrl(url, inApp: true)
+				self?.coordinator?.openUrl(url)
 			}
 		)
 		DispatchQueue.main.asyncAfter(deadline: .now() + (ProcessInfo().isUnitTesting ? 0 : 0.5)) {

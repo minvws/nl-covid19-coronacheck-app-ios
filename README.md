@@ -48,7 +48,7 @@ This is a general overview of the features that are available in the app:
 
 * **Onboarding**: When the app starts or the first time, the user is informed of the functionality of the app and views the privacy declaration.
 
-* **Dashboard**: an overview of the user's certificates. Depending on the active [disclosure policy](#disclosure-policies), there can a tab switcher to change between Domestic and International certificates, or else it's hidden and the user can only view International certificates.
+* **Dashboard**: an overview of the user's certificates. The user can only view International certificates.
 
 * **View QR codes**: View the QR code(s) for a selected certificate.
 
@@ -66,8 +66,6 @@ This is a general overview of the features that are available in the app:
 
   * **Scan to add certificate**: the user can import a paper copy of a various types of certificate by scanning it using the phone's camera.
 
-  * **Add visitor pass**: for users who were vaccinated outside the EU and are visiting the Netherlands, they can obtain a "vaccine approval" code and use it - together with a negative test - to create a visitor pass in the app.
-
   * **Frequently asked questions**: a webview 
 
   * **About this app**:
@@ -81,18 +79,6 @@ This is a general overview of the features that are available in the app:
     To aid in development/testing of the app, there are some extra menu items when compiling for Development/Test/Acceptance:
 
     * ***Open Scanner**: open the CoronaCheck Scanner app via a universal-link*
-
-    * ***A list of disclosure policies** (1G, 3G, etc) which can be manually activated to override the remote configuration disclosure policy.*
-
-##### Disclosure policies
-
-Depending on the active disclosure policy (which is set by the remote config), the Dutch certificates are handled differently in the app:
-
-* **0G**: no Dutch certificates displayed, only international certificates.
-
-* **1G** access: the user can only use a negative test to enter places which require a coronavirus pass. The app only displays the QRs of negative test certificates.
-* **3G** access: the user can enter anywhere (that requires a coronavirus pass) with a proof of vaccination, recovery, or a negative test. So all certificates are available.
-* **1G + 3G**: some venues are operating with 1G rules, others with 3G. Thus the app displays separate certificates for 3G and for 1G access.
 
 #### CoronaCheck Scanner
 
@@ -118,7 +104,6 @@ This is a general overview of the features that are available in the app:
 * **Onboarding**: When the app starts or the first time, the user is informed of the purpose of the app and accepts the Acceptable Use Policy.
 * **Landing screen**: explains briefly what the app does.
 * **"About Scanning" onboarding**: informs the user how to scan & verify a certificate.
-* **New Policy screen**: explains the current disclosure policy
 * **Scan QR code**: camera view which allows the user to scan a QR code. The device's flashlight can be toggled.
 * **Result screen**: shows a green checkmark or a red cross depending on the result of the scan.
 

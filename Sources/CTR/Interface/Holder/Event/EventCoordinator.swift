@@ -44,16 +44,13 @@ enum EventScreenResult: Equatable {
 	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails], footer: String?)
 	
-	case shouldCompleteVaccinationAssessment
-	
 	case showHints(NonemptyArray<String>, eventMode: EventMode)
 	
 	case mismatchedIdentity(matchingBlobIds: [[String]])
 	
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
-			case (.back, .back), (.stop, .stop),
-				(.shouldCompleteVaccinationAssessment, .shouldCompleteVaccinationAssessment):
+			case (.back, .back), (.stop, .stop):
 				return true
 				
 			case (let .alternativeRoute(lhsEventMode), let .alternativeRoute(rhsEventMode)):
@@ -120,9 +117,6 @@ protocol EventFlowDelegate: AnyObject {
 
 	/// The event flow is finished
 	func eventFlowDidComplete()
-	
-	/// The event flow is finished, but go to the vaccination assessment entry
-	func eventFlowDidCompleteButVisitorPassNeedsCompletion()
 
 	func eventFlowDidCancel()
 }
@@ -174,11 +168,11 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		
 		var mode: EventMode = .test(.ggd)
 		
-		if let event = events.first?.wrapper.events?.first {
+		if originalMode == .migration {
+			mode = .migration
+		} else if let event = events.first?.wrapper.events?.first {
 			
-			if event.hasVaccinationAssessment {
-				mode = .vaccinationassessment
-			} else if event.hasPaperCertificate {
+			if event.hasPaperCertificate {
 				mode = .paperflow
 			} else if event.hasPositiveTest {
 				mode = .recovery
@@ -192,7 +186,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 				mode = .vaccination
 			}
 		}
-
+		
 		navigateToListEvents(events, eventMode: mode, originalMode: originalMode, eventsMightBeMissing: false)
 	}
 
@@ -275,7 +269,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 				screenCaptureDetector: ScreenCaptureDetector(),
 				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url)
 				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
@@ -338,20 +332,6 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 			)
 		}
 	}
-	
-	private func navigateBackToVisitorPassStart() -> Bool {
-		
-		if let eventStartViewController = navigationController.viewControllers
-			.first(where: { $0 is VisitorPassStartViewController }) {
-			
-			navigationController.popToViewController(
-				eventStartViewController,
-				animated: true
-			)
-			return true
-		}
-		return false
-	}
 
 	private func displayError(content: Content, allowsSwipeBack: Bool = false, backAction: @escaping () -> Void) {
 
@@ -362,12 +342,7 @@ class EventCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 extension EventCoordinator: EventCoordinatorDelegate {
 	
 	func showHintsScreenDidFinish(_ result: EventScreenResult) {
-		switch result {
-			case .shouldCompleteVaccinationAssessment:
-				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
-			default:
-				delegate?.eventFlowDidComplete()
-		}
+		delegate?.eventFlowDidComplete()
 	}
 
 	func eventStartScreenDidFinish(_ result: EventScreenResult) {
@@ -428,17 +403,13 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	private func goBack(_ eventMode: EventMode) {
 
 		switch eventMode {
-			case .vaccinationassessment:
-				if !navigateBackToVisitorPassStart() {
-					navigateBackToTestStart()
-				}
 			case .recovery, .vaccination, .vaccinationAndPositiveTest:
 				navigateBackToEventStart()
 			case .test:
 				if !navigateBackToEventStart() {
 					navigateBackToTestStart()
 				}
-			case .paperflow:
+			case .paperflow, .migration:
 				delegate?.eventFlowDidCancel()
 		}
 	}
@@ -448,8 +419,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
-			case .continue:
-				delegate?.eventFlowDidComplete()
+			case .continue( let eventMode):
+				if eventMode == .migration {
+					showMigrationEndState()
+				} else {
+					delegate?.eventFlowDidComplete()
+				}
 			case .back(let eventMode):
 				goBack(eventMode)
 			case let .error(content: content, backAction: backAction):
@@ -458,8 +433,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details, footer):
 				navigateToEventDetails(title, details: details, footer: footer)
-			case .shouldCompleteVaccinationAssessment:
-				delegate?.eventFlowDidCompleteButVisitorPassNeedsCompletion()
 			case let .showHints(hints, eventMode):
 				navigateToShowHints(hints: hints, eventMode: eventMode)
 			case let .mismatchedIdentity(matchingBlobIds: matchingBlobIds):
@@ -540,6 +513,21 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			shouldAllowBackNavigationToExitFlow: true
 		)
 		startChildCoordinator(fmCoordinator)
+	}
+	
+	private func showMigrationEndState() {
+		
+		presentContent(
+			content: Content(
+				title: L.holder_migrationFlow_migrationSuccessful_title(),
+				body: L.holder_migrationFlow_migrationSuccessful_message(),
+				primaryActionTitle: L.general_toMyOverview(),
+				primaryAction: { [weak self] in
+					self?.delegate?.eventFlowDidComplete()
+				}
+			),
+			allowsSwipeBack: false
+		)
 	}
 }
 

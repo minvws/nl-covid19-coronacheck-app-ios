@@ -25,16 +25,6 @@ final class EmptyDashboardImagePlaceholderViewTests: XCTestCase {
 			sut.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
 		])
 	}
-
-	func test_domestic() {
-		// Arrange
-		sut.title = "Hier komt jouw Nederlandse bewijs"
-		sut.image = I.dashboard.domestic()
-
-		// Act
-		// Assert
-		sut.assertImage()
-	}
 	
 	func test_international() {
 		// Arrange

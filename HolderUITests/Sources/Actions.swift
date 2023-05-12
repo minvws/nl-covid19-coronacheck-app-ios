@@ -22,12 +22,6 @@ extension BaseTest {
 		waitUntilSpinnerIsGone()
 	}
 	
-	func addVisitorPass() {
-		app.tapButton("Open menu")
-		app.tapButton("Bezoekersbewijs toevoegen")
-		app.tapButton("Volgende")
-	}
-	
 	func proceedToOverview() {
 		app.tapButton("Naar mijn bewijzen")
 	}
@@ -103,24 +97,6 @@ extension BaseTest {
 		
 		if let verificationCode = verificationCode {
 			app.containsText("Verificatiecode")
-			let verificationField = app.textFields["Verificatiecode"]
-			verificationField.tap()
-			verificationField.typeText(verificationCode)
-			app.tapButton("Volgende")
-		}
-	}
-	
-	func addVaccinationAssessment(for approvalCode: String? = nil, with verificationCode: String? = nil) {
-		addVisitorPass()
-		
-		if let approvalCode = approvalCode {
-			let approvalField = app.textFields["Beoordelingscode"]
-			approvalField.tap()
-			approvalField.typeText(approvalCode)
-			app.tapButton("Volgende", index: 1)
-		}
-		
-		if let verificationCode = verificationCode {
 			let verificationField = app.textFields["Verificatiecode"]
 			verificationField.tap()
 			verificationField.typeText(verificationCode)

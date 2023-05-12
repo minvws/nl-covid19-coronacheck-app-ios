@@ -107,7 +107,7 @@ public enum EventMode: Equatable {
 	case recovery
 	case test(TestRoute)
 	case vaccination
-	case vaccinationassessment
+	case migration
  
 	public var rawValue: String {
 		switch self {
@@ -121,8 +121,8 @@ public enum EventMode: Equatable {
 				return "test"
 			case .vaccination:
 				return "vaccination"
-			case .vaccinationassessment:
-				return "vaccinationassessment"
+			case .migration:
+				return "migration"
 		}
 	}
 	
@@ -132,8 +132,7 @@ public enum EventMode: Equatable {
 			case .test: return ["negativetest"]
 			case .vaccination: return ["vaccination"]
 			case .recovery: return ["positivetest"]
-			case .vaccinationassessment: return ["vaccinationassessment"]
-			case .paperflow: return nil
+			case .paperflow, .migration: return nil
 		}
 	}
 }

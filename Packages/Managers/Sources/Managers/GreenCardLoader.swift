@@ -146,18 +146,11 @@ public class GreenCardLoader: GreenCardLoading {
 
 		var success = true
 
-		walletManager.removeExistingGreenCards(secureUserSettings: secureUserSettings)
+		walletManager.removeExistingGreenCards()
 		
 		// Store the new secret key
 		secureUserSettings.holderSecretKey = secretKey
 		
-		// Domestic
-		if let domestic = response.domesticGreenCard {
-			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
-		} else {
-			// Don't hold on to the key if there are no domestic greencards.
-			secureUserSettings.holderSecretKey = nil
-		}
 		// International
 		if let remoteEuGreenCards = response.euGreenCards {
 			for remoteEuGreenCard in remoteEuGreenCards {

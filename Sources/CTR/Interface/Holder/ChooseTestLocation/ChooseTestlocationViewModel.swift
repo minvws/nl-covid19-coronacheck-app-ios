@@ -32,17 +32,20 @@ class ChooseTestLocationViewModel: ListOptionsProtocol {
 		
 		optionModels.value = [
 			ListOptionsViewController.OptionModel(
-				title: L.holderLocationGgdTitle()) { [weak self] in
+				title: L.holderLocationGgdTitle(),
+				type: .singleLine) { [weak self] in
 					self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
 				},
 			ListOptionsViewController.OptionModel(
-				title: L.holderLocationOtherTitle()) { [weak self] in
+				title: L.holderLocationOtherTitle(),
+				type: .singleLine) { [weak self] in
 					self?.coordinator?.userWishesToCreateANegativeTestQR()
 				}
 		]
 		
 		bottomButton.value = ListOptionsViewController.OptionModel(
-			title: L.holderLocationNotest()) { [weak self] in
+			title: L.holderLocationNotest(),
+			type: .singleLine) { [weak self] in
 				self?.coordinator?.userWishesMoreInfoAboutGettingTested()
 			}
 	}

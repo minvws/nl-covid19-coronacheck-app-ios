@@ -60,6 +60,8 @@ class NetworkManagerCredentialsTests: XCTestCase {
 			// Return valid greencards
 			return HTTPStubsResponse(
 				jsonObject: [
+					// Domestic is no longer used, just to check if
+					// thing do not break when it is included. 
 					"domesticGreencard": [
 						"origins": [
 							["type": "vaccination",
@@ -100,8 +102,6 @@ class NetworkManagerCredentialsTests: XCTestCase {
 				
 				// Then
 				expect(result.isSuccess) == true
-				expect(result.successValue?.domesticGreenCard) != nil
-				expect(result.successValue?.domesticGreenCard?.origins.first?.type) == "vaccination"
 				expect(result.successValue?.euGreenCards).toNot(beEmpty())
 				expect(result.successValue?.euGreenCards?.first?.origins.first?.type) == "vaccination"
 				done()

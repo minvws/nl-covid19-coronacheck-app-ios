@@ -88,21 +88,39 @@ class ListRemoteEventsViewModel {
 
 	func warnBeforeGoBack() {
 		
-		alert = AlertContent(
-			title: L.holderVaccinationAlertTitle(),
-			subTitle: eventMode.alertBody,
-			okAction: AlertContent.Action(
-				title: L.holderVaccinationAlertContinue(),
-				isPreferred: true
-			),
-			cancelAction: AlertContent.Action(
-				title: L.holderVaccinationAlertStop(),
-				action: { [weak self] _ in
-					self?.goBack()
-				},
-				isDestructive: true
+		if eventMode == .migration {
+			alert = AlertContent(
+				title: L.holder_migrationFlow_goBack_dialog_title(),
+				subTitle: L.holder_migrationFlow_goBack_dialog_message(),
+				okAction: AlertContent.Action(
+					title: L.holder_migrationFlow_goBack_dialog_noButton(),
+					isPreferred: true
+				),
+				cancelAction: AlertContent.Action(
+					title: L.holder_migrationFlow_goBack_dialog_yesButton(),
+					action: { [weak self] _ in
+						self?.goBack()
+					},
+					isDestructive: true
+				)
 			)
-		)
+		} else {
+			alert = AlertContent(
+				title: L.holderVaccinationAlertTitle(),
+				subTitle: eventMode.alertBody,
+				okAction: AlertContent.Action(
+					title: L.holderVaccinationAlertContinue(),
+					isPreferred: true
+				),
+				cancelAction: AlertContent.Action(
+					title: L.holderVaccinationAlertStop(),
+					action: { [weak self] _ in
+						self?.goBack()
+					},
+					isDestructive: true
+				)
+			)
+		}
 	}
 
 	func goBack() {
@@ -116,7 +134,7 @@ class ListRemoteEventsViewModel {
 
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 
 	// MARK: Sign the events
@@ -149,8 +167,6 @@ class ListRemoteEventsViewModel {
 				// Expanded Event Mode resolves a paper flow to vaccination / recovery / test.
 				logVerbose("Setting eventModeToUse to \(paperFlowEmbeddedEventMode.rawValue)")
 				return paperFlowEmbeddedEventMode
-			} else if originalEventMode == .vaccinationassessment {
-				return .vaccinationassessment
 			} else {
 				return eventMode
 			}
@@ -260,7 +276,7 @@ class ListRemoteEventsViewModel {
 						shouldPrimaryButtonBeEnabled = true
 						
 					case .noSignedEvents:
-						Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
+						Current.walletManager.removeExistingGreenCards()
 						Current.walletManager.removeDraftEventGroups() // FYI: for the case of `.mismatchedIdentity` below, this is performed in that flow instead. It's also performed on app startup.
 					
 						showEventError()
@@ -394,9 +410,6 @@ extension EventFlow.Event {
 		}
 		if hasNegativeTest {
 			return .test(.ggd)
-		}
-		if hasVaccinationAssessment {
-			return .vaccinationassessment
 		}
 		if hasPaperCertificate {
 			return .paperflow

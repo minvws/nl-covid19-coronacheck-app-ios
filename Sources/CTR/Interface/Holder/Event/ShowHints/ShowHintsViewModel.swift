@@ -74,7 +74,7 @@ final class ShowHintsViewModel {
 				case .recoveryTooOld:
 					return L.holder_listRemoteEvents_endStateRecoveryTooOld_title()
 				case .addVaccinationAssessment:
-					return L.holder_event_negativeTestEndstate_addVaccinationAssessment_title()
+					return ""
 				case .cantCreateCertificate:
 					return L.holder_listRemoteEvents_endStateCantCreateCertificate_title()
 			}
@@ -98,7 +98,7 @@ final class ShowHintsViewModel {
 				case .recoveryTooOld:
 					return L.holder_listRemoteEvents_endStateRecoveryTooOld_message()
 				case .addVaccinationAssessment:
-					return L.holder_event_negativeTestEndstate_addVaccinationAssessment_body()
+					return ""
 				case .cantCreateCertificate(let errorCode):
 					return L.holder_listRemoteEvents_endStateCantCreateCertificate_message(
 						eventMode.errorStateLocalization.lowercased(),
@@ -108,11 +108,7 @@ final class ShowHintsViewModel {
 		}
 		
 		var buttonTitle: String {
-			if case .addVaccinationAssessment = self {
-				return L.holder_event_negativeTestEndstate_addVaccinationAssessment_button_complete()
-			} else {
-				return L.general_toMyOverview()
-			}
+			return L.general_toMyOverview()
 		}
 	}
 	
@@ -147,17 +143,12 @@ final class ShowHintsViewModel {
 	
 	func openUrl(_ url: URL) {
 		
-		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url)
 	}
 	
 	func userTappedCallToActionButton() {
 		
-		switch endState {
-			case .addVaccinationAssessment:
-				coordinator?.showHintsScreenDidFinish(.shouldCompleteVaccinationAssessment)
-			default:
-				coordinator?.showHintsScreenDidFinish(.stop)
-		}
+		coordinator?.showHintsScreenDidFinish(.stop)
 	}
 	
 	// `throws` if it's an unknown hint combination
@@ -246,12 +237,11 @@ private extension EventMode {
 	/// Op dit moment kunnen we geen bewijs maken van je _____.
 	var errorStateLocalization: String {
 		switch self {
-			case .paperflow: return L.general_scannedQRCode() // gescande QR-code
+			case .paperflow, .migration: return L.general_scannedQRCode() // gescande QR-code
 			case .vaccinationAndPositiveTest: return L.general_retrievedDetails() // opgehaalde gegevens
 			case .recovery: return L.general_positiveTest() // positive testuitslag
 			case .test: return L.general_negativeTest() // negative testuitslag
 			case .vaccination: return L.general_vaccination() // vaccinatie
-			case .vaccinationassessment: return L.general_vaccinationAssessment() // vaccinatiebeoordeling
 		}
 	}
 }

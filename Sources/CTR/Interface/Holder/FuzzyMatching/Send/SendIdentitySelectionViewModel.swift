@@ -135,7 +135,7 @@ class SendIdentitySelectionViewModel {
 						case .noInternet:
 							self.displayNoInternet()
 						case .noSignedEvents:
-							Current.walletManager.removeExistingGreenCards(secureUserSettings: Current.secureUserSettings)
+							Current.walletManager.removeExistingGreenCards()
 							self.displayErrorCode(ErrorCode(flow: .fuzzyMatching, step: .signer, clientCode: .noEventsToSendToTheSigner))
 						case let .customError(title: title, message: message):
 							removesDraftEventGroups = true
@@ -192,13 +192,6 @@ class SendIdentitySelectionViewModel {
 			self.coordinatorDelegate?.presentError(content: content, backAction: nil)
 		}
 	}
-}
-
-// MARK: - ErrorCode.Flow
-
-extension ErrorCode.Flow {
-
-	static let fuzzyMatching = ErrorCode.Flow(value: "13")
 }
 
 // MARK: ErrorCode.ClientCode

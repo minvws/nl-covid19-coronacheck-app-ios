@@ -292,35 +292,6 @@ class DCCVaccinationDetailsGenerator {
 	}
 }
 
-class VaccinationAssessementDetailsGenerator {
-	
-	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {
-		
-		let mappingManager: MappingManaging = Current.mappingManager
-		
-		let formattedBirthDate: String = identity.birthDateString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayMonthYear.string) ?? (identity.birthDateString ?? "")
-		let formattedAssessmentDate: String = event.vaccinationAssessment?.dateTimeString
-			.flatMap(Formatter.getDateFrom)
-			.map(DateFormatter.Format.dayNameDayNumericMonthWithTime.string) ?? (event.vaccinationAssessment?.dateTimeString ?? "")
-
-		let country = mappingManager.getDisplayCountry(event.vaccinationAssessment?.country ?? "")
-		
-		var list: [EventDetails] = [
-				EventDetails(field: EventDetailsVaccinationAssessment.subtitle, value: nil),
-				EventDetails(field: EventDetailsVaccinationAssessment.name, value: identity.fullName),
-				EventDetails(field: EventDetailsVaccinationAssessment.dateOfBirth, value: formattedBirthDate),
-				EventDetails(field: EventDetailsVaccinationAssessment.date, value: formattedAssessmentDate)
-		]
-		if country != "" {
-			list.append(EventDetails(field: EventDetailsVaccinationAssessment.country, value: country))
-		}
-		list.append(EventDetails(field: EventDetailsVaccinationAssessment.uniqueIdentifer, value: event.nonBreakingUnique))
-		return list
-	}
-}
-
 class RecoveryDetailsGenerator {
 
 	static func getDetails(identity: EventFlow.Identity, event: EventFlow.Event) -> [EventDetails] {

@@ -27,21 +27,11 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		// Warnings:
 		case expiredQR(message: String, didTapClose: () -> Void)
-		case expiredVaccinationQR(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-		case originNotValidInThisRegion(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case deviceHasClockDeviation(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case configAlmostOutOfDate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case eventsWereRemoved(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
 		
-		// Vaccination & Recovery Validity
-		case newValidityInfoForVaccinationAndRecoveries(title: String, buttonText: String, didTapCallToAction: () -> Void, didTapClose: () -> Void)
-		
-		// Vaccination Assessment
-		case completeYourVaccinationAssessment(title: String, buttonText: String, didTapCallToAction: () -> Void)
-		case vaccinationAssessmentInvalidOutsideNL(title: String, buttonText: String, didTapCallToAction: () -> Void)
-		
 		// QR Cards:
-		case domesticQR(disclosurePolicyLabel: String, title: String, isDisabledByDisclosurePolicy: Bool, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
 		// Recommendations
@@ -74,8 +64,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		setupBindings()
 		
-		sceneView.delegate = self
-
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.addCertificateFooterTapped()
 		}
@@ -132,18 +120,12 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		guard !didSetInitialStartingTabOnSceneView else { return }
 		didSetInitialStartingTabOnSceneView = true
-		
-		// Select start tab after layouting is done to be able to update scroll position
-		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.selectTab(tab: selectedTab)
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
 		
-		coordinator.animate { _ in
-			self.sceneView.updateScrollPosition()
-		}
+		coordinator.animate { _ in }
 	}
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -152,7 +134,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		if #available(iOS 13.0, *),
 			traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
 			
-			setup(cards: viewModel.domesticCards.value, with: sceneView.domesticScrollView.stackView)
 			setup(cards: viewModel.internationalCards.value, with: sceneView.internationalScrollView.stackView)
 		}
 	}
@@ -163,12 +144,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 
 		viewModel.title.observe { [weak self] in self?.sceneView.fakeNavigationTitle = $0 }
 		
-		viewModel.domesticCards.observe { [sceneView, weak self] cards in
-			performUIUpdate {
-				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
-			}
-		}
-		
 		viewModel.internationalCards.observe { [sceneView, weak self] cards in
 			performUIUpdate {
 				self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
@@ -177,19 +152,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		
 		viewModel.primaryButtonTitle.observe { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
 		viewModel.shouldShowAddCertificateFooter.observe { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
-
-		viewModel.selectedTab.observe { [weak self, sceneView] region in
-			guard let self, self.didSetInitialStartingTabOnSceneView else { return }
-			sceneView.selectTab(tab: region)
-		}
-		
-		viewModel.shouldShowTabBar.observe { [sceneView] in
-			sceneView.shouldShowTabBar = $0
-		}
-		
-		viewModel.shouldShowOnlyInternationalPane.observe { [sceneView] in
-			sceneView.shouldShowOnlyInternationalPane = $0
-		}
 	}
 
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
@@ -204,14 +166,6 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		}
 
 		UIAccessibility.post(notification: .layoutChanged, argument: view)
-	}
-}
-
-extension HolderDashboardViewController: HolderDashboardViewDelegate {
-	
-	func holderDashboardView(didDisplay tab: DashboardTab) {
-		let changedRegion: QRCodeValidityRegion = tab.isDomestic ? .domestic : .europeanUnion
-		viewModel.dashboardRegionToggleValue = changedRegion
 	}
 }
 
@@ -234,12 +188,9 @@ private extension HolderDashboardViewController.Card {
 				return MessageCardView(config: .init(title: message, closeButtonCommand: didTapCloseAction, ctaButton: nil))
 
 			// Message Cards with a message + CTA button
-			case let .originNotValidInThisRegion(message, callToActionButtonText, didTapCallToAction),
-				let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
+			case let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
-				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction),
-				let .completeYourVaccinationAssessment(message, callToActionButtonText, didTapCallToAction),
-				let .vaccinationAssessmentInvalidOutsideNL(message, callToActionButtonText, didTapCallToAction):
+				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
@@ -248,15 +199,14 @@ private extension HolderDashboardViewController.Card {
 				))
 				
 			// Message Cards with a message + CTA button + close button
-			case let .newValidityInfoForVaccinationAndRecoveries(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .expiredVaccinationQR(message, callToActionButtonText, didTapCallToAction, didTapCloseAction),
-				let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
+			case let .eventsWereRemoved(message, callToActionButtonText, didTapCallToAction, didTapCloseAction):
 				
 				return MessageCardView(config: .init(
 					title: message,
 					closeButtonCommand: didTapCloseAction,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
 				))
+				
 			case let .disclosurePolicyInformation(message, callToActionButtonText, accessibilityIdentifier, didTapCallToAction, didTapCloseAction):
 				return MessageCardView(config: .init(
 					title: message,
@@ -273,28 +223,10 @@ private extension HolderDashboardViewController.Card {
 				view.title = title
 				view.image = image
 				return view
-				
-			case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
-				let qrCard = QRCardView(stackSize: 1)
-				qrCard.shouldStyleForEU = false
-				qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
-				qrCard.viewQRButtonCommand = didTapViewQR
-				qrCard.title = title
-				qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
-				qrCard.validityTexts = validityTexts
-				qrCard.expiryEvaluator = expiryCountdownEvaluator
-				qrCard.isLoading = isLoading
-				qrCard.isDisabledByDisclosurePolicy = isDisabledByDisclosurePolicy
-				qrCard.disclosurePolicyLabel = disclosurePolicyLabel
-				qrCard.accessibilityIdentifier = "\(disclosurePolicyLabel)QRCard"
-				qrCard.errorMessage = cardError?.message
-				qrCard.errorMessageTapHandler = cardError?.didTapURL
-				return qrCard
 			
 			case let .europeanUnionQR(title, stackSize, validityTexts, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator, cardError):
 			
 				let qrCard = QRCardView(stackSize: stackSize)
-				qrCard.shouldStyleForEU = true
 				qrCard.viewQRButtonTitle = stackSize == 1 ? L.holderDashboardQrButtonViewQR() : L.holderDashboardQrButtonViewQRs()
 				qrCard.viewQRButtonCommand = didTapViewQR
 				qrCard.title = title

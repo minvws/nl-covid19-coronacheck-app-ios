@@ -193,13 +193,6 @@ struct FakeRemoteEvent {
 		)
 	}
 	
-	static var fakeRemoteEventVaccinationAssessment: RemoteEvent {
-		RemoteEvent(
-			wrapper: EventFlow.EventResultWrapper.fakeVaccinationAssessmentResultWrapper,
-			signedResponse: SignedResponse.fakeResponse
-		)
-	}
-	
 	static var fakeRemoteEventPaperProof: RemoteEvent {
 		RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper.fakePaperProofResultWrapper,
@@ -368,24 +361,6 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 				standardisedGivenName: "CHECK"
 			),
 			schemaVersion: "1.0.0"
-		)
-	}
-}
-
-extension DomesticCredentialAttributes {
-	
-	static func sample(category: String?) -> DomesticCredentialAttributes {
-		DomesticCredentialAttributes(
-			birthDay: "30",
-			birthMonth: "5",
-			firstNameInitial: "R",
-			lastNameInitial: "P",
-			credentialVersion: "2",
-			category: category ?? "",
-			specimen: "0",
-			paperProof: "0",
-			validFrom: "\(Date().timeIntervalSince1970)",
-			validForHours: "24"
 		)
 	}
 }

@@ -28,7 +28,7 @@ let package = Package(
 			name: "Resources",
 			dependencies: [
 				.product(name: "Shared", package: "Shared"),
-				.product(name: "RswiftLibrary", package: "R.swift"),
+				.product(name: "RswiftLibrary", package: "R.swift")
 			],
 			resources: 	[
 				.copy("Resources/Animations"),

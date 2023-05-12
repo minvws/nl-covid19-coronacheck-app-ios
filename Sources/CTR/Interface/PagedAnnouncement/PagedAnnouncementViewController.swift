@@ -16,7 +16,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
 	/// Disable swiping to launch screen
-	override var enableSwipeBack: Bool { false }
+	override var enableSwipeBack: Bool { viewModel.enableSwipeBack }
 	
 	var showsBackButton: Bool {
 		backButtonAction != nil
@@ -28,7 +28,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: PagedAnnouncementViewModel, allowsPreviousPageButton: Bool, allowsCloseButton: Bool, allowsNextPageButton: Bool, backButtonAction: (() -> Void)? = nil) {
+	init(title: String? = nil, viewModel: PagedAnnouncementViewModel, allowsPreviousPageButton: Bool, allowsCloseButton: Bool, allowsNextPageButton: Bool, backButtonAction: (() -> Void)? = nil) {
 		
 		self.backButtonAction = backButtonAction
 		self.allowsPreviousPageButton = allowsPreviousPageButton
@@ -39,6 +39,7 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 			sceneView: PagedAnnouncementView(shouldShowWithVWSRibbon: viewModel.shouldShowWithVWSRibbon),
 			viewModel: viewModel
 		)
+		self.title = title
 	}
 	
 	private var backButton: UIBarButtonItem?
@@ -60,7 +61,8 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 				return viewController
 			}
 			
-			self.sceneView.pageControl.numberOfPages = $0.count
+			self.sceneView.pageControl.numberOfPages = $0.count + (self.viewModel.hasPhantomTrailingPage ? 1 : 0)
+			
 			self.updateFooterView(for: 0)
 		}
 		
@@ -93,24 +95,26 @@ class PagedAnnouncementViewController: GenericViewController<PagedAnnouncementVi
 	
 	/// Create a custom previous-page button so we can catch the tap on the back button.
 	private func setupPreviousPageButton() {
-
+		
 		// Create a button with a back arrow
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: #selector(previousPageButtonTapped),
-												   content: .image(I.backArrow()),
-												   accessibilityIdentifier: "BackButton",
-												   accessibilityLabel: L.generalBack())
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: #selector(previousPageButtonTapped),
+			content: .image(I.backArrow()),
+			accessibilityIdentifier: "BackButton",
+			accessibilityLabel: L.generalBack())
 		previousPageButton = .create(config)
 	}
 	
 	private func setupBackButton() {
-
+		
 		// Create a button with a back arrow
-		let config = UIBarButtonItem.Configuration(target: self,
-												   action: #selector(backButtonTapped),
-												   content: .image(I.backArrow()),
-												   accessibilityIdentifier: "BackButton",
-												   accessibilityLabel: L.generalBack())
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: #selector(backButtonTapped),
+			content: .image(I.backArrow()),
+			accessibilityIdentifier: "BackButton",
+			accessibilityLabel: L.generalBack())
 		navigationItem.backBarButtonItem = .create(config)
 	}
 	
@@ -230,7 +234,11 @@ extension PagedAnnouncementViewController: PageControlDelegate {
 	
 	func pageControl(didChangeToPageIndex currentPageIndex: Int, previousPageIndex: Int) {
 		if currentPageIndex > previousPageIndex {
-			pageViewController.nextPage()
+			if viewModel.pages.count == currentPageIndex && viewModel.hasPhantomTrailingPage {
+				viewModel.finish()
+			} else {
+				pageViewController.nextPage()
+			}
 		} else {
 			pageViewController.previousPage()
 		}

@@ -79,16 +79,6 @@ extension BaseTest {
 				switch disclosureMode {
 					case .mode0G:
 						return []
-					case .mode1G:
-						return [card1G()]
-					case .mode3G:
-						return [card3G()]
-					case .mode1GWith3G:
-						if combinedWithOther {
-							return [card1G()]
-						} else {
-							return [card1G(), card3G()]
-						}
 				}
 			default:
 				return [card3G()]
@@ -96,11 +86,6 @@ extension BaseTest {
 	}
 	
 	func is3GEnabled() -> Bool {
-		switch disclosureMode {
-			case .mode3G, .mode1GWith3G:
-				return true
-			default:
-				return false
-		}
+		return false
 	}
 }

@@ -48,19 +48,9 @@ extension SecurityAnimation {
 		name: "internationalSummerAnimation",
 		fileName: "international_summer_animation"
 	)
-	
-	static let domesticSummerAnimation = SecurityAnimation(
-		name: "domesticSummerAnimation",
-		fileName: "domestic_summer_animation"
-	)
  
 	static let internationalWinterAnimation = SecurityAnimation(
 		name: "internationalWinterAnimation",
 		fileName: "international_winter_animation"
-	)
-
-	static let domesticWinterAnimation = SecurityAnimation(
-		name: "domesticWinterAnimation",
-		fileName: "domestic_winter_animation"
 	)
 }

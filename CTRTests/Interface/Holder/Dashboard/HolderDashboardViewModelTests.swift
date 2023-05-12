@@ -25,7 +25,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 	var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	var sampleGreencardObjectID: NSManagedObjectID!
 	var configurationNotificationManagerSpy: ConfigurationNotificationManagerSpy!
-	var vaccinationAssessmentNotificationManagerSpy: VaccinationAssessmentNotificationManagerSpy!
 	var environmentSpies: EnvironmentSpies!
 
 	private static var initialTimeZone: TimeZone?
@@ -56,18 +55,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		configurationNotificationManagerSpy = ConfigurationNotificationManagerSpy()
 		configurationNotificationManagerSpy.stubbedAlmostOutOfDateObservatory = Observatory.create().0
-		vaccinationAssessmentNotificationManagerSpy = VaccinationAssessmentNotificationManagerSpy()
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
-	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion, appVersion: String = "1.0.0", activeDisclosurePolicies: [DisclosurePolicy] = [.policy3G]) -> HolderDashboardViewModel {
+	func vendSut(appVersion: String = "1.0.0") -> HolderDashboardViewModel {
 
-		environmentSpies.userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.disclosurePolicies = activeDisclosurePolicies.map { $0.featureFlag }
-		environmentSpies.featureFlagManagerSpy.stubbedAreBothDisclosurePoliciesEnabledResult = activeDisclosurePolicies.sorted(by: { $0.featureFlag < $1.featureFlag }) == [.policy1G, .policy3G]
-		environmentSpies.featureFlagManagerSpy.stubbedIs1GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy1G]
-		environmentSpies.featureFlagManagerSpy.stubbedIs3GExclusiveDisclosurePolicyEnabledResult = activeDisclosurePolicies == [.policy3G]
-		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = activeDisclosurePolicies.isEmpty
+		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			qrcardDatasource: qrCardDatasourceSpy,
@@ -75,7 +68,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			mismatchedIdentityDatasource: mismatchedIdentityEventsSpy,
 			strippenRefresher: strippenRefresherSpy,
 			configurationNotificationManager: configurationNotificationManagerSpy,
-			vaccinationAssessmentNotificationManager: vaccinationAssessmentNotificationManagerSpy,
 			versionSupplier: AppVersionSupplierSpy(version: appVersion)
 		)
 	}
@@ -117,18 +109,6 @@ func beHeaderMessageCard(test: @escaping (String, String?) -> Void = { _, _ in }
 	}
 }
 
-func beDomesticQRCard(test: @escaping (String, String, Bool, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?, HolderDashboardViewController.Card.Error?) -> Void = { _, _, _, _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .domesticQR with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   // Skip buttonEnabledEvaluator because it always comes from the `HolderDashboardViewModel.MyQRCard` itself (which means it is stubbed in the test)
-		   case let .domesticQR(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator, error) = actual {
-			test(disclosurePolicyLabel, title, isDisabledByDisclosurePolicy, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beEuropeanUnionQRCard(test: @escaping (String, Int, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?, HolderDashboardViewController.Card.Error?) -> Void = { _, _, _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .europeanUnionQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
@@ -151,28 +131,6 @@ func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _, _ in })
 	}
 }
 
-func beExpiredVaccinationQRCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .expiredVaccinationQR with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .expiredVaccinationQR(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2) = actual {
-			test(message2, callToActionButtonText2, didTapCallToAction2, didTapClose2)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
-func beOriginNotValidInThisRegionCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .originNotValidInThisRegion with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .originNotValidInThisRegion(message2, callToActionButtonText, didTapCallToAction) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
 func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .configAlmostOutOfDate with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
@@ -188,39 +146,6 @@ func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Voi
 	return Predicate.define("be .beRecommendedUpdateCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .recommendedUpdate(message2, callToActionButtonText, didTapCallToAction) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
-func beNewValidityInfoForVaccinationAndRecoveriesCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beNewValidityInfoForVaccinationAndRecoveriesCard with matching values") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .newValidityInfoForVaccinationAndRecoveries(message2, callToActionButtonText, didTapCallToAction, didTapToClose) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction, didTapToClose)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
-func beCompleteYourVaccinationAssessmentCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beCompleteYourVaccinationAssessmentCard with matching value") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .completeYourVaccinationAssessment(message2, callToActionButtonText, didTapCallToAction) = actual {
-			test(message2, callToActionButtonText, didTapCallToAction)
-			return PredicateResult(status: .matches, message: message)
-		}
-		return PredicateResult(status: .fail, message: message)
-	}
-}
-
-func beVaccinationAssessmentInvalidOutsideNLCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
-	return Predicate.define("be .beVaccinationAssessmentInvalidOutsideNLCard with matching value") { expression, message in
-		if let actual = try expression.evaluate(),
-		   case let .vaccinationAssessmentInvalidOutsideNL(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}

@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -243,7 +242,7 @@ public struct EventFlow {
 	}
 
 	public struct Event: Codable, Equatable {
-		public init(type: String, unique: String?, isSpecimen: Bool?, vaccination: EventFlow.VaccinationEvent?, negativeTest: EventFlow.TestEvent?, positiveTest: EventFlow.TestEvent?, recovery: EventFlow.RecoveryEvent?, dccEvent: EventFlow.DccEvent?, vaccinationAssessment: EventFlow.VaccinationAssessment?) {
+		public init(type: String, unique: String?, isSpecimen: Bool?, vaccination: EventFlow.VaccinationEvent?, negativeTest: EventFlow.TestEvent?, positiveTest: EventFlow.TestEvent?, recovery: EventFlow.RecoveryEvent?, dccEvent: EventFlow.DccEvent?) {
 			self.type = type
 			self.unique = unique
 			self.isSpecimen = isSpecimen
@@ -252,7 +251,6 @@ public struct EventFlow {
 			self.positiveTest = positiveTest
 			self.recovery = recovery
 			self.dccEvent = dccEvent
-			self.vaccinationAssessment = vaccinationAssessment
 		}
 		
 		public let type: String
@@ -263,7 +261,6 @@ public struct EventFlow {
 		public let positiveTest: TestEvent?
 		public let recovery: RecoveryEvent?
 		public let dccEvent: DccEvent?
-		public let vaccinationAssessment: VaccinationAssessment?
 
 		public enum CodingKeys: String, CodingKey {
 
@@ -275,7 +272,6 @@ public struct EventFlow {
 			case positiveTest = "positivetest"
 			case recovery
 			case dccEvent
-			case vaccinationAssessment = "vaccinationassessment"
 		}
 	}
 
@@ -433,37 +429,6 @@ public struct EventFlow {
 			self.country = country
 		}
 	}
-	
-	public struct VaccinationAssessment: Codable, Equatable {
-		
-		public let dateTimeString: String?
-		public let country: String?
-		public let verified: Bool
-		
-		public enum CodingKeys: String, CodingKey {
-			
-			case dateTimeString = "assessmentDate"
-			case country
-			case verified = "digitallyVerified"
-		}
-		
-		/// Get the date for this event
-		/// - Parameter dateformatter: the date formatter
-		/// - Returns: optional date
-		public func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
-			
-			if let dateTimeString {
-				return dateformatter.date(from: dateTimeString)
-			}
-			return nil
-		}
-		
-		public init(dateTimeString: String?, country: String?, verified: Bool) {
-			self.dateTimeString = dateTimeString
-			self.country = country
-			self.verified = verified
-		}
-	}
 
 	/// This identifier is used for persiting paper proofs.
 	public static let paperproofIdentier = "DCC"
@@ -492,9 +457,6 @@ extension EventFlow.Event {
 		if hasRecovery {
 			return recovery?.getDate(with: dateformatter)
 		}
-		if hasVaccinationAssessment {
-			return vaccinationAssessment?.getDate(with: dateformatter)
-		}
 		return positiveTest?.getDate(with: dateformatter)
 	}
 
@@ -512,10 +474,6 @@ extension EventFlow.Event {
 
 	public var hasRecovery: Bool {
 		return recovery != nil
-	}
-
-	public var hasVaccinationAssessment: Bool {
-		return vaccinationAssessment != nil
 	}
 
 	public var hasPaperCertificate: Bool {

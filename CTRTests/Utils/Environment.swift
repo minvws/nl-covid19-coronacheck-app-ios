@@ -56,7 +56,6 @@ final class EnvironmentSpies {
 		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = nil
 		spy.stubbedVerifyQRMessageResult = .success(result)
-		spy.stubbedDiscloseCredentialResult = Data()
 		return spy
 	}()
 	
@@ -64,13 +63,6 @@ final class EnvironmentSpies {
 	
 	var deviceAuthenticationDetectorSpy: DeviceAuthenticationSpy = {
 		let spy = DeviceAuthenticationSpy()
-		return spy
-	}()
-	
-	var disclosurePolicyManagingSpy: DisclosurePolicyManagingSpy = {
-		let spy = DisclosurePolicyManagingSpy()
-		spy.stubbedFactory = UpdatedDisclosurePolicyFactory()
-		(spy.stubbedObservatory, _) = Observatory<Void>.create()
 		return spy
 	}()
 	
@@ -166,7 +158,6 @@ final class EnvironmentSpies {
 	var userSettingsSpy: UserSettingsSpy = {
 		let spy = UserSettingsSpy()
 		spy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
-		spy.stubbedDashboardRegionToggleValue = .domestic
 		return spy
 	}()
 	
@@ -195,7 +186,6 @@ func setupEnvironmentSpies() -> EnvironmentSpies {
 		cryptoManager: spies.cryptoManagerSpy,
 		dataStoreManager: spies.dataStoreManager,
 		deviceAuthenticationDetector: spies.deviceAuthenticationDetectorSpy,
-		disclosurePolicyManager: spies.disclosurePolicyManagingSpy,
 		featureFlagManager: spies.featureFlagManagerSpy,
 		greenCardLoader: spies.greenCardLoaderSpy,
 		identityChecker: spies.identityCheckerSpy,
