@@ -74,32 +74,34 @@ class ExportLoopViewModel {
 	}
 	
 	func exportEventGroups() {
-
+		
 		let eventGroupParcels = listEventGroupParcels()
-
 		let encoder = JSONEncoder()
 		logDebug("We got \(eventGroupParcels.count) event group parcels")
-
+		
 		if let encoded = try? encoder.encode(eventGroupParcels) {
-
 			do {
 				let items = try dataExporter.export(encoded)
-
-				items.forEach { item in
-					DispatchQueue.global(qos: .userInitiated).async {
-						if let image = item.generateQRCode(correctionLevel: QRGenerator.CorrectionLevel.medium) {
-							self.imageList.append(image)
-						}
-						if self.imageList.count == items.count {
-							logDebug("All converted to QR, start animation")
-							DispatchQueue.main.async {
-								self.startTimer()
-							}
-						}
-					}
-				}
+				appendItemsToImageList(items)
 			} catch let error {
 				presentError(error)
+			}
+		}
+	}
+	
+	private func appendItemsToImageList(_ items: [String]) {
+		
+		items.forEach { item in
+			DispatchQueue.global(qos: .userInitiated).async {
+				if let image = item.generateQRCode(correctionLevel: QRGenerator.CorrectionLevel.medium) {
+					self.imageList.append(image)
+				}
+				if self.imageList.count == items.count {
+					logDebug("All \(items.count) converted to QR, start animation")
+					DispatchQueue.main.async {
+						self.startTimer()
+					}
+				}
 			}
 		}
 	}
@@ -133,7 +135,7 @@ class ExportLoopViewModel {
 		delegate?.presentError(errorCode)
 	}
 	
-	@objc func alterImage() {
+	@objc func showQR() {
 		
 		guard imageList.isNotEmpty else { return }
 		
@@ -147,7 +149,7 @@ class ExportLoopViewModel {
 			withTimeInterval: 1 / frequency,
 			repeats: true,
 			block: { [weak self] _ in
-			self?.alterImage()
+			self?.showQR()
 		})
 		animationTimer?.fire()
 	}

@@ -53,19 +53,24 @@ class ImportViewModel: ScanPermissionViewModel {
 			try dataImporter?.importString(qrMessage)
 		} catch let error {
 			shouldStopScanning.value = true
-			let errorCode: ErrorCode
-			switch error {
-				case DataMigrationError.compressionError:
-					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .compressionError)
-				case DataMigrationError.invalidVersion:
-					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .invalidVersion)
-				case DataMigrationError.invalidNumberOfPackages:
-					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .invalidNumberOfPackages)
-				default:
-					errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .other)
-			}
-			theCoordinator?.presentError(errorCode)
+			theCoordinator?.presentError(mapError(error))
 		}
+	}
+	
+	private func mapError(_ error: Error) -> ErrorCode {
+		
+		let errorCode: ErrorCode
+		switch error {
+			case DataMigrationError.compressionError:
+				errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .compressionError)
+			case DataMigrationError.invalidVersion:
+				errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .invalidVersion)
+			case DataMigrationError.invalidNumberOfPackages:
+				errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .invalidNumberOfPackages)
+			default:
+				errorCode = ErrorCode(flow: .migration, step: .import, clientCode: .other)
+		}
+		return errorCode
 	}
 }
 
