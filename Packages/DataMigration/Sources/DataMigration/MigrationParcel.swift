@@ -24,12 +24,4 @@ public struct MigrationParcel: Codable {
 		case payload = "p"
 		case version = "v"
 	}
-	
-	public init(index: Int, numberOfPackages: Int, payload: Data, version: String) {
-		
-		self.index = index
-		self.numberOfPackages = numberOfPackages
-		self.payload = payload
-		self.version = version
-	}
 }

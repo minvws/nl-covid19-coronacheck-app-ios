@@ -8,6 +8,13 @@
 import Foundation
 import Shared
 
+public protocol DataImportDelegate: AnyObject {
+	
+	func completed(_ value: Data)
+	
+	func progress(_ percentage: Float)
+}
+
 public protocol DataImportProtocol: AnyObject {
 	
 	var delegate: DataImportDelegate? { get set }
@@ -55,7 +62,7 @@ public class DataImporter: DataImportProtocol {
 
 		if parcelCache.values.count == parcel.numberOfPackages {
 			logDebug("DataImporter - We got them all")
-			let combinedData = try combine()
+			let combinedData = try unzip(stich(parcelCache.values))
 			delegate?.completed(combinedData)
 		}
 	}
@@ -72,31 +79,27 @@ public class DataImporter: DataImportProtocol {
 		logVerbose("percent: \(percentage)")
 		delegate?.progress(percentage)
 	}
-	
-	private func combine() throws -> Data {
 		
-		let zipped = parcelCache.values
-			.map { _, parcel in return parcel }
-			.sorted { $0.index < $1.index }
-			.reduce(Data()) { $0 + $1.payload }
-
-		if zipped.isGzipped {
-			do {
-				let unzipped = try zipped.gunzipped()
-				return unzipped
-			} catch let error {
-				logError(error.localizedDescription)
-				throw error
-			}
-		} else {
+	private func stich(_ values: [Int: MigrationParcel]) -> Data {
+		
+		return values
+			.map { _, parcel in return parcel } // (Int, MigrationParcel) -> MigrationParcel
+			.sorted { $0.index < $1.index } // In order
+			.reduce(Data()) { $0 + $1.payload } // Combine MigrationParcel.payload
+	}
+	
+	private func unzip(_ data: Data) throws -> Data {
+		
+		guard data.isGzipped else {
 			throw DataMigrationError.compressionError
 		}
+		
+		do {
+			let unzipped = try data.gunzipped()
+			return unzipped
+		} catch let error {
+			logError(error.localizedDescription)
+			throw error
+		}
 	}
-}
-
-public protocol DataImportDelegate: AnyObject {
-	
-	func completed(_ value: Data)
-	
-	func progress(_ percentage: Float)
 }
