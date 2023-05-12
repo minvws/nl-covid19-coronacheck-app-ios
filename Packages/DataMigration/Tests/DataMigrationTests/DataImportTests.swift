@@ -65,30 +65,3 @@ class DataImportTests: XCTestCase {
 			.to(throwError(DataMigrationError.invalidNumberOfPackages))
 	}
 }
-
-class DataImportDelegateSpy: DataImportDelegate {
-
-	var invokedCompleted = false
-	var invokedCompletedCount = 0
-	var invokedCompletedParameters: (value: Data, Void)?
-	var invokedCompletedParametersList = [(value: Data, Void)]()
-
-	func completed(_ value: Data) {
-		invokedCompleted = true
-		invokedCompletedCount += 1
-		invokedCompletedParameters = (value, ())
-		invokedCompletedParametersList.append((value, ()))
-	}
-
-	var invokedProgress = false
-	var invokedProgressCount = 0
-	var invokedProgressParameters: (percentage: Float, Void)?
-	var invokedProgressParametersList = [(percentage: Float, Void)]()
-
-	func progress(_ percentage: Float) {
-		invokedProgress = true
-		invokedProgressCount += 1
-		invokedProgressParameters = (percentage, ())
-		invokedProgressParametersList.append((percentage, ()))
-	}
-}
