@@ -659,6 +659,7 @@
 "holder_startMigration_option_toOtherDevice_title" = "Naar mijn andere telefoon";
 "holder_startMigration_option_toThisDevice_title" = "Naar deze telefoon";
 "holder_startMigration_title" = "Naar welke telefoon wil je overzetten?";
+"holder_startMigration_toOtherDevice_accessiblityQR" = "Je export QR-code wordt hier getoond";
 "holder_startMigration_toOtherDevice_onboarding_nextButton" = "Volgende";
 "holder_startMigration_toOtherDevice_onboarding_step1_message" = "Pak de telefoon waar je jouw gegevens naar wilt overzetten. Ga daar ook naar ‘Mijn bewijzen overzetten’ en doorloop de bijbehorende stappen.";
 "holder_startMigration_toOtherDevice_onboarding_step1_title" = "Pak ook je andere telefoon erbij";

@@ -22,6 +22,10 @@ class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView
 		
 		viewModel.title.observe { [weak self] in self?.title = $0 }
 		viewModel.image.observe { [weak self] in self?.sceneView.imageView.image = $0 }
+		viewModel.qrAccessibilityTitle.observe { [weak self] (qrAccessibilityTitle: String) in
+			self?.sceneView.imageView.isAccessibilityElement = true
+			self?.sceneView.imageView.accessibilityLabel = qrAccessibilityTitle
+		}
 		viewModel.step.observe { [weak self] in self?.sceneView.step = $0 }
 		viewModel.header.observe { [weak self] in self?.sceneView.header = $0 }
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
