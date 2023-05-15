@@ -659,6 +659,7 @@
 "holder_startMigration_option_toOtherDevice_title" = "To my other phone";
 "holder_startMigration_option_toThisDevice_title" = "To this phone";
 "holder_startMigration_title" = "To which phone do you want to transfer?";
+"holder_startMigration_toOtherDevice_accessiblityQR" = "Your export QR code is displayed here";
 "holder_startMigration_toOtherDevice_onboarding_nextButton" = "Next";
 "holder_startMigration_toOtherDevice_onboarding_step1_message" = "Take the phone you want to transfer your details to. From there, also go to 'Transfer my certificate' and go through the corresponding steps.";
 "holder_startMigration_toOtherDevice_onboarding_step1_title" = "Grab your other phone too";
