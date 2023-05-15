@@ -40,7 +40,7 @@ class ImportViewModel: ScanPermissionViewModel {
 		self.theCoordinator = coordinator
 		super.init(coordinator: coordinator)
 		self.dataImporter = dataImporter
-		self.dataImporter?.delegate = self
+		self.dataImporter.delegate = self
 	}
 
 	/// Parse the scanned QR-code
