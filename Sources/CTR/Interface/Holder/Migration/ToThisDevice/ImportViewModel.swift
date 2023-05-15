@@ -18,7 +18,7 @@ class ImportViewModel: ScanPermissionViewModel {
 	/// Coordination Delegate
 	weak var theCoordinator: (MigrationCoordinatorDelegate & OpenUrlProtocol)?
 	
-	weak var dataImporter: DataImportProtocol?
+	var dataImporter: DataImportProtocol?
 
 	var title = Observable<String>(value: L.holder_scanner_title())
 	var step = Observable<String>(value: L.holder_startMigration_onboarding_step("3"))
