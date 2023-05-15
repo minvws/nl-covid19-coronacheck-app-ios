@@ -18,7 +18,7 @@ class ImportViewModel: ScanPermissionViewModel {
 	/// Coordination Delegate
 	weak var theCoordinator: (MigrationCoordinatorDelegate & OpenUrlProtocol)?
 	
-	var dataImporter: DataImportProtocol?
+	var dataImporter: DataImportProtocol!
 
 	var title = Observable<String>(value: L.holder_scanner_title())
 	var step = Observable<String>(value: L.holder_startMigration_onboarding_step("3"))
@@ -50,7 +50,7 @@ class ImportViewModel: ScanPermissionViewModel {
 		guard !shouldStopScanning.value else { return }
 		logVerbose("Scanned \(qrMessage)")
 		do {
-			try dataImporter?.importString(qrMessage)
+			try dataImporter.importString(qrMessage)
 		} catch let error {
 			shouldStopScanning.value = true
 			theCoordinator?.presentError(mapError(error))
