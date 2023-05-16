@@ -66,7 +66,7 @@ final class ExportLoopViewModelTests: XCTestCase {
 		
 		// Given
 		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
-		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup, eventGroup]
 		dataExportSpy.stubbedExportResult = ["This is a test", "This is another test"]
 		
 		// When
