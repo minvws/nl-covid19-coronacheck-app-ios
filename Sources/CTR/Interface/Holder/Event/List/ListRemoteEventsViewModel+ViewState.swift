@@ -387,10 +387,10 @@ extension ListRemoteEventsViewModel {
 			title = L.holderDccVaccinationListTitle("\(doseNumber)", "\(totalDose)")
 		}
 			
-			let footer: String? = {
-				guard eventMode != .migration else { return nil }
-				return isForeign ? L.holder_listRemoteEvents_somethingWrong_foreignDCC_body() : L.holderDccVaccinationFooter()
-			}()
+		let footer: String? = {
+			guard eventMode != .migration else { return nil }
+			return isForeign ? L.holder_listRemoteEvents_somethingWrong_foreignDCC_body() : L.holderDccVaccinationFooter()
+		}()
 
 		return ListRemoteEventsViewController.Row(
 			title: Shared.Sanitizer.sanitize(title),
