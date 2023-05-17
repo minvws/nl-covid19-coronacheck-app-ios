@@ -19,8 +19,8 @@ let package = Package(
 
 		// testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
-		.package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: .init(1, 9, 0)),
-		.package(url: "https://github.com/Quick/Nimble", from: .init(10, 0, 0))
+		.package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: "1.9.0"),
+		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [
 		// Targets are the basic building blocks of a package. A target can define a module or a test suite.
