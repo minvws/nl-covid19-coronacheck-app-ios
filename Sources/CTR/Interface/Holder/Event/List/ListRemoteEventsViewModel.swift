@@ -261,6 +261,11 @@ class ListRemoteEventsViewModel {
 
 				Current.userSettings.lastSuccessfulCompletionOfAddCertificateFlowDate = Current.now()
 				
+				guard self.eventMode != .migration else {
+					coordinator?.listEventsScreenDidFinish(.continue(eventMode: self.eventMode))
+					return
+				}
+				
 				if let hints = response.hints, let nonEmptyHints = NonemptyArray(hints) {
 					coordinator?.listEventsScreenDidFinish(.showHints(nonEmptyHints, eventMode: eventMode))
 				} else {
