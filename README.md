@@ -30,6 +30,10 @@ The apps can run on devices that meet the following requirements.
 - Operating System: iOS 11.0+
 - Internet connection (either Wifi or Mobile Data)
 
+### Accessibility
+
+The latest accessibility audit can be found at [2023-05-27 Toegankelijkheidsonderzoek CoronaCheck 4.13 (iOS) versie 3.0.pdf](/Accessibility/2023-05-27 Toegankelijkheidsonderzoek CoronaCheck 4.13 (iOS) versie 3.0.pdf)
+
 ### Feature Overview
 
 #### CoronaCheck
