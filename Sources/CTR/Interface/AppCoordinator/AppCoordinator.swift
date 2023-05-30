@@ -385,8 +385,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		isPresentingPriorityNotification = true
 		
 		let alertController = UIAlertController(
-			title: notification,
-			message: nil,
+			title: "",
+			message: notification,
 			preferredStyle: .alert
 		)
 
