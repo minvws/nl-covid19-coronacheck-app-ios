@@ -378,9 +378,11 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	
 	func showPriorityNotification(_ notification: String) {
 		
-		guard !isPresentingPriorityNotification else {
-			return
-		}
+		// Only show if the notification is not empty
+		guard notification.isNotEmpty else { return }
+		
+		// Show only once
+		guard !isPresentingPriorityNotification else { return }
 		
 		isPresentingPriorityNotification = true
 		

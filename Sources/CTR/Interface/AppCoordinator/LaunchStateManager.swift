@@ -103,7 +103,8 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	private func checkRemoteConfiguration(_ remoteConfiguration: RemoteConfiguration, onContinue: (() -> Void)?) {
 	
-		if let prioNotification = remoteConfiguration.priorityNotification, prioNotification.isNotEmpty {
+		if let prioNotification = remoteConfiguration.priorityNotification,
+			let sanitized = Shared.Sanitizer.strip(prioNotification), sanitized.isNotEmpty {
 			self.delegate?.showPriorityNotification(prioNotification)
 		}
 		
