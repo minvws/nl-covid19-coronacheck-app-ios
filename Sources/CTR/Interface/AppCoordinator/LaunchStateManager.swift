@@ -33,6 +33,8 @@ protocol LaunchStateManagerDelegate: AnyObject {
 	func updateIsRequired(appStoreUrl: URL)
 	
 	func updateIsRecommended(version: String, appStoreUrl: URL)
+	
+	func showPriorityNotification(_ notification: String)
 }
 
 final class LaunchStateManager: LaunchStateManaging {
@@ -101,25 +103,29 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	private func checkRemoteConfiguration(_ remoteConfiguration: RemoteConfiguration, onContinue: (() -> Void)?) {
 	
+		if let prioNotification = remoteConfiguration.priorityNotification, prioNotification.isNotEmpty {
+			self.delegate?.showPriorityNotification(prioNotification)
+		}
+		
 		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
 		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
 		let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
 
 		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 		   let url = remoteConfiguration.appStoreURL {
-			
+
 			self.enableRestart()
 			self.delegate?.updateIsRequired(appStoreUrl: url)
 		} else if remoteConfiguration.isDeactivated {
-			
+
 			self.enableRestart()
 			self.delegate?.appIsDeactivated()
 		} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
 			let url = remoteConfiguration.appStoreURL {
-			
+
 			self.delegate?.updateIsRecommended(version: recommendedVersion, appStoreUrl: url)
 		} else {
-			
+
 			onContinue?()
 		}
 	}
