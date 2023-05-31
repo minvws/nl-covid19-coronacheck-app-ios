@@ -37,7 +37,13 @@ class AppCoordinator: Coordinator {
 	
 	private var privacySnapshotWindow: UIWindow?
 	
+	private var priorityNotificationWindow: UIWindow?
+	
 	private var shouldUsePrivacySnapShot = true
+	
+	// Flag to prevent showing the priority notification dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var isPresentingPriorityNotification = false
 	
 	// Flag to prevent showing the recommended update dialog twice
 	// which can happen with the config being fetched within the TTL.
@@ -369,6 +375,54 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func updateIsRecommended(version: String, appStoreUrl: URL) {
 		
 		handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: appStoreUrl)
+	}
+	
+	func showPriorityNotification(_ notification: String) {
+		
+		// Only show if the notification is not empty
+		guard notification.isNotEmpty else { return }
+		
+		// Show only once
+		guard !isPresentingPriorityNotification else { return }
+		
+		isPresentingPriorityNotification = true
+		
+		let alertController = UIAlertController(
+			title: "",
+			message: notification,
+			preferredStyle: .alert
+		)
+		
+		alertController.addAction(
+			UIAlertAction(
+				title: L.generalOk(),
+				style: .default,
+				handler: {  _ in
+					self.isPresentingPriorityNotification = false
+					self.priorityNotificationWindow?.alpha = 0
+					self.priorityNotificationWindow?.isHidden = true
+					self.priorityNotificationWindow = nil
+				}
+			)
+		)
+		// Show the Priority Notification Alert on top of everything
+		if #available(iOS 13.0, *) {
+			guard let windowScene = window.windowScene else {
+				return
+			}
+			priorityNotificationWindow = UIWindow(windowScene: windowScene)
+		} else {
+			// Fallback on earlier versions
+			priorityNotificationWindow = UIWindow(frame: UIScreen.main.bounds)
+		}
+		
+		let clearVC = UIViewController()
+		clearVC.view.backgroundColor = .clear
+		priorityNotificationWindow?.rootViewController = clearVC
+		priorityNotificationWindow?.windowLevel = .alert + 1
+		priorityNotificationWindow?.alpha = 1
+		priorityNotificationWindow?.makeKeyAndVisible()
+		clearVC.present(alertController, animated: false)
 	}
 }
 
