@@ -103,9 +103,9 @@ final class LaunchStateManager: LaunchStateManaging {
 	
 	private func checkRemoteConfiguration(_ remoteConfiguration: RemoteConfiguration, onContinue: (() -> Void)?) {
 	
-		if let prioNotification = remoteConfiguration.priorityNotification,
-			let sanitized = Shared.Sanitizer.strip(prioNotification), sanitized.isNotEmpty {
-			self.delegate?.showPriorityNotification(prioNotification)
+		if let priorityNotification = remoteConfiguration.priorityNotification,
+			let sanitizedNotification = Shared.Sanitizer.strip(priorityNotification), sanitizedNotification.isNotEmpty {
+			self.delegate?.showPriorityNotification(sanitizedNotification)
 		}
 		
 		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
