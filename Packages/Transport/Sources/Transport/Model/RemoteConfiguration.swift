@@ -156,6 +156,8 @@ public struct RemoteConfiguration: Codable, Equatable {
 	public var backendTLSCertificates: [String]?
 	
 	public var contactInformation: ContactInformation?
+	
+	public var priorityNotification: String?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -193,6 +195,7 @@ public struct RemoteConfiguration: Codable, Equatable {
 		case backendTLSCertificates = "backendTLSCertificates"
 		case providerIdentifiers = "providerIdentifiers"
 		case contactInformation = "contactInformation"
+		case priorityNotification = "priorityNotification"
 	}
 	
 	init(minVersion: String) {
@@ -226,6 +229,7 @@ public struct RemoteConfiguration: Codable, Equatable {
 		config.scanLogStorageSeconds = 3600
 		config.verificationPolicies = ["3G"]
 		config.backendTLSCertificates = []
+		config.priorityNotification = nil
 		return config
 	}
 
