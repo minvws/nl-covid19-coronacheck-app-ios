@@ -45,6 +45,10 @@ class AppCoordinator: Coordinator {
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingPriorityNotification = false
 	
+	// Flag to prevent showing the priority notification dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var hasPresentedPriorityNotification = false
+	
 	// Flag to prevent showing the recommended update dialog twice
 	// which can happen with the config being fetched within the TTL.
 	private var isPresentingRecommendedUpdate = false
@@ -381,8 +385,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 		// Only show if the notification is not empty
 		guard notification.isNotEmpty else { return }
 		
-		// Show only once
-		guard !isPresentingPriorityNotification else { return }
+		// prevent presenting twice
+		guard !isPresentingPriorityNotification, !hasPresentedPriorityNotification else { return }
 		
 		isPresentingPriorityNotification = true
 		
@@ -397,6 +401,8 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 				title: L.generalOk(),
 				style: .default,
 				handler: {  _ in
+					// We only want to show this notification once per session
+					self.hasPresentedPriorityNotification = true
 					self.isPresentingPriorityNotification = false
 					self.priorityNotificationWindow?.alpha = 0
 					self.priorityNotificationWindow?.isHidden = true
