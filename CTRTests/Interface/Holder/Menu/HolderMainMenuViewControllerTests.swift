@@ -27,8 +27,8 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	override func setUp() {
 		
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = true
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		
 		window = UIWindow()
 		super.setUp()
@@ -43,7 +43,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_content() {
 		
 		// Given
-		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = true
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		
 		// When
 		loadView()
@@ -57,6 +57,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = false
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		
 		// When
 		loadView()
@@ -69,6 +70,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_userWishesToCreateAQR() {
 		
 		// Given
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		loadView()
 		
 		// When
@@ -81,6 +83,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_userWishesToAddPaperProof() {
 		
 		// Given
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		loadView()
 		
 		// When
@@ -93,6 +96,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_userWishesToSeeStoredEvents() {
 		
 		// Given
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		loadView()
 		
 		// When
@@ -105,6 +109,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_userWishesToMigrate() {
 		
 		// Given
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		loadView()
 		
 		// When
@@ -117,6 +122,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_userWishesToSeeHelpAndInfoMenu() {
 		
 		// Given
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		loadView()
 		
 		// When
@@ -129,6 +135,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_userWishesToRestart() {
 		
 		// Given
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		loadView()
 		
 		// When
