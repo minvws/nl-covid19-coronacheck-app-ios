@@ -25,6 +25,7 @@ public protocol FeatureFlagManaging {
 	// Holder
 	func areZeroDisclosurePoliciesEnabled() -> Bool
 	func isGGDPortalEnabled() -> Bool
+	func isMigrationEnabled() -> Bool
 }
 
 public class FeatureFlagManager: FeatureFlagManaging {
@@ -80,6 +81,10 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	// Holder
 	
 	public func areZeroDisclosurePoliciesEnabled() -> Bool {
+		return true
+	}
+	
+	public func isMigrationEnabled() -> Bool {
 		return true
 	}
 }

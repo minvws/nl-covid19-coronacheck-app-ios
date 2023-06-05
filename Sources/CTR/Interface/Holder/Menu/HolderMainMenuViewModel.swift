@@ -56,7 +56,9 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		
 		holderItems += [.sectionBreak]
 		holderItems += [itemStoredData]
-		holderItems += [itemDataMigration]
+		if Current.featureFlagManager.isMigrationEnabled() {
+			holderItems += [itemDataMigration]
+		}
 
 		holderItems += [.sectionBreak]
 		holderItems += [itemHelpAndInfo]

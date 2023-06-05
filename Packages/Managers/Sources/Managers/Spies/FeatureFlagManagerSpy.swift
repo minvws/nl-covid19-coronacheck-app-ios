@@ -68,4 +68,14 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedIsGGDPortalEnabledCount += 1
 		return stubbedIsGGDPortalEnabledResult
 	}
+
+	var invokedIsMigrationEnabled = false
+	var invokedIsMigrationEnabledCount = 0
+	var stubbedIsMigrationEnabledResult: Bool! = false
+
+	func isMigrationEnabled() -> Bool {
+		invokedIsMigrationEnabled = true
+		invokedIsMigrationEnabledCount += 1
+		return stubbedIsMigrationEnabledResult
+	}
 }

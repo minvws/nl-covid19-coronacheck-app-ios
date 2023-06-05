@@ -43,6 +43,20 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 	func test_content() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = true
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.title) == L.general_menu()
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_disabledMigration() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = false
 		
 		// When
 		loadView()
