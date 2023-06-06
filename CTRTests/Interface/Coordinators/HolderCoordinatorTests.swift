@@ -32,6 +32,7 @@ class HolderCoordinatorTests: XCTestCase {
 
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
 		navigationSpy = NavigationControllerSpy()
 		alertVerifier = AlertVerifier()
 		sut = HolderCoordinator(
@@ -125,6 +126,28 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
+		expect(self.sut.unhandledUniversalLink) == nil
+	}
+	
+	func test_consume_redeemHolder_addEvents_disabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == false
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
 		expect(self.sut.unhandledUniversalLink) == nil
 	}
 	
