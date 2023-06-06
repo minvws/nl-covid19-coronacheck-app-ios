@@ -23,9 +23,10 @@ public protocol FeatureFlagManaging {
 	func is1GVerificationPolicyEnabled() -> Bool
 	
 	// Holder
-	func areZeroDisclosurePoliciesEnabled() -> Bool
 	func isGGDPortalEnabled() -> Bool
 	func isMigrationEnabled() -> Bool
+	func isAddingEventsEnabled() -> Bool
+	func isScanningEventsEnabled() -> Bool
 }
 
 public class FeatureFlagManager: FeatureFlagManaging {
@@ -80,11 +81,18 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	
 	// Holder
 	
-	public func areZeroDisclosurePoliciesEnabled() -> Bool {
-		return true
+	public func isMigrationEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.migrateButtonEnabled ?? true
 	}
 	
-	public func isMigrationEnabled() -> Bool {
-		return true
+	public func isAddingEventsEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.addEventsButtonEnabled ?? true
+	}
+	
+	public func isScanningEventsEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.scanCertificateButtonEnabled ?? true
 	}
 }

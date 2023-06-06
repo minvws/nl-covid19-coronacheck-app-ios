@@ -28,6 +28,8 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsScanningEventsEnabledResult = true
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		
 		window = UIWindow()
@@ -57,6 +59,50 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		
 		// Given
 		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = false
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.title) == L.general_menu()
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_disabledAddEvent() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.title) == L.general_menu()
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_disabledScanEvent() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsScanningEventsEnabledResult = false
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.title) == L.general_menu()
+		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_disabledScanEvent_disabledAddEvent_disabledMigration() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsScanningEventsEnabledResult = false
 		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
 		
 		// When

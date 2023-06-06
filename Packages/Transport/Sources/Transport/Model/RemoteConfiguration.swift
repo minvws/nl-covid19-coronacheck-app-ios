@@ -158,6 +158,12 @@ public struct RemoteConfiguration: Codable, Equatable {
 	public var contactInformation: ContactInformation?
 	
 	public var priorityNotification: String?
+	
+	public var migrateButtonEnabled: Bool?
+	
+	public var addEventsButtonEnabled: Bool?
+	
+	public var scanCertificateButtonEnabled: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -196,6 +202,9 @@ public struct RemoteConfiguration: Codable, Equatable {
 		case providerIdentifiers = "providerIdentifiers"
 		case contactInformation = "contactInformation"
 		case priorityNotification = "priorityNotification"
+		case addEventsButtonEnabled = "addEventsButtonEnabled"
+		case migrateButtonEnabled = "migrateButtonEnabled"
+		case scanCertificateButtonEnabled = "scanCertificateButtonEnabled"
 	}
 	
 	init(minVersion: String) {

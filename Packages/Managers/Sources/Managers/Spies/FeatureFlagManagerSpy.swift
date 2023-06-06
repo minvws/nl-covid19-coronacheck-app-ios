@@ -49,16 +49,6 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		return stubbedIs1GVerificationPolicyEnabledResult
 	}
 
-	var invokedAreZeroDisclosurePoliciesEnabled = false
-	var invokedAreZeroDisclosurePoliciesEnabledCount = 0
-	var stubbedAreZeroDisclosurePoliciesEnabledResult: Bool! = false
-
-	func areZeroDisclosurePoliciesEnabled() -> Bool {
-		invokedAreZeroDisclosurePoliciesEnabled = true
-		invokedAreZeroDisclosurePoliciesEnabledCount += 1
-		return stubbedAreZeroDisclosurePoliciesEnabledResult
-	}
-
 	var invokedIsGGDPortalEnabled = false
 	var invokedIsGGDPortalEnabledCount = 0
 	var stubbedIsGGDPortalEnabledResult: Bool! = false
@@ -77,5 +67,25 @@ class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedIsMigrationEnabled = true
 		invokedIsMigrationEnabledCount += 1
 		return stubbedIsMigrationEnabledResult
+	}
+
+	var invokedIsAddingEventsEnabled = false
+	var invokedIsAddingEventsEnabledCount = 0
+	var stubbedIsAddingEventsEnabledResult: Bool! = false
+
+	func isAddingEventsEnabled() -> Bool {
+		invokedIsAddingEventsEnabled = true
+		invokedIsAddingEventsEnabledCount += 1
+		return stubbedIsAddingEventsEnabledResult
+	}
+
+	var invokedIsScanningEventsEnabled = false
+	var invokedIsScanningEventsEnabledCount = 0
+	var stubbedIsScanningEventsEnabledResult: Bool! = false
+
+	func isScanningEventsEnabled() -> Bool {
+		invokedIsScanningEventsEnabled = true
+		invokedIsScanningEventsEnabledCount += 1
+		return stubbedIsScanningEventsEnabledResult
 	}
 }
