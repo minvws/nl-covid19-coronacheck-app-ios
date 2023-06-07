@@ -428,6 +428,60 @@ extension HolderDashboardViewModelTests {
 		}))
 		expect(self.sut.internationalCards.value[3]).toEventually(beAddCertificateCard())
 	}
+	
+	func test_datasourceupdate_singleCurrentlyValidInternationalTest_addEventsDisabled() {
+		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration = .default
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		environmentSpies.mappingManagerSpy.stubbedGetTestTypeResult = "PCR (NAAT)"
+		
+		// Arrange
+		sut = vendSut()
+		
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in return EuCredentialAttributes.fake(dcc: .sampleWithTest()) }),
+				greencards: [.init(id: sampleGreencardObjectID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_filledState_international_0G_message()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
+		}))
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
+			// check isLoading
+			expect(isLoading) == false
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts).to(haveCount(1))
+			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].kind) == .current
+			expect(nowValidityTexts[0].lines[0]) == "Type test: PCR (NAAT)"
+			expect(nowValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
+			
+			// Exercise the validityText with different sample dates:
+			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow))
+			expect(futureValidityTexts[0].kind) == .current
+			expect(futureValidityTexts[0].lines[0]) == "Type test: PCR (NAAT)"
+			expect(futureValidityTexts[0].lines[1]) == "Testdatum: donderdag 15 juli 16:02"
+			
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRsParameters?.greenCardObjectIDs.first) === self.sampleGreencardObjectID
+			
+			expect(expiryCountdownEvaluator?(now)) == nil
+		}))
+	}
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalRecovery() {
 

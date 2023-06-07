@@ -7,83 +7,83 @@
 
 import Foundation
 
-class FeatureFlagManagerSpy: FeatureFlagManaging {
+public class FeatureFlagManagerSpy: FeatureFlagManaging {
 
-	var invokedIsGGDEnabled = false
-	var invokedIsGGDEnabledCount = 0
-	var stubbedIsGGDEnabledResult: Bool! = false
+	public var invokedIsGGDEnabled = false
+	public var invokedIsGGDEnabledCount = 0
+	public var stubbedIsGGDEnabledResult: Bool! = false
 
-	func isGGDEnabled() -> Bool {
+	public func isGGDEnabled() -> Bool {
 		invokedIsGGDEnabled = true
 		invokedIsGGDEnabledCount += 1
 		return stubbedIsGGDEnabledResult
 	}
 
-	var invokedIsLuhnCheckEnabled = false
-	var invokedIsLuhnCheckEnabledCount = 0
-	var stubbedIsLuhnCheckEnabledResult: Bool! = false
+	public var invokedIsLuhnCheckEnabled = false
+	public var invokedIsLuhnCheckEnabledCount = 0
+	public var stubbedIsLuhnCheckEnabledResult: Bool! = false
 
-	func isLuhnCheckEnabled() -> Bool {
+	public func isLuhnCheckEnabled() -> Bool {
 		invokedIsLuhnCheckEnabled = true
 		invokedIsLuhnCheckEnabledCount += 1
 		return stubbedIsLuhnCheckEnabledResult
 	}
 
-	var invokedAreMultipleVerificationPoliciesEnabled = false
-	var invokedAreMultipleVerificationPoliciesEnabledCount = 0
-	var stubbedAreMultipleVerificationPoliciesEnabledResult: Bool! = false
+	public var invokedAreMultipleVerificationPoliciesEnabled = false
+	public var invokedAreMultipleVerificationPoliciesEnabledCount = 0
+	public var stubbedAreMultipleVerificationPoliciesEnabledResult: Bool! = false
 
-	func areMultipleVerificationPoliciesEnabled() -> Bool {
+	public func areMultipleVerificationPoliciesEnabled() -> Bool {
 		invokedAreMultipleVerificationPoliciesEnabled = true
 		invokedAreMultipleVerificationPoliciesEnabledCount += 1
 		return stubbedAreMultipleVerificationPoliciesEnabledResult
 	}
 
-	var invokedIs1GVerificationPolicyEnabled = false
-	var invokedIs1GVerificationPolicyEnabledCount = 0
-	var stubbedIs1GVerificationPolicyEnabledResult: Bool! = false
+	public var invokedIs1GVerificationPolicyEnabled = false
+	public var invokedIs1GVerificationPolicyEnabledCount = 0
+	public var stubbedIs1GVerificationPolicyEnabledResult: Bool! = false
 
-	func is1GVerificationPolicyEnabled() -> Bool {
+	public func is1GVerificationPolicyEnabled() -> Bool {
 		invokedIs1GVerificationPolicyEnabled = true
 		invokedIs1GVerificationPolicyEnabledCount += 1
 		return stubbedIs1GVerificationPolicyEnabledResult
 	}
 
-	var invokedIsGGDPortalEnabled = false
-	var invokedIsGGDPortalEnabledCount = 0
-	var stubbedIsGGDPortalEnabledResult: Bool! = false
+	public var invokedIsGGDPortalEnabled = false
+	public var invokedIsGGDPortalEnabledCount = 0
+	public var stubbedIsGGDPortalEnabledResult: Bool! = false
 
-	func isGGDPortalEnabled() -> Bool {
+	public func isGGDPortalEnabled() -> Bool {
 		invokedIsGGDPortalEnabled = true
 		invokedIsGGDPortalEnabledCount += 1
 		return stubbedIsGGDPortalEnabledResult
 	}
 
-	var invokedIsMigrationEnabled = false
-	var invokedIsMigrationEnabledCount = 0
-	var stubbedIsMigrationEnabledResult: Bool! = false
+	public var invokedIsMigrationEnabled = false
+	public var invokedIsMigrationEnabledCount = 0
+	public var stubbedIsMigrationEnabledResult: Bool! = false
 
-	func isMigrationEnabled() -> Bool {
+	public func isMigrationEnabled() -> Bool {
 		invokedIsMigrationEnabled = true
 		invokedIsMigrationEnabledCount += 1
 		return stubbedIsMigrationEnabledResult
 	}
 
-	var invokedIsAddingEventsEnabled = false
-	var invokedIsAddingEventsEnabledCount = 0
-	var stubbedIsAddingEventsEnabledResult: Bool! = false
+	public var invokedIsAddingEventsEnabled = false
+	public var invokedIsAddingEventsEnabledCount = 0
+	public var stubbedIsAddingEventsEnabledResult: Bool! = false
 
-	func isAddingEventsEnabled() -> Bool {
+	public func isAddingEventsEnabled() -> Bool {
 		invokedIsAddingEventsEnabled = true
 		invokedIsAddingEventsEnabledCount += 1
 		return stubbedIsAddingEventsEnabledResult
 	}
 
-	var invokedIsScanningEventsEnabled = false
-	var invokedIsScanningEventsEnabledCount = 0
-	var stubbedIsScanningEventsEnabledResult: Bool! = false
+	public var invokedIsScanningEventsEnabled = false
+	public var invokedIsScanningEventsEnabledCount = 0
+	public var stubbedIsScanningEventsEnabledResult: Bool! = false
 
-	func isScanningEventsEnabled() -> Bool {
+	public func isScanningEventsEnabled() -> Bool {
 		invokedIsScanningEventsEnabled = true
 		invokedIsScanningEventsEnabledCount += 1
 		return stubbedIsScanningEventsEnabledResult

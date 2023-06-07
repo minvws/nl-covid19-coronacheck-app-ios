@@ -299,10 +299,20 @@ class AppCoordinator: Coordinator {
 	func consume(universalLink: UniversalLink) -> Bool {
 		
 		switch universalLink {
-			case .redeemHolderToken,
-					.thirdPartyTicketApp,
+				
+			case .redeemHolderToken:
+				if Current.featureFlagManager.isAddingEventsEnabled() {
+					unhandledUniversalLink = universalLink
+					return true
+				} else {
+					// Do not cache token deeplinks when adding events is disabled.
+					return false
+				}
+				
+			case .thirdPartyTicketApp,
 					.tvsAuth,
 					.thirdPartyScannerApp:
+				
 				// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
 				// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
