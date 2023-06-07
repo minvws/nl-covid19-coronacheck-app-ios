@@ -272,6 +272,8 @@ class ListStoredEventsViewModel {
 	
 	private func showRemovalConfirmationAlert(objectID: NSManagedObjectID) {
 		
+		guard !Current.featureFlagManager.isInArchiveMode() else { return }
+		
 		alert = AlertContent(
 			title: L.holder_storedEvent_alert_removeEvents_title(),
 			subTitle: L.holder_storedEvent_alert_removeEvents_message(),
@@ -292,6 +294,8 @@ class ListStoredEventsViewModel {
 	
 	private func removeEventGroup(objectID: NSManagedObjectID ) {
 		
+		guard !Current.featureFlagManager.isInArchiveMode() else { return }
+		
 		let removalResult = Current.walletManager.removeEventGroup(objectID)
 		switch removalResult {
 			case .success:
@@ -309,6 +313,8 @@ class ListStoredEventsViewModel {
 	}
 	
 	private func sendEventsToTheSigner() {
+		
+		guard !Current.featureFlagManager.isInArchiveMode() else { return }
 		
 		Current.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(eventMode: nil) { [weak self] result in
 			// Result<RemoteGreenCards.Response, Error>
