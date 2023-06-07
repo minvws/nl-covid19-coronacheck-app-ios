@@ -26,7 +26,7 @@ extension HolderDashboardViewModelTests {
 		
 		// Act
 		sut = vendSut()
-
+		
 		// Assert
 		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
 		expect(self.sut.internationalCards.value[0]).toEventually(beEmptyStateDescription(test: { message, buttonTitle in
@@ -122,5 +122,89 @@ extension HolderDashboardViewModelTests {
 			expect(expiryCountdownEvaluator?(now)) == nil
 		}))
 		expect(self.sut.internationalCards.value[5]).toEventually(beAddCertificateCard())
+	}
+	
+	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination_0G_addEventsDisabled() {
+		
+		// Arrange
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		sut = vendSut()
+		
+		let vaccineGreenCardID = NSManagedObjectID()
+		let testGreenCardID = NSManagedObjectID()
+		let recoveryGreenCardID = NSManagedObjectID()
+		
+		let qrCards = [
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: vaccineGreenCardID, origins: [.validOneDayAgo_vaccination_expires3DaysFromNow(doseNumber: 1)])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: recoveryGreenCardID, origins: [.validOneHourAgo_recovery_expires300DaysFromNow()])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.QRCard(
+				region: .europeanUnion(evaluateCredentialAttributes: { _, _ in nil }),
+				greencards: [.init(id: testGreenCardID, origins: [.validOneHourAgo_test_expires23HoursFromNow()])],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		
+		// Act
+		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
+		
+		// Assert
+		expect(self.sut.internationalCards.value).toEventually(haveCount(5))
+		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
+			expect(message) == L.holder_dashboard_filledState_international_0G_message()
+			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
+		}))
+		
+		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
+			// check isLoading
+			expect(isLoading) == false
+			expect(title) == L.general_vaccinationcertificate_0G()
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts.count) == 1
+			expect(nowValidityTexts[0].lines.count) == 2
+			expect(nowValidityTexts[0].lines[0]) == L.general_vaccinationcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[1]) == "14 juli 2021"
+			
+			expect(expiryCountdownEvaluator?(now)) == nil
+		}))
+		
+		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
+			// check isLoading
+			expect(isLoading) == false
+			expect(title) == L.general_recoverycertificate_0G()
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts.count) == 1
+			expect(nowValidityTexts[0].lines.count) == 1
+			expect(nowValidityTexts[0].lines[0]) == "Geldig tot 11 mei 2022"
+			
+			expect(expiryCountdownEvaluator?(now)) == nil
+		}))
+		
+		expect(self.sut.internationalCards.value[4]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
+			// check isLoading
+			expect(isLoading) == false
+			expect(title) == L.general_testcertificate_0G()
+			
+			let nowValidityTexts = validityTextEvaluator(now)
+			expect(nowValidityTexts.count) == 1
+			expect(nowValidityTexts[0].lines.count) == 2
+			expect(nowValidityTexts[0].lines[0]) == L.general_testcertificate().capitalized + ":"
+			expect(nowValidityTexts[0].lines[1]) == "geldig tot donderdag 15 juli 16:02"
+			
+			expect(expiryCountdownEvaluator?(now)) == nil
+		}))
 	}
 }

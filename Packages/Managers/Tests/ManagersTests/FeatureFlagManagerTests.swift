@@ -90,19 +90,6 @@ class FeatureFlagManagerTests: XCTestCase {
 		expect(enabled) == true
 	}
 	
-	// MARK: - Disclosure -
-	
-	func test_isNoDisclosurePoliciesEnabled_noPoliciesEnabled() {
-		
-		// Given
-		
-		// When
-		let enabled = sut.areZeroDisclosurePoliciesEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
 	func test_isGGDEnabled_GGDDisabled() {
 		
 		// Given
@@ -209,5 +196,77 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// Then
 		expect(flag) == true
+	}
+		
+	func test_isMigrateButtonEnabled_migrationButtonEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.migrateButtonEnabled = true
+		
+		// When
+		let flag = sut.isMigrationEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+	
+	func test_isMigrateButtonEnabled_migrationButtonDisabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.migrateButtonEnabled = false
+		
+		// When
+		let flag = sut.isMigrationEnabled()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isAddingEventsEnabled_addEventsButtonEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.addEventsButtonEnabled = true
+		
+		// When
+		let flag = sut.isAddingEventsEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+	
+	func test_isAddingEventsEnabled_addEventsButtonDisabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.addEventsButtonEnabled = false
+		
+		// When
+		let flag = sut.isAddingEventsEnabled()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isScanningEventsEnabled_scanCertificateButtonEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.scanCertificateButtonEnabled = true
+		
+		// When
+		let flag = sut.isScanningEventsEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+	
+	func test_isScanningEventsEnabled_scanCertificateButtonDisabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.scanCertificateButtonEnabled = false
+		
+		// When
+		let flag = sut.isScanningEventsEnabled()
+		
+		// Then
+		expect(flag) == false
 	}
 }

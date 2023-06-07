@@ -93,7 +93,8 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		var shouldShowRecommendedUpdateBanner: Bool = false
 		
 		var shouldShowAddCertificateFooter: Bool {
-			(qrCards.isEmpty || (!dashboardHasInternationalQRCards()))
+			guard Current.featureFlagManager.isAddingEventsEnabled() else { return false }
+			return (qrCards.isEmpty || (!dashboardHasInternationalQRCards()))
 		}
 		
 		var shouldShow0GDisclosurePolicyBecameActiveBanner = false

@@ -218,6 +218,8 @@ class HolderCoordinator: SharedCoordinator {
 	
 	private func consumeToken(_ requestToken: RequestToken, universalLink: UniversalLink) -> Bool {
 		
+		guard Current.featureFlagManager.isAddingEventsEnabled() else { return false }
+		
 		// Need to handle two situations:
 		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
 		//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling

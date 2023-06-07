@@ -33,6 +33,7 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		
 		guard !state.shouldShowAddCertificateFooter else { return [] }
+		guard Current.featureFlagManager.isAddingEventsEnabled() else { return [] }
 		return [
 			.addCertificate(
 				title: L.holder_dashboard_addCard_title(),

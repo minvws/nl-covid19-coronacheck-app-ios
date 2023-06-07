@@ -1875,7 +1875,6 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 			greenCardLoader: greenCardLoader
 		)
 
-		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		environmentSpies.walletManagerSpy.stubbedStoreEventGroupResult = try EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture)
 		environmentSpies.walletManagerSpy.stubbedStoreEuGreenCardResult = true
 		environmentSpies.walletManagerSpy.stubbedFetchSignedEventsResult = ["test"]

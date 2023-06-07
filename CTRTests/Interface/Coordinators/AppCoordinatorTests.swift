@@ -30,6 +30,7 @@ class AppCoordinatorTests: XCTestCase {
 		
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
 		navigationSpy = NavigationControllerSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy
@@ -754,9 +755,28 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 	
-	func test_consume_redeemHolder() {
+	func test_consume_redeemHolder_addEventsDisabled() {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == false
+		expect(self.sut.unhandledUniversalLink) == nil
+	}
+	
+	func test_consume_redeemHolder_addEventsEnabled() {
+		
+		// Given
+		
 		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
 			protocolVersion: "3.0",
