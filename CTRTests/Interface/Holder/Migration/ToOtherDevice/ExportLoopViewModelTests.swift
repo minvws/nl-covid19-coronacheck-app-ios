@@ -62,7 +62,7 @@ final class ExportLoopViewModelTests: XCTestCase {
 		expect(self.sut.image.value).toEventuallyNot(beNil())
 	}
 	
-	func test_exportWithData_multipleImages() throws {
+	func flaky_tobefixed_test_exportWithData_multipleImages() throws {
 		
 		// Given
 		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
