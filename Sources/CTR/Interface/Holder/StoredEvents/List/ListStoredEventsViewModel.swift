@@ -73,10 +73,10 @@ class ListStoredEventsViewModel {
 			result.append(ListStoredEventsViewController.Group(
 				header: getListHeader(providerIdentifier: eventGroup.providerIdentifier),
 				rows: getEventRows(eventGroup),
-				action: { [weak self] in
+				action: Current.featureFlagManager.isInArchiveMode() ? nil : { [weak self] in
 					self?.showRemovalConfirmationAlert(objectID: eventGroup.objectID)
 				},
-				actionTitle: L.holder_storedEvents_button_removeEvents()))
+				actionTitle: Current.featureFlagManager.isInArchiveMode() ? nil : L.holder_storedEvents_button_removeEvents()))
 		}
 		return result
 	}

@@ -27,6 +27,7 @@ public protocol FeatureFlagManaging {
 	func isMigrationEnabled() -> Bool
 	func isAddingEventsEnabled() -> Bool
 	func isScanningEventsEnabled() -> Bool
+	func isInArchiveMode() -> Bool
 }
 
 public class FeatureFlagManager: FeatureFlagManaging {
@@ -94,5 +95,10 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	public func isScanningEventsEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.scanCertificateButtonEnabled ?? true
+	}
+	
+	public func isInArchiveMode() -> Bool {
+
+		return true
 	}
 }
