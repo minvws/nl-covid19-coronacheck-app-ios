@@ -27,6 +27,7 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 		window = UIWindow()
 	}
@@ -77,6 +78,25 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holder_storedEvents_message()
 		expect(self.sut.sceneView.secondaryButtonTitle) == L.holder_storedEvents_button_handleData()
 
+		sut.assertImage()
+	}
+	
+	func test_content_negativeTestEvent_inArchiveMode() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		setupSut()
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_storedEvents_title()
+		expect(self.sut.sceneView.message) == L.holder_storedEvents_message()
+		expect(self.sut.sceneView.secondaryButtonTitle) == L.holder_storedEvents_button_handleData()
+		
 		sut.assertImage()
 	}
 	
@@ -208,6 +228,26 @@ class ListStoredEventsViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holder_storedEvents_message()
 		expect(self.sut.sceneView.secondaryButtonTitle) == L.holder_storedEvents_button_handleData()
 
+		sut.assertImage()
+	}
+	
+	func test_content_combinedEvents_inArchiveMode() throws {
+		
+		// Given
+		let multipleVaccinationsGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeMultipleVaccinationResultWrapper))
+		let postiviteTestGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [postiviteTestGroup, multipleVaccinationsGroup]
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		setupSut()
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_storedEvents_title()
+		expect(self.sut.sceneView.message) == L.holder_storedEvents_message()
+		expect(self.sut.sceneView.secondaryButtonTitle) == L.holder_storedEvents_button_handleData()
+		
 		sut.assertImage()
 	}
 	

@@ -27,18 +27,21 @@ public protocol FeatureFlagManaging {
 	func isMigrationEnabled() -> Bool
 	func isAddingEventsEnabled() -> Bool
 	func isScanningEventsEnabled() -> Bool
+	func isInArchiveMode() -> Bool
 }
 
 public class FeatureFlagManager: FeatureFlagManaging {
 	
+	private let now: () -> Date
 	private var remoteConfigManager: RemoteConfigManaging
 	private var userSettings: UserSettingsProtocol
 	
 	public required init(
+		now: @escaping () -> Date,
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol
 	) {
-		
+		self.now = now
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
 	}
@@ -94,5 +97,11 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	public func isScanningEventsEnabled() -> Bool {
 		
 		return remoteConfigManager.storedConfiguration.scanCertificateButtonEnabled ?? true
+	}
+	
+	public func isInArchiveMode() -> Bool {
+		
+		guard let archiveDate = remoteConfigManager.storedConfiguration.archiveOnlyDate else { return false }
+		return now() > archiveDate
 	}
 }

@@ -191,11 +191,14 @@ class HolderCoordinator: SharedCoordinator {
 		Current.walletManager.removeDomesticGreenCards()
 		Current.walletManager.removeVaccinationAssessmentEventGroups()
 		
-		// Remove leftovers from previous sessions
-		Current.walletManager.removeDraftEventGroups()
-		
-		// Remove expired event groups
-		Current.walletManager.expireEventGroups(forDate: Current.now())
+		if !Current.featureFlagManager.isInArchiveMode() {
+			
+			// Remove leftovers from previous sessions
+			Current.walletManager.removeDraftEventGroups()
+			
+			// Remove expired event groups
+			Current.walletManager.expireEventGroups(forDate: Current.now())
+		}
 	}
 	
 	// MARK: - Universal Links

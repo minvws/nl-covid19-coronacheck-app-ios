@@ -88,4 +88,14 @@ public class FeatureFlagManagerSpy: FeatureFlagManaging {
 		invokedIsScanningEventsEnabledCount += 1
 		return stubbedIsScanningEventsEnabledResult
 	}
+	
+	public var invokedIsInArchiveMode = false
+	public var invokedIsInArchiveModeCount = 0
+	public var stubbedIsInArchiveModeResult: Bool! = false
+	
+	public func isInArchiveMode() -> Bool {
+		invokedIsInArchiveMode = true
+		invokedIsInArchiveModeCount += 1
+		return stubbedIsInArchiveModeResult
+	}
 }

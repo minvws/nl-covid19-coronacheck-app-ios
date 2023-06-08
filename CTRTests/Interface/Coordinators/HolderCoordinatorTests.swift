@@ -33,6 +33,7 @@ class HolderCoordinatorTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		navigationSpy = NavigationControllerSpy()
 		alertVerifier = AlertVerifier()
 		sut = HolderCoordinator(
@@ -57,6 +58,18 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
+	}
+	
+	func testRunsDatabaseCleanupOnStart_archiveModeEnabled() {
+		// When
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		sut.start()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == false
 	}
 	
 	func testStartNewFeatures() {

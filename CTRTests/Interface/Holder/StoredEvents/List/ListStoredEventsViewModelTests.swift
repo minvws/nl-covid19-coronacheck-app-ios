@@ -29,6 +29,7 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 	}
@@ -87,6 +88,46 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		expect(group.header) == "Opgehaald bij CoronaCheck"
 		expect(group.actionTitle) == L.holder_storedEvents_button_removeEvents()
 		expect(group.action) != nil
+		expect(group.rows).to(haveCount(1))
+		let row = try XCTUnwrap(group.rows.first)
+		expect(row.title) == L.general_negativeTest().capitalizingFirstLetter()
+		expect(row.details) == "1 juli 2021"
+		
+		// When
+		row.action?()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetails) == true
+		expect(self.coordinatorSpy.invokedUserWishesToSeeEventDetailsParameters?.title) == L.general_negativeTest().capitalizingFirstLetter()
+	}
+	
+	func test_content_negativeTestEvent_inArchiveMode() throws {
+		
+		// Given
+		let eventGroup = try XCTUnwrap(createEventGroup(wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		
+		// When
+		setupSut()
+		
+		// Then
+		guard case let .listEvents(content: content, groups: groups) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(content.title) == L.holder_storedEvents_title()
+		expect(content.body) == L.holder_storedEvents_message()
+		expect(content.primaryActionTitle) == nil
+		expect(content.primaryAction) == nil
+		expect(content.secondaryActionTitle) == L.holder_storedEvents_button_handleData()
+		expect(content.secondaryAction) != nil
+		expect(groups).toNot(beEmpty())
+		expect(groups).to(haveCount(1))
+		let group = try XCTUnwrap(groups.first)
+		expect(group.header) == "Opgehaald bij CoronaCheck"
+		expect(group.actionTitle) == nil
+		expect(group.action) == nil
 		expect(group.rows).to(haveCount(1))
 		let row = try XCTUnwrap(group.rows.first)
 		expect(row.title) == L.general_negativeTest().capitalizingFirstLetter()

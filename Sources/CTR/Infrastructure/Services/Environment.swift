@@ -198,6 +198,7 @@ private let scanLockManager = ScanLockManager(now: now, secureUserSettings: secu
 private let secureUserSettings = SecureUserSettings()
 
 private let featureFlagManager = FeatureFlagManager(
+	now: now,
 	remoteConfigManager: remoteConfigManager,
 	userSettings: userSettings
 )

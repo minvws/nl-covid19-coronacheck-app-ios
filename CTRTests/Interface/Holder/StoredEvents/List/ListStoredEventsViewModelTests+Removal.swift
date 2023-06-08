@@ -28,6 +28,7 @@ class ListStoredEventsViewModelRemovalTests: XCTestCase {
 		super.setUp()
 		
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		
 		coordinatorSpy = HolderCoordinatorDelegateSpy()
 	}

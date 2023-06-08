@@ -164,6 +164,8 @@ public struct RemoteConfiguration: Codable, Equatable {
 	public var addEventsButtonEnabled: Bool?
 	
 	public var scanCertificateButtonEnabled: Bool?
+	
+	public var archiveOnlyDate: Date?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -205,6 +207,7 @@ public struct RemoteConfiguration: Codable, Equatable {
 		case addEventsButtonEnabled = "addEventsButtonEnabled"
 		case migrateButtonEnabled = "migrateButtonEnabled"
 		case scanCertificateButtonEnabled = "scanCertificateButtonEnabled"
+		case archiveOnlyDate = "archiveOnlyDate"
 	}
 	
 	init(minVersion: String) {
