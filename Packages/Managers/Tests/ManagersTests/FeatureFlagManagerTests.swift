@@ -7,6 +7,7 @@
 
 import XCTest
 import Nimble
+import TestingShared
 @testable import Managers
 
 class FeatureFlagManagerTests: XCTestCase {
@@ -25,6 +26,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		
 		sut = FeatureFlagManager(
+			now: { now },
 			remoteConfigManager: remoteConfigManagerSpy,
 			userSettings: userSettingsSpy
 		)
@@ -268,5 +270,43 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// Then
 		expect(flag) == false
+	}
+	
+	func test_isInArchiveMode_noArchiveDate() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = nil
+		
+		// When
+		let flag = sut.isInArchiveMode()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isInArchiveMode_archiveDateBeforeNow() {
+		
+		// Given
+		let archiveOnlyDate = Formatter.getDateFrom(dateString8601: "2022-07-01T23:00:00z")
+		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = archiveOnlyDate
+		
+		// When
+		let flag = sut.isInArchiveMode()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isInArchiveMode_archiveDateAfterNow() {
+		
+		// Given
+		let archiveOnlyDate = Formatter.getDateFrom(dateString8601: "2021-07-01T23:00:00z")
+		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = archiveOnlyDate
+		
+		// When
+		let flag = sut.isInArchiveMode()
+		
+		// Then
+		expect(flag) == true
 	}
 }

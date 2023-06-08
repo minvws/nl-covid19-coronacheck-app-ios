@@ -32,14 +32,16 @@ public protocol FeatureFlagManaging {
 
 public class FeatureFlagManager: FeatureFlagManaging {
 	
+	private let now: () -> Date
 	private var remoteConfigManager: RemoteConfigManaging
 	private var userSettings: UserSettingsProtocol
 	
 	public required init(
+		now: @escaping () -> Date,
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol
 	) {
-		
+		self.now = now
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
 	}
@@ -98,7 +100,8 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	}
 	
 	public func isInArchiveMode() -> Bool {
-
-		return true
+		
+		guard let archiveDate = remoteConfigManager.storedConfiguration.archiveOnlyDate else { return false }
+		return now() > archiveDate
 	}
 }
