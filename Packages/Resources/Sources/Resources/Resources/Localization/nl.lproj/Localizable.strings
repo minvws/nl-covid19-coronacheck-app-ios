@@ -468,6 +468,7 @@
 "holder_dashboard_originExpiredBanner_internationalRecovery_title" = "Je internationale herstelbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Je internationale testbewijs is verlopen";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Je internationale vaccinatiebewijs is verlopen";
+"holder_dashboard_qrValidityDate_expired" = "Verlopen op";
 "holder_dccDetails_subtitle" = "De volgende gegevens staan in je bewijs:";
 "holder_dcc_alert_message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder_dcc_issuer" = "Afgever certificaat:";
