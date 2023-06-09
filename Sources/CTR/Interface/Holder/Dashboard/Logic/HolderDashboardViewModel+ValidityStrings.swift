@@ -36,12 +36,12 @@ extension QRCard {
 		func text(qrCard: QRCard, greencard: QRCard.GreenCard, origin: QRCard.GreenCard.Origin, now: Date) -> HolderDashboardViewController.ValidityText {
 			
 			switch (self, qrCard.region, origin.type) {
-				case (.isExpired, _, _):
-					return validityText_isExpired()
 					
 				// -- EU Vaccines --
 					
-				case (_, .europeanUnion(let dccEvaluator), .vaccination):
+				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .vaccination),
+					(.validityHasNotYetBegun, .europeanUnion(let dccEvaluator), .vaccination):
+					
 					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
 					   let totalDose = euVaccination.totalDose {
@@ -70,12 +70,23 @@ extension QRCard {
 						validFrom: origin.validFromDate,
 						expirationTime: origin.expirationTime
 					)
+					
+				case (.isExpired, .europeanUnion, .recovery):
+					return validityText_expired_eu_recovery(
+						expirationTime: origin.expirationTime
+					)
+					
+					// -- Expired --
+					
+				case (.isExpired, _, _):
+					return validityText_isExpired_fallback()
+					
 			}
 		}
 	}
 }
 
-private func validityText_isExpired() -> HolderDashboardViewController.ValidityText {
+private func validityText_isExpired_fallback() -> HolderDashboardViewController.ValidityText {
 	.init(lines: [], kind: .past)
 }
 
@@ -171,5 +182,22 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 		// geldig vanaf 17 juli t/m 11 mei 2022
 		lines: [valueString],
 		kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+	)
+}
+
+private func validityText_expired_eu_recovery(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+	
+	guard Current.featureFlagManager.isInArchiveMode() else {
+		return validityText_isExpired_fallback()
+	}
+	
+	let prefix = L.holder_dashboard_qrValidityDate_expired()
+	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
+	
+	let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+	let valueString = "\(prefix) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		lines: [titleString, valueString],
+		kind: .past
 	)
 }
