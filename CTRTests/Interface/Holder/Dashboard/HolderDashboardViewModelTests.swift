@@ -47,6 +47,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 
 		configSpy = ConfigurationGeneralSpy()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
