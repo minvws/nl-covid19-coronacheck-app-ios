@@ -181,8 +181,10 @@ extension HolderDashboardViewModelTests {
 			// Exercise the validityText with different sample dates:
 			let futureValidityTexts = validityTextEvaluator(now.addingTimeInterval(2 * minutes * fromNow))
 			expect(futureValidityTexts[0].kind) == .past
-			expect(futureValidityTexts[0].lines).to(beEmpty())
-
+			expect(futureValidityTexts[0].lines[0]) == "Dosis 1/2"
+			expect(futureValidityTexts[0].lines[1]) == "Vaccinatiedatum: 15 juni 2021"
+			expect(futureValidityTexts[0].lines[2]) == "Verlopen op 15 juli 2021"
+			
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRs) == false
 			didTapViewQR()

@@ -50,6 +50,19 @@ extension QRCard {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
 					}
 					
+				case (.isExpired, .europeanUnion(let dccEvaluator), .vaccination):
+					
+					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
+					   let doseNumber = euVaccination.doseNumber,
+					   let totalDose = euVaccination.totalDose {
+						return validityText_expired_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), issuingCountryCode: euVaccination.country, validFrom: origin.eventDate, expirationTime: origin.expirationTime)
+					} else {
+						return validityText_expired_eu_recovery(
+							origin: origin,
+							expirationTime: origin.expirationTime
+						)
+					}
+					
 				// -- EU Tests --
 					
 				case (_, .europeanUnion(let dccEvaluator), .test):
@@ -73,6 +86,7 @@ extension QRCard {
 					
 				case (.isExpired, .europeanUnion, .recovery):
 					return validityText_expired_eu_recovery(
+						origin: origin,
 						expirationTime: origin.expirationTime
 					)
 					
@@ -185,7 +199,7 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 	)
 }
 
-private func validityText_expired_eu_recovery(expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_expired_eu_recovery(origin: QRCard.GreenCard.Origin, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 	
 	guard Current.featureFlagManager.isInArchiveMode() else {
 		return validityText_isExpired_fallback()
@@ -194,10 +208,37 @@ private func validityText_expired_eu_recovery(expirationTime: Date) -> HolderDas
 	let prefix = L.holder_dashboard_qrValidityDate_expired()
 	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
 	
-	let titleString = OriginType.recovery.localizedProof.capitalizingFirstLetter() + ":"
+	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = "\(prefix) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
 		lines: [titleString, valueString],
+		kind: .past
+	)
+}
+
+private func validityText_expired_eu_vaccination(doseNumber: String, totalDoses: String, issuingCountryCode: String, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+	let formatter = DateFormatter.Format.dayMonthYear
+	
+	let dosesAndCountryLine: String = {
+		let doses = L.holderDashboardQrEuVaccinecertificatedoses(doseNumber, totalDoses)
+		
+		// If issued by another country than NL, get the localized name and append to the String:
+		if issuingCountryCode != "NL", let issuingCountry = Locale.autoupdatingCurrent.localizedString(forRegionCode: issuingCountryCode) {
+			return doses + " (\(issuingCountry))"
+		} else {
+			return doses
+		}
+	}()
+	let prefix = L.holder_dashboard_qrValidityDate_expired()
+	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
+	let valueString = "\(prefix) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
+	
+	return .init(
+		lines: [
+			Shared.Sanitizer.sanitize(dosesAndCountryLine),
+			Shared.Sanitizer.sanitize("\(L.generalVaccinationdate()): \(formatter.string(from: validFrom))"),
+			valueString
+		],
 		kind: .past
 	)
 }
