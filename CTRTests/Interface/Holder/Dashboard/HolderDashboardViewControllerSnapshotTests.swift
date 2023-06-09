@@ -426,6 +426,31 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image)
 	}
 	
+	func test_internationalQR_validityTexts_past_multiline() {
+		
+		// Arrange
+		let sut = HolderDashboardViewController(viewModel: viewModelSpy)
+		
+		// Act
+		viewModelSpy.stubbedInternationalCards.value = [
+			.europeanUnionQR(
+				title: "title",
+				stackSize: 1,
+				validityTexts: { _ in [
+					HolderDashboardViewController.ValidityText(lines: ["line", "line"], kind: .past)
+				] },
+				isLoading: false,
+				didTapViewQR: {},
+				buttonEnabledEvaluator: { _ in false },
+				expiryCountdownEvaluator: nil,
+				error: nil
+			)
+		]
+		
+		// Assert
+		assertSnapshot(matching: sut, as: .image)
+	}
+	
 	func test_internationalQR_validityTexts_current() {
 
 		// Arrange
