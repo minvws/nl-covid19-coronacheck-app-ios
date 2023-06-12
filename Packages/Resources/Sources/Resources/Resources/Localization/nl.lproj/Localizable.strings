@@ -426,6 +426,9 @@
 "holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
 "holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
+"holder_archiveMode_button" = "Naar CoronaCheck.nl";
+"holder_archiveMode_description" = "** Archive Description **";
+"holder_archiveMode_title" = "** Archive Mode **";
 "holder_authentication_popup_digid_message_testFlow" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
 "holder_authentication_popup_digid_message_vaccinationFlow" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder_authentication_popup_digid_title" = "Inloggen afgebroken";
