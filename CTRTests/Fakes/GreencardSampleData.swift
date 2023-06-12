@@ -539,4 +539,14 @@ extension HolderDashboardViewModel.QRCard.GreenCard.Origin {
 			doseNumber: 1
 		)
 	}
+	
+	static func validOneMonthAgo_recovery_expired2DaysAgo() -> HolderDashboardViewModel.QRCard.GreenCard.Origin {
+		.init(
+			type: OriginType.recovery,
+			eventDate: now.addingTimeInterval(30 * days * ago),
+			expirationTime: now.addingTimeInterval(2 * days * ago),
+			validFromDate: now.addingTimeInterval(14 * days * ago),
+			doseNumber: 1
+		)
+	}
 }

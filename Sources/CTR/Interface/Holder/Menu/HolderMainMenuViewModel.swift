@@ -51,12 +51,20 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		}
 		
 		var holderItems = [Item]()
-		holderItems += [itemAddCertificate]
-		holderItems += [itemAddPaperCertificate]
+		if Current.featureFlagManager.isAddingEventsEnabled() {
+			holderItems += [itemAddCertificate]
+		}
+		if Current.featureFlagManager.isScanningEventsEnabled() {
+			holderItems += [itemAddPaperCertificate]
+		}
+		if Current.featureFlagManager.isAddingEventsEnabled() || Current.featureFlagManager.isScanningEventsEnabled() {
+			holderItems += [.sectionBreak]
+		}
 		
-		holderItems += [.sectionBreak]
 		holderItems += [itemStoredData]
-		holderItems += [itemDataMigration]
+		if Current.featureFlagManager.isMigrationEnabled() {
+			holderItems += [itemDataMigration]
+		}
 
 		holderItems += [.sectionBreak]
 		holderItems += [itemHelpAndInfo]

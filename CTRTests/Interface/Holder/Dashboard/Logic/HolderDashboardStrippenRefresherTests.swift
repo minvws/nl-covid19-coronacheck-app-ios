@@ -28,6 +28,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		reachabilitySpy = ReachabilitySpy()
 	}
 	
@@ -51,6 +52,26 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.loadingState) == .loading(silently: true)
 		expect(self.sut.state.isNonsilentlyLoading) == false
 	}
+
+	func test_expiring_calculates_state_expiring_inArchiveMode() {
+		
+		// Arrange
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+		
+		// Act
+		sut.load()
+		
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.isNonsilentlyLoading) == false
+	}
 	
 	func test_expired_calculates_state_expired_and_loads() {
 		// Arrange
@@ -68,6 +89,25 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
 		expect(self.sut.state.loadingState) == .loading(silently: false)
 		expect(self.sut.state.isNonsilentlyLoading) == true
+	}
+
+	func test_expired_calculates_state_expired_and_inArchiveMode() {
+		// Arrange
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		environmentSpies.walletManagerSpy.loadInternationalCredentialsExpiredWithMoreToFetch(dataStoreManager: environmentSpies.dataStoreManager)
+		
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			reachability: reachabilitySpy
+		)
+		
+		// Act
+		sut.load()
+		
+		// Assert
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.isNonsilentlyLoading) == false
 	}
 	
 	func test_expiring_with_expiring_origin_calculates_state_noActionNeeded_and_doesnt_load() {

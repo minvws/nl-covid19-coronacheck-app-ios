@@ -46,6 +46,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 
 		configSpy = ConfigurationGeneralSpy()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
@@ -60,7 +62,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func vendSut(appVersion: String = "1.0.0") -> HolderDashboardViewModel {
 
-		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			qrcardDatasource: qrCardDatasourceSpy,

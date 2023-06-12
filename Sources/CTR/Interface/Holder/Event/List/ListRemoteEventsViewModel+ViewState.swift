@@ -386,6 +386,11 @@ extension ListRemoteEventsViewModel {
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
 			title = L.holderDccVaccinationListTitle("\(doseNumber)", "\(totalDose)")
 		}
+			
+		let footer: String? = {
+			guard eventMode != .migration else { return nil }
+			return isForeign ? L.holder_listRemoteEvents_somethingWrong_foreignDCC_body() : L.holderDccVaccinationFooter()
+		}()
 
 		return ListRemoteEventsViewController.Row(
 			title: Shared.Sanitizer.sanitize(title),
@@ -399,7 +404,7 @@ extension ListRemoteEventsViewModel {
 					.showEventDetails(
 						title: L.holderDccVaccinationDetailsTitle(),
 						details: DCCVaccinationDetailsGenerator.getDetails(identity: dataRow.identity, vaccination: vaccination),
-						footer: isForeign ? L.holder_listRemoteEvents_somethingWrong_foreignDCC_body() : L.holderDccVaccinationFooter()
+						footer: footer
 					)
 				)
 			}

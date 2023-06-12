@@ -163,6 +163,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 
 	private let walletManager: WalletManaging = Current.walletManager
 	private let greencardLoader: GreenCardLoading = Current.greenCardLoader
+	private let featureFlagManager: FeatureFlagManaging = Current.featureFlagManager
 	private let reachability: ReachabilityProtocol?
 
 	private let now: () -> Date = Current.now
@@ -175,6 +176,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh,
 			walletManager: walletManager,
+			featureFlagManager: featureFlagManager,
 			now: now()
 		)
 
@@ -255,6 +257,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: self.minimumThresholdOfValidCredentialsTriggeringRefresh,
 								walletManager: self.walletManager,
+								featureFlagManager: self.featureFlagManager,
 								now: self.now()
 							)
 
@@ -302,8 +305,14 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing {
 	private static func calculateGreenCardsCredentialExpiryState(
 		minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int,
 		walletManager: WalletManaging,
+		featureFlagManager: FeatureFlagManaging,
 		now: Date) -> State.GreencardsCredentialExpiryState {
 		
+		guard !featureFlagManager.isInArchiveMode() else {
+			logDebug("StrippenRefresh: Skipping due to Archive Mode")
+			return .noActionNeeded
+		}
+			
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(
 			now: now,
 			ofOriginType: nil

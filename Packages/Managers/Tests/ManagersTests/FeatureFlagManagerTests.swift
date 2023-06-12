@@ -7,6 +7,7 @@
 
 import XCTest
 import Nimble
+import TestingShared
 @testable import Managers
 
 class FeatureFlagManagerTests: XCTestCase {
@@ -25,6 +26,7 @@ class FeatureFlagManagerTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		
 		sut = FeatureFlagManager(
+			now: { now },
 			remoteConfigManager: remoteConfigManagerSpy,
 			userSettings: userSettingsSpy
 		)
@@ -85,19 +87,6 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// When
 		let enabled = sut.areMultipleVerificationPoliciesEnabled()
-		
-		// Then
-		expect(enabled) == true
-	}
-	
-	// MARK: - Disclosure -
-	
-	func test_isNoDisclosurePoliciesEnabled_noPoliciesEnabled() {
-		
-		// Given
-		
-		// When
-		let enabled = sut.areZeroDisclosurePoliciesEnabled()
 		
 		// Then
 		expect(enabled) == true
@@ -206,6 +195,116 @@ class FeatureFlagManagerTests: XCTestCase {
 		
 		// When
 		let flag = sut.isLuhnCheckEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+		
+	func test_isMigrateButtonEnabled_migrationButtonEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.migrateButtonEnabled = true
+		
+		// When
+		let flag = sut.isMigrationEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+	
+	func test_isMigrateButtonEnabled_migrationButtonDisabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.migrateButtonEnabled = false
+		
+		// When
+		let flag = sut.isMigrationEnabled()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isAddingEventsEnabled_addEventsButtonEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.addEventsButtonEnabled = true
+		
+		// When
+		let flag = sut.isAddingEventsEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+	
+	func test_isAddingEventsEnabled_addEventsButtonDisabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.addEventsButtonEnabled = false
+		
+		// When
+		let flag = sut.isAddingEventsEnabled()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isScanningEventsEnabled_scanCertificateButtonEnabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.scanCertificateButtonEnabled = true
+		
+		// When
+		let flag = sut.isScanningEventsEnabled()
+		
+		// Then
+		expect(flag) == true
+	}
+	
+	func test_isScanningEventsEnabled_scanCertificateButtonDisabled() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.scanCertificateButtonEnabled = false
+		
+		// When
+		let flag = sut.isScanningEventsEnabled()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isInArchiveMode_noArchiveDate() {
+		
+		// Given
+		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = nil
+		
+		// When
+		let flag = sut.isInArchiveMode()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isInArchiveMode_archiveDateBeforeNow() {
+		
+		// Given
+		let archiveOnlyDate = Formatter.getDateFrom(dateString8601: "2022-07-01T23:00:00z")
+		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = archiveOnlyDate
+		
+		// When
+		let flag = sut.isInArchiveMode()
+		
+		// Then
+		expect(flag) == false
+	}
+	
+	func test_isInArchiveMode_archiveDateAfterNow() {
+		
+		// Given
+		let archiveOnlyDate = Formatter.getDateFrom(dateString8601: "2021-07-01T23:00:00z")
+		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = archiveOnlyDate
+		
+		// When
+		let flag = sut.isInArchiveMode()
 		
 		// Then
 		expect(flag) == true

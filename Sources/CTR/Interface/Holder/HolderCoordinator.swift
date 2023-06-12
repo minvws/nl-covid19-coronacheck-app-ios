@@ -191,11 +191,14 @@ class HolderCoordinator: SharedCoordinator {
 		Current.walletManager.removeDomesticGreenCards()
 		Current.walletManager.removeVaccinationAssessmentEventGroups()
 		
-		// Remove leftovers from previous sessions
-		Current.walletManager.removeDraftEventGroups()
-		
-		// Remove expired event groups
-		Current.walletManager.expireEventGroups(forDate: Current.now())
+		if !Current.featureFlagManager.isInArchiveMode() {
+			
+			// Remove leftovers from previous sessions
+			Current.walletManager.removeDraftEventGroups()
+			
+			// Remove expired event groups
+			Current.walletManager.expireEventGroups(forDate: Current.now())
+		}
 	}
 	
 	// MARK: - Universal Links
@@ -217,6 +220,8 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	private func consumeToken(_ requestToken: RequestToken, universalLink: UniversalLink) -> Bool {
+		
+		guard Current.featureFlagManager.isAddingEventsEnabled() else { return false }
 		
 		// Need to handle two situations:
 		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)

@@ -12,7 +12,6 @@ import XCTest
 @testable import Managers
 @testable import Resources
 import Nimble
-import Clcore
 import CoreData
 import SnapshotTesting
 
