@@ -468,6 +468,7 @@
 "holder_dashboard_originExpiredBanner_internationalRecovery_title" = "Your international recovery certificate has expired";
 "holder_dashboard_originExpiredBanner_internationalTest_title" = "Your international test certificate has expired";
 "holder_dashboard_originExpiredBanner_internationalVaccine_title" = "Your international vaccination certificate has expired";
+"holder_dashboard_qrValidityDate_expired" = "Expired on";
 "holder_dccDetails_subtitle" = "The following details are in your certificate:";
 "holder_dcc_alert_message" = "You can try to add a paper certificate again later.";
 "holder_dcc_issuer" = "Certificate issuer:";

@@ -72,6 +72,9 @@ class HolderDashboardQRCardDatasource: HolderDashboardQRCardDatasourceProtocol {
 	}
 
 	private func removeExpiredGreenCards() -> [ExpiredQR] {
+		
+		guard !Current.featureFlagManager.isInArchiveMode() else { return [] }
+		
 		return Current.walletManager.removeExpiredGreenCards(forDate: Current.now()).compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
 			guard let region = QRCodeValidityRegion(rawValue: greencardType) else { return nil }
 			guard let originType = OriginType(rawValue: originType) else { return nil }
@@ -157,6 +160,10 @@ extension QRCard {
 			
 			if dbGreencard.getType() == GreenCardType.eu {
 				
+				guard !Current.featureFlagManager.isInArchiveMode() else {
+					return true
+				}
+				
 				let hasValidOrigin = origins.contains(where: { $0.isValid(duringDate: date) })
 				let credential = dbGreencard.getLatestInternationalCredential()
 				let hasValidCredential = date.isWithinTimeWindow(
@@ -239,7 +246,7 @@ extension QRCard.GreenCard.Origin {
 
 	fileprivate static func origins(fromDBOrigins dbOrigins: [Origin], now: Date) -> [QRCard.GreenCard.Origin] {
 
-		let structOrigins = dbOrigins
+		var structOrigins = dbOrigins
 			.compactMap { origin -> QRCard.GreenCard.Origin? in
 				guard let typeRawValue = origin.type,
 					  let type = OriginType(rawValue: typeRawValue),
@@ -256,12 +263,16 @@ extension QRCard.GreenCard.Origin {
 					doseNumber: origin.doseNumber.map { $0.intValue }
 				)
 			}
-			.filter {
-				// Pro-actively remove invalid Origins here, in case the database is laggy:
-				// Future: this could be moved to the DB layer like how greencard.getActiveCredentials does it.
-				now < $0.expirationTime
-			}
 			.sorted { $0.customSortIndex < $1.customSortIndex }
+		
+		if !Current.featureFlagManager.isInArchiveMode() {
+			structOrigins = structOrigins
+				.filter {
+					// Pro-actively remove invalid Origins here, in case the database is laggy:
+					// Future: this could be moved to the DB layer like how greencard.getActiveCredentials does it.
+					now < $0.expirationTime
+				}
+		}
 		
 		// Deduplicate: `QRCard.GreenCard.Origin` is hashable, so passing through a `Set` removes exact-duplicates
 		return Array(Set(structOrigins))
