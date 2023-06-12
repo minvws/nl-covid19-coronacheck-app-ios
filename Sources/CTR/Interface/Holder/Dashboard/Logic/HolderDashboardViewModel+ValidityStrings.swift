@@ -38,9 +38,21 @@ extension QRCard {
 			switch (self, qrCard.region, origin.type) {
 					
 				// -- EU Vaccines --
+				
+//				case (.isExpired, .europeanUnion(let dccEvaluator), .vaccination):
+//
+//					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
+//					   let doseNumber = euVaccination.doseNumber,
+//					   let totalDose = euVaccination.totalDose {
+//						return validityText_expired_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), issuingCountryCode: euVaccination.country, validFrom: origin.eventDate, expirationTime: origin.expirationTime)
+//					} else {
+//						return validityText_expired_eu_recovery(
+//							origin: origin,
+//							expirationTime: origin.expirationTime
+//						)
+//					}
 					
-				case (.validityHasBegun, .europeanUnion(let dccEvaluator), .vaccination),
-					(.validityHasNotYetBegun, .europeanUnion(let dccEvaluator), .vaccination):
+				case (_, .europeanUnion(let dccEvaluator), .vaccination):
 					
 					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
 					   let doseNumber = euVaccination.doseNumber,
@@ -48,19 +60,6 @@ extension QRCard {
 						return validityText_hasBegun_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), issuingCountryCode: euVaccination.country, validFrom: origin.eventDate)
 					} else {
 						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
-					}
-					
-				case (.isExpired, .europeanUnion(let dccEvaluator), .vaccination):
-					
-					if let euVaccination = dccEvaluator(greencard, now)?.digitalCovidCertificate.vaccinations?.first,
-					   let doseNumber = euVaccination.doseNumber,
-					   let totalDose = euVaccination.totalDose {
-						return validityText_expired_eu_vaccination(doseNumber: String(doseNumber), totalDoses: String(totalDose), issuingCountryCode: euVaccination.country, validFrom: origin.eventDate, expirationTime: origin.expirationTime)
-					} else {
-						return validityText_expired_eu_recovery(
-							origin: origin,
-							expirationTime: origin.expirationTime
-						)
 					}
 					
 				// -- EU Tests --
