@@ -17,6 +17,7 @@ class NewFeaturesManagerTests: XCTestCase {
 	// MARK: - Setup
 	var sut: NewFeaturesManager!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
+	private var featureFlagManagerSpy: FeatureFlagManagerSpy!
 	
 	override func setUp() {
 		super.setUp()
@@ -25,8 +26,9 @@ class NewFeaturesManagerTests: XCTestCase {
 		secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedForcedInformationData = .empty
 		sut = NewFeaturesManager(secureUserSettings: secureUserSettingsSpy)
-		
-		sut.factory = HolderNewFeaturesFactory()
+		featureFlagManagerSpy = FeatureFlagManagerSpy()
+		featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
+		sut.factory = HolderNewFeaturesFactory(featureFlagManager: featureFlagManagerSpy)
 	}
 	
 	// MARK: - Tests
@@ -73,6 +75,26 @@ class NewFeaturesManagerTests: XCTestCase {
 		let expectedPage = PagedAnnoucementItem(
 			title: L.holder_newintheapp_foreignproofs_title(),
 			content: L.holder_newintheapp_foreignproofs_body(),
+			image: I.newInTheApp.paperDCC(),
+			imageBackgroundColor: C.white(),
+			tagline: L.general_newintheapp(),
+			step: 0
+		)
+		
+		// When
+		let actualPage = sut.pagedAnnouncementItems()
+		
+		// Then
+		expect(actualPage) == [expectedPage]
+	}
+	
+	func test_getUpdatePage_holder_archiveMode() {
+		
+		// Given
+		featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		let expectedPage = PagedAnnoucementItem(
+			title: L.holder_newintheapp_archiveMode_title(),
+			content: L.holder_newintheapp_archiveMode_body(),
 			image: I.newInTheApp.paperDCC(),
 			imageBackgroundColor: C.white(),
 			tagline: L.general_newintheapp(),

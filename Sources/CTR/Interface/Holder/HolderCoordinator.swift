@@ -110,7 +110,7 @@ class HolderCoordinator: SharedCoordinator {
 				
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
-			newFeaturesFactory: HolderNewFeaturesFactory()
+			newFeaturesFactory: HolderNewFeaturesFactory(featureFlagManager: Current.featureFlagManager)
 		) {
 			
 			if let unhandledUniversalLink {

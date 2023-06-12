@@ -607,6 +607,8 @@
 "holder_migration_import_errorcode_message" = "<p>Er gaat iets mis met het importeren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
 "holder_negativetest_ggd_title" = "Gegevens van je test ophalen";
+"holder_newintheapp_archiveMode_body" = "** Whats new archive mode body **";
+"holder_newintheapp_archiveMode_title" = "** Whats new Archive Mode title **";
 "holder_newintheapp_foreignproofs_body" = "Heb je een coronabewijs met QR-code van een test of vaccinatie uit het buitenland? Dan kun je jouw bewijs nu toevoegen aan CoronaCheck. Kies in het menu voor “Coronabewijs inscannen”.";
 "holder_newintheapp_foreignproofs_title" = "Buitenlandse bewijzen toevoegen";
 "holder_noDigiD_buttonSubTitle_continueWithoutDigiD" = "Als je geen DigiD kunt of wilt aanvragen";
