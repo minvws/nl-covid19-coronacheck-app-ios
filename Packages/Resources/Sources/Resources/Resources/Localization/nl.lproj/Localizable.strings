@@ -578,6 +578,7 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_login" = "Log in op %@";
+"holder_menu_exportPDF" = "Bewijzen bewaren";
 "holder_menu_helpInfo" = "Hulp & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 "holder_menu_migration" = "Mijn bewijzen overzetten";
