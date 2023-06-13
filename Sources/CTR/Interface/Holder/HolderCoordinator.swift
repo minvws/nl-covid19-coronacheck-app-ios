@@ -447,6 +447,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
+	func userWishesToExportPDF() {
+		
+		let exportCoordinator = PDFExportCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		startChildCoordinator(exportCoordinator)
+	}
+	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem]) {
 
 		let bulletpoints = compactRemovedEventItems(blockedEventItems)
@@ -588,6 +597,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToChooseTestLocation() {
+		
 		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
@@ -605,7 +615,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAQR() {
-		navigateToChooseQRCodeType()
+		
+		userWishesToExportPDF()
+//		navigateToChooseQRCodeType()
 	}
 	
 	func userWishesToCreateARecoveryQR() {
@@ -805,6 +817,21 @@ extension HolderCoordinator: MigrationFlowDelegate {
 	private func removeMigrationCoordinator() {
 		
 		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
+	}
+}
+
+extension HolderCoordinator: PDFExportFlowDelegate {
+	
+	func exportCompleted() {
+		
+		removePDFExportCoordinator()
+	}
+	
+	private func removePDFExportCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is PDFExportCoordinator }) {
 			removeChildCoordinator(childCoordinator)
 		}
 	}
