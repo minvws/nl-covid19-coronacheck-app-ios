@@ -16,28 +16,50 @@ protocol PDFExportFlowDelegate: AnyObject {
 }
 
 class PDFExportCoordinator: NSObject, Coordinator, OpenUrlProtocol {
-
+	
 	var childCoordinators: [Coordinator] = []
-
+	
 	var navigationController: UINavigationController
-
+	
 	weak var delegate: PDFExportFlowDelegate?
-
+	
 	var startPagesFactory: StartPDFExportFactoryProtocol = StartPDFExportFactory()
-
+	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	///   - delegate: the pdf export flow delegate
 	init(navigationController: UINavigationController, delegate: PDFExportFlowDelegate) {
-
+		
 		self.navigationController = navigationController
 		self.delegate = delegate
 		super.init()
 		self.navigationController.delegate = self
 	}
-
+	
 	func start() {
+		
+		userWishesToStart()
+	}
+	
+	// MARK: - Universal Link handling
+	
+	func consume(universalLink: Models.UniversalLink) -> Bool {
+		
+		return false
+	}
+}
+
+protocol PDFExportCoordinatorDelegate: AnyObject {
+	
+	func userWishesToStart()
+	
+	func userWishesToExport()
+}
+
+extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
+	
+	func userWishesToStart() {
 		
 		let viewController = PagedAnnouncementViewController(
 			title: nil,
@@ -57,11 +79,15 @@ class PDFExportCoordinator: NSObject, Coordinator, OpenUrlProtocol {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	// MARK: - Universal Link handling
-
-	func consume(universalLink: Models.UniversalLink) -> Bool {
-
-		return false
+	func userWishesToExport() {
+		
+		// Go to consent
+		let viewController = PDFExportViewController(
+			viewModel: PDFExportViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 
@@ -71,7 +97,7 @@ extension PDFExportCoordinator: PagedAnnouncementDelegate {
 	
 	func didFinishPagedAnnouncement() {
 		
-		logDebug("PDFExportCoordinator - PagedAnnouncementDelegate - didFinishPagedAnnouncement")
+		userWishesToExport()
 	}
 }
 
