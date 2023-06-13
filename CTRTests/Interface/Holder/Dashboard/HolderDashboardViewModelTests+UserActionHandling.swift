@@ -69,6 +69,18 @@ extension HolderDashboardViewModelTests {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutClockDeviationCount) == 1
 	}
 	
+	func test_actionhandling_didTapExportReminderMoreInfo() {
+		
+		// Arrange
+		sut = vendSut()
+		
+		// Act
+		sut.didTapExportReminderMoreInfo()
+		
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToExportPDFCount) == 1
+	}
+	
 	func test_actionhandling_didTapShowQR() {
 		
 		// Arrange

@@ -220,6 +220,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateAVaccinationQRCount += 1
 	}
 
+	var invokedUserWishesToExportPDF = false
+	var invokedUserWishesToExportPDFCount = 0
+
+	func userWishesToExportPDF() {
+		invokedUserWishesToExportPDF = true
+		invokedUserWishesToExportPDFCount += 1
+	}
+
 	var invokedUserWishesToLaunchThirdPartyTicketApp = false
 	var invokedUserWishesToLaunchThirdPartyTicketAppCount = 0
 
