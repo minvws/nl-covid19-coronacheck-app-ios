@@ -35,6 +35,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
 		// Recommendations
+		case exportReminder(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		
 		// Disclosure Policy
@@ -190,6 +191,7 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button
 			case let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
+				let .exportReminder(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(

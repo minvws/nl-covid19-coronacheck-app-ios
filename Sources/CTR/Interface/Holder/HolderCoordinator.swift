@@ -52,6 +52,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
+	func userWishesToExportPDF()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToMigrate()
@@ -616,8 +617,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToCreateAQR() {
 		
-		userWishesToExportPDF()
-//		navigateToChooseQRCodeType()
+		navigateToChooseQRCodeType()
 	}
 	
 	func userWishesToCreateARecoveryQR() {
