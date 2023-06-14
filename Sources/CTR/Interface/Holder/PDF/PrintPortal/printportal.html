@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-        <script>!!pdfTools!!</script>
+		<script>!!pdfTools!!</script>
 		<script>
 			var holderConfigJSON = '!!configJSON!!';
 			var vaccinationJSON = '!!dccJSON!!';
-            
+			
 			var holderConfig = JSON.parse(holderConfigJSON);
 			var vaccination = JSON.parse(vaccinationJSON);
 			
@@ -19,7 +19,7 @@
 			};
 			
 			pdfTools.getDocument(options).then( function(doc) {
-
+				
 				webkit.messageHandlers.coronacheck.postMessage({"doc":doc.output('datauristring')});
 			}).catch( function(err) {
 				console.error('Could not retrieve document:', err)
