@@ -191,10 +191,16 @@ private extension HolderDashboardViewController.Card {
 			// Message Cards with a message + CTA button
 			case let .deviceHasClockDeviation(message, callToActionButtonText, didTapCallToAction),
 				let .configAlmostOutOfDate(message, callToActionButtonText, didTapCallToAction),
-				let .exportReminder(message, callToActionButtonText, didTapCallToAction),
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
+					title: message,
+					closeButtonCommand: nil,
+					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+				))
+				
+			case let .exportReminder(message, callToActionButtonText, didTapCallToAction):
+				return BlueMessageCardView(config: .init(
 					title: message,
 					closeButtonCommand: nil,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)

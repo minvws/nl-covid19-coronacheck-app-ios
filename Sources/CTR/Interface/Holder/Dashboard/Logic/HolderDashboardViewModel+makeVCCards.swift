@@ -181,7 +181,7 @@ extension HolderDashboardViewController.Card {
 		return [
 			.exportReminder(
 				message: L.holder_pdfExport_card_description(),
-				callToActionButtonText: L.general_readmore(),
+				callToActionButtonText: L.holder_pdfExport_card_action(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapExportReminderMoreInfo()
 				}
