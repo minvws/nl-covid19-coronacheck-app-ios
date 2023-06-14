@@ -21,9 +21,10 @@ class PDFExportViewModel {
 	weak var coordinator: (OpenUrlProtocol & PDFExportCoordinatorDelegate)?
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	
-	var title = Observable<String>(value: L.holder_pdfExport_success_title())
+	var title = Observable<String>(value: L.holder_pdfExport_generating_title())
 	var message = Observable<String>(value: L.holder_pdfExport_success_message())
 	var html = Observable<String?>(value: nil)
+	var state = Observable<PDFExportViewController.State>(value: .loading)
 	
 	init(coordinator: (OpenUrlProtocol & PDFExportCoordinatorDelegate)) {
 	
@@ -50,7 +51,7 @@ class PDFExportViewModel {
 			
 			html.value = localHTML
 		} catch {
-
+			displayError(error)
 		}
 	}
 	
@@ -59,10 +60,8 @@ class PDFExportViewModel {
 		guard let filePath else { throw Error.wrongFilePath}
 			do {
 				let content = try String(contentsOfFile: filePath)
-				print(content.prefix(100))
 				return content
 			} catch {
-				print("file not found \(filePath)")
 				throw Error.cantloadFile
 			}
 	}
@@ -70,6 +69,8 @@ class PDFExportViewModel {
 	private enum Error: Swift.Error {
 		case wrongFilePath
 		case cantloadFile
+		case cantCreatePDF
+		case cantSavePDF
 	}
 	
 	private func getPrintableDCCs() throws -> String {
@@ -77,21 +78,17 @@ class PDFExportViewModel {
 		var euPrintAttributes = [EUPrintAttributes]()
 		let greenCards = Current.walletManager.listGreenCards()
 		greenCards.forEach { greenCard in
-			if let credential = getEuCredentialAttributes(greenCard) {
-//				print("credentials: \(credential)")
+			if let credential = getEuCredentialAttributes(greenCard),
+			   let data = greenCard.getLatestInternationalCredential()?.data {
+				let qrString = String(decoding: data, as: UTF8.self)
 				
-				if let data = greenCard.getLatestInternationalCredential()?.data {
-					let qrString = String(decoding: data, as: UTF8.self)
-//					print("QR -> \(qrString)")
-					
-					euPrintAttributes.append(
-						EUPrintAttributes(
-							digitalCovidCertificate: credential.digitalCovidCertificate,
-							expirationTime: Date(timeIntervalSince1970: credential.expirationTime),
-							qr: qrString
-						)
+				euPrintAttributes.append(
+					EUPrintAttributes(
+						digitalCovidCertificate: credential.digitalCovidCertificate,
+						expirationTime: Date(timeIntervalSince1970: credential.expirationTime),
+						qr: qrString
 					)
-				}
+				)
 			}
 		}
 		let printAttributes = PrintAttributes(european: euPrintAttributes)
@@ -102,7 +99,7 @@ class PDFExportViewModel {
 		return String(decoding: encoded, as: UTF8.self)
 	}
 	
-	func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
+	private func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
 		
 		guard greenCard.getType() == GreenCardType.eu else { return nil }
 		
@@ -119,11 +116,18 @@ class PDFExportViewModel {
 		guard let dict = message.body as? [String: AnyObject] else { return }
 		
 		if let dataString = dict["doc"] as? String {
-			saveBase64StringToPDF(dataString)
+			
+			switch saveBase64StringToPDF(dataString) {
+				case .success:
+					title.value = L.holder_pdfExport_success_title()
+					state.value = .success
+				case .failure(let error):
+					displayError(error)
+			}
 		}
 	}
 	
-	func saveBase64StringToPDF(_ base64String: String) {
+	private func saveBase64StringToPDF(_ base64String: String) -> Result<Void, Error> {
 		
 		let withoutLeadingInfoBase64String = base64String.replacingOccurrences(of: "data:application/pdf;base64,", with: "")
 		
@@ -131,21 +135,22 @@ class PDFExportViewModel {
 			var documentsURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last,
 			let convertedData = Data(base64Encoded: withoutLeadingInfoBase64String)
 		else {
-			// handle error when getting documents URL
-			return
+			return .failure(Error.cantCreatePDF)
 		}
 		// File name
 		documentsURL.appendPathComponent("CoronaCheck - Internationaal.pdf")
 		
 		do {
 			try convertedData.write(to: documentsURL)
+			logDebug("PDFExport: Saved to \(documentsURL)")
+			return .success(())
 		} catch {
-			// handle write error here
+			return .failure(Error.cantSavePDF)
 		}
+	}
+	
+	private func displayError(_ error: Swift.Error) {
 		
-		// if you want to get a quick output of where your
-		// file was saved from the simulator on your machine
-		// just print the documentsURL and go there in Finder
-		print(documentsURL)
+		let content = Content(title: "Rolus")
 	}
 }

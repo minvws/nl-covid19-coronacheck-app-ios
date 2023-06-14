@@ -13,6 +13,11 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 	
 	static let postMessageIdentifier: String = "coronacheck"
 	
+	enum State {
+		case loading
+		case success
+	}
+	
 	var webView: WKWebView?
 	
 	override func viewDidLoad() {
@@ -21,11 +26,27 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 		
 		addBackButton(customAction: nil)
 		
+		sceneView.cardView.title = "Internationaal bewijs"
+		sceneView.cardView.message = "Gebruik dit bewijs als je in het buitenland bent of de grens over gaat."
+		sceneView.cardView.actionButtonTitle = "Openen"
+		
 		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }
 		sceneView.messageTextView.linkTouchedHandler = { [weak self] url in
-			
 			self?.viewModel.openUrl(url)
+		}
+		
+		viewModel.state.observe { [weak self] state in
+			switch state {
+				case .loading:
+					self?.sceneView.shouldShowLoadingSpinner = true
+					self?.sceneView.messageTextView.isHidden = true
+					self?.sceneView.cardView.isHidden = true
+				case .success:
+					self?.sceneView.shouldShowLoadingSpinner = false
+					self?.sceneView.messageTextView.isHidden = false
+					self?.sceneView.cardView.isHidden = false
+			}
 		}
 		
 		viewModel.html.observe { [weak self] in
@@ -50,7 +71,6 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 		webView = WKWebView(frame: .zero, configuration: webConfiguration)
 
 		sceneView.stackView.addArrangedSubview(webView!)
-		webView?.heightAnchor.constraint(equalToConstant: 50).isActive = true
 		webView?.loadHTMLString(html, baseURL: nil)
 	}
 }

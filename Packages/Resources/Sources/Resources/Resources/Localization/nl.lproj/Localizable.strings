@@ -625,9 +625,10 @@
 "holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";
 "holder_pdfExport_card_action" = "Mijn bewijzen bewaren";
 "holder_pdfExport_card_description" = "Je kunt nog tot eind dit jaar je bewijzen bewaren. Nieuwe bewijzen maken kan niet meer.";
-"holder_pdfExport_start_buttonTitle" = "Maak PDF";
-"holder_pdfExport_start_message" = "De overheid heeft bepaald dat het vanaf 1 juli 2023 niet meer mogelijk is om nieuwe bewijzen te maken. Het is nog wel mogelijk om van je bestaande bewijzen een PDF te maken. Dat kan hier in de app.";
-"holder_pdfExport_start_title" = "XXXX";
+"holder_pdfExport_generating_title" = "Bestand maken";
+"holder_pdfExport_start_buttonTitle" = "Maak PDF-bestand";
+"holder_pdfExport_start_message" = "Maak een PDF-bestand van je bewijzen die je kunt opslaan op je telefoon of uitprinten. Dit kan nog tot eind dit jaar (2023).";
+"holder_pdfExport_start_title" = "Je bewijzen bewaren";
 "holder_pdfExport_success_message" = "<p>Je hebt een PDF gemaakt van al je bewijzen in de app. Controleer altijd voor vertrek of je het goede bewijs hebt voor jouw bestemming op <a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">Nederland Wereldwijd</a>.</p><p>Open de PDF om deze te downloaden of uit te printen. Gebruik het bewijs om naar andere landen te reizen.</p>";
 "holder_pdfExport_success_title" = "Gelukt! De PDF staat hieronder klaar";
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";

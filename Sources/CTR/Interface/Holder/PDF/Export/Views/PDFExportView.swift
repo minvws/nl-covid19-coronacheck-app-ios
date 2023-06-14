@@ -18,6 +18,10 @@ class PDFExportView: ScrolledStackView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
+		enum Card {
+			static let cornerRadius: CGFloat = 10.0
+			static let borderWidth: CGFloat = 1.0
+		}
 	}
 
 	private let titleLabel: Label = {
@@ -29,9 +33,26 @@ class PDFExportView: ScrolledStackView {
 		
 		return TextView()
 	}()
+	
+	let cardView: PDFExportCardView = {
+		
+		let view = PDFExportCardView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.layer.cornerRadius = ViewTraits.Card.cornerRadius
+		view.layer.borderWidth = ViewTraits.Card.borderWidth
+		view.layer.borderColor = C.grey4()?.cgColor
+		return view
+	}()
 
+	private let activityIndicatorView: ActivityIndicatorView = {
+		
+		let view = ActivityIndicatorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 	
 	override func setupViews() {
+		
 		super.setupViews()
 		
 		backgroundColor = C.white()
@@ -41,10 +62,25 @@ class PDFExportView: ScrolledStackView {
 	}
 	
 	override func setupViewHierarchy() {
+
 		super.setupViewHierarchy()
+		
+		addSubview(activityIndicatorView)
 		
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageTextView)
+		stackView.addArrangedSubview(cardView)
+	}
+	
+	/// Setup the constraints
+	override func setupViewConstraints() {
+		
+		super.setupViewConstraints()
+		
+		NSLayoutConstraint.activate([
+			activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
+			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor)
+		])
 	}
 	
 	// MARK: Public Access
@@ -70,6 +106,12 @@ class PDFExportView: ScrolledStackView {
 			) {
 				self.messageTextView.attributedText = $0
 			}
+		}
+	}
+	
+	var shouldShowLoadingSpinner: Bool = false {
+		didSet {
+			activityIndicatorView.shouldShowLoadingSpinner = shouldShowLoadingSpinner
 		}
 	}
 }

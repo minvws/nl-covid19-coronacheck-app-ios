@@ -55,6 +55,8 @@ protocol PDFExportCoordinatorDelegate: AnyObject {
 	func userWishesToStart()
 	
 	func userWishesToExport()
+	
+	func displayError(content: Content)
 }
 
 extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
@@ -88,6 +90,11 @@ extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
+	}
+	
+	func displayError(content: Content) {
+		
+		presentContent(content: content)
 	}
 }
 
