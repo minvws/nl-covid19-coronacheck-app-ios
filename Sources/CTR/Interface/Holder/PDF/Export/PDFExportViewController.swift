@@ -29,6 +29,9 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 		sceneView.cardView.title = "Internationaal bewijs"
 		sceneView.cardView.message = "Gebruik dit bewijs als je in het buitenland bent of de grens over gaat."
 		sceneView.cardView.actionButtonTitle = "Openen"
+		sceneView.cardView.actionButtonCommand  = { [weak viewModel] in
+			viewModel?.share()
+		}
 		
 		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
 		viewModel.message.observe { [weak self] in self?.sceneView.message = $0 }

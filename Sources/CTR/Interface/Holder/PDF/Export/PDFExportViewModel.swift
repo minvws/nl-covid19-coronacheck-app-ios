@@ -18,6 +18,8 @@ import WebKit
 
 class PDFExportViewModel {
 	
+	private let fileName = "CoronaCheck - International.pdf"
+	
 	weak var coordinator: (OpenUrlProtocol & PDFExportCoordinatorDelegate)?
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	
@@ -138,7 +140,7 @@ class PDFExportViewModel {
 			return .failure(Error.cantCreatePDF)
 		}
 		// File name
-		documentsURL.appendPathComponent("CoronaCheck - Internationaal.pdf")
+		documentsURL.appendPathComponent(self.fileName)
 		
 		do {
 			try convertedData.write(to: documentsURL)
@@ -152,5 +154,14 @@ class PDFExportViewModel {
 	private func displayError(_ error: Swift.Error) {
 		
 		let content = Content(title: "Rolus")
+		coordinator?.displayError(content: content)
 	}
+	
+	func share() {
+		if let url = FileStorage().documentsURL {
+			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
+			coordinator?.userWishesToShare(fileUrl)
+		}
+	}
+	
 }

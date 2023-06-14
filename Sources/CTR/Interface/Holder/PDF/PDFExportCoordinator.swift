@@ -57,6 +57,8 @@ protocol PDFExportCoordinatorDelegate: AnyObject {
 	func userWishesToExport()
 	
 	func displayError(content: Content)
+	
+	func userWishesToShare(_ path: URL)
 }
 
 extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
@@ -95,6 +97,13 @@ extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
 	func displayError(content: Content) {
 		
 		presentContent(content: content)
+	}
+	
+	func userWishesToShare(_ path: URL) {
+		
+		let items: [Any] = [path]
+		let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+		navigationController.present(ac, animated: true)
 	}
 }
 
