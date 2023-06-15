@@ -76,7 +76,6 @@ class PDFExportViewModel: NSObject {
 	func openPDF() {
 		if let url = FileStorage().documentsURL {
 			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
-			//			coordinator?.userWishesToShare(fileUrl)
 			previewURL.value = fileUrl
 		}
 	}
@@ -86,13 +85,6 @@ class PDFExportViewModel: NSObject {
 			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
 			coordinator?.userWishesToShare(fileUrl)
 		}
-	}
-	
-	func userHasEndedPDFPreview() {
-		
-		hasGeneratedPDF = true
-		title.value = L.holder_pdfExport_success_title()
-		state.value = .success
 	}
 }
 
@@ -163,7 +155,9 @@ extension PDFExportViewModel {
 			
 			switch saveBase64StringToPDF(dataString) {
 				case .success:
-					openPDF()
+					hasGeneratedPDF = true
+					title.value = L.holder_pdfExport_success_title()
+					state.value = .success
 				case .failure(let error):
 					displayError(error)
 			}

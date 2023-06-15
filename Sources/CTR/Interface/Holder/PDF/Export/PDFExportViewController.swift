@@ -139,9 +139,4 @@ extension PDFExportViewController: UIDocumentInteractionControllerDelegate {
 		
 		return self
 	}
-	
-	func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
-		
-		viewModel.userHasEndedPDFPreview()
-	}
 }
