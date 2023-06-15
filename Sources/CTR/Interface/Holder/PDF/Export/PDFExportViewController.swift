@@ -36,7 +36,8 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 		sceneView.message = L.holder_pdfExport_success_message()
 		sceneView.cardView.title = L.holder_pdfExport_success_card_title()
 		sceneView.cardView.message = L.holder_pdfExport_success_card_message()
-		sceneView.cardView.actionButtonTitle = L.holder_pdfExport_success_card_action()
+		sceneView.cardView.primaryButtonTitle = L.holder_pdfExport_success_card_action_save()
+		sceneView.cardView.secondaryButtonTitle = L.holder_pdfExport_success_card_action_view()
 	}
 	
 	private func setupObservers() {
@@ -48,12 +49,10 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 					self?.sceneView.shouldShowLoadingSpinner = true
 					self?.sceneView.messageTextView.isHidden = true
 					self?.sceneView.cardView.isHidden = true
-					self?.navigationItem.rightBarButtonItem = nil
 				case .success:
 					self?.sceneView.shouldShowLoadingSpinner = false
 					self?.sceneView.messageTextView.isHidden = false
 					self?.sceneView.cardView.isHidden = false
-					self?.setupShareButton()
 			}
 		}
 		viewModel.html.observe { [weak self] in
@@ -72,33 +71,17 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 	
 	private func setupActions() {
 		
-		sceneView.cardView.actionButtonCommand = { [weak viewModel] in
+		sceneView.cardView.primaryButtonCommand = { [weak viewModel] in
+			viewModel?.sharePDF()
+		}
+		
+		sceneView.cardView.secondaryButtonCommand = { [weak viewModel] in
 			viewModel?.openPDF()
 		}
 		
 		sceneView.messageTextView.linkTouchedHandler = { [weak self] url in
 			self?.viewModel.openUrl(url)
 		}
-	}
-	
-	func setupShareButton() {
-		
-		if #available(iOS 13.0, *) {
-			let config = UIBarButtonItem.Configuration(
-				target: self,
-				action: #selector(share),
-				content: .image(UIImage(systemName: "square.and.arrow.up")),
-				accessibilityIdentifier: "ShareButton",
-				accessibilityLabel: "Share"
-			)
-			let button: UIBarButtonItem = .create(config)
-			navigationItem.rightBarButtonItem = button
-		}
-	}
-	
-	@objc func share() {
-		
-		viewModel.sharePDF()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

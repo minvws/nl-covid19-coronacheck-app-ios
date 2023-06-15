@@ -179,7 +179,7 @@ extension PDFExportViewModel {
 		
 		do {
 			try convertedData.write(to: documentsURL)
-			logDebug("PDFExport: Saved to \(documentsURL)")
+			// logDebug("PDFExport: Saved to \(documentsURL)")
 			return .success(())
 		} catch {
 			return .failure(Error.cantSavePDF)

@@ -31,9 +31,13 @@ class PDFExportCardView: BaseView {
 			static let sideMargin: CGFloat = 24.0
 			static let topMargin: CGFloat = 16.0
 		}
-		enum Button {
-			static let topMargin: CGFloat = 32.0
+		enum PrimaryButton {
+			static let topMargin: CGFloat = 16.0
 			static let bottomMargin: CGFloat = 40.0
+		}
+		enum SecondaryButton {
+			static let topMargin: CGFloat = 32.0
+			static let sideMargin: CGFloat = 16.0
 		}
 	}
 	
@@ -56,8 +60,12 @@ class PDFExportCardView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 	
-	private let actionButton: Button = {
+	private let primaryButton: Button = {
 		return Button(title: "", style: .roundedBlue)
+	}()
+
+	private let secondaryButton: Button = {
+		return Button(title: "", style: .textLabelBlue)
 	}()
 	
 	override func setupViews() {
@@ -65,7 +73,8 @@ class PDFExportCardView: BaseView {
 		super.setupViews()
 		
 		backgroundColor = C.white()
-		actionButton.touchUpInside(self, action: #selector(actionButtonTapped))
+		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 	
 	override func setupViewHierarchy() {
@@ -75,7 +84,8 @@ class PDFExportCardView: BaseView {
 		addSubview(imageView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
-		addSubview(actionButton)
+		addSubview(secondaryButton)
+		addSubview(primaryButton)
 	}
 	
 	/// Setup the constraints
@@ -97,25 +107,42 @@ class PDFExportCardView: BaseView {
 			messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.Message.sideMargin),
 			messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.Message.sideMargin),
-			messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.Title.topMargin),
+			messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ViewTraits.Message.topMargin),
+
+			secondaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+			secondaryButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: ViewTraits.SecondaryButton.topMargin),
+			secondaryButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.SecondaryButton.sideMargin),
+			secondaryButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.SecondaryButton.sideMargin),
 			
-			actionButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			actionButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: ViewTraits.Button.topMargin),
-			actionButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Button.bottomMargin)
-			
+			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+			primaryButton.topAnchor.constraint(equalTo: secondaryButton.bottomAnchor, constant: ViewTraits.PrimaryButton.topMargin),
+			primaryButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.PrimaryButton.bottomMargin)
 		])
 	}
 	
-	@objc private func actionButtonTapped() {
+	@objc private func primaryButtonTapped() {
 		
-		actionButtonCommand?()
+		primaryButtonCommand?()
 	}
 	
-	var actionButtonCommand: (() -> Void)?
+	@objc private func secondaryButtonTapped() {
+		
+		secondaryButtonCommand?()
+	}
 	
-	var actionButtonTitle: String? {
+	var primaryButtonCommand: (() -> Void)?
+	
+	var secondaryButtonCommand: (() -> Void)?
+	
+	var primaryButtonTitle: String? {
 		didSet {
-			actionButton.title = actionButtonTitle
+			primaryButton.title = primaryButtonTitle
+		}
+	}
+	
+	var secondaryButtonTitle: String? {
+		didSet {
+			secondaryButton.title = secondaryButtonTitle
 		}
 	}
 	
