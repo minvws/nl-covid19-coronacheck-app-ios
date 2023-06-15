@@ -30,6 +30,7 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = true
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
 		environmentSpies.featureFlagManagerSpy.stubbedIsScanningEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		
 		window = UIWindow()
@@ -111,6 +112,37 @@ class HolderMainMenuViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.general_menu()
 		sut.assertImage(containedInNavigationController: true)
+	}
+	
+	func test_content_disabledScanEvent_disabledAddEvent_disabledMigration_enabledArchiveMode() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsMigrationEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsScanningEventsEnabledResult = false
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.title) == L.general_menu()
+		sut.assertImage(containedInNavigationController: true)
+	}
+
+	func test_userWishesToExportPDF() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		sut = MenuViewController(viewModel: HolderMainMenuViewModel(coordinatorDelegateSpy))
+		loadView()
+		
+		// When
+		(sut.sceneView.stackView.arrangedSubviews[0] as? MenuRowView)?.sendActions(for: .touchUpInside)
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToExportPDF) == true
 	}
 	
 	func test_userWishesToCreateAQR() {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>!!pdfTools!!</script>
+		<script>
+			var holderConfigJSON = '!!configJSON!!';
+			var vaccinationJSON = '!!dccJSON!!';
+			
+			var holderConfig = JSON.parse(holderConfigJSON);
+			var vaccination = JSON.parse(vaccinationJSON);
+			
+			var proofs = pdfTools.parseProofData(vaccination, holderConfig, 'nl');
+			var options = {
+				proofs,
+				locale: 'nl',
+				qrSizeInCm: 8,
+				createdAt: new Date(),
+				internationalProofScanned: false,
+			};
+			
+			pdfTools.getDocument(options).then( function(doc) {
+				
+				webkit.messageHandlers.coronacheck.postMessage({"doc":doc.output('datauristring')});
+			}).catch( function(err) {
+				console.error('Could not retrieve document:', err)
+				webkit.messageHandlers.coronacheck.postMessage({"error":err});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="page"></div>
+	</body>
+</html>

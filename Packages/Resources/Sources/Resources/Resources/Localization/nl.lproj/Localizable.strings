@@ -578,6 +578,7 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_login" = "Log in op %@";
+"holder_menu_exportPDF" = "Bewijzen bewaren";
 "holder_menu_helpInfo" = "Hulp & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 "holder_menu_migration" = "Mijn bewijzen overzetten";
@@ -622,6 +623,17 @@
 "holder_paperproof_startscanning_title" = "Een coronabewijs inscannen";
 "holder_paperproof_whichProofsCanBeUsed_body" = "<p>Je kunt de volgende bewijzen inscannen en toevoegen aan de app:</p><ul><li>Een papieren bewijs gekregen van je zorgverlener of de overheid. Heb je een bewijs voor in Nederland en voor internationaal gebruik? Scan dan de <b>internationale QR-code</b>.</li><li>Een coronabewijs met QR-code van je test of vaccinatie uit het buitenland. Je hebt je QR-code op papier of in een buitenlandse corona-app staan.</li></ul>";
 "holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";
+"holder_pdfExport_card_action" = "Mijn bewijzen bewaren";
+"holder_pdfExport_card_description" = "Je kunt nog tot eind dit jaar je bewijzen bewaren. Nieuwe bewijzen maken kan niet meer.";
+"holder_pdfExport_generating_title" = "Bestand maken";
+"holder_pdfExport_start_buttonTitle" = "Maak PDF-bestand";
+"holder_pdfExport_start_message" = "Maak een PDF-bestand van je bewijzen die je kunt opslaan op je telefoon of uitprinten. Dit kan nog tot eind dit jaar (2023).";
+"holder_pdfExport_start_title" = "Je bewijzen bewaren";
+"holder_pdfExport_success_card_action" = "Openen";
+"holder_pdfExport_success_card_message" = "Gebruik dit bewijs als je in het buitenland bent of de grens over gaat.";
+"holder_pdfExport_success_card_title" = "Internationaal bewijs";
+"holder_pdfExport_success_message" = "Open het bestand hieronder om je bewijs op te slaan of uit te printen.";
+"holder_pdfExport_success_title" = "Jouw bewijzen";
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
 "holder_qr_code_expired_explanation_title" = "Verlopen QR-code";

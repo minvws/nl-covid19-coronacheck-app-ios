@@ -51,6 +51,20 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedStoreParametersList.append((data, file))
 	}
 
+	var invokedRead = false
+	var invokedReadCount = 0
+	var invokedReadParameters: (file: CryptoLibUtility.File, Void)?
+	var invokedReadParametersList = [(file: CryptoLibUtility.File, Void)]()
+	var stubbedReadResult: Data!
+
+	func read(_ file: CryptoLibUtility.File) -> Data? {
+		invokedRead = true
+		invokedReadCount += 1
+		invokedReadParameters = (file, ())
+		invokedReadParametersList.append((file, ()))
+		return stubbedReadResult
+	}
+
 	var invokedCheckFile = false
 	var invokedCheckFileCount = 0
 	var invokedCheckFileParameters: (file: CryptoLibUtility.File, Void)?

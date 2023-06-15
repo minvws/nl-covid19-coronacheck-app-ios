@@ -173,6 +173,22 @@ extension HolderDashboardViewController.Card {
 		]
 	}
 	
+	static func makeExportReminderCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.shouldShowExportReminderBanner else { return [] }
+		return [
+			.exportReminder(
+				message: L.holder_pdfExport_card_description(),
+				callToActionButtonText: L.holder_pdfExport_card_action(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapExportReminderMoreInfo()
+				}
+			)
+		]
+	}
+	
 	static func makeDisclosurePolicyInformation0GBanner(
 		state: HolderDashboardViewModel.State,
 		actionHandler: HolderDashboardCardUserActionHandling

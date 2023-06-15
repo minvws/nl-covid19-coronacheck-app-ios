@@ -154,6 +154,17 @@ func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Voi
 	}
 }
 
+func beExportReminderCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .beExportReminderCard with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .exportReminder(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
 func beAddCertificateCard(test: @escaping (String, () -> Void) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beAddCertificateCardCard with matching value") { expression, message in
 		if let actual = try expression.evaluate(),

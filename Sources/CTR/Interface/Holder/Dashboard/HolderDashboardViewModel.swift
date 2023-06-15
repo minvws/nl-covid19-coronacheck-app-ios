@@ -23,6 +23,7 @@ protocol HolderDashboardCardUserActionHandling: AnyObject {
 	func didTapCloseExpiredQR(expiredQR: HolderDashboardViewModel.ExpiredQR)
 	func didTapConfigAlmostOutOfDateCTA()
 	func didTapDeviceHasClockDeviationMoreInfo()
+	func didTapExportReminderMoreInfo()
 	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem])
 	func didTapMismatchedIdentityEventsDeletedDismiss(items: [RemovedEventItem])
 	func didTapRecommendedUpdate()
@@ -98,6 +99,11 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		}
 		
 		var shouldShow0GDisclosurePolicyBecameActiveBanner = false
+		
+		var shouldShowExportReminderBanner: Bool {
+			guard Current.featureFlagManager.isInArchiveMode() else { return false }
+			return Current.walletManager.listGreenCards().isNotEmpty
+		}
 		
 		// Has QR Cards or expired QR Cards
 		func dashboardHasQRCards(for validityRegion: QRCodeValidityRegion) -> Bool {
@@ -452,6 +458,7 @@ final class HolderDashboardViewModel: HolderDashboardViewModelType {
 		cards += VCCard.makeDeviceHasClockDeviationCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeConfigAlmostOutOfDateCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeRecommendedUpdateCard(state: state, actionHandler: actionHandler)
+		cards += VCCard.makeExportReminderCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeBlockedEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeMismatchedIdentityEventsCard(state: state, actionHandler: actionHandler)
 		cards += VCCard.makeExpiredQRCard(validityRegion: validityRegion, state: state, actionHandler: actionHandler)
@@ -495,6 +502,10 @@ extension HolderDashboardViewModel: HolderDashboardCardUserActionHandling {
 	func didTapBlockedEventsDeletedDismiss(blockedEventItems: [RemovedEventItem]) {
 		Current.walletManager.removeExistingBlockedEvents()
 		Current.userSettings.hasShownBlockedEventsAlert = false
+	}
+	
+	func didTapExportReminderMoreInfo() {
+		coordinator?.userWishesToExportPDF()
 	}
 	
 	func didTapMismatchedIdentityEventsDeletedMoreInfo(items: [RemovedEventItem]) {
