@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 import ReusableViews
@@ -16,7 +16,7 @@ import Managers
 
 import WebKit
 
-class PDFExportViewModel {
+class PDFExportViewModel: NSObject {
 	
 	private let fileName = "CoronaCheck - International.pdf"
 	
@@ -24,12 +24,13 @@ class PDFExportViewModel {
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	
 	var title = Observable<String>(value: L.holder_pdfExport_generating_title())
-	var message = Observable<String>(value: L.holder_pdfExport_success_message())
 	var html = Observable<String?>(value: nil)
 	var state = Observable<PDFExportViewController.State>(value: .loading)
+	var previewURL = Observable<URL?>(value: nil)
 	
 	init(coordinator: (OpenUrlProtocol & PDFExportCoordinatorDelegate)) {
-	
+		
+		super.init()
 		self.coordinator = coordinator
 	}
 	
@@ -46,7 +47,7 @@ class PDFExportViewModel {
 			guard let configData = Current.cryptoLibUtility.read(.remoteConfiguration) else { return }
 			let config = String(decoding: configData, as: UTF8.self).replacingOccurrences(of: #"\"#, with: "")
 			let dccs = try getPrintableDCCs()
-				
+			
 			localHTML = localHTML.replacingOccurrences(of: "!!pdfTools!!", with: pdfTools)
 			localHTML = localHTML.replacingOccurrences(of: "!!configJSON!!", with: config)
 			localHTML = localHTML.replacingOccurrences(of: "!!dccJSON!!", with: dccs)
@@ -57,22 +58,48 @@ class PDFExportViewModel {
 		}
 	}
 	
-	private func getContent(filePath: String?) throws -> String {
-		
-		guard let filePath else { throw Error.wrongFilePath}
-			do {
-				let content = try String(contentsOfFile: filePath)
-				return content
-			} catch {
-				throw Error.cantloadFile
-			}
-	}
-	
 	private enum Error: Swift.Error {
 		case wrongFilePath
 		case cantloadFile
 		case cantCreatePDF
 		case cantSavePDF
+	}
+	
+	private func displayError(_ error: Swift.Error) {
+		
+		let content = Content(title: "Rolus")
+		coordinator?.displayError(content: content)
+	}
+	
+	func openPDF() {
+		if let url = FileStorage().documentsURL {
+			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
+			//			coordinator?.userWishesToShare(fileUrl)
+			previewURL.value = fileUrl
+		}
+	}
+	
+	func sharePDF() {
+		if let url = FileStorage().documentsURL {
+			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
+			coordinator?.userWishesToShare(fileUrl)
+		}
+	}
+}
+
+// MARK: - Fetch Data
+
+extension PDFExportViewModel {
+	
+	private func getContent(filePath: String?) throws -> String {
+		
+		guard let filePath else { throw Error.wrongFilePath}
+		do {
+			let content = try String(contentsOfFile: filePath)
+			return content
+		} catch {
+			throw Error.cantloadFile
+		}
 	}
 	
 	private func getPrintableDCCs() throws -> String {
@@ -111,6 +138,11 @@ class PDFExportViewModel {
 		}
 		return nil
 	}
+}
+
+// MARK: - Handle PDF
+
+extension PDFExportViewModel {
 	
 	func handleMessage(message: WKScriptMessage) {
 		
@@ -150,18 +182,4 @@ class PDFExportViewModel {
 			return .failure(Error.cantSavePDF)
 		}
 	}
-	
-	private func displayError(_ error: Swift.Error) {
-		
-		let content = Content(title: "Rolus")
-		coordinator?.displayError(content: content)
-	}
-	
-	func share() {
-		if let url = FileStorage().documentsURL {
-			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
-			coordinator?.userWishesToShare(fileUrl)
-		}
-	}
-	
 }

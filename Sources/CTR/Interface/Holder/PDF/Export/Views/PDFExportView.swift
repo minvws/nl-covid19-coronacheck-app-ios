@@ -1,9 +1,9 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import UIKit
 import ReusableViews
@@ -23,7 +23,7 @@ class PDFExportView: ScrolledStackView {
 			static let borderWidth: CGFloat = 1.0
 		}
 	}
-
+	
 	private let titleLabel: Label = {
 		
 		return Label(title3: nil, montserrat: true).multiline().header()
@@ -43,7 +43,7 @@ class PDFExportView: ScrolledStackView {
 		view.layer.borderColor = C.grey4()?.cgColor
 		return view
 	}()
-
+	
 	private let activityIndicatorView: ActivityIndicatorView = {
 		
 		let view = ActivityIndicatorView()
@@ -62,7 +62,7 @@ class PDFExportView: ScrolledStackView {
 	}
 	
 	override func setupViewHierarchy() {
-
+		
 		super.setupViewHierarchy()
 		
 		addSubview(activityIndicatorView)
