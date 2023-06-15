@@ -20,6 +20,8 @@ class PDFExportViewModel: NSObject {
 	
 	private let fileName = "CoronaCheck - International.pdf"
 	
+	private var hasGeneratedPDF = false
+	
 	weak var coordinator: (OpenUrlProtocol & PDFExportCoordinatorDelegate)?
 	weak private var cryptoManager: CryptoManaging? = Current.cryptoManager
 	
@@ -85,6 +87,13 @@ class PDFExportViewModel: NSObject {
 			coordinator?.userWishesToShare(fileUrl)
 		}
 	}
+	
+	func userHasEndedPDFPreview() {
+		
+		hasGeneratedPDF = true
+		title.value = L.holder_pdfExport_success_title()
+		state.value = .success
+	}
 }
 
 // MARK: - Fetch Data
@@ -146,6 +155,7 @@ extension PDFExportViewModel {
 	
 	func handleMessage(message: WKScriptMessage) {
 		
+		guard !hasGeneratedPDF else { return }
 		guard message.name == PDFExportViewController.postMessageIdentifier else { return }
 		guard let dict = message.body as? [String: AnyObject] else { return }
 		
@@ -153,8 +163,7 @@ extension PDFExportViewModel {
 			
 			switch saveBase64StringToPDF(dataString) {
 				case .success:
-					title.value = L.holder_pdfExport_success_title()
-					state.value = .success
+					openPDF()
 				case .failure(let error):
 					displayError(error)
 			}

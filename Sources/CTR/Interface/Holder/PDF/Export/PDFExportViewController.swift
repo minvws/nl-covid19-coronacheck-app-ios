@@ -121,7 +121,7 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 	}
 }
 
-// MARK: WKScriptMessageHandler
+// MARK: - WKScriptMessageHandler
 
 extension PDFExportViewController: WKScriptMessageHandler {
 	
@@ -131,9 +131,17 @@ extension PDFExportViewController: WKScriptMessageHandler {
 	}
 }
 
+// MARK: - UIDocumentInteractionControllerDelegate
+
 extension PDFExportViewController: UIDocumentInteractionControllerDelegate {
 	
 	func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+		
 		return self
+	}
+	
+	func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
+		
+		viewModel.userHasEndedPDFPreview()
 	}
 }

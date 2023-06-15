@@ -632,8 +632,8 @@
 "holder_pdfExport_success_card_action" = "Openen";
 "holder_pdfExport_success_card_message" = "Gebruik dit bewijs als je in het buitenland bent of de grens over gaat.";
 "holder_pdfExport_success_card_title" = "Internationaal bewijs";
-"holder_pdfExport_success_message" = "<p>Je hebt een PDF gemaakt van al je bewijzen in de app. Controleer altijd voor vertrek of je het goede bewijs hebt voor jouw bestemming op <a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">Nederland Wereldwijd</a>.</p><p>Open de PDF om deze te downloaden of uit te printen. Gebruik het bewijs om naar andere landen te reizen.</p>";
-"holder_pdfExport_success_title" = "Gelukt! De PDF staat hieronder klaar";
+"holder_pdfExport_success_message" = "Open het bestand hieronder om je bewijs op te slaan of uit te printen.";
+"holder_pdfExport_success_title" = "Jouw bewijzen";
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
 "holder_qr_code_expired_explanation_title" = "Verlopen QR-code";
