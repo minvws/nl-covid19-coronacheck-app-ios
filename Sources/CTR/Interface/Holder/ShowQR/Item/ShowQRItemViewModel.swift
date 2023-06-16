@@ -137,12 +137,20 @@ class ShowQRItemViewModel {
 	
 	func setupOverlay() {
 		
+		var originType = OriginType.vaccination
+		if let rawType = greenCard.castOrigins()?.last?.type,
+		   let castedType =  OriginType(rawValue: rawType) {
+			originType = castedType
+		}
+		
 		switch state {
 			case .expired:
 				overlayTitle = L.holder_qr_code_expired_overlay_title()
 				overlayIcon = I.expired()
 				overlayRevealTitle = L.holderShowqrShowqr()
-				overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
+				if originType != .test {
+					overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
+				}
 			case .irrelevant:
 				overlayTitle = L.holderShowqrQrhidden()
 				overlayIcon = I.eye()
