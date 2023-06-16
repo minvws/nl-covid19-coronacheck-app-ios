@@ -754,6 +754,8 @@ extension HolderDashboardViewModelTests {
 		// Arrange
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		let greencards = GreenCard.sampleInternationalCredentialsVaccinationExpiringIn10DaysWithMoreToFetchWithValidTest(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
 		sut = vendSut()
 		
 		let qrCards = [
@@ -768,20 +770,20 @@ extension HolderDashboardViewModelTests {
 		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 		
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(3))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_filledState_international_0G_message()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()
 		}))
-		expect(self.sut.internationalCards.value[1]).toEventually(beDisclosurePolicyInformationCard())
-		expect(self.sut.internationalCards.value[2]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
+		expect(self.sut.internationalCards.value[1]).toEventually(beExportReminderCard())
+		expect(self.sut.internationalCards.value[2]).toEventually(beDisclosurePolicyInformationCard())
+		expect(self.sut.internationalCards.value[3]).toEventually(beEuropeanUnionQRCard(test: { title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, expiryCountdownEvaluator, error in
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(1))
 			expect(nowValidityTexts[0].kind) == .past
-			expect(nowValidityTexts[0].lines[0]) == "Herstelbewijs:"
-			expect(nowValidityTexts[0].lines[1]) == "Verlopen op 13 juli 2021"
+			expect(nowValidityTexts[0].lines[0]) == "Verlopen op 13 juli 2021"
 		}))
 	}
 

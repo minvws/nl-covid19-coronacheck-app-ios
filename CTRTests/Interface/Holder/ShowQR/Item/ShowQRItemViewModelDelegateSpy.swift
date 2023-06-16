@@ -6,6 +6,7 @@
 */
 
 import XCTest
+import Persistence
 @testable import CTR
 
 class ShowQRItemViewModelDelegateSpy: ShowQRItemViewModelDelegate {
@@ -20,10 +21,14 @@ class ShowQRItemViewModelDelegateSpy: ShowQRItemViewModelDelegate {
 
 	var invokedShowInfoExpiredQR = false
 	var invokedShowInfoExpiredQRCount = 0
+	var invokedShowInfoExpiredQRParameters: (type: OriginType, Void)?
+	var invokedShowInfoExpiredQRParametersList = [(type: OriginType, Void)]()
 
-	func showInfoExpiredQR() {
+	func showInfoExpiredQR(type: OriginType) {
 		invokedShowInfoExpiredQR = true
 		invokedShowInfoExpiredQRCount += 1
+		invokedShowInfoExpiredQRParameters = (type, ())
+		invokedShowInfoExpiredQRParametersList.append((type, ()))
 	}
 
 	var invokedShowInfoHiddenQR = false

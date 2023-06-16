@@ -18,7 +18,7 @@ protocol ShowQRItemViewModelDelegate: AnyObject {
 	
 	func itemIsNotValid()
 	
-	func showInfoExpiredQR()
+	func showInfoExpiredQR(type: OriginType)
 	
 	func showInfoHiddenQR()
 }
@@ -142,7 +142,10 @@ class ShowQRItemViewModel {
 				overlayTitle = L.holder_qr_code_expired_overlay_title()
 				overlayIcon = I.expired()
 				overlayRevealTitle = L.holderShowqrShowqr()
-				overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
+				if originType != .test {
+					// 5631 Hide Info button for negative test
+					overlayInfoTitle = L.holder_qr_code_hidden_explanation_button()
+				}
 			case .irrelevant:
 				overlayTitle = L.holderShowqrQrhidden()
 				overlayIcon = I.eye()
@@ -151,6 +154,14 @@ class ShowQRItemViewModel {
 			case .regular:
 				break
 		}
+	}
+	
+	var originType: OriginType {
+		if let rawType = greenCard.castOrigins()?.last?.type,
+		   let castedType = OriginType(rawValue: rawType) {
+			return castedType
+		}
+		return .vaccination
 	}
 	
 	func updateQRVisibility() {
@@ -277,7 +288,7 @@ class ShowQRItemViewModel {
 		
 		switch state {
 			case .expired:
-				delegate?.showInfoExpiredQR()
+				delegate?.showInfoExpiredQR(type: originType)
 			case .irrelevant:
 				delegate?.showInfoHiddenQR()
 			case .regular:

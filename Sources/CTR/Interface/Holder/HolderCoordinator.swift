@@ -39,7 +39,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
-	func userWishesMoreInfoAboutExpiredQR()
+	func userWishesMoreInfoAboutExpiredQR(type: OriginType)
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem])
@@ -52,6 +52,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
+	func userWishesToExportPDF()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToMigrate()
@@ -447,6 +448,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
+	func userWishesToExportPDF() {
+		
+		let exportCoordinator = PDFExportCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		startChildCoordinator(exportCoordinator)
+	}
+	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem]) {
 
 		let bulletpoints = compactRemovedEventItems(blockedEventItems)
@@ -502,16 +512,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 		
-	func userWishesMoreInfoAboutExpiredQR() {
+	func userWishesMoreInfoAboutExpiredQR(type: OriginType) {
+		
+		var body: String? {
+			guard Current.featureFlagManager.isInArchiveMode() else {
+				return L.holder_qr_code_expired_explanation_description()
+			}
+			switch type {
+				case .vaccination: return L.holder_qr_code_expired_explanation_description_archive_vaccination()
+				case .recovery: return L.holder_qr_code_expired_explanation_description_archive_recovery()
+				default: return nil
+			}
+		}
 	
 		let viewModel = BottomSheetContentViewModel(
 			content: Content(
 				title: L.holder_qr_code_expired_explanation_title(),
-				body: L.holder_qr_code_expired_explanation_description(),
+				body: body,
 				primaryActionTitle: nil,
 				primaryAction: nil,
-				secondaryActionTitle: L.holder_qr_code_expired_explanation_action(),
-				secondaryAction: { [weak self] in
+				secondaryActionTitle: Current.featureFlagManager.isInArchiveMode() ? nil : L.holder_qr_code_expired_explanation_action(),
+				secondaryAction: Current.featureFlagManager.isInArchiveMode() ? nil : { [weak self] in
 					guard let self,
 						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
 					self.openUrl(url)
@@ -527,7 +548,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = BottomSheetContentViewController(viewModel: viewModel)
 		presentAsBottomSheet(viewController)
 	}
-
+	
 	func userWishesMoreInfoAboutHiddenQR() {
 		
 		let viewModel = BottomSheetContentViewModel(
@@ -588,6 +609,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToChooseTestLocation() {
+		
 		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
@@ -605,6 +627,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAQR() {
+		
 		navigateToChooseQRCodeType()
 	}
 	
@@ -805,6 +828,21 @@ extension HolderCoordinator: MigrationFlowDelegate {
 	private func removeMigrationCoordinator() {
 		
 		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
+	}
+}
+
+extension HolderCoordinator: PDFExportFlowDelegate {
+	
+	func exportCompleted() {
+		
+		removePDFExportCoordinator()
+	}
+	
+	private func removePDFExportCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is PDFExportCoordinator }) {
 			removeChildCoordinator(childCoordinator)
 		}
 	}
