@@ -189,7 +189,7 @@ class AppCoordinator: Coordinator {
 	/// Show the Archived ModeView
 	private func showArchivedMode() {
 		
-		let viewModel = AppArchivedViewModel(coordinator: self, informationUrl: URL(string: "https://coronacheck.nl"))
+		let viewModel = AppArchivedViewModel(coordinator: self, informationUrl: URL(string: L.holder_archiveMode_link()))
 		displayAppStatus(with: viewModel)
 	}
 	
