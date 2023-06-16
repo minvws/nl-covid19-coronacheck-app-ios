@@ -203,6 +203,6 @@ class BlueMessageCardView: MessageCardView {
 	override func setupViews() {
 		
 		super.setupViews()
-		view?.backgroundColor = shouldUseDarkMode ? C.grey5() : C.primaryBlue5()
+		view?.backgroundColor = C.blueBackground()
 	}
 }
