@@ -3,7 +3,7 @@
 "appstatus_diskfull_body" = "Because your phone’s storage is full, CoronaCheck doesn't work. Please free up space on your phone and reopen CoronaCheck.";
 "appstatus_diskfull_button" = "Close CoronaCheck";
 "appstatus_diskfull_title" = "Your storage is full";
-"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the CoronaCheck helpdesk via %@ and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
+"appstatus_launchError_body" = "<p>We can’t launch the app right now. For more information, contact the helpdesk via %@ and pass on the error code below.</p><p><b>Error code:</b><br /> %@ </p>";
 "appstatus_launchError_button" = "Close the app";
 "appstatus_launchError_title" = "Something went wrong";
 "general.add" = "Add";
@@ -426,7 +426,10 @@
 "holder_addVaccination_message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p>";
 "holder_addVaccination_title" = "Retrieve your vaccination details";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Retrieve my positive test result too";
-"holder_archiveMode_button" = "Go to CoronaCheck.nl";
+"holder_archiveMode_button" = "Read more";
+"holder_archiveMode_description" = "This app is no longer in use because you cannot create coronavirus certificates with CoronaCheck anymore.";
+"holder_archiveMode_link" = "https://coronacheck.nl/en/app-in-archivemode";
+"holder_archiveMode_title" = "App out of use";
 "holder_authentication_popup_digid_message_testFlow" = "Want to retrieve your test result? Log in again with DigiD.";
 "holder_authentication_popup_digid_message_vaccinationFlow" = "Want to retrieve your vaccination details? Log in again with DigiD.";
 "holder_authentication_popup_digid_title" = "Login was cancelled";
@@ -605,6 +608,8 @@
 "holder_migration_import_errorcode_message" = "<p>Something is going wrong while importing your details.</p><p><b>Error code:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is your result in? Log in with DigiD to retrieve your test result from the GGD.";
 "holder_negativetest_ggd_title" = "Retrieve your test details";
+"holder_newintheapp_archiveMode_body" = "You can no longer create new coronavirus certificates with this app. However, the certificates you already had in the app can be saved as a file.";
+"holder_newintheapp_archiveMode_title" = "Saving certificates only";
 "holder_newintheapp_foreignproofs_body" = "Do you have a coronavirus certificate with QR code of a test or vaccination from abroad? Now you can add your certificate to CoronaCheck. Choose “Scan to add certificate” in the menu.";
 "holder_newintheapp_foreignproofs_title" = "Adding foreign certificates";
 "holder_noDigiD_buttonSubTitle_continueWithoutDigiD" = "If you can’t or don’t want to request a DigiD";
@@ -623,8 +628,12 @@
 "holder_paperproof_startscanning_title" = "Scan to add a certificate";
 "holder_paperproof_whichProofsCanBeUsed_body" = "<p>You can scan and add the following certificates to the app:</p><ul><li>A paper certificate you got from your health care provider or the government. Did you receive a certificate for in the Netherlands and for international use? Scan the <b>international QR code</b>.</li><li>A coronavirus certificate with QR code of your test or vaccination from abroad. You have the QR code on paper or in a foreign coronavirus app.</li></ul>";
 "holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
+"holder_pdfExport_card_action" = "Save my certificates";
+"holder_pdfExport_card_description" = "You can still save your certificates until the end of this year. Creating new certificates is no longer possible.";
 "holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired it means your vaccination is still valid, but the certificate that you’ve added isn't. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
+"holder_qr_code_expired_explanation_description_archive_recovery" = "<p>If the QR code from your recovery certificate has expired, it means that your positive test result is more than 180 days old.</p><p>With an expired QR code, you can still demonstrate that you have had coronavirus in the past. However, you can no longer use this QR code as a recovery certificate.</p>";
+"holder_qr_code_expired_explanation_description_archive_vaccination" = "<p>If your QR code has expired it means your vaccination is still valid, but the QR code in this app isn't.</p><p>With expired QR codes, you can still demonstrate that you have been vaccinated. However, you may no longer be able to use these QR codes everywhere as a vaccination certificate.</p>";
 "holder_qr_code_expired_explanation_title" = "Expired QR code";
 "holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/en/faq-in-app/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
 "holder_qr_code_expired_overlay_title" = "QR code has expired";
