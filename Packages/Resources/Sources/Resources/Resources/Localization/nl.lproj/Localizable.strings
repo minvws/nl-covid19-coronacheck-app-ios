@@ -637,6 +637,8 @@
 "holder_pdfExport_success_title" = "Jouw bewijzen";
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
+"holder_qr_code_expired_explanation_description_archive_recovery" = "<p>Als de QR-code van je herstelbewijs is verlopen betekent dit dat je positieve testuitslag ouder dan 180 dagen is.</p><p>Met een verlopen QR-code kun je nog wel aantonen dat je ooit corona hebt gehad. Je kunt deze QR-code alleen niet meer als herstelbewijs gebruiken.</p>";
+"holder_qr_code_expired_explanation_description_archive_vaccination" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar de QR-code in deze app niet meer. </p><p>Met verlopen QR-codes kun je nog wel aantonen dat je gevaccineerd bent. Je kunt deze QR-codes alleen niet overal meer als vaccinatiebewijs gebruiken.</p>";
 "holder_qr_code_expired_explanation_title" = "Verlopen QR-code";
 "holder_qr_code_expired_explanation_url" = "https://coronacheck.nl/nl/faq-in-app/1-12-de-qr-code-van-mijn-vaccinatie-is-verlopen-wat-moet-ik-doen/";
 "holder_qr_code_expired_overlay_title" = "QR-code is verlopen";

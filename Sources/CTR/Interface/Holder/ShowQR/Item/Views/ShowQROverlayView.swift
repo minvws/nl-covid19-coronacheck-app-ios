@@ -224,6 +224,7 @@ class ShowQROverlayView: BaseView {
 	var info: String? {
 		didSet {
 			infoButton.title = info
+			infoButton.isHidden = info == nil
 		}
 	}
 	

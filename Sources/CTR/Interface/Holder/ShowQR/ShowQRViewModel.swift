@@ -231,8 +231,8 @@ extension ShowQRViewModel: ShowQRItemViewModelDelegate {
 		coordinator?.navigateBackToStart()
 	}
 	
-	func showInfoExpiredQR() {
-		coordinator?.userWishesMoreInfoAboutExpiredQR()
+	func showInfoExpiredQR(type: OriginType) {
+		coordinator?.userWishesMoreInfoAboutExpiredQR(type: type)
 	}
 	
 	func showInfoHiddenQR() {
