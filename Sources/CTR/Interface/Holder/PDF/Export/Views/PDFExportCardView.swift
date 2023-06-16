@@ -32,8 +32,9 @@ class PDFExportCardView: BaseView {
 			static let topMargin: CGFloat = 16.0
 		}
 		enum PrimaryButton {
-			static let topMargin: CGFloat = 16.0
+			static let topMargin: CGFloat = 24.0
 			static let bottomMargin: CGFloat = 40.0
+			static let height: CGFloat = 52.0
 		}
 		enum SecondaryButton {
 			static let topMargin: CGFloat = 32.0
@@ -116,7 +117,8 @@ class PDFExportCardView: BaseView {
 			
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.topAnchor.constraint(equalTo: secondaryButton.bottomAnchor, constant: ViewTraits.PrimaryButton.topMargin),
-			primaryButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.PrimaryButton.bottomMargin)
+			primaryButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.PrimaryButton.bottomMargin),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.PrimaryButton.height)
 		])
 	}
 	

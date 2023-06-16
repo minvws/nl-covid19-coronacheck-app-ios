@@ -19,14 +19,14 @@ class PDFExportView: ScrolledStackView {
 			static let kerning: CGFloat = -0.26
 		}
 		enum Card {
-			static let cornerRadius: CGFloat = 10.0
+			static let cornerRadius: CGFloat = 16.0
 			static let borderWidth: CGFloat = 1.0
 		}
 	}
 	
 	private let titleLabel: Label = {
 		
-		return Label(title3: nil, montserrat: true).multiline().header()
+		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
 	let messageTextView: TextView = {
