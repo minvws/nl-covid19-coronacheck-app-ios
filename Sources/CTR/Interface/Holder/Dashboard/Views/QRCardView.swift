@@ -376,7 +376,7 @@ class QRCardView: BaseView {
 
 			for (index, text) in validityText.lines.enumerated() {
 				let label: Label
-				if validityText.kind == .past && index == validityText.lines.endIndex - 1 && validityText.lines.count > 1 {
+				if validityText.kind == .past && index == validityText.lines.endIndex - 1 {
 					// Show the last line of a multinline expired text in red.
 					label = Label(bodyBold: text)
 					label.textColor = C.ccError()

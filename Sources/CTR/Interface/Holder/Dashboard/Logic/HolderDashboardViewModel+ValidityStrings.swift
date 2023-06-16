@@ -63,6 +63,14 @@ extension QRCard {
 					}
 					
 				// -- EU Tests --
+
+				case (.isExpired, .europeanUnion(let dccEvaluator), .test):
+					if let euTest = dccEvaluator(greencard, now)?.digitalCovidCertificate.tests?.first {
+						let testType = Current.mappingManager.getTestType(euTest.typeOfTest) ?? euTest.typeOfTest
+						return validityText_isExpired_eu_test(testType: testType, validFrom: origin.eventDate, expirationTime: origin.expirationTime)
+					} else {
+						return validityText_hasBegun_eu_fallback(origin: origin, now: now)
+					}
 					
 				case (_, .europeanUnion(let dccEvaluator), .test):
 					if let euTest = dccEvaluator(greencard, now)?.digitalCovidCertificate.tests?.first {
@@ -84,7 +92,7 @@ extension QRCard {
 					)
 					
 				case (.isExpired, .europeanUnion, .recovery):
-					return validityText_expired_eu_recovery(
+					return validityText_isExpired_eu_recovery(
 						origin: origin,
 						expirationTime: origin.expirationTime
 					)
@@ -134,6 +142,20 @@ private func validityText_hasBegun_eu_test(testType: String, validFrom: Date) ->
 			"\(L.generalTestdate().capitalizingFirstLetter()): \(formatter.string(from: validFrom))"
 		],
 		kind: .current
+	)
+}
+
+private func validityText_isExpired_eu_test(testType: String, validFrom: Date, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+	let formatter = DateFormatter.Format.dayNameDayNumericMonthWithTime
+	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
+	let valueString = "\(L.holder_dashboard_qrValidityDate_expired()) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
+	return .init(
+		lines: [
+			"\(L.generalTesttype().capitalizingFirstLetter()): \(testType)",
+			"\(L.generalTestdate().capitalizingFirstLetter()): \(formatter.string(from: validFrom))",
+			valueString
+		],
+		kind: .past
 	)
 }
 
@@ -198,7 +220,7 @@ private func validityText_hasNotYetBegun_eu_recovery(validFrom: Date, expiration
 	)
 }
 
-private func validityText_expired_eu_recovery(origin: QRCard.GreenCard.Origin, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
+private func validityText_isExpired_eu_recovery(origin: QRCard.GreenCard.Origin, expirationTime: Date) -> HolderDashboardViewController.ValidityText {
 	
 	guard Current.featureFlagManager.isInArchiveMode() else {
 		return validityText_isExpired_fallback()
@@ -207,10 +229,10 @@ private func validityText_expired_eu_recovery(origin: QRCard.GreenCard.Origin, e
 	let prefix = L.holder_dashboard_qrValidityDate_expired()
 	let expiryDateString = DateFormatter.Format.dayMonthYear.string(from: expirationTime)
 	
-	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
+//	let titleString = origin.type.localizedProof.capitalizingFirstLetter() + ":"
 	let valueString = "\(prefix) \(expiryDateString)".trimmingCharacters(in: .whitespacesAndNewlines)
 	return .init(
-		lines: [titleString, valueString],
+		lines: [valueString],
 		kind: .past
 	)
 }
