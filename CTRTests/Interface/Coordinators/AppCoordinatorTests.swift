@@ -15,6 +15,7 @@ import XCTest
 @testable import Resources
 import Nimble
 import ViewControllerPresentationSpy
+import Persistence
 
 class AppCoordinatorTests: XCTestCase {
 
@@ -31,6 +32,7 @@ class AppCoordinatorTests: XCTestCase {
 		environmentSpies = setupEnvironmentSpies()
 		environmentSpies.cryptoLibUtilitySpy.stubbedIsInitialized = true
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		navigationSpy = NavigationControllerSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy
@@ -667,6 +669,43 @@ class AppCoordinatorTests: XCTestCase {
 	func test_startAsHolder() {
 		
 		// Given
+		sut.flavor = .holder
+		
+		// When
+		sut.applicationShouldStart()
+		
+		// Then
+		expect(self.environmentSpies.remoteConfigManagerSpy.invokedRegisterTriggers) == true
+		expect(self.environmentSpies.cryptoLibUtilitySpy.invokedRegisterTriggers) == true
+		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(self.sut.childCoordinators.last is HolderCoordinator) == true
+	}
+	
+	func test_startAsHolder_inArchiveMode_noEvents() {
+		
+		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		sut.window.rootViewController = viewControllerSpy
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = []
+		sut.flavor = .holder
+		
+		// When
+		sut.applicationShouldStart()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(haveCount(0))
+		expect(viewControllerSpy.presentCalled) == true
+		expect(viewControllerSpy.thePresentedViewController is AppStatusViewController) == true
+		expect((viewControllerSpy.thePresentedViewController as? AppStatusViewController)?.viewModel is AppArchivedViewModel) == true
+	}
+	
+	func test_startAsHolder_inArchiveMode_withEvents() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: environmentSpies.dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
+		environmentSpies.walletManagerSpy.stubbedListEventGroupsResult = [eventGroup]
 		sut.flavor = .holder
 		
 		// When

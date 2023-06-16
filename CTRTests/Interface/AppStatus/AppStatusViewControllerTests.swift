@@ -232,4 +232,25 @@ class AppStatusViewControllerTests: XCTestCase {
 		
 		sut.assertImage()
 	}
+	
+	func test_holder_appArchivedMode() {
+		
+		// Given
+		let viewModel = AppArchivedViewModel(
+			coordinator: appCoordinatorSpy,
+			informationUrl: nil
+		)
+		sut = AppStatusViewController(viewModel: viewModel)
+		
+		// When
+		loadView()
+		
+		// Then
+		expect(self.sut.sceneView.title) == L.holder_archiveMode_title()
+		expect(self.sut.sceneView.message) == L.holder_archiveMode_description()
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == L.holder_archiveMode_button()
+		expect(self.sut.sceneView.image) == I.endOfLife()
+		
+		sut.assertImage()
+	}
 }

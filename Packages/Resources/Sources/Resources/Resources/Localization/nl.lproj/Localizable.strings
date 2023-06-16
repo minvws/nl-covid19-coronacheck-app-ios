@@ -3,7 +3,7 @@
 "appstatus_diskfull_body" = "Omdat de opslag van je telefoon vol is werkt CoronaCheck niet. Maak ruimte vrij op je telefoon en open CoronaCheck opnieuw.";
 "appstatus_diskfull_button" = "Sluit CoronaCheck";
 "appstatus_diskfull_title" = "Je opslag is vol";
-"appstatus_launchError_body" = "<p>Op dit moment kan de app niet gestart worden. Bel voor meer informatie de CoronaCheck helpdesk op %@ en geef de foutcode hieronder door.</p><p><b>Foutcode:</b><br /> %@ </p>";
+"appstatus_launchError_body" = "<p>Op dit moment kan de app niet gestart worden. Bel voor meer informatie de helpdesk op %@ en geef de foutcode hieronder door.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "appstatus_launchError_button" = "Sluit de app";
 "appstatus_launchError_title" = "Er gaat iets mis";
 "general.add" = "Toevoegen";
@@ -426,6 +426,10 @@
 "holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
 "holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
 "holder_addVaccine_alsoCollectPositiveTestResults_checkbox" = "Haal ook mijn positieve testuitslag op";
+"holder_archiveMode_button" = "Lees meer";
+"holder_archiveMode_description" = "Deze app is niet meer in gebruik omdat je geen coronabewijzen meer kunt maken met CoronaCheck.";
+"holder_archiveMode_link" = "https://coronacheck.nl/nl/app-in-archiefmode";
+"holder_archiveMode_title" = "App buiten gebruik";
 "holder_authentication_popup_digid_message_testFlow" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
 "holder_authentication_popup_digid_message_vaccinationFlow" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder_authentication_popup_digid_title" = "Inloggen afgebroken";
@@ -605,6 +609,8 @@
 "holder_migration_import_errorcode_message" = "<p>Er gaat iets mis met het importeren van je gegevens.</p><p><b>Foutcode:</b><br /> %@ </p>";
 "holder_negativetest_ggd_message" = "Is je uitslag bekend? Log in met DigiD om je testuitslag bij de GGD op te halen.";
 "holder_negativetest_ggd_title" = "Gegevens van je test ophalen";
+"holder_newintheapp_archiveMode_body" = "Je kunt met deze app geen nieuwe coronabewijzen meer maken. De bewijzen die je al in de app had staan kun je nog wel als bestand bewaren.";
+"holder_newintheapp_archiveMode_title" = "Alleen nog bewijzen bewaren";
 "holder_newintheapp_foreignproofs_body" = "Heb je een coronabewijs met QR-code van een test of vaccinatie uit het buitenland? Dan kun je jouw bewijs nu toevoegen aan CoronaCheck. Kies in het menu voor “Coronabewijs inscannen”.";
 "holder_newintheapp_foreignproofs_title" = "Buitenlandse bewijzen toevoegen";
 "holder_noDigiD_buttonSubTitle_continueWithoutDigiD" = "Als je geen DigiD kunt of wilt aanvragen";

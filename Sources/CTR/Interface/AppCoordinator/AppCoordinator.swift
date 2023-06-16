@@ -132,6 +132,11 @@ class AppCoordinator: Coordinator {
 	/// Start the app as a holder
 	private func startAsHolder() {
 		
+		guard !shouldShowArchivedMode() else {
+			showArchivedMode()
+			return
+		}
+		
 		guard childCoordinators.isEmpty else {
 			if childCoordinators.first is HolderCoordinator {
 				childCoordinators.first?.start()
@@ -169,6 +174,22 @@ class AppCoordinator: Coordinator {
 	private func showInternetRequired() {
 		
 		let viewModel = InternetRequiredViewModel(coordinator: self)
+		displayAppStatus(with: viewModel)
+	}
+	
+	private func shouldShowArchivedMode() -> Bool {
+		
+		guard Current.featureFlagManager.isInArchiveMode() else {
+			return false
+		}
+		
+		return Current.walletManager.listEventGroups().isEmpty
+	}
+	
+	/// Show the Archived ModeView
+	private func showArchivedMode() {
+		
+		let viewModel = AppArchivedViewModel(coordinator: self, informationUrl: URL(string: L.holder_archiveMode_link()))
 		displayAppStatus(with: viewModel)
 	}
 	
