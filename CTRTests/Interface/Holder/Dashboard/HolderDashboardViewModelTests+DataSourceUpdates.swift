@@ -781,10 +781,9 @@ extension HolderDashboardViewModelTests {
 			
 			let nowValidityTexts = validityTextEvaluator(now)
 			expect(nowValidityTexts).to(haveCount(1))
-			expect(nowValidityTexts[0].lines).to(haveCount(2))
+			expect(nowValidityTexts[0].lines).to(haveCount(1))
 			expect(nowValidityTexts[0].kind) == .past
-			expect(nowValidityTexts[0].lines[0]) == "Herstelbewijs:"
-			expect(nowValidityTexts[0].lines[1]) == "Verlopen op 13 juli 2021"
+			expect(nowValidityTexts[0].lines[0]) == "Verlopen op 13 juli 2021"
 		}))
 	}
 
