@@ -24,7 +24,7 @@ struct StartPDFExportFactory: StartPDFExportFactoryProtocol {
 			PagedAnnoucementItem(
 				title: L.holder_pdfExport_start_title(),
 				content: L.holder_pdfExport_start_message(),
-				image: I.onboarding.validity(),
+				image: I.pdF.start(),
 				tagline: nil,
 				step: 0,
 				nextButtonTitle: L.holder_pdfExport_start_buttonTitle()
