@@ -95,7 +95,7 @@ class NewFeaturesManagerTests: XCTestCase {
 		let expectedPage = PagedAnnoucementItem(
 			title: L.holder_newintheapp_archiveMode_title(),
 			content: L.holder_newintheapp_archiveMode_body(),
-			image: I.newInTheApp.paperDCC(),
+			image: I.newInTheApp.archiveMode(),
 			imageBackgroundColor: C.white(),
 			tagline: L.general_newintheapp(),
 			step: 0
