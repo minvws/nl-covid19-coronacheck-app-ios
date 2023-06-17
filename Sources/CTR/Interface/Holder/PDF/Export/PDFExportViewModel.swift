@@ -6,14 +6,13 @@
  */
 
 import UIKit
+import Models
+import Managers
+import Persistence
 import ReusableViews
 import Resources
 import Shared
-
-import Persistence
-import Models
-import Managers
-
+import Transport
 import WebKit
 
 class PDFExportViewModel: NSObject {
@@ -46,7 +45,11 @@ class PDFExportViewModel: NSObject {
 		do {
 			let pdfTools = try getContent(filePath: Bundle.main.path(forResource: "coronacheck-web-pdf-tools", ofType: "js"))
 			var localHTML = try getContent(filePath: Bundle.main.path(forResource: "printportal", ofType: "html"))
-			guard let configData = Current.cryptoLibUtility.read(.remoteConfiguration) else { return }
+			
+			guard let configData = Current.cryptoLibUtility.read(.remoteConfiguration) else {
+				displayError(Error.failedToLoadFile)
+				return
+			}
 			let config = String(decoding: configData, as: UTF8.self).replacingOccurrences(of: #"\"#, with: "")
 			let dccs = try getPrintableDCCs()
 			
@@ -62,15 +65,11 @@ class PDFExportViewModel: NSObject {
 	
 	private enum Error: Swift.Error {
 		case wrongFilePath
-		case cantloadFile
-		case cantCreatePDF
-		case cantSavePDF
-	}
-	
-	private func displayError(_ error: Swift.Error) {
-		
-		let content = Content(title: "Rolus")
-		coordinator?.displayError(content: content)
+		case failedToLoadFile
+		case failedToCreatePDF
+		case failedToSavePDF
+		case noDCCsToExport
+		case failedToEncode
 	}
 	
 	func openPDF() {
@@ -99,14 +98,18 @@ extension PDFExportViewModel {
 			let content = try String(contentsOfFile: filePath)
 			return content
 		} catch {
-			throw Error.cantloadFile
+			throw Error.failedToLoadFile
 		}
 	}
 	
 	private func getPrintableDCCs() throws -> String {
 		
-		var euPrintAttributes = [EUPrintAttributes]()
 		let greenCards = Current.walletManager.listGreenCards()
+		guard greenCards.isNotEmpty else {
+			throw Error.noDCCsToExport
+		}
+		
+		var euPrintAttributes = [EUPrintAttributes]()
 		greenCards.forEach { greenCard in
 			if let credential = getEuCredentialAttributes(greenCard),
 			   let data = greenCard.getLatestInternationalCredential()?.data {
@@ -125,8 +128,12 @@ extension PDFExportViewModel {
 		
 		let encoder = JSONEncoder()
 		encoder.dateEncodingStrategy = .iso8601
-		let encoded = try encoder.encode(printAttributes)
-		return String(decoding: encoded, as: UTF8.self)
+		do {
+			let encoded = try encoder.encode(printAttributes)
+			return String(decoding: encoded, as: UTF8.self)
+		} catch {
+			throw Error.failedToEncode
+		}
 	}
 	
 	private func getEuCredentialAttributes(_ greenCard: GreenCard) -> EuCredentialAttributes? {
@@ -172,7 +179,7 @@ extension PDFExportViewModel {
 			var documentsURL = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).last,
 			let convertedData = Data(base64Encoded: withoutLeadingInfoBase64String)
 		else {
-			return .failure(Error.cantCreatePDF)
+			return .failure(Error.failedToCreatePDF)
 		}
 		// File name
 		documentsURL.appendPathComponent(self.fileName)
@@ -182,7 +189,57 @@ extension PDFExportViewModel {
 			// logDebug("PDFExport: Saved to \(documentsURL)")
 			return .success(())
 		} catch {
-			return .failure(Error.cantSavePDF)
+			return .failure(Error.failedToSavePDF)
 		}
 	}
+}
+
+// MARK: - Error Handling
+
+extension PDFExportViewModel {
+	
+	private func displayError(_ error: Swift.Error) {
+		
+		let clientCode: ErrorCode.ClientCode
+		switch error {
+			case Error.wrongFilePath: clientCode = .wrongFilePath
+			case Error.failedToLoadFile: clientCode = .failedToLoadFile
+			case Error.failedToCreatePDF: clientCode = .failedToCreatePDF
+			case Error.failedToSavePDF: clientCode = .failedToSavePDF
+			case Error.noDCCsToExport: clientCode = .noDCC
+			case Error.failedToEncode: clientCode = .failedToEncode
+			default: clientCode = .unhandled
+		}
+		
+		let errorCode = ErrorCode(flow: .pdfFlow, step: .createPDF, clientCode: clientCode)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			body: L.holder_pdfExport_error_body(Current.contactInformationProvider.phoneNumberLink, "\(errorCode)"),
+			primaryActionTitle: L.general_toMyOverview(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.exportFailed()
+			}
+		)
+		coordinator?.displayError(content: content)
+	}
+}
+
+extension ErrorCode.Flow {
+	
+	static let pdfFlow = ErrorCode.Flow(value: "15")
+}
+
+extension ErrorCode.Step {
+	
+	static let createPDF = ErrorCode.Step(value: "10")
+}
+
+extension ErrorCode.ClientCode {
+	
+	static let wrongFilePath = ErrorCode.ClientCode(value: "120")
+	static let failedToLoadFile = ErrorCode.ClientCode(value: "121")
+	static let failedToCreatePDF = ErrorCode.ClientCode(value: "122")
+	static let failedToSavePDF = ErrorCode.ClientCode(value: "123")
+	static let noDCC = ErrorCode.ClientCode(value: "124")
+	static let failedToEncode = ErrorCode.ClientCode(value: "031")
 }
