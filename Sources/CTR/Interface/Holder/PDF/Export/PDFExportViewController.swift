@@ -49,10 +49,12 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 					self?.sceneView.shouldShowLoadingSpinner = true
 					self?.sceneView.messageTextView.isHidden = true
 					self?.sceneView.cardView.isHidden = true
+					UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
 				case .success:
 					self?.sceneView.shouldShowLoadingSpinner = false
 					self?.sceneView.messageTextView.isHidden = false
 					self?.sceneView.cardView.isHidden = false
+					UIAccessibility.post(notification: .screenChanged, argument: self?.sceneView.title)
 			}
 		}
 		viewModel.html.observe { [weak self] in
