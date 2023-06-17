@@ -632,6 +632,7 @@
 "holder_paperproof_whichProofsCanBeUsed_title" = "Welke bewijzen kan ik inscannen?";
 "holder_pdfExport_card_action" = "Mijn bewijzen bewaren";
 "holder_pdfExport_card_description" = "Je kunt nog tot eind dit jaar je bewijzen bewaren. Nieuwe bewijzen maken kan niet meer.";
+"holder_pdfExport_error_body" = "<p>Er gaat iets mis met het maken van het PDF-bestand met jouw bewijzen. </p><p>Heb je vragen? Bel de CoronaCheck helpdesk op %@ en geef onderstaande foutcode door.</p><p><b>Foutcode:</b><br />%@</p>";
 "holder_pdfExport_generating_title" = "Bestand maken";
 "holder_pdfExport_start_buttonTitle" = "Maak bestand";
 "holder_pdfExport_start_message" = "Maak een bestand van je bewijzen dat je kunt opslaan op je telefoon of tablet, of printen. Dit kan nog tot eind dit jaar (2023).";
