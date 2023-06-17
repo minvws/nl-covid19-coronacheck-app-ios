@@ -840,6 +840,12 @@ extension HolderCoordinator: PDFExportFlowDelegate {
 		removePDFExportCoordinator()
 	}
 	
+	func exportFailed() {
+		
+		removePDFExportCoordinator()
+		navigateToDashboard()
+	}
+	
 	private func removePDFExportCoordinator() {
 		
 		if let childCoordinator = childCoordinators.first(where: { $0 is PDFExportCoordinator }) {

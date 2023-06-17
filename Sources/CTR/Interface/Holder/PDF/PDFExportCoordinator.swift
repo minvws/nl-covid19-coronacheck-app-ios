@@ -13,6 +13,8 @@ import UIKit
 protocol PDFExportFlowDelegate: AnyObject {
 
 	func exportCompleted()
+	
+	func exportFailed()
 }
 
 class PDFExportCoordinator: NSObject, Coordinator, OpenUrlProtocol {
@@ -59,6 +61,8 @@ protocol PDFExportCoordinatorDelegate: AnyObject {
 	func displayError(content: Content)
 	
 	func userWishesToShare(_ path: URL)
+	
+	func exportFailed()
 }
 
 extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
@@ -104,6 +108,11 @@ extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
 		let items: [Any] = [path]
 		let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
 		navigationController.present(ac, animated: true)
+	}
+	
+	func exportFailed() {
+
+		delegate?.exportFailed()
 	}
 }
 
