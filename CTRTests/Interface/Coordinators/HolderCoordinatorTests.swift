@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 
 import XCTest
 @testable import CTR
@@ -612,6 +612,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutHiddenQR() throws {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -624,6 +625,26 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verborgen QR-code"
+		expect(viewModel.content.body) == "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>"
+	}
+	
+	func test_userWishesMoreInfoAboutHiddenQR_inArchiveMode() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutHiddenQR()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verborgen QR-code"
+		expect(viewModel.content.body) == "<p>QR-codes worden verborgen als je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien als dat nodig is.</p>"
 	}
 	
 	func test_userWishesToViewQRs() {

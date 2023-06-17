@@ -422,6 +422,7 @@
 "holder.vaccination.nolist.title" = "No vaccinations available";
 "holder.vaccination.start.action" = "Log in with DigiD";
 "holder.vaccination.start.nodigid" = "Don’t have DigiD?";
+"holder_aboutThisApp_archiveMode_description" = "<p>CoronaCheck is the official app of the Netherlands for showing coronavirus entry passes.</p><p>The app is developed by the Ministry of Health, Welfare and Sport. You can use CoronaCheck to prove you have been vaccinated, tested negative, or recovered from coronavirus.</p>";
 "holder_addVaccination_alsoCollectPositiveTestResults_message" = "<p><b>Did you have coronavirus?</b><br />In some cases, you need one less vaccination to be fully vaccinated. Retrieve your oldest positive test result as well to possibly have it count for your vaccination certificate.</p>";
 "holder_addVaccination_message" = "<p>Did you receive a (booster) vaccination? Log in using DigiD to retrieve all your vaccination details.</p>";
 "holder_addVaccination_title" = "Retrieve your vaccination details";
@@ -582,6 +583,7 @@
 "holder_listRemoteEvents_title" = "Are the details correct?";
 "holder_listRemoteEvents_vaccination_message" = "If the details are correct you can create a certificate.";
 "holder_login" = "Sign in to %@";
+"holder_menu_exportPDF" = "Save my certificates";
 "holder_menu_helpInfo" = "Help & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Add vaccination or test";
 "holder_menu_migration" = "Transfer my certificates";
@@ -630,6 +632,16 @@
 "holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
 "holder_pdfExport_card_action" = "Save my certificates";
 "holder_pdfExport_card_description" = "You can still save your certificates until the end of this year. Creating new certificates is no longer possible.";
+"holder_pdfExport_generating_title" = "Creating certificate";
+"holder_pdfExport_start_buttonTitle" = "Create certificate";
+"holder_pdfExport_start_message" = "Create a file from your certificates that you can save on your phone or tablet, or print. This can be done until the end of this year (2023).";
+"holder_pdfExport_start_title" = "Saving your certificates";
+"holder_pdfExport_success_card_action_save" = "Save file";
+"holder_pdfExport_success_card_action_view" = "View file";
+"holder_pdfExport_success_card_message" = "Use this certificate if you are abroad or crossing the border.";
+"holder_pdfExport_success_card_title" = "International certificate";
+"holder_pdfExport_success_message" = "You can save, send or print the file with your certificates below.";
+"holder_pdfExport_success_title" = "Success!";
 "holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired it means your vaccination is still valid, but the certificate that you’ve added isn't. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
 "holder_qr_code_expired_explanation_description_archive_recovery" = "<p>If the QR code from your recovery certificate has expired, it means that your positive test result is more than 180 days old.</p><p>With an expired QR code, you can still demonstrate that you have had coronavirus in the past. However, you can no longer use this QR code as a recovery certificate.</p>";
@@ -640,6 +652,7 @@
 "holder_qr_code_hidden_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_hidden_explanation_button" = "What does this mean?";
 "holder_qr_code_hidden_explanation_description" = "<p>If the QR code of your vaccination is hidden, you probably don’t need it. This is because there are QR codes of your more recent vaccinations in the app too.</p><p>You can still show and use hidden QR codes if needed.</p>";
+"holder_qr_code_hidden_explanation_description_archive_vaccination" = "<p>QR codes will be hidden if you also have QR codes of more recent vaccinations in the app.</p><p>Hidden QR codes can still be shown if needed.</p>";
 "holder_qr_code_hidden_explanation_title" = "Hidden QR code";
 "holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/en/faq-in-app/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_recovery_alert_message" = "Doing so will stop the creation of your certificate. You will have to retrieve your test result again later.";

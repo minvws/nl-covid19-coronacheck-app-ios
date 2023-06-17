@@ -422,6 +422,7 @@
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
 "holder.vaccination.start.action" = "Log in met DigiD";
 "holder.vaccination.start.nodigid" = "Heb je geen DigiD?";
+"holder_aboutThisApp_archiveMode_description" = "<p>CoronaCheck is de officiële app van Nederland voor het tonen van coronatoegangsbewijzen.</p><p>De app is ontwikkeld door het ministerie van Volksgezondheid, Welzijn en Sport. Met CoronaCheck kun je aantonen dat je gevaccineerd, negatief getest, of hersteld van corona bent.</p>";
 "holder_addVaccination_alsoCollectPositiveTestResults_message" = "<p><b>Heb je corona gehad?</b><br />Dan heb je soms een prik minder nodig om volledig gevaccineerd te zijn. Haal ook je oudste positieve testuitslag op om die mogelijk mee te laten tellen in je vaccinatiebewijs.</p>";
 "holder_addVaccination_message" = "<p>Heb je een (booster)vaccinatie gehad? Log in met DigiD om al je vaccinatiegegevens op te halen.</p>";
 "holder_addVaccination_title" = "Gegevens van je vaccinatie ophalen";
@@ -582,7 +583,7 @@
 "holder_listRemoteEvents_title" = "Kloppen de gegevens?";
 "holder_listRemoteEvents_vaccination_message" = "Als de gegevens kloppen kun je een bewijs maken.";
 "holder_login" = "Log in op %@";
-"holder_menu_exportPDF" = "Bewijzen bewaren";
+"holder_menu_exportPDF" = "Mijn bewijzen bewaren";
 "holder_menu_helpInfo" = "Hulp & Info";
 "holder_menu_listItem_addVaccinationOrTest_title" = "Vaccinatie of test toevoegen";
 "holder_menu_migration" = "Mijn bewijzen overzetten";
@@ -632,15 +633,15 @@
 "holder_pdfExport_card_action" = "Mijn bewijzen bewaren";
 "holder_pdfExport_card_description" = "Je kunt nog tot eind dit jaar je bewijzen bewaren. Nieuwe bewijzen maken kan niet meer.";
 "holder_pdfExport_generating_title" = "Bestand maken";
-"holder_pdfExport_start_buttonTitle" = "Maak PDF-bestand";
-"holder_pdfExport_start_message" = "Maak een PDF-bestand van je bewijzen die je kunt opslaan op je telefoon of uitprinten. Dit kan nog tot eind dit jaar (2023).";
+"holder_pdfExport_start_buttonTitle" = "Maak bestand";
+"holder_pdfExport_start_message" = "Maak een bestand van je bewijzen dat je kunt opslaan op je telefoon of tablet, of printen. Dit kan nog tot eind dit jaar (2023).";
 "holder_pdfExport_start_title" = "Je bewijzen bewaren";
 "holder_pdfExport_success_card_action_save" = "Bestand opslaan";
 "holder_pdfExport_success_card_action_view" = "Bekijk bestand";
 "holder_pdfExport_success_card_message" = "Gebruik dit bewijs als je in het buitenland bent of de grens over gaat.";
 "holder_pdfExport_success_card_title" = "Internationaal bewijs";
-"holder_pdfExport_success_message" = "Open het bestand hieronder om je bewijs op te slaan of uit te printen.";
-"holder_pdfExport_success_title" = "Jouw bewijzen";
+"holder_pdfExport_success_message" = "Het bestand met jouw bewijzen hieronder kun je opslaan, versturen of printen.";
+"holder_pdfExport_success_title" = "Gelukt!";
 "holder_qr_code_expired_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>";
 "holder_qr_code_expired_explanation_description_archive_recovery" = "<p>Als de QR-code van je herstelbewijs is verlopen betekent dit dat je positieve testuitslag ouder dan 180 dagen is.</p><p>Met een verlopen QR-code kun je nog wel aantonen dat je ooit corona hebt gehad. Je kunt deze QR-code alleen niet meer als herstelbewijs gebruiken.</p>";
@@ -651,6 +652,7 @@
 "holder_qr_code_hidden_explanation_action" = "Lees meer op CoronaCheck.nl";
 "holder_qr_code_hidden_explanation_button" = "Wat betekent dit?";
 "holder_qr_code_hidden_explanation_description" = "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>";
+"holder_qr_code_hidden_explanation_description_archive_vaccination" = "<p>QR-codes worden verborgen als je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien als dat nodig is.</p>";
 "holder_qr_code_hidden_explanation_title" = "Verborgen QR-code";
 "holder_qr_code_hidden_explanation_url" = "https://coronacheck.nl/nl/faq-in-app/1-11-mijn-qr-code-is-verborgen-wat-betekent-dit/";
 "holder_recovery_alert_message" = "Hierdoor stop je het maken van een bewijs en moet je later opnieuw je testuitslag ophalen.";
