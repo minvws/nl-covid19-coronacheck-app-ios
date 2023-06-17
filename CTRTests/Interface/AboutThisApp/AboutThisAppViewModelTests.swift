@@ -37,6 +37,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 	}
 	
 	// MARK: Tests
@@ -58,6 +59,35 @@ class AboutThisAppViewModelTests: XCTestCase {
 		// Then
 		expect(sut.title) == L.holderAboutTitle()
 		expect(sut.message) == L.holderAboutText()
+		expect(sut.menu).to(haveCount(1))
+		expect(sut.menu[0].title) == nil
+		expect(sut.menu[0].options).to(haveCount(4))
+		expect(sut.menu[0].options[0].identifier) == .privacyStatement
+		expect(sut.menu[0].options[1].identifier) == .accessibility
+		expect(sut.menu[0].options[2].identifier) == .colophon
+		expect(sut.menu[0].options[3].identifier) == .deeplink
+		
+		expect(outcomes).to(beEmpty())
+	}
+	
+	func test_initializationWithHolder_archiveMode() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		
+		// When
+		var outcomes = [AboutThisAppViewModel.Outcome]()
+		
+		let sut = AboutThisAppViewModel(
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder
+		) { outcome in
+			outcomes.append(outcome)
+		}
+		
+		// Then
+		expect(sut.title) == L.holderAboutTitle()
+		expect(sut.message) == L.holder_aboutThisApp_archiveMode_description()
 		expect(sut.menu).to(haveCount(1))
 		expect(sut.menu[0].title) == nil
 		expect(sut.menu[0].options).to(haveCount(4))

@@ -551,10 +551,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesMoreInfoAboutHiddenQR() {
 		
+		var body: String {
+			Current.featureFlagManager.isInArchiveMode() ? L.holder_qr_code_hidden_explanation_description_archive_vaccination() : L.holder_qr_code_hidden_explanation_description()
+		}
+		
 		let viewModel = BottomSheetContentViewModel(
 			content: Content(
 				title: L.holder_qr_code_hidden_explanation_title(),
-				body: L.holder_qr_code_hidden_explanation_description(),
+				body: body,
 				primaryActionTitle: nil,
 				primaryAction: nil,
 				secondaryActionTitle: L.holder_qr_code_hidden_explanation_action(),

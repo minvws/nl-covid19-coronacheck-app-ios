@@ -80,7 +80,8 @@ class AboutThisAppViewModel {
 		self.outcomeHandler = outcomeHandler
 		self.flavor = flavor
 		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
-		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
+		let holderAboutText = Current.featureFlagManager.isInArchiveMode() ? L.holder_aboutThisApp_archiveMode_description() : L.holderAboutText()
+		self.message = flavor == .holder ? holderAboutText : L.verifierAboutText()
 
 		appVersion = L.aboutthisapp_appversion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 		
