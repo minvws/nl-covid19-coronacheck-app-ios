@@ -27,6 +27,7 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_14.2.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+  MOBILE_CORE_COMMIT_HASH: 0b1d6d8c2a699449f614e90a0e2e5cc643fa67a1 # v0.4.5
 
 jobs:
   template_firebase-deploy:
@@ -67,6 +68,8 @@ jobs:
 
     - name: Build mobile core
       uses: ./.github/actions/build-core
+      with:
+        mobile_core_commit_hash: ${{ env.MOBILE_CORE_COMMIT_HASH }}
 
     - name: Generate project
       run: |

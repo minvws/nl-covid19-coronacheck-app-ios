@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import CTR
-import Clcore
+import Mobilecore
 
 class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 

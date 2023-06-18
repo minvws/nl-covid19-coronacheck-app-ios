@@ -51,8 +51,8 @@ report.xml
 /Sources/Transport/Transport-Info.plist
 /TransportTests/Info.plist
 /Sources/Shared/Shared-Info.plist
-/clcore.xcframework
-/Frameworks/clcore.xcframework
-/Packages/CryptoCore/Frameworks/clcore.xcframework
-/tmp-clcore
+/mobilecore.xcframework
+/Frameworks/mobilecore.xcframework
+/Packages/CryptoCore/Frameworks/mobilecore.xcframework
+/tmp-mobile-core
 /tmp

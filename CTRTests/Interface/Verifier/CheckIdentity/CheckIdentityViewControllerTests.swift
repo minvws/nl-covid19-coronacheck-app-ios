@@ -9,7 +9,7 @@ import XCTest
 @testable import CTR
 import SnapshotTesting
 import Nimble
-import Clcore
+import Mobilecore
 import Shared
 import TestingShared
 @testable import Resources

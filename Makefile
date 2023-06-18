@@ -40,7 +40,7 @@ mint_ci:
 # -- -- Generate MobileCore framework -- 
 
 compile_mobilecore: 
-	Scripts/fetch_ctcl.sh
+	Scripts/fetch_mobile_core.sh
 
 # -- -- Generate Xcode project -- 
 

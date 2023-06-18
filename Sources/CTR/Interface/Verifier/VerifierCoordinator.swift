@@ -6,7 +6,7 @@
  */
 
 import UIKit
-import Clcore
+import Mobilecore
 import Transport
 import Shared
 import ReusableViews

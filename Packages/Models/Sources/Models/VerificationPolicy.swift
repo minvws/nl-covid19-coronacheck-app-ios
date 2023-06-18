@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import Clcore
+import Mobilecore
 
 public enum VerificationPolicy: Codable, CaseIterable {
 	/// 3G policy
