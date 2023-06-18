@@ -43,7 +43,7 @@ class PDFExportViewModel: NSObject {
 	func viewDidAppear() {
 		
 		do {
-			let pdfTools = try getContent(filePath: Bundle.main.path(forResource: "coronacheck-web-pdf-tools", ofType: "js"))
+			let pdfTools = try getContent(filePath: Bundle.main.path(forResource: "web-pdf-tools", ofType: "js"))
 			var localHTML = try getContent(filePath: Bundle.main.path(forResource: "printportal", ofType: "html"))
 			
 			guard let configData = Current.cryptoLibUtility.read(.remoteConfiguration) else {
