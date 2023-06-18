@@ -169,11 +169,11 @@ The majority of our third-party dependencies are included as Swift Packages. Her
 
 * [Fastlane](https://github.com/fastlane/fastlane): for automating the build and distribution pipeline.
 
-### CLCore
+### MobileCore
 
 The Android and iOS apps share a core library, written in Go, which is responsible for producing the QR-code image, and for validating scanned QR-codes. 
 
-`Scripts/fetch_ctcl.sh` builds an xcframework which is linked by the app. 
+`Scripts/fetch_mobile_core.sh` builds an xcframework which is linked by the app. 
 
 ## Development
 

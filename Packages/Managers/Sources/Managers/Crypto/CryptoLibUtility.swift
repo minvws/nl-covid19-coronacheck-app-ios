@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import Reachability
-import Clcore
+import Mobilecore
 import Transport
 import Shared
 import Persistence

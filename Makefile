@@ -1,6 +1,6 @@
 # -- Main entrypoint
 
-dev: install_dev_deps install_githooks remove_old_rswift generate_project compile_mobilecore open_project
+dev: install_dev_deps install_githooks remove_old_rswift generate_project compile_mobilecore build_web_pdf_tools open_project
 
 # -- Setup Environment --
 
@@ -40,7 +40,12 @@ mint_ci:
 # -- -- Generate MobileCore framework -- 
 
 compile_mobilecore: 
-	Scripts/fetch_ctcl.sh
+	Scripts/fetch_mobile_core.sh
+
+# -- -- Generate web pdf tools javascript file --
+
+build_web_pdf_tools:
+	Scripts/build_web_pdf_tools.sh
 
 # -- -- Generate Xcode project -- 
 

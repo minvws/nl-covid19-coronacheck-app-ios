@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import CTR
-import Clcore
+import Mobilecore
 import Nimble
 import Shared
 @testable import Models

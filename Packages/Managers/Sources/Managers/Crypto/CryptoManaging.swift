@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import Clcore
+import Mobilecore
 import Models
 
 public protocol CryptoManaging: AnyObject {

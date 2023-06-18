@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
-import Clcore
+import Mobilecore
 import Shared
 @testable import Models
 @testable import Managers

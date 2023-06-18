@@ -1,59 +1,71 @@
 name: 'Build mobile core'
 description: 'Builds the mobile core library'
+inputs:
+  mobile_core_commit_hash:
+    type: string
+    required: true
+  go_version:
+    type: string
+    required: false
+    # TODO: This should probably be golang version stable, but leaving at ancient 1.16 for now
+    default: '1.16'
+  temp_path:
+    type: string
+    required: false
+    default: 'tmp-mobile-core'
+  destination_path:
+    type: string
+    required: false
+    default: 'Packages/CryptoCore/Frameworks/mobilecore.xcframework'
+
 runs:
   using: "composite"
   steps:
     - name: Checkout Mobile Core
       shell: bash
       run: |
-        git clone https://github.com/minvws/nl-covid19-coronacheck-mobile-core.git tmp-clcore
-        cd tmp-clcore
-        git checkout v0.4.5
-        cd ..
+        set -eux
+        git clone https://github.com/minvws/nl-covid19-coronacheck-mobile-core.git "${{ inputs.temp_path }}"
+        cd "${{ inputs.temp_path }}"
+        git checkout ${{ inputs.mobile_core_commit_hash }}
 
-    - name: Get mobile core version
-      id: version
-      working-directory: tmp-clcore
-      shell: bash
-      run: |
-        echo VERSION=`git rev-parse HEAD` >> $GITHUB_OUTPUT
-        echo GO_VERSION="`cat go.mod | grep "go 1." | sed 's/ //g'`" >> $GITHUB_OUTPUT
-
-    - name: Restore mobile core from cache
-      id: corecache
+    - name: Restore mobilecore.framework from cache
+      id: cachestep
       uses: actions/cache@v3
       with:
         path: |
-          Packages/CryptoCore/Frameworks/clcore.xcframework
-        key: clcore-xcframework-${{ steps.version.outputs.VERSION }}-${{ steps.version.outputs.GO_VERSION }}-v3
+          ${{ inputs.destination_path }}
+        key: mobilecore-xcframework-${{ inputs.mobile_core_commit_hash }}-${{ inputs.go_version }}-v3
 
-    - name: Setup go
-      if: steps.corecache.outputs.cache-hit != 'true'
-      uses: actions/setup-go@v3.4.0
+    - name: Setup Go
+      if: steps.cachestep.outputs.cache-hit != 'true'
+      uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # pin@v4
       with:
-        go-version-file: 'tmp-clcore/go.mod'
+        go-version: '${{ inputs.go_version }}'
+        cache-dependency-path: '${{ inputs.temp_path }}/go.sum'
       
     - name: Compile Go library dependency
-      if: steps.corecache.outputs.cache-hit != 'true'
+      if: steps.cachestep.outputs.cache-hit != 'true'
       shell: bash
-      working-directory: tmp-clcore
       run: |
-        git submodule init
-        git submodule update
+        set -eux
+
+        pushd "${{ inputs.temp_path }}"
         go mod download golang.org/x/mobile
         go install golang.org/x/mobile/cmd/gomobile@latest
         gomobile init
-        gomobile bind -target ios,iossimulator -o clcore.xcframework -iosversion 11.0 github.com/minvws/nl-covid19-coronacheck-mobile-core
-        cd ../
-        rm -rf clcore.framework # cleanup previous location
-        rm -rf Frameworks # cleanup previous location
-        cp -R tmp-clcore/clcore.xcframework Packages/CryptoCore/Frameworks/
-        rm -rf tmp-clcore
+        gomobile bind -target ios,iossimulator -o mobilecore.xcframework -iosversion 11.0 github.com/minvws/nl-covid19-coronacheck-mobile-core
+        popd
+
+        rm -rf mobilecore.framework Frameworks # TODO: I don't think these are necessary
+        rm -rf "${{ inputs.destination_path }}"
+        cp -r "${{ inputs.temp_path }}/mobilecore.xcframework" "${{ inputs.destination_path }}"
+        rm -rf "${{ inputs.temp_path }}"
 
     - name: Archive mobile core dependency
       uses: actions/upload-artifact@v3
       with:
-        name: clcore.xcframework
+        name: mobilecore.xcframework
         path: |
-          Packages/CryptoCore/Frameworks/clcore.xcframework
+          ${{ inputs.destination_path }}
         retention-days: 2
