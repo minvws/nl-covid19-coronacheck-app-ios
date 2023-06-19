@@ -44,6 +44,12 @@ class PDFExportView: ScrolledStackView {
 		return view
 	}()
 	
+	let cardContainer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
 	private let activityIndicatorView: ActivityIndicatorView = {
 		
 		let view = ActivityIndicatorView()
@@ -69,7 +75,8 @@ class PDFExportView: ScrolledStackView {
 		
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageTextView)
-		stackView.addArrangedSubview(cardView)
+		cardContainer.addSubview(cardView)
+		stackView.addArrangedSubview(cardContainer)
 	}
 	
 	/// Setup the constraints
@@ -79,7 +86,14 @@ class PDFExportView: ScrolledStackView {
 		
 		NSLayoutConstraint.activate([
 			activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
-			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor)
+			activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			
+			cardView.topAnchor.constraint(equalTo: cardContainer.topAnchor),
+			cardView.bottomAnchor.constraint(equalTo: cardContainer.bottomAnchor),
+			cardView.leadingAnchor.constraint(greaterThanOrEqualTo: cardContainer.leadingAnchor),
+			cardView.trailingAnchor.constraint(lessThanOrEqualTo: cardContainer.trailingAnchor),
+			cardView.centerXAnchor.constraint(equalTo: cardContainer.centerXAnchor),
+			cardView.centerYAnchor.constraint(equalTo: cardContainer.centerYAnchor)
 		])
 	}
 	
