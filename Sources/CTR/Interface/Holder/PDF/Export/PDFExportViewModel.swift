@@ -105,7 +105,10 @@ extension PDFExportViewModel {
 	
 	private func getPrintableDCCs() throws -> String {
 		
-		let greenCards = Current.walletManager.listGreenCards()
+		let greenCards = Current.walletManager.listGreenCards().sorted { lhs, rhs in
+			// Order by event date, oldest first.
+			lhs.castOrigins()?.first?.eventDate ?? .distantPast < rhs.castOrigins()?.first?.eventDate ?? .distantPast
+		}
 		guard greenCards.isNotEmpty else {
 			throw Error.noDCCsToExport
 		}
@@ -126,7 +129,6 @@ extension PDFExportViewModel {
 			}
 		}
 		let printAttributes = PrintAttributes(european: euPrintAttributes)
-		
 		let encoder = JSONEncoder()
 		encoder.dateEncodingStrategy = .iso8601
 		do {
