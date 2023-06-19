@@ -57,6 +57,7 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		var holderItems = [Item]()
 		if Current.featureFlagManager.isInArchiveMode() {
 			holderItems += [itemExportPDF]
+			holderItems += [.sectionBreak]
 		}
 		
 		if Current.featureFlagManager.isAddingEventsEnabled() {
