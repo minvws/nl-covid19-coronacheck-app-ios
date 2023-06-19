@@ -635,13 +635,13 @@
 "holder_pdfExport_error_body" = "<p>Something is going wrong while creating the file with your certificates.</p><p>Do you have questions about this? Please contact the helpdesk via %@ and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
 "holder_pdfExport_generating_title" = "Creating certificate";
 "holder_pdfExport_start_buttonTitle" = "Create certificate";
-"holder_pdfExport_start_message" = "Create a file from your certificates that you can save on your phone or tablet, or print. This can be done until the end of this year (2023).";
+"holder_pdfExport_start_message" = "Create a file from your certificates that you can share, save on your phone or tablet, or print. This can be done until the end of this year (2023).";
 "holder_pdfExport_start_title" = "Saving your certificates";
 "holder_pdfExport_success_card_action_save" = "Save file";
 "holder_pdfExport_success_card_action_view" = "View file";
 "holder_pdfExport_success_card_message" = "Use this certificate if you are abroad or crossing the border.";
 "holder_pdfExport_success_card_title" = "International certificate";
-"holder_pdfExport_success_message" = "You can save, send or print the file with your certificates below.";
+"holder_pdfExport_success_message" = "You can share, save, send or print the file with your certificates below.";
 "holder_pdfExport_success_title" = "Success!";
 "holder_qr_code_expired_explanation_action" = "Read more on CoronaCheck.nl";
 "holder_qr_code_expired_explanation_description" = "<p>If your QR code has expired it means your vaccination is still valid, but the certificate that you’ve added isn't. You can request a new certificate with QR code and add it to the app again.</p><p>Do you have a more recent vaccination in the app? Then you can also use that QR code.</p>";
