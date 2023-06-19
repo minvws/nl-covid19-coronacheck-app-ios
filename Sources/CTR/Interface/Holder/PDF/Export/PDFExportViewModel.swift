@@ -53,6 +53,7 @@ class PDFExportViewModel: NSObject {
 			let config = String(decoding: configData, as: UTF8.self).replacingOccurrences(of: #"\"#, with: "")
 			let dccs = try getPrintableDCCs()
 			
+			localHTML = localHTML.replacingOccurrences(of: "!!locale!!", with: "en")
 			localHTML = localHTML.replacingOccurrences(of: "!!pdfTools!!", with: pdfTools)
 			localHTML = localHTML.replacingOccurrences(of: "!!configJSON!!", with: config)
 			localHTML = localHTML.replacingOccurrences(of: "!!dccJSON!!", with: dccs)
