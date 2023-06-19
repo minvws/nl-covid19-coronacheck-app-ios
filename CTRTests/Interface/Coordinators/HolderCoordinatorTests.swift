@@ -827,39 +827,15 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
 	}
 	
-	// MARK: - PDF Export
-	
-	func test_pdfExport_completed() {
+	func test_userWishesToExportPDF() {
 		
 		// Given
-		sut.childCoordinators = [
-			PDFExportCoordinator(
-				navigationController: navigationSpy,
-				delegate: sut
-			)
-		]
 		
 		// When
-		sut.exportCompleted()
+		sut.userWishesToExportPDF()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-	}
-	
-	func test_pdfExport_failed() {
-		
-		// Given
-		sut.childCoordinators = [
-			PDFExportCoordinator(
-				navigationController: navigationSpy,
-				delegate: sut
-			)
-		]
-		
-		// When
-		sut.exportFailed()
-		
-		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(self.sut.childCoordinators).toNot(beEmpty())
+		expect(self.sut.childCoordinators.first is PDFExportCoordinator) == true
 	}
 }
