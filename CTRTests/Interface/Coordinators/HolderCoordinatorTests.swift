@@ -569,6 +569,8 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verlopen QR-code"
 		expect(viewModel.content.body) == "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>"
+		expect(viewModel.content.secondaryActionTitle) == "Lees meer op CoronaCheck.nl"
+		expect(viewModel.content.secondaryAction) != nil
 	}
 	
 	func test_userWishesMoreInfoAboutExpiredQR_vaccination_inArchiveMode() throws {
@@ -588,6 +590,8 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verlopen QR-code"
 		expect(viewModel.content.body) == "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar de QR-code in deze app niet meer. </p><p>Met verlopen QR-codes kun je nog wel aantonen dat je gevaccineerd bent. Je kunt deze QR-codes alleen niet overal meer als vaccinatiebewijs gebruiken.</p>"
+		expect(viewModel.content.secondaryActionTitle) == nil
+		expect(viewModel.content.secondaryAction) == nil
 	}
 	
 	func test_userWishesMoreInfoAboutExpiredQR_recovery_inArchiveMode() throws {
@@ -607,6 +611,8 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verlopen QR-code"
 		expect(viewModel.content.body) == "<p>Als de QR-code van je herstelbewijs is verlopen betekent dit dat je positieve testuitslag ouder dan 180 dagen is.</p><p>Met een verlopen QR-code kun je nog wel aantonen dat je ooit corona hebt gehad. Je kunt deze QR-code alleen niet meer als herstelbewijs gebruiken.</p>"
+		expect(viewModel.content.secondaryActionTitle) == nil
+		expect(viewModel.content.secondaryAction) == nil
 	}
 
 	func test_userWishesMoreInfoAboutHiddenQR() throws {
@@ -626,6 +632,8 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verborgen QR-code"
 		expect(viewModel.content.body) == "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>"
+		expect(viewModel.content.secondaryActionTitle) == "Lees meer op CoronaCheck.nl"
+		expect(viewModel.content.secondaryAction) != nil
 	}
 	
 	func test_userWishesMoreInfoAboutHiddenQR_inArchiveMode() throws {
@@ -645,6 +653,8 @@ class HolderCoordinatorTests: XCTestCase {
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verborgen QR-code"
 		expect(viewModel.content.body) == "<p>QR-codes worden verborgen als je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien als dat nodig is.</p>"
+		expect(viewModel.content.secondaryActionTitle) == nil
+		expect(viewModel.content.secondaryAction) == nil
 	}
 	
 	func test_userWishesToViewQRs() {

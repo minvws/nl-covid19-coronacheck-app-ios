@@ -632,6 +632,7 @@
 "holder_paperproof_whichProofsCanBeUsed_title" = "Which certificates can I scan?";
 "holder_pdfExport_card_action" = "Save my certificates";
 "holder_pdfExport_card_description" = "You can still save your certificates until the end of this year. Creating new certificates is no longer possible.";
+"holder_pdfExport_error_body" = "<p>Something is going wrong while creating the file with your certificates.</p><p>Do you have questions about this? Please contact the helpdesk via %@ and pass on the below error code.</p><p><b>Error code:</b><br />%@</p>";
 "holder_pdfExport_generating_title" = "Creating certificate";
 "holder_pdfExport_start_buttonTitle" = "Create certificate";
 "holder_pdfExport_start_message" = "Create a file from your certificates that you can save on your phone or tablet, or print. This can be done until the end of this year (2023).";
