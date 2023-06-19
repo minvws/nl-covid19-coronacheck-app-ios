@@ -5,14 +5,15 @@
 		<script>
 			var holderConfigJSON = '!!configJSON!!';
 			var vaccinationJSON = '!!dccJSON!!';
+			var locale = '!!locale!!';
 			
 			var holderConfig = JSON.parse(holderConfigJSON);
 			var vaccination = JSON.parse(vaccinationJSON);
 			
-			var proofs = pdfTools.parseProofData(vaccination, holderConfig, 'nl');
+			var proofs = pdfTools.parseProofData(vaccination, holderConfig, locale);
 			var options = {
 				proofs,
-				locale: 'nl',
+				locale: locale,
 				qrSizeInCm: 8,
 				createdAt: new Date(),
 				internationalProofScanned: false,

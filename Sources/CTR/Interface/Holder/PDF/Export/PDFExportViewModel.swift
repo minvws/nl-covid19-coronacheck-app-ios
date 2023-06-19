@@ -53,6 +53,7 @@ class PDFExportViewModel: NSObject {
 			let config = String(decoding: configData, as: UTF8.self).replacingOccurrences(of: #"\"#, with: "")
 			let dccs = try getPrintableDCCs()
 			
+			localHTML = localHTML.replacingOccurrences(of: "!!locale!!", with: "en")
 			localHTML = localHTML.replacingOccurrences(of: "!!pdfTools!!", with: pdfTools)
 			localHTML = localHTML.replacingOccurrences(of: "!!configJSON!!", with: config)
 			localHTML = localHTML.replacingOccurrences(of: "!!dccJSON!!", with: dccs)
@@ -104,7 +105,10 @@ extension PDFExportViewModel {
 	
 	private func getPrintableDCCs() throws -> String {
 		
-		let greenCards = Current.walletManager.listGreenCards()
+		let greenCards = Current.walletManager.listGreenCards().sorted { lhs, rhs in
+			// Order by event date, oldest first.
+			lhs.castOrigins()?.first?.eventDate ?? .distantPast < rhs.castOrigins()?.first?.eventDate ?? .distantPast
+		}
 		guard greenCards.isNotEmpty else {
 			throw Error.noDCCsToExport
 		}
@@ -125,7 +129,6 @@ extension PDFExportViewModel {
 			}
 		}
 		let printAttributes = PrintAttributes(european: euPrintAttributes)
-		
 		let encoder = JSONEncoder()
 		encoder.dateEncodingStrategy = .iso8601
 		do {
