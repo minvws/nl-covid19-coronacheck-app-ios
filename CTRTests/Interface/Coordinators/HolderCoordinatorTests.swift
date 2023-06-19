@@ -816,4 +816,40 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
 	}
+	
+	// MARK: - PDF Export
+	
+	func test_pdfExport_completed() {
+		
+		// Given
+		sut.childCoordinators = [
+			PDFExportCoordinator(
+				navigationController: navigationSpy,
+				delegate: sut
+			)
+		]
+		
+		// When
+		sut.exportCompleted()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_pdfExport_failed() {
+		
+		// Given
+		sut.childCoordinators = [
+			PDFExportCoordinator(
+				navigationController: navigationSpy,
+				delegate: sut
+			)
+		]
+		
+		// When
+		sut.exportFailed()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
 }
