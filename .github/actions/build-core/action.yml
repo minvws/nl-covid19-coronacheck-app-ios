@@ -68,3 +68,11 @@ runs:
         path: |
           ${{ inputs.destination_path }}
         retention-days: 2
+
+    - name: Save mobile core to cache
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{ inputs.destination_path }}
+        key: mobilecore-xcframework-${{ inputs.mobile_core_commit_hash }}-${{ inputs.go_version }}-v3
+	

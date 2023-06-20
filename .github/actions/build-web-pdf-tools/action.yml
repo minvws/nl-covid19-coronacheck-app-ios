@@ -67,3 +67,10 @@ runs:
         path: |
           ${{ inputs.destination_path }}
         retention-days: 2
+
+    - name: Save web-pdf-tools to cache
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{ inputs.destination_path }}
+        key: web-pdf-tools-js-${{ inputs.web_pdf_tools_commit_hash }}-${{ inputs.node_version }}-v1
