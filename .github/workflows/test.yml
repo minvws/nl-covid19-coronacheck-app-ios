@@ -54,6 +54,9 @@ jobs:
 
       - name: Build mobile core
         uses: ./.github/actions/build-core
+        
+      - name: Build web pdf tools core
+        uses: ./.github/actions/build-web-pdf-tools
 
       - name: Generate project
         run: |
