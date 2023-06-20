@@ -54,9 +54,13 @@ jobs:
 
       - name: Build mobile core
         uses: ./.github/actions/build-core
+        with:
+          mobile_core_commit_hash: "0b1d6d8c2a699449f614e90a0e2e5cc643fa67a1"
         
       - name: Build web pdf tools core
         uses: ./.github/actions/build-web-pdf-tools
+        with:
+          web_pdf_tools_commit_hash: "1b03bb722b45970578854290a835e70069147257"
 
       - name: Generate project
         run: |
