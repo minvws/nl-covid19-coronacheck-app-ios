@@ -15,6 +15,7 @@ import Persistence
 @testable import Models
 @testable import Managers
 @testable import Resources
+import WebKit
 
 final class ExportPDFViewModelTests: XCTestCase {
 	
@@ -70,12 +71,48 @@ final class ExportPDFViewModelTests: XCTestCase {
 	func test_viewDidAppear() {
 		
 		// Given
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "PHONENUMBER"
 		
 		// When
 		sut.viewDidAppear()
 		
 		// Then
 		expect(self.coordinatorSpy.invokedDisplayError) == true
+		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.content.body) == L.holder_pdfExport_error_body("PHONENUMBER", "i 1510 000 121") // Can't load file (config)
+		expect(self.sut.html.value) == nil
 	}
 	
+	func test_viewDidAppear_withConfig() throws {
+		
+		// Given
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "PHONENUMBER"
+		environmentSpies.cryptoLibUtilitySpy.stubbedReadResult = try XCTUnwrap( JSONEncoder().encode(environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration)
+		)
+		
+		// When
+		sut.viewDidAppear()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedDisplayError) == true
+		expect(self.coordinatorSpy.invokedDisplayErrorParameters?.content.body) == L.holder_pdfExport_error_body("PHONENUMBER", "i 1510 000 124") // No DCC's
+		expect(self.sut.html.value) == nil
+	}
+	
+	func test_viewDidAppear_withConfig_withDCC() throws {
+		
+		// Given
+		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "PHONENUMBER"
+		environmentSpies.cryptoLibUtilitySpy.stubbedReadResult = try XCTUnwrap( JSONEncoder().encode(environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration)
+		)
+		let greencards = GreenCard.sampleInternationalMultipleVaccineDCC(dataStoreManager: environmentSpies.dataStoreManager)
+		environmentSpies.walletManagerSpy.stubbedListGreenCardsResult = greencards
+		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
+		
+		// When
+		sut.viewDidAppear()
+		
+		// Then
+		expect(self.coordinatorSpy.invokedDisplayError) == false
+		expect(self.sut.html.value) != nil
+	}
 }
