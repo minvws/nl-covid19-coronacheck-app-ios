@@ -826,4 +826,16 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
 	}
+	
+	func test_userWishesToExportPDF() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToExportPDF()
+		
+		// Then
+		expect(self.sut.childCoordinators).toNot(beEmpty())
+		expect(self.sut.childCoordinators.first is PDFExportCoordinator) == true
+	}
 }

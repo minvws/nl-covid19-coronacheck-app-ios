@@ -100,9 +100,10 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 		webConfiguration.userContentController = contentController
 		webConfiguration.preferences.javaScriptEnabled = true
 		webView = WKWebView(frame: .zero, configuration: webConfiguration)
-		
-		sceneView.stackView.addArrangedSubview(webView!)
-		webView?.loadHTMLString(html, baseURL: nil)
+		if let unwrappedView = webView {
+			sceneView.stackView.addArrangedSubview(unwrappedView)
+			unwrappedView.loadHTMLString(html, baseURL: nil)
+		}
 	}
 }
 
