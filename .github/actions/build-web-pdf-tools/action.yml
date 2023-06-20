@@ -60,14 +60,6 @@ runs:
         cp "${{ inputs.temp_path }}/dist/index.js" "${{ inputs.destination_path }}"
         rm -rf "${{ inputs.temp_path }}"
 
-    - name: Archive web-pdf-tools.js
-      uses: actions/upload-artifact@v3
-      with:
-        name: web-pdf-tools.js
-        path: |
-          ${{ inputs.destination_path }}
-        retention-days: 2
-
     - name: Save web-pdf-tools to cache
       if: steps.cachestep.outputs.cache-hit != 'true'
       uses: actions/cache/save@v3

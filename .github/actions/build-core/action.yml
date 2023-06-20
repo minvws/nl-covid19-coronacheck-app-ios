@@ -61,14 +61,6 @@ runs:
         cp -r "${{ inputs.temp_path }}/mobilecore.xcframework" "${{ inputs.destination_path }}"
         rm -rf "${{ inputs.temp_path }}"
 
-    - name: Archive mobile core dependency
-      uses: actions/upload-artifact@v3
-      with:
-        name: mobilecore.xcframework
-        path: |
-          ${{ inputs.destination_path }}
-        retention-days: 2
-
     - name: Save mobile core to cache
       if: steps.cachestep.outputs.cache-hit != 'true'
       uses: actions/cache/save@v3
