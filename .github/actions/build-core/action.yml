@@ -70,6 +70,7 @@ runs:
         retention-days: 2
 
     - name: Save mobile core to cache
+      if: steps.cachestep.outputs.cache-hit != 'true'
       uses: actions/cache/save@v3
       with:
         path: |
