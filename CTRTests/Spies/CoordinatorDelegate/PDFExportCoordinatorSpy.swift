@@ -11,116 +11,67 @@ import SnapshotTesting
 @testable import CTR
 import Shared
 import Models
+import ReusableViews
 
-class PDFExportCoordinatorSpy: PDFExportCoordinator {
+class PDFExportCoordinatorSpy: PDFExportCoordinatorDelegate, OpenUrlProtocol {
 
-	var invokedChildCoordinatorsSetter = false
-	var invokedChildCoordinatorsSetterCount = 0
-	var invokedChildCoordinators: [Coordinator]?
-	var invokedChildCoordinatorsList = [[Coordinator]]()
-	var invokedChildCoordinatorsGetter = false
-	var invokedChildCoordinatorsGetterCount = 0
-	var stubbedChildCoordinators: [Coordinator]! = []
+	var invokedUserWishesToStart = false
+	var invokedUserWishesToStartCount = 0
 
-	override var childCoordinators: [Coordinator] {
-		set {
-			invokedChildCoordinatorsSetter = true
-			invokedChildCoordinatorsSetterCount += 1
-			invokedChildCoordinators = newValue
-			invokedChildCoordinatorsList.append(newValue)
-		}
-		get {
-			invokedChildCoordinatorsGetter = true
-			invokedChildCoordinatorsGetterCount += 1
-			return stubbedChildCoordinators
-		}
+	func userWishesToStart() {
+		invokedUserWishesToStart = true
+		invokedUserWishesToStartCount += 1
 	}
 
-	var invokedNavigationControllerSetter = false
-	var invokedNavigationControllerSetterCount = 0
-	var invokedNavigationController: UINavigationController?
-	var invokedNavigationControllerList = [UINavigationController]()
-	var invokedNavigationControllerGetter = false
-	var invokedNavigationControllerGetterCount = 0
-	var stubbedNavigationController: UINavigationController!
+	var invokedUserWishesToExport = false
+	var invokedUserWishesToExportCount = 0
 
-	override var navigationController: UINavigationController {
-		set {
-			invokedNavigationControllerSetter = true
-			invokedNavigationControllerSetterCount += 1
-			invokedNavigationController = newValue
-			invokedNavigationControllerList.append(newValue)
-		}
-		get {
-			invokedNavigationControllerGetter = true
-			invokedNavigationControllerGetterCount += 1
-			return stubbedNavigationController
-		}
+	func userWishesToExport() {
+		invokedUserWishesToExport = true
+		invokedUserWishesToExportCount += 1
 	}
 
-	var invokedDelegateSetter = false
-	var invokedDelegateSetterCount = 0
-	var invokedDelegate: PDFExportFlowDelegate?
-	var invokedDelegateList = [PDFExportFlowDelegate?]()
-	var invokedDelegateGetter = false
-	var invokedDelegateGetterCount = 0
-	var stubbedDelegate: PDFExportFlowDelegate!
+	var invokedDisplayError = false
+	var invokedDisplayErrorCount = 0
+	var invokedDisplayErrorParameters: (content: Content, Void)?
+	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
 
-	override var delegate: PDFExportFlowDelegate? {
-		set {
-			invokedDelegateSetter = true
-			invokedDelegateSetterCount += 1
-			invokedDelegate = newValue
-			invokedDelegateList.append(newValue)
-		}
-		get {
-			invokedDelegateGetter = true
-			invokedDelegateGetterCount += 1
-			return stubbedDelegate
-		}
+	func displayError(content: Content) {
+		invokedDisplayError = true
+		invokedDisplayErrorCount += 1
+		invokedDisplayErrorParameters = (content, ())
+		invokedDisplayErrorParametersList.append((content, ()))
 	}
 
-	var invokedStartPagesFactorySetter = false
-	var invokedStartPagesFactorySetterCount = 0
-	var invokedStartPagesFactory: StartPDFExportFactoryProtocol?
-	var invokedStartPagesFactoryList = [StartPDFExportFactoryProtocol]()
-	var invokedStartPagesFactoryGetter = false
-	var invokedStartPagesFactoryGetterCount = 0
-	var stubbedStartPagesFactory: StartPDFExportFactoryProtocol!
+	var invokedUserWishesToShare = false
+	var invokedUserWishesToShareCount = 0
+	var invokedUserWishesToShareParameters: (path: URL, Void)?
+	var invokedUserWishesToShareParametersList = [(path: URL, Void)]()
 
-	override var startPagesFactory: StartPDFExportFactoryProtocol {
-		set {
-			invokedStartPagesFactorySetter = true
-			invokedStartPagesFactorySetterCount += 1
-			invokedStartPagesFactory = newValue
-			invokedStartPagesFactoryList.append(newValue)
-		}
-		get {
-			invokedStartPagesFactoryGetter = true
-			invokedStartPagesFactoryGetterCount += 1
-			return stubbedStartPagesFactory
-		}
+	func userWishesToShare(_ path: URL) {
+		invokedUserWishesToShare = true
+		invokedUserWishesToShareCount += 1
+		invokedUserWishesToShareParameters = (path, ())
+		invokedUserWishesToShareParametersList.append((path, ()))
 	}
 
-	var invokedStart = false
-	var invokedStartCount = 0
+	var invokedExportFailed = false
+	var invokedExportFailedCount = 0
 
-	override func start() {
-		invokedStart = true
-		invokedStartCount += 1
+	func exportFailed() {
+		invokedExportFailed = true
+		invokedExportFailedCount += 1
 	}
 
-	var invokedConsume = false
-	var invokedConsumeCount = 0
-	var invokedConsumeParameters: (universalLink: Models.UniversalLink, Void)?
-	var invokedConsumeParametersList = [(universalLink: Models.UniversalLink, Void)]()
-	var stubbedConsumeResult: Bool! = false
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
 
-	override func consume(universalLink: Models.UniversalLink) -> Bool {
-		invokedConsume = true
-		invokedConsumeCount += 1
-		invokedConsumeParameters = (universalLink, ())
-		invokedConsumeParametersList.append((universalLink, ()))
-		return stubbedConsumeResult
+	func openUrl(_ url: URL) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
 }
