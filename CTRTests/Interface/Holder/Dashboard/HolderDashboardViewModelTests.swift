@@ -46,6 +46,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 
 		configSpy = ConfigurationGeneralSpy()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
@@ -60,7 +62,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func vendSut(appVersion: String = "1.0.0") -> HolderDashboardViewModel {
 
-		environmentSpies.featureFlagManagerSpy.stubbedAreZeroDisclosurePoliciesEnabledResult = true
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			qrcardDatasource: qrCardDatasourceSpy,
@@ -146,6 +147,17 @@ func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Voi
 	return Predicate.define("be .beRecommendedUpdateCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .recommendedUpdate(message2, callToActionButtonText, didTapCallToAction) = actual {
+			test(message2, callToActionButtonText, didTapCallToAction)
+			return PredicateResult(status: .matches, message: message)
+		}
+		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+func beExportReminderCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+	return Predicate.define("be .beExportReminderCard with matching values") { expression, message in
+		if let actual = try expression.evaluate(),
+		   case let .exportReminder(message2, callToActionButtonText, didTapCallToAction) = actual {
 			test(message2, callToActionButtonText, didTapCallToAction)
 			return PredicateResult(status: .matches, message: message)
 		}

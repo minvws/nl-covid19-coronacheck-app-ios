@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 
 import XCTest
 @testable import CTR
@@ -32,6 +32,8 @@ class HolderCoordinatorTests: XCTestCase {
 
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		navigationSpy = NavigationControllerSpy()
 		alertVerifier = AlertVerifier()
 		sut = HolderCoordinator(
@@ -56,6 +58,18 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
+	}
+	
+	func testRunsDatabaseCleanupOnStart_archiveModeEnabled() {
+		// When
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		sut.start()
+		
+		// Then
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
+		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
+		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == false
 	}
 	
 	func testStartNewFeatures() {
@@ -125,6 +139,28 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(consumed) == true
 		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
 		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
+		expect(self.sut.unhandledUniversalLink) == nil
+	}
+	
+	func test_consume_redeemHolder_addEvents_disabled() {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
+		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
+		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
+		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+			token: "STXT2VF3389TJ2",
+			protocolVersion: "3.0",
+			providerIdentifier: "XXX"
+		))
+		
+		// When
+		let consumed = sut.consume(universalLink: universalLink)
+		
+		// Then
+		expect(consumed) == false
+		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
 		expect(self.sut.unhandledUniversalLink) == nil
 	}
 	
@@ -516,26 +552,73 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewModel.content.title) == "Maak verbinding met het internet"
 	}
 
-	func test_userWishesMoreInfoAboutExpiredQR() throws {
+	func test_userWishesMoreInfoAboutExpiredQR_vaccination_notInArchiveMode() throws {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
 		]
 		
 		// When
-		sut.userWishesMoreInfoAboutExpiredQR()
+		sut.userWishesMoreInfoAboutExpiredQR(type: .vaccination)
 		
 		// Then
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verlopen QR-code"
+		expect(viewModel.content.body) == "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar het bewijs dat je hebt toegevoegd niet meer. Je kunt een nieuw bewijs met QR-code aanvragen en deze opnieuw toevoegen aan de app.</p><p>Heb je een nieuwere vaccinatie in de app staan? Dan kun je ook die QR-code gebruiken.</p>"
+		expect(viewModel.content.secondaryActionTitle) == "Lees meer op CoronaCheck.nl"
+		expect(viewModel.content.secondaryAction) != nil
+	}
+	
+	func test_userWishesMoreInfoAboutExpiredQR_vaccination_inArchiveMode() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutExpiredQR(type: .vaccination)
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verlopen QR-code"
+		expect(viewModel.content.body) == "<p>Als je QR-code is verlopen betekent dit dat je vaccinatie nog geldig is, maar de QR-code in deze app niet meer. </p><p>Met verlopen QR-codes kun je nog wel aantonen dat je gevaccineerd bent. Je kunt deze QR-codes alleen niet overal meer als vaccinatiebewijs gebruiken.</p>"
+		expect(viewModel.content.secondaryActionTitle) == nil
+		expect(viewModel.content.secondaryAction) == nil
+	}
+	
+	func test_userWishesMoreInfoAboutExpiredQR_recovery_inArchiveMode() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutExpiredQR(type: .recovery)
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verlopen QR-code"
+		expect(viewModel.content.body) == "<p>Als de QR-code van je herstelbewijs is verlopen betekent dit dat je positieve testuitslag ouder dan 180 dagen is.</p><p>Met een verlopen QR-code kun je nog wel aantonen dat je ooit corona hebt gehad. Je kunt deze QR-code alleen niet meer als herstelbewijs gebruiken.</p>"
+		expect(viewModel.content.secondaryActionTitle) == nil
+		expect(viewModel.content.secondaryAction) == nil
 	}
 
 	func test_userWishesMoreInfoAboutHiddenQR() throws {
 		
 		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -548,6 +631,30 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(viewControllerSpy.presentCalled) == true
 		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
 		expect(viewModel.content.title) == "Verborgen QR-code"
+		expect(viewModel.content.body) == "<p>Als de QR-code van je vaccinatie verborgen is, dan heb je deze waarschijnlijk niet nodig. Dit komt omdat je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien en gebruiken als dat nodig is.</p>"
+		expect(viewModel.content.secondaryActionTitle) == "Lees meer op CoronaCheck.nl"
+		expect(viewModel.content.secondaryAction) != nil
+	}
+	
+	func test_userWishesMoreInfoAboutHiddenQR_inArchiveMode() throws {
+		
+		// Given
+		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
+		let viewControllerSpy = ViewControllerSpy()
+		navigationSpy.viewControllers = [
+			viewControllerSpy
+		]
+		
+		// When
+		sut.userWishesMoreInfoAboutHiddenQR()
+		
+		// Then
+		expect(viewControllerSpy.presentCalled) == true
+		let viewModel = try XCTUnwrap(((viewControllerSpy.thePresentedViewController as? BottomSheetModalViewController)?.childViewController as? BottomSheetContentViewController)?.viewModel)
+		expect(viewModel.content.title) == "Verborgen QR-code"
+		expect(viewModel.content.body) == "<p>QR-codes worden verborgen als je ook QR-codes van nieuwere vaccinaties in de app hebt staan.</p><p>Verborgen QR-codes kun je gewoon nog laten zien als dat nodig is.</p>"
+		expect(viewModel.content.secondaryActionTitle) == nil
+		expect(viewModel.content.secondaryAction) == nil
 	}
 	
 	func test_userWishesToViewQRs() {
@@ -718,5 +825,17 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == true
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
+	}
+	
+	func test_userWishesToExportPDF() {
+		
+		// Given
+		
+		// When
+		sut.userWishesToExportPDF()
+		
+		// Then
+		expect(self.sut.childCoordinators).toNot(beEmpty())
+		expect(self.sut.childCoordinators.first is PDFExportCoordinator) == true
 	}
 }

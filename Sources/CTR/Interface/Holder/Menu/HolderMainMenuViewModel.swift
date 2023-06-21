@@ -24,6 +24,10 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 	}
 	
 	func createMenuItems() -> [Item] {
+
+		let itemExportPDF: Item = .row(title: L.holder_menu_exportPDF(), subTitle: nil, icon: I.icon_menu_pdfexport()!, overrideColor: nil) { [weak coordinator] in
+			coordinator?.userWishesToExportPDF()
+		}
 		
 		let itemAddCertificate: Item = .row(title: L.holder_menu_listItem_addVaccinationOrTest_title(), subTitle: nil, icon: I.icon_menu_add()!, overrideColor: nil) { [weak coordinator] in
 			coordinator?.userWishesToCreateAQR()
@@ -51,14 +55,27 @@ class HolderMainMenuViewModel: MenuViewModelProtocol {
 		}
 		
 		var holderItems = [Item]()
-		holderItems += [itemAddCertificate]
-		holderItems += [itemAddPaperCertificate]
+		if Current.featureFlagManager.isInArchiveMode() {
+			holderItems += [itemExportPDF]
+			holderItems += [.sectionBreak]
+		}
 		
-		holderItems += [.sectionBreak]
+		if Current.featureFlagManager.isAddingEventsEnabled() {
+			holderItems += [itemAddCertificate]
+		}
+		if Current.featureFlagManager.isScanningEventsEnabled() {
+			holderItems += [itemAddPaperCertificate]
+		}
+		if Current.featureFlagManager.isAddingEventsEnabled() || Current.featureFlagManager.isScanningEventsEnabled() {
+			holderItems += [.sectionBreak]
+		}
+		
 		holderItems += [itemStoredData]
-		holderItems += [itemDataMigration]
+		if Current.featureFlagManager.isMigrationEnabled() {
+			holderItems += [itemDataMigration]
+			holderItems += [.sectionBreak]
+		}
 
-		holderItems += [.sectionBreak]
 		holderItems += [itemHelpAndInfo]
 		
 		if Configuration().getRelease() != .production {

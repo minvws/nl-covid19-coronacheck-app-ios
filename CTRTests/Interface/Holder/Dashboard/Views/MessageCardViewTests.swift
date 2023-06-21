@@ -55,6 +55,20 @@ class MessageCardViewTests: XCTestCase {
 		sut.assertImage()
 	}
 	
+	func test_titleWithCTA_blue() {
+		
+		// Arrange
+		let sut = MessageCardView(config: BlueMessageCardView.Config(
+			title: "Title",
+			closeButtonCommand: nil,
+			ctaButton: ("Call To Action", {})
+		))
+		
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 335, height: 335)
+		sut.assertImage()
+	}
+	
 	func test_titleWithCTAWithCloseButton() {
 		
 		// Arrange

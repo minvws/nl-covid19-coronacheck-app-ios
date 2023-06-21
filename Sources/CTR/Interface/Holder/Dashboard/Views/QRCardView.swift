@@ -373,12 +373,18 @@ class QRCardView: BaseView {
 		// and they are rendered as grouped together.
 
 		zip(1..., validityTexts).forEach { index, validityText in
-			guard validityText.kind != .past else { return }
 
-			validityText.lines.forEach { text in
-				let label = Label(body: text)
+			for (index, text) in validityText.lines.enumerated() {
+				let label: Label
+				if validityText.kind == .past && index == validityText.lines.endIndex - 1 {
+					// Show the last line of a multinline expired text in red.
+					label = Label(bodyBold: text)
+					label.textColor = C.ccError()
+				} else {
+					label = Label(body: text)
+					label.textColor = C.black()
+				}
 				label.numberOfLines = 0
-				label.textColor = C.black()
 				label.isSelectable = false
 				verticalLabelsStackView.addArrangedSubview(label)
 			}

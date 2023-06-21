@@ -28,27 +28,41 @@ QRGenerator: {
 OpenIDConnect: {
   shape: hexagon
 }
+SwiftSoup: {
+  shape: hexagon
+}
+GZip: {
+  shape: hexagon
+}
+
+# The application
 
 app: {
   shape: package
 }
+
+app <- BrightFutures
 app <- CryptoCore
+app <- DataMigration
+app <- Lottie
 app <- Managers
 app <- Models
+app <- OpenIDConnect
 app <- Persistence
+app <- QRGenerator
+app <- Reachability
+app <- RestrictedBrowser
+app <- Reusableviews
 app <- Shared
 app <- Transport
-app <- Reusableviews
-app <- Lottie
-app <- QRGenerator
-app <- OpenIDConnect
-app <- Reachability
-app <- BrightFutures
-app <- Rswift
 
 # - Packages - 
 
 CryptoCore { style.fill: "#ffcc00" }
+
+DataMigration { style.fill: "#ffcc00" }
+DataMigration <- Shared
+DataMigration <- GZip
 
 Managers { style.fill: "#ffcc00" }
 Managers <- CryptoCore
@@ -57,8 +71,8 @@ Managers <- Persistence
 Managers <- Resources
 Managers <- Shared
 Managers <- Transport
-Managers <- iOSSecuritySuite
 Managers <- BrightFutures
+Managers <- iOSSecuritySuite
 
 Models { style.fill: "#ffcc00" }
 Models <- CryptoCore
@@ -74,12 +88,18 @@ Resources { style.fill: "#ffcc00" }
 Resources <- Shared
 Resources <- Rswift
 
+RestrictedBrowser { style.fill: "#ffcc00" }
+RestrictedBrowser <- Shared
+RestrictedBrowser <- Resources
+RestrictedBrowser <- ReusableViews
+
 ReusableViews { style.fill: "#ffcc00" }
 ReusableViews <- Shared
 ReusableViews <- Resources
 
 Shared { style.fill: "#ffcc00" }
 Shared <- Reachability
+Shared <- SwiftSoup
 
 Transport { style.fill: "#ffcc00" }
 Transport <- HTTPSecurity

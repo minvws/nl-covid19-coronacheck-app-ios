@@ -16,3 +16,10 @@ runs:
       shell: bash
       run: |
         make mint_ci
+        
+    - name: Save Mint to cache
+      if: steps.mintcache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v3
+      with:
+        path: ~/.mint
+        key: mintfile-build-cache-${{ hashFiles('**/Mintfile_CI') }}

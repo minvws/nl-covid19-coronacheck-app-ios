@@ -33,6 +33,7 @@ extension HolderDashboardViewController.Card {
 	) -> [HolderDashboardViewController.Card] {
 		
 		guard !state.shouldShowAddCertificateFooter else { return [] }
+		guard Current.featureFlagManager.isAddingEventsEnabled() else { return [] }
 		return [
 			.addCertificate(
 				title: L.holder_dashboard_addCard_title(),
@@ -167,6 +168,22 @@ extension HolderDashboardViewController.Card {
 				callToActionButtonText: L.recommended_update_card_action(),
 				didTapCallToAction: { [weak actionHandler] in
 					actionHandler?.didTapRecommendedUpdate()
+				}
+			)
+		]
+	}
+	
+	static func makeExportReminderCard(
+		state: HolderDashboardViewModel.State,
+		actionHandler: HolderDashboardCardUserActionHandling
+	) -> [HolderDashboardViewController.Card] {
+		guard state.shouldShowExportReminderBanner else { return [] }
+		return [
+			.exportReminder(
+				message: L.holder_pdfExport_card_description(),
+				callToActionButtonText: L.holder_pdfExport_card_action(),
+				didTapCallToAction: { [weak actionHandler] in
+					actionHandler?.didTapExportReminderMoreInfo()
 				}
 			)
 		]

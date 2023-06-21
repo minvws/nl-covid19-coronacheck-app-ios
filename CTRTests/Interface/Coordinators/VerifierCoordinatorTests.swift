@@ -10,7 +10,7 @@ import XCTest
 @testable import Transport
 @testable import Shared
 import Nimble
-import Clcore
+import Mobilecore
 import ReusableViews
 @testable import Models
 @testable import Managers

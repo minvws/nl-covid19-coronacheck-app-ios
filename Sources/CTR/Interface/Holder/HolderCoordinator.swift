@@ -39,7 +39,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem])
 	func userWishesMoreInfoAboutClockDeviation()
-	func userWishesMoreInfoAboutExpiredQR()
+	func userWishesMoreInfoAboutExpiredQR(type: OriginType)
 	func userWishesMoreInfoAboutHiddenQR()
 	func userWishesMoreInfoAboutGettingTested()
 	func userWishesMoreInfoAboutMismatchedIdentityEventsBeingDeleted(items: [RemovedEventItem])
@@ -52,6 +52,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateAQR()
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
+	func userWishesToExportPDF()
 	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToMigrate()
@@ -110,7 +111,7 @@ class HolderCoordinator: SharedCoordinator {
 				
 		handleOnboarding(
 			onboardingFactory: onboardingFactory,
-			newFeaturesFactory: HolderNewFeaturesFactory()
+			newFeaturesFactory: HolderNewFeaturesFactory(featureFlagManager: Current.featureFlagManager)
 		) {
 			
 			if let unhandledUniversalLink {
@@ -191,11 +192,14 @@ class HolderCoordinator: SharedCoordinator {
 		Current.walletManager.removeDomesticGreenCards()
 		Current.walletManager.removeVaccinationAssessmentEventGroups()
 		
-		// Remove leftovers from previous sessions
-		Current.walletManager.removeDraftEventGroups()
-		
-		// Remove expired event groups
-		Current.walletManager.expireEventGroups(forDate: Current.now())
+		if !Current.featureFlagManager.isInArchiveMode() {
+			
+			// Remove leftovers from previous sessions
+			Current.walletManager.removeDraftEventGroups()
+			
+			// Remove expired event groups
+			Current.walletManager.expireEventGroups(forDate: Current.now())
+		}
 	}
 	
 	// MARK: - Universal Links
@@ -217,6 +221,8 @@ class HolderCoordinator: SharedCoordinator {
 	}
 	
 	private func consumeToken(_ requestToken: RequestToken, universalLink: UniversalLink) -> Bool {
+		
+		guard Current.featureFlagManager.isAddingEventsEnabled() else { return false }
 		
 		// Need to handle two situations:
 		// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
@@ -442,6 +448,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	// MARK: - User Wishes To ... -
 	
+	func userWishesToExportPDF() {
+		
+		let exportCoordinator = PDFExportCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		startChildCoordinator(exportCoordinator)
+	}
+	
 	func userWishesMoreInfoAboutBlockedEventsBeingDeleted(blockedEventItems: [RemovedEventItem]) {
 
 		let bulletpoints = compactRemovedEventItems(blockedEventItems)
@@ -497,16 +512,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 		
-	func userWishesMoreInfoAboutExpiredQR() {
+	func userWishesMoreInfoAboutExpiredQR(type: OriginType) {
+		
+		var body: String? {
+			guard Current.featureFlagManager.isInArchiveMode() else {
+				return L.holder_qr_code_expired_explanation_description()
+			}
+			switch type {
+				case .vaccination: return L.holder_qr_code_expired_explanation_description_archive_vaccination()
+				case .recovery: return L.holder_qr_code_expired_explanation_description_archive_recovery()
+				default: return nil
+			}
+		}
 	
 		let viewModel = BottomSheetContentViewModel(
 			content: Content(
 				title: L.holder_qr_code_expired_explanation_title(),
-				body: L.holder_qr_code_expired_explanation_description(),
+				body: body,
 				primaryActionTitle: nil,
 				primaryAction: nil,
-				secondaryActionTitle: L.holder_qr_code_expired_explanation_action(),
-				secondaryAction: { [weak self] in
+				secondaryActionTitle: Current.featureFlagManager.isInArchiveMode() ? nil : L.holder_qr_code_expired_explanation_action(),
+				secondaryAction: Current.featureFlagManager.isInArchiveMode() ? nil : { [weak self] in
 					guard let self,
 						  let url = URL(string: L.holder_qr_code_expired_explanation_url()) else { return }
 					self.openUrl(url)
@@ -522,17 +548,21 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = BottomSheetContentViewController(viewModel: viewModel)
 		presentAsBottomSheet(viewController)
 	}
-
+	
 	func userWishesMoreInfoAboutHiddenQR() {
+		
+		var body: String {
+			Current.featureFlagManager.isInArchiveMode() ? L.holder_qr_code_hidden_explanation_description_archive_vaccination() : L.holder_qr_code_hidden_explanation_description()
+		}
 		
 		let viewModel = BottomSheetContentViewModel(
 			content: Content(
 				title: L.holder_qr_code_hidden_explanation_title(),
-				body: L.holder_qr_code_hidden_explanation_description(),
+				body: body,
 				primaryActionTitle: nil,
 				primaryAction: nil,
-				secondaryActionTitle: L.holder_qr_code_hidden_explanation_action(),
-				secondaryAction: { [weak self] in
+				secondaryActionTitle: Current.featureFlagManager.isInArchiveMode() ? nil : L.holder_qr_code_hidden_explanation_action(),
+				secondaryAction: Current.featureFlagManager.isInArchiveMode() ? nil : { [weak self] in
 					guard let self,
 							let url = URL(string: L.holder_qr_code_hidden_explanation_url()) else { return }
 					self.openUrl(url)
@@ -583,6 +613,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToChooseTestLocation() {
+		
 		if Current.featureFlagManager.isGGDEnabled() {
 			navigateToChooseTestLocation()
 		} else {
@@ -600,6 +631,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 	
 	func userWishesToCreateAQR() {
+		
 		navigateToChooseQRCodeType()
 	}
 	
@@ -800,6 +832,27 @@ extension HolderCoordinator: MigrationFlowDelegate {
 	private func removeMigrationCoordinator() {
 		
 		if let childCoordinator = childCoordinators.first(where: { $0 is MigrationCoordinator }) {
+			removeChildCoordinator(childCoordinator)
+		}
+	}
+}
+
+extension HolderCoordinator: PDFExportFlowDelegate {
+	
+	func exportCompleted() {
+		
+		removePDFExportCoordinator()
+	}
+	
+	func exportFailed() {
+		
+		removePDFExportCoordinator()
+		navigateToDashboard()
+	}
+	
+	private func removePDFExportCoordinator() {
+		
+		if let childCoordinator = childCoordinators.first(where: { $0 is PDFExportCoordinator }) {
 			removeChildCoordinator(childCoordinator)
 		}
 	}

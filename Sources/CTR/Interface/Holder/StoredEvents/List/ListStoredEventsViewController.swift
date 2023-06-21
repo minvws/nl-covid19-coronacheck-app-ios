@@ -21,7 +21,7 @@ class ListStoredEventsViewController: GenericViewController<ListStoredEventsView
 		let header: String?
 		let rows: [Row]
 		let action: (() -> Void)?
-		let actionTitle: String
+		let actionTitle: String?
 	}
 	
 	struct Row {
@@ -97,9 +97,11 @@ class ListStoredEventsViewController: GenericViewController<ListStoredEventsView
 					)
 				}.forEach(groupStack.addArrangedSubview)
 				
-				groupStack.addArrangedSubview(
-					RedDisclosureButton.makeRedButton(title: group.actionTitle, command: group.action)
-				)
+				if let action = group.action, let actionTitle = group.actionTitle {
+					groupStack.addArrangedSubview(
+						RedDisclosureButton.makeRedButton(title: actionTitle, command: action)
+					)
+				}
 				return groupStack
 			}
 			.forEach(self.sceneView.addGroupStackView)

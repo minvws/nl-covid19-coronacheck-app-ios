@@ -17,21 +17,41 @@ public protocol NewFeaturesFactory {
 
 public struct HolderNewFeaturesFactory: NewFeaturesFactory {
 	
-	public init() {}
+	private var featureFlagManager: FeatureFlagManaging
+	
+	public init(featureFlagManager: FeatureFlagManaging) {
+		
+		self.featureFlagManager = featureFlagManager
+	}
 	
 	public var information: NewFeatureInformation {
 		
-		return .init(
-			pages: [PagedAnnoucementItem(
-				title: L.holder_newintheapp_foreignproofs_title(),
-				content: L.holder_newintheapp_foreignproofs_body(),
-				image: I.newInTheApp.paperDCC(),
-				imageBackgroundColor: C.white(),
-				tagline: L.general_newintheapp(),
-				step: 0
-			)],
-			version: 5
-		)
+		if featureFlagManager.isInArchiveMode() {
+			
+			return NewFeatureInformation(
+				pages: [PagedAnnoucementItem(
+					title: L.holder_newintheapp_archiveMode_title(),
+					content: L.holder_newintheapp_archiveMode_body(),
+					image: I.newInTheApp.archiveMode(),
+					imageBackgroundColor: C.white(),
+					tagline: L.general_newintheapp(),
+					step: 0
+				)],
+				version: 6
+			)
+		} else {
+			return NewFeatureInformation(
+				pages: [PagedAnnoucementItem(
+					title: L.holder_newintheapp_foreignproofs_title(),
+					content: L.holder_newintheapp_foreignproofs_body(),
+					image: I.newInTheApp.paperDCC(),
+					imageBackgroundColor: C.white(),
+					tagline: L.general_newintheapp(),
+					step: 0
+				)],
+				version: 5
+			)
+		}
 	}
 }
 

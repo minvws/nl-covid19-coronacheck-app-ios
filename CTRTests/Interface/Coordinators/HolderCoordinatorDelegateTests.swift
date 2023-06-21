@@ -196,4 +196,40 @@ extension HolderCoordinatorTests {
 		expect(self.sut.childCoordinators).to(beEmpty())
 		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 	}
+	
+	// MARK: - PDFExportFlowDelegate
+	
+	func test_pdfExport_completed() {
+		
+		// Given
+		sut.childCoordinators = [
+			PDFExportCoordinator(
+				navigationController: navigationSpy,
+				delegate: sut
+			)
+		]
+		
+		// When
+		sut.exportCompleted()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
+	
+	func test_pdfExport_failed() {
+		
+		// Given
+		sut.childCoordinators = [
+			PDFExportCoordinator(
+				navigationController: navigationSpy,
+				delegate: sut
+			)
+		]
+		
+		// When
+		sut.exportFailed()
+		
+		// Then
+		expect(self.sut.childCoordinators).to(beEmpty())
+	}
 }

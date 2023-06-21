@@ -110,10 +110,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesMoreInfoAboutExpiredQR = false
 	var invokedUserWishesMoreInfoAboutExpiredQRCount = 0
+	var invokedUserWishesMoreInfoAboutExpiredQRParameters: (type: OriginType, Void)?
+	var invokedUserWishesMoreInfoAboutExpiredQRParametersList = [(type: OriginType, Void)]()
 
-	func userWishesMoreInfoAboutExpiredQR() {
+	func userWishesMoreInfoAboutExpiredQR(type: OriginType) {
 		invokedUserWishesMoreInfoAboutExpiredQR = true
 		invokedUserWishesMoreInfoAboutExpiredQRCount += 1
+		invokedUserWishesMoreInfoAboutExpiredQRParameters = (type, ())
+		invokedUserWishesMoreInfoAboutExpiredQRParametersList.append((type, ()))
 	}
 
 	var invokedUserWishesMoreInfoAboutHiddenQR = false
@@ -218,6 +222,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToCreateAVaccinationQR() {
 		invokedUserWishesToCreateAVaccinationQR = true
 		invokedUserWishesToCreateAVaccinationQRCount += 1
+	}
+
+	var invokedUserWishesToExportPDF = false
+	var invokedUserWishesToExportPDFCount = 0
+
+	func userWishesToExportPDF() {
+		invokedUserWishesToExportPDF = true
+		invokedUserWishesToExportPDFCount += 1
 	}
 
 	var invokedUserWishesToLaunchThirdPartyTicketApp = false

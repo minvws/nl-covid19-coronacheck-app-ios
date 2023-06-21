@@ -37,7 +37,17 @@ class AppCoordinator: Coordinator {
 	
 	private var privacySnapshotWindow: UIWindow?
 	
+	private var priorityNotificationWindow: UIWindow?
+	
 	private var shouldUsePrivacySnapShot = true
+
+	// Flag to prevent showing the priority notification dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var isPresentingPriorityNotification = false
+	
+	// Flag to prevent showing the priority notification dialog twice
+	// which can happen with the config being fetched within the TTL.
+	private var hasPresentedPriorityNotification = false
 	
 	// Flag to prevent showing the recommended update dialog twice
 	// which can happen with the config being fetched within the TTL.
@@ -122,6 +132,11 @@ class AppCoordinator: Coordinator {
 	/// Start the app as a holder
 	private func startAsHolder() {
 		
+		guard !shouldShowArchivedMode() else {
+			showArchivedMode()
+			return
+		}
+		
 		guard childCoordinators.isEmpty else {
 			if childCoordinators.first is HolderCoordinator {
 				childCoordinators.first?.start()
@@ -159,6 +174,22 @@ class AppCoordinator: Coordinator {
 	private func showInternetRequired() {
 		
 		let viewModel = InternetRequiredViewModel(coordinator: self)
+		displayAppStatus(with: viewModel)
+	}
+	
+	private func shouldShowArchivedMode() -> Bool {
+		
+		guard Current.featureFlagManager.isInArchiveMode() else {
+			return false
+		}
+		
+		return Current.walletManager.listEventGroups().isEmpty
+	}
+	
+	/// Show the Archived ModeView
+	private func showArchivedMode() {
+		
+		let viewModel = AppArchivedViewModel(coordinator: self, informationUrl: URL(string: L.holder_archiveMode_link()))
 		displayAppStatus(with: viewModel)
 	}
 	
@@ -289,10 +320,20 @@ class AppCoordinator: Coordinator {
 	func consume(universalLink: UniversalLink) -> Bool {
 		
 		switch universalLink {
-			case .redeemHolderToken,
-					.thirdPartyTicketApp,
+				
+			case .redeemHolderToken:
+				if Current.featureFlagManager.isAddingEventsEnabled() {
+					unhandledUniversalLink = universalLink
+					return true
+				} else {
+					// Do not cache token deeplinks when adding events is disabled.
+					return false
+				}
+				
+			case .thirdPartyTicketApp,
 					.tvsAuth,
 					.thirdPartyScannerApp:
+				
 				// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
 				// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
@@ -368,6 +409,56 @@ extension AppCoordinator: LaunchStateManagerDelegate {
 	func updateIsRecommended(version: String, appStoreUrl: URL) {
 		
 		handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: appStoreUrl)
+	}
+	
+	func showPriorityNotification(_ notification: String) {
+		
+		// Only show if the notification is not empty
+		guard notification.isNotEmpty else { return }
+		
+		// prevent presenting twice
+		guard !isPresentingPriorityNotification, !hasPresentedPriorityNotification else { return }
+		
+		isPresentingPriorityNotification = true
+		
+		let alertController = UIAlertController(
+			title: "",
+			message: notification,
+			preferredStyle: .alert
+		)
+
+		alertController.addAction(
+			UIAlertAction(
+				title: L.generalOk(),
+				style: .default,
+				handler: {  _ in
+					// We only want to show this notification once per session
+					self.hasPresentedPriorityNotification = true
+					self.isPresentingPriorityNotification = false
+					self.priorityNotificationWindow?.alpha = 0
+					self.priorityNotificationWindow?.isHidden = true
+					self.priorityNotificationWindow = nil
+				}
+			)
+		)
+		// Show the Priority Notification Alert on top of everything
+		if #available(iOS 13.0, *) {
+			guard let windowScene = window.windowScene else {
+				return
+			}
+			priorityNotificationWindow = UIWindow(windowScene: windowScene)
+		} else {
+			// Fallback on earlier versions
+			priorityNotificationWindow = UIWindow(frame: UIScreen.main.bounds)
+		}
+		
+		let clearVC = UIViewController()
+		clearVC.view.backgroundColor = .clear
+		priorityNotificationWindow?.rootViewController = clearVC
+		priorityNotificationWindow?.windowLevel = .alert + 1
+		priorityNotificationWindow?.alpha = 1
+		priorityNotificationWindow?.makeKeyAndVisible()
+		clearVC.present(alertController, animated: false)
 	}
 }
 

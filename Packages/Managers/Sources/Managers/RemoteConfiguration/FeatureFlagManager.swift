@@ -23,20 +23,25 @@ public protocol FeatureFlagManaging {
 	func is1GVerificationPolicyEnabled() -> Bool
 	
 	// Holder
-	func areZeroDisclosurePoliciesEnabled() -> Bool
 	func isGGDPortalEnabled() -> Bool
+	func isMigrationEnabled() -> Bool
+	func isAddingEventsEnabled() -> Bool
+	func isScanningEventsEnabled() -> Bool
+	func isInArchiveMode() -> Bool
 }
 
 public class FeatureFlagManager: FeatureFlagManaging {
 	
+	private let now: () -> Date
 	private var remoteConfigManager: RemoteConfigManaging
 	private var userSettings: UserSettingsProtocol
 	
 	public required init(
+		now: @escaping () -> Date,
 		remoteConfigManager: RemoteConfigManaging,
 		userSettings: UserSettingsProtocol
 	) {
-		
+		self.now = now
 		self.remoteConfigManager = remoteConfigManager
 		self.userSettings = userSettings
 	}
@@ -79,7 +84,24 @@ public class FeatureFlagManager: FeatureFlagManaging {
 	
 	// Holder
 	
-	public func areZeroDisclosurePoliciesEnabled() -> Bool {
-		return true
+	public func isMigrationEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.migrateButtonEnabled ?? true
+	}
+	
+	public func isAddingEventsEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.addEventsButtonEnabled ?? true
+	}
+	
+	public func isScanningEventsEnabled() -> Bool {
+		
+		return remoteConfigManager.storedConfiguration.scanCertificateButtonEnabled ?? true
+	}
+	
+	public func isInArchiveMode() -> Bool {
+		
+		guard let archiveDate = remoteConfigManager.storedConfiguration.archiveOnlyDate else { return false }
+		return now() > archiveDate
 	}
 }

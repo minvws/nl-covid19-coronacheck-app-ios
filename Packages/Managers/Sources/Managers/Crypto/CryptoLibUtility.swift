@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import Reachability
-import Clcore
+import Mobilecore
 import Transport
 import Shared
 import Persistence
@@ -30,6 +30,8 @@ public protocol CryptoLibUtilityProtocol: AnyObject {
 	///   - data: Data that needs to be saved
 	///   - file: File type
 	func store(_ data: Data, for file: CryptoLibUtility.File)
+	
+	func read(_ file: CryptoLibUtility.File) -> Data?
 
 	/// Check if a file exists. If true, initialize
 	/// - Parameter file: file type
@@ -175,6 +177,10 @@ public final class CryptoLibUtility: CryptoLibUtilityProtocol {
 			return
 		}
 		shouldInitialize.insert(file)
+	}
+	
+	public func read(_ file: CryptoLibUtility.File) -> Data? {
+		return fileStorage.read(fileName: file.name)
 	}
 
 	/// Check if a file exists. If true, initialize

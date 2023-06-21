@@ -197,3 +197,12 @@ class MessageCardView: BaseView {
 		callToActionButtonTappedCommand?()
 	}
 }
+
+class BlueMessageCardView: MessageCardView {
+	
+	override func setupViews() {
+		
+		super.setupViews()
+		view?.backgroundColor = C.blueBackground()
+	}
+}

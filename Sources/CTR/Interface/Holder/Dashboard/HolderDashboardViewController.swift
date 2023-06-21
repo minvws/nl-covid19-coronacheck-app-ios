@@ -35,6 +35,7 @@ class HolderDashboardViewController: GenericViewController<HolderDashboardView, 
 		case europeanUnionQR(title: String, stackSize: Int, validityTexts: (Date) -> [ValidityText], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?, error: Card.Error?)
 		
 		// Recommendations
+		case exportReminder(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		case recommendedUpdate(message: String, callToActionButtonText: String, didTapCallToAction: () -> Void)
 		
 		// Disclosure Policy
@@ -193,6 +194,13 @@ private extension HolderDashboardViewController.Card {
 				let .recommendedUpdate(message, callToActionButtonText, didTapCallToAction):
 				
 				return MessageCardView(config: .init(
+					title: message,
+					closeButtonCommand: nil,
+					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)
+				))
+				
+			case let .exportReminder(message, callToActionButtonText, didTapCallToAction):
+				return BlueMessageCardView(config: .init(
 					title: message,
 					closeButtonCommand: nil,
 					ctaButton: (title: callToActionButtonText, command: didTapCallToAction)

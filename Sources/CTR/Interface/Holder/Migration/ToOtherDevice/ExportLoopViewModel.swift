@@ -31,11 +31,12 @@ class ExportLoopViewModel {
 	
 	// MARK: - Observable
 
-	var title = Observable<String>(value: L.holder_startMigration_onboarding_toolbar())
-	var step = Observable<String>(value: L.holder_startMigration_onboarding_step("3"))
+	let title = Observable<String>(value: L.holder_startMigration_onboarding_toolbar())
+	let step = Observable<String>(value: L.holder_startMigration_onboarding_step("3"))
 	var header = Observable<String>(value: L.holder_startMigration_toOtherDevice_onboarding_step3_title())
 	var message = Observable<String>(value: L.holder_startMigration_toOtherDevice_onboarding_step3_message())
-	var actionTitle = Observable<String>(value: L.holder_startMigration_onboarding_doneButton())
+	let actionTitle = Observable<String>(value: L.holder_startMigration_onboarding_doneButton())
+	let qrAccessibilityTitle = Observable<String>(value: L.holder_startMigration_toOtherDevice_accessiblityQR())
 	var image = Observable<UIImage?>(value: nil)
 	var pageControlCount = Observable<Int>(value: 0)
 
