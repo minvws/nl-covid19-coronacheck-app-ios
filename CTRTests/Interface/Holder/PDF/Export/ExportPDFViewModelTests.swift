@@ -68,7 +68,7 @@ final class ExportPDFViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedUserWishesToShare) == true
 	}
 
-	func to_be_fixed_test_test_viewDidAppear() {
+	func test_viewDidAppear() {
 		
 		// Given
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "PHONENUMBER"
@@ -82,7 +82,7 @@ final class ExportPDFViewModelTests: XCTestCase {
 		expect(self.sut.html.value) == nil
 	}
 	
-	func to_be_fixed_test_viewDidAppear_withConfig() throws {
+	func test_viewDidAppear_withConfig() throws {
 		
 		// Given
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "PHONENUMBER"
@@ -98,7 +98,7 @@ final class ExportPDFViewModelTests: XCTestCase {
 		expect(self.sut.html.value) == nil
 	}
 	
-	func to_be_fixed_test_viewDidAppear_withConfig_withDCC() throws {
+	func test_viewDidAppear_withConfig_withDCC() throws {
 		
 		// Given
 		environmentSpies.contactInformationSpy.stubbedPhoneNumberLink = "PHONENUMBER"

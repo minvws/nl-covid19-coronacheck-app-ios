@@ -7,8 +7,7 @@ inputs:
   go_version:
     type: string
     required: false
-    # TODO: This should probably be golang version stable, but leaving at ancient 1.16 for now
-    default: '1.16'
+    default: '1.20.5'
   temp_path:
     type: string
     required: false
@@ -62,10 +61,10 @@ runs:
         cp -r "${{ inputs.temp_path }}/mobilecore.xcframework" "${{ inputs.destination_path }}"
         rm -rf "${{ inputs.temp_path }}"
 
-    - name: Archive mobile core dependency
-      uses: actions/upload-artifact@v3
+    - name: Save mobile core to cache
+      if: steps.cachestep.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v3
       with:
-        name: mobilecore.xcframework
         path: |
           ${{ inputs.destination_path }}
-        retention-days: 2
+        key: mobilecore-xcframework-${{ inputs.mobile_core_commit_hash }}-${{ inputs.go_version }}-v3
