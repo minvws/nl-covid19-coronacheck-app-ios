@@ -45,7 +45,7 @@ class ScanInstructionsCoordinator: Coordinator, ScanInstructionsCoordinatorDeleg
 		delegate: ScanInstructionsDelegate,
 		isOpenedFromMenu: Bool,
 		allowSkipInstruction: Bool,
-		userSettings: UserSettingsProtocol = UserSettings(),
+		userSettings: UserSettingsProtocol = Current.userSettings,
 		verificationPolicyManager: VerificationPolicyManaging = Current.verificationPolicyManager
 	) {
 
