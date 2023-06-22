@@ -11,17 +11,6 @@ import UIKit
 
 extension UINavigationController {
 	
-	public func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
-		pushViewController(viewController, animated: animated)
-
-		guard animated, let coordinator = transitionCoordinator else {
-			DispatchQueue.main.async { completion() }
-			return
-		}
-
-		coordinator.animate(alongsideTransition: nil) { _ in completion() }
-	}
-
 	public func popViewController( animated: Bool, completion: @escaping () -> Void) {
 
 		popViewController(animated: animated)
@@ -100,21 +89,6 @@ extension UINavigationController {
 
 		guard let popbackVC = viewControllers.first(where: { $0.isKind(of: viewControllerType) })
 		else {
-			completion()
-			return
-		}
-		
-		popToViewController(popbackVC, animated: animated, completion: completion)
-	}
-	
-	/// `oneOfInstanceOf` is in descending priority order
-	public func popbackTo(oneOfInstanceOf viewControllerTypes: [UIViewController.Type], animated: Bool, completion: @escaping () -> Void) {
-
-		let viewControllersMatchingTypes = viewControllerTypes.compactMap { viewControllerType in
-			self.viewControllers.last(where: { $0.isKind(of: viewControllerType) })
-		}
-		
-		guard let popbackVC = viewControllersMatchingTypes.first else {
 			completion()
 			return
 		}

@@ -17,7 +17,7 @@ import Persistence
 @testable import Resources
 import WebKit
 
-final class ExportPDFViewModelTests: XCTestCase {
+final class PDFExportViewModelTests: XCTestCase {
 	
 	private var sut: PDFExportViewModel!
 	private var environmentSpies: EnvironmentSpies!

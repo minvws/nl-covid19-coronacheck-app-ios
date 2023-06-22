@@ -33,6 +33,9 @@ final class MenuRowView: UIControl {
 			static let margin: CGFloat = 16
 			static let spacing: CGFloat = 4
 		}
+		enum Animation {
+			static let duration: CGFloat = 0.2
+		}
 	}
 	
 	var titleLabelTopConstraint: NSLayoutConstraint?
@@ -103,6 +106,8 @@ final class MenuRowView: UIControl {
 		setColorsForCurrentTraitCollection()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
+		addTarget(self, action: #selector(self.touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
+		addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 	}
 
 	func setupViewHierarchy() {
@@ -197,6 +202,20 @@ final class MenuRowView: UIControl {
 			self.isSelected = false
 			self.isHighlighted = false
 		}
+	}
+	
+	@objc private func touchDownAnimation() {
+		Haptic.light()
+		
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
+			self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+		})
+	}
+	
+	@objc private func touchUpAnimation() {
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
+			self.transform = CGAffineTransform.identity
+		})
 	}
 	
 	// MARK: - Accessors
