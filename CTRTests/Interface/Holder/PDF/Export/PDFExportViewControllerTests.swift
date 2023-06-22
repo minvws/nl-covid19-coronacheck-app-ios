@@ -10,7 +10,7 @@ import Nimble
 @testable import CTR
 import SnapshotTesting
 
-final class ExportPDFiewControllerTests: XCTestCase {
+final class PDFExportViewControllerTests: XCTestCase {
 	
 	private var sut: PDFExportViewController!
 	private var viewModel: PDFExportViewModel!
