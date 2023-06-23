@@ -26,6 +26,9 @@ final class MakeTestAppointmentView: BaseView {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
 		}
+		enum Button {
+			static let height: CGFloat = 52
+		}
 	}
 	
 	/// The stackview
@@ -111,6 +114,9 @@ final class MakeTestAppointmentView: BaseView {
 			button.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
+			),
+			button.heightAnchor.constraint(
+				greaterThanOrEqualToConstant: ViewTraits.Button.height
 			)
 		])
 	}
