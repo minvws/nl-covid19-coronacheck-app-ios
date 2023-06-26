@@ -10,7 +10,7 @@ import Shared
 
 public final class ContentViewModel {
 
-	@Bindable public private(set) var content: Content
+	public private(set) var content: Observable<Content>
 	
 	public let showBackButton: Bool
 	public let allowsSwipeBack: Bool
@@ -24,7 +24,7 @@ public final class ContentViewModel {
 		linkTapHander: ((URL) -> Void)? = nil
 	) {
 
-		self.content = content
+		self.content = Observable(value: content)
 		self.backbuttonAction = backAction
 		self.showBackButton = backbuttonAction != nil
 		self.allowsSwipeBack = allowsSwipeBack

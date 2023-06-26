@@ -18,9 +18,7 @@ public class ContentViewController: TraitWrappedGenericViewController<ContentVie
 			addBackButton(customAction: #selector(self.backButtonTapped))
 		}
 		
-		viewModel.$content.binding = { [weak self] in
-			self?.displayContent($0)
-		}
+		viewModel.content.observe { [weak self] in self?.displayContent($0) }
 		
 		sceneView.contentTextView.linkTouchedHandler = { [weak self] url in
 			
