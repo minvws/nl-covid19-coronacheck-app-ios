@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -10,13 +10,12 @@ import Shared
 
 public class BottomSheetContentViewModel {
 
-	// MARK: - Bindable
+	// MARK: - Observable
 
-	@Bindable private(set) var title: String
-	@Bindable private(set) var body: String
-	@Bindable private(set) var secondaryButtonTitle: String?
-
-	@Bindable private(set) var hideForCapture: Bool = false
+	private(set) var title: Observable<String>
+	private(set) var body: Observable<String>
+	private(set) var secondaryButtonTitle: Observable<String?>
+	private(set) var hideForCapture = Observable<Bool>(value: false)
 
 	// MARK: - Private
 	private let linkTapHander: ((URL) -> Void)?
@@ -37,15 +36,15 @@ public class BottomSheetContentViewModel {
 	) {
 
 		self.content = content
-		self.title = content.title
-		self.body = content.body ?? ""
-		self.secondaryButtonTitle = content.secondaryActionTitle
+		self.title = Observable(value: content.title)
+		self.body = Observable(value: content.body ?? "")
+		self.secondaryButtonTitle = Observable(value: content.secondaryActionTitle)
 		self.linkTapHander = linkTapHander
 		self.screenCaptureDetector = screenCaptureDetector
 		
 		if hideBodyForScreenCapture {
 			screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
-				self?.hideForCapture = isBeingCaptured
+				self?.hideForCapture.value = isBeingCaptured
 			}
 		}
 	}

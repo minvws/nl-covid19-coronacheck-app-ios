@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -17,10 +17,10 @@ class DccValidVac2of2NL: BaseTest {
 	}
 	
 	func test_validVac2of2NL() {
-		addScannedQR()
-		proceedToOverview()
-		assertInternationalVaccination(of: vaccination, dose: "2/2")
 		
+		addScannedQR()
+		assertInternationalVaccination(of: vaccination, dose: "2/2")
+
 		viewQRCode(of: .vaccination)
 		assertInternationalVaccinationQR(of: vaccination, dose: "2/2")
 	}

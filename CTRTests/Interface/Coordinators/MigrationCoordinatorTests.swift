@@ -210,7 +210,7 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.first is ContentViewController) == true
 		expect((self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel)
 			.to(beAnInstanceOf(ContentViewModel.self))
-		expect((self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel.content.body) == "<p>Er gaat iets mis met het importeren van je gegevens.</p><p><b>Foutcode:</b><br /> i 1410 000 110 </p>"
+		expect((self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel.content.value.body) == "<p>Er gaat iets mis met het importeren van je gegevens.</p><p><b>Foutcode:</b><br /> i 1410 000 110 </p>"
 	}
 	
 	func test_presentError_export() {
@@ -226,7 +226,7 @@ class MigrationCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.first is ContentViewController) == true
 		expect((self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel)
 			.to(beAnInstanceOf(ContentViewModel.self))
-		expect((self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel.content.body) == "<p>Er gaat iets mis met het exporteren van je gegevens.</p><p><b>Foutcode:</b><br /> i 1420 000 110 </p>"
+		expect((self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel.content.value.body) == "<p>Er gaat iets mis met het exporteren van je gegevens.</p><p><b>Foutcode:</b><br /> i 1420 000 110 </p>"
 	}
 	
 	func test_userWishesToSeeScannedEvents() throws {

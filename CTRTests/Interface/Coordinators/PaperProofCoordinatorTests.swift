@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -249,8 +249,8 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holderPaperproofNotokenTitle()
-		expect(viewModel.content.body) == L.holderPaperproofNotokenMessage()
+		expect(viewModel.content.value.title) == L.holderPaperproofNotokenTitle()
+		expect(viewModel.content.value.body) == L.holderPaperproofNotokenMessage()
 	}
 	
 	func test_userWishesMoreInformationOnWhichProofsCanBeUsed() {
@@ -286,7 +286,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_displayErrorForPaperProofCheck() throws {
@@ -303,7 +303,7 @@ class PaperProofCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_userWishesToCancelPaperProofFlow() {

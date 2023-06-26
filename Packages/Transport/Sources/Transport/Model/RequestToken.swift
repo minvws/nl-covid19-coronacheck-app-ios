@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -8,7 +8,7 @@
 import Foundation
 
 /// The request token to fetch a test result form a commercial tester
-public struct RequestToken: Codable, Equatable {
+public struct RequestToken: Codable, Equatable, Sendable {
 
 	/// The current highest known protocol version
 	/// 1.0: Checksum

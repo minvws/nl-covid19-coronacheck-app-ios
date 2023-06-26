@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -8,8 +8,8 @@
 class WalletSmoke: BaseTest {
 	
 	func test_emptyWallet() {
-		viewWallet()
 		
+		viewWallet()
 		assertNoEventsInWallet()
 	}
 	
@@ -19,7 +19,6 @@ class WalletSmoke: BaseTest {
 		
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		assertWalletItem(ofType: .vaccination, with: vac)
@@ -65,7 +64,6 @@ class WalletSmoke: BaseTest {
 		let person = TestData.vacP1
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		deleteItemFromWallet()

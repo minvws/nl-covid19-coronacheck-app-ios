@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -112,8 +112,8 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == "Vraag je coronabewijs aan via de helpdesk"
-		expect(viewModel.content.body) == "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je maandag t/m vrijdag tussen 08:00 en 18:00 uur bellen op: <a href=\"tel:TEST\">TEST</a> (gratis, gesloten op feestdagen).</p>\n<p>Of als je vanuit het buitenland belt: <a href=\"tel:TEST 2\">TEST 2</a>. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>"
+		expect(viewModel.content.value.title) == "Vraag je coronabewijs aan via de helpdesk"
+		expect(viewModel.content.value.body) == "<p>Vraag je bewijs aan bij de CoronaCheck helpdesk. Die kun je maandag t/m vrijdag tussen 08:00 en 18:00 uur bellen op: <a href=\"tel:TEST\">TEST</a> (gratis, gesloten op feestdagen).</p>\n<p>Of als je vanuit het buitenland belt: <a href=\"tel:TEST 2\">TEST 2</a>. Kies in het keuzemenu voor “een bewijs aanvragen”.</p>Geef het volgende door:<ul><li>je burgerservicenummer (BSN)</li><li>je postcode</li></ul><p>Je bewijs met QR-code wordt per post opgestuurd. Dit kan maximaal 7 werkdagen duren.</p>"
 	}
 	
 	func test_userHasNoBSN_portalDisabled_vaccinationFlow() throws {
@@ -128,8 +128,8 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_vaccinationFlow_title()
-		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_vaccinationFlow_message()
+		expect(viewModel.content.value.title) == L.holder_contactProviderHelpdesk_vaccinationFlow_title()
+		expect(viewModel.content.value.body) == L.holder_contactProviderHelpdesk_vaccinationFlow_message()
 	}
 	
 	func test_userHasNoBSN_portalDisabled_vaccinationAndPositiveTestFlow() throws {
@@ -145,8 +145,8 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_vaccinationFlow_title()
-		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_vaccinationFlow_message()
+		expect(viewModel.content.value.title) == L.holder_contactProviderHelpdesk_vaccinationFlow_title()
+		expect(viewModel.content.value.body) == L.holder_contactProviderHelpdesk_vaccinationFlow_message()
 	}
 	
 	func test_userHasNoBSN_portalDisabled_recoveryFlow() throws {
@@ -162,8 +162,8 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_testFlow_title()
-		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_testFlow_message()
+		expect(viewModel.content.value.title) == L.holder_contactProviderHelpdesk_testFlow_title()
+		expect(viewModel.content.value.body) == L.holder_contactProviderHelpdesk_testFlow_message()
 	}
 	
 	func test_userHasNoBSN_portalDisabled_testFlow() throws {
@@ -179,8 +179,8 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_testFlow_title()
-		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_testFlow_message()
+		expect(viewModel.content.value.title) == L.holder_contactProviderHelpdesk_testFlow_title()
+		expect(viewModel.content.value.body) == L.holder_contactProviderHelpdesk_testFlow_message()
 	}
 	
 	func test_userHasNoBSN_portalEnabled_vaccinationFlow() throws {
@@ -251,8 +251,8 @@ class AlternativeRouteCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.holder_contactProviderHelpdesk_vaccinationFlow_title()
-		expect(viewModel.content.body) == L.holder_contactProviderHelpdesk_message_ggdPortalEnabled()
+		expect(viewModel.content.value.title) == L.holder_contactProviderHelpdesk_vaccinationFlow_title()
+		expect(viewModel.content.value.body) == L.holder_contactProviderHelpdesk_message_ggdPortalEnabled()
 	}
 
 	func test_userWishedToGoToGGDPortal() {

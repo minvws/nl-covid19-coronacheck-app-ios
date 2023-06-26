@@ -112,11 +112,7 @@ class PDFExportView: ScrolledStackView {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: message,
-				style: NSAttributedString.HTMLStyle(
-					font: Fonts.body,
-					textColor: C.black()!,
-					paragraphSpacing: 0
-				)
+				style: .bodyDarkNoParagraphSpacing
 			) {
 				self.messageTextView.attributedText = $0
 			}

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -14,12 +14,12 @@ public class BottomSheetContentViewController: GenericViewController<BottomSheet
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$body.binding = { [weak self] in self?.sceneView.body = $0 }
-		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+		viewModel.title.observe { [weak self] in self?.sceneView.title = $0 }
+		viewModel.body.observe { [weak self] in self?.sceneView.body = $0 }
+		viewModel.secondaryButtonTitle.observe { [weak self] in
 			self?.sceneView.secondaryButtonTitle = $0
 		}
-		viewModel.$hideForCapture.binding = { [weak self] in
+		viewModel.hideForCapture.observe { [weak self] in
 			self?.sceneView.handleScreenCapture(shouldHide: $0)
 		}
 

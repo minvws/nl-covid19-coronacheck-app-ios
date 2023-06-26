@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -70,8 +70,8 @@ extension BaseTest {
 	
 	func assertHintForInternationalVaccinationAndRecoveryCertificate() {
 		app.containsText("Vaccinatiebewijs en herstelbewijs gemaakt")
-		app.containsValue("Van je opgehaalde vaccinaties kon alleen een internationaal vaccinatiebewijs worden gemaakt.")
-		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs gemaakt worden.")
+		app.containsValue("Van je opgehaalde vaccinaties is een vaccinatiebewijs gemaakt.")
+		app.containsValue("Van je positieve testuitslag kon ook een herstelbewijs worden gemaakt.")
 		proceedToOverview()
 	}
 	
@@ -127,7 +127,7 @@ extension BaseTest {
 		for (index, dose) in doses.reversed().enumerated() {
 			card(of: .vaccination).containsText("Dosis \(dose) Vaccinatiedatum: " + formattedOffsetDate(with: vaccinationDateOffsetInDays - (30 * index)))
 		}
-		card(of: .vaccination).containsText("Bekijk QR")
+		card(of: .vaccination).containsText("Bekijk QR-code")
 	}
 	
 	func assertInternationalVaccination(of vaccination: Vaccination, dose: String? = nil) {
@@ -137,20 +137,20 @@ extension BaseTest {
 			card(of: .vaccination).containsText("Dosis \(dose)")
 		}
 		card(of: .vaccination).containsText("Vaccinatiedatum: " + vaccination.eventDate.toString(.written))
-		card(of: .vaccination).containsText("Bekijk QR")
+		card(of: .vaccination).containsText("Bekijk QR-code")
 	}
 	
 	func assertValidInternationalRecoveryCertificate(validUntilOffsetInDays: Int) {
 		tapOnInternationalTab()
 		card(of: .recovery).containsText(CertificateType.recovery.rawValue)
 		card(of: .recovery).containsText("Geldig tot " + formattedOffsetDate(with: validUntilOffsetInDays))
-		card(of: .recovery).containsText("Bekijk QR")
+		card(of: .recovery).containsText("Bekijk QR-code")
 	}
 	
 	func assertInternationalRecovery(of positiveTest: PositiveTest) {
 		card(of: .recovery).containsText(positiveTest.internationalEventCertificate)
 		card(of: .recovery).containsText("Geldig tot " + positiveTest.validUntil!.toString(.written))
-		card(of: .recovery).containsText("Bekijk QR")
+		card(of: .recovery).containsText("Bekijk QR-code")
 	}
 	
 	func assertValidInternationalTestCertificate(testType: TestCertificateType, testDateOffsetInDays: Int = 0) {
@@ -158,19 +158,15 @@ extension BaseTest {
 		card(of: .test).containsText(CertificateType.test.rawValue)
 		card(of: .test).containsText("Type test: " + testType.rawValue)
 		card(of: .test).containsText("Testdatum: " + formattedOffsetDate(with: testDateOffsetInDays, withYear: false, withDay: true))
-		card(of: .test).containsText("Bekijk QR")
+		card(of: .test).containsText("Bekijk QR-code")
 	}
 	
 	func assertInternationalTest(of negativeTest: NegativeTest) {
-		tapOnInternationalTab()
-		if disclosureMode == .mode0G {
-			card(of: .test).containsText(negativeTest.internationalEventCertificate)
-		} else {
-			card(of: .test).containsText(negativeTest.eventCertificate)
-		}
+
+		card(of: .test).containsText(negativeTest.internationalEventCertificate)
 		card(of: .test).containsText("Type test: " + negativeTest.testType.rawValue)
 		card(of: .test).containsText("Testdatum: " + negativeTest.eventDate.toString(.recently))
-		card(of: .test).containsText("Bekijk QR")
+		card(of: .test).containsText("Bekijk QR-code")
 	}
 	
 	func assertCertificateIsNotValidInternationally(ofType certificateType: CertificateType) {
@@ -234,7 +230,7 @@ extension BaseTest {
 	}
 	
 	func assertInternationalRecoveryQRDetails(for person: TestPerson) {
-		card(of: .recovery).tapButton("Bekijk QR")
+		card(of: .recovery).tapButton("Bekijk QR-code")
 		app.textExists("Internationale QR")
 		
 		openQRDetails(for: person)
@@ -247,7 +243,7 @@ extension BaseTest {
 	}
 	
 	func assertInternationalRecoveryQR(for positiveTest: PositiveTest, for person: Person? = nil) {
-		card(of: .recovery).tapButton("Bekijk QR")
+		card(of: .recovery).tapButton("Bekijk QR-code")
 		app.textExists("Internationale QR")
 		
 		openQRDetails(for: person)
@@ -263,7 +259,7 @@ extension BaseTest {
 	}
 	
 	func assertInternationalTestQRDetails(for person: TestPerson, testType: TestCertificateType) {
-		card(of: .test).tapButton("Bekijk QR")
+		card(of: .test).tapButton("Bekijk QR-code")
 		app.textExists("Internationale QR")
 		
 		openQRDetails(for: person)

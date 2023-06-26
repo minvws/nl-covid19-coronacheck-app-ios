@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -150,11 +150,7 @@ final class HelpdeskView: ScrolledStackView {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: contactMessage1,
-				style: NSAttributedString.HTMLStyle(
-					font: Fonts.body,
-					textColor: C.black()!,
-					paragraphSpacing: 0
-				)
+				style: .bodyDarkNoParagraphSpacing
 			) {
 				self.contactMessageTextView1.attributedText = $0
 			}
@@ -165,11 +161,7 @@ final class HelpdeskView: ScrolledStackView {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: contactMessage2,
-				style: NSAttributedString.HTMLStyle(
-					font: Fonts.body,
-					textColor: C.black()!,
-					paragraphSpacing: 0
-				)
+				style: .bodyDarkNoParagraphSpacing
 			) {
 				self.contactMessageTextView2.attributedText = $0
 			}
@@ -180,11 +172,7 @@ final class HelpdeskView: ScrolledStackView {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: contactMessage3,
-				style: NSAttributedString.HTMLStyle(
-					font: Fonts.body,
-					textColor: C.black()!,
-					paragraphSpacing: 0
-				)
+				style: .bodyDarkNoParagraphSpacing
 			) {
 				self.contactMessageTextView3.attributedText = $0
 			}
@@ -204,11 +192,7 @@ final class HelpdeskView: ScrolledStackView {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: supportMessage,
-				style: NSAttributedString.HTMLStyle(
-					font: Fonts.body,
-					textColor: C.black()!,
-					paragraphSpacing: 0
-				)
+				style: .bodyDarkNoParagraphSpacing
 			) {
 				self.supportMessageTextView.attributedText = $0
 			}
