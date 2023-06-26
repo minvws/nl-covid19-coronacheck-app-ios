@@ -47,7 +47,7 @@ final class ContentViewModelTests: XCTestCase {
 		// When
 
 		// Then
-		expect(self.sut.content) == Content(title: "test")
+		expect(self.sut.content.value) == Content(title: "test")
 		expect(self.sut.allowsSwipeBack) == true
 	}
 
