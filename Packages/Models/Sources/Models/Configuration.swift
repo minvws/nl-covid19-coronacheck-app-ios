@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Configuration {
+public final class Configuration {
 	
 	public enum Release: String {
 		case production
@@ -17,13 +17,13 @@ public class Configuration {
 	}
 
 	/// Dictionary with DigiD configs
-	public var digid: NSDictionary = [:]
+	public private(set) var digid: NSDictionary = [:]
 	
 	/// Dictionary with GGD Portal configs
-	public var ggdPortal: NSDictionary = [:]
+	public private(set) var ggdPortal: NSDictionary = [:]
 
 	/// Dictionary with General configs
-	public var general: NSDictionary = [:]
+	public private(set) var general: NSDictionary = [:]
 
 	/// Initlializer
 	public init() {
