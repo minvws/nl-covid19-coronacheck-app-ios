@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -65,5 +65,26 @@ extension UIViewController {
 		bottomSheetViewController.modalPresentationStyle = .custom
 		bottomSheetViewController.modalPresentationCapturesStatusBarAppearance = true
 		present(bottomSheetViewController, animated: true)
+	}
+		
+	public func addBackButton(customAction: Selector? = nil) {
+		
+		var action = #selector(onBack)
+		if let customAction {
+			action = customAction
+		}
+		
+		let config = UIBarButtonItem.Configuration(
+			target: self,
+			action: action,
+			content: .image(I.backArrow()),
+			accessibilityIdentifier: "BackButton",
+			accessibilityLabel: L.generalBack()
+		)
+		navigationItem.leftBarButtonItem = .create(config)
+	}
+	
+	@objc open func onBack() {
+		navigationController?.popViewController(animated: true)
 	}
 }

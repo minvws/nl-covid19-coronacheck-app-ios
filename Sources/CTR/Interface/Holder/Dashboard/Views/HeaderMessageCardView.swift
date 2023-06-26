@@ -71,11 +71,7 @@ final class HeaderMessageCardView: BaseView {
 		didSet {
 			NSAttributedString.makeFromHtml(
 				text: message,
-				style: NSAttributedString.HTMLStyle(
-					font: Fonts.body,
-					textColor: C.black()!,
-					paragraphSpacing: 0
-				)
+				style: .bodyDarkNoParagraphSpacing
 			) {
 				self.contentTextView.attributedText = $0
 			}
