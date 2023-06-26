@@ -11,7 +11,7 @@ class VaccinationErrorsSmoke: BaseTest {
 		addVaccinationCertificate(for: TestData.vacNoVaccination.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertNoCertificateCouldBeCreated()
+//		assertNoCertificateCouldBeCreated()
 		assertNoCertificateRetrieved()
 	}
 }

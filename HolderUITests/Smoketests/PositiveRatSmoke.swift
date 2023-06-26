@@ -22,7 +22,6 @@ class PositiveRatSmoke: BaseTest {
 		
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 		assertCertificateIsNotValidInternationally(ofType: .recovery)

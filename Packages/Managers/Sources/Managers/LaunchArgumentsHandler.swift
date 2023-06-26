@@ -47,4 +47,9 @@ public class LaunchArgumentsHandler {
 		
 		return CommandLine.arguments.contains("-skipOnboarding")
 	}
+	
+	public static func shouldSkipArchiveEndStata() -> Bool {
+		
+		return CommandLine.arguments.contains("-skipArchiveEndState")
+	}
 }

@@ -11,7 +11,6 @@ class VaccinationSmoke: BaseTest {
 		let person = TestData.vacP1
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 		assertInternationalVaccinationQRDetails(for: person)

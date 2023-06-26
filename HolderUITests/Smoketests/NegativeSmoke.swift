@@ -46,7 +46,6 @@ class NegativeSmoke: BaseTest {
 	// MARK: Negative tests - premature
 	
 	func test_negPrematurePcr() {
-		let person = TestData.negPrematurePcr
 		addTestCertificateFromGGD(for: TestData.negPrematurePcr.bsn)
 		addRetrievedCertificateToApp()
 		

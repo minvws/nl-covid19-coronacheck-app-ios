@@ -130,6 +130,7 @@ extension BaseTest {
 	}
 	
 	private func loginToServer() {
+		
 		guard let authPassword = ProcessInfo.processInfo.environment["ACCEPTANCE_BASIC_AUTH_PASSWORD"] else {
 			XCTFail("The password could not be found.")
 			return

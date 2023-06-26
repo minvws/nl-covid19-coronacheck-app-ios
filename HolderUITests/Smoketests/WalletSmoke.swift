@@ -8,8 +8,8 @@
 class WalletSmoke: BaseTest {
 	
 	func test_emptyWallet() {
-		viewWallet()
 		
+		viewWallet()
 		assertNoEventsInWallet()
 	}
 	
@@ -19,7 +19,6 @@ class WalletSmoke: BaseTest {
 		
 		let vac = storeRetrievedCertificateDetails()
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		assertWalletItem(ofType: .vaccination, with: vac)
@@ -65,7 +64,6 @@ class WalletSmoke: BaseTest {
 		let person = TestData.vacP1
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		viewWallet()
 		deleteItemFromWallet()

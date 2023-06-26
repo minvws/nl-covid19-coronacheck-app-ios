@@ -183,6 +183,10 @@ class AppCoordinator: Coordinator {
 			return false
 		}
 		
+		if LaunchArgumentsHandler.shouldSkipArchiveEndStata() {
+			return false
+		}
+		
 		return Current.walletManager.listEventGroups().isEmpty
 	}
 	

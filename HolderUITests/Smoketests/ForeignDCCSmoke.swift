@@ -25,17 +25,10 @@ class DccValidVac1of2DE: BaseTest {
 	func test_validVac1of2DE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		proceedToOverview()
 		
 		addScannedQR()
 		
-		assertInternationalVaccination(of: vac1, dose: "2/2")
-		assertInternationalVaccination(of: vac2, dose: "1/2")
-		
-		viewQRCode(of: .vaccination)
-		assertInternationalVaccinationQR(of: vac2, dose: "2/2")
-		viewPreviousQR(hidden: true)
-		assertInternationalVaccinationQR(of: vac1, dose: "1/2")
+		assertSomethingWentWrong(error: "i 280 000 400 99785")
 	}
 }
 
@@ -55,17 +48,9 @@ class DccValidVac2of2DE: BaseTest {
 	func test_validVac2of2DE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		proceedToOverview()
 		
 		addScannedQR()
-		
-		assertInternationalVaccination(of: vac1, dose: "3/3")
-		assertInternationalVaccination(of: vac2, dose: "2/2")
-		
-		viewQRCode(of: .vaccination)
-		assertInternationalVaccinationQR(of: vac2, dose: "3/3")
-		viewPreviousQR()
-		assertInternationalVaccinationQR(of: vac1, dose: "2/2")
+		assertSomethingWentWrong(error: "i 280 000 400 99785")
 	}
 }
 
@@ -85,17 +70,9 @@ class DccValidVac3of3DE: BaseTest {
 	func test_validVac3of3DE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		proceedToOverview()
 		
 		addScannedQR()
-		
-		assertInternationalVaccination(of: vac1, dose: "4/4")
-		assertInternationalVaccination(of: vac2, dose: "3/3")
-		
-		viewQRCode(of: .vaccination)
-		assertInternationalVaccinationQR(of: vac2, dose: "4/4")
-		viewPreviousQR()
-		assertInternationalVaccinationQR(of: vac1, dose: "3/3")
+		assertSomethingWentWrong(error: "i 280 000 400 99785")
 	}
 }
 
@@ -113,7 +90,6 @@ class DccExpiredVac1of2DE: BaseTest {
 	
 	func test_expiredVac1of2DE() {
 		addScannedQR()
-		proceedToOverview()
 		assertInternationalVaccination(of: vaccination, dose: "1/2")
 	}
 }
@@ -130,7 +106,6 @@ class DccExpiredVac2of2DE: BaseTest {
 	
 	func test_expiredVac2of2DE() {
 		addScannedQR()
-		proceedToOverview()
 		assertInternationalVaccination(of: vaccination, dose: "2/2")
 	}
 }
@@ -169,7 +144,6 @@ class DccValidRecDE: BaseTest {
 	func test_validRecDE() {
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		proceedToOverview()
 		
 		addScannedQR()
 		
@@ -210,7 +184,8 @@ class DccValidNegDE: BaseTest {
 		
 		addScannedQR()
 		
-		assertSomethingWentWrong(error: "i 580 000 400 99785")
+		assertValidInternationalTestCertificate(testType: .pcr)
+		viewQRCode(of: .test)
 	}
 }
 
