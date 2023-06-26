@@ -314,7 +314,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 
 	func test_authenticationScreenDidFinish_back_test() {
@@ -492,7 +492,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_fetchEventsScreenDidFinish_back_vaccination() {
@@ -596,7 +596,7 @@ class EventCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_listEventsScreenDidFinish_moreInformation() throws {

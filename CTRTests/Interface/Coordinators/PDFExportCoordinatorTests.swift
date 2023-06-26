@@ -103,7 +103,7 @@ class PDFExportCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
 		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
-		expect(viewModel.content.title) == L.generalNetworkwasbusyTitle()
+		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 		expect(self.delegateSpy.invokedExportFailed) == false
 		expect(self.delegateSpy.invokedExportCompleted) == false
 	}
