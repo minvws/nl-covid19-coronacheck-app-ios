@@ -11,7 +11,6 @@ class VaccinationErrorsTest: BaseTest {
 		let person = TestData.vacP2SameDate
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
@@ -28,7 +27,6 @@ class VaccinationErrorsTest: BaseTest {
 		let person = TestData.vacP1M1SameDate
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}

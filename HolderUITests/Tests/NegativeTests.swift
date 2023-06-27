@@ -15,7 +15,6 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalTestCertificate(testType: .pcr)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
@@ -27,7 +26,6 @@ class NegativeTests: BaseTest {
 		addRetrievedCertificateToApp()
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalTestCertificate(testType: .rat)
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
@@ -37,13 +35,7 @@ class NegativeTests: BaseTest {
 		let person = TestData.negAgobP1
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
-		
-		addVaccinationCertificate(for: person.bsn)
-		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
-		
-		assertCertificateIsNotValidInternationally(ofType: .test)
-		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
+		assertNoCertificateCouldBeCreated(error: "i 480 000 0512")
 	}
 	
 	// MARK: Negative tests - 30 days old

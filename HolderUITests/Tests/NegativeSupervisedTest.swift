@@ -12,7 +12,7 @@ class NegativeSupervisedTest: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertNoCertificateRetrieved()
+		assertNoCertificateCouldBeCreated(error: "i 480 000 0512")
 	}
 	
 	func test_negRatSupervisedSelftest() {
@@ -20,6 +20,6 @@ class NegativeSupervisedTest: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertNoCertificateRetrieved()
+		assertNoCertificateCouldBeCreated(error: "i 480 000 0512")
 	}
 }

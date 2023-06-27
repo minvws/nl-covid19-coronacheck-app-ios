@@ -11,7 +11,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		let person = TestData.vacP1P1Old
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
@@ -28,7 +27,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		let person = TestData.vacM1M1Old
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
@@ -53,7 +51,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		let person = TestData.vacP1M1Old
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
