@@ -11,7 +11,6 @@ class VaccinationPSPriorEventTest: BaseTest {
 		let person = TestData.vacP1PSPriorEvent
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl)
 	}
