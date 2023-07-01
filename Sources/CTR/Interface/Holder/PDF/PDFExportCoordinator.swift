@@ -106,8 +106,13 @@ extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
 	func userWishesToShare(_ path: URL) {
 		
 		let items: [Any] = [path]
-		let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-		navigationController.present(ac, animated: true)
+		let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+		
+		if UIDevice.current.userInterfaceIdiom == .pad {
+			activityViewController.popoverPresentationController?.sourceRect = CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 0, height: 0)
+			activityViewController.popoverPresentationController?.sourceView = navigationController.viewControllers.last?.view
+		}
+		navigationController.present(activityViewController, animated: true)
 	}
 	
 	func exportFailed() {
