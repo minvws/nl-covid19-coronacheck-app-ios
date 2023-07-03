@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -45,7 +45,7 @@ class ScanInstructionsCoordinator: Coordinator, ScanInstructionsCoordinatorDeleg
 		delegate: ScanInstructionsDelegate,
 		isOpenedFromMenu: Bool,
 		allowSkipInstruction: Bool,
-		userSettings: UserSettingsProtocol = UserSettings(),
+		userSettings: UserSettingsProtocol = Current.userSettings,
 		verificationPolicyManager: VerificationPolicyManaging = Current.verificationPolicyManager
 	) {
 

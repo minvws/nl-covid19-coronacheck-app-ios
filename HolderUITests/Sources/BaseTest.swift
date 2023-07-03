@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -19,12 +19,13 @@ class BaseTest: XCTestCase {
 		try super.setUpWithError()
 		app.launchArguments.append("-resetOnStart")
 		app.launchArguments.append("-skipOnboarding")
+		app.launchArguments.append("-skipArchiveEndState")
 		app.launchArguments.append("-disableTransitions")
 		app.launchArguments.append("-showAccessibilityLabels")
 		app.launchArguments.append(disclosureMode.rawValue)
 		app.launch()
 		XCTAssertTrue(app.waitForExistence(timeout: loginTimeout), "App did not start")
-		XCTAssertTrue(app.buttons["Mijn bewijzen"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
+		XCTAssertTrue(app.buttons["MenuButton"].waitForExistence(timeout: loginTimeout), "Overview was not loaded in time")
 		
 		continueAfterFailure = false
 	}

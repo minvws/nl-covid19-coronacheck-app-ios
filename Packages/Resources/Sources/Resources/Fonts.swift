@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -50,11 +50,6 @@ public class Fonts {
 		font(textStyle: .title3, weight: .bold, customFont: "Montserrat-Bold")
 	}
 	
-	/// Size 20 points
-	public static var title3Medium: UIFont {
-		font(textStyle: .title3, weight: .medium)
-	}
-	
 	/// Size 17 points
 	public static var headline: UIFont {
 		font(textStyle: .headline)
@@ -73,11 +68,6 @@ public class Fonts {
 	/// Size 17 points
 	public static var body: UIFont {
 		font(textStyle: .body)
-	}
-	
-	/// Size 17 points
-	public static var bodyMontserrat: UIFont {
-		font(textStyle: .body, customFont: "Montserrat-Bold")
 	}
 	
 	/// Size 17 points
@@ -114,19 +104,9 @@ public class Fonts {
 		font(textStyle: .callout)
 	}
 	
-	/// Size 16 points
-	public static var calloutSemiBold: UIFont {
-		font(textStyle: .callout, weight: .semiBold)
-	}
-	
 	/// Size 15 points
 	public static var subhead: UIFont {
 		font(textStyle: .subheadline)
-	}
-	
-	/// Size 15 points
-	public static var subheadMontserrat: UIFont {
-		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
 	}
 	
 	/// Size 15 points
@@ -134,24 +114,9 @@ public class Fonts {
 		font(textStyle: .subheadline, weight: .heavyBold)
 	}
 	
-	/// Size 15 points
-	public static var subheadBold: UIFont {
-		font(textStyle: .subheadline, weight: .bold)
-	}
-	
-	/// Size 15 points
-	public static var subheadMedium: UIFont {
-		font(textStyle: .subheadline, weight: .medium)
-	}
-	
 	/// Size 13 points
 	public static var footnote: UIFont {
 		font(textStyle: .footnote)
-	}
-	
-	/// Size 13 points
-	public static var footnoteMontserrat: UIFont {
-		font(textStyle: .footnote, customFont: "Montserrat-SemiBold")
 	}
 	
 	/// size 12 points

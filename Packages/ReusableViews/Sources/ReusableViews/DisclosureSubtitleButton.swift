@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -39,6 +39,9 @@ open class DisclosureSubtitleButton: BaseView {
 			static let kerning: CGFloat = -0.24
 			static let bottomMargin: CGFloat = 16.0
 		}
+		enum Animation {
+			static let duration: CGFloat = 0.2
+		}
 	}
 	
 	/// The title label
@@ -74,6 +77,8 @@ open class DisclosureSubtitleButton: BaseView {
 		backgroundColor = C.primaryBlue5()
 		layer.cornerRadius = ViewTraits.View.cornerRadius
 		button.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
+		button.addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
+		button.addTarget(self, action: #selector(touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
 		titleLabel.isSelectable = false
 		subtitleLabel.isSelectable = false
 	}
@@ -163,6 +168,20 @@ open class DisclosureSubtitleButton: BaseView {
 	@objc public func primaryButtonTapped() {
 		
 		primaryButtonTappedCommand?()
+	}
+	
+	@objc private func touchDownAnimation() {
+		Haptic.light()
+		
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
+			self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+		})
+	}
+	
+	@objc private func touchUpAnimation() {
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
+			self.transform = CGAffineTransform.identity
+		})
 	}
 	
 	// MARK: Public Access

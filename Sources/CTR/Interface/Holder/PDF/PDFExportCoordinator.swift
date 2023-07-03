@@ -60,7 +60,7 @@ protocol PDFExportCoordinatorDelegate: AnyObject {
 	
 	func displayError(content: Content)
 	
-	func userWishesToShare(_ path: URL)
+	func userWishesToShare(_ path: URL, sender: UIView?)
 	
 	func exportFailed()
 }
@@ -103,11 +103,16 @@ extension PDFExportCoordinator: PDFExportCoordinatorDelegate {
 		presentContent(content: content)
 	}
 	
-	func userWishesToShare(_ path: URL) {
+	func userWishesToShare(_ path: URL, sender: UIView?) {
 		
 		let items: [Any] = [path]
-		let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-		navigationController.present(ac, animated: true)
+		let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+		
+		if let sender, UIDevice.current.userInterfaceIdiom == .pad {
+			activityViewController.popoverPresentationController?.sourceRect = sender.bounds
+			activityViewController.popoverPresentationController?.sourceView = sender
+		}
+		navigationController.present(activityViewController, animated: true)
 	}
 	
 	func exportFailed() {

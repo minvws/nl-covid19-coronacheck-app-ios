@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -12,7 +12,7 @@ class NegativeSupervisedTest: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertNoCertificateRetrieved()
+		assertNoCertificateCouldBeCreated(error: "i 480 000 0512")
 	}
 	
 	func test_negRatSupervisedSelftest() {
@@ -20,6 +20,6 @@ class NegativeSupervisedTest: BaseTest {
 		addTestCertificateFromGGD(for: person.bsn)
 		addRetrievedCertificateToApp()
 		
-		assertNoCertificateRetrieved()
+		assertNoCertificateCouldBeCreated(error: "i 480 000 0512")
 	}
 }

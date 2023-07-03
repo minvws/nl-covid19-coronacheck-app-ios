@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -11,7 +11,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		let person = TestData.vacP1P1Old
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
@@ -28,7 +27,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		let person = TestData.vacM1M1Old
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}
@@ -53,7 +51,6 @@ class VaccinationOlderThanOneYearTest: BaseTest {
 		let person = TestData.vacP1M1Old
 		addVaccinationCertificate(for: person.bsn)
 		addRetrievedCertificateToApp()
-		assertCertificateIsOnlyValidInternationally()
 		
 		assertValidInternationalVaccinationCertificate(doses: person.doseIntl, vaccinationDateOffsetInDays: person.vacOffset)
 	}

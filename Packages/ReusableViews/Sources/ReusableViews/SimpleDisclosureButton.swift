@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -159,6 +159,9 @@ open class SimpleDisclosureButton: BaseView {
 	}
 }
 
+/*
+ A red full width button with a title and a disclosure icon
+ */
 public class RedDisclosureButton: SimpleDisclosureButton {
 	
 	/// The display constants

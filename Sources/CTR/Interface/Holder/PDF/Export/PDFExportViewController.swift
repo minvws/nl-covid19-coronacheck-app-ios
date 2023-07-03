@@ -73,8 +73,8 @@ class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, 
 	
 	private func setupActions() {
 		
-		sceneView.cardView.primaryButtonCommand = { [weak viewModel] in
-			viewModel?.sharePDF()
+		sceneView.cardView.primaryButtonCommand = { [weak self] in
+			self?.viewModel.sharePDF(sender: self?.sceneView.cardView.primaryButton)
 		}
 		
 		sceneView.cardView.secondaryButtonCommand = { [weak viewModel] in

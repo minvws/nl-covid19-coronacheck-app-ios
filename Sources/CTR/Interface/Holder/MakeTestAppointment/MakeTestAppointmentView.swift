@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -25,6 +25,9 @@ final class MakeTestAppointmentView: BaseView {
 		enum Title {
 			static let lineHeight: CGFloat = 32
 			static let kerning: CGFloat = -0.26
+		}
+		enum Button {
+			static let height: CGFloat = 52
 		}
 	}
 	
@@ -111,6 +114,9 @@ final class MakeTestAppointmentView: BaseView {
 			button.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
+			),
+			button.heightAnchor.constraint(
+				greaterThanOrEqualToConstant: ViewTraits.Button.height
 			)
 		])
 	}

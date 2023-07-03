@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -61,6 +61,7 @@ final public class PageViewController: UIPageViewController {
 	}
 	
 	public func nextPage() {
+		
 		guard let currentViewController = viewControllers?.first else { return }
 		guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
 		guard !inProgress else { return }
@@ -69,6 +70,7 @@ final public class PageViewController: UIPageViewController {
 	}
 	
 	public func previousPage() {
+		
 		guard let currentViewController = viewControllers?.first else { return }
 		guard let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
 		guard !inProgress else { return }
@@ -77,6 +79,7 @@ final public class PageViewController: UIPageViewController {
 	}
 
 	public func startAtIndex(_ index: Int) {
+		
 		guard let pages = pages, pages.count > index else { return }
 		guard !inProgress else { return }
 		setViewControllers([pages[index]], direction: .forward, animated: false, completion: nil)

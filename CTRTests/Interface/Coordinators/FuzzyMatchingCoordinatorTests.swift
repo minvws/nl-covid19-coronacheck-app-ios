@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -166,8 +166,8 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.first is ContentViewController) == true
 		let viewModel = (self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel
 		
-		expect(viewModel?.content.title) == L.holder_identitySelection_success_title()
-		expect(viewModel?.content.body) == L.holder_identitySelection_success_body(name)
+		expect(viewModel?.content.value.title) == L.holder_identitySelection_success_title()
+		expect(viewModel?.content.value.body) == L.holder_identitySelection_success_body(name)
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == false
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidStop) == false
 	}
@@ -180,7 +180,7 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		let viewModel = (self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel as? ContentViewModel
 		
 		// When
-		viewModel?.content.primaryAction?()
+		viewModel?.content.value.primaryAction?()
 		
 		// Then
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == true
@@ -224,7 +224,7 @@ class FuzzyMatchingCoordinatorTests: XCTestCase {
 		expect(self.navigationSpy.viewControllers.first is ContentViewController) == true
 		let viewModel = (self.navigationSpy.viewControllers.first as? ContentViewController)?.viewModel
 		
-		expect(viewModel?.content.title) == "test"
+		expect(viewModel?.content.value.title) == "test"
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidFinish) == false
 		expect(self.delegateSpy.invokedFuzzyMatchingFlowDidStop) == false
 	}

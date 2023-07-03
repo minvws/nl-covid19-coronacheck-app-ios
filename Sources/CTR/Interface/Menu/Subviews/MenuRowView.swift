@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -32,6 +32,9 @@ final class MenuRowView: UIControl {
 			static let kerning: CGFloat = -0.24
 			static let margin: CGFloat = 16
 			static let spacing: CGFloat = 4
+		}
+		enum Animation {
+			static let duration: CGFloat = 0.2
 		}
 	}
 	
@@ -103,6 +106,8 @@ final class MenuRowView: UIControl {
 		setColorsForCurrentTraitCollection()
 		
 		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
+		addTarget(self, action: #selector(self.touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
+		addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 	}
 
 	func setupViewHierarchy() {
@@ -197,6 +202,20 @@ final class MenuRowView: UIControl {
 			self.isSelected = false
 			self.isHighlighted = false
 		}
+	}
+	
+	@objc private func touchDownAnimation() {
+		Haptic.light()
+		
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
+			self.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+		})
+	}
+	
+	@objc private func touchUpAnimation() {
+		UIButton.animate(withDuration: ViewTraits.Animation.duration, animations: {
+			self.transform = CGAffineTransform.identity
+		})
 	}
 	
 	// MARK: - Accessors

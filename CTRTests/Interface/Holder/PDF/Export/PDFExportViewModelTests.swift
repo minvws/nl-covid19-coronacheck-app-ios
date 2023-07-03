@@ -17,7 +17,7 @@ import Persistence
 @testable import Resources
 import WebKit
 
-final class ExportPDFViewModelTests: XCTestCase {
+final class PDFExportViewModelTests: XCTestCase {
 	
 	private var sut: PDFExportViewModel!
 	private var environmentSpies: EnvironmentSpies!
@@ -62,7 +62,7 @@ final class ExportPDFViewModelTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.sharePDF()
+		sut.sharePDF(sender: nil)
 		
 		// Then
 		expect(self.coordinatorSpy.invokedUserWishesToShare) == true

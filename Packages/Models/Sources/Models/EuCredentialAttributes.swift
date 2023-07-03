@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
 *
 *  SPDX-License-Identifier: EUPL-1.2
@@ -10,9 +10,9 @@ import Transport
 import Shared
 import Persistence
 
-public struct EuCredentialAttributes: Codable, Equatable {
+public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 
-	public struct DigitalCovidCertificate: Codable, Equatable {
+	public struct DigitalCovidCertificate: Codable, Equatable, Sendable {
 
 		public let dateOfBirth: String
 		public let name: Name
@@ -32,7 +32,7 @@ public struct EuCredentialAttributes: Codable, Equatable {
 		}
 	}
 
-	public struct Name: Codable, Equatable {
+	public struct Name: Codable, Equatable, Sendable {
 
 		public let familyName: String
 		public let standardisedFamilyName: String
@@ -48,7 +48,7 @@ public struct EuCredentialAttributes: Codable, Equatable {
 		}
 	}
 
-	public struct Vaccination: Codable, Equatable {
+	public struct Vaccination: Codable, Equatable, Sendable {
 
 		public let certificateIdentifier: String
 		public let country: String
@@ -76,7 +76,7 @@ public struct EuCredentialAttributes: Codable, Equatable {
 		}
 	}
 
-	public struct TestEntry: Codable, Equatable {
+	public struct TestEntry: Codable, Equatable, Sendable {
 
 		public let certificateIdentifier: String
 		public let country: String
@@ -104,7 +104,7 @@ public struct EuCredentialAttributes: Codable, Equatable {
 		}
 	}
 
-	public struct RecoveryEntry: Codable, Equatable {
+	public struct RecoveryEntry: Codable, Equatable, Sendable {
 
 		public let certificateIdentifier: String
 		public let country: String

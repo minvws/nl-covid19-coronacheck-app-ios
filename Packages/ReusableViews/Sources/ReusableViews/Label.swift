@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -54,10 +54,6 @@ open class Label: UILabel {
 			self.init(title3, font: Fonts.title3, textColor: textColor)
 		}
 	}
-	
-	public convenience init(title3Medium: String?, textColor: UIColor = C.primaryText()!) {
-		self.init(title3Medium, font: Fonts.title3Medium, textColor: textColor)
-	}
 
 	public convenience init(headline: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(headline, font: Fonts.headline, textColor: textColor)
@@ -87,28 +83,12 @@ open class Label: UILabel {
 		self.init(bodyMedium, font: Fonts.bodyMedium, textColor: textColor)
 	}
 	
-	public convenience init(callout: String?, textColor: UIColor = C.primaryText()!) {
-		self.init(callout, font: Fonts.callout, textColor: textColor)
-	}
-	
-	public convenience init(calloutSemiBold: String?, textColor: UIColor = C.primaryText()!) {
-		self.init(calloutSemiBold, font: Fonts.calloutSemiBold, textColor: textColor)
-	}
-	
 	public convenience init(subhead: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(subhead, font: Fonts.subhead, textColor: textColor)
 	}
 	
-	public convenience init(subheadBold: String?, textColor: UIColor = C.primaryText()!) {
-		self.init(subheadBold, font: Fonts.subheadBold, textColor: textColor)
-	}
-	
 	public convenience init(subheadHeavyBold: String?, textColor: UIColor = C.primaryText()!) {
 		self.init(subheadHeavyBold, font: Fonts.subheadHeavyBold, textColor: textColor)
-	}
-	
-	public convenience init(subheadMedium: String?, textColor: UIColor = C.primaryText()!) {
-		self.init(subheadMedium, font: Fonts.subheadMedium, textColor: textColor)
 	}
 	
 	public convenience init(footnote: String?, textColor: UIColor = C.primaryText()!) {
