@@ -61,7 +61,7 @@ class PDFExportCardView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 	
-	private let primaryButton: Button = {
+	let primaryButton: Button = {
 		return Button(title: "", style: .roundedBlue)
 	}()
 
