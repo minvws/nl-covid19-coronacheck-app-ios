@@ -80,10 +80,10 @@ class PDFExportViewModel: NSObject {
 		}
 	}
 	
-	func sharePDF() {
+	func sharePDF(sender: UIView?) {
 		if let url = FileStorage().documentsURL {
 			let fileUrl = url.appendingPathComponent(self.fileName, isDirectory: false)
-			coordinator?.userWishesToShare(fileUrl)
+			coordinator?.userWishesToShare(fileUrl, sender: sender)
 		}
 	}
 }
