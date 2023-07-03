@@ -62,7 +62,7 @@ final class PDFExportViewModelTests: XCTestCase {
 		// Given
 		
 		// When
-		sut.sharePDF()
+		sut.sharePDF(sender: nil)
 		
 		// Then
 		expect(self.coordinatorSpy.invokedUserWishesToShare) == true

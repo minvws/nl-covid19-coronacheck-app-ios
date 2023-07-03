@@ -114,7 +114,7 @@ class PDFExportCoordinatorTests: XCTestCase {
 		let url = try XCTUnwrap(URL(string: "https://apple.com"))
 		
 		// When
-		sut.userWishesToShare(url)
+		sut.userWishesToShare(url, sender: nil)
 		
 		// Then
 		expect(self.navigationSpy.invokedPresent) == true

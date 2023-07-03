@@ -45,14 +45,14 @@ class PDFExportCoordinatorSpy: PDFExportCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedUserWishesToShare = false
 	var invokedUserWishesToShareCount = 0
-	var invokedUserWishesToShareParameters: (path: URL, Void)?
-	var invokedUserWishesToShareParametersList = [(path: URL, Void)]()
+	var invokedUserWishesToShareParameters: (path: URL, sender: UIView?)?
+	var invokedUserWishesToShareParametersList = [(path: URL, sender: UIView?)]()
 
-	func userWishesToShare(_ path: URL) {
+	func userWishesToShare(_ path: URL, sender: UIView?) {
 		invokedUserWishesToShare = true
 		invokedUserWishesToShareCount += 1
-		invokedUserWishesToShareParameters = (path, ())
-		invokedUserWishesToShareParametersList.append((path, ()))
+		invokedUserWishesToShareParameters = (path, sender)
+		invokedUserWishesToShareParametersList.append((path, sender))
 	}
 
 	var invokedExportFailed = false
