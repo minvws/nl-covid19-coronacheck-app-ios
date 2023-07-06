@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckUI
 import XCTest
 import Nimble
 import SnapshotTesting
@@ -12,8 +13,6 @@ import SnapshotTesting
 @testable import DataMigration
 @testable import Managers
 import Persistence
-@testable import Resources
-@testable import Shared
 
 class ExportLoopViewControllerTests: XCTestCase {
 

@@ -5,12 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckUI
 import XCTest
 import Nimble
 @testable import CTR
-@testable import Resources
-import Shared
 
 // swiftlint:disable:next type_name
 class PaperProofInputCouplingCodeViewModelTests: XCTestCase {

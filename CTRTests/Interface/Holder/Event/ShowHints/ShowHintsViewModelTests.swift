@@ -5,13 +5,12 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckUI
 import Nimble
 import XCTest
 import SnapshotTesting
-import Shared
 import TestingShared
 import Persistence
-@testable import Resources
 
 @testable import CTR
 
