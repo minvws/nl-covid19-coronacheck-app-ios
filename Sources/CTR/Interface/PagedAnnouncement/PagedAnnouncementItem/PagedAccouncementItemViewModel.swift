@@ -5,8 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
+import CoronaCheckUI
 import Models
 
 class PagedAnnouncementItemViewModel {

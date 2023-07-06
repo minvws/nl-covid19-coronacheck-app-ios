@@ -7,7 +7,6 @@
 // swiftlint:disable type_body_length type_name
 
 import CoronaCheckUI
-import UIKit
 import XCTest
 import SnapshotTesting
 import CoreData
