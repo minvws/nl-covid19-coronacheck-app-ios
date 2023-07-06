@@ -8,83 +8,85 @@
 import Foundation
 import Models
 
-class OnboardingFactorySpy: OnboardingFactoryProtocol {
+public class OnboardingFactorySpy: OnboardingFactoryProtocol {
+	
+	public init() {}
 
-	var invokedCreate = false
-	var invokedCreateCount = 0
-	var stubbedCreateResult: [PagedAnnoucementItem]! = []
+	public var invokedCreate = false
+	public var invokedCreateCount = 0
+	public var stubbedCreateResult: [PagedAnnoucementItem]! = []
 
-	func create() -> [PagedAnnoucementItem] {
+	public func create() -> [PagedAnnoucementItem] {
 		invokedCreate = true
 		invokedCreateCount += 1
 		return stubbedCreateResult
 	}
 
-	var invokedGetConsentTitle = false
-	var invokedGetConsentTitleCount = 0
-	var stubbedGetConsentTitleResult: String! = ""
+	public var invokedGetConsentTitle = false
+	public var invokedGetConsentTitleCount = 0
+	public var stubbedGetConsentTitleResult: String! = ""
 
-	func getConsentTitle() -> String {
+	public func getConsentTitle() -> String {
 		invokedGetConsentTitle = true
 		invokedGetConsentTitleCount += 1
 		return stubbedGetConsentTitleResult
 	}
 
-	var invokedGetConsentMessage = false
-	var invokedGetConsentMessageCount = 0
-	var stubbedGetConsentMessageResult: String! = ""
+	public var invokedGetConsentMessage = false
+	public var invokedGetConsentMessageCount = 0
+	public var stubbedGetConsentMessageResult: String! = ""
 
-	func getConsentMessage() -> String {
+	public func getConsentMessage() -> String {
 		invokedGetConsentMessage = true
 		invokedGetConsentMessageCount += 1
 		return stubbedGetConsentMessageResult
 	}
 
-	var invokedGetConsentButtonTitle = false
-	var invokedGetConsentButtonTitleCount = 0
-	var stubbedGetConsentButtonTitleResult: String! = ""
+	public var invokedGetConsentButtonTitle = false
+	public var invokedGetConsentButtonTitleCount = 0
+	public var stubbedGetConsentButtonTitleResult: String! = ""
 
-	func getConsentButtonTitle() -> String {
+	public func getConsentButtonTitle() -> String {
 		invokedGetConsentButtonTitle = true
 		invokedGetConsentButtonTitleCount += 1
 		return stubbedGetConsentButtonTitleResult
 	}
 
-	var invokedGetConsentNotGivenError = false
-	var invokedGetConsentNotGivenErrorCount = 0
-	var stubbedGetConsentNotGivenErrorResult: String!
+	public var invokedGetConsentNotGivenError = false
+	public var invokedGetConsentNotGivenErrorCount = 0
+	public var stubbedGetConsentNotGivenErrorResult: String!
 
-	func getConsentNotGivenError() -> String? {
+	public func getConsentNotGivenError() -> String? {
 		invokedGetConsentNotGivenError = true
 		invokedGetConsentNotGivenErrorCount += 1
 		return stubbedGetConsentNotGivenErrorResult
 	}
 
-	var invokedGetConsentItems = false
-	var invokedGetConsentItemsCount = 0
-	var stubbedGetConsentItemsResult: [String]! = []
+	public var invokedGetConsentItems = false
+	public var invokedGetConsentItemsCount = 0
+	public var stubbedGetConsentItemsResult: [String]! = []
 
-	func getConsentItems() -> [String] {
+	public func getConsentItems() -> [String] {
 		invokedGetConsentItems = true
 		invokedGetConsentItemsCount += 1
 		return stubbedGetConsentItemsResult
 	}
 
-	var invokedUseConsentButton = false
-	var invokedUseConsentButtonCount = 0
-	var stubbedUseConsentButtonResult: Bool! = false
+	public var invokedUseConsentButton = false
+	public var invokedUseConsentButtonCount = 0
+	public var stubbedUseConsentButtonResult: Bool! = false
 
-	func useConsentButton() -> Bool {
+	public func useConsentButton() -> Bool {
 		invokedUseConsentButton = true
 		invokedUseConsentButtonCount += 1
 		return stubbedUseConsentButtonResult
 	}
 
-	var invokedGetActionButtonTitle = false
-	var invokedGetActionButtonTitleCount = 0
-	var stubbedGetActionButtonTitleResult: String! = ""
+	public var invokedGetActionButtonTitle = false
+	public var invokedGetActionButtonTitleCount = 0
+	public var stubbedGetActionButtonTitleResult: String! = ""
 
-	func getActionButtonTitle() -> String {
+	public func getActionButtonTitle() -> String {
 		invokedGetActionButtonTitle = true
 		invokedGetActionButtonTitleCount += 1
 		return stubbedGetActionButtonTitleResult

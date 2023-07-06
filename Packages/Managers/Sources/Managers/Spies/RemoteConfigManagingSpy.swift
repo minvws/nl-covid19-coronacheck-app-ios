@@ -9,46 +9,48 @@ import Foundation
 import Transport
 import Shared
 
-class RemoteConfigManagingSpy: RemoteConfigManaging {
+public class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	var invokedStoredConfigurationGetter = false
-	var invokedStoredConfigurationGetterCount = 0
-	var stubbedStoredConfiguration: RemoteConfiguration!
+	public init() {}
 
-	var storedConfiguration: RemoteConfiguration {
+	public var invokedStoredConfigurationGetter = false
+	public var invokedStoredConfigurationGetterCount = 0
+	public var stubbedStoredConfiguration: RemoteConfiguration!
+
+	public var storedConfiguration: RemoteConfiguration {
 		invokedStoredConfigurationGetter = true
 		invokedStoredConfigurationGetterCount += 1
 		return stubbedStoredConfiguration
 	}
 
-	var invokedObservatoryForUpdatesGetter = false
-	var invokedObservatoryForUpdatesGetterCount = 0
-	var stubbedObservatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification>!
+	public var invokedObservatoryForUpdatesGetter = false
+	public var invokedObservatoryForUpdatesGetterCount = 0
+	public var stubbedObservatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification>!
 
-	var observatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification> {
+	public var observatoryForUpdates: Observatory<RemoteConfigManager.ConfigNotification> {
 		invokedObservatoryForUpdatesGetter = true
 		invokedObservatoryForUpdatesGetterCount += 1
 		return stubbedObservatoryForUpdates
 	}
 
-	var invokedObservatoryForReloadsGetter = false
-	var invokedObservatoryForReloadsGetterCount = 0
-	var stubbedObservatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>!
+	public var invokedObservatoryForReloadsGetter = false
+	public var invokedObservatoryForReloadsGetterCount = 0
+	public var stubbedObservatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>>!
 
-	var observatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>> {
+	public var observatoryForReloads: Observatory<Result<RemoteConfigManager.ConfigNotification, ServerError>> {
 		invokedObservatoryForReloadsGetter = true
 		invokedObservatoryForReloadsGetterCount += 1
 		return stubbedObservatoryForReloads
 	}
 
-	var invokedUpdate = false
-	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
-	var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
-	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
-	var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
+	public var invokedUpdate = false
+	public var invokedUpdateCount = 0
+	public var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
+	public var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
+	public var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
+	public var stubbedUpdateCompletionResult: (Result<(Bool, RemoteConfiguration), ServerError>, Void)?
 
-	func update(
+	public func update(
 		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: @escaping () -> Void,
 		completion: @escaping (Result<(Bool, RemoteConfiguration), ServerError>) -> Void) {
@@ -64,18 +66,18 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 		}
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}
 
-	var invokedRegisterTriggers = false
-	var invokedRegisterTriggersCount = 0
+	public var invokedRegisterTriggers = false
+	public var invokedRegisterTriggersCount = 0
 
-	func registerTriggers() {
+	public func registerTriggers() {
 		invokedRegisterTriggers = true
 		invokedRegisterTriggersCount += 1
 	}

@@ -9,52 +9,54 @@ import Foundation
 import Shared
 import Models
 
-class VerificationPolicyManagerSpy: VerificationPolicyManaging {
+public class VerificationPolicyManagerSpy: VerificationPolicyManaging {
 
-	var invokedStateGetter = false
-	var invokedStateGetterCount = 0
-	var stubbedState: VerificationPolicy!
+	public init() {}
+	
+	public var invokedStateGetter = false
+	public var invokedStateGetterCount = 0
+	public var stubbedState: VerificationPolicy!
 
-	var state: VerificationPolicy? {
+	public var state: VerificationPolicy? {
 		invokedStateGetter = true
 		invokedStateGetterCount += 1
 		return stubbedState
 	}
 
-	var invokedObservatoryGetter = false
-	var invokedObservatoryGetterCount = 0
-	var stubbedObservatory: Observatory<VerificationPolicy?>!
+	public var invokedObservatoryGetter = false
+	public var invokedObservatoryGetterCount = 0
+	public var stubbedObservatory: Observatory<VerificationPolicy?>!
 
-	var observatory: Observatory<VerificationPolicy?> {
+	public var observatory: Observatory<VerificationPolicy?> {
 		invokedObservatoryGetter = true
 		invokedObservatoryGetterCount += 1
 		return stubbedObservatory
 	}
 
-	var invokedUpdate = false
-	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (verificationPolicy: VerificationPolicy?, Void)?
-	var invokedUpdateParametersList = [(verificationPolicy: VerificationPolicy?, Void)]()
+	public var invokedUpdate = false
+	public var invokedUpdateCount = 0
+	public var invokedUpdateParameters: (verificationPolicy: VerificationPolicy?, Void)?
+	public var invokedUpdateParametersList = [(verificationPolicy: VerificationPolicy?, Void)]()
 
-	func update(verificationPolicy: VerificationPolicy?) {
+	public func update(verificationPolicy: VerificationPolicy?) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
 		invokedUpdateParameters = (verificationPolicy, ())
 		invokedUpdateParametersList.append((verificationPolicy, ()))
 	}
 
-	var invokedWipeScanMode = false
-	var invokedWipeScanModeCount = 0
+	public var invokedWipeScanMode = false
+	public var invokedWipeScanModeCount = 0
 
-	func wipeScanMode() {
+	public func wipeScanMode() {
 		invokedWipeScanMode = true
 		invokedWipeScanModeCount += 1
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

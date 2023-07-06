@@ -8,17 +8,19 @@
 import Foundation
 import Models
 
-class NewFeaturesManagerSpy: NewFeaturesManaging {
+public class NewFeaturesManagerSpy: NewFeaturesManaging {
 
-	var invokedFactorySetter = false
-	var invokedFactorySetterCount = 0
-	var invokedFactory: NewFeaturesFactory?
-	var invokedFactoryList = [NewFeaturesFactory?]()
-	var invokedFactoryGetter = false
-	var invokedFactoryGetterCount = 0
-	var stubbedFactory: NewFeaturesFactory!
+	public init() {}
+	
+	public var invokedFactorySetter = false
+	public var invokedFactorySetterCount = 0
+	public var invokedFactory: NewFeaturesFactory?
+	public var invokedFactoryList = [NewFeaturesFactory?]()
+	public var invokedFactoryGetter = false
+	public var invokedFactoryGetterCount = 0
+	public var stubbedFactory: NewFeaturesFactory!
 
-	var factory: NewFeaturesFactory? {
+	public var factory: NewFeaturesFactory? {
 		set {
 			invokedFactorySetter = true
 			invokedFactorySetterCount += 1
@@ -32,38 +34,38 @@ class NewFeaturesManagerSpy: NewFeaturesManaging {
 		}
 	}
 
-	var invokedNeedsUpdatingGetter = false
-	var invokedNeedsUpdatingGetterCount = 0
-	var stubbedNeedsUpdating: Bool! = false
+	public var invokedNeedsUpdatingGetter = false
+	public var invokedNeedsUpdatingGetterCount = 0
+	public var stubbedNeedsUpdating: Bool! = false
 
-	var needsUpdating: Bool {
+	public var needsUpdating: Bool {
 		invokedNeedsUpdatingGetter = true
 		invokedNeedsUpdatingGetterCount += 1
 		return stubbedNeedsUpdating
 	}
 
-	var invokedPagedAnnouncementItems = false
-	var invokedPagedAnnouncementItemsCount = 0
-	var stubbedPagedAnnouncementItemsResult: [PagedAnnoucementItem]!
+	public var invokedPagedAnnouncementItems = false
+	public var invokedPagedAnnouncementItemsCount = 0
+	public var stubbedPagedAnnouncementItemsResult: [PagedAnnoucementItem]!
 
-	func pagedAnnouncementItems() -> [PagedAnnoucementItem]? {
+	public func pagedAnnouncementItems() -> [PagedAnnoucementItem]? {
 		invokedPagedAnnouncementItems = true
 		invokedPagedAnnouncementItemsCount += 1
 		return stubbedPagedAnnouncementItemsResult
 	}
 
-	var invokedUserHasViewedNewFeatureIntro = false
-	var invokedUserHasViewedNewFeatureIntroCount = 0
+	public var invokedUserHasViewedNewFeatureIntro = false
+	public var invokedUserHasViewedNewFeatureIntroCount = 0
 
-	func userHasViewedNewFeatureIntro() {
+	public func userHasViewedNewFeatureIntro() {
 		invokedUserHasViewedNewFeatureIntro = true
 		invokedUserHasViewedNewFeatureIntroCount += 1
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

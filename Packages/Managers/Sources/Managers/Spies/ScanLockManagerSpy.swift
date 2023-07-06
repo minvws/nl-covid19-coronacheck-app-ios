@@ -9,63 +9,65 @@ import Foundation
 import Shared
 
 extension ScanLockManagerSpy {
-	static var configScanLockDuration: TimeInterval {
+	static public var configScanLockDuration: TimeInterval {
 		return 10
 	}
 }
 
-class ScanLockManagerSpy: ScanLockManaging {
+public class ScanLockManagerSpy: ScanLockManaging {
+	
+	public init() {}
 
-	var invokedStateGetter = false
-	var invokedStateGetterCount = 0
-	var stubbedState: ScanLockManager.State!
+	public var invokedStateGetter = false
+	public var invokedStateGetterCount = 0
+	public var stubbedState: ScanLockManager.State!
 
-	var state: ScanLockManager.State {
+	public var state: ScanLockManager.State {
 		invokedStateGetter = true
 		invokedStateGetterCount += 1
 		return stubbedState
 	}
 
-	var invokedObservatoryGetter = false
-	var invokedObservatoryGetterCount = 0
-	var stubbedObservatory: Observatory<ScanLockManager.State>!
+	public var invokedObservatoryGetter = false
+	public var invokedObservatoryGetterCount = 0
+	public var stubbedObservatory: Observatory<ScanLockManager.State>!
 
-	var observatory: Observatory<ScanLockManager.State> {
+	public var observatory: Observatory<ScanLockManager.State> {
 		invokedObservatoryGetter = true
 		invokedObservatoryGetterCount += 1
 		return stubbedObservatory
 	}
 
-	var invokedConfigScanLockDurationGetter = false
-	var invokedConfigScanLockDurationGetterCount = 0
-	var stubbedConfigScanLockDuration: TimeInterval!
+	public var invokedConfigScanLockDurationGetter = false
+	public var invokedConfigScanLockDurationGetterCount = 0
+	public var stubbedConfigScanLockDuration: TimeInterval!
 
-	var configScanLockDuration: TimeInterval {
+	public var configScanLockDuration: TimeInterval {
 		invokedConfigScanLockDurationGetter = true
 		invokedConfigScanLockDurationGetterCount += 1
 		return stubbedConfigScanLockDuration
 	}
 
-	var invokedLock = false
-	var invokedLockCount = 0
+	public var invokedLock = false
+	public var invokedLockCount = 0
 
-	func lock() {
+	public func lock() {
 		invokedLock = true
 		invokedLockCount += 1
 	}
 
-	var invokedWipeScanMode = false
-	var invokedWipeScanModeCount = 0
+	public var invokedWipeScanMode = false
+	public var invokedWipeScanModeCount = 0
 
-	func wipeScanMode() {
+	public func wipeScanMode() {
 		invokedWipeScanMode = true
 		invokedWipeScanModeCount += 1
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

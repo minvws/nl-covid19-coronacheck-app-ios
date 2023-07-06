@@ -10,15 +10,17 @@ import Transport
 import Shared
 import Persistence
 
-class GreenCardLoaderSpy: GreenCardLoading {
+public class GreenCardLoaderSpy: GreenCardLoading {
+	
+	public init() {}
 
-	var invokedSignTheEventsIntoGreenCardsAndCredentials = false
-	var invokedSignTheEventsIntoGreenCardsAndCredentialsCount = 0
-	var invokedSignTheEventsIntoGreenCardsAndCredentialsParameters: (eventMode: EventMode?, Void)?
-	var invokedSignTheEventsIntoGreenCardsAndCredentialsParametersList = [(eventMode: EventMode?, Void)]()
-	var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<RemoteGreenCards.Response, GreenCardLoader.Error>, Void)?
+	public var invokedSignTheEventsIntoGreenCardsAndCredentials = false
+	public var invokedSignTheEventsIntoGreenCardsAndCredentialsCount = 0
+	public var invokedSignTheEventsIntoGreenCardsAndCredentialsParameters: (eventMode: EventMode?, Void)?
+	public var invokedSignTheEventsIntoGreenCardsAndCredentialsParametersList = [(eventMode: EventMode?, Void)]()
+	public var stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult: (Result<RemoteGreenCards.Response, GreenCardLoader.Error>, Void)?
 
-	func signTheEventsIntoGreenCardsAndCredentials(
+	public func signTheEventsIntoGreenCardsAndCredentials(
 		eventMode: EventMode?,
 		completion: @escaping (Result<RemoteGreenCards.Response, GreenCardLoader.Error>) -> Void) {
 		invokedSignTheEventsIntoGreenCardsAndCredentials = true

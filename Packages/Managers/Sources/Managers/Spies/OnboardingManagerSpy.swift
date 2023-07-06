@@ -8,48 +8,50 @@
 import Foundation
 import Models
 
-class OnboardingManagerSpy: OnboardingManaging {
+public class OnboardingManagerSpy: OnboardingManaging {
+	
+	public init() {}
 
-	var invokedNeedsOnboardingGetter = false
-	var invokedNeedsOnboardingGetterCount = 0
-	var stubbedNeedsOnboarding: Bool! = false
+	public var invokedNeedsOnboardingGetter = false
+	public var invokedNeedsOnboardingGetterCount = 0
+	public var stubbedNeedsOnboarding: Bool! = false
 
-	var needsOnboarding: Bool {
+	public var needsOnboarding: Bool {
 		invokedNeedsOnboardingGetter = true
 		invokedNeedsOnboardingGetterCount += 1
 		return stubbedNeedsOnboarding
 	}
 
-	var invokedNeedsConsentGetter = false
-	var invokedNeedsConsentGetterCount = 0
-	var stubbedNeedsConsent: Bool! = false
+	public var invokedNeedsConsentGetter = false
+	public var invokedNeedsConsentGetterCount = 0
+	public var stubbedNeedsConsent: Bool! = false
 
-	var needsConsent: Bool {
+	public var needsConsent: Bool {
 		invokedNeedsConsentGetter = true
 		invokedNeedsConsentGetterCount += 1
 		return stubbedNeedsConsent
 	}
 
-	var invokedFinishOnboarding = false
-	var invokedFinishOnboardingCount = 0
+	public var invokedFinishOnboarding = false
+	public var invokedFinishOnboardingCount = 0
 
-	func finishOnboarding() {
+	public func finishOnboarding() {
 		invokedFinishOnboarding = true
 		invokedFinishOnboardingCount += 1
 	}
 
-	var invokedConsentGiven = false
-	var invokedConsentGivenCount = 0
+	public var invokedConsentGiven = false
+	public var invokedConsentGivenCount = 0
 
-	func consentGiven() {
+	public func consentGiven() {
 		invokedConsentGiven = true
 		invokedConsentGivenCount += 1
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}
