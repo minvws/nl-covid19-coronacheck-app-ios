@@ -5,10 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
-import ReusableViews
-import Resources
+import CoronaCheckUI
 
 final class RiskIndicatorIconView: BaseView {
 	

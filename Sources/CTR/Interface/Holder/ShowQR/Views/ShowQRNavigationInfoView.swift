@@ -5,10 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
-import Shared
-import ReusableViews
-import Resources
+import CoronaCheckUI
 
 /// Component is to get left to right accessibility VoiceOver focus order
 final class ShowQRNavigationInfoView: BaseView {

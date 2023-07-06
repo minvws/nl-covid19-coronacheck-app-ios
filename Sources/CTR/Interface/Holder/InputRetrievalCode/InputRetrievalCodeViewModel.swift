@@ -6,14 +6,11 @@
 */
 // swiftlint:disable type_body_length
 
-import UIKit
+import CoronaCheckUI
 import Transport
-import Shared
-import ReusableViews
 import Persistence
 import Models
 import Managers
-import Resources
 
 class InputRetrievalCodeViewModel {
 

@@ -5,9 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import ReusableViews
-import Shared
+import CoronaCheckUI
 
 class ExportLoopViewController: TraitWrappedGenericViewController<ExportLoopView, ExportLoopViewModel> {
 

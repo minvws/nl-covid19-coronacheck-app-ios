@@ -5,11 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import Shared
-import ReusableViews
+import CoronaCheckUI
 import Transport
-import Resources
 
 enum IdentityControlViewState: Equatable {
 	case selected

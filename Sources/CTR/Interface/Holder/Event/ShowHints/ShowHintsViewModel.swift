@@ -5,12 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import CoronaCheckUI
 import Transport
-import Shared
-import ReusableViews
 import Persistence
-import Resources
 
 final class ShowHintsViewModel {
 	

@@ -5,9 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Resources
-import ReusableViews
-import UIKit
+import CoronaCheckUI
 import WebKit
 
 class PDFExportViewController: TraitWrappedGenericViewController<PDFExportView, PDFExportViewModel> {
