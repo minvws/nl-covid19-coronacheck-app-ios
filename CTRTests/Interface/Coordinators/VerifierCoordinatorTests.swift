@@ -5,14 +5,13 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 @testable import CTR
 @testable import Transport
 import Nimble
 import Mobilecore
-@testable import Models
-@testable import Managers
 
 class VerifierCoordinatorTests: XCTestCase {
 

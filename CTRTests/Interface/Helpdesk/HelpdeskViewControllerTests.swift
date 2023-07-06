@@ -5,13 +5,13 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
 import Nimble
 import SnapshotTesting
 import TestingShared
-@testable import Managers
 
 class HelpdeskViewControllerTests: XCTestCase {
 	

@@ -5,12 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 @testable import CTR
 @testable import Transport
-@testable import Models
-@testable import Managers
 import Nimble
 
 class AlternativeRouteCoordinatorTests: XCTestCase {

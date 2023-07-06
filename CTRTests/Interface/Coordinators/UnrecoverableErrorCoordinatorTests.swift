@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 @testable import CTR
@@ -12,9 +13,6 @@ import XCTest
 import Nimble
 import ViewControllerPresentationSpy
 import TestingShared
-import Persistence
-@testable import Managers
-@testable import Models
 
 class UnrecoverableErrorCoordinatorTests: XCTestCase {
 

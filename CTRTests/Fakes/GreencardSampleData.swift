@@ -5,12 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 import CoreData
 @testable import CTR
 import TestingShared
-import Persistence
-@testable import Managers
 
 extension GreenCard {
 

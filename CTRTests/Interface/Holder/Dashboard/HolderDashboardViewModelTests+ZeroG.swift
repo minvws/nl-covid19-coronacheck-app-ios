@@ -5,15 +5,13 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 @testable import CTR
 import Nimble
 import CoreData
 import TestingShared
-import Persistence
-@testable import Models
-@testable import Managers
 
 extension HolderDashboardViewModelTests {
 	

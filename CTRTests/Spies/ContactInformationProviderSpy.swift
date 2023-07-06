@@ -5,8 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 @testable import CTR
-@testable import Managers
+
 class ContactInformationProviderSpy: ContactInformationProtocol {
 
 	var invokedPhoneNumberLinkGetter = false

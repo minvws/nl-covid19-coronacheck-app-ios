@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 import Nimble
@@ -12,7 +13,6 @@ import SnapshotTesting
 @testable import CTR
 @testable import Transport
 import TestingShared
-@testable import Managers
 
 final class PaperProofScanViewModelTests: XCTestCase {
 	
