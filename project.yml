@@ -49,6 +49,8 @@ packages:
     path: ./Packages/TestingShared
   Transport:
     path: ./Packages/Transport
+  CoronaCheckUI:
+    path: ./Packages/CoronaCheckUI
 
 # - Attributes:
 
@@ -145,6 +147,7 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: CoronaCheckUI
       - package: CryptoCore
       - package: DataMigration
       - package: Managers
