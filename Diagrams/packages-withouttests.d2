@@ -42,6 +42,7 @@ app: {
 }
 
 app <- BrightFutures
+app <- CoronaCheckUI
 app <- CryptoCore
 app <- DataMigration
 app <- Lottie
@@ -52,11 +53,15 @@ app <- Persistence
 app <- QRGenerator
 app <- Reachability
 app <- RestrictedBrowser
-app <- Reusableviews
 app <- Shared
 app <- Transport
 
 # - Packages - 
+
+CoronaCheckUI { style.fill: "#ffcc00" }
+CoronaCheckUI <- Resources
+CoronaCheckUI <- ReusableViews
+CoronaCheckUI <- Shared
 
 CryptoCore { style.fill: "#ffcc00" }
 
