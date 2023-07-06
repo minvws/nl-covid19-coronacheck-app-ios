@@ -5,14 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import CoronaCheckFoundation
 import Reachability
 import Transport
-import Shared
 import OpenIDConnect
-import Persistence
-import Managers
-import Models
 
 // MARK: - 1: Define the Environment
 

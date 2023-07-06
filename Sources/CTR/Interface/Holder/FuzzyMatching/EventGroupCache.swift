@@ -5,11 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import CoronaCheckFoundation
 import Transport
-import Shared
-import Persistence
-import Models
 
 protocol EventGroupCacheProtocol {
 	

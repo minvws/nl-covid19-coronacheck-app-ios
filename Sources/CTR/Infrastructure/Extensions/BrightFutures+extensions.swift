@@ -6,7 +6,7 @@
 */
 
 import BrightFutures
-import Shared
+import CoronaCheckFoundation
 
 extension Future {
 

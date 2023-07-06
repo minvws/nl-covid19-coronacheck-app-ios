@@ -6,12 +6,10 @@
 */
 
 import CoronaCheckUI
-import Foundation
+import CoronaCheckFoundation
 import XCTest
 @testable import CTR
 @testable import Transport
-@testable import Shared
-@testable import Managers
 import Nimble
 import TestingShared
 

@@ -5,15 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 import Mobilecore
 @testable import CTR
 @testable import Transport
-@testable import Shared
 import TestingShared
-import Persistence
-@testable import Models
-@testable import Managers
 
 ///
 /// Set of Spies with sensible default stubbed values, which can be modified per-test.

@@ -42,6 +42,7 @@ app: {
 }
 
 app <- BrightFutures
+app <- CoronaCheckFoundation
 app <- CoronaCheckUI
 app <- CryptoCore
 app <- DataMigration
@@ -53,10 +54,15 @@ app <- Persistence
 app <- QRGenerator
 app <- Reachability
 app <- RestrictedBrowser
-app <- Shared
 app <- Transport
 
 # - Packages - 
+
+CoronaCheckFoundation { style.fill: "#ffcc00" }
+CoronaCheckFoundation <- Managers
+CoronaCheckFoundation <- Models
+CoronaCheckFoundation <- Persistence
+CoronaCheckFoundation <- Shared
 
 CoronaCheckUI { style.fill: "#ffcc00" }
 CoronaCheckUI <- Resources

@@ -6,14 +6,11 @@
  */
 
 import CoronaCheckUI
+import CoronaCheckFoundation
 import XCTest
 @testable import CTR
 import Nimble
 import TestingShared
-import Persistence
-@testable import Models
-@testable import Managers
-@testable import Shared
 
 class VerifierStartScanningViewModelTests: XCTestCase {
 	

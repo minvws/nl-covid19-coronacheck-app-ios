@@ -27,6 +27,10 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     exactVersion: 1.9.0
+  CoronaCheckFoundation:
+    path: ./Packages/CoronaCheckFoundation
+  CoronaCheckUI:
+    path: ./Packages/CoronaCheckUI
   CryptoCore:
     path: ./Packages/CryptoCore
   DataMigration:
@@ -49,8 +53,6 @@ packages:
     path: ./Packages/TestingShared
   Transport:
     path: ./Packages/Transport
-  CoronaCheckUI:
-    path: ./Packages/CoronaCheckUI
 
 # - Attributes:
 
@@ -147,6 +149,7 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: CoronaCheckFoundation
       - package: CoronaCheckUI
       - package: CryptoCore
       - package: DataMigration
