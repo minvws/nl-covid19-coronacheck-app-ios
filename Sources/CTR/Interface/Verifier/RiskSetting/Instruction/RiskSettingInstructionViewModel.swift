@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Shared
+import CoronaCheckUI
 import Models
-import Resources
 
 final class RiskSettingInstructionViewModel {
 	

@@ -5,12 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 import Transport
-import Shared
-import ReusableViews
 import Models
-import Resources
 
 class PaperProofScanViewModel: ScanPermissionViewModel {
 

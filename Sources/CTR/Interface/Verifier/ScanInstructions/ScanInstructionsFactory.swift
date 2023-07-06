@@ -5,9 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
-import Shared
-import Resources
+import CoronaCheckUI
 
 enum ScanInstructionsStep: CaseIterable {
 	case scanQR, checkTheDetails, checkOnlyTheVisibleData, greenScreenIsAccess, verificationPoliciyAccess, redScreenNowWhat

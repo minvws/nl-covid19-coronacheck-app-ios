@@ -5,13 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
-import ReusableViews
+import CoronaCheckUI
 import Transport
 import OpenIDConnect
 import Persistence
-import Resources
 
 enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)

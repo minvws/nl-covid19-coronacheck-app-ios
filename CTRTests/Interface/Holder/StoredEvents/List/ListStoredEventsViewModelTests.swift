@@ -6,16 +6,15 @@
 */
 // swiftlint:disable type_body_length
 
+import CoronaCheckUI
 import XCTest
 import Nimble
 @testable import CTR
 @testable import Transport
-@testable import Shared
 import TestingShared
 import Persistence
 @testable import Models
 @testable import Managers
-@testable import Resources
 
 class ListStoredEventsViewModelTests: XCTestCase {
 	

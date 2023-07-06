@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckUI
 import Foundation
 @testable import CTR
-import ReusableViews
 @testable import Transport
 
 class PaperProofCoordinatorDelegateSpy: PaperProofCoordinatorDelegate, OpenUrlProtocol, Dismissable {

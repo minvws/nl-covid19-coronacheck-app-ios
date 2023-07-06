@@ -5,9 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Resources
-import ReusableViews
+import CoronaCheckUI
 
 class ExportLoopView: ScrolledStackWithButtonView {
 	

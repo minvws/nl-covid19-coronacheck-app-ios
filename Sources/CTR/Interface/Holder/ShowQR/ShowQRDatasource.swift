@@ -6,8 +6,7 @@
  */
 
 import Foundation
-import UIKit
-import Shared
+import CoronaCheckUI
 import Persistence
 import Models
 import Managers

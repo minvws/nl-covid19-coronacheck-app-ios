@@ -5,12 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
-import ReusableViews
+import CoronaCheckUI
 import Persistence
 import Models
-import Resources
 
 protocol AlternativeRouteFlowDelegate: AnyObject {
 

@@ -5,17 +5,14 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 import XCTest
 @testable import CTR
 import Nimble
 import QRGenerator
-import Shared
-import ReusableViews
 import TestingShared
 import Persistence
 @testable import Managers
-@testable import Resources
 
 class ShowQRItemViewModelTests: XCTestCase {
 

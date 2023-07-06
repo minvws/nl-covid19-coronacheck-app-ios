@@ -5,13 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
+import CoronaCheckUI
 import Models
 import Managers
 import Persistence
-import ReusableViews
-import Resources
-import Shared
 import Transport
 import WebKit
 

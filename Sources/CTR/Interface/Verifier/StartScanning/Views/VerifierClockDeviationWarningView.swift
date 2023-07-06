@@ -5,11 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import UIKit
-import Shared
-import ReusableViews
-import Resources
+import CoronaCheckUI
 
 class VerifierClockDeviationWarningView: BaseView {
 

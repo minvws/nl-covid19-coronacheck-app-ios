@@ -6,17 +6,14 @@
  */
 // swiftlint:disable file_length
 
-import UIKit
+import CoronaCheckUI
 import CoreData
 import Reachability
-import Shared
-import ReusableViews
 import Transport
 import OpenIDConnect
 import Persistence
 import Models
 import Managers
-import Resources
 
 protocol HolderCoordinatorDelegate: AnyObject {
 	

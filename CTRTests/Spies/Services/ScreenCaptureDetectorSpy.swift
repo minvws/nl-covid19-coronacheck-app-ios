@@ -5,10 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckUI
 import Foundation
 @testable import CTR
-import ReusableViews
-import Shared
 
 class ScreenCaptureDetectorSpy: ScreenCaptureDetectorProtocol {
 

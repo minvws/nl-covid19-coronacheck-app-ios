@@ -5,14 +5,13 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
-  
+
+import CoronaCheckUI
 @testable import CTR
 @testable import Transport
-@testable import Shared
 import XCTest
 import Nimble
 import OpenIDConnect
-@testable import Resources
 
 class AuthenticationViewModelTests: XCTestCase {
 

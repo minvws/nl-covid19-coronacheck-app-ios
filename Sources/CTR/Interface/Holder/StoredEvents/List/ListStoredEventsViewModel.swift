@@ -5,14 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckUI
 import CoreData
-import Shared
-import ReusableViews
 import Transport
 import Persistence
 import Models
-import Resources
 
 class ListStoredEventsViewModel {
 

@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 import SafariServices
-import Shared
 import Managers
 import Models
 

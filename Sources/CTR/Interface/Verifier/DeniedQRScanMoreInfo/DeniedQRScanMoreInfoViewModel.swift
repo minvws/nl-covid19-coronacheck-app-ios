@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
+import CoronaCheckUI
 import Managers
-import Resources
 
 typealias DisplayContent = (text: String, customSpacing: CGFloat)
 

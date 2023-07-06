@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Shared
+import CoronaCheckUI
 import Persistence
 import Managers
-import Resources
 import DataMigration
 import Transport
 
