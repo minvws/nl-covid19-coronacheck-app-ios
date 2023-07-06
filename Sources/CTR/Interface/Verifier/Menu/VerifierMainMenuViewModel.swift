@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Resources
+import CoronaCheckUI
 import Models
-import Shared
 
 class VerifierMainMenuViewModel: MenuViewModelProtocol {
 	

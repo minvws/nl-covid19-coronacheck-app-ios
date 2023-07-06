@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckUI
 import Lottie
-import Shared
-import Resources
 
 struct SecurityAnimation: Equatable {
 

@@ -5,12 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckUI
 import Managers
 import Models
 import Persistence
-import Resources
-import Shared
-import UIKit
 
 class ShowQRViewModel {
 

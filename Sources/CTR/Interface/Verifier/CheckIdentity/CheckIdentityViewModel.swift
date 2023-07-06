@@ -5,12 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 import Mobilecore
-import Shared
 import Models
 import Managers
-import Resources
 
 final class CheckIdentityViewModel {
 	

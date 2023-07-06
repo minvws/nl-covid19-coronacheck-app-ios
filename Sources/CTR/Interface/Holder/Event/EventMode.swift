@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 import Transport
-import Shared
 import Persistence
-import Resources
 
 extension EventMode {
 	var localized: String {

@@ -5,9 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
-import Shared
-import Resources
+import CoronaCheckUI
 
 /// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:
 extension InputRetrievalCodeViewModel {

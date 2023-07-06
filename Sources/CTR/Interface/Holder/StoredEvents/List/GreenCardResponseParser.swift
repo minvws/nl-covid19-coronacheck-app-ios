@@ -5,11 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import Shared
+import CoronaCheckUI
 import Transport
 import Managers
-import Resources
 
 enum GreenCardResponseError: Error {
 

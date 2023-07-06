@@ -5,9 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Resources
-import Shared
+import CoronaCheckUI
 
 final class DCCQRDetailsViewModel {
 	
