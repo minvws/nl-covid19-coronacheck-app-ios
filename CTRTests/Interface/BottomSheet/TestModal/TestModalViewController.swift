@@ -5,10 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
+import CoronaCheckUI
 @testable import CTR
-import Shared
-import ReusableViews
 
 final class TestModalViewController: GenericViewController<TestModalView, TestModalViewModel> {
 		
