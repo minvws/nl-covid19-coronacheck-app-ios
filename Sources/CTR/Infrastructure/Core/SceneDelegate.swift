@@ -5,10 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import OpenIDConnect
-import Models
-import Managers
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

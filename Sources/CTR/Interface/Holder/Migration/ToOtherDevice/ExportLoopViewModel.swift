@@ -5,11 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import DataMigration
 import QRGenerator
 import Transport
-import Managers
 
 class ExportLoopViewModel {
 	

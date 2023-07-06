@@ -5,11 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import Mobilecore
 import Transport
-import Models
-import Managers
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	

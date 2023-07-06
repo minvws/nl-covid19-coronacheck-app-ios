@@ -5,10 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import DataMigration
-import Models
-import Managers
 import Transport
 
 protocol MigrationFlowDelegate: AnyObject {

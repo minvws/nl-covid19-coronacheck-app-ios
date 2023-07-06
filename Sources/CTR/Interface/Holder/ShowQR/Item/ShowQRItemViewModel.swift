@@ -5,12 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import Transport
 import QRGenerator
-import Persistence
-import Models
-import Managers
 
 protocol ShowQRItemViewModelDelegate: AnyObject {
 	

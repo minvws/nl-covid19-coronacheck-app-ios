@@ -6,7 +6,7 @@
  */
 
 import CoronaCheckUI
-import Managers
+import CoronaCheckFoundation
 
 extension UIView {
 	

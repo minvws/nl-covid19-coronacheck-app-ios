@@ -5,12 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import Transport
 import OpenIDConnect
-import Persistence
-import Managers
-import Models
 
 protocol AppCoordinatorDelegate: AnyObject {
 	

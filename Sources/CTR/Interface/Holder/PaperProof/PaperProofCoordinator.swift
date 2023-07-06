@@ -5,10 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import Transport
-import Managers
-import Models
 
 protocol PaperProofFlowDelegate: AnyObject {
 	
