@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 
 /// Action detectors for in app navigation
 enum AppAction {
