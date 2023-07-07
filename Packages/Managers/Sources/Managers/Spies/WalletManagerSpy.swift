@@ -5,11 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
   
+import CoreData
 import Foundation
 import Transport
 import Shared
 import Persistence
-import CoreData
 import Models
 
 public class WalletManagerSpy: WalletManaging {

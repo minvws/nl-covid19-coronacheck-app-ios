@@ -6,10 +6,10 @@
 */
 // swiftlint:disable type_body_length type_name
 
+import CoreData
 import CoronaCheckUI
 import XCTest
 import SnapshotTesting
-import CoreData
 import Nimble
 @testable import CTR
 

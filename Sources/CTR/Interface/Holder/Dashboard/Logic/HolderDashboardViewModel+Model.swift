@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import CoronaCheckFoundation
 import CoreData
+import CoronaCheckFoundation
 
 // MARK: - Model
 

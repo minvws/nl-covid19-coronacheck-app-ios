@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoreData
 import CoronaCheckFoundation
 import CoronaCheckUI
-import CoreData
 
 class ListStoredEventsViewModel {
 

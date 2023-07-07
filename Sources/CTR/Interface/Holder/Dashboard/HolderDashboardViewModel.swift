@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoreData
 import CoronaCheckFoundation
 import CoronaCheckUI
-import CoreData
 import Reachability
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards

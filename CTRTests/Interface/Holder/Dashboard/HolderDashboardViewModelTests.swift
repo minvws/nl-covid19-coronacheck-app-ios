@@ -5,11 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoreData
 import CoronaCheckFoundation
 import XCTest
 @testable import CTR
 import Nimble
-import CoreData
 
 class HolderDashboardViewModelTests: XCTestCase {
 
