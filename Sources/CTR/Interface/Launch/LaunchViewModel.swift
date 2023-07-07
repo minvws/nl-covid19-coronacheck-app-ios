@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import CoronaCheckUI
 import LocalAuthentication
-import Transport
 
 class LaunchViewModel {
 

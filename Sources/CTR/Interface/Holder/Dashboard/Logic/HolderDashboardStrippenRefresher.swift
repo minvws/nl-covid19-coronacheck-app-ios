@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import CoronaCheckUI
 import Reachability
-import Transport
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()

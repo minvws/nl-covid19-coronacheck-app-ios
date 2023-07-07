@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import CoronaCheckUI
 import DataMigration
-import Transport
 
 class ImportViewModel: ScanPermissionViewModel {
 

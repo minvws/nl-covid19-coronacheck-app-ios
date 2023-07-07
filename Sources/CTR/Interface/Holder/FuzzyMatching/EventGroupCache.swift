@@ -6,7 +6,6 @@
  */
 
 import CoronaCheckFoundation
-import Transport
 
 protocol EventGroupCacheProtocol {
 	

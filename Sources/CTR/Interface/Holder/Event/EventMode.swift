@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import Transport
 
 extension EventMode {
 	var localized: String {

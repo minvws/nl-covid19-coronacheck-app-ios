@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import CoronaCheckFoundation
 import CoreData
-import Transport
+import CoronaCheckFoundation
 
 extension Array where Element == RemoteGreenCards.BlobExpiry {
 	

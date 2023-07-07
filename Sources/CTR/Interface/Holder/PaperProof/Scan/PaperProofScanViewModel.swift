@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import Transport
 
 class PaperProofScanViewModel: ScanPermissionViewModel {
 

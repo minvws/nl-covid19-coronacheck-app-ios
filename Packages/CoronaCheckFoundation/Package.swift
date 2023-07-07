@@ -15,7 +15,8 @@ let package = Package(
 		.package(name: "Managers", path: "../Managers"),
 		.package(name: "Models", path: "../Models"),
 		.package(name: "Persistence", path: "../Persistence"),
-		.package(name: "Shared", path: "../Shared")
+		.package(name: "Shared", path: "../Shared"),
+		.package(name: "Transport", path: "../Transport")
 	],
 	targets: [
 		.target(
@@ -24,7 +25,8 @@ let package = Package(
 				.product(name: "Managers", package: "Managers"),
 				.product(name: "Models", package: "Models"),
 				.product(name: "Persistence", package: "Persistence"),
-				.product(name: "Shared", package: "Shared")
+				.product(name: "Shared", package: "Shared"),
+				.product(name: "Transport", package: "Transport")
 			]
 		)
 	]

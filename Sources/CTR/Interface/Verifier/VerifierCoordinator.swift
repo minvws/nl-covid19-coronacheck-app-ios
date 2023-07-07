@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import CoronaCheckUI
 import Mobilecore
-import Transport
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	

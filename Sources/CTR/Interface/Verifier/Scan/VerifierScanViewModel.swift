@@ -9,7 +9,6 @@ import CoronaCheckFoundation
 import CoronaCheckUI
 import AVFoundation
 import Mobilecore
-import Transport
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 

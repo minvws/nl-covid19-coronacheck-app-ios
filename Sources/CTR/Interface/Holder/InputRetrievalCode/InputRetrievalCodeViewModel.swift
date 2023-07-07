@@ -8,7 +8,6 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import Transport
 
 class InputRetrievalCodeViewModel {
 

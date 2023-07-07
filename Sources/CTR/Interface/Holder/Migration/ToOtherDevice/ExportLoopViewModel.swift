@@ -9,7 +9,6 @@ import CoronaCheckFoundation
 import CoronaCheckUI
 import DataMigration
 import QRGenerator
-import Transport
 
 class ExportLoopViewModel {
 	

@@ -13,7 +13,7 @@ public struct ServerResponse: Decodable, Equatable {
 	public let code: Int
 	public let context: ServerResponseContext?
 	
-	init(status: String, code: Int, context: ServerResponseContext? = nil) {
+	public init(status: String, code: Int, context: ServerResponseContext? = nil) {
 		self.status = status
 		self.code = code
 		self.context = context

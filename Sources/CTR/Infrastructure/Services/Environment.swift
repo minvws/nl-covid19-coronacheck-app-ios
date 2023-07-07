@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import Reachability
-import Transport
 import OpenIDConnect
 
 // MARK: - 1: Define the Environment

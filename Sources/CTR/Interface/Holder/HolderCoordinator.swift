@@ -10,7 +10,6 @@ import CoronaCheckFoundation
 import CoronaCheckUI
 import CoreData
 import Reachability
-import Transport
 import OpenIDConnect
 
 protocol HolderCoordinatorDelegate: AnyObject {

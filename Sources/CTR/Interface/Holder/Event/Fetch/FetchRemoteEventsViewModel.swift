@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import CoronaCheckUI
 import BrightFutures
-import Transport
 
 // swiftlint:disable type_body_length
 final class FetchRemoteEventsViewModel {
