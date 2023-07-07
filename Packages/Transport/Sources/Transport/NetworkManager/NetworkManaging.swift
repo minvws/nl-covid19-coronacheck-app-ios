@@ -31,6 +31,10 @@ public struct ServerResponseContext: Codable, Equatable {
 	
 	public let matchingBlobIds: [[String]]?
 	
+	public init(matchingBlobIds: [[String]]? = nil) {
+		self.matchingBlobIds = matchingBlobIds
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case matchingBlobIds
 	}

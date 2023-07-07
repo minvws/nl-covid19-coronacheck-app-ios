@@ -10,7 +10,6 @@ import CoronaCheckUI
 import XCTest
 @testable import CTR
 import Nimble
-import Transport
 
 class FuzzyMatchingCoordinatorTests: XCTestCase {
 	

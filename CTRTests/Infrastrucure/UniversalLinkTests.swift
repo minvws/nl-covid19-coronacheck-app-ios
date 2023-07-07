@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import XCTest
-@testable import Transport
 @testable import CTR
 import Nimble
 import TestingShared

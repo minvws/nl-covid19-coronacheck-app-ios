@@ -24,6 +24,21 @@ public struct HPKData: Codable, Equatable {
 	/// euManufacturers lookup
 	public let marketingAuthorizationHolder: String
 	
+	public init(
+		code: String,
+		name: String,
+		displayName: String? = nil,
+		vaccineOrProphylaxis: String,
+		medicalProduct: String,
+		marketingAuthorizationHolder: String) {
+			self.code = code
+			self.name = name
+			self.displayName = displayName
+			self.vaccineOrProphylaxis = vaccineOrProphylaxis
+			self.medicalProduct = medicalProduct
+			self.marketingAuthorizationHolder = marketingAuthorizationHolder
+		}
+	
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 		
@@ -45,6 +60,21 @@ public struct ContactInformation: Codable, Equatable {
 	public let endDay: Int?
 	public let endHour: String?
 	
+	public init(
+		phoneNumber: String? = nil,
+		phoneNumberAbroad: String? = nil,
+		startDay: Int? = nil,
+		startHour: String? = nil,
+		endDay: Int? = nil,
+		endHour: String? = nil) {
+		self.phoneNumber = phoneNumber
+		self.phoneNumberAbroad = phoneNumberAbroad
+		self.startDay = startDay
+		self.startHour = startHour
+		self.endDay = endDay
+		self.endHour = endHour
+	}
+	
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 		
@@ -58,17 +88,27 @@ public struct ContactInformation: Codable, Equatable {
 }
 
 public struct Mapping: Codable, Equatable {
-
+	
 	public let code: String
 	
 	public let name: String
+	
+	public init(code: String, name: String) {
+		self.code = code
+		self.name = name
+	}
 }
 
 public struct UniversalLinkPermittedDomain: Codable, Equatable {
-
+	
 	public let url: String
-
+	
 	public let name: String
+	
+	public init(url: String, name: String) {
+		self.url = url
+		self.name = name
+	}
 }
 
 public struct RemoteConfiguration: Codable, Equatable {

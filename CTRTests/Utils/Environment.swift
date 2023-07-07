@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import Mobilecore
 @testable import CTR
-@testable import Transport
 import TestingShared
 
 ///

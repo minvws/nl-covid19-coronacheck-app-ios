@@ -7,9 +7,9 @@
 // swiftlint:disable type_body_length
 // swiftlint:disable file_length
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 @testable import CTR
-@testable import Transport
 import XCTest
 import Nimble
 

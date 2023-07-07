@@ -13,7 +13,6 @@ import SnapshotTesting
 import ViewControllerPresentationSpy
 @testable import CTR
 @testable import DataMigration
-@testable import Transport
 
 class ImportViewControllerTests: XCTestCase {
 

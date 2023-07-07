@@ -9,7 +9,6 @@ import CoronaCheckFoundation
 @testable import CTR
 import XCTest
 import TestingShared
-@testable import Transport
 
 class IdentityCheckerSpy: IdentityCheckerProtocol {
 

@@ -10,7 +10,6 @@ import CoronaCheckUI
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
-@testable import Transport
 import Nimble
 import SnapshotTesting
 import TestingShared

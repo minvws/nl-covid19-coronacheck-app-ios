@@ -11,7 +11,6 @@ import CoronaCheckUI
 import XCTest
 import Nimble
 @testable import CTR
-@testable import Transport
 import TestingShared
 
 class ListStoredEventsViewModelTests: XCTestCase {

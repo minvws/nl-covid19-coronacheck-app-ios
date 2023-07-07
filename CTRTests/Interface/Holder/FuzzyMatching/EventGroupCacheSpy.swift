@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 @testable import CTR
-@testable import Transport
 
 class EventGroupCacheSpy: EventGroupCacheProtocol {
 

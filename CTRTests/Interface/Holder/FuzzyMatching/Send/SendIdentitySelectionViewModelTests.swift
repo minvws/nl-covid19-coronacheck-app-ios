@@ -9,7 +9,6 @@ import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 import Nimble
-@testable import Transport
 @testable import CTR
 
 final class SendIdentitySelectionViewModelTests: XCTestCase {

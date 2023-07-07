@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import XCTest
 @testable import CTR
-import Transport
 
 class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
 

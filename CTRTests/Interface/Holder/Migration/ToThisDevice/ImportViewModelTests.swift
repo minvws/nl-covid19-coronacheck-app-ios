@@ -11,7 +11,6 @@ import XCTest
 import Nimble
 @testable import CTR
 @testable import DataMigration
-@testable import Transport
 
 final class ImportViewModelTests: XCTestCase {
 	

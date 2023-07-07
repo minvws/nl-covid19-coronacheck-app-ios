@@ -11,7 +11,6 @@ import XCTest
 import Nimble
 import ViewControllerPresentationSpy
 @testable import CTR
-@testable import Transport
 
 class PaperProofScanViewControllerTests: XCTestCase {
 

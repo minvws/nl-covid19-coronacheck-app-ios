@@ -9,7 +9,6 @@ import CoronaCheckFoundation
 import XCTest
 import CoreData
 @testable import CTR
-@testable import Transport
 import Nimble
 import Reachability
 import TestingShared

@@ -11,7 +11,6 @@ import CoreData
 import XCTest
 @testable import CTR
 import TestingShared
-@testable import Transport
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 

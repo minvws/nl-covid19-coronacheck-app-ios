@@ -8,7 +8,6 @@
 import CoronaCheckFoundation
 import XCTest
 import Nimble
-@testable import Transport
 @testable import CTR
 import SnapshotTesting
 import ViewControllerPresentationSpy

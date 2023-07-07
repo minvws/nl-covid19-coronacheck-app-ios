@@ -6,7 +6,6 @@
 */
 
 import CoronaCheckFoundation
-import Transport
 import TestingShared
 
 extension EuCredentialAttributes.TestEntry {

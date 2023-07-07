@@ -10,7 +10,6 @@ import XCTest
 @testable import CTR
 import Nimble
 import TestingShared
-@testable import Transport
 
 final class EventGroupCacheTests: XCTestCase {
 	

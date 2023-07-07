@@ -12,7 +12,6 @@ import SnapshotTesting
 import ViewControllerPresentationSpy
 import Nimble
 @testable import CTR
-@testable import Transport
 
 class InputRetrievalCodeControllerTests: XCTestCase {
 

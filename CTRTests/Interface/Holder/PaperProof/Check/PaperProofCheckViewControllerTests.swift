@@ -12,7 +12,6 @@ import Nimble
 import SnapshotTesting
 import ViewControllerPresentationSpy
 @testable import CTR
-@testable import Transport
 import TestingShared
 
 class PaperProofCheckViewControllerTests: XCTestCase {

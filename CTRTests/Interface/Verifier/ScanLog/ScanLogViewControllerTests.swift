@@ -9,7 +9,6 @@ import CoronaCheckFoundation
 import CoronaCheckUI
 import XCTest
 @testable import CTR
-@testable import Transport
 import SnapshotTesting
 import Nimble
 import TestingShared

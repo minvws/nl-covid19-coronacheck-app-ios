@@ -13,7 +13,6 @@ import Nimble
 import SnapshotTesting
 import ViewControllerPresentationSpy
 import TestingShared
-@testable import Transport
 
 class ListRemoteEventsViewControllerTests: XCTestCase {
 	
