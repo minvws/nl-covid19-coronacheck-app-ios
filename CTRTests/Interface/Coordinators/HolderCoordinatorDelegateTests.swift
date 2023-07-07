@@ -12,7 +12,6 @@ import XCTest
 @testable import Transport
 import Nimble
 import TestingShared
-import Persistence
 import ViewControllerPresentationSpy
 
 extension HolderCoordinatorTests {

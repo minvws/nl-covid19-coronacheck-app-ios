@@ -5,10 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
 import Transport
 import OpenIDConnect
-import Persistence
 
 enum AuthenticationMode {
 	case manyAuthenticationExchange // TVS - Digid (many authentication exchange)

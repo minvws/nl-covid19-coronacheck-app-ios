@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import XCTest
-import Persistence
 @testable import CTR
 
 class ShowQRItemViewModelDelegateSpy: ShowQRItemViewModelDelegate {

@@ -5,12 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 import XCTest
 import Nimble
 @testable import CTR
 import TestingShared
-import Persistence
 
 class EventModeTests: XCTestCase {
 	
