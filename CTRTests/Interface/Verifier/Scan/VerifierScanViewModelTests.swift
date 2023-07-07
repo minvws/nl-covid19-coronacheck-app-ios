@@ -6,11 +6,10 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
 import Mobilecore
-import Nimble
 
 class VerifierScanViewModelTests: XCTestCase {
 	

@@ -6,10 +6,8 @@
 */
 
 import CoreData
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import SnapshotTesting
-import Nimble
 @testable import CTR
 
 class HolderDashboardViewControllerTests: XCTestCase {

@@ -7,10 +7,9 @@
 // swiftlint:disable type_body_length file_length
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import Nimble
 import ViewControllerPresentationSpy
 
 class AppCoordinatorTests: XCTestCase {

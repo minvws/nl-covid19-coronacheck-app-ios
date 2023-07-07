@@ -5,11 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-import Nimble
+import CoronaCheckTest
 @testable import CTR
-import SnapshotTesting
-import TestingShared
 
 final class MakeTestAppointmentViewTests: XCTestCase {
 	

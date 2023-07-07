@@ -6,7 +6,6 @@
 */
 
 import CoronaCheckUI
-import XCTest
 @testable import CTR
 
 final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegate {

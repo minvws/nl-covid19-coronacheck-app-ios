@@ -6,13 +6,10 @@
  */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import Nimble
-import SnapshotTesting
 import OpenIDConnect
-import TestingShared
 
 class AuthenticationViewControllerTests: XCTestCase {
 	

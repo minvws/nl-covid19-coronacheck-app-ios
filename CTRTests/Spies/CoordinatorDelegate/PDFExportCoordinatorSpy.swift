@@ -7,9 +7,6 @@
 
 import CoronaCheckUI
 import CoronaCheckFoundation
-import XCTest
-import Nimble
-import SnapshotTesting
 @testable import CTR
 
 class PDFExportCoordinatorSpy: PDFExportCoordinatorDelegate, OpenUrlProtocol {

@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import CoronaCheckUI
 import CoronaCheckFoundation
-import XCTest
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
 
 class PagedAnnouncementDelegateSpy: PagedAnnouncementDelegate {

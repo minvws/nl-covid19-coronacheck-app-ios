@@ -6,10 +6,8 @@
 */
 
 import CoronaCheckFoundation
-import XCTest
-import Nimble
+import CoronaCheckTest
 @testable import CTR
-import TestingShared
 
 class EventModeTests: XCTestCase {
 	

@@ -7,10 +7,9 @@
 // swiftlint:disable type_body_length
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
-import XCTest
-import Nimble
 import OpenIDConnect
 
 class AuthenticationViewModelTests: XCTestCase {

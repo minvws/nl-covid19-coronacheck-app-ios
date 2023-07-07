@@ -6,12 +6,9 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import Nimble
-import SnapshotTesting
 @testable import CTR
-import TestingShared
 
 class ListStoredEventsViewControllerTests: XCTestCase {
 

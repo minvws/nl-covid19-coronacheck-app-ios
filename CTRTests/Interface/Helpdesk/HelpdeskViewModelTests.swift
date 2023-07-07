@@ -6,10 +6,8 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import Nimble
-import TestingShared
 @testable import CTR
 
 class HelpdeskViewModelTests: XCTestCase {

@@ -6,13 +6,10 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import Nimble
-import SnapshotTesting
 import ViewControllerPresentationSpy
 @testable import CTR
-import TestingShared
 
 class PaperProofCheckViewControllerTests: XCTestCase {
 

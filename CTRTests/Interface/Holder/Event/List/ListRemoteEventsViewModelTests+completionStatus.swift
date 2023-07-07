@@ -6,10 +6,9 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
-import XCTest
-import Nimble
 
 // swiftlint:disable:next type_name
 class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {

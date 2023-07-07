@@ -6,9 +6,8 @@
  */
 
 import CoronaCheckFoundation
-import XCTest
+import CoronaCheckTest
 @testable import CTR
-import Nimble
 
 final class IdentitySelectionDataSourceTests: XCTestCase {
 	

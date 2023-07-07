@@ -6,9 +6,9 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import Mobilecore
 @testable import CTR
-import TestingShared
 
 ///
 /// Set of Spies with sensible default stubbed values, which can be modified per-test.

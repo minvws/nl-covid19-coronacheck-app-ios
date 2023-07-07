@@ -6,8 +6,8 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
 
 class SnapshotViewModelTests: XCTestCase {

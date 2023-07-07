@@ -6,6 +6,7 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 

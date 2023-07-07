@@ -7,11 +7,9 @@
 
 import CoreData
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import Nimble
-import TestingShared
 
 extension HolderDashboardViewModelTests {
 	

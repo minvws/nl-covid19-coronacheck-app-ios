@@ -6,12 +6,9 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import SnapshotTesting
-import Nimble
-import TestingShared
 
 final class RiskSettingInstructionViewControllerTests: XCTestCase { // swiftlint:disable:this type_name
 	

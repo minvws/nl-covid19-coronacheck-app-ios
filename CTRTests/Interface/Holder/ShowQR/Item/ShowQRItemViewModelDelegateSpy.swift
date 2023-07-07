@@ -6,7 +6,7 @@
 */
 
 import CoronaCheckFoundation
-import XCTest
+import CoronaCheckTest
 @testable import CTR
 
 class ShowQRItemViewModelDelegateSpy: ShowQRItemViewModelDelegate {

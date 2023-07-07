@@ -6,12 +6,10 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import Nimble
 import QRGenerator
-import TestingShared
 
 class ShowQRItemViewModelTests: XCTestCase {
 

@@ -6,11 +6,8 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import Nimble
-import XCTest
-import SnapshotTesting
-import TestingShared
 
 @testable import CTR
 

@@ -6,7 +6,6 @@
 */
 
 import CoronaCheckFoundation
-import XCTest
 @testable import CTR
 
 class DeviceAuthenticationSpy: DeviceAuthenticationProtocol {

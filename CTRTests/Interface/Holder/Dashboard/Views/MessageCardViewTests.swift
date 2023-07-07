@@ -6,10 +6,8 @@
  */
 
 import CoronaCheckFoundation
-import SnapshotTesting
+import CoronaCheckTest
 @testable import CTR
-import XCTest
-import TestingShared
 
 class MessageCardViewTests: XCTestCase {
 	

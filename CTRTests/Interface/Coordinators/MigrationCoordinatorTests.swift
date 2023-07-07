@@ -6,12 +6,10 @@
  */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import Nimble
 @testable import DataMigration
-import TestingShared
 
 class MigrationCoordinatorTests: XCTestCase {
 	

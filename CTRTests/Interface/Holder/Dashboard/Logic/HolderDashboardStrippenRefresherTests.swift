@@ -7,11 +7,9 @@
 
 import CoreData
 import CoronaCheckFoundation
-import XCTest
+import CoronaCheckTest
 @testable import CTR
-import Nimble
 import Reachability
-import TestingShared
 
 class HolderDashboardStrippenRefresherTests: XCTestCase {
 	

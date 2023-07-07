@@ -6,8 +6,7 @@
  */
 
 import CoronaCheckFoundation
-import XCTest
-import SnapshotTesting
+import CoronaCheckTest
 @testable import CTR
 
 class InputRetrievalCodeViewTests: XCTestCase {

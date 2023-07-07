@@ -6,9 +6,8 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 @testable import CTR
-import XCTest
-import TestingShared
 
 class IdentityCheckerSpy: IdentityCheckerProtocol {
 

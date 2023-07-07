@@ -6,12 +6,9 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import Nimble
 @testable import CTR
-import SnapshotTesting
-import TestingShared
 
 class HolderHelpAndInfoMenuViewControllerTests: XCTestCase {
 

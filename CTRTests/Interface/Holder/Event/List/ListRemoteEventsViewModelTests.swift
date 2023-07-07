@@ -8,11 +8,9 @@
 // swiftlint:disable file_length
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
-import XCTest
-import Nimble
-import TestingShared
 
 class ListRemoteEventsViewModelTests: XCTestCase {
 

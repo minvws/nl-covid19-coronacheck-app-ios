@@ -6,8 +6,7 @@
 */
 
 import CoronaCheckFoundation
-import XCTest
-import Nimble
+import CoronaCheckTest
 @testable import CTR
 
 final class PaperProofIdentifierTests: XCTestCase {

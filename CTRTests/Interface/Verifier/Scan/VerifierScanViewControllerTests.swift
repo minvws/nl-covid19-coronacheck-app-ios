@@ -6,11 +6,10 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import Nimble
-import ViewControllerPresentationSpy
 @testable import CTR
+import ViewControllerPresentationSpy
 
 class VerifierScanViewControllerTests: XCTestCase {
 

@@ -6,10 +6,8 @@
  */
 
 import CoronaCheckFoundation
-import XCTest
+import CoronaCheckTest
 @testable import CTR
-import Nimble
-import TestingShared
 
 final class EventGroupCacheTests: XCTestCase {
 	

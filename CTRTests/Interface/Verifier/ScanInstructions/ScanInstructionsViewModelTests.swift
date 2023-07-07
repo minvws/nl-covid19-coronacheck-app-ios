@@ -6,13 +6,10 @@
 */
 
 import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
-import Nimble
-import Lottie
 @testable import CTR
-import SnapshotTesting
-import TestingShared
+import Lottie
 
 class ScanInstructionsViewModelTests: XCTestCase {
 

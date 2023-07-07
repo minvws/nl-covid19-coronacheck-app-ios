@@ -6,9 +6,7 @@
 */
 
 import CoronaCheckUI
-import XCTest
-import Nimble
-import SnapshotTesting
+import CoronaCheckTest
 @testable import CTR
 
 class CheckForBSNViewControllerTests: XCTestCase {

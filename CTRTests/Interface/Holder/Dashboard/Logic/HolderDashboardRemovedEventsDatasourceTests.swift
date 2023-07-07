@@ -6,10 +6,8 @@
 */
 
 import CoronaCheckFoundation
-import XCTest
-import Nimble
+import CoronaCheckTest
 @testable import CTR
-import TestingShared
 
 // swiftlint:disable:next type_name
 class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
