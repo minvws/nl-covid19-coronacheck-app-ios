@@ -7,27 +7,27 @@
 
 import Foundation
 
-class AppVersionSupplierSpy: AppVersionSupplierProtocol {
+public class AppVersionSupplierSpy: AppVersionSupplierProtocol {
 
-	var getCurrentVersionCalled = false
-	var appVersion: String
+	public var getCurrentVersionCalled = false
+	public var appVersion: String
 
-	var getCurrentBuildCalled = false
-	var appBuild: String
+	public var getCurrentBuildCalled = false
+	public var appBuild: String
 
-	init(version: String, build: String = "") {
+	public init(version: String, build: String = "") {
 
 		appVersion = version
 		appBuild = build
 	}
 
-	func getCurrentVersion() -> String {
+	public func getCurrentVersion() -> String {
 
 		getCurrentVersionCalled = true
 		return appVersion
 	}
 
-	func getCurrentBuild() -> String {
+	public func getCurrentBuild() -> String {
 
 		getCurrentBuildCalled = true
 		return appBuild

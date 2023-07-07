@@ -10,17 +10,19 @@ import Transport
 import Shared
 import Models
 
-class SecureUserSettingsSpy: SecureUserSettingsProtocol {
+public class SecureUserSettingsSpy: SecureUserSettingsProtocol {
+	
+	public init() {}
 
-	var invokedScanLockUntilSetter = false
-	var invokedScanLockUntilSetterCount = 0
-	var invokedScanLockUntil: Date?
-	var invokedScanLockUntilList = [Date]()
-	var invokedScanLockUntilGetter = false
-	var invokedScanLockUntilGetterCount = 0
-	var stubbedScanLockUntil: Date!
+	public var invokedScanLockUntilSetter = false
+	public var invokedScanLockUntilSetterCount = 0
+	public var invokedScanLockUntil: Date?
+	public var invokedScanLockUntilList = [Date]()
+	public var invokedScanLockUntilGetter = false
+	public var invokedScanLockUntilGetterCount = 0
+	public var stubbedScanLockUntil: Date!
 
-	var scanLockUntil: Date {
+	public var scanLockUntil: Date {
 		set {
 			invokedScanLockUntilSetter = true
 			invokedScanLockUntilSetterCount += 1
@@ -34,15 +36,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedAppInstalledDateSetter = false
-	var invokedAppInstalledDateSetterCount = 0
-	var invokedAppInstalledDate: Date?
-	var invokedAppInstalledDateList = [Date?]()
-	var invokedAppInstalledDateGetter = false
-	var invokedAppInstalledDateGetterCount = 0
-	var stubbedAppInstalledDate: Date!
+	public var invokedAppInstalledDateSetter = false
+	public var invokedAppInstalledDateSetterCount = 0
+	public var invokedAppInstalledDate: Date?
+	public var invokedAppInstalledDateList = [Date?]()
+	public var invokedAppInstalledDateGetter = false
+	public var invokedAppInstalledDateGetterCount = 0
+	public var stubbedAppInstalledDate: Date!
 
-	var appInstalledDate: Date? {
+	public var appInstalledDate: Date? {
 		set {
 			invokedAppInstalledDateSetter = true
 			invokedAppInstalledDateSetterCount += 1
@@ -56,15 +58,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedForcedInformationDataSetter = false
-	var invokedForcedInformationDataSetterCount = 0
-	var invokedForcedInformationData: ForcedInformationData?
-	var invokedForcedInformationDataList = [ForcedInformationData]()
-	var invokedForcedInformationDataGetter = false
-	var invokedForcedInformationDataGetterCount = 0
-	var stubbedForcedInformationData: ForcedInformationData!
+	public var invokedForcedInformationDataSetter = false
+	public var invokedForcedInformationDataSetterCount = 0
+	public var invokedForcedInformationData: ForcedInformationData?
+	public var invokedForcedInformationDataList = [ForcedInformationData]()
+	public var invokedForcedInformationDataGetter = false
+	public var invokedForcedInformationDataGetterCount = 0
+	public var stubbedForcedInformationData: ForcedInformationData!
 
-	var forcedInformationData: ForcedInformationData {
+	public var forcedInformationData: ForcedInformationData {
 		set {
 			invokedForcedInformationDataSetter = true
 			invokedForcedInformationDataSetterCount += 1
@@ -78,15 +80,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedHolderSecretKeySetter = false
-	var invokedHolderSecretKeySetterCount = 0
-	var invokedHolderSecretKey: Data?
-	var invokedHolderSecretKeyList = [Data?]()
-	var invokedHolderSecretKeyGetter = false
-	var invokedHolderSecretKeyGetterCount = 0
-	var stubbedHolderSecretKey: Data!
+	public var invokedHolderSecretKeySetter = false
+	public var invokedHolderSecretKeySetterCount = 0
+	public var invokedHolderSecretKey: Data?
+	public var invokedHolderSecretKeyList = [Data?]()
+	public var invokedHolderSecretKeyGetter = false
+	public var invokedHolderSecretKeyGetterCount = 0
+	public var stubbedHolderSecretKey: Data!
 
-	var holderSecretKey: Data? {
+	public var holderSecretKey: Data? {
 		set {
 			invokedHolderSecretKeySetter = true
 			invokedHolderSecretKeySetterCount += 1
@@ -100,15 +102,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedOnboardingDataSetter = false
-	var invokedOnboardingDataSetterCount = 0
-	var invokedOnboardingData: OnboardingData?
-	var invokedOnboardingDataList = [OnboardingData]()
-	var invokedOnboardingDataGetter = false
-	var invokedOnboardingDataGetterCount = 0
-	var stubbedOnboardingData: OnboardingData!
+	public var invokedOnboardingDataSetter = false
+	public var invokedOnboardingDataSetterCount = 0
+	public var invokedOnboardingData: OnboardingData?
+	public var invokedOnboardingDataList = [OnboardingData]()
+	public var invokedOnboardingDataGetter = false
+	public var invokedOnboardingDataGetterCount = 0
+	public var stubbedOnboardingData: OnboardingData!
 
-	var onboardingData: OnboardingData {
+	public var onboardingData: OnboardingData {
 		set {
 			invokedOnboardingDataSetter = true
 			invokedOnboardingDataSetterCount += 1
@@ -122,15 +124,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedSelectedIdentitySetter = false
-	var invokedSelectedIdentitySetterCount = 0
-	var invokedSelectedIdentity: String?
-	var invokedSelectedIdentityList = [String?]()
-	var invokedSelectedIdentityGetter = false
-	var invokedSelectedIdentityGetterCount = 0
-	var stubbedSelectedIdentity: String!
+	public var invokedSelectedIdentitySetter = false
+	public var invokedSelectedIdentitySetterCount = 0
+	public var invokedSelectedIdentity: String?
+	public var invokedSelectedIdentityList = [String?]()
+	public var invokedSelectedIdentityGetter = false
+	public var invokedSelectedIdentityGetterCount = 0
+	public var stubbedSelectedIdentity: String!
 
-	var selectedIdentity: String? {
+	public var selectedIdentity: String? {
 		set {
 			invokedSelectedIdentitySetter = true
 			invokedSelectedIdentitySetterCount += 1
@@ -144,15 +146,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedStoredConfigurationSetter = false
-	var invokedStoredConfigurationSetterCount = 0
-	var invokedStoredConfiguration: RemoteConfiguration?
-	var invokedStoredConfigurationList = [RemoteConfiguration]()
-	var invokedStoredConfigurationGetter = false
-	var invokedStoredConfigurationGetterCount = 0
-	var stubbedStoredConfiguration: RemoteConfiguration!
+	public var invokedStoredConfigurationSetter = false
+	public var invokedStoredConfigurationSetterCount = 0
+	public var invokedStoredConfiguration: RemoteConfiguration?
+	public var invokedStoredConfigurationList = [RemoteConfiguration]()
+	public var invokedStoredConfigurationGetter = false
+	public var invokedStoredConfigurationGetterCount = 0
+	public var stubbedStoredConfiguration: RemoteConfiguration!
 
-	var storedConfiguration: RemoteConfiguration {
+	public var storedConfiguration: RemoteConfiguration {
 		set {
 			invokedStoredConfigurationSetter = true
 			invokedStoredConfigurationSetterCount += 1
@@ -166,15 +168,15 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedVerificationPolicySetter = false
-	var invokedVerificationPolicySetterCount = 0
-	var invokedVerificationPolicy: VerificationPolicy?
-	var invokedVerificationPolicyList = [VerificationPolicy?]()
-	var invokedVerificationPolicyGetter = false
-	var invokedVerificationPolicyGetterCount = 0
-	var stubbedVerificationPolicy: VerificationPolicy!
+	public var invokedVerificationPolicySetter = false
+	public var invokedVerificationPolicySetterCount = 0
+	public var invokedVerificationPolicy: VerificationPolicy?
+	public var invokedVerificationPolicyList = [VerificationPolicy?]()
+	public var invokedVerificationPolicyGetter = false
+	public var invokedVerificationPolicyGetterCount = 0
+	public var stubbedVerificationPolicy: VerificationPolicy!
 
-	var verificationPolicy: VerificationPolicy? {
+	public var verificationPolicy: VerificationPolicy? {
 		set {
 			invokedVerificationPolicySetter = true
 			invokedVerificationPolicySetterCount += 1
@@ -188,10 +190,10 @@ class SecureUserSettingsSpy: SecureUserSettingsProtocol {
 		}
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

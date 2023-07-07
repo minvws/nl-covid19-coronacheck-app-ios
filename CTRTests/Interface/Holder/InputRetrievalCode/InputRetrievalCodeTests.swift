@@ -6,15 +6,10 @@
 */
 // swiftlint:disable type_body_length file_length
 
+import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import Foundation
-import XCTest
-import Nimble
 @testable import CTR
-@testable import Transport
-import SnapshotTesting
-import TestingShared
-@testable import Models
 
 /// (Experimentally) combines TokenEntryViewModel tests and TokenEntryViewController snapshot tests
 class InputRetrievalCodeViewModelTests: XCTestCase {

@@ -5,13 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
+import CoronaCheckTest
 import CoronaCheckUI
-import XCTest
 @testable import CTR
-import Nimble
-import SnapshotTesting
-import TestingShared
-@testable import Managers
 
 class PrivacyConsentViewControllerTests: XCTestCase {
 

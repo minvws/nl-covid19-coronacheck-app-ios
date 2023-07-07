@@ -9,22 +9,24 @@ import Foundation
 import Shared
 import Models
 
-final class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
+final public class VerificationPolicyEnablerSpy: VerificationPolicyEnableable {
 
-	var invokedObservatoryGetter = false
-	var invokedObservatoryGetterCount = 0
-	var stubbedObservatory: Observatory<[VerificationPolicy]>!
+	public init() {}
+	
+	public var invokedObservatoryGetter = false
+	public var invokedObservatoryGetterCount = 0
+	public var stubbedObservatory: Observatory<[VerificationPolicy]>!
 
-	var observatory: Observatory<[VerificationPolicy]> {
+	public var observatory: Observatory<[VerificationPolicy]> {
 		invokedObservatoryGetter = true
 		invokedObservatoryGetterCount += 1
 		return stubbedObservatory
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

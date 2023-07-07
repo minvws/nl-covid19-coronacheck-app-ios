@@ -6,8 +6,8 @@
 */
 
 import AVFoundation
+import CoronaCheckFoundation
 import CoronaCheckUI
-import Models
 
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 

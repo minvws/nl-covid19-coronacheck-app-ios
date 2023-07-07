@@ -5,22 +5,24 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
   
+import CoreData
 import Foundation
 import Transport
 import Shared
 import Persistence
-import CoreData
 import Models
 
-class WalletManagerSpy: WalletManaging {
+public class WalletManagerSpy: WalletManaging {
+	
+	public init() {}
 
-	var invokedStoreEventGroup = false
-	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?, isDraft: Bool)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?, isDraft: Bool)]()
-	var stubbedStoreEventGroupResult: EventGroup!
+	public var invokedStoreEventGroup = false
+	public var invokedStoreEventGroupCount = 0
+	public var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?, isDraft: Bool)?
+	public var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, expiryDate: Date?, isDraft: Bool)]()
+	public var stubbedStoreEventGroupResult: EventGroup!
 
-	func storeEventGroup(
+	public func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
 		jsonData: Data,
@@ -33,39 +35,39 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreEventGroupResult
 	}
 
-	var invokedFetchSignedEvents = false
-	var invokedFetchSignedEventsCount = 0
-	var stubbedFetchSignedEventsResult: [String]! = []
+	public var invokedFetchSignedEvents = false
+	public var invokedFetchSignedEventsCount = 0
+	public var stubbedFetchSignedEventsResult: [String]! = []
 
-	func fetchSignedEvents() -> [String] {
+	public func fetchSignedEvents() -> [String] {
 		invokedFetchSignedEvents = true
 		invokedFetchSignedEventsCount += 1
 		return stubbedFetchSignedEventsResult
 	}
 
-	var invokedRemoveDomesticGreenCards = false
-	var invokedRemoveDomesticGreenCardsCount = 0
+	public var invokedRemoveDomesticGreenCards = false
+	public var invokedRemoveDomesticGreenCardsCount = 0
 
-	func removeDomesticGreenCards() {
+	public func removeDomesticGreenCards() {
 		invokedRemoveDomesticGreenCards = true
 		invokedRemoveDomesticGreenCardsCount += 1
 	}
 
-	var invokedRemoveDraftEventGroups = false
-	var invokedRemoveDraftEventGroupsCount = 0
+	public var invokedRemoveDraftEventGroups = false
+	public var invokedRemoveDraftEventGroupsCount = 0
 
-	func removeDraftEventGroups() {
+	public func removeDraftEventGroups() {
 		invokedRemoveDraftEventGroups = true
 		invokedRemoveDraftEventGroupsCount += 1
 	}
 
-	var invokedRemoveExistingEventGroupsType = false
-	var invokedRemoveExistingEventGroupsTypeCount = 0
-	var invokedRemoveExistingEventGroupsTypeParameters: (type: EventMode, providerIdentifier: String)?
-	var invokedRemoveExistingEventGroupsTypeParametersList = [(type: EventMode, providerIdentifier: String)]()
-	var stubbedRemoveExistingEventGroupsTypeResult: Int! = 0
+	public var invokedRemoveExistingEventGroupsType = false
+	public var invokedRemoveExistingEventGroupsTypeCount = 0
+	public var invokedRemoveExistingEventGroupsTypeParameters: (type: EventMode, providerIdentifier: String)?
+	public var invokedRemoveExistingEventGroupsTypeParametersList = [(type: EventMode, providerIdentifier: String)]()
+	public var stubbedRemoveExistingEventGroupsTypeResult: Int! = 0
 
-	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) -> Int {
+	public func removeExistingEventGroups(type: EventMode, providerIdentifier: String) -> Int {
 		invokedRemoveExistingEventGroupsType = true
 		invokedRemoveExistingEventGroupsTypeCount += 1
 		invokedRemoveExistingEventGroupsTypeParameters = (type, providerIdentifier)
@@ -73,53 +75,53 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedRemoveExistingEventGroupsTypeResult
 	}
 
-	var invokedRemoveExistingEventGroups = false
-	var invokedRemoveExistingEventGroupsCount = 0
+	public var invokedRemoveExistingEventGroups = false
+	public var invokedRemoveExistingEventGroupsCount = 0
 
-	func removeExistingEventGroups() {
+	public func removeExistingEventGroups() {
 		invokedRemoveExistingEventGroups = true
 		invokedRemoveExistingEventGroupsCount += 1
 	}
 
-	var invokedRemoveExistingGreenCards = false
-	var invokedRemoveExistingGreenCardsCount = 0
+	public var invokedRemoveExistingGreenCards = false
+	public var invokedRemoveExistingGreenCardsCount = 0
 
-	func removeExistingGreenCards() {
+	public func removeExistingGreenCards() {
 		invokedRemoveExistingGreenCards = true
 		invokedRemoveExistingGreenCardsCount += 1
 	}
 
-	var invokedRemoveExistingBlockedEvents = false
-	var invokedRemoveExistingBlockedEventsCount = 0
+	public var invokedRemoveExistingBlockedEvents = false
+	public var invokedRemoveExistingBlockedEventsCount = 0
 
-	func removeExistingBlockedEvents() {
+	public func removeExistingBlockedEvents() {
 		invokedRemoveExistingBlockedEvents = true
 		invokedRemoveExistingBlockedEventsCount += 1
 	}
 
-	var invokedRemoveExistingMismatchedIdentityEvents = false
-	var invokedRemoveExistingMismatchedIdentityEventsCount = 0
+	public var invokedRemoveExistingMismatchedIdentityEvents = false
+	public var invokedRemoveExistingMismatchedIdentityEventsCount = 0
 
-	func removeExistingMismatchedIdentityEvents() {
+	public func removeExistingMismatchedIdentityEvents() {
 		invokedRemoveExistingMismatchedIdentityEvents = true
 		invokedRemoveExistingMismatchedIdentityEventsCount += 1
 	}
 
-	var invokedRemoveVaccinationAssessmentEventGroups = false
-	var invokedRemoveVaccinationAssessmentEventGroupsCount = 0
+	public var invokedRemoveVaccinationAssessmentEventGroups = false
+	public var invokedRemoveVaccinationAssessmentEventGroupsCount = 0
 
-	func removeVaccinationAssessmentEventGroups() {
+	public func removeVaccinationAssessmentEventGroups() {
 		invokedRemoveVaccinationAssessmentEventGroups = true
 		invokedRemoveVaccinationAssessmentEventGroupsCount += 1
 	}
 
-	var invokedStoreEuGreenCard = false
-	var invokedStoreEuGreenCardCount = 0
-	var invokedStoreEuGreenCardParameters: (remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)?
-	var invokedStoreEuGreenCardParametersList = [(remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)]()
-	var stubbedStoreEuGreenCardResult: Bool! = false
+	public var invokedStoreEuGreenCard = false
+	public var invokedStoreEuGreenCardCount = 0
+	public var invokedStoreEuGreenCardParameters: (remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)?
+	public var invokedStoreEuGreenCardParametersList = [(remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)]()
+	public var stubbedStoreEuGreenCardResult: Bool! = false
 
-	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
+	public func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
 		invokedStoreEuGreenCard = true
 		invokedStoreEuGreenCardCount += 1
 		invokedStoreEuGreenCardParameters = (remoteEuGreenCard, cryptoManager)
@@ -127,13 +129,13 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreEuGreenCardResult
 	}
 
-	var invokedStoreRemovedEvent = false
-	var invokedStoreRemovedEventCount = 0
-	var invokedStoreRemovedEventParameters: (type: EventMode, eventDate: Date, reason: String)?
-	var invokedStoreRemovedEventParametersList = [(type: EventMode, eventDate: Date, reason: String)]()
-	var stubbedStoreRemovedEventResult: RemovedEvent!
+	public var invokedStoreRemovedEvent = false
+	public var invokedStoreRemovedEventCount = 0
+	public var invokedStoreRemovedEventParameters: (type: EventMode, eventDate: Date, reason: String)?
+	public var invokedStoreRemovedEventParametersList = [(type: EventMode, eventDate: Date, reason: String)]()
+	public var stubbedStoreRemovedEventResult: RemovedEvent!
 
-	func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
+	public func storeRemovedEvent(type: EventMode, eventDate: Date, reason: String) -> RemovedEvent? {
 		invokedStoreRemovedEvent = true
 		invokedStoreRemovedEventCount += 1
 		invokedStoreRemovedEventParameters = (type, eventDate, reason)
@@ -141,13 +143,13 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreRemovedEventResult
 	}
 
-	var invokedCreateAndPersistRemovedEventWrapper = false
-	var invokedCreateAndPersistRemovedEventWrapperCount = 0
-	var invokedCreateAndPersistRemovedEventWrapperParameters: (wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)?
-	var invokedCreateAndPersistRemovedEventWrapperParametersList = [(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)]()
-	var stubbedCreateAndPersistRemovedEventWrapperResult: [RemovedEvent]! = []
+	public var invokedCreateAndPersistRemovedEventWrapper = false
+	public var invokedCreateAndPersistRemovedEventWrapperCount = 0
+	public var invokedCreateAndPersistRemovedEventWrapperParameters: (wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)?
+	public var invokedCreateAndPersistRemovedEventWrapperParametersList = [(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason)]()
+	public var stubbedCreateAndPersistRemovedEventWrapperResult: [RemovedEvent]! = []
 
-	func createAndPersistRemovedEvent(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
+	public func createAndPersistRemovedEvent(wrapper: EventFlow.EventResultWrapper, reason: RemovalReason) -> [RemovedEvent] {
 		invokedCreateAndPersistRemovedEventWrapper = true
 		invokedCreateAndPersistRemovedEventWrapperCount += 1
 		invokedCreateAndPersistRemovedEventWrapperParameters = (wrapper, reason)
@@ -155,13 +157,13 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedCreateAndPersistRemovedEventWrapperResult
 	}
 
-	var invokedCreateAndPersistRemovedEventEuCredentialAttributes = false
-	var invokedCreateAndPersistRemovedEventEuCredentialAttributesCount = 0
-	var invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters: (euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)?
-	var invokedCreateAndPersistRemovedEventEuCredentialAttributesParametersList = [(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)]()
-	var stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult: RemovedEvent!
+	public var invokedCreateAndPersistRemovedEventEuCredentialAttributes = false
+	public var invokedCreateAndPersistRemovedEventEuCredentialAttributesCount = 0
+	public var invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters: (euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)?
+	public var invokedCreateAndPersistRemovedEventEuCredentialAttributesParametersList = [(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason)]()
+	public var stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult: RemovedEvent!
 
-	func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
+	public func createAndPersistRemovedEvent(euCredentialAttributes: EuCredentialAttributes, reason: RemovalReason) -> RemovedEvent? {
 		invokedCreateAndPersistRemovedEventEuCredentialAttributes = true
 		invokedCreateAndPersistRemovedEventEuCredentialAttributesCount += 1
 		invokedCreateAndPersistRemovedEventEuCredentialAttributesParameters = (euCredentialAttributes, reason)
@@ -169,13 +171,13 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedCreateAndPersistRemovedEventEuCredentialAttributesResult
 	}
 
-	var invokedCreateAndPersistRemovedEventBlockItem = false
-	var invokedCreateAndPersistRemovedEventBlockItemCount = 0
-	var invokedCreateAndPersistRemovedEventBlockItemParameters: (blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)?
-	var invokedCreateAndPersistRemovedEventBlockItemParametersList = [(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)]()
-	var stubbedCreateAndPersistRemovedEventBlockItemResult: RemovedEvent!
+	public var invokedCreateAndPersistRemovedEventBlockItem = false
+	public var invokedCreateAndPersistRemovedEventBlockItemCount = 0
+	public var invokedCreateAndPersistRemovedEventBlockItemParameters: (blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)?
+	public var invokedCreateAndPersistRemovedEventBlockItemParametersList = [(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?)]()
+	public var stubbedCreateAndPersistRemovedEventBlockItemResult: RemovedEvent!
 
-	func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent? {
+	public func createAndPersistRemovedEvent(blockItem: RemoteGreenCards.BlobExpiry, existingEventGroup: EventGroup, cryptoManager: CryptoManaging?) -> RemovedEvent? {
 		invokedCreateAndPersistRemovedEventBlockItem = true
 		invokedCreateAndPersistRemovedEventBlockItemCount += 1
 		invokedCreateAndPersistRemovedEventBlockItemParameters = (blockItem, existingEventGroup, cryptoManager)
@@ -183,33 +185,33 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedCreateAndPersistRemovedEventBlockItemResult
 	}
 
-	var invokedListEventGroups = false
-	var invokedListEventGroupsCount = 0
-	var stubbedListEventGroupsResult: [EventGroup]! = []
+	public var invokedListEventGroups = false
+	public var invokedListEventGroupsCount = 0
+	public var stubbedListEventGroupsResult: [EventGroup]! = []
 
-	func listEventGroups() -> [EventGroup] {
+	public func listEventGroups() -> [EventGroup] {
 		invokedListEventGroups = true
 		invokedListEventGroupsCount += 1
 		return stubbedListEventGroupsResult
 	}
 
-	var invokedListGreenCards = false
-	var invokedListGreenCardsCount = 0
-	var stubbedListGreenCardsResult: [GreenCard]! = []
+	public var invokedListGreenCards = false
+	public var invokedListGreenCardsCount = 0
+	public var stubbedListGreenCardsResult: [GreenCard]! = []
 
-	func listGreenCards() -> [GreenCard] {
+	public func listGreenCards() -> [GreenCard] {
 		invokedListGreenCards = true
 		invokedListGreenCardsCount += 1
 		return stubbedListGreenCardsResult
 	}
 
-	var invokedRemoveExpiredGreenCards = false
-	var invokedRemoveExpiredGreenCardsCount = 0
-	var invokedRemoveExpiredGreenCardsParameters: (forDate: Date, Void)?
-	var invokedRemoveExpiredGreenCardsParametersList = [(forDate: Date, Void)]()
-	var stubbedRemoveExpiredGreenCardsResult: [(greencardType: String, originType: String)]! = []
+	public var invokedRemoveExpiredGreenCards = false
+	public var invokedRemoveExpiredGreenCardsCount = 0
+	public var invokedRemoveExpiredGreenCardsParameters: (forDate: Date, Void)?
+	public var invokedRemoveExpiredGreenCardsParametersList = [(forDate: Date, Void)]()
+	public var stubbedRemoveExpiredGreenCardsResult: [(greencardType: String, originType: String)]! = []
 
-	func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)] {
+	public func removeExpiredGreenCards(forDate: Date) -> [(greencardType: String, originType: String)] {
 		invokedRemoveExpiredGreenCards = true
 		invokedRemoveExpiredGreenCardsCount += 1
 		invokedRemoveExpiredGreenCardsParameters = (forDate, ())
@@ -217,25 +219,25 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedRemoveExpiredGreenCardsResult
 	}
 
-	var invokedExpireEventGroups = false
-	var invokedExpireEventGroupsCount = 0
-	var invokedExpireEventGroupsParameters: (forDate: Date, Void)?
-	var invokedExpireEventGroupsParametersList = [(forDate: Date, Void)]()
+	public var invokedExpireEventGroups = false
+	public var invokedExpireEventGroupsCount = 0
+	public var invokedExpireEventGroupsParameters: (forDate: Date, Void)?
+	public var invokedExpireEventGroupsParametersList = [(forDate: Date, Void)]()
 
-	func expireEventGroups(forDate: Date) {
+	public func expireEventGroups(forDate: Date) {
 		invokedExpireEventGroups = true
 		invokedExpireEventGroupsCount += 1
 		invokedExpireEventGroupsParameters = (forDate, ())
 		invokedExpireEventGroupsParametersList.append((forDate, ()))
 	}
 
-	var invokedRemoveEventGroup = false
-	var invokedRemoveEventGroupCount = 0
-	var invokedRemoveEventGroupParameters: (objectID: NSManagedObjectID, Void)?
-	var invokedRemoveEventGroupParametersList = [(objectID: NSManagedObjectID, Void)]()
-	var stubbedRemoveEventGroupResult: Result<Void, Error>!
+	public var invokedRemoveEventGroup = false
+	public var invokedRemoveEventGroupCount = 0
+	public var invokedRemoveEventGroupParameters: (objectID: NSManagedObjectID, Void)?
+	public var invokedRemoveEventGroupParametersList = [(objectID: NSManagedObjectID, Void)]()
+	public var stubbedRemoveEventGroupResult: Result<Void, Error>!
 
-	func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
+	public func removeEventGroup(_ objectID: NSManagedObjectID) -> Result<Void, Error> {
 		invokedRemoveEventGroup = true
 		invokedRemoveEventGroupCount += 1
 		invokedRemoveEventGroupParameters = (objectID, ())
@@ -243,13 +245,13 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedRemoveEventGroupResult
 	}
 
-	var invokedGreencardsWithUnexpiredOrigins = false
-	var invokedGreencardsWithUnexpiredOriginsCount = 0
-	var invokedGreencardsWithUnexpiredOriginsParameters: (now: Date, ofOriginType: OriginType?)?
-	var invokedGreencardsWithUnexpiredOriginsParametersList = [(now: Date, ofOriginType: OriginType?)]()
-	var stubbedGreencardsWithUnexpiredOriginsResult: [GreenCard]! = []
+	public var invokedGreencardsWithUnexpiredOrigins = false
+	public var invokedGreencardsWithUnexpiredOriginsCount = 0
+	public var invokedGreencardsWithUnexpiredOriginsParameters: (now: Date, ofOriginType: OriginType?)?
+	public var invokedGreencardsWithUnexpiredOriginsParametersList = [(now: Date, ofOriginType: OriginType?)]()
+	public var stubbedGreencardsWithUnexpiredOriginsResult: [GreenCard]! = []
 
-	func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard] {
+	public func greencardsWithUnexpiredOrigins(now: Date, ofOriginType: OriginType?) -> [GreenCard] {
 		invokedGreencardsWithUnexpiredOrigins = true
 		invokedGreencardsWithUnexpiredOriginsCount += 1
 		invokedGreencardsWithUnexpiredOriginsParameters = (now, ofOriginType)
@@ -257,24 +259,24 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedGreencardsWithUnexpiredOriginsResult
 	}
 
-	var invokedUpdateEventGroupIdentifier = false
-	var invokedUpdateEventGroupIdentifierCount = 0
-	var invokedUpdateEventGroupIdentifierParameters: (identifier: String, expiryDate: Date)?
-	var invokedUpdateEventGroupIdentifierParametersList = [(identifier: String, expiryDate: Date)]()
+	public var invokedUpdateEventGroupIdentifier = false
+	public var invokedUpdateEventGroupIdentifierCount = 0
+	public var invokedUpdateEventGroupIdentifierParameters: (identifier: String, expiryDate: Date)?
+	public var invokedUpdateEventGroupIdentifierParametersList = [(identifier: String, expiryDate: Date)]()
 
-	func updateEventGroup(identifier: String, expiryDate: Date) {
+	public func updateEventGroup(identifier: String, expiryDate: Date) {
 		invokedUpdateEventGroupIdentifier = true
 		invokedUpdateEventGroupIdentifierCount += 1
 		invokedUpdateEventGroupIdentifierParameters = (identifier, expiryDate)
 		invokedUpdateEventGroupIdentifierParametersList.append((identifier, expiryDate))
 	}
 
-	var invokedUpdateEventGroupIsDraft = false
-	var invokedUpdateEventGroupIsDraftCount = 0
-	var invokedUpdateEventGroupIsDraftParameters: (eventGroup: EventGroup, isDraft: Bool)?
-	var invokedUpdateEventGroupIsDraftParametersList = [(eventGroup: EventGroup, isDraft: Bool)]()
+	public var invokedUpdateEventGroupIsDraft = false
+	public var invokedUpdateEventGroupIsDraftCount = 0
+	public var invokedUpdateEventGroupIsDraftParameters: (eventGroup: EventGroup, isDraft: Bool)?
+	public var invokedUpdateEventGroupIsDraftParametersList = [(eventGroup: EventGroup, isDraft: Bool)]()
 
-	func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool) {
+	public func updateEventGroup(_ eventGroup: EventGroup, isDraft: Bool) {
 		invokedUpdateEventGroupIsDraft = true
 		invokedUpdateEventGroupIsDraftCount += 1
 		invokedUpdateEventGroupIsDraftParameters = (eventGroup, isDraft)

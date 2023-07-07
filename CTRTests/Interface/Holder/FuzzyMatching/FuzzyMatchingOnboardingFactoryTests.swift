@@ -6,9 +6,8 @@
  */
 
 import CoronaCheckUI
-import XCTest
+import CoronaCheckTest
 @testable import CTR
-import Nimble
 
 final class FuzzyMatchingOnboardingFactoryTests: XCTestCase {
 	

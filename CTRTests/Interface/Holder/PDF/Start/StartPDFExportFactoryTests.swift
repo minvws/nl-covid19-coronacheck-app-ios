@@ -5,9 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckTest
 import CoronaCheckUI
-import Nimble
-import XCTest
 @testable import CTR
 
 final class StartPDFExportFactoryTests: XCTestCase {

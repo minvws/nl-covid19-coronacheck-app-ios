@@ -12,21 +12,18 @@ packages:
   RDOModules:
     github: minvws/nl-rdo-app-ios-modules
     branch: main
-  Nimble:
-    github: Quick/Nimble
-    majorVersion: 10.0.0
-  OHHTTPStubs:
-    github: AliSoftware/OHHTTPStubs
-    majorVersion: 9.1.0
   BrightFutures:
     github: Thomvis/BrightFutures
     branch: master
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
-  SnapshotTesting:
-    github: pointfreeco/swift-snapshot-testing
-    exactVersion: 1.9.0
+  CoronaCheckFoundation:
+    path: ./Packages/CoronaCheckFoundation
+  CoronaCheckTest:
+    path: ./Packages/CoronaCheckTest
+  CoronaCheckUI:
+    path: ./Packages/CoronaCheckUI
   CryptoCore:
     path: ./Packages/CryptoCore
   DataMigration:
@@ -45,12 +42,8 @@ packages:
     path: ./Packages/RestrictedBrowser
   Shared:
     path: ./Packages/Shared
-  TestingShared:
-    path: ./Packages/TestingShared
   Transport:
     path: ./Packages/Transport
-  CoronaCheckUI:
-    path: ./Packages/CoronaCheckUI
 
 # - Attributes:
 
@@ -147,6 +140,7 @@ targetTemplates:
     type: application
     dependencies:
       # SPM:
+      - package: CoronaCheckFoundation
       - package: CoronaCheckUI
       - package: CryptoCore
       - package: DataMigration
@@ -239,11 +233,7 @@ targetTemplates:
     platform: iOS
     type: bundle.unit-test
     dependencies:
-      - package: TestingShared
-      - package: Nimble
-      - package: OHHTTPStubs
-        product: OHHTTPStubsSwift
-      - package: SnapshotTesting
+      - package: CoronaCheckTest
       - target: Holder
       - framework: Vendor/ViewControllerPresentationSpy.framework
         embed: true

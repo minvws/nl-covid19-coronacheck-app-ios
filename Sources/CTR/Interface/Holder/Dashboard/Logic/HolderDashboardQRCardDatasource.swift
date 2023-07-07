@@ -5,9 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Persistence
-import Models
+import CoronaCheckFoundation
 
 protocol HolderDashboardQRCardDatasourceProtocol: AnyObject {
 	typealias QRCard = HolderDashboardViewModel.QRCard

@@ -6,11 +6,8 @@
 */
 
 import CoronaCheckUI
-import XCTest
+import CoronaCheckTest
 @testable import CTR
-import Nimble
-import SnapshotTesting
-import TestingShared
 
 class RemoteEventStartViewControllerTests: XCTestCase {
 

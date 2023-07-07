@@ -5,9 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import XCTest
+import CoronaCheckFoundation
 @testable import CTR
-import Transport
 
 class MigrationCoordinatorDelegateSpy: MigrationCoordinatorDelegate, OpenUrlProtocol {
 

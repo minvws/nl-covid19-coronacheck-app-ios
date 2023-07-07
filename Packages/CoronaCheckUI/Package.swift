@@ -8,12 +8,13 @@ let package = Package(
 	products: [
 		.library(
 			name: "CoronaCheckUI",
-			targets: ["CoronaCheckUI"]),
+			targets: ["CoronaCheckUI"]
+		)
 	],
 	dependencies: [
-		.package(name: "Shared", path: "../Shared"),
 		.package(name: "Resources", path: "../Resources"),
-		.package(name: "ReusableViews", path: "../ReusableViews")
+		.package(name: "ReusableViews", path: "../ReusableViews"),
+		.package(name: "Shared", path: "../Shared")
 	],
 	targets: [
 		.target(
@@ -22,6 +23,7 @@ let package = Package(
 				.product(name: "Resources", package: "Resources"),
 				.product(name: "ReusableViews", package: "ReusableViews"),
 				.product(name: "Shared", package: "Shared")
-			])
+			]
+		)
 	]
 )

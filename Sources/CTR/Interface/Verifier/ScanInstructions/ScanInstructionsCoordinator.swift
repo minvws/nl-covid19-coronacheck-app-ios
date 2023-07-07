@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import CoronaCheckUI
-import Managers
-import Models
 
 protocol ScanInstructionsCoordinatorDelegate: AnyObject {
 

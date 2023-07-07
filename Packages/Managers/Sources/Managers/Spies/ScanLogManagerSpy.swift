@@ -9,15 +9,17 @@ import Foundation
 import Persistence
 import Models
 
-class ScanLogManagingSpy: ScanLogManaging {
+public class ScanLogManagingSpy: ScanLogManaging {
 
-	var invokedDidWeScanQRs = false
-	var invokedDidWeScanQRsCount = 0
-	var invokedDidWeScanQRsParameters: (withinLastNumberOfSeconds: Int, now: Date)?
-	var invokedDidWeScanQRsParametersList = [(withinLastNumberOfSeconds: Int, now: Date)]()
-	var stubbedDidWeScanQRsResult: Bool! = false
+	public init() {}
+	
+	public var invokedDidWeScanQRs = false
+	public var invokedDidWeScanQRsCount = 0
+	public var invokedDidWeScanQRsParameters: (withinLastNumberOfSeconds: Int, now: Date)?
+	public var invokedDidWeScanQRsParametersList = [(withinLastNumberOfSeconds: Int, now: Date)]()
+	public var stubbedDidWeScanQRsResult: Bool! = false
 
-	func didWeScanQRs(withinLastNumberOfSeconds: Int, now: Date) -> Bool {
+	public func didWeScanQRs(withinLastNumberOfSeconds: Int, now: Date) -> Bool {
 		invokedDidWeScanQRs = true
 		invokedDidWeScanQRsCount += 1
 		invokedDidWeScanQRsParameters = (withinLastNumberOfSeconds, now)
@@ -25,13 +27,13 @@ class ScanLogManagingSpy: ScanLogManaging {
 		return stubbedDidWeScanQRsResult
 	}
 
-	var invokedGetScanEntries = false
-	var invokedGetScanEntriesCount = 0
-	var invokedGetScanEntriesParameters: (withinLastNumberOfSeconds: Int, now: Date)?
-	var invokedGetScanEntriesParametersList = [(withinLastNumberOfSeconds: Int, now: Date)]()
-	var stubbedGetScanEntriesResult: Result<[ScanLogEntry], Error>!
+	public var invokedGetScanEntries = false
+	public var invokedGetScanEntriesCount = 0
+	public var invokedGetScanEntriesParameters: (withinLastNumberOfSeconds: Int, now: Date)?
+	public var invokedGetScanEntriesParametersList = [(withinLastNumberOfSeconds: Int, now: Date)]()
+	public var stubbedGetScanEntriesResult: Result<[ScanLogEntry], Error>!
 
-	func getScanEntries(withinLastNumberOfSeconds: Int, now: Date) -> Result<[ScanLogEntry], Error> {
+	public func getScanEntries(withinLastNumberOfSeconds: Int, now: Date) -> Result<[ScanLogEntry], Error> {
 		invokedGetScanEntries = true
 		invokedGetScanEntriesCount += 1
 		invokedGetScanEntriesParameters = (withinLastNumberOfSeconds, now)
@@ -39,22 +41,22 @@ class ScanLogManagingSpy: ScanLogManaging {
 		return stubbedGetScanEntriesResult
 	}
 
-	var invokedAddScanEntry = false
-	var invokedAddScanEntryCount = 0
-	var invokedAddScanEntryParameters: (verificationPolicy: VerificationPolicy, date: Date)?
-	var invokedAddScanEntryParametersList = [(verificationPolicy: VerificationPolicy, date: Date)]()
+	public var invokedAddScanEntry = false
+	public var invokedAddScanEntryCount = 0
+	public var invokedAddScanEntryParameters: (verificationPolicy: VerificationPolicy, date: Date)?
+	public var invokedAddScanEntryParametersList = [(verificationPolicy: VerificationPolicy, date: Date)]()
 
-	func addScanEntry(verificationPolicy: VerificationPolicy, date: Date) {
+	public func addScanEntry(verificationPolicy: VerificationPolicy, date: Date) {
 		invokedAddScanEntry = true
 		invokedAddScanEntryCount += 1
 		invokedAddScanEntryParameters = (verificationPolicy, date)
 		invokedAddScanEntryParametersList.append((verificationPolicy, date))
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

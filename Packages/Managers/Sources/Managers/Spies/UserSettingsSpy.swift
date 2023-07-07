@@ -8,17 +8,19 @@
 import Foundation
 import Models
 
-class UserSettingsSpy: UserSettingsProtocol {
+public class UserSettingsSpy: UserSettingsProtocol {
+	
+	public init() {}
 
-	var invokedScanInstructionShownSetter = false
-	var invokedScanInstructionShownSetterCount = 0
-	var invokedScanInstructionShown: Bool?
-	var invokedScanInstructionShownList = [Bool]()
-	var invokedScanInstructionShownGetter = false
-	var invokedScanInstructionShownGetterCount = 0
-	var stubbedScanInstructionShown: Bool! = false
+	public var invokedScanInstructionShownSetter = false
+	public var invokedScanInstructionShownSetterCount = 0
+	public var invokedScanInstructionShown: Bool?
+	public var invokedScanInstructionShownList = [Bool]()
+	public var invokedScanInstructionShownGetter = false
+	public var invokedScanInstructionShownGetterCount = 0
+	public var stubbedScanInstructionShown: Bool! = false
 
-	var scanInstructionShown: Bool {
+	public var scanInstructionShown: Bool {
 		set {
 			invokedScanInstructionShownSetter = true
 			invokedScanInstructionShownSetterCount += 1
@@ -32,15 +34,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedJailbreakWarningShownSetter = false
-	var invokedJailbreakWarningShownSetterCount = 0
-	var invokedJailbreakWarningShown: Bool?
-	var invokedJailbreakWarningShownList = [Bool]()
-	var invokedJailbreakWarningShownGetter = false
-	var invokedJailbreakWarningShownGetterCount = 0
-	var stubbedJailbreakWarningShown: Bool! = false
+	public var invokedJailbreakWarningShownSetter = false
+	public var invokedJailbreakWarningShownSetterCount = 0
+	public var invokedJailbreakWarningShown: Bool?
+	public var invokedJailbreakWarningShownList = [Bool]()
+	public var invokedJailbreakWarningShownGetter = false
+	public var invokedJailbreakWarningShownGetterCount = 0
+	public var stubbedJailbreakWarningShown: Bool! = false
 
-	var jailbreakWarningShown: Bool {
+	public var jailbreakWarningShown: Bool {
 		set {
 			invokedJailbreakWarningShownSetter = true
 			invokedJailbreakWarningShownSetterCount += 1
@@ -54,15 +56,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedConfigFetchedTimestampSetter = false
-	var invokedConfigFetchedTimestampSetterCount = 0
-	var invokedConfigFetchedTimestamp: TimeInterval?
-	var invokedConfigFetchedTimestampList = [TimeInterval?]()
-	var invokedConfigFetchedTimestampGetter = false
-	var invokedConfigFetchedTimestampGetterCount = 0
-	var stubbedConfigFetchedTimestamp: TimeInterval!
+	public var invokedConfigFetchedTimestampSetter = false
+	public var invokedConfigFetchedTimestampSetterCount = 0
+	public var invokedConfigFetchedTimestamp: TimeInterval?
+	public var invokedConfigFetchedTimestampList = [TimeInterval?]()
+	public var invokedConfigFetchedTimestampGetter = false
+	public var invokedConfigFetchedTimestampGetterCount = 0
+	public var stubbedConfigFetchedTimestamp: TimeInterval!
 
-	var configFetchedTimestamp: TimeInterval? {
+	public var configFetchedTimestamp: TimeInterval? {
 		set {
 			invokedConfigFetchedTimestampSetter = true
 			invokedConfigFetchedTimestampSetterCount += 1
@@ -76,15 +78,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedConfigFetchedHashSetter = false
-	var invokedConfigFetchedHashSetterCount = 0
-	var invokedConfigFetchedHash: String?
-	var invokedConfigFetchedHashList = [String?]()
-	var invokedConfigFetchedHashGetter = false
-	var invokedConfigFetchedHashGetterCount = 0
-	var stubbedConfigFetchedHash: String!
+	public var invokedConfigFetchedHashSetter = false
+	public var invokedConfigFetchedHashSetterCount = 0
+	public var invokedConfigFetchedHash: String?
+	public var invokedConfigFetchedHashList = [String?]()
+	public var invokedConfigFetchedHashGetter = false
+	public var invokedConfigFetchedHashGetterCount = 0
+	public var stubbedConfigFetchedHash: String!
 
-	var configFetchedHash: String? {
+	public var configFetchedHash: String? {
 		set {
 			invokedConfigFetchedHashSetter = true
 			invokedConfigFetchedHashSetterCount += 1
@@ -98,15 +100,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastScreenshotTimeSetter = false
-	var invokedLastScreenshotTimeSetterCount = 0
-	var invokedLastScreenshotTime: Date?
-	var invokedLastScreenshotTimeList = [Date?]()
-	var invokedLastScreenshotTimeGetter = false
-	var invokedLastScreenshotTimeGetterCount = 0
-	var stubbedLastScreenshotTime: Date!
+	public var invokedLastScreenshotTimeSetter = false
+	public var invokedLastScreenshotTimeSetterCount = 0
+	public var invokedLastScreenshotTime: Date?
+	public var invokedLastScreenshotTimeList = [Date?]()
+	public var invokedLastScreenshotTimeGetter = false
+	public var invokedLastScreenshotTimeGetterCount = 0
+	public var stubbedLastScreenshotTime: Date!
 
-	var lastScreenshotTime: Date? {
+	public var lastScreenshotTime: Date? {
 		set {
 			invokedLastScreenshotTimeSetter = true
 			invokedLastScreenshotTimeSetterCount += 1
@@ -120,15 +122,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedIssuerKeysFetchedTimestampSetter = false
-	var invokedIssuerKeysFetchedTimestampSetterCount = 0
-	var invokedIssuerKeysFetchedTimestamp: TimeInterval?
-	var invokedIssuerKeysFetchedTimestampList = [TimeInterval?]()
-	var invokedIssuerKeysFetchedTimestampGetter = false
-	var invokedIssuerKeysFetchedTimestampGetterCount = 0
-	var stubbedIssuerKeysFetchedTimestamp: TimeInterval!
+	public var invokedIssuerKeysFetchedTimestampSetter = false
+	public var invokedIssuerKeysFetchedTimestampSetterCount = 0
+	public var invokedIssuerKeysFetchedTimestamp: TimeInterval?
+	public var invokedIssuerKeysFetchedTimestampList = [TimeInterval?]()
+	public var invokedIssuerKeysFetchedTimestampGetter = false
+	public var invokedIssuerKeysFetchedTimestampGetterCount = 0
+	public var stubbedIssuerKeysFetchedTimestamp: TimeInterval!
 
-	var issuerKeysFetchedTimestamp: TimeInterval? {
+	public var issuerKeysFetchedTimestamp: TimeInterval? {
 		set {
 			invokedIssuerKeysFetchedTimestampSetter = true
 			invokedIssuerKeysFetchedTimestampSetterCount += 1
@@ -142,15 +144,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastRecommendUpdateDismissalTimestampSetter = false
-	var invokedLastRecommendUpdateDismissalTimestampSetterCount = 0
-	var invokedLastRecommendUpdateDismissalTimestamp: TimeInterval?
-	var invokedLastRecommendUpdateDismissalTimestampList = [TimeInterval?]()
-	var invokedLastRecommendUpdateDismissalTimestampGetter = false
-	var invokedLastRecommendUpdateDismissalTimestampGetterCount = 0
-	var stubbedLastRecommendUpdateDismissalTimestamp: TimeInterval!
+	public var invokedLastRecommendUpdateDismissalTimestampSetter = false
+	public var invokedLastRecommendUpdateDismissalTimestampSetterCount = 0
+	public var invokedLastRecommendUpdateDismissalTimestamp: TimeInterval?
+	public var invokedLastRecommendUpdateDismissalTimestampList = [TimeInterval?]()
+	public var invokedLastRecommendUpdateDismissalTimestampGetter = false
+	public var invokedLastRecommendUpdateDismissalTimestampGetterCount = 0
+	public var stubbedLastRecommendUpdateDismissalTimestamp: TimeInterval!
 
-	var lastRecommendUpdateDismissalTimestamp: TimeInterval? {
+	public var lastRecommendUpdateDismissalTimestamp: TimeInterval? {
 		set {
 			invokedLastRecommendUpdateDismissalTimestampSetter = true
 			invokedLastRecommendUpdateDismissalTimestampSetterCount += 1
@@ -164,15 +166,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastSeenRecommendedUpdateSetter = false
-	var invokedLastSeenRecommendedUpdateSetterCount = 0
-	var invokedLastSeenRecommendedUpdate: String?
-	var invokedLastSeenRecommendedUpdateList = [String?]()
-	var invokedLastSeenRecommendedUpdateGetter = false
-	var invokedLastSeenRecommendedUpdateGetterCount = 0
-	var stubbedLastSeenRecommendedUpdate: String!
+	public var invokedLastSeenRecommendedUpdateSetter = false
+	public var invokedLastSeenRecommendedUpdateSetterCount = 0
+	public var invokedLastSeenRecommendedUpdate: String?
+	public var invokedLastSeenRecommendedUpdateList = [String?]()
+	public var invokedLastSeenRecommendedUpdateGetter = false
+	public var invokedLastSeenRecommendedUpdateGetterCount = 0
+	public var stubbedLastSeenRecommendedUpdate: String!
 
-	var lastSeenRecommendedUpdate: String? {
+	public var lastSeenRecommendedUpdate: String? {
 		set {
 			invokedLastSeenRecommendedUpdateSetter = true
 			invokedLastSeenRecommendedUpdateSetterCount += 1
@@ -186,15 +188,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = false
-	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount = 0
-	var invokedLastSuccessfulCompletionOfAddCertificateFlowDate: Date?
-	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateList = [Date?]()
-	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetter = false
-	var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetterCount = 0
-	var stubbedLastSuccessfulCompletionOfAddCertificateFlowDate: Date!
+	public var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = false
+	public var invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount = 0
+	public var invokedLastSuccessfulCompletionOfAddCertificateFlowDate: Date?
+	public var invokedLastSuccessfulCompletionOfAddCertificateFlowDateList = [Date?]()
+	public var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetter = false
+	public var invokedLastSuccessfulCompletionOfAddCertificateFlowDateGetterCount = 0
+	public var stubbedLastSuccessfulCompletionOfAddCertificateFlowDate: Date!
 
-	var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? {
+	public var lastSuccessfulCompletionOfAddCertificateFlowDate: Date? {
 		set {
 			invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetter = true
 			invokedLastSuccessfulCompletionOfAddCertificateFlowDateSetterCount += 1
@@ -208,15 +210,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedDeviceAuthenticationWarningShownSetter = false
-	var invokedDeviceAuthenticationWarningShownSetterCount = 0
-	var invokedDeviceAuthenticationWarningShown: Bool?
-	var invokedDeviceAuthenticationWarningShownList = [Bool]()
-	var invokedDeviceAuthenticationWarningShownGetter = false
-	var invokedDeviceAuthenticationWarningShownGetterCount = 0
-	var stubbedDeviceAuthenticationWarningShown: Bool! = false
+	public var invokedDeviceAuthenticationWarningShownSetter = false
+	public var invokedDeviceAuthenticationWarningShownSetterCount = 0
+	public var invokedDeviceAuthenticationWarningShown: Bool?
+	public var invokedDeviceAuthenticationWarningShownList = [Bool]()
+	public var invokedDeviceAuthenticationWarningShownGetter = false
+	public var invokedDeviceAuthenticationWarningShownGetterCount = 0
+	public var stubbedDeviceAuthenticationWarningShown: Bool! = false
 
-	var deviceAuthenticationWarningShown: Bool {
+	public var deviceAuthenticationWarningShown: Bool {
 		set {
 			invokedDeviceAuthenticationWarningShownSetter = true
 			invokedDeviceAuthenticationWarningShownSetterCount += 1
@@ -230,15 +232,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedConfigVerificationPoliciesSetter = false
-	var invokedConfigVerificationPoliciesSetterCount = 0
-	var invokedConfigVerificationPolicies: [VerificationPolicy]?
-	var invokedConfigVerificationPoliciesList = [[VerificationPolicy]]()
-	var invokedConfigVerificationPoliciesGetter = false
-	var invokedConfigVerificationPoliciesGetterCount = 0
-	var stubbedConfigVerificationPolicies: [VerificationPolicy]! = []
+	public var invokedConfigVerificationPoliciesSetter = false
+	public var invokedConfigVerificationPoliciesSetterCount = 0
+	public var invokedConfigVerificationPolicies: [VerificationPolicy]?
+	public var invokedConfigVerificationPoliciesList = [[VerificationPolicy]]()
+	public var invokedConfigVerificationPoliciesGetter = false
+	public var invokedConfigVerificationPoliciesGetterCount = 0
+	public var stubbedConfigVerificationPolicies: [VerificationPolicy]! = []
 
-	var configVerificationPolicies: [VerificationPolicy] {
+	public var configVerificationPolicies: [VerificationPolicy] {
 		set {
 			invokedConfigVerificationPoliciesSetter = true
 			invokedConfigVerificationPoliciesSetterCount += 1
@@ -252,15 +254,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedPolicyInformationShownSetter = false
-	var invokedPolicyInformationShownSetterCount = 0
-	var invokedPolicyInformationShown: Bool?
-	var invokedPolicyInformationShownList = [Bool]()
-	var invokedPolicyInformationShownGetter = false
-	var invokedPolicyInformationShownGetterCount = 0
-	var stubbedPolicyInformationShown: Bool! = false
+	public var invokedPolicyInformationShownSetter = false
+	public var invokedPolicyInformationShownSetterCount = 0
+	public var invokedPolicyInformationShown: Bool?
+	public var invokedPolicyInformationShownList = [Bool]()
+	public var invokedPolicyInformationShownGetter = false
+	public var invokedPolicyInformationShownGetterCount = 0
+	public var stubbedPolicyInformationShown: Bool! = false
 
-	var policyInformationShown: Bool {
+	public var policyInformationShown: Bool {
 		set {
 			invokedPolicyInformationShownSetter = true
 			invokedPolicyInformationShownSetterCount += 1
@@ -274,15 +276,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedHasDismissedZeroGPolicySetter = false
-	var invokedHasDismissedZeroGPolicySetterCount = 0
-	var invokedHasDismissedZeroGPolicy: Bool?
-	var invokedHasDismissedZeroGPolicyList = [Bool]()
-	var invokedHasDismissedZeroGPolicyGetter = false
-	var invokedHasDismissedZeroGPolicyGetterCount = 0
-	var stubbedHasDismissedZeroGPolicy: Bool! = false
+	public var invokedHasDismissedZeroGPolicySetter = false
+	public var invokedHasDismissedZeroGPolicySetterCount = 0
+	public var invokedHasDismissedZeroGPolicy: Bool?
+	public var invokedHasDismissedZeroGPolicyList = [Bool]()
+	public var invokedHasDismissedZeroGPolicyGetter = false
+	public var invokedHasDismissedZeroGPolicyGetterCount = 0
+	public var stubbedHasDismissedZeroGPolicy: Bool! = false
 
-	var hasDismissedZeroGPolicy: Bool {
+	public var hasDismissedZeroGPolicy: Bool {
 		set {
 			invokedHasDismissedZeroGPolicySetter = true
 			invokedHasDismissedZeroGPolicySetterCount += 1
@@ -296,15 +298,15 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedHasShownBlockedEventsAlertSetter = false
-	var invokedHasShownBlockedEventsAlertSetterCount = 0
-	var invokedHasShownBlockedEventsAlert: Bool?
-	var invokedHasShownBlockedEventsAlertList = [Bool]()
-	var invokedHasShownBlockedEventsAlertGetter = false
-	var invokedHasShownBlockedEventsAlertGetterCount = 0
-	var stubbedHasShownBlockedEventsAlert: Bool! = false
+	public var invokedHasShownBlockedEventsAlertSetter = false
+	public var invokedHasShownBlockedEventsAlertSetterCount = 0
+	public var invokedHasShownBlockedEventsAlert: Bool?
+	public var invokedHasShownBlockedEventsAlertList = [Bool]()
+	public var invokedHasShownBlockedEventsAlertGetter = false
+	public var invokedHasShownBlockedEventsAlertGetterCount = 0
+	public var stubbedHasShownBlockedEventsAlert: Bool! = false
 
-	var hasShownBlockedEventsAlert: Bool {
+	public var hasShownBlockedEventsAlert: Bool {
 		set {
 			invokedHasShownBlockedEventsAlertSetter = true
 			invokedHasShownBlockedEventsAlertSetterCount += 1
@@ -318,10 +320,10 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}

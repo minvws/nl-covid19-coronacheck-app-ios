@@ -5,12 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
+import CoronaCheckTest
 @testable import CTR
-import XCTest
-import TestingShared
-import Persistence
-@testable import Transport
-@testable import Managers
 
 class IdentityCheckerSpy: IdentityCheckerProtocol {
 

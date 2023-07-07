@@ -9,55 +9,57 @@ import Foundation
 import Transport
 import Shared
 
-final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
+final public class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
+	
+	public init() {}
 
-	var invokedHasPublicKeysGetter = false
-	var invokedHasPublicKeysGetterCount = 0
-	var stubbedHasPublicKeys: Bool! = false
+	public var invokedHasPublicKeysGetter = false
+	public var invokedHasPublicKeysGetterCount = 0
+	public var stubbedHasPublicKeys: Bool! = false
 
-	var hasPublicKeys: Bool {
+	public var hasPublicKeys: Bool {
 		invokedHasPublicKeysGetter = true
 		invokedHasPublicKeysGetterCount += 1
 		return stubbedHasPublicKeys
 	}
 
-	var invokedIsInitializedGetter = false
-	var invokedIsInitializedGetterCount = 0
-	var stubbedIsInitialized: Bool! = false
+	public var invokedIsInitializedGetter = false
+	public var invokedIsInitializedGetterCount = 0
+	public var stubbedIsInitialized: Bool! = false
 
-	var isInitialized: Bool {
+	public var isInitialized: Bool {
 		invokedIsInitializedGetter = true
 		invokedIsInitializedGetterCount += 1
 		return stubbedIsInitialized
 	}
 
-	var invokedInitialize = false
-	var invokedInitializeCount = 0
+	public var invokedInitialize = false
+	public var invokedInitializeCount = 0
 
-	func initialize() {
+	public func initialize() {
 		invokedInitialize = true
 		invokedInitializeCount += 1
 	}
 
-	var invokedStore = false
-	var invokedStoreCount = 0
-	var invokedStoreParameters: (data: Data, file: CryptoLibUtility.File)?
-	var invokedStoreParametersList = [(data: Data, file: CryptoLibUtility.File)]()
+	public var invokedStore = false
+	public var invokedStoreCount = 0
+	public var invokedStoreParameters: (data: Data, file: CryptoLibUtility.File)?
+	public var invokedStoreParametersList = [(data: Data, file: CryptoLibUtility.File)]()
 
-	func store(_ data: Data, for file: CryptoLibUtility.File) {
+	public func store(_ data: Data, for file: CryptoLibUtility.File) {
 		invokedStore = true
 		invokedStoreCount += 1
 		invokedStoreParameters = (data, file)
 		invokedStoreParametersList.append((data, file))
 	}
 
-	var invokedRead = false
-	var invokedReadCount = 0
-	var invokedReadParameters: (file: CryptoLibUtility.File, Void)?
-	var invokedReadParametersList = [(file: CryptoLibUtility.File, Void)]()
-	var stubbedReadResult: Data!
+	public var invokedRead = false
+	public var invokedReadCount = 0
+	public var invokedReadParameters: (file: CryptoLibUtility.File, Void)?
+	public var invokedReadParametersList = [(file: CryptoLibUtility.File, Void)]()
+	public var stubbedReadResult: Data!
 
-	func read(_ file: CryptoLibUtility.File) -> Data? {
+	public func read(_ file: CryptoLibUtility.File) -> Data? {
 		invokedRead = true
 		invokedReadCount += 1
 		invokedReadParameters = (file, ())
@@ -65,26 +67,26 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		return stubbedReadResult
 	}
 
-	var invokedCheckFile = false
-	var invokedCheckFileCount = 0
-	var invokedCheckFileParameters: (file: CryptoLibUtility.File, Void)?
-	var invokedCheckFileParametersList = [(file: CryptoLibUtility.File, Void)]()
+	public var invokedCheckFile = false
+	public var invokedCheckFileCount = 0
+	public var invokedCheckFileParameters: (file: CryptoLibUtility.File, Void)?
+	public var invokedCheckFileParametersList = [(file: CryptoLibUtility.File, Void)]()
 
-	func checkFile(_ file: CryptoLibUtility.File) {
+	public func checkFile(_ file: CryptoLibUtility.File) {
 		invokedCheckFile = true
 		invokedCheckFileCount += 1
 		invokedCheckFileParameters = (file, ())
 		invokedCheckFileParametersList.append((file, ()))
 	}
 
-	var invokedUpdate = false
-	var invokedUpdateCount = 0
-	var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
-	var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
-	var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
-	var stubbedUpdateCompletionResult: (Result<Bool, ServerError>, Void)?
+	public var invokedUpdate = false
+	public var invokedUpdateCount = 0
+	public var invokedUpdateParameters: (isAppLaunching: Bool, Void)?
+	public var invokedUpdateParametersList = [(isAppLaunching: Bool, Void)]()
+	public var shouldInvokeUpdateImmediateCallbackIfWithinTTL = false
+	public var stubbedUpdateCompletionResult: (Result<Bool, ServerError>, Void)?
 
-	func update(
+	public func update(
 		isAppLaunching: Bool,
 		immediateCallbackIfWithinTTL: (() -> Void)?,
 		completion: ((Result<Bool, ServerError>) -> Void)?) {
@@ -100,18 +102,18 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		}
 	}
 
-	var invokedWipePersistedData = false
-	var invokedWipePersistedDataCount = 0
+	public var invokedWipePersistedData = false
+	public var invokedWipePersistedDataCount = 0
 
-	func wipePersistedData() {
+	public func wipePersistedData() {
 		invokedWipePersistedData = true
 		invokedWipePersistedDataCount += 1
 	}
 
-	var invokedRegisterTriggers = false
-	var invokedRegisterTriggersCount = 0
+	public var invokedRegisterTriggers = false
+	public var invokedRegisterTriggersCount = 0
 
-	func registerTriggers() {
+	public func registerTriggers() {
 		invokedRegisterTriggers = true
 		invokedRegisterTriggersCount += 1
 	}

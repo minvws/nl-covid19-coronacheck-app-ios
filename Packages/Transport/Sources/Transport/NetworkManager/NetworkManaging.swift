@@ -13,7 +13,7 @@ public struct ServerResponse: Decodable, Equatable {
 	public let code: Int
 	public let context: ServerResponseContext?
 	
-	init(status: String, code: Int, context: ServerResponseContext? = nil) {
+	public init(status: String, code: Int, context: ServerResponseContext? = nil) {
 		self.status = status
 		self.code = code
 		self.context = context
@@ -30,6 +30,10 @@ public struct ServerResponse: Decodable, Equatable {
 public struct ServerResponseContext: Codable, Equatable {
 	
 	public let matchingBlobIds: [[String]]?
+	
+	public init(matchingBlobIds: [[String]]? = nil) {
+		self.matchingBlobIds = matchingBlobIds
+	}
 	
 	enum CodingKeys: String, CodingKey {
 		case matchingBlobIds

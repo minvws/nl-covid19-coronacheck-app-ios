@@ -8,17 +8,19 @@
 import Foundation
 import Reachability
 
-class ReachabilitySpy: ReachabilityProtocol {
+public class ReachabilitySpy: ReachabilityProtocol {
+	
+	public init() {}
 
-	var invokedWhenReachableSetter = false
-	var invokedWhenReachableSetterCount = 0
-	var invokedWhenReachable: ((Reachability) -> Void)?
-	var invokedWhenReachableList = [((Reachability) -> Void)?]()
-	var invokedWhenReachableGetter = false
-	var invokedWhenReachableGetterCount = 0
-	var stubbedWhenReachable: ((Reachability) -> Void)!
+	public var invokedWhenReachableSetter = false
+	public var invokedWhenReachableSetterCount = 0
+	public var invokedWhenReachable: ((Reachability) -> Void)?
+	public var invokedWhenReachableList = [((Reachability) -> Void)?]()
+	public var invokedWhenReachableGetter = false
+	public var invokedWhenReachableGetterCount = 0
+	public var stubbedWhenReachable: ((Reachability) -> Void)!
 
-	var whenReachable: ((Reachability) -> Void)? {
+	public var whenReachable: ((Reachability) -> Void)? {
 		set {
 			invokedWhenReachableSetter = true
 			invokedWhenReachableSetterCount += 1
@@ -32,15 +34,15 @@ class ReachabilitySpy: ReachabilityProtocol {
 		}
 	}
 
-	var invokedWhenUnreachableSetter = false
-	var invokedWhenUnreachableSetterCount = 0
-	var invokedWhenUnreachable: ((Reachability) -> Void)?
-	var invokedWhenUnreachableList = [((Reachability) -> Void)?]()
-	var invokedWhenUnreachableGetter = false
-	var invokedWhenUnreachableGetterCount = 0
-	var stubbedWhenUnreachable: ((Reachability) -> Void)!
+	public var invokedWhenUnreachableSetter = false
+	public var invokedWhenUnreachableSetterCount = 0
+	public var invokedWhenUnreachable: ((Reachability) -> Void)?
+	public var invokedWhenUnreachableList = [((Reachability) -> Void)?]()
+	public var invokedWhenUnreachableGetter = false
+	public var invokedWhenUnreachableGetterCount = 0
+	public var stubbedWhenUnreachable: ((Reachability) -> Void)!
 
-	var whenUnreachable: ((Reachability) -> Void)? {
+	public var whenUnreachable: ((Reachability) -> Void)? {
 		set {
 			invokedWhenUnreachableSetter = true
 			invokedWhenUnreachableSetterCount += 1
@@ -54,11 +56,11 @@ class ReachabilitySpy: ReachabilityProtocol {
 		}
 	}
 
-	var invokedStartNotifier = false
-	var invokedStartNotifierCount = 0
-	var stubbedStartNotifierError: Error?
+	public var invokedStartNotifier = false
+	public var invokedStartNotifierCount = 0
+	public var stubbedStartNotifierError: Error?
 
-	func startNotifier() throws {
+	public func startNotifier() throws {
 		invokedStartNotifier = true
 		invokedStartNotifierCount += 1
 		if let error = stubbedStartNotifierError {

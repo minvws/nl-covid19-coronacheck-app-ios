@@ -5,12 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import CoronaCheckUI
 import CoreData
+import CoronaCheckFoundation
+import CoronaCheckUI
 import Reachability
-import Persistence
-import Managers
-import Models
 
 /// All the actions that the user can trigger by interacting with the Dashboard cards
 protocol HolderDashboardCardUserActionHandling: AnyObject {

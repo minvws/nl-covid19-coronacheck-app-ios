@@ -5,10 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-import Nimble
+import CoronaCheckFoundation
+import CoronaCheckTest
 @testable import CTR
-@testable import Managers
 
 final class PaperProofIdentifierTests: XCTestCase {
 	

@@ -6,11 +6,9 @@
 */
 // swiftlint:disable type_body_length type_name
 
-import CoronaCheckUI
-import XCTest
-import SnapshotTesting
 import CoreData
-import Nimble
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
 
 class HolderDashboardViewControllerSnapshotTests: XCTestCase {

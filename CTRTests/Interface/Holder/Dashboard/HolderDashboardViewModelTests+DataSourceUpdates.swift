@@ -6,15 +6,11 @@
  */
 // swiftlint:disable file_length
 
-import CoronaCheckUI
-import XCTest
-@testable import CTR
-import Nimble
 import CoreData
-import TestingShared
-import Persistence
-@testable import Models
-@testable import Managers
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
+@testable import CTR
 
 extension HolderDashboardViewModelTests {
 	

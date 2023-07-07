@@ -8,6 +8,8 @@
 import Foundation
 
 public class FeatureFlagManagerSpy: FeatureFlagManaging {
+	
+	public init() {}
 
 	public var invokedIsGGDEnabled = false
 	public var invokedIsGGDEnabledCount = 0

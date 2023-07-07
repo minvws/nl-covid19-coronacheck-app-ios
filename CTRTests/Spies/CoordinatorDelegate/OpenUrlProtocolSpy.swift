@@ -5,7 +5,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
 @testable import CTR
 
 class OpenUrlProtocolSpy: OpenUrlProtocol {

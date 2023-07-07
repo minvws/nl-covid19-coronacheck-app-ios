@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import CoronaCheckUI
 import BrightFutures
-import Transport
-import Persistence
-import Models
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 // swiftlint:disable type_body_length
 final class FetchRemoteEventsViewModel {

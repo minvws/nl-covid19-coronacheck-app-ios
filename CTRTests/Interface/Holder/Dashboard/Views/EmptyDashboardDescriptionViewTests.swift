@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
+import CoronaCheckTest
 @testable import CTR
-import SnapshotTesting
-import TestingShared
 
 final class EmptyDashboardDescriptionViewTests: XCTestCase {
 	

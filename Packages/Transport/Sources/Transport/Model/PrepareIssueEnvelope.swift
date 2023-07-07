@@ -8,7 +8,12 @@
 import Foundation
 
 public struct PrepareIssueEnvelope: Codable {
-
+	
 	public let prepareIssueMessage: String
 	public let stoken: String
+
+	public init(prepareIssueMessage: String, stoken: String) {
+		self.prepareIssueMessage = prepareIssueMessage
+		self.stoken = stoken
+	}
 }
