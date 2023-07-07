@@ -5,10 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Models
-import ReusableViews
-import Shared
-import UIKit
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 protocol PDFExportFlowDelegate: AnyObject {
 

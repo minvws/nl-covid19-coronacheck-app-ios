@@ -5,9 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import XCTest
-import SnapshotTesting
+import CoronaCheckFoundation
+import CoronaCheckTest
 @testable import CTR
 
 class InputRetrievalCodeViewTests: XCTestCase {

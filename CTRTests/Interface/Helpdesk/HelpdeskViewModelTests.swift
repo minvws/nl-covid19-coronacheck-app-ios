@@ -5,14 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import XCTest
-import Nimble
-import TestingShared
-import Shared
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-@testable import Managers
-@testable import Resources
 
 class HelpdeskViewModelTests: XCTestCase {
 	

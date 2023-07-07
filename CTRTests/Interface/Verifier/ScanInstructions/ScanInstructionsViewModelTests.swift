@@ -5,17 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import XCTest
-import Nimble
-import Lottie
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-import SnapshotTesting
-import Shared
-import TestingShared
-@testable import Models
-@testable import Managers
-@testable import Resources
+import Lottie
 
 class ScanInstructionsViewModelTests: XCTestCase {
 

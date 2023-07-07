@@ -5,8 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-@testable import Transport
+import CoronaCheckFoundation
 import TestingShared
 
 // MARK: CTRTests

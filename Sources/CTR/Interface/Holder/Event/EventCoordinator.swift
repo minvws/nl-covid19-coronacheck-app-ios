@@ -5,13 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Transport
-import Shared
-import ReusableViews
-import Persistence
-import Models
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 enum EventScreenResult: Equatable {
 

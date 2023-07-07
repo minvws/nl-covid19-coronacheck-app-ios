@@ -5,9 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
+import CoronaCheckFoundation
 @testable import CTR
-@testable import Managers
+
 class DeviceAuthenticationSpy: DeviceAuthenticationProtocol {
 
 	required init() {}

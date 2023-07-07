@@ -5,11 +5,7 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import Shared
-import ReusableViews
-import UIKit
-import Resources
+import CoronaCheckUI
 
 class ListIdentitySelectionViewController: TraitWrappedGenericViewController<ListIdentitySelectionView, ListIdentitySelectionViewModel> {
 	

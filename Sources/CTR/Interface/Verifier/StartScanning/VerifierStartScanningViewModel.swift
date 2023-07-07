@@ -5,12 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckFoundation
+import CoronaCheckUI
 import Lottie
-import Shared
-import Models
-import Managers
-import Resources
 
 enum VerifierStartResult {
 

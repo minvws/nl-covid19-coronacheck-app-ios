@@ -5,14 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Transport
-import Shared
-import ReusableViews
-import Persistence
-import Models
-import Managers
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 class ListRemoteEventsViewModel {
 

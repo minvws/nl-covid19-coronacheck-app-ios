@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 
 // See https://stackoverflow.com/a/41811798/443270
 struct OrientationUtility {

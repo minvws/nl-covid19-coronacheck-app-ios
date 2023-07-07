@@ -5,14 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import SnapshotTesting
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-import XCTest
-import Nimble
-import Shared
-import TestingShared
-@testable import Resources
 
 class MenuRowViewTests: XCTestCase {
 	

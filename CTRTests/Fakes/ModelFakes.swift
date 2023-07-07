@@ -5,10 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Transport
-import Persistence
-@testable import Models
+import CoronaCheckFoundation
 import TestingShared
 
 extension EuCredentialAttributes.TestEntry {

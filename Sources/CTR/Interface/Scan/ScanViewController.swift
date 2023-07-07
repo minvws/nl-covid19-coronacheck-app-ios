@@ -6,11 +6,8 @@
 */
 
 import AVFoundation
-import UIKit
-import Shared
-import ReusableViews
-import Models
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 

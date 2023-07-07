@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-@testable import Persistence
 import CoreData
+import CoronaCheckFoundation
 
 extension WalletModel {
 	

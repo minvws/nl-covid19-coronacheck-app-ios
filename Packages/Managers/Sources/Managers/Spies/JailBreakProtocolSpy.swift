@@ -7,13 +7,15 @@
 
 import Foundation
 
-class JailBreakProtocolSpy: JailBreakProtocol {
+public class JailBreakProtocolSpy: JailBreakProtocol {
 
-	var invokedIsJailBroken = false
-	var invokedIsJailBrokenCount = 0
-	var stubbedIsJailBrokenResult: Bool! = false
+	public init() {}
+	
+	public var invokedIsJailBroken = false
+	public var invokedIsJailBrokenCount = 0
+	public var stubbedIsJailBrokenResult: Bool! = false
 
-	func isJailBroken() -> Bool {
+	public func isJailBroken() -> Bool {
 		invokedIsJailBroken = true
 		invokedIsJailBrokenCount += 1
 		return stubbedIsJailBrokenResult

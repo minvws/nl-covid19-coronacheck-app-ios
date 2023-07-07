@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
-import Managers
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 final class PrivacyConsentViewModel {
 

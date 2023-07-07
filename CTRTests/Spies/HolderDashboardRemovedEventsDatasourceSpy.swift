@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 @testable import CTR
-@testable import Persistence
 
 // swiftlint:disable:next type_name
 class HolderDashboardRemovedEventsDatasourceSpy: HolderDashboardRemovedEventsDatasourceProtocol {

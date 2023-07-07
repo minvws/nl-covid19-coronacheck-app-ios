@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
-import Shared
-import Persistence
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 class RemoteEventStartViewModel {
 

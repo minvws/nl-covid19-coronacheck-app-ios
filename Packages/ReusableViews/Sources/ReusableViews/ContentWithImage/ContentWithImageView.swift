@@ -78,7 +78,7 @@ final public class ContentWithImageView: ScrolledStackWithButtonView {
 
 	// MARK: - Callbacks
 
-	@objc func secondaryButtonTapped() {
+	@objc public func secondaryButtonTapped() {
 
 		secondaryButtonCommand?()
 	}

@@ -11,7 +11,7 @@ import Resources
 /*
  A grey full width button with a leading image, a title and a disclosure icon
  */
-class DisclosureLeadingImageButton: DisclosureButton {
+open class DisclosureLeadingImageButton: DisclosureButton {
 	
 	/// The display constants
 	private struct ViewTraits {

@@ -5,16 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import XCTest
-import Nimble
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-@testable import Transport
-@testable import Shared
-import ReusableViews
-import TestingShared
-import Persistence
-@testable import Managers
-@testable import Resources
 
 class ListStoredEventsViewModelRemovalTests: XCTestCase {
 	

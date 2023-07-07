@@ -9,14 +9,16 @@ import Foundation
 
 // If regenerating, watch out for `addObserver()` as it is customized to retain the `using block` parameter:
 
-class NotificationCenterSpy: NotificationCenterProtocol {
+public class NotificationCenterSpy: NotificationCenterProtocol {
 
-	var invokedAddObserverSelector = false
-	var invokedAddObserverSelectorCount = 0
-	var invokedAddObserverSelectorParameters: (observer: Any, aSelector: Selector, aName: NSNotification.Name?, anObject: Any?)?
-	var invokedAddObserverSelectorParametersList = [(observer: Any, aSelector: Selector, aName: NSNotification.Name?, anObject: Any?)]()
+	public init() {}
+	
+	public var invokedAddObserverSelector = false
+	public var invokedAddObserverSelectorCount = 0
+	public var invokedAddObserverSelectorParameters: (observer: Any, aSelector: Selector, aName: NSNotification.Name?, anObject: Any?)?
+	public var invokedAddObserverSelectorParametersList = [(observer: Any, aSelector: Selector, aName: NSNotification.Name?, anObject: Any?)]()
 
-	func addObserver(
+	public func addObserver(
 		_ observer: Any,
 		selector aSelector: Selector,
 		name aName: NSNotification.Name?,
@@ -28,14 +30,14 @@ class NotificationCenterSpy: NotificationCenterProtocol {
 		invokedAddObserverSelectorParametersList.append((observer, aSelector, aName, anObject))
 	}
 
-	var invokedAddObserverForName = false
-	var invokedAddObserverForNameCount = 0
-	var invokedAddObserverForNameParameters: (name: NSNotification.Name?, obj: Any?, queue: OperationQueue?, block: (Notification) -> Void)?
-	var invokedAddObserverForNameParametersList = [(name: NSNotification.Name?, obj: Any?, queue: OperationQueue?, block: (Notification) -> Void)]()
-	var stubbedAddObserverForNameBlockResult: (Notification, Void)?
-	var stubbedAddObserverForNameResult: NSObjectProtocol!
+	public var invokedAddObserverForName = false
+	public var invokedAddObserverForNameCount = 0
+	public var invokedAddObserverForNameParameters: (name: NSNotification.Name?, obj: Any?, queue: OperationQueue?, block: (Notification) -> Void)?
+	public var invokedAddObserverForNameParametersList = [(name: NSNotification.Name?, obj: Any?, queue: OperationQueue?, block: (Notification) -> Void)]()
+	public var stubbedAddObserverForNameBlockResult: (Notification, Void)?
+	public var stubbedAddObserverForNameResult: NSObjectProtocol!
 
-	func addObserver(
+	public func addObserver(
 		forName name: NSNotification.Name?,
 		object obj: Any?,
 		queue: OperationQueue?,
@@ -50,12 +52,12 @@ class NotificationCenterSpy: NotificationCenterProtocol {
 		return stubbedAddObserverForNameResult
 	}
 
-	var invokedRemoveObserver = false
-	var invokedRemoveObserverCount = 0
-	var invokedRemoveObserverParameters: (observer: Any, Void)?
-	var invokedRemoveObserverParametersList = [(observer: Any, Void)]()
+	public var invokedRemoveObserver = false
+	public var invokedRemoveObserverCount = 0
+	public var invokedRemoveObserverParameters: (observer: Any, Void)?
+	public var invokedRemoveObserverParametersList = [(observer: Any, Void)]()
 
-	func removeObserver(_ observer: Any) {
+	public func removeObserver(_ observer: Any) {
 		invokedRemoveObserver = true
 		invokedRemoveObserverCount += 1
 		invokedRemoveObserverParameters = (observer, ())

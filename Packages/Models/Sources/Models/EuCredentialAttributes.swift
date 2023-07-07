@@ -11,15 +11,43 @@ import Shared
 import Persistence
 
 public struct EuCredentialAttributes: Codable, Equatable, Sendable {
-
+	
+	public init(
+		credentialVersion: Int,
+		digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate,
+		expirationTime: TimeInterval,
+		issuedAt: TimeInterval,
+		issuer: String) {
+		self.credentialVersion = credentialVersion
+		self.digitalCovidCertificate = digitalCovidCertificate
+		self.expirationTime = expirationTime
+		self.issuedAt = issuedAt
+		self.issuer = issuer
+	}
+	
 	public struct DigitalCovidCertificate: Codable, Equatable, Sendable {
-
+		
 		public let dateOfBirth: String
 		public let name: Name
 		public let schemaVersion: String
 		public var vaccinations: [Vaccination]?
 		public var tests: [TestEntry]?
 		public var recoveries: [RecoveryEntry]?
+
+		public init(
+			dateOfBirth: String,
+			name: EuCredentialAttributes.Name,
+			schemaVersion: String,
+			vaccinations: [EuCredentialAttributes.Vaccination]? = nil,
+			tests: [EuCredentialAttributes.TestEntry]? = nil,
+			recoveries: [EuCredentialAttributes.RecoveryEntry]? = nil) {
+				self.dateOfBirth = dateOfBirth
+				self.name = name
+				self.schemaVersion = schemaVersion
+				self.vaccinations = vaccinations
+				self.tests = tests
+				self.recoveries = recoveries
+			}
 
 		public enum CodingKeys: String, CodingKey {
 
@@ -33,11 +61,22 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 	}
 
 	public struct Name: Codable, Equatable, Sendable {
-
+		
 		public let familyName: String
 		public let standardisedFamilyName: String
 		public let givenName: String
 		public let standardisedGivenName: String
+
+		public init(
+			familyName: String,
+			standardisedFamilyName: String,
+			givenName: String,
+			standardisedGivenName: String) {
+			self.familyName = familyName
+			self.standardisedFamilyName = standardisedFamilyName
+			self.givenName = givenName
+			self.standardisedGivenName = standardisedGivenName
+		}
 
 		public enum CodingKeys: String, CodingKey {
 
@@ -49,7 +88,7 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 	}
 
 	public struct Vaccination: Codable, Equatable, Sendable {
-
+		
 		public let certificateIdentifier: String
 		public let country: String
 		public let diseaseAgentTargeted: String
@@ -60,6 +99,29 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 		public let medicalProduct: String
 		public let totalDose: Int?
 		public let vaccineOrProphylaxis: String
+		
+		public init(
+			certificateIdentifier: String,
+			country: String,
+			diseaseAgentTargeted: String,
+			doseNumber: Int? = nil,
+			dateOfVaccination: String,
+			issuer: String,
+			marketingAuthorizationHolder: String,
+			medicalProduct: String,
+			totalDose: Int? = nil,
+			vaccineOrProphylaxis: String) {
+			self.certificateIdentifier = certificateIdentifier
+			self.country = country
+			self.diseaseAgentTargeted = diseaseAgentTargeted
+			self.doseNumber = doseNumber
+			self.dateOfVaccination = dateOfVaccination
+			self.issuer = issuer
+			self.marketingAuthorizationHolder = marketingAuthorizationHolder
+			self.medicalProduct = medicalProduct
+			self.totalDose = totalDose
+			self.vaccineOrProphylaxis = vaccineOrProphylaxis
+		}
 
 		public enum CodingKeys: String, CodingKey {
 
@@ -77,7 +139,7 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 	}
 
 	public struct TestEntry: Codable, Equatable, Sendable {
-
+		
 		public let certificateIdentifier: String
 		public let country: String
 		public let diseaseAgentTargeted: String
@@ -88,6 +150,29 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 		public let testResult: String
 		public let testCenter: String
 		public let typeOfTest: String
+		
+		public init(
+			certificateIdentifier: String,
+			country: String,
+			diseaseAgentTargeted: String,
+			issuer: String,
+			marketingAuthorizationHolder: String? = nil,
+			name: String? = nil,
+			sampleDate: String,
+			testResult: String,
+			testCenter: String,
+			typeOfTest: String) {
+			self.certificateIdentifier = certificateIdentifier
+			self.country = country
+			self.diseaseAgentTargeted = diseaseAgentTargeted
+			self.issuer = issuer
+			self.marketingAuthorizationHolder = marketingAuthorizationHolder
+			self.name = name
+			self.sampleDate = sampleDate
+			self.testResult = testResult
+			self.testCenter = testCenter
+			self.typeOfTest = typeOfTest
+		}
 
 		public enum CodingKeys: String, CodingKey {
 
@@ -105,7 +190,7 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 	}
 
 	public struct RecoveryEntry: Codable, Equatable, Sendable {
-
+		
 		public let certificateIdentifier: String
 		public let country: String
 		public let diseaseAgentTargeted: String
@@ -113,6 +198,23 @@ public struct EuCredentialAttributes: Codable, Equatable, Sendable {
 		public let firstPositiveTestDate: String
 		public let issuer: String
 		public let validFrom: String
+
+		public init(
+			certificateIdentifier: String,
+			country: String,
+			diseaseAgentTargeted: String,
+			expiresAt: String,
+			firstPositiveTestDate: String,
+			issuer: String,
+			validFrom: String) {
+				self.certificateIdentifier = certificateIdentifier
+				self.country = country
+				self.diseaseAgentTargeted = diseaseAgentTargeted
+				self.expiresAt = expiresAt
+				self.firstPositiveTestDate = firstPositiveTestDate
+				self.issuer = issuer
+				self.validFrom = validFrom
+			}
 
 		public enum CodingKeys: String, CodingKey {
 

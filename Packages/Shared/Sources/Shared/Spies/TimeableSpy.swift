@@ -7,20 +7,22 @@
 
 import Foundation
 
-class TimerSpy: Timeable {
+public class TimerSpy: Timeable {
+	
+	public init() {}
 
-	var invokedInvalidate = false
-	var invokedInvalidateCount = 0
+	public var invokedInvalidate = false
+	public var invokedInvalidateCount = 0
 
-	func invalidate() {
+	public func invalidate() {
 		invokedInvalidate = true
 		invokedInvalidateCount += 1
 	}
 
-	var invokedFire = false
-	var invokedFireCount = 0
+	public var invokedFire = false
+	public var invokedFireCount = 0
 
-	func fire() {
+	public func fire() {
 		invokedFire = true
 		invokedFireCount += 1
 	}

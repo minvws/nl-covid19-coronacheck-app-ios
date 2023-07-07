@@ -5,12 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import Transport
-import Shared
-import ReusableViews
-import Models
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 protocol IdentitySelectionDataSourceProtocol {
 	

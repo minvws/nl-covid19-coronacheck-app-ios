@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-import Nimble
-import SnapshotTesting
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-@testable import ReusableViews
 
 // swiftlint:disable type_name
 class MigrationTransferOptionsViewControllerTests: XCTestCase {

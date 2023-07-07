@@ -42,21 +42,29 @@ app: {
 }
 
 app <- BrightFutures
+app <- CoronaCheckFoundation
+app <- CoronaCheckUI
 app <- CryptoCore
 app <- DataMigration
 app <- Lottie
-app <- Managers
-app <- Models
 app <- OpenIDConnect
-app <- Persistence
 app <- QRGenerator
 app <- Reachability
 app <- RestrictedBrowser
-app <- Reusableviews
-app <- Shared
-app <- Transport
 
 # - Packages - 
+
+CoronaCheckFoundation { style.fill: "#ffcc00" }
+CoronaCheckFoundation <- Managers
+CoronaCheckFoundation <- Models
+CoronaCheckFoundation <- Persistence
+CoronaCheckFoundation <- Shared
+CoronaCheckFoundation <- Transport
+
+CoronaCheckUI { style.fill: "#ffcc00" }
+CoronaCheckUI <- Resources
+CoronaCheckUI <- ReusableViews
+CoronaCheckUI <- Shared
 
 CryptoCore { style.fill: "#ffcc00" }
 

@@ -7,10 +7,7 @@
 // swiftlint:disable type_body_length
 // swiftlint:disable file_length
 
-import UIKit
-import Shared
-import ReusableViews
-import Resources
+import CoronaCheckUI
 
 class QRCardView: BaseView {
 

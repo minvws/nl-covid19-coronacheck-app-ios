@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
+import CoronaCheckUI
 @testable import CTR
-import ReusableViews
 
 final class FuzzyMatchingCoordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegate {
 

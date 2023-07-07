@@ -8,25 +8,27 @@
 import Foundation
 import Shared
 
-class NetworkSpy: NetworkManaging {
+public class NetworkSpy: NetworkManaging {
 
-	var invokedNetworkConfigurationGetter = false
-	var invokedNetworkConfigurationGetterCount = 0
-	var stubbedNetworkConfiguration: NetworkConfiguration!
+	public init() {}
+	
+	public var invokedNetworkConfigurationGetter = false
+	public var invokedNetworkConfigurationGetterCount = 0
+	public var stubbedNetworkConfiguration: NetworkConfiguration!
 
-	var networkConfiguration: NetworkConfiguration {
+	public var networkConfiguration: NetworkConfiguration {
 		invokedNetworkConfigurationGetter = true
 		invokedNetworkConfigurationGetterCount += 1
 		return stubbedNetworkConfiguration
 	}
 
-	var invokedFetchEventAccessTokens = false
-	var invokedFetchEventAccessTokensCount = 0
-	var invokedFetchEventAccessTokensParameters: (maxToken: String, Void)?
-	var invokedFetchEventAccessTokensParametersList = [(maxToken: String, Void)]()
-	var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], ServerError>, Void)?
+	public var invokedFetchEventAccessTokens = false
+	public var invokedFetchEventAccessTokensCount = 0
+	public var invokedFetchEventAccessTokensParameters: (maxToken: String, Void)?
+	public var invokedFetchEventAccessTokensParametersList = [(maxToken: String, Void)]()
+	public var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], ServerError>, Void)?
 
-	func fetchEventAccessTokens(maxToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
+	public func fetchEventAccessTokens(maxToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 		invokedFetchEventAccessTokens = true
 		invokedFetchEventAccessTokensCount += 1
 		invokedFetchEventAccessTokensParameters = (maxToken, ())
@@ -36,11 +38,11 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedPrepareIssue = false
-	var invokedPrepareIssueCount = 0
-	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, ServerError>, Void)?
+	public var invokedPrepareIssue = false
+	public var invokedPrepareIssueCount = 0
+	public var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, ServerError>, Void)?
 
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
+	public func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 		invokedPrepareIssue = true
 		invokedPrepareIssueCount += 1
 		if let result = stubbedPrepareIssueCompletionResult {
@@ -48,11 +50,11 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedGetPublicKeys = false
-	var invokedGetPublicKeysCount = 0
-	var stubbedGetPublicKeysCompletionResult: (Result<Data, ServerError>, Void)?
+	public var invokedGetPublicKeys = false
+	public var invokedGetPublicKeysCount = 0
+	public var stubbedGetPublicKeysCompletionResult: (Result<Data, ServerError>, Void)?
 
-	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
+	public func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 		invokedGetPublicKeys = true
 		invokedGetPublicKeysCount += 1
 		if let result = stubbedGetPublicKeysCompletionResult {
@@ -60,11 +62,11 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedGetRemoteConfiguration = false
-	var invokedGetRemoteConfigurationCount = 0
-	var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), ServerError>, Void)?
+	public var invokedGetRemoteConfiguration = false
+	public var invokedGetRemoteConfigurationCount = 0
+	public var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), ServerError>, Void)?
 
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
+	public func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
 		invokedGetRemoteConfiguration = true
 		invokedGetRemoteConfigurationCount += 1
 		if let result = stubbedGetRemoteConfigurationCompletionResult {
@@ -72,11 +74,11 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchTestProviders = false
-	var invokedFetchTestProvidersCount = 0
-	var stubbedFetchTestProvidersCompletionResult: (Result<[TestProvider], ServerError>, Void)?
+	public var invokedFetchTestProviders = false
+	public var invokedFetchTestProvidersCount = 0
+	public var stubbedFetchTestProvidersCompletionResult: (Result<[TestProvider], ServerError>, Void)?
 
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
+	public func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 		invokedFetchTestProviders = true
 		invokedFetchTestProvidersCount += 1
 		if let result = stubbedFetchTestProvidersCompletionResult {
@@ -84,11 +86,11 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchEventProviders = false
-	var invokedFetchEventProvidersCount = 0
-	var stubbedFetchEventProvidersCompletionResult: (Result<[EventFlow.EventProvider], ServerError>, Void)?
+	public var invokedFetchEventProviders = false
+	public var invokedFetchEventProvidersCount = 0
+	public var stubbedFetchEventProvidersCompletionResult: (Result<[EventFlow.EventProvider], ServerError>, Void)?
 
-	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
+	public func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 		invokedFetchEventProviders = true
 		invokedFetchEventProvidersCount += 1
 		if let result = stubbedFetchEventProvidersCompletionResult {
@@ -96,13 +98,13 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchGreencards = false
-	var invokedFetchGreencardsCount = 0
-	var invokedFetchGreencardsParameters: (dictionary: [String: AnyObject], Void)?
-	var invokedFetchGreencardsParametersList = [(dictionary: [String: AnyObject], Void)]()
-	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, ServerError>, Void)?
+	public var invokedFetchGreencards = false
+	public var invokedFetchGreencardsCount = 0
+	public var invokedFetchGreencardsParameters: (dictionary: [String: AnyObject], Void)?
+	public var invokedFetchGreencardsParametersList = [(dictionary: [String: AnyObject], Void)]()
+	public var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, ServerError>, Void)?
 
-	func fetchGreencards(
+	public func fetchGreencards(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void) {
 		invokedFetchGreencards = true
@@ -114,13 +116,13 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchTestResult = false
-	var invokedFetchTestResultCount = 0
-	var invokedFetchTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
-	var invokedFetchTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
-	var stubbedFetchTestResultCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>, Void)?
+	public var invokedFetchTestResult = false
+	public var invokedFetchTestResultCount = 0
+	public var invokedFetchTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
+	public var invokedFetchTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
+	public var stubbedFetchTestResultCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse, URLResponse), ServerError>, Void)?
 
-	func fetchTestResult(
+	public func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
@@ -134,13 +136,13 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchEventInformation = false
-	var invokedFetchEventInformationCount = 0
-	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, Void)?
-	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, Void)]()
-	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, ServerError>, Void)?
+	public var invokedFetchEventInformation = false
+	public var invokedFetchEventInformationCount = 0
+	public var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, Void)?
+	public var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, Void)]()
+	public var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, ServerError>, Void)?
 
-	func fetchEventInformation(
+	public func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 		invokedFetchEventInformation = true
@@ -152,13 +154,13 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchEvents = false
-	var invokedFetchEventsCount = 0
-	var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, Void)?
-	var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, Void)]()
-	var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>, Void)?
+	public var invokedFetchEvents = false
+	public var invokedFetchEventsCount = 0
+	public var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, Void)?
+	public var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, Void)]()
+	public var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>, Void)?
 
-	func fetchEvents(
+	public func fetchEvents(
 		provider: EventFlow.EventProvider,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 		invokedFetchEvents = true
@@ -170,13 +172,13 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedCheckCouplingStatus = false
-	var invokedCheckCouplingStatusCount = 0
-	var invokedCheckCouplingStatusParameters: (dictionary: [String: AnyObject], Void)?
-	var invokedCheckCouplingStatusParametersList = [(dictionary: [String: AnyObject], Void)]()
-	var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
+	public var invokedCheckCouplingStatus = false
+	public var invokedCheckCouplingStatusCount = 0
+	public var invokedCheckCouplingStatusParameters: (dictionary: [String: AnyObject], Void)?
+	public var invokedCheckCouplingStatusParametersList = [(dictionary: [String: AnyObject], Void)]()
+	public var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
 
-	func checkCouplingStatus(
+	public func checkCouplingStatus(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {
 		invokedCheckCouplingStatus = true

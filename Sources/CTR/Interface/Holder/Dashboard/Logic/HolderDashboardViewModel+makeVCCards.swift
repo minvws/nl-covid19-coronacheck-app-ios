@@ -5,11 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Shared
-import Persistence
-import Models
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 extension HolderDashboardViewController.Card {
 

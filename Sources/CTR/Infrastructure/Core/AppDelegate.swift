@@ -5,12 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
+import CoronaCheckFoundation
+import CoronaCheckUI
 import OpenIDConnect
-import Shared
-import ReusableViews
-import Managers
-import Resources
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, OpenIDConnectState {

@@ -5,13 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import XCTest
-import Nimble
-import SnapshotTesting
+import CoronaCheckUI
+import CoronaCheckFoundation
 @testable import CTR
-import Shared
-import Models
-import ReusableViews
 
 class PDFExportCoordinatorSpy: PDFExportCoordinatorDelegate, OpenUrlProtocol {
 

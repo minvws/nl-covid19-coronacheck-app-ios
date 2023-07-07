@@ -5,13 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
+import CoronaCheckUI
 import Reachability
-import UIKit
-import Transport
-import Shared
-import Persistence
-import Managers
 
 protocol DashboardStrippenRefreshing: AnyObject {
 	func load()

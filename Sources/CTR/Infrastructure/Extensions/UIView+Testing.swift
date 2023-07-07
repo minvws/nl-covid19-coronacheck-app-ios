@@ -5,8 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
-import Managers
+import CoronaCheckUI
+import CoronaCheckFoundation
 
 extension UIView {
 	

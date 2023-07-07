@@ -5,13 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import SnapshotTesting
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-@testable import Resources
-import XCTest
-import Shared
-import TestingShared
 
 class AddCertificateCardViewTests: XCTestCase {
 

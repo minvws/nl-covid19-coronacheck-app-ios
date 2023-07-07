@@ -5,12 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Shared
-import ReusableViews
-import Managers
-import Models
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 /// the various about menu options
 enum AboutThisAppMenuIdentifier: String {

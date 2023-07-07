@@ -9,15 +9,17 @@ import Foundation
 import Transport
 import Shared
 
-class MappingManagerSpy: MappingManaging {
+public class MappingManagerSpy: MappingManaging {
+	
+	public init() {}
 
-	var invokedGetProviderIdentifierMapping = false
-	var invokedGetProviderIdentifierMappingCount = 0
-	var invokedGetProviderIdentifierMappingParameters: (code: String?, Void)?
-	var invokedGetProviderIdentifierMappingParametersList = [(code: String?, Void)]()
-	var stubbedGetProviderIdentifierMappingResult: String!
+	public var invokedGetProviderIdentifierMapping = false
+	public var invokedGetProviderIdentifierMappingCount = 0
+	public var invokedGetProviderIdentifierMappingParameters: (code: String?, Void)?
+	public var invokedGetProviderIdentifierMappingParametersList = [(code: String?, Void)]()
+	public var stubbedGetProviderIdentifierMappingResult: String!
 
-	func getProviderIdentifierMapping(_ code: String? ) -> String? {
+	public func getProviderIdentifierMapping(_ code: String? ) -> String? {
 		invokedGetProviderIdentifierMapping = true
 		invokedGetProviderIdentifierMappingCount += 1
 		invokedGetProviderIdentifierMappingParameters = (code, ())
@@ -25,13 +27,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetProviderIdentifierMappingResult
 	}
 
-	var invokedGetDisplayIssuer = false
-	var invokedGetDisplayIssuerCount = 0
-	var invokedGetDisplayIssuerParameters: (issuer: String, country: String)?
-	var invokedGetDisplayIssuerParametersList = [(issuer: String, country: String)]()
-	var stubbedGetDisplayIssuerResult: String! = ""
+	public var invokedGetDisplayIssuer = false
+	public var invokedGetDisplayIssuerCount = 0
+	public var invokedGetDisplayIssuerParameters: (issuer: String, country: String)?
+	public var invokedGetDisplayIssuerParametersList = [(issuer: String, country: String)]()
+	public var stubbedGetDisplayIssuerResult: String! = ""
 
-	func getDisplayIssuer(_ issuer: String, country: String) -> String {
+	public func getDisplayIssuer(_ issuer: String, country: String) -> String {
 		invokedGetDisplayIssuer = true
 		invokedGetDisplayIssuerCount += 1
 		invokedGetDisplayIssuerParameters = (issuer, country)
@@ -39,13 +41,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetDisplayIssuerResult
 	}
 
-	var invokedGetBilingualDisplayCountry = false
-	var invokedGetBilingualDisplayCountryCount = 0
-	var invokedGetBilingualDisplayCountryParameters: (country: String, languageCode: String?)?
-	var invokedGetBilingualDisplayCountryParametersList = [(country: String, languageCode: String?)]()
-	var stubbedGetBilingualDisplayCountryResult: String! = ""
+	public var invokedGetBilingualDisplayCountry = false
+	public var invokedGetBilingualDisplayCountryCount = 0
+	public var invokedGetBilingualDisplayCountryParameters: (country: String, languageCode: String?)?
+	public var invokedGetBilingualDisplayCountryParametersList = [(country: String, languageCode: String?)]()
+	public var stubbedGetBilingualDisplayCountryResult: String! = ""
 
-	func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String {
+	public func getBilingualDisplayCountry(_ country: String, languageCode: String?) -> String {
 		invokedGetBilingualDisplayCountry = true
 		invokedGetBilingualDisplayCountryCount += 1
 		invokedGetBilingualDisplayCountryParameters = (country, languageCode)
@@ -53,13 +55,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetBilingualDisplayCountryResult
 	}
 
-	var invokedGetDisplayCountry = false
-	var invokedGetDisplayCountryCount = 0
-	var invokedGetDisplayCountryParameters: (country: String, Void)?
-	var invokedGetDisplayCountryParametersList = [(country: String, Void)]()
-	var stubbedGetDisplayCountryResult: String! = ""
+	public var invokedGetDisplayCountry = false
+	public var invokedGetDisplayCountryCount = 0
+	public var invokedGetDisplayCountryParameters: (country: String, Void)?
+	public var invokedGetDisplayCountryParametersList = [(country: String, Void)]()
+	public var stubbedGetDisplayCountryResult: String! = ""
 
-	func getDisplayCountry(_ country: String) -> String {
+	public func getDisplayCountry(_ country: String) -> String {
 		invokedGetDisplayCountry = true
 		invokedGetDisplayCountryCount += 1
 		invokedGetDisplayCountryParameters = (country, ())
@@ -67,13 +69,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetDisplayCountryResult
 	}
 
-	var invokedGetDisplayFacility = false
-	var invokedGetDisplayFacilityCount = 0
-	var invokedGetDisplayFacilityParameters: (facility: String, Void)?
-	var invokedGetDisplayFacilityParametersList = [(facility: String, Void)]()
-	var stubbedGetDisplayFacilityResult: String! = ""
+	public var invokedGetDisplayFacility = false
+	public var invokedGetDisplayFacilityCount = 0
+	public var invokedGetDisplayFacilityParameters: (facility: String, Void)?
+	public var invokedGetDisplayFacilityParametersList = [(facility: String, Void)]()
+	public var stubbedGetDisplayFacilityResult: String! = ""
 
-	func getDisplayFacility(_ facility: String) -> String {
+	public func getDisplayFacility(_ facility: String) -> String {
 		invokedGetDisplayFacility = true
 		invokedGetDisplayFacilityCount += 1
 		invokedGetDisplayFacilityParameters = (facility, ())
@@ -81,13 +83,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetDisplayFacilityResult
 	}
 
-	var invokedGetTestType = false
-	var invokedGetTestTypeCount = 0
-	var invokedGetTestTypeParameters: (code: String?, Void)?
-	var invokedGetTestTypeParametersList = [(code: String?, Void)]()
-	var stubbedGetTestTypeResult: String!
+	public var invokedGetTestType = false
+	public var invokedGetTestTypeCount = 0
+	public var invokedGetTestTypeParameters: (code: String?, Void)?
+	public var invokedGetTestTypeParametersList = [(code: String?, Void)]()
+	public var stubbedGetTestTypeResult: String!
 
-	func getTestType(_ code: String? ) -> String? {
+	public func getTestType(_ code: String? ) -> String? {
 		invokedGetTestType = true
 		invokedGetTestTypeCount += 1
 		invokedGetTestTypeParameters = (code, ())
@@ -95,13 +97,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetTestTypeResult
 	}
 
-	var invokedGetTestName = false
-	var invokedGetTestNameCount = 0
-	var invokedGetTestNameParameters: (code: String?, Void)?
-	var invokedGetTestNameParametersList = [(code: String?, Void)]()
-	var stubbedGetTestNameResult: String!
+	public var invokedGetTestName = false
+	public var invokedGetTestNameCount = 0
+	public var invokedGetTestNameParameters: (code: String?, Void)?
+	public var invokedGetTestNameParametersList = [(code: String?, Void)]()
+	public var stubbedGetTestNameResult: String!
 
-	func getTestName(_ code: String? ) -> String? {
+	public func getTestName(_ code: String? ) -> String? {
 		invokedGetTestName = true
 		invokedGetTestNameCount += 1
 		invokedGetTestNameParameters = (code, ())
@@ -109,13 +111,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetTestNameResult
 	}
 
-	var invokedGetTestManufacturer = false
-	var invokedGetTestManufacturerCount = 0
-	var invokedGetTestManufacturerParameters: (code: String?, Void)?
-	var invokedGetTestManufacturerParametersList = [(code: String?, Void)]()
-	var stubbedGetTestManufacturerResult: String!
+	public var invokedGetTestManufacturer = false
+	public var invokedGetTestManufacturerCount = 0
+	public var invokedGetTestManufacturerParameters: (code: String?, Void)?
+	public var invokedGetTestManufacturerParametersList = [(code: String?, Void)]()
+	public var stubbedGetTestManufacturerResult: String!
 
-	func getTestManufacturer(_ code: String? ) -> String? {
+	public func getTestManufacturer(_ code: String? ) -> String? {
 		invokedGetTestManufacturer = true
 		invokedGetTestManufacturerCount += 1
 		invokedGetTestManufacturerParameters = (code, ())
@@ -123,13 +125,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetTestManufacturerResult
 	}
 
-	var invokedIsRatTest = false
-	var invokedIsRatTestCount = 0
-	var invokedIsRatTestParameters: (code: String?, Void)?
-	var invokedIsRatTestParametersList = [(code: String?, Void)]()
-	var stubbedIsRatTestResult: Bool! = false
+	public var invokedIsRatTest = false
+	public var invokedIsRatTestCount = 0
+	public var invokedIsRatTestParameters: (code: String?, Void)?
+	public var invokedIsRatTestParametersList = [(code: String?, Void)]()
+	public var stubbedIsRatTestResult: Bool! = false
 
-	func isRatTest(_ code: String?) -> Bool {
+	public func isRatTest(_ code: String?) -> Bool {
 		invokedIsRatTest = true
 		invokedIsRatTestCount += 1
 		invokedIsRatTestParameters = (code, ())
@@ -137,13 +139,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedIsRatTestResult
 	}
 
-	var invokedGetHpkData = false
-	var invokedGetHpkDataCount = 0
-	var invokedGetHpkDataParameters: (code: String?, Void)?
-	var invokedGetHpkDataParametersList = [(code: String?, Void)]()
-	var stubbedGetHpkDataResult: HPKData!
+	public var invokedGetHpkData = false
+	public var invokedGetHpkDataCount = 0
+	public var invokedGetHpkDataParameters: (code: String?, Void)?
+	public var invokedGetHpkDataParametersList = [(code: String?, Void)]()
+	public var stubbedGetHpkDataResult: HPKData!
 
-	func getHpkData(_ code: String? ) -> HPKData? {
+	public func getHpkData(_ code: String? ) -> HPKData? {
 		invokedGetHpkData = true
 		invokedGetHpkDataCount += 1
 		invokedGetHpkDataParameters = (code, ())
@@ -151,13 +153,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetHpkDataResult
 	}
 
-	var invokedGetVaccinationBrand = false
-	var invokedGetVaccinationBrandCount = 0
-	var invokedGetVaccinationBrandParameters: (code: String?, Void)?
-	var invokedGetVaccinationBrandParametersList = [(code: String?, Void)]()
-	var stubbedGetVaccinationBrandResult: String!
+	public var invokedGetVaccinationBrand = false
+	public var invokedGetVaccinationBrandCount = 0
+	public var invokedGetVaccinationBrandParameters: (code: String?, Void)?
+	public var invokedGetVaccinationBrandParametersList = [(code: String?, Void)]()
+	public var stubbedGetVaccinationBrandResult: String!
 
-	func getVaccinationBrand(_ code: String? ) -> String? {
+	public func getVaccinationBrand(_ code: String? ) -> String? {
 		invokedGetVaccinationBrand = true
 		invokedGetVaccinationBrandCount += 1
 		invokedGetVaccinationBrandParameters = (code, ())
@@ -165,13 +167,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetVaccinationBrandResult
 	}
 
-	var invokedGetVaccinationType = false
-	var invokedGetVaccinationTypeCount = 0
-	var invokedGetVaccinationTypeParameters: (code: String?, Void)?
-	var invokedGetVaccinationTypeParametersList = [(code: String?, Void)]()
-	var stubbedGetVaccinationTypeResult: String!
+	public var invokedGetVaccinationType = false
+	public var invokedGetVaccinationTypeCount = 0
+	public var invokedGetVaccinationTypeParameters: (code: String?, Void)?
+	public var invokedGetVaccinationTypeParametersList = [(code: String?, Void)]()
+	public var stubbedGetVaccinationTypeResult: String!
 
-	func getVaccinationType(_ code: String? ) -> String? {
+	public func getVaccinationType(_ code: String? ) -> String? {
 		invokedGetVaccinationType = true
 		invokedGetVaccinationTypeCount += 1
 		invokedGetVaccinationTypeParameters = (code, ())
@@ -179,13 +181,13 @@ class MappingManagerSpy: MappingManaging {
 		return stubbedGetVaccinationTypeResult
 	}
 
-	var invokedGetVaccinationManufacturer = false
-	var invokedGetVaccinationManufacturerCount = 0
-	var invokedGetVaccinationManufacturerParameters: (code: String?, Void)?
-	var invokedGetVaccinationManufacturerParametersList = [(code: String?, Void)]()
-	var stubbedGetVaccinationManufacturerResult: String!
+	public var invokedGetVaccinationManufacturer = false
+	public var invokedGetVaccinationManufacturerCount = 0
+	public var invokedGetVaccinationManufacturerParameters: (code: String?, Void)?
+	public var invokedGetVaccinationManufacturerParametersList = [(code: String?, Void)]()
+	public var stubbedGetVaccinationManufacturerResult: String!
 
-	func getVaccinationManufacturer(_ code: String? ) -> String? {
+	public func getVaccinationManufacturer(_ code: String? ) -> String? {
 		invokedGetVaccinationManufacturer = true
 		invokedGetVaccinationManufacturerCount += 1
 		invokedGetVaccinationManufacturerParameters = (code, ())

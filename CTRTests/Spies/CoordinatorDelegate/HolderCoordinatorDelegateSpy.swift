@@ -5,14 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 import CoreData
-import XCTest
 @testable import CTR
-import ReusableViews
-import TestingShared
-import Persistence
-@testable import Transport
-@testable import Models
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 

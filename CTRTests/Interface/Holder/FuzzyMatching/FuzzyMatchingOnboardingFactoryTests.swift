@@ -5,11 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import XCTest
+import CoronaCheckUI
+import CoronaCheckTest
 @testable import CTR
-@testable import Resources
-import Nimble
-import Shared
 
 final class FuzzyMatchingOnboardingFactoryTests: XCTestCase {
 	

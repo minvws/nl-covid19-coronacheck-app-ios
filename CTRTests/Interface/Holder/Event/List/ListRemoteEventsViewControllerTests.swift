@@ -5,19 +5,11 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import XCTest
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-import Nimble
-import SnapshotTesting
 import ViewControllerPresentationSpy
-import Shared
-import TestingShared
-import Persistence
-import ReusableViews
-@testable import Transport
-@testable import Models
-@testable import Managers
-@testable import Resources
 
 class ListRemoteEventsViewControllerTests: XCTestCase {
 	

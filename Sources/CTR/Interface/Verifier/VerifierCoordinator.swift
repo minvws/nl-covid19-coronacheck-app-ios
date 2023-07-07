@@ -5,14 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
+import CoronaCheckFoundation
+import CoronaCheckUI
 import Mobilecore
-import Transport
-import Shared
-import ReusableViews
-import Models
-import Managers
-import Resources
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	

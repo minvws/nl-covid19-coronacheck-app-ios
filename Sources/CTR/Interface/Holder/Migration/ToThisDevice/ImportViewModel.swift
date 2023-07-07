@@ -5,13 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Shared
-import Persistence
-import Managers
-import Resources
+import CoronaCheckFoundation
+import CoronaCheckUI
 import DataMigration
-import Transport
 
 class ImportViewModel: ScanPermissionViewModel {
 

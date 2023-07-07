@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 
 /// Shared protocol between `DCCQRLabelViews` to support accessibility
 protocol DCCQRLabelViewable: AnyObject {

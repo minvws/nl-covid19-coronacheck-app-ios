@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckFoundation
+import CoronaCheckUI
 import SafariServices
-import Shared
-import Managers
-import Models
 
 protocol NewFeaturesDelegate: AnyObject {
 

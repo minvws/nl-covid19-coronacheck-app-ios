@@ -5,12 +5,10 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-import XCTest
 import SnapshotTesting
-import Nimble
-import ReusableViews
 
 final class BottomSheetModalViewControllerTests: XCTestCase {
 	

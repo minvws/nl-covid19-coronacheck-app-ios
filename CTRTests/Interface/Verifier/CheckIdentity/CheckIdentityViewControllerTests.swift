@@ -5,16 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-import SnapshotTesting
-import Nimble
 import Mobilecore
-import Shared
-import TestingShared
-@testable import Resources
-@testable import Managers
-@testable import Models
 
 final class CheckIdentityViewControllerTests: XCTestCase {
 	

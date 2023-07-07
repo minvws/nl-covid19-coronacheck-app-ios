@@ -5,11 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import SnapshotTesting
+import CoronaCheckFoundation
+import CoronaCheckTest
 @testable import CTR
-import XCTest
-import TestingShared
 
 class VerifierClockDeviationWarningsViewTests: XCTestCase {
 

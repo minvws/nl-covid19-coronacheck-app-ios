@@ -5,14 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-@testable import Transport
-@testable import Shared
-import XCTest
-import Nimble
-@testable import Models
-@testable import Managers
-@testable import Resources
 
 class EventDetailsGeneratorTest: XCTestCase {
 

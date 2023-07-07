@@ -5,14 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
-import Models
-import Managers
-import Persistence
-import ReusableViews
-import Resources
-import Shared
-import Transport
+import CoronaCheckFoundation
+import CoronaCheckUI
 import WebKit
 
 class PDFExportViewModel: NSObject {

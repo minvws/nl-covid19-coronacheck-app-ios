@@ -5,9 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
+import CoronaCheckFoundation
 @testable import CTR
-import Shared
 
 final class TestModalViewModel {
 	

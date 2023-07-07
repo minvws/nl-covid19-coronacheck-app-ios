@@ -5,13 +5,9 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-import Nimble
-@testable import Transport
+import CoronaCheckFoundation
+import CoronaCheckTest
 @testable import CTR
-import Shared
-@testable import Managers
-import SnapshotTesting
 import ViewControllerPresentationSpy
 
 final class SendIdentitySelectionViewControllerTests: XCTestCase {

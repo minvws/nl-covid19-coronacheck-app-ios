@@ -5,14 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
+import CoronaCheckUI
 import DataMigration
-import Models
-import Resources
-import ReusableViews
-import Managers
-import Shared
-import Transport
-import UIKit
 
 protocol MigrationFlowDelegate: AnyObject {
 	

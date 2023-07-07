@@ -5,12 +5,8 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import Foundation
-import UIKit
-import Shared
-import Persistence
-import Models
-import Managers
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 protocol ShowQRDatasourceProtocol {
 

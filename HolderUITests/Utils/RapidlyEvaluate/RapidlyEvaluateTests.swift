@@ -6,7 +6,7 @@
  */
 
 import CoreFoundation
-import XCTest
+import CoronaCheckTest
 
 class RapidlyEvaluateTests: XCTestCase {
 	

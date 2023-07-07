@@ -8,13 +8,15 @@
 import Foundation
 import Models
 
-final class NewFeaturesFactorySpy: NewFeaturesFactory {
+final public class NewFeaturesFactorySpy: NewFeaturesFactory {
 
-	var invokedInformationGetter = false
-	var invokedInformationGetterCount = 0
-	var stubbedInformation: NewFeatureInformation!
+	public init() {}
+	
+	public var invokedInformationGetter = false
+	public var invokedInformationGetterCount = 0
+	public var stubbedInformation: NewFeatureInformation!
 
-	var information: NewFeatureInformation {
+	public var information: NewFeatureInformation {
 		invokedInformationGetter = true
 		invokedInformationGetterCount += 1
 		return stubbedInformation

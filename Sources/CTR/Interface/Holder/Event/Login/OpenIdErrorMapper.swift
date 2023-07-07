@@ -5,10 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
-import UIKit
+import CoronaCheckFoundation
+import CoronaCheckUI
 import OpenIDConnect
-import Shared
-import Transport
 
 // MARK: Mapping Errors
 

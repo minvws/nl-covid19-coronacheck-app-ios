@@ -5,9 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
 import CoreData
-import Persistence
+import CoronaCheckFoundation
 
 // swiftlint:disable type_name
 protocol HolderDashboardRemovedEventsDatasourceProtocol: AnyObject {

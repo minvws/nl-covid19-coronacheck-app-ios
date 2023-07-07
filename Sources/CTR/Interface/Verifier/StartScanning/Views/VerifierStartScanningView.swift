@@ -5,11 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import CoronaCheckUI
 import Lottie
-import Shared
-import ReusableViews
-import Resources
 
 // swiftlint:disable type_body_length
 class VerifierStartScanningView: BaseView {

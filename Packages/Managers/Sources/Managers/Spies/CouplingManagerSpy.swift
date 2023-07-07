@@ -8,15 +8,17 @@
 import Foundation
 import Transport
 
-class CouplingManagerSpy: CouplingManaging {
+public class CouplingManagerSpy: CouplingManaging {
+	
+	public init() {}
 
-	var invokedConvert = false
-	var invokedConvertCount = 0
-	var invokedConvertParameters: (dcc: String, couplingCode: String?)?
-	var invokedConvertParametersList = [(dcc: String, couplingCode: String?)]()
-	var stubbedConvertResult: EventFlow.EventResultWrapper!
+	public var invokedConvert = false
+	public var invokedConvertCount = 0
+	public var invokedConvertParameters: (dcc: String, couplingCode: String?)?
+	public var invokedConvertParametersList = [(dcc: String, couplingCode: String?)]()
+	public var stubbedConvertResult: EventFlow.EventResultWrapper!
 
-	func convert(_ dcc: String, couplingCode: String?) -> EventFlow.EventResultWrapper? {
+	public func convert(_ dcc: String, couplingCode: String?) -> EventFlow.EventResultWrapper? {
 		invokedConvert = true
 		invokedConvertCount += 1
 		invokedConvertParameters = (dcc, couplingCode)
@@ -24,13 +26,13 @@ class CouplingManagerSpy: CouplingManaging {
 		return stubbedConvertResult
 	}
 
-	var invokedCheckCouplingStatus = false
-	var invokedCheckCouplingStatusCount = 0
-	var invokedCheckCouplingStatusParameters: (dcc: String, couplingCode: String)?
-	var invokedCheckCouplingStatusParametersList = [(dcc: String, couplingCode: String)]()
-	var stubbedCheckCouplingStatusOnCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
+	public var invokedCheckCouplingStatus = false
+	public var invokedCheckCouplingStatusCount = 0
+	public var invokedCheckCouplingStatusParameters: (dcc: String, couplingCode: String)?
+	public var invokedCheckCouplingStatusParametersList = [(dcc: String, couplingCode: String)]()
+	public var stubbedCheckCouplingStatusOnCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
 
-	func checkCouplingStatus(
+	public func checkCouplingStatus(
 		dcc: String,
 		couplingCode: String,
 		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {

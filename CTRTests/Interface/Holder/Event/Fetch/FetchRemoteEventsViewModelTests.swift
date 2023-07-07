@@ -7,13 +7,10 @@
 // swiftlint:disable type_body_length
 // swiftlint:disable file_length
 
+import CoronaCheckFoundation
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-@testable import Transport
-@testable import Shared
-@testable import Resources
-import XCTest
-import Nimble
-import ReusableViews
 
 class FetchRemoteEventsViewModelTests: XCTestCase {
 

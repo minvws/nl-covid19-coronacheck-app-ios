@@ -10,7 +10,11 @@ import Foundation
 public struct DccCoupling {
 
 	public struct CouplingResponse: Codable {
-
+		
+		public init(status: DccCoupling.CouplingState) {
+			self.status = status
+		}
+		
 		public let status: CouplingState
 	}
 

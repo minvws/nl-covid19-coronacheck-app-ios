@@ -5,10 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Resources
-import Models
-import Shared
+import CoronaCheckFoundation
+import CoronaCheckUI
 
 class HolderMainMenuViewModel: MenuViewModelProtocol {
 	

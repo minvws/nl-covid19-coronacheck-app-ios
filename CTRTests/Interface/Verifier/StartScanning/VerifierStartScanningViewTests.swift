@@ -5,13 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import XCTest
-import Nimble
-import Lottie
+import CoronaCheckTest
+import CoronaCheckUI
 @testable import CTR
-import SnapshotTesting
-import Shared
-@testable import Resources
+import Lottie
 
 class VerifierStartScanningViewTests: XCTestCase {
 	var sut: VerifierStartScanningView!

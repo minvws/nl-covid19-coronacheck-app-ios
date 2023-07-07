@@ -5,11 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
-import Transport
-import Shared
-import Managers
-import Models
+import CoronaCheckFoundation
 
 protocol LaunchStateManaging {
 	
