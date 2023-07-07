@@ -42,8 +42,6 @@ packages:
     path: ./Packages/RestrictedBrowser
   Shared:
     path: ./Packages/Shared
-  TestingShared:
-    path: ./Packages/TestingShared
   Transport:
     path: ./Packages/Transport
 
