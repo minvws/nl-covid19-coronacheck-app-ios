@@ -5,9 +5,9 @@
  *  SPDX-License-Identifier: EUPL-1.2
  */
 
+import CoronaCheckFoundation
 @testable import CTR
 @testable import Transport
-@testable import Models
 
 class EventGroupCacheSpy: EventGroupCacheProtocol {
 

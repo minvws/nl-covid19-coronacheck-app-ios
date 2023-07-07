@@ -6,13 +6,12 @@
 */
 
 import CoronaCheckUI
+import CoronaCheckFoundation
 import CoreData
 import XCTest
 @testable import CTR
 import TestingShared
-import Persistence
 @testable import Transport
-@testable import Models
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 

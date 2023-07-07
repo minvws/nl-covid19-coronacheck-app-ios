@@ -6,8 +6,8 @@
 */
 
 import CoronaCheckUI
+import CoronaCheckFoundation
 @testable import CTR
-@testable import Models
 
 class HolderDashboardViewModelSpy: HolderDashboardViewModelType {
 

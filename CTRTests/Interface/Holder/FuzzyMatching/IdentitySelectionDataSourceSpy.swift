@@ -5,10 +5,10 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoronaCheckFoundation
 import XCTest
 @testable import CTR
 import Transport
-@testable import Models
 
 class IdentitySelectionDataSourceSpy: IdentitySelectionDataSourceProtocol {
 

@@ -6,9 +6,9 @@
 */
 
 import CoronaCheckUI
+import CoronaCheckFoundation
 import XCTest
 @testable import CTR
-@testable import Models
 
 class PagedAnnouncementDelegateSpy: PagedAnnouncementDelegate {
 

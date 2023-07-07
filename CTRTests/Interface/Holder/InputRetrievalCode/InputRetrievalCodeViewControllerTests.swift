@@ -6,13 +6,13 @@
 */
 
 import CoronaCheckUI
+import CoronaCheckFoundation
 import XCTest
 import SnapshotTesting
 import ViewControllerPresentationSpy
 import Nimble
 @testable import CTR
 @testable import Transport
-@testable import Models
 
 class InputRetrievalCodeControllerTests: XCTestCase {
 

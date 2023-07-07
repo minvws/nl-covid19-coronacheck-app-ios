@@ -7,15 +7,17 @@
 
 import Foundation
 
-internal class TokenValidatorSpy: TokenValidatorProtocol {
+public class TokenValidatorSpy: TokenValidatorProtocol {
 
-	var invokedValidate = false
-	var invokedValidateCount = 0
-	var invokedValidateParameters: (token: String, Void)?
-	var invokedValidateParametersList = [(token: String, Void)]()
-	var stubbedValidateResult: Bool! = false
+	public init() {}
+	
+	public var invokedValidate = false
+	public var invokedValidateCount = 0
+	public var invokedValidateParameters: (token: String, Void)?
+	public var invokedValidateParametersList = [(token: String, Void)]()
+	public var stubbedValidateResult: Bool! = false
 
-	func validate(_ token: String) -> Bool {
+	public func validate(_ token: String) -> Bool {
 		invokedValidate = true
 		invokedValidateCount += 1
 		invokedValidateParameters = (token, ())
