@@ -16,7 +16,7 @@ let package = Package(
 		.package(name: "Shared", path: "../Shared"),
 		
 		// External:
-		.package(url: "https://github.com/1024jp/GzipSwift", from: "5.2.0"),
+		.package(url: "https://github.com/1024jp/GzipSwift", from: "6.0.0"),
 		
 		// Testing:
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
