@@ -17,7 +17,7 @@ let package = Package(
 		.package(name: "Shared", path: "../Shared"),
 		
 		// External:
-		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.0.0"),
+		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.3.0"),
 		
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
