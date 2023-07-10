@@ -15,7 +15,7 @@ let package = Package(
 	dependencies: [
 		// Internal:
 		.package(url: "https://github.com/ashleymills/Reachability.swift", from: "5.1.0"),
-		.package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.0"),
+		.package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.1"),
 		
 		// Testing:
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
@@ -34,7 +34,7 @@ let package = Package(
 			name: "SharedTests",
 			dependencies: [
 				"Shared",
-				.product(name: "Nimble", package: "Nimble"),
+				.product(name: "Nimble", package: "Nimble")
 			])
 	]
 )
