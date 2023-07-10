@@ -12,12 +12,11 @@ let package = Package(
 			targets: ["Transport"])
 	],
 	dependencies: [
-		// Dependencies declare other packages that this package depends on.
-		// .package(url: /* package url */, from: "1.0.0"),
+		// Internal:
 		.package(name: "Shared", path: "../Shared"),
 		.package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
 		
-		// testing:
+		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/AliSoftware/OHHTTPStubs", from: "9.1.0"),
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")

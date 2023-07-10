@@ -12,9 +12,10 @@ let package = Package(
 			targets: ["Persistence"]),
 	],
 	dependencies: [
+		// Internal:
 		.package(name: "Shared", path: "../Shared"),
 		
-		// testing:
+		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],

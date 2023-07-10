@@ -12,11 +12,13 @@ let package = Package(
 			targets: ["Models"]),
 	],
 	dependencies: [
+		// Internal
 		.package(name: "CryptoCore", path: "../CryptoCore"),
 		.package(name: "Persistence", path: "../Persistence"),
 		.package(name: "Shared", path: "../Shared"),
 		.package(name: "Transport", path: "../Transport"),
 		
+		// External
 		.package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
 		
 		// Testing:
