@@ -43,7 +43,7 @@ let package = Package(
 				.product(name: "Transport", package: "Transport"),
 				
 				.product(name: "IOSSecuritySuite", package: "IOSSecuritySuite"),
-				.product(name: "BrightFutures", package: "BrightFutures"),
+				.product(name: "BrightFutures", package: "BrightFutures")
 			]),
 		.testTarget(
 			name: "ManagersTests",

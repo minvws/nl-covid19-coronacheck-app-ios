@@ -28,7 +28,7 @@ let package = Package(
 			dependencies: [
 				.product(name: "Shared", package: "Shared"),
 				.product(name: "Resources", package: "Resources"),
-				.product(name: "ReusableViews", package: "ReusableViews"),
+				.product(name: "ReusableViews", package: "ReusableViews")
 			]
 		),
 		.testTarget(

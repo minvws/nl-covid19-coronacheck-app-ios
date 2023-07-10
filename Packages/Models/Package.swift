@@ -23,7 +23,7 @@ let package = Package(
 		
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
-		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
+		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [
 		// Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -36,14 +36,14 @@ let package = Package(
 				.product(name: "Shared", package: "Shared"),
 				.product(name: "Transport", package: "Transport"),
 				
-				.product(name: "LuhnCheck", package: "nl-rdo-app-ios-modules"),
+				.product(name: "LuhnCheck", package: "nl-rdo-app-ios-modules")
 			]),
 		.testTarget(
 			name: "ModelsTests",
 			dependencies: [
 				"Models",
 				.product(name: "TestingShared", package: "TestingShared"),
-				.product(name: "Nimble", package: "Nimble"),
+				.product(name: "Nimble", package: "Nimble")
 			]),
 	]
 )

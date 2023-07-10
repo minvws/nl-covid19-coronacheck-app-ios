@@ -43,7 +43,7 @@ let package = Package(
 			dependencies: [
 				"Resources",
 				.product(name: "TestingShared", package: "TestingShared"),
-				.product(name: "Nimble", package: "Nimble"),
+				.product(name: "Nimble", package: "Nimble")
 			]),
 	]
 )
