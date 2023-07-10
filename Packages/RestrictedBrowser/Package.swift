@@ -12,10 +12,12 @@ let package = Package(
 			targets: ["RestrictedBrowser"])
 	],
 	dependencies: [
-		// Dependencies declare other packages that this package depends on.
+		// Internal:
 		.package(name: "Shared", path: "../Shared"),
 		.package(name: "Resources", path: "../Resources"),
 		.package(name: "ReusableViews", path: "../ReusableViews"),
+		
+		// Testing:
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [
@@ -26,7 +28,7 @@ let package = Package(
 			dependencies: [
 				.product(name: "Shared", package: "Shared"),
 				.product(name: "Resources", package: "Resources"),
-				.product(name: "ReusableViews", package: "ReusableViews"),
+				.product(name: "ReusableViews", package: "ReusableViews")
 			]
 		),
 		.testTarget(

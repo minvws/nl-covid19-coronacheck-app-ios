@@ -13,11 +13,13 @@ let package = Package(
 			targets: ["Resources"]),
 	],
 	dependencies: [
-		// Dependencies declare other packages that this package depends on.
+		// Internal:
 		.package(name: "Shared", path: "../Shared"),
-		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.0.0"),
 		
-		// testing:
+		// External:
+		.package(url: "https://github.com/mac-cain13/R.swift.git", from: "7.3.0"),
+		
+		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
@@ -41,7 +43,7 @@ let package = Package(
 			dependencies: [
 				"Resources",
 				.product(name: "TestingShared", package: "TestingShared"),
-				.product(name: "Nimble", package: "Nimble"),
+				.product(name: "Nimble", package: "Nimble")
 			]),
 	]
 )

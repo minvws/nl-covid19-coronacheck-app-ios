@@ -12,6 +12,7 @@ let package = Package(
 			targets: ["Managers"]),
 	],
 	dependencies: [
+		// Internal:
 		.package(name: "CryptoCore", path: "../CryptoCore"),
 		.package(name: "Models", path: "../Models"),
 		.package(name: "Persistence", path: "../Persistence"), // TODO: only for FileStorageProtocol, consider moving
@@ -19,8 +20,9 @@ let package = Package(
 		.package(name: "Shared", path: "../Shared"),
 		.package(name: "Transport", path: "../Transport"),
 		
-		.package(url: "https://github.com/securing/IOSSecuritySuite", from: "1.9.5"),
-		.package(url: "https://github.com/Thomvis/BrightFutures", branch: "master"),
+		// External:
+		.package(url: "https://github.com/securing/IOSSecuritySuite", from: "1.9.7"),
+		.package(url: "https://github.com/Thomvis/BrightFutures", from: "8.2.0"),
 		
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
@@ -41,7 +43,7 @@ let package = Package(
 				.product(name: "Transport", package: "Transport"),
 				
 				.product(name: "IOSSecuritySuite", package: "IOSSecuritySuite"),
-				.product(name: "BrightFutures", package: "BrightFutures"),
+				.product(name: "BrightFutures", package: "BrightFutures")
 			]),
 		.testTarget(
 			name: "ManagersTests",

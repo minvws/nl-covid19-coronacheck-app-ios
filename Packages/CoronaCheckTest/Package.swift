@@ -12,12 +12,12 @@ let package = Package(
 		)
 	],
 	dependencies: [
-		// internal
+		// Internal:
 		.package(name: "TestingShared", path: "../TestingShared"),
 		
-		// External
-		.package(url: "https://github.com/pointfreeco/swift-snapshot-testing", exact: "1.9.0"),
-		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
+		// Testing:
+		.package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.11.0"),
+		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [
 		.target(

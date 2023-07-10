@@ -12,9 +12,10 @@ let package = Package(
 			targets: ["Persistence"]),
 	],
 	dependencies: [
+		// Internal:
 		.package(name: "Shared", path: "../Shared"),
 		
-		// testing:
+		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
@@ -28,7 +29,7 @@ let package = Package(
 			],
 			resources: [
 				.copy("Schemas/CoronaCheck.xcdatamodeld"),
-				.copy("Schemas/Verifier.xcdatamodeld"),
+				.copy("Schemas/Verifier.xcdatamodeld")
 			]
 		),
 		.testTarget(
@@ -36,7 +37,7 @@ let package = Package(
 			dependencies: [
 				"Persistence",
 				.product(name: "TestingShared", package: "TestingShared"),
-				.product(name: "Nimble", package: "Nimble"),
+				.product(name: "Nimble", package: "Nimble")
 			]),
 	]
 )
