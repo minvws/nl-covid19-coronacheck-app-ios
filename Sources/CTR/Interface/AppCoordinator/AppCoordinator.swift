@@ -328,8 +328,7 @@ class AppCoordinator: Coordinator {
 					return false
 				}
 				
-			case .thirdPartyTicketApp,
-					.tvsAuth,
+			case .tvsAuth,
 					.thirdPartyScannerApp:
 				
 				// If we reach here it means that there was no holder/verifierCoordinator initialized at the time

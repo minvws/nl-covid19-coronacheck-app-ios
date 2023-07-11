@@ -47,7 +47,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateARecoveryQR()
 	func userWishesToCreateAVaccinationQR()
 	func userWishesToExportPDF()
-	func userWishesToLaunchThirdPartyTicketApp()
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode)
 	func userWishesToMigrate()
 	func userWishesToOpenTheMenu()
@@ -64,11 +63,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	
-	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
-	///	display a "return to Ticket App" button on the ShowQR screen
-	/// Docs: https://shrtm.nu/oc45
-	var thirdpartyTicketApp: (name: String, returnURL: URL)?
-	
 	/// If set, this should be handled at the first opportunity:
 	var unhandledUniversalLink: UniversalLink?
 	
@@ -76,7 +70,6 @@ class HolderCoordinator: SharedCoordinator {
 	
 	override init(navigationController: UINavigationController, window: UIWindow) {
 		super.init(navigationController: navigationController, window: window)
-		setupNotificationListeners()
 	}
 	
 	// MARK: - Teardown
@@ -168,16 +161,6 @@ class HolderCoordinator: SharedCoordinator {
 		startChildCoordinator(fmCoordinator)
 	}
 	
-	// MARK: - Setup Listeners
-	
-	private func setupNotificationListeners() {
-		
-		// Prevent the thirdparty ticket feature persisting forever, let's clear it when the user minimises the app
-		NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.thirdpartyTicketApp = nil
-		}
-	}
-	
 	// MARK: - App Launch Cleanup
 	
 	func performAppLaunchCleanup() {
@@ -205,8 +188,6 @@ class HolderCoordinator: SharedCoordinator {
 		switch universalLink {
 			case .redeemHolderToken(let requestToken):
 				return consumeToken(requestToken, universalLink: universalLink)
-			case .thirdPartyTicketApp(let returnURL):
-				return consumeThirdPartyTicket(returnURL)
 			case .tvsAuth(let returnURL):
 				return consumeTvsAuthLink(returnURL)
 			default:
@@ -232,21 +213,6 @@ class HolderCoordinator: SharedCoordinator {
 				navigateToTokenEntry(requestToken)
 			}
 		}
-		return true
-	}
-	
-	private func consumeThirdPartyTicket(_ returnURL: URL?) -> Bool {
-		
-		guard let returnURL = returnURL,
-			  let matchingMetadata = remoteConfigManager.storedConfiguration.universalLinkPermittedDomains?.first(where: { permittedDomain in
-				  permittedDomain.url == returnURL.host
-			  })
-		else {
-			return true
-		}
-		
-		thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
-		
 		return true
 	}
 	
@@ -355,8 +321,7 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
-				greenCards: greenCards,
-				thirdPartyTicketAppName: thirdpartyTicketApp?.name
+				greenCards: greenCards
 			)
 		)
 		
@@ -635,11 +600,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	
 	func userWishesToCreateAVaccinationQR() {
 		startEventFlowForVaccination()
-	}
-	
-	func userWishesToLaunchThirdPartyTicketApp() {
-		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
-		openUrl(thirdpartyTicketApp.returnURL)
 	}
 	
 	func userWishesToMakeQRFromRemoteEvent(_ remoteEvent: RemoteEvent, originalMode: EventMode) {

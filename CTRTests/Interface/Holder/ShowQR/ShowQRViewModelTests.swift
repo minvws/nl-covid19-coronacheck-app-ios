@@ -43,8 +43,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// When
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
+			greenCards: [greenCard]
 		)
 
 		// Then
@@ -69,8 +68,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// When
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
+			greenCards: [greenCard]
 		)
 
 		// Then
@@ -85,8 +83,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// Given
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [],
-			thirdPartyTicketAppName: nil
+			greenCards: []
 		)
 
 		// When
@@ -107,8 +104,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
+			greenCards: [greenCard]
 		)
 
 		// When
@@ -131,8 +127,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
+			greenCards: [greenCard]
 		)
 		environmentSpies.cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination(dcc: .sampleWithVaccine(doseNumber: 2, totalDose: 2))
 		let expectedDetails: [DCCQRDetails] = [
@@ -161,55 +156,6 @@ class ShowQRViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.dateInformation) == L.holderShowqrEuAboutVaccinationDateinformation()
 	}
 
-	func test_canShowThirdPartyAppButton() throws {
-
-		// Arrange
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .eu,
-				withValidCredential: true
-			)
-		)
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: "RollerDiscoParties"
-		)
-
-		// Act
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == false
-		sut.didTapThirdPartyAppButton()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == true
-	}
-
-	func test_minimisingApp_clears_thirdpartyappbutton() throws {
-		// Arrange
-		let greenCard = try XCTUnwrap(
-			GreenCardModel.createFakeGreenCard(
-				dataStoreManager: environmentSpies.dataStoreManager,
-				type: .eu,
-				withValidCredential: true
-			)
-		)
-		notificationCenterSpy.stubbedAddObserverForNameResult = NSObject()
-		notificationCenterSpy.stubbedAddObserverForNameBlockResult = (Notification(name: UIApplication.didEnterBackgroundNotification, object: nil, userInfo: nil), ())
-		// Act
-		sut = ShowQRViewModel(
-			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: "RollerDiscoParties",
-			notificationCenter: notificationCenterSpy
-		)
-
-		let (name, _, _, _) = notificationCenterSpy.invokedAddObserverForNameParameters!
-		expect(name) == UIApplication.didEnterBackgroundNotification
-
-		expect(self.sut.thirdPartyTicketAppButtonTitle) == nil
-	}
-
 	func test_selectedanimation_internationalsummer() throws {
 		
 		// Arrange
@@ -226,8 +172,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// Act
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
+			greenCards: [greenCard]
 		)
 		
 		expect(self.sut.animationStyle) == .international(isWithinWinterPeriod: false)
@@ -249,8 +194,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// Act
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			greenCards: [greenCard],
-			thirdPartyTicketAppName: nil
+			greenCards: [greenCard]
 		)
 		
 		expect(self.sut.animationStyle) == .international(isWithinWinterPeriod: true)

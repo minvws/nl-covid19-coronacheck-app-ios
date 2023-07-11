@@ -825,19 +825,6 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.unhandledUniversalLink) == universalLink
 	}
 	
-	func test_consume_thirdPartyTicketApp() {
-		
-		// Given
-		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://coronacheck.nl"))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.sut.unhandledUniversalLink) == universalLink
-	}
-	
 	func test_consume_tvsAuth() {
 		
 		// Given
