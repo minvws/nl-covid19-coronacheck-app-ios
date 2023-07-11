@@ -72,8 +72,8 @@ class VerifierScanViewController: ScanViewController {
 			self?.sceneView.verificationPolicy = $0
 		}
 
-		sceneView.moreInformationButtonCommand = { [viewModel] in
-			viewModel.didTapMoreInformationButton()
+		sceneView.moreInformationButtonCommand = { [weak viewModel] in
+			viewModel?.didTapMoreInformationButton()
 		}
 		
 		addCloseButton(

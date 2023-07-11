@@ -229,14 +229,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToExportPDFCount += 1
 	}
 
-	var invokedUserWishesToLaunchThirdPartyTicketApp = false
-	var invokedUserWishesToLaunchThirdPartyTicketAppCount = 0
-
-	func userWishesToLaunchThirdPartyTicketApp() {
-		invokedUserWishesToLaunchThirdPartyTicketApp = true
-		invokedUserWishesToLaunchThirdPartyTicketAppCount += 1
-	}
-
 	var invokedUserWishesToMakeQRFromRemoteEvent = false
 	var invokedUserWishesToMakeQRFromRemoteEventCount = 0
 	var invokedUserWishesToMakeQRFromRemoteEventParameters: (remoteEvent: RemoteEvent, originalMode: EventMode)?

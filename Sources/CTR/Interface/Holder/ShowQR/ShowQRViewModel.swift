@@ -52,8 +52,6 @@ class ShowQRViewModel {
 
 	@Bindable private(set) var animationStyle: ShowQRView.AnimationStyle = .international(isWithinWinterPeriod: false)
 
-	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
-
 	@Bindable private(set) var items = [ShowQRItem]()
 
 	@Bindable private(set) var startingPage: Int
@@ -66,7 +64,6 @@ class ShowQRViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCards: [GreenCard],
-		thirdPartyTicketAppName: String?,
 		notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	) {
 		
@@ -80,15 +77,10 @@ class ShowQRViewModel {
 		self.currentPage = mostRelevantPage
 
 		displayQRInformation()
-		setupContent(greenCards: greenCards, thirdPartyTicketAppName: thirdPartyTicketAppName)
-		setupListeners()
+		setupContent(greenCards: greenCards)
 	}
 
-	deinit {
-		notificationCenter.removeObserver(self)
-	}
-
-	private func setupContent(greenCards: [GreenCard], thirdPartyTicketAppName: String?) {
+	private func setupContent(greenCards: [GreenCard]) {
 
 		if let greenCard = greenCards.first,
 			greenCard.getType() == GreenCardType.eu {
@@ -98,15 +90,6 @@ class ShowQRViewModel {
 		}
 		
 		pageButtonAccessibility = (L.holderShowqrPreviousbutton(), L.holderShowqrNextbutton())
-	}
-
-	private func setupListeners() {
-
-		// When the app is backgrounded, the holdercoordinator clears the reference to the third-party ticket app
-		// so we should hide that from the UI on this screen too.
-		notificationCenter.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
-			self?.thirdPartyTicketAppButtonTitle = nil
-		}
 	}
 
 	func viewWillAppear() {
@@ -119,11 +102,6 @@ class ShowQRViewModel {
 	
 	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {
 		currentPage = pageIndex
-	}
-
-	func didTapThirdPartyAppButton() {
-
-		coordinator?.userWishesToLaunchThirdPartyTicketApp()
 	}
 
 	func showMoreInformation() {
