@@ -165,7 +165,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		// Setup the real test:
 		// within TTL but outside minimum interval
 		var newConfig = RemoteConfiguration.default
-		newConfig.minimumVersionMessage = "This was changed"
+		newConfig.recommendedVersion = "2.0.0"
 
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(100 * seconds * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
@@ -209,7 +209,7 @@ class CryptoLibUtilityTests: XCTestCase {
 		// Setup the real test:
 		// within TTL but outside minimum interval
 		var newConfig = RemoteConfiguration.default
-		newConfig.minimumVersionMessage = "This was changed"
+		newConfig.recommendedVersion = "2.0.0"
 
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
