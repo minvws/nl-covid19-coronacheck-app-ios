@@ -803,3 +803,4 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators.first is PDFExportCoordinator) == true
 	}
 }
+// swiftlint:enable type_body_length file_length

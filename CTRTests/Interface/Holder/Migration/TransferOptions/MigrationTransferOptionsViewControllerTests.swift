@@ -9,8 +9,7 @@ import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 
-// swiftlint:disable type_name
-class MigrationTransferOptionsViewControllerTests: XCTestCase {
+class MigrationTransferOptionsViewControllerTests: XCTestCase { // swiftlint:disable:this type_name
 
 	var sut: ListOptionsViewController!
 	var coordinatorDelegateSpy: MigrationCoordinatorDelegateSpy!

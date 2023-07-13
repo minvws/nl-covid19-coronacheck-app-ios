@@ -8,8 +8,7 @@
 import CoronaCheckFoundation
 @testable import CTR
 
-// swiftlint:disable:next type_name
-class HolderDashboardRemovedEventsDatasourceSpy: HolderDashboardRemovedEventsDatasourceProtocol {
+class HolderDashboardRemovedEventsDatasourceSpy: HolderDashboardRemovedEventsDatasourceProtocol { // swiftlint:disable:this type_name
 
 	var invokedDidUpdateSetter = false
 	var invokedDidUpdateSetterCount = 0

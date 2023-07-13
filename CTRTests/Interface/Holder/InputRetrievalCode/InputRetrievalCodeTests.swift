@@ -1658,3 +1658,5 @@ extension NetworkSpy {
 		stubbedFetchTestResultCompletionResult = nil
 	}
 }
+
+// swiftlint:enable type_body_length file_length

@@ -489,3 +489,4 @@ class ListStoredEventsViewModelTests: XCTestCase {
 		return eventGroup
 	}
 }
+// swiftlint:enable type_body_length

@@ -871,5 +871,5 @@ class AppCoordinatorTests: XCTestCase {
 			return PredicateResult(status: .matches, message: ExpectationMessage.expectedTo("Use `DiskFullViewModel` viewmodel"))
 		}))
 	}
-
 }
+// swiftlint:enable type_body_length file_length

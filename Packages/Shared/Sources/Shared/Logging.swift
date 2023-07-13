@@ -5,8 +5,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-// swiftlint:disable disable_print
-
 import Foundation
 
 private enum LoggingLevel: String, Comparable {
@@ -86,6 +84,7 @@ public func logError(_ message: String, _ values: Any...) {
 	log(icon: "🔥", message: message, values)
 }
 
+// swiftlint:disable disable_print
 private func log(icon: String, message: String, _ values: Any...) {
 	if values.count == 1, let valuesDict = values[0] as? [String: Any] {
 		print("\(icon) \(message):", valuesDict)
@@ -97,3 +96,4 @@ private func log(icon: String, message: String, _ values: Any...) {
 		print("\(icon) \(message)")
 	}
 }
+// swiftlint:enable disable_print

@@ -8,8 +8,7 @@
 import CoreData
 import CoronaCheckFoundation
 
-// swiftlint:disable type_name
-protocol HolderDashboardRemovedEventsDatasourceProtocol: AnyObject {
+protocol HolderDashboardRemovedEventsDatasourceProtocol: AnyObject { // swiftlint:disable:this type_name
 	var didUpdate: (([RemovedEventItem]) -> Void)? { get set }
 }
 

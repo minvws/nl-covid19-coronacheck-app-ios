@@ -16,7 +16,7 @@ struct PrintAttributes: Codable {
 		case european
 	}
 	
-	init(european: [EUPrintAttributes]) {
+	public init(european: [EUPrintAttributes]) {
 		self.european = european
 	}
 }
@@ -34,7 +34,7 @@ struct EUPrintAttributes: Codable {
 		case qr
 	}
 	
-	init(digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate, expirationTime: Date, qr: String) {
+	public init(digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate, expirationTime: Date, qr: String) {
 		
 		self.digitalCovidCertificate = digitalCovidCertificate
 		self.expirationTime = expirationTime

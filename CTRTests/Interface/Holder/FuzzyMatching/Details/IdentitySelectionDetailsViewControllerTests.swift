@@ -8,8 +8,7 @@
 import CoronaCheckTest
 @testable import CTR
 
-// swiftlint:disable type_name
-final class IdentitySelectionDetailsViewControllerTests: XCTestCase {
+final class IdentitySelectionDetailsViewControllerTests: XCTestCase { // swiftlint:disable:this type_name
 	
 	var sut: IdentitySelectionDetailsViewController!
 	var window = UIWindow()

@@ -80,3 +80,5 @@ extension SecureUserSettings {
 		verificationPolicy = Defaults.verificationPolicy
 	}
 }
+
+// swiftlint:enable redundant_optional_initialization

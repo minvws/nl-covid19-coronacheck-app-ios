@@ -490,6 +490,7 @@ final class FetchRemoteEventsViewModel {
 		}
 	}
 }
+// swiftlint:enable type_body_length
 
 extension FetchRemoteEventsViewModel {
 
