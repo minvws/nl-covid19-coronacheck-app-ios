@@ -515,3 +515,5 @@ class AuthenticationViewModelPAPTests: XCTestCase {
 		}
 	}
 }
+
+// swiftlint:enable type_body_length

@@ -9,8 +9,7 @@ import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 
-// swiftlint:disable:next type_name
-class PaperProofInputCouplingCodeViewModelTests: XCTestCase {
+class PaperProofInputCouplingCodeViewModelTests: XCTestCase { // swiftlint:disable:this type_name
 
 	var sut: PaperProofInputCouplingCodeViewModel!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!

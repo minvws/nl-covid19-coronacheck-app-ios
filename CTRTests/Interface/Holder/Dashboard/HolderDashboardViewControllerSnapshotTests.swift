@@ -4,14 +4,14 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length type_name
+// swiftlint:disable type_body_length
 
 import CoreData
 import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 
-class HolderDashboardViewControllerSnapshotTests: XCTestCase {
+class HolderDashboardViewControllerSnapshotTests: XCTestCase { // swiftlint:disable:this type_name
 
 	var viewModelSpy: HolderDashboardViewModelSpy!
 	
@@ -525,3 +525,4 @@ class HolderDashboardViewControllerSnapshotTests: XCTestCase {
 		assertSnapshot(matching: sut, as: .image)
 	}
 }
+// swiftlint:enable type_body_length

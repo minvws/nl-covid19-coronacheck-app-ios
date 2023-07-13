@@ -464,3 +464,4 @@ class VerifierStartScanningView: BaseView {
 		}
 	}
 }
+// swiftlint:enable type_body_length

@@ -9,8 +9,7 @@ import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 
-// swiftlint:disable:next type_name
-class PaperProofInputCouplingCodeViewControllerTests: XCTestCase {
+class PaperProofInputCouplingCodeViewControllerTests: XCTestCase { // swiftlint:disable:this type_name
 
 	// MARK: Subject under test
 	private var sut: PaperProofInputCouplingCodeViewController!

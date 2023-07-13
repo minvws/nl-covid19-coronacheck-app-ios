@@ -9,8 +9,7 @@ import CoronaCheckFoundation
 import CoronaCheckTest
 @testable import CTR
 
-// swiftlint:disable:next type_name
-class HolderDashboardRemovedEventsDatasourceTests: XCTestCase {
+class HolderDashboardRemovedEventsDatasourceTests: XCTestCase { // swiftlint:disable:this type_name
 	
 	var sut: HolderDashboardRemovedEventsDatasource!
 	var environmentSpies: EnvironmentSpies!

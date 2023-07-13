@@ -10,3 +10,5 @@
 public let L = R.string.localizable
 public let I = R.image
 public let C = R.color
+
+// swiftlint:enable identifier_name

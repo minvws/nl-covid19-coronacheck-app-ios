@@ -7,8 +7,7 @@
 
 import CoronaCheckUI
 
-// swiftlint:disable type_name
-protocol ScanInstructionsItemViewControllerDelegate: AnyObject {
+protocol ScanInstructionsItemViewControllerDelegate: AnyObject { // swiftlint:disable:this type_name
 	
 	/// Delegates the onAccessibilityScroll event
 	func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool

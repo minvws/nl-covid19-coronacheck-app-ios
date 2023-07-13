@@ -10,8 +10,7 @@ import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 
-// swiftlint:disable:next type_name
-class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase {
+class ListRemoteEventsViewModelCompletionStatusTests: XCTestCase { // swiftlint:disable:this type_name
 	
 	/// Subject under test
 	private var sut: ListRemoteEventsViewModel!

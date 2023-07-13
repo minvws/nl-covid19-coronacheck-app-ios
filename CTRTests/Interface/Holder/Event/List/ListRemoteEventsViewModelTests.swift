@@ -4,8 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
-// swiftlint:disable file_length
+// swiftlint:disable type_body_length file_length
 
 import CoronaCheckFoundation
 import CoronaCheckTest
@@ -2243,3 +2242,4 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		return eventGroup
 	}
 }
+// swiftlint:enable type_body_length file_length

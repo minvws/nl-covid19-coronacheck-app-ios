@@ -262,6 +262,7 @@ extension NSAttributedString {
 			return false
 		}
 	}
+	// swiftlint:enable empty_count
 	
 	/// Determines the line height used for the attributed string
 	var lineHeight: CGFloat {
