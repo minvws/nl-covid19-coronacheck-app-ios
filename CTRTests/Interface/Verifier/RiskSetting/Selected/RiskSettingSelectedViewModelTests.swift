@@ -108,7 +108,7 @@ final class RiskSettingSelectedViewModelTests: XCTestCase {
 		
 		// Fish in Alert for OK action & trigger it:
 		expect(self.sut.alert) != nil
-		sut.alert?.okAction.action?(UIAlertAction())
+		sut.alert?.okAction.handler?(UIAlertAction())
 		
 		// Assert
 		expect(self.environmentSpies.scanLockManagerSpy.invokedLockCount) == 1

@@ -147,7 +147,7 @@ class ListIdentitySelectionViewModel {
 			okAction: AlertContent.Action(title: L.holder_identitySelection_skipAlert_action(), action: { _ in
 				self.coordinatorDelegate?.userHasStoppedTheFlow()
 			}, isDestructive: true),
-			cancelAction: AlertContent.Action(title: L.general_cancel())
+			cancelAction: .cancel
 		)
 	}
 }

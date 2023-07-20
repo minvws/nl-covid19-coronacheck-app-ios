@@ -220,7 +220,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 			AlertContent(
 				title: "Scanning not supported",
 				subTitle: "Your device does not support scanning a code from an item. Please use a device with a camera.",
-				okAction: AlertContent.Action.okay
+				okAction: .okay
 			)
 		)
 		captureSession = nil

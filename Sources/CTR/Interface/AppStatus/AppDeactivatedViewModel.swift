@@ -42,7 +42,7 @@ class AppDeactivatedViewModel: AppStatusViewModel {
 			alert.value = AlertContent(
 				title: L.generalErrorTitle(),
 				subTitle: flavor == .holder ? L.holder_endOfLife_errorMessage() : L.verifier_endOfLife_errorMessage(),
-				okAction: AlertContent.Action.okay
+				okAction: .okay
 			)
 			return
 		}

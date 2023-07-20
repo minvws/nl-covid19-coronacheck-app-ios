@@ -17,16 +17,17 @@ public struct AlertContent {
 	public struct Action {
 		
 		public var title: String
-		public var action: ((UIAlertAction) -> Void)?
+		public var handler: ((UIAlertAction) -> Void)?
 		public var isDestructive: Bool = false
 		public var isPreferred: Bool = false
 		
 		public static let okay = AlertContent.Action(title: L.generalOk(), action: nil)
 		public static let cancel = AlertContent.Action(title: L.general_cancel(), action: nil)
+		public static let close = AlertContent.Action(title: L.generalClose(), action: nil)
 		
 		public init(title: String, action: ((UIAlertAction) -> Void)? = nil, isDestructive: Bool = false, isPreferred: Bool = false) {
 			self.title = title
-			self.action = action
+			self.handler = action
 			self.isDestructive = isDestructive
 			self.isPreferred = isPreferred
 		}
@@ -82,7 +83,7 @@ extension UIAlertController {
 		let alertAction = UIAlertAction(
 			title: action.title,
 			style: action.isDestructive ? .destructive : style,
-			handler: action.action
+			handler: action.handler
 		)
 		addAction(alertAction)
 		if action.isPreferred {

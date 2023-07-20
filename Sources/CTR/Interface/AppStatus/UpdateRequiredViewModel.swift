@@ -42,7 +42,7 @@ class UpdateRequiredViewModel: AppStatusViewModel {
 			alert.value = AlertContent(
 				title: L.generalErrorTitle(),
 				subTitle: flavor == .holder ? L.holder_updateApp_errorMessage() : L.verifier_updateApp_errorMessage(),
-				okAction: AlertContent.Action.okay
+				okAction: .okay
 			)
 			return
 		}
