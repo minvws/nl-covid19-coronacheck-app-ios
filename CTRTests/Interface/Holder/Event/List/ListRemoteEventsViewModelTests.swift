@@ -1463,7 +1463,7 @@ class ListRemoteEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toEventuallyNot(beNil())
 		expect(self.sut.alert?.title).toEventually(equal(L.generalErrorTitle()))
 		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderFetcheventsErrorNoresultsNetworkerrorMessage("vaccinatie")))
-		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.holderVaccinationErrorClose()))
+		expect(self.sut.alert?.cancelAction?.title).toEventually(equal(L.generalClose()))
 		expect(self.sut.alert?.okAction.title).toEventually(equal( L.holderVaccinationErrorAgain()))
 	}
 

@@ -414,7 +414,6 @@
 "holder.vaccination.alert.stop" = "Yes, go back";
 "holder.vaccination.alert.title" = "Are you sure you want to go back?";
 "holder.vaccination.error.again" = "Try again";
-"holder.vaccination.error.close" = "Close";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.list.wrong" = "Is something wrong?";

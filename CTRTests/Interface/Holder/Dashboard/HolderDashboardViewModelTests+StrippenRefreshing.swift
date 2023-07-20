@@ -108,10 +108,10 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.currentlyPresentedAlert.value?.cancelAction?.title) == L.generalClose()
 		expect(self.sut.currentlyPresentedAlert.value?.okAction.title) == L.generalRetry()
 
-		self.sut.currentlyPresentedAlert.value?.cancelAction?.action?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.cancelAction?.handler?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedUserDismissedALoadingError) == true
 
-		self.sut.currentlyPresentedAlert.value?.okAction.action?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.okAction.handler?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedLoad) == true
 	}
 
@@ -172,10 +172,10 @@ extension HolderDashboardViewModelTests {
 		expect(self.sut.currentlyPresentedAlert.value?.cancelAction?.title) == L.generalClose()
 		expect(self.sut.currentlyPresentedAlert.value?.okAction.title) == L.generalRetry()
 
-		self.sut.currentlyPresentedAlert.value?.cancelAction?.action?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.cancelAction?.handler?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedUserDismissedALoadingError) == true
 
-		self.sut.currentlyPresentedAlert.value?.okAction.action?(UIAlertAction())
+		self.sut.currentlyPresentedAlert.value?.okAction.handler?(UIAlertAction())
 		expect(self.strippenRefresherSpy.invokedLoad) == true
 	}
 

@@ -756,7 +756,7 @@ class HolderCoordinatorTests: XCTestCase {
 			animated: true,
 			actions: [
 				.destructive(L.holder_migrationFlow_deleteDetails_dialog_deleteButton()),
-				.default(L.holder_migrationFlow_deleteDetails_dialog_retainButton())
+				.cancel(L.holder_migrationFlow_deleteDetails_dialog_retainButton())
 			]
 		)
 	}

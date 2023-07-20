@@ -90,7 +90,7 @@ class ImportViewController: ScanViewController {
 						self?.viewModel.gotoSettings()
 					}
 				),
-				cancelAction: AlertContent.Action.cancel
+				cancelAction: .cancel
 			)
 		)
 	}

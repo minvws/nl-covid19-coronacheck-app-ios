@@ -414,7 +414,6 @@
 "holder.vaccination.alert.stop" = "Ja, terug";
 "holder.vaccination.alert.title" = "Weet je zeker dat je terug wilt?";
 "holder.vaccination.error.again" = "Probeer opnieuw";
-"holder.vaccination.error.close" = "Sluiten";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.list.action" = "Maak bewijs";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";

@@ -48,9 +48,7 @@ extension ListRemoteEventsViewModel {
 				isPreferred: true
 				
 			),
-			cancelAction: AlertContent.Action(
-				title: L.holderVaccinationErrorClose()
-			)
+			cancelAction: .close
 		)
 	}
 
@@ -67,9 +65,7 @@ extension ListRemoteEventsViewModel {
 				},
 				isPreferred: true
 			),
-			cancelAction: AlertContent.Action(
-				title: L.generalClose()
-			)
+			cancelAction: .close
 		)
 	}
 	
@@ -105,7 +101,7 @@ extension ListRemoteEventsViewModel {
 		alert = AlertContent(
 			title: L.holderErrorstateSomeresultTitle(),
 			subTitle: L.holderErrorstateSomeresultMessage(),
-			okAction: AlertContent.Action.okay
+			okAction: .okay
 		)
 	}
 }

@@ -50,7 +50,7 @@ extension HolderDashboardViewModelTests {
 		expect(alert.subTitle) == L.holder_invaliddetailsremoved_alert_body()
 		expect(alert.okAction.title) == L.holder_invaliddetailsremoved_alert_button_moreinfo()
 		
-		alert.okAction.action?(UIAlertAction()) // trigger the okay button
+		alert.okAction.handler?(UIAlertAction()) // trigger the okay button
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutBlockedEventsBeingDeletedCount) == 1
 		
 		expect(alert.cancelAction?.title) == L.holder_invaliddetailsremoved_alert_button_close()

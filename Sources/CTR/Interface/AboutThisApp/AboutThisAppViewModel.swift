@@ -194,7 +194,7 @@ class AboutThisAppViewModel {
 				},
 				isDestructive: true
 			),
-			cancelAction: AlertContent.Action.cancel
+			cancelAction: .cancel
 		)
 	}
 

@@ -580,9 +580,7 @@ extension InputRetrievalCodeViewModel {
 					self?.fetchProviders(requestToken, verificationCode: verificationCode)
 				}
 			),
-			cancelAction: AlertContent.Action(
-				title: L.generalClose()
-			)
+			cancelAction: .close
 		)
 	}
 
@@ -599,9 +597,7 @@ extension InputRetrievalCodeViewModel {
 				},
 				isPreferred: true
 			),
-			cancelAction: AlertContent.Action(
-				title: L.generalClose()
-			)
+			cancelAction: .close
 		)
 	}
 

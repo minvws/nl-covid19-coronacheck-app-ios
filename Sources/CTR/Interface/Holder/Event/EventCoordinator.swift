@@ -451,7 +451,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 
 		let presentError = {
-			let alertController = UIAlertController(
+			
+			let alertContent = AlertContent(
 				title: {
 					switch authenticationMode {
 						case .manyAuthenticationExchange:
@@ -460,7 +461,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holder_authentication_popup_portal_title()
 					}
 				}(),
-				message: {
+				subTitle: {
 					switch (eventMode, authenticationMode) {
 						case (.vaccination, .manyAuthenticationExchange), (.vaccinationAndPositiveTest, .manyAuthenticationExchange):
 							return L.holder_authentication_popup_digid_message_vaccinationFlow()
@@ -472,11 +473,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 							return L.holder_authentication_popup_portal_message_testFlow()
 					}
 				}(),
-				preferredStyle: .alert
+				okAction: .okay
 			)
-
-			alertController.addAction(.init(title: L.generalClose(), style: .default, handler: nil))
-			self.navigationController.present(alertController, animated: true, completion: nil)
+			self.navigationController.showAlert(alertContent)
 		}
 
 		if let popback {
