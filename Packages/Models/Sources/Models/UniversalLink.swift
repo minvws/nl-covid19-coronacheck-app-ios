@@ -12,7 +12,6 @@ import Shared
 public enum UniversalLink: Equatable, Sendable {
 	
 	case redeemHolderToken(requestToken: RequestToken)
-	case thirdPartyTicketApp(returnURL: URL?)
 	case tvsAuth(returnURL: URL?)
 	case thirdPartyScannerApp(returnURL: URL?)
 }

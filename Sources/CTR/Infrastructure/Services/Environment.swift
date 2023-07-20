@@ -253,6 +253,4 @@ let environment: (DataStoreManager) -> Environment = { datastoreManager in
 	)
 }
 
-// swiftlint:disable identifier_name
-
-var Current: Environment!
+var Current: Environment! // swiftlint:disable:this identifier_name

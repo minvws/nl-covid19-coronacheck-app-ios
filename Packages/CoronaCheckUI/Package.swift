@@ -12,6 +12,7 @@ let package = Package(
 		)
 	],
 	dependencies: [
+		// Internal:
 		.package(name: "Resources", path: "../Resources"),
 		.package(name: "ReusableViews", path: "../ReusableViews"),
 		.package(name: "Shared", path: "../Shared")

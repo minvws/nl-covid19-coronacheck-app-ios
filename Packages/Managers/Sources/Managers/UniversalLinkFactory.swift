@@ -36,9 +36,6 @@ public final class HolderUniversalLinkFactory {
 			
 			guard let requestToken = createRequestToken(fragment: fragment, featureFlagManager: featureFlagManager) else { return nil }
 			return UniversalLink.redeemHolderToken(requestToken: requestToken)
-		} else if url.path == "/app/open" {
-			
-			return UniversalLink.thirdPartyTicketApp(returnURL: createReturnURL(for: url))
 		} else if url.path.hasPrefix("/app/auth") {
 			
 			// Currently '/app/auth2' path is in use

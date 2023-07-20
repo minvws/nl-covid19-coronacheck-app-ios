@@ -18,12 +18,10 @@ class ShowQRView: BaseView {
 
 		enum Margin {
 			static let edge: CGFloat = 10
-			static let returnToThirdPartyAppButton: CGFloat = 12
 		}
 		
 		enum Spacing {
 			static let buttonToPageControl: CGFloat = 4
-			static let containerToReturnToThirdPartyAppButton: CGFloat = 24
 		}
 	}
 	
@@ -87,14 +85,6 @@ class ShowQRView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-
-	let returnToThirdPartyAppButton: Button = {
-
-		let button = Button(title: "", style: .textLabelBlue)
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.isHidden = true
-		return button
-	}()
 	
 	let navigationInfoView: ShowQRNavigationInfoView = {
 		
@@ -109,7 +99,6 @@ class ShowQRView: BaseView {
 		super.setupViews()
 		backgroundColor = C.white()
 		
-		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		navigationInfoView.previousButton.addTarget(self, action: #selector(didTapPreviousButton), for: .touchUpInside)
 		navigationInfoView.nextButton.addTarget(self, action: #selector(didTapNextButton), for: .touchUpInside)
 		
@@ -125,7 +114,6 @@ class ShowQRView: BaseView {
 		addSubview(securityAnimationView)
 		addSubview(containerView)
 		addSubview(pageControl)
-		addSubview(returnToThirdPartyAppButton)
 		addSubview(navigationInfoView)
 		
 		addLayoutGuide(qrFrameLayoutGuide)
@@ -153,15 +141,7 @@ class ShowQRView: BaseView {
 		setupSecurityViewConstraints()
 
 		NSLayoutConstraint.activate([
-			returnToThirdPartyAppButton.topAnchor.constraint(
-				equalTo: containerView.bottomAnchor,
-				constant: ViewTraits.Spacing.containerToReturnToThirdPartyAppButton
-			),
-			returnToThirdPartyAppButton.leadingAnchor.constraint(
-				equalTo: containerView.leadingAnchor,
-				constant: ViewTraits.Margin.returnToThirdPartyAppButton
-			),
-			
+
 			qrFrameLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
 			qrFrameLayoutGuide.widthAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 1.03),
 			qrFrameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor),
@@ -249,11 +229,6 @@ class ShowQRView: BaseView {
 		containerHeightRestrictionConstraint?.constant = containerHeightRestrictionConstant
 	}
 
-	@objc func didTapThirdPartyAppButton() {
-
-		didTapThirdPartyAppButtonCommand?()
-	}
-
 	@objc func didTapPreviousButton() {
 
 		didTapPreviousButtonCommand?()
@@ -272,13 +247,6 @@ class ShowQRView: BaseView {
 			navigationInfoView.dosageLabel.attributedText = dosage?.setLineHeight(ViewTraits.Dimension.titleLineHeight, alignment: .center)
 		}
 	}
-
-	var returnToThirdPartyAppButtonTitle: String? {
-		didSet {
-			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
-			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
-		}
-	}
 	
 	var pageButtonAccessibility: (previous: String, next: String)? {
 		didSet {
@@ -286,8 +254,6 @@ class ShowQRView: BaseView {
 			navigationInfoView.nextButton.accessibilityLabel = pageButtonAccessibility?.next
 		}
 	}
-
-	var didTapThirdPartyAppButtonCommand: (() -> Void)?
 
 	var didTapPreviousButtonCommand: (() -> Void)?
 

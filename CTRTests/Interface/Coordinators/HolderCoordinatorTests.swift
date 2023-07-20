@@ -221,35 +221,6 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.unhandledUniversalLink) == universalLink
 	}
 	
-	func test_consume_thirdPartyTicketApp() {
-		
-		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
-		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://coronacheck.nl"))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.sut.thirdpartyTicketApp?.name) == "CoronaCheck"
-		expect(self.sut.thirdpartyTicketApp?.returnURL) == URL(string: "https://coronacheck.nl")
-	}
-	
-	func test_consume_thirdPartyTicketApp_domainNotAllowed() {
-		
-		// Given
-		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
-		let universalLink = UniversalLink.thirdPartyTicketApp(returnURL: URL(string: "https://apple.com"))
-		
-		// When
-		let consumed = sut.consume(universalLink: universalLink)
-		
-		// Then
-		expect(consumed) == true
-		expect(self.sut.thirdpartyTicketApp) == nil
-	}
-	
 	func test_consume_tvsAuth() {
 		
 		// Given
@@ -785,7 +756,7 @@ class HolderCoordinatorTests: XCTestCase {
 			animated: true,
 			actions: [
 				.destructive(L.holder_migrationFlow_deleteDetails_dialog_deleteButton()),
-				.default(L.holder_migrationFlow_deleteDetails_dialog_retainButton())
+				.cancel(L.holder_migrationFlow_deleteDetails_dialog_retainButton())
 			]
 		)
 	}
@@ -832,3 +803,4 @@ class HolderCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators.first is PDFExportCoordinator) == true
 	}
 }
+// swiftlint:enable type_body_length file_length

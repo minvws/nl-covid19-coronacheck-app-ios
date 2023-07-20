@@ -72,8 +72,8 @@ class VerifierScanViewController: ScanViewController {
 			self?.sceneView.verificationPolicy = $0
 		}
 
-		sceneView.moreInformationButtonCommand = { [viewModel] in
-			viewModel.didTapMoreInformationButton()
+		sceneView.moreInformationButtonCommand = { [weak viewModel] in
+			viewModel?.didTapMoreInformationButton()
 		}
 		
 		addCloseButton(
@@ -106,7 +106,7 @@ class VerifierScanViewController: ScanViewController {
 						self?.viewModel.gotoSettings()
 					}
 				),
-				cancelAction: AlertContent.Action.cancel
+				cancelAction: .cancel
 			)
 		)
 	}

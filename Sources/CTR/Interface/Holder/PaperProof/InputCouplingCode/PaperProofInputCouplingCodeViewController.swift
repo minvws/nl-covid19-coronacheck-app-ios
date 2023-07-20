@@ -7,8 +7,7 @@
 
 import CoronaCheckUI
 
-// swiftlint:disable:next type_name
-class PaperProofInputCouplingCodeViewController: TraitWrappedGenericViewController<PaperProofInputCouplingCodeView, PaperProofInputCouplingCodeViewModel> {
+class PaperProofInputCouplingCodeViewController: TraitWrappedGenericViewController<PaperProofInputCouplingCodeView, PaperProofInputCouplingCodeViewModel> { // swiftlint:disable:this type_name
 	
 	private var tapGestureRecognizer: UITapGestureRecognizer?
 	

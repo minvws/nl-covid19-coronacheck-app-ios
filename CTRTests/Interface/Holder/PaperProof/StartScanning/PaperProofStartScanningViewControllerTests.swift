@@ -9,8 +9,7 @@ import CoronaCheckTest
 import CoronaCheckUI
 @testable import CTR
 
-// swiftlint:disable:next type_name
-class PaperProofStartScanningViewControllerTests: XCTestCase {
+class PaperProofStartScanningViewControllerTests: XCTestCase { // swiftlint:disable:this type_name
 	
 	private var sut: ContentWithImageViewController!
 	private var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!

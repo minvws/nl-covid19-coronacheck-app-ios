@@ -116,9 +116,6 @@ public struct RemoteConfiguration: Codable, Equatable {
 	/// The minimum required version
 	public var minimumVersion: String
 
-	/// The message for the minimum required version
-	public var minimumVersionMessage: String?
-
 	/// The recommended version
 	public var recommendedVersion: String?
 
@@ -127,9 +124,6 @@ public struct RemoteConfiguration: Codable, Equatable {
 
 	/// The url to the appStore
 	public var appStoreURL: URL?
-
-	/// The url to the site
-	public var informationURL: URL?
 
 	/// Is the app deactivated?
 	public var appDeactivated: Bool?
@@ -143,13 +137,9 @@ public struct RemoteConfiguration: Codable, Equatable {
 
 	public var configAlmostOutOfDateWarningSeconds: Int?
 
-	public var recoveryExpirationDays: Int?
-
 	public var domesticQRRefreshSeconds: Int?
 	
 	public var hpkCodes: [HPKData]? = []
-
-	public var nlTestTypes: [Mapping]? = []
 
 	public var euBrands: [Mapping]? = []
 
@@ -211,19 +201,15 @@ public struct RemoteConfiguration: Codable, Equatable {
 	enum CodingKeys: String, CodingKey {
 
 		case minimumVersion = "iosMinimumVersion"
-		case minimumVersionMessage = "iosMinimumVersionMessage"
 		case recommendedVersion = "iosRecommendedVersion"
 		case recommendedNagIntervalHours = "upgradeRecommendationInterval"
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
-		case informationURL = "informationURL"
 		case configTTL = "configTTL"
 		case configMinimumIntervalSeconds = "configMinimumIntervalSeconds"
 		case configAlmostOutOfDateWarningSeconds = "configAlmostOutOfDateWarningSeconds"
-		case recoveryExpirationDays = "recoveryExpirationDays"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
-		case nlTestTypes = "nlTestTypes"
 		case euManufacturers = "euManufacturers"
 		case euVaccinationTypes = "euVaccinations"
 		case euTestTypes = "euTestTypes"
@@ -259,16 +245,13 @@ public struct RemoteConfiguration: Codable, Equatable {
 	public static var `default`: RemoteConfiguration {
 
 		var config = RemoteConfiguration(minVersion: "1.0.0")
-		config.minimumVersionMessage = nil
 		config.recommendedVersion = "1.0.0"
 		config.recommendedNagIntervalHours = 24
 		config.appStoreURL = nil
 		config.appDeactivated = false
-		config.informationURL = nil
 		config.configTTL = 3600
 		config.configMinimumIntervalSeconds = 300
 		config.configAlmostOutOfDateWarningSeconds = 300
-		config.recoveryExpirationDays = 180
 		config.isGGDEnabled = true
 		config.isPAPEnabled = true
 		config.credentialRenewalDays = 5

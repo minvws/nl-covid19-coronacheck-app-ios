@@ -12,6 +12,7 @@ let package = Package(
 		)
 	],
 	dependencies: [
+		// Internal:
 		.package(name: "Managers", path: "../Managers"),
 		.package(name: "Models", path: "../Models"),
 		.package(name: "Persistence", path: "../Persistence"),

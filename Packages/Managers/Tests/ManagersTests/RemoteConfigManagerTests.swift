@@ -164,7 +164,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Now perform a request to fetch a "new config":
 		// within TTL but outside minimum interval, to fetch the `newConfig`:
 		var newConfig = RemoteConfiguration.default
-		newConfig.minimumVersionMessage = "This was changed"
+		newConfig.recommendedVersion = "2.0.0"
 
 		// (within TTL (3600) but outside minimum interval (300)):
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(400 * seconds * ago).timeIntervalSince1970
@@ -201,7 +201,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Setup the real test:
 		// within TTL but outside minimum interval
 		var newConfig = RemoteConfiguration.default
-		newConfig.minimumVersionMessage = "This was changed"
+		newConfig.recommendedVersion = "2.0.0"
 
 		// (within TTL (3600) and minimum interval (300)):
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
@@ -238,7 +238,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Now perform a request to fetch a "new config":
 		// within TTL but outside minimum interval, to fetch the `newConfig`:
 		var newConfig = RemoteConfiguration.default
-		newConfig.minimumVersionMessage = "This was changed"
+		newConfig.recommendedVersion = "2.0.0"
 
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(5 * seconds * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((newConfig, newConfig.data, URLResponse())), ())
@@ -414,7 +414,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		// Arrange
 		let newConfiguration: RemoteConfiguration = {
 			var config = RemoteConfiguration.default
-			config.minimumVersionMessage = "this config has changed"
+			config.recommendedVersion = "2.0.0"
 			return config
 		}()
 

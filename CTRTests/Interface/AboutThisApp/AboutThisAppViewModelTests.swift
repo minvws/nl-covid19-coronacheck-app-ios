@@ -330,7 +330,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 
 		// When
 		sut.didTapResetApp()
-		sut.alert?.okAction.action?(UIAlertAction())
+		sut.alert?.okAction.handler?(UIAlertAction())
 
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
@@ -362,7 +362,7 @@ class AboutThisAppViewModelTests: XCTestCase {
 
 		// When
 		sut.didTapResetApp()
-		sut.alert?.okAction.action?(UIAlertAction())
+		sut.alert?.okAction.handler?(UIAlertAction())
 
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false

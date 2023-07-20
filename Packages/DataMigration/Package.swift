@@ -12,10 +12,13 @@ let package = Package(
 			targets: ["DataMigration"]),
 	],
 	dependencies: [
+		// Internal:
 		.package(name: "Shared", path: "../Shared"),
-		.package(url: "https://github.com/1024jp/GzipSwift", from: "5.2.0"),
 		
-		// testing:
+		// External:
+		.package(url: "https://github.com/1024jp/GzipSwift", from: "6.0.0"),
+		
+		// Testing:
 		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [

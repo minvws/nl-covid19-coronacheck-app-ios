@@ -394,7 +394,7 @@ class InputRetrievalCodeViewModel {
 
 			case .invalid:
 				self.fieldErrorMessage = Strings.errorInvalidCode()
-				self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+				self.decideWhetherToAbortRequestTokenProvidedMode()
 
 			case .blocked:
 				self.fieldErrorMessage = L.holder_inputRetrievalCode_error_blocked()
@@ -411,7 +411,7 @@ class InputRetrievalCodeViewModel {
 
 					logDebug("Unhandled test result status: \(remoteEvent.0.status)")
 					self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
-					self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+					self.decideWhetherToAbortRequestTokenProvidedMode()
 				}
 		}
 	}
@@ -580,9 +580,7 @@ extension InputRetrievalCodeViewModel {
 					self?.fetchProviders(requestToken, verificationCode: verificationCode)
 				}
 			),
-			cancelAction: AlertContent.Action(
-				title: L.generalClose()
-			)
+			cancelAction: .close
 		)
 	}
 
@@ -599,9 +597,7 @@ extension InputRetrievalCodeViewModel {
 				},
 				isPreferred: true
 			),
-			cancelAction: AlertContent.Action(
-				title: L.generalClose()
-			)
+			cancelAction: .close
 		)
 	}
 
@@ -714,3 +710,4 @@ extension InputRetrievalCodeViewModel {
 		}
 	}
 }
+// swiftlint:enable type_body_length

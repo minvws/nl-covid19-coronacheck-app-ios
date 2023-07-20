@@ -106,7 +106,7 @@ private struct ScanLogDataSource {
 
 	let entries: [ScanLogEntry]
 
-	init(entries: [ScanLogEntry]) {
+	public init(entries: [ScanLogEntry]) {
 		self.entries = entries
 	}
 

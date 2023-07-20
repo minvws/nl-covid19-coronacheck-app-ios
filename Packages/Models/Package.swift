@@ -12,16 +12,18 @@ let package = Package(
 			targets: ["Models"]),
 	],
 	dependencies: [
+		// Internal
 		.package(name: "CryptoCore", path: "../CryptoCore"),
 		.package(name: "Persistence", path: "../Persistence"),
 		.package(name: "Shared", path: "../Shared"),
 		.package(name: "Transport", path: "../Transport"),
 		
+		// External
 		.package(url: "https://github.com/minvws/nl-rdo-app-ios-modules", branch: "main"),
 		
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
-		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
+		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0")
 	],
 	targets: [
 		// Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -34,14 +36,14 @@ let package = Package(
 				.product(name: "Shared", package: "Shared"),
 				.product(name: "Transport", package: "Transport"),
 				
-				.product(name: "LuhnCheck", package: "nl-rdo-app-ios-modules"),
+				.product(name: "LuhnCheck", package: "nl-rdo-app-ios-modules")
 			]),
 		.testTarget(
 			name: "ModelsTests",
 			dependencies: [
 				"Models",
 				.product(name: "TestingShared", package: "TestingShared"),
-				.product(name: "Nimble", package: "Nimble"),
+				.product(name: "Nimble", package: "Nimble")
 			]),
 	]
 )

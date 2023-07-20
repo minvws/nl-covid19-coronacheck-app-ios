@@ -14,7 +14,7 @@ packages:
     branch: main
   BrightFutures:
     github: Thomvis/BrightFutures
-    branch: master
+    majorVersion: 8.2.0
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0

@@ -89,7 +89,7 @@ class VerifierStartScanningViewController: GenericViewController<VerifierStartSc
 					AlertContent(
 						title: L.generalErrorTitle(),
 						subTitle: L.verifierStartOntimeinternet(),
-						okAction: AlertContent.Action.okay
+						okAction: .okay
 					)
 				)
 			}
