@@ -21,7 +21,7 @@ let package = Package(
 		.package(name: "Transport", path: "../Transport"),
 		
 		// External:
-		.package(url: "https://github.com/securing/IOSSecuritySuite", from: "1.9.7"),
+		.package(url: "https://github.com/securing/IOSSecuritySuite", from: "1.9.9"),
 		.package(url: "https://github.com/Thomvis/BrightFutures", from: "8.2.0"),
 		
 		// Testing:
