@@ -12,7 +12,6 @@ public final class Configuration {
 	public enum Release: String {
 		case production
 		case acceptance = "acc"
-		case test
 		case development = "dev"
 	}
 
@@ -35,8 +34,6 @@ public final class Configuration {
 				plistPath = Bundle.main.path(forResource: "configuration-production", ofType: "plist")
 			case .acceptance:
 				plistPath = Bundle.main.path(forResource: "configuration-acceptance", ofType: "plist")
-			case .test:
-				plistPath = Bundle.main.path(forResource: "configuration-test", ofType: "plist")
 			case .development:
 				plistPath = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
 		}
@@ -58,8 +55,8 @@ public final class Configuration {
 	
 	public func getRelease() -> Release {
 
-		guard let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String else { return .test }
-		guard let release = Release(rawValue: networkConfigurationValue.lowercased()) else { return .test }
+		guard let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String else { return .development }
+		guard let release = Release(rawValue: networkConfigurationValue.lowercased()) else { return .development }
 		return release
 	}
 }

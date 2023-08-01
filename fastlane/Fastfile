@@ -154,40 +154,9 @@ platform :ios do
       message: "[TESTFLIGHT] :apple: Successfully distributed iOS #{schemename} app build #{version} (#{build_number}) to TestFlight :rocket:",
     )
 
-  end 
-
-
-  # -- DEPLOYING -- 
-
-  desc "Build and deploy the Holder app for Test via Firebase from CI"
-  lane :deploy_holder_test_ci do
-    deploy(
-      provisioning_profile_path: "fastlane/profiles/CoronaCheck_Holder_Test.mobileprovision",
-      xcodeproj: "CTR.xcodeproj",
-      targetname: "Holder",
-      schemename:  "Holder Test",
-      configuration: "FirebaseTest",
-      provisioningprofilename: "CoronaCheck Holder Test",
-      bundleid: "nl.rijksoverheid.ctr.test",
-      firebaseappid: "1:168257592968:ios:fdf9202f0c3e579b26493d",
-      firebasegroupscsv: "testers"
-    )
   end
 
-  desc "Build and deploy the Verifier app for Test via Firebase from CI"
-  lane :deploy_verifier_test_ci do
-    deploy(
-      provisioning_profile_path: "fastlane/profiles/CoronaCheck_Verifier_Test.mobileprovision",
-      xcodeproj: "CTR.xcodeproj",
-      targetname: "Verifier",
-      schemename:  "Verifier Test",
-      configuration: "FirebaseTest",
-      provisioningprofilename: "CoronaCheck Verifier Test",
-      bundleid: "nl.rijksoverheid.ctr.verifier.test",
-      firebaseappid: "1:168257592968:ios:cb0aec1f7163acbe26493d",
-      firebasegroupscsv: "verifiers"
-    )
-  end
+  # -- DEPLOYING --
 
   desc "Build and deploy the Holder app for Acc via Firebase from CI"
   lane :deploy_holder_acc_ci do
