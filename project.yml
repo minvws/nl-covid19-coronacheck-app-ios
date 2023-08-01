@@ -55,7 +55,6 @@ attributes:
 configs:
   Development: debug
   FirebaseAcceptance: release
-  FirebaseTest: release
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
@@ -108,10 +107,6 @@ targetTemplates:
           NETWORK_CONFIGURATION: ACC
           LOG_LEVEL: error
           SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
-        FirebaseTest:
-          NETWORK_CONFIGURATION: TEST
-          LOG_LEVEL: debug
-          SWIFT_OPTIMIZE_OBJECT_LIFETIME: true
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
           LOG_LEVEL: error
@@ -131,7 +126,6 @@ targetTemplates:
         Development:
           CODE_SIGN_IDENTITY: iPhone Developer
         FirebaseAcceptance:
-        FirebaseTest:
         FirebaseProduction:
         AppStore:
         
@@ -281,12 +275,6 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
-        FirebaseTest:
-          DISPLAY_NAME: "🧪 Test Holder"
-          PRODUCT_NAME: CTR Test
-          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
-          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Test.entitlements
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Holder"
           PRODUCT_NAME: CTR ACC
@@ -318,10 +306,6 @@ targets:
               CFBundleURLSchemes:
                 - coronacheck-dev
             - CFBundleTypeRole: Editor
-              CFBundleURLName: nl.rijksoverheid.ctr.test
-              CFBundleURLSchemes:
-                - coronacheck-test
-            - CFBundleTypeRole: Editor
               CFBundleURLName: nl.rijksoverheid.ctr.acc
               CFBundleURLSchemes:
                 - coronacheck-acc
@@ -350,11 +334,6 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Dev.entitlements
-        FirebaseTest:
-          DISPLAY_NAME: "🧪 Test Scanner"
-          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
-          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Verifier-Test.entitlements
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Acc
@@ -382,10 +361,6 @@ targets:
               CFBundleURLName: nl.rijksoverheid.ctr.verifier.dev
               CFBundleURLSchemes:
                 - coronacheck-verifier-dev
-            - CFBundleTypeRole: Editor
-              CFBundleURLName: nl.rijksoverheid.ctr.verifier.test
-              CFBundleURLSchemes:
-                - coronacheck-verifier-test
             - CFBundleTypeRole: Editor
               CFBundleURLName: nl.rijksoverheid.ctr.verifier.acc
               CFBundleURLSchemes:
@@ -494,13 +469,13 @@ schemes:
           parallelizable: false
         - package: Managers/ManagersTests
           randomExecutionOrder: true
-          parallelizable: false  
+          parallelizable: false
         - package: Models/ModelsTests
           randomExecutionOrder: true
-          parallelizable: false        
+          parallelizable: false
         - package: Persistence/PersistenceTests
           randomExecutionOrder: true
-          parallelizable: false        
+          parallelizable: false
         - package: Resources/ResourcesTests
           randomExecutionOrder: true
           parallelizable: false
@@ -548,13 +523,6 @@ schemes:
     templateAttributes:
       appTargetName: Holder
       configEnvironment: FirebaseAcceptance
-  
-  Holder Test:
-    templates:
-      - ConfigScheme
-    templateAttributes:
-      appTargetName: Holder
-      configEnvironment: FirebaseTest
 
   Holder Production:
     templates:
@@ -585,13 +553,6 @@ schemes:
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: FirebaseAcceptance
-
-  Verifier Test:
-    templates:
-      - ConfigScheme
-    templateAttributes:
-      appTargetName: Verifier
-      configEnvironment: FirebaseTest
 
   Verifier Production:
     templates:

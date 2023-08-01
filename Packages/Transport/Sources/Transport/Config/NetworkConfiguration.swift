@@ -36,23 +36,7 @@ public struct NetworkConfiguration {
 			path: ["v9"]
 		)
 	)
-	
-	public static let test = NetworkConfiguration(
-		name: "TEST",
-		api: .init(
-			scheme: "https",
-			host: AppFlavor.flavor == .holder ? "holder-api.test.coronacheck.nl" : "verifier-api.test.coronacheck.nl",
-			port: nil,
-			path: ["v9"]
-		),
-		cdn: .init(
-			scheme: "https",
-			host: AppFlavor.flavor == .holder ? "holder-api.test.coronacheck.nl" : "verifier-api.test.coronacheck.nl",
-			port: nil,
-			path: ["v9"]
-		)
-	)
-	
+		
 	public static let acceptance = NetworkConfiguration(
 		name: "ACC",
 		api: .init(
