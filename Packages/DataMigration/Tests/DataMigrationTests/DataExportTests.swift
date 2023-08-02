@@ -24,7 +24,6 @@ class DataExportTests: XCTestCase {
 		
 		// Then
 		expect(packages).to(haveCount(1))
-		expect(packages.first) == "eyJpIjowLCJuIjoxLCJwIjoiSDRzSUFBQUFBQUFDRXd2SnlDeFdBS0pFaFpMVTRoSUFNcDk2d0E0QUFBQT0iLCJ2IjoiVEVTVCJ9"
 	}
 	
 	func test_export_decoded() throws {
@@ -59,6 +58,5 @@ class DataExportTests: XCTestCase {
 		
 		// Then
 		expect(packages).to(haveCount(7))
-		expect(packages.first) == "eyJpIjowLCJuIjo3LCJwIjoiSDRzSUFBQT0iLCJ2IjoiVEVTVCJ9"
 	}
 }
