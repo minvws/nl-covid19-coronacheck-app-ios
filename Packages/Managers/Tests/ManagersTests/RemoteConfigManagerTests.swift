@@ -278,7 +278,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(updateObserverReceivedConfiguration) == newConfig
 	}
 
-	func flacky_test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withUnchangedConfig() {
+	func flaky_test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withUnchangedConfig() {
 
 		// Arrange:
 		// Put in place a "previously loaded" config:
@@ -375,7 +375,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(self.sut.isLoading) == false
 	}
 
-	func flacky_test_update_unchangedConfig_returnsFalse_updatesObservers() {
+	func flaky_test_update_unchangedConfig_returnsFalse_updatesObservers() {
 		// Arrange
 		
 		let configuration = RemoteConfiguration.default
