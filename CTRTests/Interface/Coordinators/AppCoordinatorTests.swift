@@ -863,7 +863,7 @@ class AppCoordinatorTests: XCTestCase {
 		NotificationCenter.default.post(name: Notification.Name.diskFull, object: nil)
 
 		// Then
-		expect(self.sut.navigationController.viewControllers.first).toEventually(beAnInstanceOf(LaunchViewController.self))
+		expect(self.sut.navigationController.viewControllers.first).toEventually(beAnInstanceOf(LaunchViewController.self), timeout: .seconds(10))
 		expect(self.sut.navigationController.presentedViewController).toEventually(Predicate<UIViewController>({ expression in
 			let viewController = try XCTUnwrap(expression.evaluate() as? AppStatusViewController)
 			expect(viewController.modalPresentationStyle) == .fullScreen

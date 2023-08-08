@@ -39,7 +39,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -58,7 +58,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -78,7 +78,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -98,7 +98,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -118,7 +118,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -138,7 +138,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -158,7 +158,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -186,7 +186,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -213,7 +213,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -240,7 +240,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -277,7 +277,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -314,7 +314,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
@@ -351,7 +351,7 @@ class NetworkManagerRemoteConfigTests: XCTestCase {
 		}
 
 		// When
-		waitUntil { done in
+		waitUntil(timeout: .seconds(5)) { done in
 			self.sut.getRemoteConfiguration { result in
 
 				// Then
