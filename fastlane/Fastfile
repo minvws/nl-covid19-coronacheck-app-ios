@@ -23,7 +23,8 @@ platform :ios do
   lane :test_ci do
     run_tests(
       app_name: "CTR",
-      device: "iPhone 14",
+      destination: "platform=iOS Simulator,name=iPhone 14,OS=16.4",
+#      device: "iPhone 14",
       project: "CTR.xcodeproj",
       scheme: "Holder Dev",
       reinstall_app: true,
