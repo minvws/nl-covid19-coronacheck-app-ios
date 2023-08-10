@@ -1,15 +1,20 @@
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "08:00"
-    timezone: Europe/Amsterdam
-
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "08:00"
-    timezone: Europe/Amsterdam
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: Europe/Amsterdam
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: Europe/Amsterdam
+  - package-ecosystem: "swift"
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: Europe/Amsterdam
