@@ -116,12 +116,6 @@ extension Coordinator {
 					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.acc.coronacheck.nl/")
 				)
 				allowedDomains.append("web.acc.coronacheck.nl")
-			case .test:
-				releaseAdjustedURL = URL(string: url.absoluteString
-					.replacingOccurrences(of: "https://www.coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
-					.replacingOccurrences(of: "https://coronacheck.nl/", with: "https://web.test.coronacheck.nl/")
-				)
-				allowedDomains.append("web.test.coronacheck.nl")
 		}
 		
 		guard let releaseAdjustedURL else { return }

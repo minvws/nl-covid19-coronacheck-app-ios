@@ -8,7 +8,7 @@ External Dependencies
     https://github.com/1024jp/GzipSwift
 - HTTPStubs - 9.1.0
     https://github.com/AliSoftware/OHHTTPStubs
-- iOS Security - 1.9.7
+- iOS Security - 1.9.9
   https://github.com/securing/IOSSecuritySuite
 - mobileCore 0b1d6d8c2a699449f614e90a0e2e5cc643fa67a1 # v0.4.5
     https://github.com/minvws/nl-covid19-coronacheck-mobile-core
@@ -26,7 +26,7 @@ External Dependencies
     https://github.com/mac-cain13/R.swift.git
 - Snapshot Testing - 1.11.1 
     https://github.com/pointfreeco/swift-snapshot-testing
-- SwiftSoup - 2.6.0
+- SwiftSoup - 2.6.1
     https://github.com/scinfu/SwiftSoup
 
 
@@ -79,7 +79,7 @@ Managers
 - Resources
 - Shared
 - Transport
-- iOS Security - 1.9.7
+- iOS Security - 1.9.9
   https://github.com/securing/IOSSecuritySuite
 - BrightFutures - 8.2.0
     https://github.com/Thomvis/BrightFutures
@@ -131,7 +131,7 @@ ReusableViews
     https://github.com/pointfreeco/swift-snapshot-testing
 
 Shared
-- SwiftSoup - 2.6.0
+- SwiftSoup - 2.6.1
     https://github.com/scinfu/SwiftSoup
 - Reachability - 5.1.0
     https://github.com/ashleymills/Reachability.swift

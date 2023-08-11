@@ -7,7 +7,7 @@ inputs:
   go_version:
     type: string
     required: false
-    default: '1.20.5'
+    default: '1.20.6'
   temp_path:
     type: string
     required: false

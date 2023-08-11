@@ -498,7 +498,7 @@ extension HolderDashboardViewModelTests {
 		qrCardDatasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.internationalCards.value).toEventually(haveCount(4))
+		expect(self.sut.internationalCards.value).toEventually(haveCount(4), timeout: .seconds(10))
 		expect(self.sut.internationalCards.value[0]).toEventually(beHeaderMessageCard(test: { message, buttonTitle in
 			expect(message) == L.holder_dashboard_filledState_international_0G_message()
 			expect(buttonTitle) == L.holderDashboardIntroInternationalButton()

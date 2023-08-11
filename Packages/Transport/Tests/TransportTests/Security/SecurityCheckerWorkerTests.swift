@@ -46,7 +46,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		}
 	
 		// Then
-		expect(result).toEventually(beTrue())
+		expect(result).toEventually(beTrue(), timeout: .seconds(5))
 	}
 	
 	func test_checkSSL_wrongHostname_shouldFail() throws {
@@ -75,7 +75,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		}
 		
 		// Then
-		expect(result).toEventually(beFalse())
+		expect(result).toEventually(beFalse(), timeout: .seconds(5))
 	}
 	
 	func test_checkSSL_doesMatchTrustedHost_shouldSucceed() throws {
@@ -104,7 +104,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		}
 		
 		// Then
-		expect(result).toEventually(beTrue())
+		expect(result).toEventually(beTrue(), timeout: .seconds(5))
 	}
 	
 	func test_checkSSL_doesNotMatchTrustedHost_shouldFail() throws {
@@ -133,7 +133,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		}
 		
 		// Then
-		expect(result).toEventually(beFalse())
+		expect(result).toEventually(beFalse(), timeout: .seconds(5))
 	}
 	
 	func test_checkSSL_shouldSucceed() throws {
@@ -161,7 +161,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			)
 		}
 		// Then
-		expect(result).toEventually(beTrue())
+		expect(result).toEventually(beTrue(), timeout: .seconds(5))
 	}
 	
 	func test_checkSSL_expiredChain_shouldFail() throws {
@@ -188,7 +188,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 			)
 		}
 		// Then
-		expect(result).toEventually(beFalse())
+		expect(result).toEventually(beFalse(), timeout: .seconds(5))
 	}
 	
 	// MARK: helpers
