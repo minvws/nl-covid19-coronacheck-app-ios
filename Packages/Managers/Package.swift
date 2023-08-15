@@ -26,7 +26,7 @@ let package = Package(
 		
 		// Testing:
 		.package(name: "TestingShared", path: "../TestingShared"),
-		.package(url: "https://github.com/Quick/Nimble", from: "10.0.0"),
+		.package(url: "https://github.com/Quick/Nimble", exact: "10.0.0"),
 		.package(url: "https://github.com/ashleymills/Reachability.swift", from: "5.1.0")
 	],
 	targets: [
