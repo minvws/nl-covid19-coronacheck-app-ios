@@ -12,29 +12,32 @@ import TestingShared
 
 class FeatureFlagManagerTests: XCTestCase {
 	
-	private var sut: FeatureFlagManager!
-	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
-	private var appVersionSupplierSpy: AppVersionSupplierSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	
-	override func setUp() {
-		
-		super.setUp()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (FeatureFlagManager, RemoteConfigManagingSpy) {
+			
+		let remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		
-		userSettingsSpy = UserSettingsSpy()
+		let userSettingsSpy = UserSettingsSpy()
 		
-		sut = FeatureFlagManager(
+		let sut = FeatureFlagManager(
 			now: { now },
 			remoteConfigManager: remoteConfigManagerSpy,
 			userSettings: userSettingsSpy
 		)
+		
+		trackForMemoryLeak(instance: remoteConfigManagerSpy, file: file, line: line)
+		trackForMemoryLeak(instance: userSettingsSpy, file: file, line: line)
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, remoteConfigManagerSpy)
 	}
 
 	func test_isVerificationPolicy_1G_enabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicies = ["1G"]
 		
 		// When
@@ -47,6 +50,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isVerificationPolicy_1G_disabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicies = ["3G"]
 		
 		// When
@@ -59,6 +63,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isVerificationPolicy_multiple_1Gdisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicies = ["3G"]
 		
 		// When
@@ -71,6 +76,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isVerificationPolicy_multiple_3Gdisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicies = ["1G"]
 		
 		// When
@@ -83,6 +89,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isVerificationPolicy_multiple_enabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.verificationPolicies = ["3G", "1G"]
 		
 		// When
@@ -95,6 +102,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isGGDEnabled_GGDDisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isGGDEnabled = false
 		
 		// When
@@ -107,6 +115,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isGGDEnabled_defaultToFalseWhenNil() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isGGDEnabled = nil
 		
 		// When
@@ -119,6 +128,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isGGDEnabled_GGDEnabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isGGDEnabled = true
 		
 		// When
@@ -131,6 +141,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isGGDPortalEnabled_GGDPortalDisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isPAPEnabled = false
 		
 		// When
@@ -143,6 +154,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isGGDPortalEnabled_defaultToFalseWhenNil() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isPAPEnabled = nil
 		
 		// When
@@ -155,6 +167,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isGGDPortalEnabled_GGDPortalEnabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isPAPEnabled = true
 		
 		// When
@@ -167,6 +180,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isLunhCheckEnabled_lunhCheckDisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isLuhnCheckEnabled = false
 		
 		// When
@@ -179,6 +193,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isLuhnCheckEnabled_defaultToFalseWhenNil() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isLuhnCheckEnabled = nil
 		
 		// When
@@ -191,6 +206,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isLuhnCheckEnabled_luhnCheckEnabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.isLuhnCheckEnabled = true
 		
 		// When
@@ -203,6 +219,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isMigrateButtonEnabled_migrationButtonEnabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.migrateButtonEnabled = true
 		
 		// When
@@ -215,6 +232,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isMigrateButtonEnabled_migrationButtonDisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.migrateButtonEnabled = false
 		
 		// When
@@ -227,6 +245,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isAddingEventsEnabled_addEventsButtonEnabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.addEventsButtonEnabled = true
 		
 		// When
@@ -239,6 +258,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isAddingEventsEnabled_addEventsButtonDisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.addEventsButtonEnabled = false
 		
 		// When
@@ -251,6 +271,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isScanningEventsEnabled_scanCertificateButtonEnabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.scanCertificateButtonEnabled = true
 		
 		// When
@@ -263,6 +284,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isScanningEventsEnabled_scanCertificateButtonDisabled() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.scanCertificateButtonEnabled = false
 		
 		// When
@@ -275,6 +297,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isInArchiveMode_noArchiveDate() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = nil
 		
 		// When
@@ -287,6 +310,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isInArchiveMode_archiveDateBeforeNow() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		let archiveOnlyDate = Formatter.getDateFrom(dateString8601: "2022-07-01T23:00:00z")
 		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = archiveOnlyDate
 		
@@ -300,6 +324,7 @@ class FeatureFlagManagerTests: XCTestCase {
 	func test_isInArchiveMode_archiveDateAfterNow() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		let archiveOnlyDate = Formatter.getDateFrom(dateString8601: "2021-07-01T23:00:00z")
 		remoteConfigManagerSpy.stubbedStoredConfiguration.archiveOnlyDate = archiveOnlyDate
 		

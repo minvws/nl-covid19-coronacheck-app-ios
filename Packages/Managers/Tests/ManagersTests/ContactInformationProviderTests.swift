@@ -13,20 +13,24 @@ import Nimble
 
 class ContactInformationProviderTests: XCTestCase {
 	
-	private var sut: ContactInformationProvider!
-	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
-	
-	override func setUp() {
-		
-		super.setUp()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (ContactInformationProvider, RemoteConfigManagingSpy) {
+			
+		let remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
-		sut = ContactInformationProvider(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = ContactInformationProvider(remoteConfigManager: remoteConfigManagerSpy)
+		
+		trackForMemoryLeak(instance: remoteConfigManagerSpy, file: file, line: line)
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, remoteConfigManagerSpy)
 	}
 	
 	func test_properties_withContent() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
 			phoneNumber: "T E S T",
 			phoneNumberAbroad: "T E S T 2",
@@ -39,16 +43,17 @@ class ContactInformationProviderTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
-		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
-		expect(self.sut.openingDays) == "maandag t/m dinsdag"
-		expect(self.sut.startHour) == "07:00"
-		expect(self.sut.endHour) == "08:00"
+		expect(sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(sut.openingDays) == "maandag t/m dinsdag"
+		expect(sut.startHour) == "07:00"
+		expect(sut.endHour) == "08:00"
 	}
 	
 	func test_properties_everyDay() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
 			phoneNumber: "T E S T",
 			phoneNumberAbroad: "T E S T 2",
@@ -61,16 +66,17 @@ class ContactInformationProviderTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
-		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
-		expect(self.sut.openingDays) == "elke dag"
-		expect(self.sut.startHour) == "07:00"
-		expect(self.sut.endHour) == "08:00"
+		expect(sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(sut.openingDays) == "elke dag"
+		expect(sut.startHour) == "07:00"
+		expect(sut.endHour) == "08:00"
 	}
 
 	func test_properties_startDayOutOfScope() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
 			phoneNumber: "T E S T",
 			phoneNumberAbroad: "T E S T 2",
@@ -83,16 +89,17 @@ class ContactInformationProviderTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
-		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
-		expect(self.sut.openingDays) == "zondag t/m donderdag"
-		expect(self.sut.startHour) == "07:00"
-		expect(self.sut.endHour) == "08:00"
+		expect(sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(sut.openingDays) == "zondag t/m donderdag"
+		expect(sut.startHour) == "07:00"
+		expect(sut.endHour) == "08:00"
 	}
 	
 	func test_properties_endDayOutOfScope() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = ContactInformation(
 			phoneNumber: "T E S T",
 			phoneNumberAbroad: "T E S T 2",
@@ -105,25 +112,26 @@ class ContactInformationProviderTests: XCTestCase {
 		// When
 		
 		// Then
-		expect(self.sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
-		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
-		expect(self.sut.openingDays) == "elke dag"
-		expect(self.sut.startHour) == "07:00"
-		expect(self.sut.endHour) == "08:00"
+		expect(sut.phoneNumberLink) == "<a href=\"tel:TEST\">T E S T</a>"
+		expect(sut.phoneNumberAbroadLink) == "<a href=\"tel:TEST2\">T E S T 2</a>"
+		expect(sut.openingDays) == "elke dag"
+		expect(sut.startHour) == "07:00"
+		expect(sut.endHour) == "08:00"
 	}
 	
 	func test_properties_fallbackContent() {
 		
 		// Given
+		let (sut, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration.contactInformation = nil
 		
 		// When
 		
 		// Then
-		expect(self.sut.phoneNumberLink) == "<a href=\"tel:0800-1421\">0800 - 1421</a>"
-		expect(self.sut.phoneNumberAbroadLink) == "<a href=\"tel:+31707503720\">+31 70 750 37 20</a>"
-		expect(self.sut.openingDays) == "elke dag"
-		expect(self.sut.startHour) == "08:00"
-		expect(self.sut.endHour) == "18:00"
+		expect(sut.phoneNumberLink) == "<a href=\"tel:0800-1421\">0800 - 1421</a>"
+		expect(sut.phoneNumberAbroadLink) == "<a href=\"tel:+31707503720\">+31 70 750 37 20</a>"
+		expect(sut.openingDays) == "elke dag"
+		expect(sut.startHour) == "08:00"
+		expect(sut.endHour) == "18:00"
 	}
 }

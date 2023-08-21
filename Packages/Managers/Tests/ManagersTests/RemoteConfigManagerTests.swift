@@ -14,30 +14,26 @@ import Reachability
 @testable import Persistence
 @testable import Managers
 
+// swiftlint:disable type_body_length
 class RemoteConfigManagerTests: XCTestCase {
 	
 	// MARK: - Setup
-	private var sut: RemoteConfigManager!
-	private var networkSpy: NetworkSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	private var reachabilitySpy: ReachabilitySpy!
-	private var secureUserSettingsSpy: SecureUserSettingsSpy!
-	private var appVersionSupplierSpy: AppVersionSupplierSpy!
-	private var fileStorageSpy: FileStorageSpy!
 	
-	override func setUp() {
-
-		networkSpy = NetworkSpy()
-		userSettingsSpy = UserSettingsSpy()
-		reachabilitySpy = ReachabilitySpy()
-		secureUserSettingsSpy = SecureUserSettingsSpy()
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (RemoteConfigManager, NetworkSpy, UserSettingsSpy, ReachabilitySpy, SecureUserSettingsSpy, AppVersionSupplierSpy) {
+			
+		let networkSpy = NetworkSpy()
+		let userSettingsSpy = UserSettingsSpy()
+		let reachabilitySpy = ReachabilitySpy()
+		let secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedStoredConfiguration = .default
-		appVersionSupplierSpy = AppVersionSupplierSpy(version: "1", build: "1")
-		fileStorageSpy = FileStorageSpy()
+		let appVersionSupplierSpy = AppVersionSupplierSpy(version: "1", build: "1")
+		let fileStorageSpy = FileStorageSpy()
 		
 		fileStorageSpy.stubbedReadResult = nil
 		
-		sut = RemoteConfigManager(
+		let sut = RemoteConfigManager(
 			now: { now },
 			userSettings: userSettingsSpy,
 			reachability: reachabilitySpy,
@@ -47,12 +43,15 @@ class RemoteConfigManagerTests: XCTestCase {
 			appVersionSupplier: appVersionSupplierSpy
 		)
 		
-		super.setUp()
-	}
-	
-	override func tearDown() {
+		trackForMemoryLeak(instance: userSettingsSpy, file: file, line: line)
+		trackForMemoryLeak(instance: reachabilitySpy, file: file, line: line)
+		trackForMemoryLeak(instance: networkSpy, file: file, line: line)
+		trackForMemoryLeak(instance: secureUserSettingsSpy, file: file, line: line)
+		trackForMemoryLeak(instance: fileStorageSpy, file: file, line: line)
+		trackForMemoryLeak(instance: appVersionSupplierSpy, file: file, line: line)
+		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
-		super.tearDown()
+		return (sut, networkSpy, userSettingsSpy, reachabilitySpy, secureUserSettingsSpy, appVersionSupplierSpy)
 	}
 
 	// MARK: - Tests
@@ -62,15 +61,16 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
+			let (sut, networkSpy, _, _, _, _) = self.makeSUT()
+			networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 			// When
-			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
+			sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
 				// Then
-				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(networkSpy.invokedGetRemoteConfiguration) == true
 				expect(state.isFailure) == true
 				done()
 			})
@@ -82,14 +82,15 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
+			let (sut, networkSpy, _, _, _, _) = self.makeSUT()
+			networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 			// When
-			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
+			sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
 				// Then
-				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(networkSpy.invokedGetRemoteConfiguration) == true
 				expect(state.isSuccess) == true
 				done()
 			})
@@ -97,7 +98,9 @@ class RemoteConfigManagerTests: XCTestCase {
 	}
 
 	func test_update_withinTTL_callsbackImmediately() {
+		
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _, _) = makeSUT()
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(10 * minutes * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 		var hitCallback = false
@@ -112,13 +115,15 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(hitCallback) == true
-		expect(self.networkSpy.invokedGetRemoteConfiguration) == true
-		expect(self.sut.storedConfiguration) == .default
-		expect(self.sut.isLoading) == false
+		expect(networkSpy.invokedGetRemoteConfiguration) == true
+		expect(sut.storedConfiguration) == .default
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_notWithinTTL_doesNotCallbackImmediately() {
+		
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _, _) = makeSUT()
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 		var didNotHitCallback = true
@@ -130,13 +135,15 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didNotHitCallback) == true
-		expect(self.networkSpy.invokedGetRemoteConfiguration) == true
-		expect(self.sut.storedConfiguration) == .default
-		expect(self.sut.isLoading) == false
+		expect(networkSpy.invokedGetRemoteConfiguration) == true
+		expect(sut.storedConfiguration) == .default
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_neverFetchedBefore_doesNotCallbackImmediately() {
+		
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _, _) = makeSUT()
 		userSettingsSpy.stubbedConfigFetchedTimestamp = nil
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 		var didNotHitCallback = true
@@ -148,14 +155,15 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Assert
 		expect(didNotHitCallback) == true
-		expect(self.networkSpy.invokedGetRemoteConfiguration) == true
-		expect(self.sut.storedConfiguration) == .default
-		expect(self.sut.isLoading) == false
+		expect(networkSpy.invokedGetRemoteConfiguration) == true
+		expect(sut.storedConfiguration) == .default
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_butOutsideMinimumRefreshInterval_doesRefresh() throws {
 
 		// Arrange:
+		let (sut, networkSpy, userSettingsSpy, _, secureUserSettingsSpy, _) = makeSUT()
 		// Put in place a "previously loaded" config:
 		let existingStoredConfig = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
@@ -186,13 +194,14 @@ class RemoteConfigManagerTests: XCTestCase {
 			expect($0) == (true, newConfig)
 		})
 		
-		expect(self.secureUserSettingsSpy.invokedStoredConfigurationList.last) == newConfig
-		expect(self.sut.isLoading) == false
+		expect(secureUserSettingsSpy.invokedStoredConfigurationList.last) == newConfig
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_doesNotRefresh() {
 
 		// Arrange:
+		let (sut, networkSpy, userSettingsSpy, _, secureUserSettingsSpy, _) = makeSUT()
 		// Put in place a "previously loaded" config:
 		let existingStoredConfig = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
@@ -223,13 +232,14 @@ class RemoteConfigManagerTests: XCTestCase {
 			expect($0) == (false, existingStoredConfig)
 		})
 
-		expect(self.secureUserSettingsSpy.invokedStoredConfigurationSetter) == false
-		expect(self.sut.isLoading) == false
+		expect(secureUserSettingsSpy.invokedStoredConfigurationSetter) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withNewConfig() {
 
 		// Arrange:
+		let (sut, networkSpy, userSettingsSpy, _, secureUserSettingsSpy, _) = makeSUT()
 		// Put in place a "previously loaded" config:
 		let existingStoredConfig = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash
@@ -271,8 +281,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			expect($0) == (true, newConfig)
 		})
 
-		expect(self.secureUserSettingsSpy.invokedStoredConfiguration) == newConfig
-		expect(self.sut.isLoading) == false
+		expect(secureUserSettingsSpy.invokedStoredConfiguration) == newConfig
+		expect(sut.isLoading) == false
 
 		expect(reloadObserverReceivedConfiguration) == newConfig
 		expect(updateObserverReceivedConfiguration) == newConfig
@@ -281,6 +291,7 @@ class RemoteConfigManagerTests: XCTestCase {
 	func flaky_test_update_withinTTL_withinMinimumRefreshInterval_onAppFirstLaunch_doesRefresh_withUnchangedConfig() {
 
 		// Arrange:
+		let (sut, networkSpy, userSettingsSpy, _, secureUserSettingsSpy, appVersionSupplierSpy) = makeSUT()
 		// Put in place a "previously loaded" config:
 		let existingStoredConfig = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedHash = existingStoredConfig.hash! + appVersionSupplierSpy.getCurrentBuild() + appVersionSupplierSpy.getCurrentVersion()
@@ -319,27 +330,29 @@ class RemoteConfigManagerTests: XCTestCase {
 			return
 		}
 
-		expect(self.sut.storedConfiguration) == existingStoredConfig
-		expect(self.sut.isLoading) == false
+		expect(sut.storedConfiguration) == existingStoredConfig
+		expect(sut.isLoading) == false
 
 		expect(reloadObserverReceivedConfiguration) == existingStoredConfig
 		expect(updateObserverReceivedConfiguration) == nil // no update so no callback expected here.
 	}
 
 	func test_doesNotLoadWhenAlreadyLoading() {
-		// Arrange
 
+		// Arrange
+		let (sut, networkSpy, _, _, _, _) = makeSUT()
 		// Act
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
-		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 1
+		expect(networkSpy.invokedGetRemoteConfigurationCount) == 1
 	}
 
 	func test_networkFailure_callsback_networkFailure() {
 
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _, _) = makeSUT()
 		let serverError = ServerError.error(statusCode: 500, response: nil, error: .invalidResponse)
 		let result: Result<(RemoteConfiguration, Data, URLResponse), ServerError> = .failure(serverError)
 
@@ -359,11 +372,13 @@ class RemoteConfigManagerTests: XCTestCase {
 			default:
 				assertionFailure("results didn't match")
 		}
-		expect(self.sut.isLoading) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_updatesConfigFetchedTimestamp() {
+		
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _, _) = makeSUT()
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
 		networkSpy.stubbedGetRemoteConfigurationCompletionResult = (Result.success((RemoteConfiguration.default, RemoteConfiguration.default.data, URLResponse())), ())
 
@@ -371,13 +386,14 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
-		expect(self.userSettingsSpy.invokedConfigFetchedTimestamp) == now.timeIntervalSince1970
-		expect(self.sut.isLoading) == false
+		expect(userSettingsSpy.invokedConfigFetchedTimestamp) == now.timeIntervalSince1970
+		expect(sut.isLoading) == false
 	}
 
 	func flaky_test_update_unchangedConfig_returnsFalse_updatesObservers() {
+
 		// Arrange
-		
+		let (sut, networkSpy, userSettingsSpy, _, _, appVersionSupplierSpy) = makeSUT()
 		let configuration = RemoteConfiguration.default
 		userSettingsSpy.stubbedConfigFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
 		userSettingsSpy.stubbedConfigFetchedHash = configuration.hash! + appVersionSupplierSpy.getCurrentBuild() + appVersionSupplierSpy.getCurrentVersion()
@@ -407,11 +423,13 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(configuration))
 		expect(updateObserverReceivedConfiguration).toEventually(beNil())
-		expect(self.sut.isLoading) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_changedConfig_returnsTrue_updatesObservers() {
+	
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _, _) = makeSUT()
 		let newConfiguration: RemoteConfiguration = {
 			var config = RemoteConfiguration.default
 			config.recommendedVersion = "2.0.0"
@@ -442,22 +460,25 @@ class RemoteConfigManagerTests: XCTestCase {
 		})
 		expect(reloadObserverReceivedConfiguration).toEventually(equal(newConfiguration))
 		expect(updateObserverReceivedConfiguration).toEventually(equal(newConfiguration))
-		expect(self.sut.isLoading) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_reachability() {
 
 		// Arrange
-		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 0
+		let (sut, networkSpy, _, reachabilitySpy, _, _) = makeSUT()
+		expect(networkSpy.invokedGetRemoteConfigurationCount) == 0
 		sut.registerTriggers()
 
 		// Act
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
 
 		// Assert
-		expect(self.networkSpy.invokedGetRemoteConfigurationCount) == 1
+		expect(networkSpy.invokedGetRemoteConfigurationCount) == 1
 	}
 }
+
+// swiftlint:enable type_body_length
 
 extension RemoteConfiguration {
 

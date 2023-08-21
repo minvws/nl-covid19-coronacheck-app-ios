@@ -13,27 +13,30 @@ import Nimble
 @testable import Shared
 
 class CouplingManagerTests: XCTestCase {
-
-	private var sut: CouplingManager!
-	private var networkManagerSpy: NetworkSpy!
-	private var cryptoManagerSpy: CryptoManagerSpy!
-
-	override func setUp() {
-		super.setUp()
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (CouplingManager, NetworkSpy, CryptoManagerSpy) {
+			
+		let networkManagerSpy = NetworkSpy()
+		let cryptoManagerSpy = CryptoManagerSpy()
+		let sut = CouplingManager(cryptoManager: cryptoManagerSpy, networkManager: networkManagerSpy)
 		
-		networkManagerSpy = NetworkSpy()
-		cryptoManagerSpy = CryptoManagerSpy()
-		sut = CouplingManager(cryptoManager: cryptoManagerSpy, networkManager: networkManagerSpy)
+		trackForMemoryLeak(instance: networkManagerSpy, file: file, line: line)
+		trackForMemoryLeak(instance: cryptoManagerSpy, file: file, line: line)
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, networkManagerSpy, cryptoManagerSpy)
 	}
 	
 	func test_checkCouplingStatus() {
 		
-		// Given
-		networkManagerSpy.stubbedCheckCouplingStatusCompletionResult = (.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
-		
 		waitUntil { done in
+			// Given
+			let (sut, networkManagerSpy, _) = self.makeSUT()
+			networkManagerSpy.stubbedCheckCouplingStatusCompletionResult = (.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 			// When
-			self.sut.checkCouplingStatus(dcc: "test", couplingCode: "test") { result in
+			sut.checkCouplingStatus(dcc: "test", couplingCode: "test") { result in
 				
 				// Then
 				expect(result.isFailure) == true
@@ -46,6 +49,7 @@ class CouplingManagerTests: XCTestCase {
 	func test_convert_noCredentials() {
 		
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
 		
 		// When
@@ -59,6 +63,7 @@ class CouplingManagerTests: XCTestCase {
 	func test_convert() {
 		
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		
 		// When

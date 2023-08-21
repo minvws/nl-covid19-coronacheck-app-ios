@@ -14,15 +14,25 @@ import Nimble
 
 class MappingManagerTests: XCTestCase {
 	
-	private var sut: MappingManager!
 	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
-	
+
 	override func setUp() {
-		
+
 		super.setUp()
 		remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 	}
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> MappingManager {
+			
+			let sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+			
+			trackForMemoryLeak(instance: sut, file: file, line: line)
+			
+			return sut
+		}
 	
 	// MARK: getProviderIdentifierMapping
 
@@ -32,7 +42,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.providerIdentifiers = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getProviderIdentifierMapping("Test")
@@ -47,7 +57,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.providerIdentifiers = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getProviderIdentifierMapping("wrong")
@@ -60,7 +70,7 @@ class MappingManagerTests: XCTestCase {
 		
 		// Given
 		remoteConfigManagerSpy.stubbedStoredConfiguration.providerIdentifiers = nil
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getProviderIdentifierMapping("Test")
@@ -74,7 +84,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayIssuer() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayIssuer("Test", country: "NL")
@@ -86,7 +96,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayIssuer_translated_nl() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayIssuer("Ministry of Health Welfare and Sport", country: "NL")
@@ -98,7 +108,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayIssuer_translated_nld() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayIssuer("Ministry of Health Welfare and Sport", country: "NLD")
@@ -110,7 +120,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayIssuer_germanIssuer() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayIssuer("Ministry of Health Welfare and Sport", country: "DE")
@@ -124,7 +134,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_nl() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("NL", languageCode: "nl")
@@ -136,7 +146,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_nld() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("NLD", languageCode: "nl")
@@ -148,7 +158,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_germany() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("DE", languageCode: "nl")
@@ -160,7 +170,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_belgium() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("BE", languageCode: "nl")
@@ -172,7 +182,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_other() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("XX", languageCode: "nl")
@@ -184,7 +194,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_nl_english() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("NL", languageCode: "en")
@@ -196,7 +206,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_nld_english() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("NLD", languageCode: "en")
@@ -208,7 +218,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_germany_english() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("DE", languageCode: "en")
@@ -220,7 +230,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_belgium_english() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("BE", languageCode: "en")
@@ -232,7 +242,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getBilingualDisplayCountry_other_english() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getBilingualDisplayCountry("XX", languageCode: "en")
@@ -246,7 +256,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayCountry_nl() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayCountry("NL")
@@ -258,7 +268,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayCountry_nld() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayCountry("NLD")
@@ -270,7 +280,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayCountry_germany() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayCountry("DE")
@@ -282,7 +292,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayCountry_belgium() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayCountry("BE")
@@ -294,7 +304,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayCountry_other() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayCountry("XX")
@@ -308,7 +318,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayFacility() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayFacility("Test")
@@ -320,7 +330,7 @@ class MappingManagerTests: XCTestCase {
 	func test_getDisplayFacility_translated() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getDisplayFacility("Facility approved by the State of The Netherlands")
@@ -337,7 +347,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euTestTypes = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getTestType("Test")
@@ -352,7 +362,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euTestTypes = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getTestType("Wrong")
@@ -369,7 +379,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euTestNames = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getTestName("Test")
@@ -384,7 +394,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euTestNames = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getTestName("Wrong")
@@ -401,7 +411,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euTestManufacturers = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getTestManufacturer("Test")
@@ -416,7 +426,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euTestManufacturers = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getTestManufacturer("Wrong")
@@ -430,7 +440,7 @@ class MappingManagerTests: XCTestCase {
 	func test_isRatTest_rat() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.isRatTest("LP217198-3")
@@ -442,7 +452,7 @@ class MappingManagerTests: XCTestCase {
 	func test_isRatTest_naat() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.isRatTest("LP6464-4")
@@ -454,7 +464,7 @@ class MappingManagerTests: XCTestCase {
 	func test_isRatTest_other() {
 		
 		// Given
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.isRatTest("test")
@@ -478,7 +488,7 @@ class MappingManagerTests: XCTestCase {
 				marketingAuthorizationHolder: "ma"
 			)
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getHpkData("Test")
@@ -504,7 +514,7 @@ class MappingManagerTests: XCTestCase {
 				marketingAuthorizationHolder: "ma"
 			)
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getHpkData("Wrong")
@@ -521,7 +531,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euBrands = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getVaccinationBrand("Test")
@@ -536,7 +546,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euBrands = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getVaccinationBrand("Wrong")
@@ -553,7 +563,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euVaccinationTypes = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getVaccinationType("Test")
@@ -568,7 +578,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euVaccinationTypes = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getVaccinationType("Wrong")
@@ -585,7 +595,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euManufacturers = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getVaccinationManufacturer("Test")
@@ -600,7 +610,7 @@ class MappingManagerTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration.euManufacturers = [
 			Mapping(code: "Test", name: "Test Corona Check")
 		]
-		sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		let sut = makeSUT()
 		
 		// When
 		let mapped = sut.getVaccinationManufacturer("Wrong")
