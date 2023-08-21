@@ -52,7 +52,7 @@ class WalletManagerTests: XCTestCase {
 	func test_initializer_withExistingWallet() {
 
 		// Given
-		var (_, dataStoreManager, _) = makeSUT()
+		let (_, dataStoreManager, _) = makeSUT()
 		var wallet: Wallet?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -64,7 +64,7 @@ class WalletManagerTests: XCTestCase {
 			let exitingWallet = Wallet(label: WalletManager.walletName, managedContext: context)
 
 			// When
-			let sut = WalletManager(dataStoreManager: dataStoreManager)
+			_ = WalletManager(dataStoreManager: dataStoreManager)
 			wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
 
 			// Then
