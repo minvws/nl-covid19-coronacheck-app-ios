@@ -402,7 +402,7 @@ extension GreenCardModel {
 	}
 }
 
-private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
+private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Nimble.Predicate<ShowQRItemView.VisibilityState> {
 	return Predicate.define("be .visible with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .visible(qrImage: image) = actual {
@@ -412,7 +412,7 @@ private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicat
 		return PredicateResult(status: .fail, message: message)
 	}
 }
-private func beOverlay(test: @escaping (UIImage) -> Void = { _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
+private func beOverlay(test: @escaping (UIImage) -> Void = { _ in }) -> Nimble.Predicate<ShowQRItemView.VisibilityState> {
 	return Predicate.define("be .overlay with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .overlay(qrImage: image) = actual {
@@ -422,7 +422,7 @@ private func beOverlay(test: @escaping (UIImage) -> Void = { _ in }) -> Predicat
 		return PredicateResult(status: .fail, message: message)
 	}
 }
-private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<ShowQRItemView.VisibilityState> {
+private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Nimble.Predicate<ShowQRItemView.VisibilityState> {
 	return Predicate.define("be .screenshotBlocking with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .screenshotBlocking(timeRemainingText, voiceoverTimeRemainingText) = actual {

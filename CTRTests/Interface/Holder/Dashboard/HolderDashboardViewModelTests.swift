@@ -74,7 +74,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 // MARK: - Nimble Matchers for `HolderDashboardViewController.Card` enum cases
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
 
-func beEmptyStateDescription(test: @escaping (String, String?) -> Void = { _, _  in }) -> Predicate<HolderDashboardViewController.Card> {
+func beEmptyStateDescription(test: @escaping (String, String?) -> Void = { _, _  in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .emptyStateDescription with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .emptyStateDescription(message1, buttonTitle1) = actual {
@@ -85,7 +85,7 @@ func beEmptyStateDescription(test: @escaping (String, String?) -> Void = { _, _ 
 	}
 }
 
-func beEmptyStatePlaceholderImage(test: @escaping (UIImage?, String) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beEmptyStatePlaceholderImage(test: @escaping (UIImage?, String) -> Void = { _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .emptyStatePlaceholderImage with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .emptyStatePlaceholderImage(image, title1) = actual {
@@ -96,7 +96,7 @@ func beEmptyStatePlaceholderImage(test: @escaping (UIImage?, String) -> Void = {
 	}
 }
 
-func beHeaderMessageCard(test: @escaping (String, String?) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beHeaderMessageCard(test: @escaping (String, String?) -> Void = { _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .headerMessage with matching value") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .headerMessage(message1, buttonTitle1) = actual {
@@ -107,7 +107,7 @@ func beHeaderMessageCard(test: @escaping (String, String?) -> Void = { _, _ in }
 	}
 }
 
-func beEuropeanUnionQRCard(test: @escaping (String, Int, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?, HolderDashboardViewController.Card.Error?) -> Void = { _, _, _, _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beEuropeanUnionQRCard(test: @escaping (String, Int, (Date) -> [HolderDashboardViewController.ValidityText], Bool, () -> Void, ((Date) -> String?)?, HolderDashboardViewController.Card.Error?) -> Void = { _, _, _, _, _, _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .europeanUnionQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .europeanUnionQR(title, stackSize, validityTextEvaluator, isLoading, didTapViewQR, _, expiryCountdownEvaluator, error) = actual {
@@ -118,7 +118,7 @@ func beEuropeanUnionQRCard(test: @escaping (String, Int, (Date) -> [HolderDashbo
 	}
 }
 
-func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .expiredQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .expiredQR(message2, didTapClose) = actual {
@@ -129,7 +129,7 @@ func beExpiredQRCard(test: @escaping (String, () -> Void) -> Void = { _, _ in })
 	}
 }
 
-func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .configAlmostOutOfDate with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .configAlmostOutOfDate(message2, callToActionButtonText, didTapCallToAction) = actual {
@@ -140,7 +140,7 @@ func beConfigurationAlmostOutOfDateCard(test: @escaping (String, String, () -> V
 	}
 }
 
-func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beRecommendedUpdateCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .recommendedUpdate(message2, callToActionButtonText, didTapCallToAction) = actual {
@@ -151,7 +151,7 @@ func beRecommendedUpdateCard(test: @escaping (String, String, () -> Void) -> Voi
 	}
 }
 
-func beExportReminderCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beExportReminderCard(test: @escaping (String, String, () -> Void) -> Void = { _, _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beExportReminderCard with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .exportReminder(message2, callToActionButtonText, didTapCallToAction) = actual {
@@ -162,7 +162,7 @@ func beExportReminderCard(test: @escaping (String, String, () -> Void) -> Void =
 	}
 }
 
-func beAddCertificateCard(test: @escaping (String, () -> Void) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beAddCertificateCard(test: @escaping (String, () -> Void) -> Void = { _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beAddCertificateCardCard with matching value") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .addCertificate(title, didTapAdd) = actual {
@@ -174,7 +174,7 @@ func beAddCertificateCard(test: @escaping (String, () -> Void) -> Void = { _, _ 
 }
 
 /// title, buttonText, didTapCallToAction, didTapClose
-func beDisclosurePolicyInformationCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+func beDisclosurePolicyInformationCard(test: @escaping (String, String, () -> Void, () -> Void) -> Void = { _, _, _, _ in }) -> Nimble.Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .beAddCertificateCardCard with matching value") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .disclosurePolicyInformation(title, buttonText, _, didTapCallToAction, didTapClose) = actual {
