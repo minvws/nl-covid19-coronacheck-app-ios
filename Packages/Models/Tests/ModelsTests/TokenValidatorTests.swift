@@ -9,6 +9,7 @@ import XCTest
 import Shared
 import Nimble
 import Models
+import TestingShared
 
 class TokenValidatorTests: XCTestCase {
 	
