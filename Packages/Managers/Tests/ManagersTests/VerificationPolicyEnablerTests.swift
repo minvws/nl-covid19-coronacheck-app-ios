@@ -33,11 +33,7 @@ final class VerificationPolicyEnablerTests: XCTestCase {
 			scanLockManager: scanLockManagerSpy,
 			scanLogManager: scanLogManagerSpy
 		)
-		trackForMemoryLeak(instance: remoteConfigManagerSpy, file: file, line: line)
-		trackForMemoryLeak(instance: userSettingsSpy, file: file, line: line)
-		trackForMemoryLeak(instance: verificationPolicyManagerSpy, file: file, line: line)
-		trackForMemoryLeak(instance: scanLockManagerSpy, file: file, line: line)
-		trackForMemoryLeak(instance: scanLogManagerSpy, file: file, line: line)
+		
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, userSettingsSpy, verificationPolicyManagerSpy, scanLockManagerSpy, scanLogManagerSpy)

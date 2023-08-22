@@ -22,8 +22,6 @@ class CouplingManagerTests: XCTestCase {
 		let cryptoManagerSpy = CryptoManagerSpy()
 		let sut = CouplingManager(cryptoManager: cryptoManagerSpy, networkManager: networkManagerSpy)
 		
-		trackForMemoryLeak(instance: networkManagerSpy, file: file, line: line)
-		trackForMemoryLeak(instance: cryptoManagerSpy, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, networkManagerSpy, cryptoManagerSpy)

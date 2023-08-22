@@ -26,13 +26,13 @@ class MappingManagerTests: XCTestCase {
 	private func makeSUT(
 		file: StaticString = #filePath,
 		line: UInt = #line) -> MappingManager {
-			
-			let sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
-			
-			trackForMemoryLeak(instance: sut, file: file, line: line)
-			
-			return sut
-		}
+		
+		let sut = MappingManager(remoteConfigManager: remoteConfigManagerSpy)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return sut
+	}
 	
 	// MARK: getProviderIdentifierMapping
 

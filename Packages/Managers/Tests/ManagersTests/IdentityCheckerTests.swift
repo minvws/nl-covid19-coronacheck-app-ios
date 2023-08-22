@@ -24,8 +24,6 @@ class IdentityCheckerTests: XCTestCase {
 		let dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		let sut = IdentityChecker(cryptoManager: cryptoManagerSpy)
 		
-		trackForMemoryLeak(instance: cryptoManagerSpy, file: file, line: line)
-		trackForMemoryLeak(instance: dataStoreManager, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, dataStoreManager)

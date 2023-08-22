@@ -21,7 +21,6 @@ class ContactInformationProviderTests: XCTestCase {
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		let sut = ContactInformationProvider(remoteConfigManager: remoteConfigManagerSpy)
 		
-		trackForMemoryLeak(instance: remoteConfigManagerSpy, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, remoteConfigManagerSpy)

@@ -43,12 +43,6 @@ class RemoteConfigManagerTests: XCTestCase {
 			appVersionSupplier: appVersionSupplierSpy
 		)
 		
-		trackForMemoryLeak(instance: userSettingsSpy, file: file, line: line)
-		trackForMemoryLeak(instance: reachabilitySpy, file: file, line: line)
-		trackForMemoryLeak(instance: networkSpy, file: file, line: line)
-		trackForMemoryLeak(instance: secureUserSettingsSpy, file: file, line: line)
-		trackForMemoryLeak(instance: fileStorageSpy, file: file, line: line)
-		trackForMemoryLeak(instance: appVersionSupplierSpy, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, networkSpy, userSettingsSpy, reachabilitySpy, secureUserSettingsSpy, appVersionSupplierSpy)

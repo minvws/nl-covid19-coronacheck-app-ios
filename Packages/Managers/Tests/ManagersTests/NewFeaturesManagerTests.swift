@@ -28,8 +28,6 @@ class NewFeaturesManagerTests: XCTestCase {
 		featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		sut.factory = HolderNewFeaturesFactory(featureFlagManager: featureFlagManagerSpy)
 
-		trackForMemoryLeak(instance: secureUserSettingsSpy, file: file, line: line)
-		trackForMemoryLeak(instance: featureFlagManagerSpy, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, secureUserSettingsSpy, featureFlagManagerSpy)

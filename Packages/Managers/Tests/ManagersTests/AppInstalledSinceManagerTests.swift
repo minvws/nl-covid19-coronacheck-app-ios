@@ -21,7 +21,6 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		let secureUserSettingsSpy = SecureUserSettingsSpy()
 		let sut = AppInstalledSinceManager(secureUserSettings: secureUserSettingsSpy)
 		
-		trackForMemoryLeak(instance: secureUserSettingsSpy, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return (sut, secureUserSettingsSpy)

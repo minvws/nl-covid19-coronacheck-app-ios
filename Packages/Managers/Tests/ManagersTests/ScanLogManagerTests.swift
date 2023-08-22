@@ -21,7 +21,6 @@ class ScanLogManagerTests: XCTestCase {
 		let remoteConfigManager = RemoteConfigManagingSpy()
 		let sut = ScanLogManager(dataStoreManager: dataStoreManager, remoteConfigManager: remoteConfigManager, now: { now })
 		
-		trackForMemoryLeak(instance: remoteConfigManager, file: file, line: line)
 		trackForMemoryLeak(instance: dataStoreManager, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		

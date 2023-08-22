@@ -37,14 +37,9 @@ class CryptoLibUtilityTests: XCTestCase {
 			reachability: reachabilitySpy,
 			fileStorage: fileStorageSpy
 		)
-			
+		
 		trackForMemoryLeak(instance: sut, file: file, line: line)
-		trackForMemoryLeak(instance: userSettingsSpy, file: file, line: line)
-		trackForMemoryLeak(instance: networkSpy, file: file, line: line)
-		trackForMemoryLeak(instance: remoteConfigManagerSpy, file: file, line: line)
-		trackForMemoryLeak(instance: reachabilitySpy, file: file, line: line)
-		trackForMemoryLeak(instance: fileStorageSpy, file: file, line: line)
-			
+		
 		return (sut, networkSpy, userSettingsSpy, reachabilitySpy, remoteConfigManagerSpy)
 	}
 

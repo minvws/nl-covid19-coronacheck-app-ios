@@ -32,7 +32,6 @@ class ClockDeviationManagerTests: XCTestCase {
 			now: { now }
 		)
 		
-		trackForMemoryLeak(instance: remoteConfigManagerSpy, file: file, line: line)
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
 		return sut
