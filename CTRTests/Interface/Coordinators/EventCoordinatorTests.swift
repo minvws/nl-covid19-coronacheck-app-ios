@@ -13,20 +13,18 @@ import CoronaCheckUI
 
 class EventCoordinatorTests: XCTestCase {
 	
-	private var sut: EventCoordinator!
-	private var navigationSpy: NavigationControllerSpy!
-	private var eventFlowDelegateSpy: EventFlowDelegateSpy!
-	private var environmentSpies: EnvironmentSpies!
-	private var window = UIWindow()
-	
-	override func setUp() {
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (EventCoordinator, NavigationControllerSpy, EventFlowDelegateSpy, EnvironmentSpies) {
 		
-		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
-		navigationSpy = NavigationControllerSpy()
-		eventFlowDelegateSpy = EventFlowDelegateSpy()
+		let environmentSpies = setupEnvironmentSpies()
+		let navigationSpy = NavigationControllerSpy()
+		let eventFlowDelegateSpy = EventFlowDelegateSpy()
+		let sut = EventCoordinator(navigationController: navigationSpy, delegate: eventFlowDelegateSpy)
 		
-		sut = EventCoordinator(navigationController: navigationSpy, delegate: eventFlowDelegateSpy)
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, navigationSpy, eventFlowDelegateSpy, environmentSpies)
 	}
 	
 	// MARK: - Tests
@@ -36,6 +34,7 @@ class EventCoordinatorTests: XCTestCase {
 	func test_consume_univeralLink() {
 		
 		// Given
+		let (sut, _, _, _) = makeSUT()
 		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
 			protocolVersion: "3.0",
@@ -54,14 +53,15 @@ class EventCoordinatorTests: XCTestCase {
 	func test_start() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.vaccination
 		expect(viewModel.title) == L.holder_addVaccination_title()
 	}
@@ -69,14 +69,15 @@ class EventCoordinatorTests: XCTestCase {
 	func test_startWithVaccination() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.startWithVaccination()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.vaccination
 		expect(viewModel.title) == L.holder_addVaccination_title()
 	}
@@ -84,14 +85,15 @@ class EventCoordinatorTests: XCTestCase {
 	func test_startWithNegativeTest() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.startWithNegativeTest()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.test(.ggd)
 		expect(viewModel.title) == L.holder_negativetest_ggd_title()
 	}
@@ -99,14 +101,15 @@ class EventCoordinatorTests: XCTestCase {
 	func test_startWithRecovery() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.startWithRecovery()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? RemoteEventStartViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.recovery
 		expect(viewModel.title) == L.holderRecoveryStartTitle()
 	}
@@ -114,105 +117,112 @@ class EventCoordinatorTests: XCTestCase {
 	func test_startWithListTestEvents_paperProof() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventPaperProof
 		
 		// When
 		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.paperflow
 	}
 	
 	func test_startWithListTestEvents_positiveTest() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventPositiveTest
 		
 		// When
 		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.recovery
 	}
 	
 	func test_startWithListTestEvents_negativeTest_commercial() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventNegativeTest
 		
 		// When
 		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.test(.commercial)
 	}
 	
 	func test_startWithListTestEvents_negativeTest_ggd() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventNegativeTestGGD
 		
 		// When
 		sut.startWithListTestEvents([event], originalMode: .test(.ggd))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.test(.ggd)
 	}
 	
 	func test_startWithListTestEvents_recovery() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventRecovery
 		
 		// When
 		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.recovery
 	}
 	
 	func test_startWithListTestEvents_vaccination() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventVaccination
 		
 		// When
 		sut.startWithListTestEvents([event], originalMode: .test(.commercial))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.vaccination
 	}
 	
 	func test_startWithScannedEvent() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventPaperProof
 		
 		// When
 		sut.startWithScannedEvent(event)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.paperflow
 	}
 	
@@ -221,13 +231,14 @@ class EventCoordinatorTests: XCTestCase {
 	func test_showHintsScreenDidFinish() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		
 		// When
 		sut.showHintsScreenDidFinish(.continue(eventMode: .vaccination))
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(eventFlowDelegateSpy.invokedEventFlowDidCancel) == false
 	}
 	
 	// MARK: - eventStartScreenDidFinish
@@ -235,13 +246,14 @@ class EventCoordinatorTests: XCTestCase {
 	func test_eventStartScreenDidFinish_continue() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.eventStartScreenDidFinish(.continue(eventMode: .vaccination))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is AuthenticationViewController) == true
 	}
 	
 	// MARK: - authenticationScreenDidFinish
@@ -249,18 +261,20 @@ class EventCoordinatorTests: XCTestCase {
 	func test_authenticationScreenDidFinish_didLogin() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.authenticationScreenDidFinish(.didLogin(token: "test", authenticationMode: .manyAuthenticationExchange, eventMode: .vaccination))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is FetchRemoteEventsViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is FetchRemoteEventsViewController) == true
 	}
 	
 	func test_authenticationScreenDidFinish_errorRequiringRestart() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test(.ggd))),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
@@ -270,14 +284,15 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		expect(self.navigationSpy.invokedPresent).toEventually(beTrue())
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPresent).toEventually(beTrue())
 	}
 	
 	func test_authenticationScreenDidFinish_errorRequiringRestart_chooseTestLocation() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
@@ -287,14 +302,16 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.errorRequiringRestart(eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
-		expect(self.navigationSpy.invokedPresent).toEventually(beTrue())
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
+		expect(navigationSpy.invokedPresent).toEventually(beTrue())
 	}
 	
 	func test_authenticationScreenDidFinish_error() throws {
+		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
 		)
@@ -303,15 +320,16 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.error(content: content, backAction: {}))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 
 	func test_authenticationScreenDidFinish_back_test() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .test(.ggd))),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
@@ -321,13 +339,14 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.back(eventMode: .test(.ggd)))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 
 	func test_authenticationScreenDidFinish_back_test_chooseTestLocation() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseTestLocationViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
@@ -337,14 +356,15 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.back(eventMode: .test(.ggd)))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
 	}
 	
 	func test_authenticationScreenDidFinish_back_test_ChooseProofType() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			ListOptionsViewController(viewModel: ChooseProofTypeViewModel(coordinator: HolderCoordinatorDelegateSpy())),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange))
@@ -354,14 +374,15 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.back(eventMode: .test(.ggd)))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 	
 	func test_authenticationScreenDidFinish_back_vaccination() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange))
@@ -371,25 +392,27 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.back(eventMode: .vaccination))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
 	func test_authenticationScreenDidFinish_back_vaccination_noViewcontrollerStack() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = []
 		
 		// When
 		sut.authenticationScreenDidFinish(.back(eventMode: .vaccination))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.invokedPopToViewController) == false
 	}
 
 	func test_authenticationScreenDidFinish_back_vaccinationAndPositiveTest() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest)),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccinationAndPositiveTest, authenticationMode: .manyAuthenticationExchange))
@@ -399,13 +422,14 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.back(eventMode: .vaccinationAndPositiveTest))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
 	func test_authenticationScreenDidFinish_back_recovery() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .recovery)),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .recovery, authenticationMode: .manyAuthenticationExchange))
@@ -415,43 +439,46 @@ class EventCoordinatorTests: XCTestCase {
 		sut.authenticationScreenDidFinish(.back(eventMode: .recovery))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
 	func test_authenticationScreenDidFinish_back_vaccination_noViewControllerStack() {
 		
 		// Given
+		let (sut, navigationSpy, eventFlowDelegateSpy, _) = makeSUT()
 		navigationSpy.viewControllers = []
 		
 		// When
 		sut.authenticationScreenDidFinish(.back(eventMode: .paperflow))
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
-		expect(self.navigationSpy.invokedPopToViewController) == false
+		expect(eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
+		expect(navigationSpy.invokedPopToViewController) == false
 	}
 	
 	func test_authenticationScreenDidFinish_back_paperflow() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		
 		// When
 		sut.authenticationScreenDidFinish(.back(eventMode: .paperflow))
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
+		expect(eventFlowDelegateSpy.invokedEventFlowDidCancel) == true
 	}
 	
 	func test_authenticationScreenDidFinish_stop() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		
 		// When
 		sut.authenticationScreenDidFinish(.stop)
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	// MARK: - fetchEventsScreenDidFinish
@@ -459,20 +486,23 @@ class EventCoordinatorTests: XCTestCase {
 	func test_fetchEventsScreenDidFinish_showEvents() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let event = FakeRemoteEvent.fakeRemoteEventVaccination
 		
 		// When
 		sut.fetchEventsScreenDidFinish(.showEvents(events: [event], eventMode: .vaccination, eventsMightBeMissing: false))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ListRemoteEventsViewController)?.viewModel)
 		expect(viewModel.eventMode) == EventMode.vaccination
 	}
 	
 	func test_fetchEventsScreenDidFinish_error() throws {
+		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
 		)
@@ -481,15 +511,16 @@ class EventCoordinatorTests: XCTestCase {
 		sut.fetchEventsScreenDidFinish(.error(content: content, backAction: {}))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_fetchEventsScreenDidFinish_back_vaccination() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange)),
@@ -500,30 +531,32 @@ class EventCoordinatorTests: XCTestCase {
 		sut.fetchEventsScreenDidFinish(.back(eventMode: .vaccination))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
 	func test_fetchEventsScreenDidFinish_stop() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		
 		// When
 		sut.fetchEventsScreenDidFinish(.stop)
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	func test_fetchEventsScreenDidFinish_default() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.fetchEventsScreenDidFinish(.alternativeRoute(eventMode: .recovery))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
+		expect(navigationSpy.pushViewControllerCallCount) == 0
 	}
 	
 	// MARK: - listEventsScreenDidFinish
@@ -531,28 +564,31 @@ class EventCoordinatorTests: XCTestCase {
 	func test_listEventsScreenDidFinish_stop() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		
 		// When
 		sut.listEventsScreenDidFinish(.stop)
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 
 	func test_listEventsScreenDidFinish_continue() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		
 		// When
 		sut.listEventsScreenDidFinish(.continue(eventMode: .test(.commercial)))
 		
 		// Then
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	func test_listEventsScreenDidFinish_back_vaccination() {
 		
 		// Given
+		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
 		navigationSpy.viewControllers = [
 			RemoteEventStartViewController(viewModel: RemoteEventStartViewModel(coordinator: sut, eventMode: .vaccination)),
 			AuthenticationViewController(viewModel: AuthenticationViewModel(coordinator: sut, eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange)),
@@ -571,12 +607,14 @@ class EventCoordinatorTests: XCTestCase {
 		sut.listEventsScreenDidFinish(.back(eventMode: .vaccination))
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
 	}
 	
 	func test_listEventsScreenDidFinish_error() throws {
+		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
 		)
@@ -585,15 +623,16 @@ class EventCoordinatorTests: XCTestCase {
 		sut.listEventsScreenDidFinish(.error(content: content, backAction: {}))
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_listEventsScreenDidFinish_moreInformation() throws {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -610,7 +649,9 @@ class EventCoordinatorTests: XCTestCase {
 	}
 	
 	func test_listEventsScreenDidFinish_showEventDetails() throws {
+
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -632,72 +673,78 @@ class EventCoordinatorTests: XCTestCase {
 	func test_listEventsScreenDidFinish_showHints_invalidHint() throws {
 		
 		// Given
+		let (sut, navigationSpy, eventFlowDelegateSpy, _) = makeSUT()
 		let hints = try XCTUnwrap(NonemptyArray(["🍕"]))
 
 		// When
 		sut.listEventsScreenDidFinish(.showHints(hints, eventMode: .vaccination))
 
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 0
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 
 	func test_listEventsScreenDidFinish_showHints_noEndstate() throws {
 		
 		// Given
+		let (sut, navigationSpy, eventFlowDelegateSpy, _) = makeSUT()
 		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Created", "International_Vaccination_Created"]))
 
 		// When
 		sut.listEventsScreenDidFinish(.showHints(hints, eventMode: .vaccination))
 
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 0
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	func test_listEventsScreenDidFinish_showHints_validHint() throws {
 		
 		// Given
+		let (sut, navigationSpy, eventFlowDelegateSpy, _) = makeSUT()
 		let hints = try XCTUnwrap(NonemptyArray(["Domestic_Vaccination_Rejected", "International_Vaccination_Created"]))
 
 		// When
 		sut.listEventsScreenDidFinish(.showHints(hints, eventMode: .vaccination))
 
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
-		expect(self.navigationSpy.viewControllers.last is ShowHintsViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(navigationSpy.viewControllers.last is ShowHintsViewController) == true
 	}
 	
 	func test_listEventsScreenDidFinish_mismatchedIdentity() throws {
 		
 		// Given
-
+		let (sut, navigationSpy, _, _) = makeSUT()
+		
 		// When
 		sut.listEventsScreenDidFinish(.mismatchedIdentity(matchingBlobIds: [["123"]]))
 
 		// Then
-		expect(self.sut.childCoordinators).to(haveCount(1))
-		expect(self.sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
-		expect(self.navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
+		expect(sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
+		expect(navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
 	}
 	
 	func test_alternativeRoute() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		
 		// When
 		sut.eventStartScreenDidFinish(.alternativeRoute(eventMode: .vaccination))
 		
 		// Then
-		expect(self.sut.childCoordinators).to(haveCount(1))
-		expect(self.sut.childCoordinators.first).to(beAKindOf(AlternativeRouteCoordinator.self))
-		expect(self.navigationSpy.viewControllers.last is CheckForDigidViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
+		expect(sut.childCoordinators.first).to(beAKindOf(AlternativeRouteCoordinator.self))
+		expect(navigationSpy.viewControllers.last is CheckForDigidViewController) == true
 	}
 	
 	func test_canceledAlternativeRoute() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		let alternativeCoordinator = AlternativeRouteCoordinator(
 			navigationController: sut.navigationController,
 			delegate: sut,
@@ -709,13 +756,14 @@ class EventCoordinatorTests: XCTestCase {
 		sut.canceledAlternativeRoute()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 	}
 	
 	func test_canceledAlternativeRoute_otherChildCoordinatorActive_shouldNotCancel() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		let alternativeCoordinator = AlternativeRouteCoordinator(
 			navigationController: sut.navigationController,
 			delegate: sut,
@@ -732,15 +780,16 @@ class EventCoordinatorTests: XCTestCase {
 		sut.canceledAlternativeRoute()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(haveCount(2))
-		expect(self.sut.childCoordinators.first).to(beAKindOf(AlternativeRouteCoordinator.self))
-		expect(self.sut.childCoordinators.last).to(beAKindOf(PaperProofCoordinator.self))
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(sut.childCoordinators).to(haveCount(2))
+		expect(sut.childCoordinators.first).to(beAKindOf(AlternativeRouteCoordinator.self))
+		expect(sut.childCoordinators.last).to(beAKindOf(PaperProofCoordinator.self))
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 	}
 	
 	func test_backToMyOverview() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		let alternativeCoordinator = AlternativeRouteCoordinator(
 			navigationController: sut.navigationController,
 			delegate: sut,
@@ -752,39 +801,42 @@ class EventCoordinatorTests: XCTestCase {
 		sut.backToMyOverview()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	func test_backToMyOverview_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
 		
 		// Given
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		sut.childCoordinators = []
 		
 		// When
 		sut.backToMyOverview()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == false
 	}
 	
 	func test_continueToPAP_noAlternativeRouteCoordinator_shouldNotCallDelegate() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		sut.childCoordinators = []
 		
 		// When
 		sut.continueToPap(eventMode: .vaccination)
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopViewController) == false
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPopViewController) == false
 	}
 	
 	func test_continueToPAP() {
 		
 		// Given
+		let (sut, navigationSpy, _, _) = makeSUT()
 		let alternativeCoordinator = AlternativeRouteCoordinator(
 			navigationController: sut.navigationController,
 			delegate: sut,
@@ -796,15 +848,15 @@ class EventCoordinatorTests: XCTestCase {
 		sut.continueToPap(eventMode: .vaccination)
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopViewController) == false
-		expect(self.navigationSpy.viewControllers.last is AuthenticationViewController).toEventually(beTrue())
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPopViewController) == false
+		expect(navigationSpy.viewControllers.last is AuthenticationViewController).toEventually(beTrue())
 	}
 	
 	func test_fuzzyMatchingFlowDidStop() {
 		
 		// Given
-		
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -817,14 +869,14 @@ class EventCoordinatorTests: XCTestCase {
 		fmCoordinator.userHasStoppedTheFlow()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	func test_fuzzyMatchingFlowDidFinish() {
 		
 		// Given
-		
+		let (sut, _, eventFlowDelegateSpy, _) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -837,13 +889,14 @@ class EventCoordinatorTests: XCTestCase {
 		fmCoordinator.userHasFinishedTheFlow()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(eventFlowDelegateSpy.invokedEventFlowDidComplete) == true
 	}
 	
 	func test_fuzzyMatchingUserBackedOutOfFlow() throws {
 		
 		// Given
+		let (sut, _, _, environmentSpies) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -856,8 +909,8 @@ class EventCoordinatorTests: XCTestCase {
 		sut.fuzzyMatchingUserBackedOutOfFlow()
 
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
 	}
 }
 // swiftlint:enable type_body_length file_length
