@@ -14,7 +14,6 @@ import Reachability
 @testable import Persistence
 @testable import Managers
 
-// swiftlint:disable type_body_length
 class RemoteConfigManagerTests: XCTestCase {
 	
 	// MARK: - Setup
@@ -471,8 +470,6 @@ class RemoteConfigManagerTests: XCTestCase {
 		expect(networkSpy.invokedGetRemoteConfigurationCount) == 1
 	}
 }
-
-// swiftlint:enable type_body_length
 
 extension RemoteConfiguration {
 
