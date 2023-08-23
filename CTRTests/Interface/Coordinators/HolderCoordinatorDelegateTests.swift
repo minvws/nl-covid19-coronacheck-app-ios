@@ -18,7 +18,7 @@ extension HolderCoordinatorTests {
 	func test_eventFlowDidComplete() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
@@ -32,7 +32,7 @@ extension HolderCoordinatorTests {
 	func test_eventFlowDidCancel() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
@@ -48,7 +48,7 @@ extension HolderCoordinatorTests {
 	func test_addPaperProofFlowDidCancel() throws {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		sut.addChildCoordinator(PaperProofCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
@@ -61,7 +61,7 @@ extension HolderCoordinatorTests {
 	func test_addPaperProofFlowDidFinish() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.addChildCoordinator(PaperProofCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
@@ -75,7 +75,7 @@ extension HolderCoordinatorTests {
 	func test_switchToAddRegularProof() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.addChildCoordinator(PaperProofCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
@@ -91,7 +91,7 @@ extension HolderCoordinatorTests {
 	func test_handleMismatchedIdentityError() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.handleMismatchedIdentityError(matchingBlobIds: [["123"]])
@@ -105,7 +105,7 @@ extension HolderCoordinatorTests {
 	func test_fuzzyMatchingFlowDidStop() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -125,7 +125,7 @@ extension HolderCoordinatorTests {
 	func test_fuzzyMatchingFlowDidFinish() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -146,7 +146,7 @@ extension HolderCoordinatorTests {
 	func test_dataMigrationBackAction() {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
@@ -159,7 +159,7 @@ extension HolderCoordinatorTests {
 	func test_dataMigrationCancelled() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
@@ -173,7 +173,8 @@ extension HolderCoordinatorTests {
 	func test_dataMigrationExportCompleted() {
 		
 		// Given
-		let (sut, navigationSpy, alertVerifier, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
+		let alertVerifier = AlertVerifier()
 		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
@@ -189,7 +190,7 @@ extension HolderCoordinatorTests {
 	func test_dataMigrationImportCompleted() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
@@ -205,7 +206,7 @@ extension HolderCoordinatorTests {
 	func test_pdfExport_completed() {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		sut.childCoordinators = [
 			PDFExportCoordinator(
 				navigationController: sut.navigationController,
@@ -223,7 +224,7 @@ extension HolderCoordinatorTests {
 	func test_pdfExport_failed() {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		sut.childCoordinators = [
 			PDFExportCoordinator(
 				navigationController: sut.navigationController,

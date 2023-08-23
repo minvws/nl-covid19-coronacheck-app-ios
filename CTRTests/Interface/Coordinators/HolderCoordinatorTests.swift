@@ -18,7 +18,7 @@ class HolderCoordinatorTests: XCTestCase {
 	
 	internal func makeSUT(
 		file: StaticString = #filePath,
-		line: UInt = #line) -> (HolderCoordinator, NavigationControllerSpy, AlertVerifier, EnvironmentSpies) {
+		line: UInt = #line) -> (HolderCoordinator, NavigationControllerSpy, EnvironmentSpies) {
 		
 			let environmentSpies = setupEnvironmentSpies()
 			environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
@@ -28,11 +28,10 @@ class HolderCoordinatorTests: XCTestCase {
 				navigationController: navigationSpy,
 				window: window
 			)
-			let alertVerifier = AlertVerifier()
 		
 		trackForMemoryLeak(instance: sut, file: file, line: line)
 		
-		return (sut, navigationSpy, alertVerifier, environmentSpies)
+		return (sut, navigationSpy, environmentSpies)
 	}
 	
 	// MARK: - Tests
@@ -40,7 +39,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func testRunsDatabaseCleanupOnStart() {
 		
 		// Given
-		let (sut, _, _, environmentSpies) = makeSUT()
+		let (sut, _, environmentSpies) = makeSUT()
 		
 		// When
 		sut.start()
@@ -55,7 +54,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func testRunsDatabaseCleanupOnStart_archiveModeEnabled() {
 		
 		// Given
-		let (sut, _, _, environmentSpies) = makeSUT()
+		let (sut, _, environmentSpies) = makeSUT()
 		
 		// When
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
@@ -71,7 +70,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func testStartNewFeatures() {
 
 		// Given
-		let (sut, _, _, environmentSpies) = makeSUT()
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
@@ -95,7 +94,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func testFinishNewFeatures() {
 
 		// Given
-		let (sut, _, _, environmentSpies) = makeSUT()
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
@@ -121,7 +120,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_redeemHolder() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
@@ -144,7 +143,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_redeemHolder_addEvents_disabled() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
@@ -167,7 +166,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_redeemHolder_needsOnboarding() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
@@ -190,7 +189,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_redeemHolder_needsConsent() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
@@ -212,7 +211,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_redeemHolder_needsUpdating() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
@@ -234,7 +233,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_tvsAuth() {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		let universalLink = UniversalLink.tvsAuth(returnURL: URL(string: "https://coronacheck.nl"))
 		
 		// When
@@ -247,7 +246,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_thirdPartyScannerApp() {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		
 		// When
@@ -262,7 +261,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_navigateToChooseQRCodeType() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToChooseQRCodeType()
@@ -278,7 +277,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_navigateToAddPaperProof() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToAddPaperProof()
@@ -294,7 +293,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_navigateToAboutThisApp() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToAboutThisApp()
@@ -308,7 +307,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_navigateToAboutThisApp_userWishesToOpenScanLog() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.navigateToAboutThisApp()
 		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
 		
@@ -324,7 +323,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_navigateBackToStart() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateBackToStart()
@@ -336,7 +335,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_presentDCCQRDetails() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -363,7 +362,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToOpenTheMenu() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToOpenTheMenu()
@@ -377,7 +376,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToMakeQRFromRemoteEvent() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToMakeQRFromRemoteEvent(FakeRemoteEvent.fakeRemoteEventVaccination, originalMode: .vaccination)
@@ -391,7 +390,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToCreateANegativeTestQR() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateANegativeTestQR()
@@ -405,7 +404,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToChooseTestLocation_GGDenabled() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDEnabledResult = true
 		
 		// When
@@ -421,7 +420,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToChooseTestLocation_GGDdisabled() {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDEnabledResult = false
 		
 		// When
@@ -436,7 +435,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userHasNotBeenTested() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -456,7 +455,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToCreateANegativeTestQRFromGGD() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateANegativeTestQRFromGGD()
@@ -470,7 +469,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToCreateAVaccinationQR() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateAVaccinationQR()
@@ -484,7 +483,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToCreateARecoveryQR() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateARecoveryQR()
@@ -498,7 +497,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToCreateAQR() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateAQR()
@@ -513,7 +512,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutClockDeviation() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -531,7 +530,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutOutdatedConfig() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -549,7 +548,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutExpiredQR_vaccination_notInArchiveMode() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -571,7 +570,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutExpiredQR_vaccination_inArchiveMode() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -593,7 +592,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutExpiredQR_recovery_inArchiveMode() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -615,7 +614,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutHiddenQR() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -637,7 +636,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutHiddenQR_inArchiveMode() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, environmentSpies) = makeSUT()
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -659,7 +658,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToViewQRs(greenCardObjectIDs: [])
@@ -671,7 +670,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs_differentContext() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		var greenCard: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
@@ -696,7 +695,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs_sameContext() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		var greenCard: GreenCard?
 		let context = Current.dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -723,7 +722,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_displayError() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
 		)
@@ -741,7 +740,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutNoTestToken() throws {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -759,7 +758,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToSeeStoredEvents() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSeeStoredEvents()
@@ -773,7 +772,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToSeeEventDetails() {
 		
 		// Given
-		let (sut, navigationSpy, _, _) = makeSUT()
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSeeEventDetails("test_userWishesToSeeEventDetails", details: [])
@@ -787,7 +786,8 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_migrationIsSuccessful() {
 		
 		// Given
-		let (sut, _, alertVerifier, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
+		let alertVerifier = AlertVerifier()
 		
 		// When
 		sut.showMigrationSuccessfulDialog()
@@ -807,7 +807,8 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_removeDataAfterMigration_cancel() throws {
 		
 		// Given
-		let (sut, _, alertVerifier, environmentSpies) = makeSUT()
+		let (sut, _, environmentSpies) = makeSUT()
+		let alertVerifier = AlertVerifier()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
@@ -823,7 +824,8 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_removeDataAfterMigration_remove() throws {
 		
 		// Given
-		let (sut, _, alertVerifier, environmentSpies) = makeSUT()
+		let (sut, _, environmentSpies) = makeSUT()
+		let alertVerifier = AlertVerifier()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
@@ -839,7 +841,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToExportPDF() {
 		
 		// Given
-		let (sut, _, _, _) = makeSUT()
+		let (sut, _, _) = makeSUT()
 		
 		// When
 		sut.userWishesToExportPDF()
