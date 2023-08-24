@@ -14,7 +14,19 @@ import ViewControllerPresentationSpy
 
 class HolderCoordinatorTests: XCTestCase {
 	
+	var alertVerifier: AlertVerifier?
 	var window = UIWindow()
+	
+	override func setUp() {
+		
+		super.setUp()
+		alertVerifier = AlertVerifier()
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
+	}
 	
 	internal func makeSUT(
 		file: StaticString = #filePath,
@@ -787,13 +799,12 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Given
 		let (sut, _, _) = makeSUT()
-		let alertVerifier = AlertVerifier()
 		
 		// When
 		sut.showMigrationSuccessfulDialog()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holder_migrationFlow_deleteDetails_dialog_title(),
 			message: L.holder_migrationFlow_deleteDetails_dialog_message(),
 			animated: true,
@@ -808,11 +819,10 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Given
 		let (sut, _, environmentSpies) = makeSUT()
-		let alertVerifier = AlertVerifier()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
-		try alertVerifier.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_retainButton())
+		try alertVerifier?.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_retainButton())
 		
 		// Then
 		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
@@ -825,11 +835,10 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Given
 		let (sut, _, environmentSpies) = makeSUT()
-		let alertVerifier = AlertVerifier()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
-		try alertVerifier.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_deleteButton())
+		try alertVerifier?.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_deleteButton())
 		
 		// Then
 		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true

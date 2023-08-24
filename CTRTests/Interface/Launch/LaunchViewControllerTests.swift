@@ -17,6 +17,7 @@ class LaunchViewControllerTests: XCTestCase {
 	private var sut: LaunchViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
 	private var environmentSpies: EnvironmentSpies!
+	private var alertVerifier: AlertVerifier?
 	
 	var window = UIWindow()
 
@@ -25,7 +26,7 @@ class LaunchViewControllerTests: XCTestCase {
 
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
-		
+		alertVerifier = AlertVerifier()
 		appCoordinatorSpy = AppCoordinatorSpy()
 
 		let viewModel = LaunchViewModel(
@@ -35,6 +36,11 @@ class LaunchViewControllerTests: XCTestCase {
 
 		sut = LaunchViewController(viewModel: viewModel)
 		window = UIWindow()
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
 	}
 
 	func loadView() {
@@ -73,13 +79,11 @@ class LaunchViewControllerTests: XCTestCase {
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
-		let alertVerifier = AlertVerifier()
-
 		// When
 		loadView()
 
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.jailbrokenTitle(),
 			message: L.jailbrokenMessage(),
 			animated: true,
@@ -106,11 +110,10 @@ class LaunchViewControllerTests: XCTestCase {
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
-		let alertVerifier = AlertVerifier()
 		loadView()
 
 		// When
-		try alertVerifier.executeAction(forButton: L.generalOk())
+		try alertVerifier?.executeAction(forButton: L.generalOk())
 
 		// Then
 		expect(self.environmentSpies.userSettingsSpy.invokedJailbreakWarningShownSetter) == true
@@ -130,13 +133,11 @@ class LaunchViewControllerTests: XCTestCase {
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
-		let alertVerifier = AlertVerifier()
-
 		// When
 		loadView()
 
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holderDeviceAuthenticationWarningTitle(),
 			message: L.holderDeviceAuthenticationWarningMessage(),
 			animated: true,
@@ -163,11 +164,10 @@ class LaunchViewControllerTests: XCTestCase {
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
-		let alertVerifier = AlertVerifier()
 		loadView()
 
 		// When
-		try alertVerifier.executeAction(forButton: L.generalOk())
+		try alertVerifier?.executeAction(forButton: L.generalOk())
 
 		// Then
 		expect(self.environmentSpies.userSettingsSpy.invokedDeviceAuthenticationWarningShownSetter) == true

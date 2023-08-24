@@ -174,7 +174,6 @@ extension HolderCoordinatorTests {
 		
 		// Given
 		let (sut, navigationSpy, _) = makeSUT()
-		let alertVerifier = AlertVerifier()
 		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
@@ -183,8 +182,7 @@ extension HolderCoordinatorTests {
 		// Then
 		expect(sut.childCoordinators).to(beEmpty())
 		expect(navigationSpy.viewControllers.last is HolderDashboardViewController) == true
-		expect(alertVerifier.presentedCount).toEventually(equal(1))
-		
+		expect(self.alertVerifier?.presentedCount).toEventually(equal(1))
 	}
 	
 	func test_dataMigrationImportCompleted() {

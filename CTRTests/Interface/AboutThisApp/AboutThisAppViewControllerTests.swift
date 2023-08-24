@@ -17,6 +17,7 @@ class AboutThisAppViewControllerTests: XCTestCase {
 	private var sut: AboutThisAppViewController!
 	private var environmentSpies: EnvironmentSpies!
 	private var outcomes: [AboutThisAppViewModel.Outcome]!
+	private var alertVerifier: AlertVerifier?
 	
 	var window: UIWindow!
 	
@@ -34,7 +35,13 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
+		alertVerifier = AlertVerifier()
 		window = UIWindow()
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
 	}
 	
 	func loadView() {
@@ -129,14 +136,13 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
-		let alertVerifier = AlertVerifier()
 		loadView()
 		
 		// When
 		sut.sceneView.resetButtonTapHandler?()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holderCleardataAlertTitle(),
 			message: L.holderCleardataAlertSubtitle(),
 			animated: true,
@@ -158,12 +164,11 @@ class AboutThisAppViewControllerTests: XCTestCase {
 			}
 		)
 		sut = AboutThisAppViewController(viewModel: viewModel)
-		let alertVerifier = AlertVerifier()
 		loadView()
 		sut.sceneView.resetButtonTapHandler?()
 		
 		// When
-		try alertVerifier.executeAction(forButton: L.holderCleardataAlertRemove())
+		try alertVerifier?.executeAction(forButton: L.holderCleardataAlertRemove())
 		
 		// Then
 		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false

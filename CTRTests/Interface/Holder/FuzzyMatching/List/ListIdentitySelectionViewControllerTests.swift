@@ -18,11 +18,13 @@ final class ListIdentitySelectionViewControllerTests: XCTestCase {
 	private var coordinatorDelegateSpy: FuzzyMatchingCoordinatorDelegateSpy!
 	private var dataSourceSpy: IdentitySelectionDataSourceSpy!
 	private var environmentSpies: EnvironmentSpies!
+	private var alertVerifier: AlertVerifier?
 	
 	override func setUp() {
 		super.setUp()
 
 		environmentSpies = setupEnvironmentSpies()
+		alertVerifier = AlertVerifier()
 		dataSourceSpy = IdentitySelectionDataSourceSpy()
 		coordinatorDelegateSpy = FuzzyMatchingCoordinatorDelegateSpy()
 		window = UIWindow()
@@ -40,6 +42,11 @@ final class ListIdentitySelectionViewControllerTests: XCTestCase {
 				matchingBlobIds: []
 			)
 		)
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
 	}
 	
 	func loadView() {
@@ -122,14 +129,13 @@ final class ListIdentitySelectionViewControllerTests: XCTestCase {
 	func test_skipButtonPressed() {
 		
 		// Given
-		let alertVerifier = AlertVerifier()
 		loadView()
 		
 		// When
 		sut.onSkip()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holder_identitySelection_skipAlert_title(),
 			message: L.holder_identitySelection_skipAlert_body(),
 			animated: true,
@@ -143,12 +149,11 @@ final class ListIdentitySelectionViewControllerTests: XCTestCase {
 	func test_skipButtonPressed_okAction() throws {
 		
 		// Given
-		let alertVerifier = AlertVerifier()
 		loadView()
 		sut.onSkip()
 		
 		// When
-		try alertVerifier.executeAction(forButton: L.holder_identitySelection_skipAlert_action())
+		try alertVerifier?.executeAction(forButton: L.holder_identitySelection_skipAlert_action())
 		
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserHasStoppedTheFlow) == true
