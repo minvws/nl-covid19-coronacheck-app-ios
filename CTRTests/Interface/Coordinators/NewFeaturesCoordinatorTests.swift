@@ -12,27 +12,28 @@ import CoronaCheckUI
 
 class NewFeaturesCoordinatorTests: XCTestCase {
 	
-	var sut: NewFeaturesCoordinator!
-	
-	var navigationSpy: NavigationControllerSpy!
-	
-	var newFeaturesManagerSpy: NewFeaturesManagerSpy!
-	
-	var delegateSpy: NewFeaturesDelegateSpy!
-	
 	override func setUp() {
 		
 		super.setUp()
-		
-		navigationSpy = NavigationControllerSpy()
-		newFeaturesManagerSpy = NewFeaturesManagerSpy()
-		delegateSpy = NewFeaturesDelegateSpy()
 		_ = setupEnvironmentSpies()
-		sut = NewFeaturesCoordinator(
+	}
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (NewFeaturesCoordinator, NavigationControllerSpy, NewFeaturesManagerSpy, NewFeaturesDelegateSpy) {
+		
+		let navigationSpy = NavigationControllerSpy()
+		let newFeaturesManagerSpy = NewFeaturesManagerSpy()
+		let delegateSpy = NewFeaturesDelegateSpy()
+		let sut = NewFeaturesCoordinator(
 			navigationController: navigationSpy,
 			newFeaturesManager: newFeaturesManagerSpy,
 			delegate: delegateSpy
 		)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, navigationSpy, newFeaturesManagerSpy, delegateSpy)
 	}
 	
 	// MARK: - Tests
@@ -41,6 +42,7 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 	func test_start_shouldInvokeFinishNewFeatures() {
 		
 		// Given
+		let (sut, navigationSpy, newFeaturesManagerSpy, delegateSpy) = makeSUT()
 		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = [PagedAnnoucementItem(
 			title: "test",
 			content: "test",
@@ -53,35 +55,37 @@ class NewFeaturesCoordinatorTests: XCTestCase {
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.viewControllers).to(haveCount(1))
-		expect(self.delegateSpy.invokedFinishNewFeatures) == false
+		expect(navigationSpy.viewControllers).to(haveCount(1))
+		expect(delegateSpy.invokedFinishNewFeatures) == false
 	}
 	
 	/// Test the start methoud without update page
 	func test_start_withoutUpdatePage() {
 		
 		// Given
+		let (sut, navigationSpy, newFeaturesManagerSpy, delegateSpy) = makeSUT()
 		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = nil
 		
 		// When
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.viewControllers).to(beEmpty())
-		expect(self.delegateSpy.invokedFinishNewFeatures) == true
+		expect(navigationSpy.viewControllers).to(beEmpty())
+		expect(delegateSpy.invokedFinishNewFeatures) == true
 	}
-
+	
 	/// Test the start method without consent content
 	func testStartWithoutConsent() {
-
+		
 		// Given
+		let (sut, navigationSpy, newFeaturesManagerSpy, delegateSpy) = makeSUT()
 		newFeaturesManagerSpy.stubbedPagedAnnouncementItemsResult = nil
-
+		
 		// When
 		sut.start()
-
+		
 		// Then
-		expect(self.navigationSpy.viewControllers).to(beEmpty())
-		expect(self.delegateSpy.invokedFinishNewFeatures) == true
+		expect(navigationSpy.viewControllers).to(beEmpty())
+		expect(delegateSpy.invokedFinishNewFeatures) == true
 	}
 }

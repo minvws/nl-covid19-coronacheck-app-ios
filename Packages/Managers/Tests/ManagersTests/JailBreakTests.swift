@@ -8,22 +8,26 @@
 import XCTest
 import Nimble
 @testable import Managers
+import TestingShared
 
 class JailBreakTests: XCTestCase {
-
-	private var sut: JailBreakDetector!
-
-	override func setUp() {
-
-		super.setUp()
-
-		sut = JailBreakDetector()
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> JailBreakDetector {
+			
+		let sut = JailBreakDetector()
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return sut
 	}
 
 	func test_isJailBroken() {
 
 		// Given
-		// Can't simulate a jailbroken device. 
+		// Can't simulate a jailbroken device.
+		let sut = makeSUT()
 
 		// When
 		let result = sut.isJailBroken()

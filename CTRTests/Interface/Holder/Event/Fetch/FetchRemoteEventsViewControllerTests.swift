@@ -18,6 +18,7 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 	private var viewModel: FetchRemoteEventsViewModel!
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
+	private var alertVerifier: AlertVerifier?
 	
 	var window = UIWindow()
 	
@@ -27,7 +28,13 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 		super.setUp()
 		environmentSpies = setupEnvironmentSpies()
 		coordinatorSpy = EventCoordinatorDelegateSpy()
+		alertVerifier = AlertVerifier()
 		window = UIWindow()
+	}
+	
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
 	}
 	
 	func loadView() {
@@ -67,14 +74,13 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 		// Given
 		setupSut(eventMode: .vaccination, authenticationMode: .manyAuthenticationExchange)
 		viewModel.viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		let alertVerifier = AlertVerifier()
 		loadView()
 		
 		// When
 		sut.backButtonTapped()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holderVaccinationAlertTitle(),
 			message: L.holder_vaccination_alert_message(),
 			animated: true,
@@ -90,14 +96,13 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 		// Given
 		setupSut(eventMode: .test(.ggd), authenticationMode: .manyAuthenticationExchange)
 		viewModel.viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		let alertVerifier = AlertVerifier()
 		loadView()
 		
 		// When
 		sut.backButtonTapped()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holderVaccinationAlertTitle(),
 			message: L.holder_test_alert_message(),
 			animated: true,
@@ -113,14 +118,13 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 		// Given
 		setupSut(eventMode: .paperflow, authenticationMode: .manyAuthenticationExchange)
 		viewModel.viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		let alertVerifier = AlertVerifier()
 		loadView()
 		
 		// When
 		sut.backButtonTapped()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holderVaccinationAlertTitle(),
 			message: L.holder_dcc_alert_message(),
 			animated: true,
@@ -136,14 +140,13 @@ class FetchRemoteEventsViewControllerTests: XCTestCase {
 		// Given
 		setupSut(eventMode: .recovery, authenticationMode: .manyAuthenticationExchange)
 		viewModel.viewState = .loading(content: Content(title: L.holder_fetchRemoteEvents_title()))
-		let alertVerifier = AlertVerifier()
 		loadView()
 		
 		// When
 		sut.backButtonTapped()
 		
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.holderVaccinationAlertTitle(),
 			message: L.holder_recovery_alert_message(),
 			animated: true,

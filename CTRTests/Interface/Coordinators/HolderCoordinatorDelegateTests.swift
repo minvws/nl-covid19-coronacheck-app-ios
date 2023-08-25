@@ -18,27 +18,29 @@ extension HolderCoordinatorTests {
 	func test_eventFlowDidComplete() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
 		sut.eventFlowDidComplete()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 	}
 
 	func test_eventFlowDidCancel() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.addChildCoordinator(EventCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
 		sut.eventFlowDidCancel()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopViewController) == false
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPopViewController) == false
 	}
 	
 	// MARK: - PaperProofFlowDelegate -
@@ -46,60 +48,64 @@ extension HolderCoordinatorTests {
 	func test_addPaperProofFlowDidCancel() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
+		let (sut, _, _) = makeSUT()
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
 		sut.addPaperProofFlowDidCancel()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_addPaperProofFlowDidFinish() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
+		let (sut, navigationSpy, _) = makeSUT()
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
 		sut.addPaperProofFlowDidFinish()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 	}
 	
 	func test_switchToAddRegularProof() throws {
 		
 		// Given
-		sut.addChildCoordinator(PaperProofCoordinator(navigationController: navigationSpy, delegate: sut))
+		let (sut, navigationSpy, _) = makeSUT()
+		sut.addChildCoordinator(PaperProofCoordinator(navigationController: sut.navigationController, delegate: sut))
 		
 		// When
 		sut.switchToAddRegularProof()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
 	}
 	
 	func test_handleMismatchedIdentityError() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.handleMismatchedIdentityError(matchingBlobIds: [["123"]])
 		
 		// Then
-		expect(self.sut.childCoordinators).to(haveCount(1))
-		expect(self.sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
-		expect(self.navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
+		expect(sut.childCoordinators.first).to(beAKindOf(FuzzyMatchingCoordinator.self))
+		expect(navigationSpy.viewControllers.last is PagedAnnouncementViewController) == true
 	}
 	
 	func test_fuzzyMatchingFlowDidStop() {
 		
 		// Given
-		
+		let (sut, navigationSpy, _) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -112,14 +118,14 @@ extension HolderCoordinatorTests {
 		fmCoordinator.userHasStoppedTheFlow()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopToRootViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPopToRootViewController) == true
 	}
 	
 	func test_fuzzyMatchingFlowDidFinish() {
 		
 		// Given
-		
+		let (sut, navigationSpy, _) = makeSUT()
 		let fmCoordinator = FuzzyMatchingCoordinator(
 			navigationController: sut.navigationController,
 			matchingBlobIds: [[]],
@@ -132,7 +138,7 @@ extension HolderCoordinatorTests {
 		fmCoordinator.userHasFinishedTheFlow()
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToRootViewController) == true
+		expect(navigationSpy.invokedPopToRootViewController) == true
 	}
 	
 	// MARK: - MigrationFlowDelegate -
@@ -140,54 +146,57 @@ extension HolderCoordinatorTests {
 	func test_dataMigrationBackAction() {
 		
 		// Given
-		sut.childCoordinators = [MigrationCoordinator(navigationController: navigationSpy, delegate: sut)]
+		let (sut, _, _) = makeSUT()
+		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
 		sut.dataMigrationBackAction()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_dataMigrationCancelled() {
 		
 		// Given
-		sut.childCoordinators = [MigrationCoordinator(navigationController: navigationSpy, delegate: sut)]
+		let (sut, navigationSpy, _) = makeSUT()
+		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
 		sut.dataMigrationCancelled()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 	}
 	
 	func test_dataMigrationExportCompleted() {
 		
 		// Given
-		sut.childCoordinators = [MigrationCoordinator(navigationController: navigationSpy, delegate: sut)]
+		let (sut, navigationSpy, _) = makeSUT()
+		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
 		sut.dataMigrationExportCompleted()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 		expect(self.alertVerifier?.presentedCount).toEventually(equal(1))
-		
 	}
 	
 	func test_dataMigrationImportCompleted() {
 		
 		// Given
-		sut.childCoordinators = [MigrationCoordinator(navigationController: navigationSpy, delegate: sut)]
+		let (sut, navigationSpy, _) = makeSUT()
+		sut.childCoordinators = [MigrationCoordinator(navigationController: sut.navigationController, delegate: sut)]
 		
 		// When
 		sut.dataMigrationImportCompleted()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.viewControllers.last is HolderDashboardViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.viewControllers.last is HolderDashboardViewController) == true
 	}
 	
 	// MARK: - PDFExportFlowDelegate
@@ -195,9 +204,10 @@ extension HolderCoordinatorTests {
 	func test_pdfExport_completed() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.childCoordinators = [
 			PDFExportCoordinator(
-				navigationController: navigationSpy,
+				navigationController: sut.navigationController,
 				delegate: sut
 			)
 		]
@@ -206,15 +216,16 @@ extension HolderCoordinatorTests {
 		sut.exportCompleted()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_pdfExport_failed() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.childCoordinators = [
 			PDFExportCoordinator(
-				navigationController: navigationSpy,
+				navigationController: sut.navigationController,
 				delegate: sut
 			)
 		]
@@ -223,6 +234,6 @@ extension HolderCoordinatorTests {
 		sut.exportFailed()
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 }

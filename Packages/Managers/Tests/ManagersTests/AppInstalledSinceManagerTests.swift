@@ -13,53 +13,59 @@ import TestingShared
 @testable import Persistence
 
 class AppInstalledSinceManagerTests: XCTestCase {
-
-	var sut: AppInstalledSinceManager!
-	var secureUserSettingsSpy: SecureUserSettingsSpy!
 	
-	override func setUp() {
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (AppInstalledSinceManager, SecureUserSettingsSpy) {
 
-		super.setUp()
-		secureUserSettingsSpy = SecureUserSettingsSpy()
-		sut = AppInstalledSinceManager(secureUserSettings: secureUserSettingsSpy)
+		let secureUserSettingsSpy = SecureUserSettingsSpy()
+		let sut = AppInstalledSinceManager(secureUserSettings: secureUserSettingsSpy)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, secureUserSettingsSpy)
 	}
 
 	func test_addingServerDate_withoutAge() {
 
 		// Given
+		let (sut, secureUserSettingsSpy) = makeSUT()
 
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: nil)
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	func test_addingServerDate_withZeroAge() {
 
 		// Given
-
+		let (sut, secureUserSettingsSpy) = makeSUT()
+		
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "0")
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	func test_addingServerDate_withAge() {
 
 		// Given
+		let (sut, secureUserSettingsSpy) = makeSUT()
 
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now.addingTimeInterval(120 * seconds)
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == now.addingTimeInterval(120 * seconds)
 	}
 
 	func test_addingDocumentsDirectoryDate() {
 
 		// Given
+		let (sut, secureUserSettingsSpy) = makeSUT()
 		let provider = DateProvider()
 		provider.stubbedGetDocumentsDirectoryCreationDateResult = now
 
@@ -67,39 +73,42 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(dateProvider: provider)
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	func test_reset() {
 
 		// Given
-
+		let (sut, secureUserSettingsSpy) = makeSUT()
+		
 		// When
 		sut.wipePersistedData()
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == nil
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == nil
 	}
 
 	func test_canOnlyBeSetOnce_serverUpdates() {
 
 		// Given
+		let (sut, secureUserSettingsSpy) = makeSUT()
 		secureUserSettingsSpy.stubbedAppInstalledDate = now
 
 		// When
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
 
 		// Then
-		expect(self.sut.firstUseDate) == now
+		expect(sut.firstUseDate) == now
 	}
 
 	func test_canOnlyBeSetOnce_providerAndServer() {
 
 		// Given
+		let (sut, secureUserSettingsSpy) = makeSUT()
 		let provider = DateProvider()
 		provider.stubbedGetDocumentsDirectoryCreationDateResult = now
 		sut.update(dateProvider: provider)
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == now
 		
 		secureUserSettingsSpy.stubbedAppInstalledDate = now
 
@@ -107,7 +116,7 @@ class AppInstalledSinceManagerTests: XCTestCase {
 		sut.update(serverHeaderDate: "Thu, 15 Jul 2021 15:02:39 GMT", ageHeader: "120")
 
 		// Then
-		expect(self.secureUserSettingsSpy.invokedAppInstalledDate) == now
+		expect(secureUserSettingsSpy.invokedAppInstalledDate) == now
 	}
 
 	class DateProvider: DocumentsDirectoryCreationDateProtocol {

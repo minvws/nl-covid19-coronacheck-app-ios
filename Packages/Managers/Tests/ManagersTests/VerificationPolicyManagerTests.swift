@@ -13,7 +13,6 @@ import TestingShared
 
 class VerificationPolicyManagerTests: XCTestCase {
 
-	private var sut: VerificationPolicyManager!
 	private var secureUserSettingsSpy: SecureUserSettingsSpy!
 	private var observerVCR: ObserverCallbackRecorder<VerificationPolicy?>!
 	
@@ -21,19 +20,30 @@ class VerificationPolicyManagerTests: XCTestCase {
 
 		super.setUp()
 		secureUserSettingsSpy = SecureUserSettingsSpy()
-		
 		observerVCR = ObserverCallbackRecorder()
+	}
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> VerificationPolicyManager {
+			
+		let sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return sut
 	}
 	
 	func test_withNoPreviousPolicy_isInitiallyNil() {
 		
 		// Arrange
-		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
+		let sut = makeSUT()
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
+		
 		// Assert
-		expect(self.sut.state) == nil
+		expect(sut.state) == nil
 		expect(self.observerVCR.values).to(beEmpty())
 	}
 	
@@ -41,19 +51,21 @@ class VerificationPolicyManagerTests: XCTestCase {
 		
 		// Arrange
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy3G
-		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
+		let sut = makeSUT()
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
+		
 		// Assert
-		expect(self.sut.state) == .policy3G
+		expect(sut.state) == .policy3G
 		expect(self.observerVCR.values).to(beEmpty())
 	}
 	
 	func test_receivedUpdate_notifiesObservers() {
+		
 		// Arrange
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy3G
-		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
+		let sut = makeSUT()
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
@@ -61,15 +73,16 @@ class VerificationPolicyManagerTests: XCTestCase {
 		sut.update(verificationPolicy: .policy1G)
  
 		// Assert
-		expect(self.sut.state) == .policy1G
+		expect(sut.state) == .policy1G
 		expect(self.secureUserSettingsSpy.invokedVerificationPolicy) == .policy1G
 		expect(self.secureUserSettingsSpy.invokedVerificationPolicySetterCount) == 1
 	}
 	
 	func testWipePersistedDataClearsObserversAndNilsPolicy() {
+		
 		// Arrange
 		secureUserSettingsSpy.stubbedVerificationPolicy = .policy3G
-		sut = VerificationPolicyManager(secureUserSettings: secureUserSettingsSpy)
+		let sut = makeSUT()
 		_ = sut.observatory.append(observer: observerVCR.recordEvents)
 		
 		// Act
@@ -81,7 +94,7 @@ class VerificationPolicyManagerTests: XCTestCase {
 		expect(self.secureUserSettingsSpy.invokedVerificationPolicy) == nil
 		
 		// State should be nil
-		expect(self.sut.state) == nil
+		expect(sut.state) == nil
 		
 		// Update should not alert the observer:
 		sut.update(verificationPolicy: .policy1G)

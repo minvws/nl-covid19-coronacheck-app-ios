@@ -795,7 +795,7 @@ class FetchRemoteEventsViewModelTests: XCTestCase {
 	)
 }
 
-private func beEventScreenResultError(test: @escaping (Content) -> Void = { _ in }) -> Predicate<EventScreenResult> {
+private func beEventScreenResultError(test: @escaping (Content) -> Void = { _ in }) -> Nimble.Predicate<EventScreenResult> {
 	return Predicate.define("be .error with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
 		   case let .error(content, _) = actual {

@@ -17,6 +17,7 @@ class AppStatusViewControllerTests: XCTestCase {
 	private var sut: AppStatusViewController!
 	private var appCoordinatorSpy: AppCoordinatorSpy!
 	private var environmentalSpies: EnvironmentSpies!
+	private var alertVerifier: AlertVerifier?
 
 	var window = UIWindow()
 
@@ -26,11 +27,12 @@ class AppStatusViewControllerTests: XCTestCase {
 		appCoordinatorSpy = AppCoordinatorSpy()
 		environmentalSpies = setupEnvironmentSpies()
 		window = UIWindow()
+		alertVerifier = AlertVerifier()
 		try super.setUpWithError()
 	}
 
 	override func tearDown() {
-
+		alertVerifier = nil
 		super.tearDown()
 	}
 
@@ -52,14 +54,13 @@ class AppStatusViewControllerTests: XCTestCase {
 			flavor: .holder
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
-		let alertVerifier = AlertVerifier()
 		loadView()
 
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.generalErrorTitle(),
 			message: L.holder_updateApp_errorMessage(),
 			animated: true,
@@ -80,14 +81,13 @@ class AppStatusViewControllerTests: XCTestCase {
 			flavor: .verifier
 		)
 		sut = AppStatusViewController(viewModel: viewModel)
-		let alertVerifier = AlertVerifier()
 		loadView()
 
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.generalErrorTitle(),
 			message: L.verifier_updateApp_errorMessage(),
 			animated: true,

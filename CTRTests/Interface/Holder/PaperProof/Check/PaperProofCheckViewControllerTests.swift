@@ -16,15 +16,22 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	var sut: PaperProofCheckViewController!
 	var coordinatorDelegateSpy: PaperProofCoordinatorDelegateSpy!
 	private var environmentSpies: EnvironmentSpies!
+	private var alertVerifier: AlertVerifier?
 	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = PaperProofCoordinatorDelegateSpy()
 		environmentSpies = setupEnvironmentSpies()
+		alertVerifier = AlertVerifier()
 		window = UIWindow()
 	}
 
+	override func tearDown() {
+		super.tearDown()
+		alertVerifier = nil
+	}
+	
 	func loadView() {
 
 		window.addSubview(sut.view)
@@ -130,7 +137,6 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_alertNoInternet() {
 
 		// Given
-		let alertVerifier = AlertVerifier()
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
@@ -146,7 +152,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		alertVerifier.verify(
+		alertVerifier?.verify(
 			title: L.generalErrorNointernetTitle(),
 			message: L.generalErrorNointernetText(),
 			animated: true,
@@ -162,7 +168,6 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_alertNoInternet_cancelAction() throws {
 
 		// Given
-		let alertVerifier = AlertVerifier()
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
@@ -176,7 +181,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		try alertVerifier.executeAction(forButton: L.generalClose())
+		try alertVerifier?.executeAction(forButton: L.generalClose())
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
@@ -185,7 +190,6 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 	func test_alertNoInternet_okAction() throws {
 
 		// Given
-		let alertVerifier = AlertVerifier()
 		environmentSpies.couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
 			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
@@ -199,7 +203,7 @@ class PaperProofCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		try alertVerifier.executeAction(forButton: L.holderVaccinationErrorAgain())
+		try alertVerifier?.executeAction(forButton: L.holderVaccinationErrorAgain())
 
 		// Then
 		expect(self.environmentSpies.couplingManagerSpy.invokedCheckCouplingStatusCount).toEventually(equal(2))

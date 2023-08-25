@@ -10,126 +10,101 @@ import CoronaCheckTest
 @testable import CTR
 
 class ScanInstructionsCoordinatorTests: XCTestCase {
-
-	private var sut: ScanInstructionsCoordinator!
-
-	private var navigationSpy: NavigationControllerSpy!
-	private var environmentSpies: EnvironmentSpies!
-	private var scanInstructionsDelegateSpy: ScanInstructionsDelegateSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	private var window = UIWindow()
-
-	override func setUp() {
-
-		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
-		navigationSpy = NavigationControllerSpy()
-		scanInstructionsDelegateSpy = ScanInstructionsDelegateSpy()
-		userSettingsSpy = UserSettingsSpy()
+	
+	private func makeSUT(
+		isOpenedFromMenu: Bool = false,
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (ScanInstructionsCoordinator, NavigationControllerSpy, ScanInstructionsDelegateSpy, UserSettingsSpy, EnvironmentSpies) {
+		
+		let environmentSpies = setupEnvironmentSpies()
+		let navigationSpy = NavigationControllerSpy()
+		let scanInstructionsDelegateSpy = ScanInstructionsDelegateSpy()
+		let userSettingsSpy = UserSettingsSpy()
+		let sut = ScanInstructionsCoordinator(
+			navigationController: navigationSpy,
+			delegate: scanInstructionsDelegateSpy,
+			isOpenedFromMenu: isOpenedFromMenu,
+			allowSkipInstruction: true,
+			userSettings: userSettingsSpy
+		)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, navigationSpy, scanInstructionsDelegateSpy, userSettingsSpy, environmentSpies)
 	}
-
+	
 	// MARK: - Tests
 	
 	func test_userDidCompletePages_withScanLock() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true
-		)
+		let (sut, _, scanInstructionsDelegateSpy, _, _) = makeSUT()
 		
 		// When
 		sut.userDidCompletePages(hasScanLock: true)
 		
 		// Then
-		expect(self.scanInstructionsDelegateSpy.invokedScanInstructionsDidFinish) == true
-		expect(self.scanInstructionsDelegateSpy.invokedScanInstructionsDidFinishParameters?.hasScanLock) == true
+		expect(scanInstructionsDelegateSpy.invokedScanInstructionsDidFinish) == true
+		expect(scanInstructionsDelegateSpy.invokedScanInstructionsDidFinishParameters?.hasScanLock) == true
 	}
 	
 	func test_userDidCompletePages_withoutScanLock() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true
-		)
+		let (sut, _, scanInstructionsDelegateSpy, _, _) = makeSUT()
 		
 		// When
 		sut.userDidCompletePages(hasScanLock: false)
 		
 		// Then
-		expect(self.scanInstructionsDelegateSpy.invokedScanInstructionsDidFinish) == true
-		expect(self.scanInstructionsDelegateSpy.invokedScanInstructionsDidFinishParameters?.hasScanLock) == false
+		expect(scanInstructionsDelegateSpy.invokedScanInstructionsDidFinish) == true
+		expect(scanInstructionsDelegateSpy.invokedScanInstructionsDidFinishParameters?.hasScanLock) == false
 	}
 	
 	func test_userDidCancelScanInstructions() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true
-		)
+		let (sut, _, scanInstructionsDelegateSpy, _, _) = makeSUT()
 		
 		// When
 		sut.userDidCancelScanInstructions()
 		
 		// Then
-		expect(self.scanInstructionsDelegateSpy.invokedScanInstructionsWasCancelled) == true
+		expect(scanInstructionsDelegateSpy.invokedScanInstructionsWasCancelled) == true
 	}
 	
 	func test_userWishesToSelectRiskSetting() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true
-		)
+		let (sut, navigationSpy, _, _, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSelectRiskSetting()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RiskSettingInstructionViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RiskSettingInstructionViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToReadPolicyInformation() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true
-		)
+		let (sut, navigationSpy, _, _, _) = makeSUT()
 		
 		// When
 		sut.userWishesToReadPolicyInformation()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PolicyInformationViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is PolicyInformationViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_consume_redeemHolder() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true
-		)
+		let (sut, _, _, _, _) = makeSUT()
 		let universalLink = UniversalLink.redeemHolderToken(requestToken: RequestToken(
 			token: "STXT2VF3389TJ2",
 			protocolVersion: "3.0",
@@ -146,13 +121,7 @@ class ScanInstructionsCoordinatorTests: XCTestCase {
 	func test_start_showPolicy() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true,
-			userSettings: userSettingsSpy
-		)
+		let (sut, navigationSpy, _, userSettingsSpy, environmentSpies) = makeSUT()
 		userSettingsSpy.stubbedScanInstructionShown = true
 		userSettingsSpy.stubbedPolicyInformationShown = false
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
@@ -161,20 +130,14 @@ class ScanInstructionsCoordinatorTests: XCTestCase {
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is PolicyInformationViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is PolicyInformationViewController) == true
 	}
 	
 	func test_start_showRiskSetting() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: false,
-			allowSkipInstruction: true,
-			userSettings: userSettingsSpy
-		)
+		let (sut, navigationSpy, _, userSettingsSpy, environmentSpies) = makeSUT()
 		userSettingsSpy.stubbedScanInstructionShown = true
 		userSettingsSpy.stubbedPolicyInformationShown = true
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
@@ -183,20 +146,14 @@ class ScanInstructionsCoordinatorTests: XCTestCase {
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RiskSettingInstructionViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RiskSettingInstructionViewController) == true
 	}
 	
 	func test_start_showScanInstructions() {
 		
 		// Given
-		sut = ScanInstructionsCoordinator(
-			navigationController: navigationSpy,
-			delegate: scanInstructionsDelegateSpy,
-			isOpenedFromMenu: true,
-			allowSkipInstruction: true,
-			userSettings: userSettingsSpy
-		)
+		let (sut, navigationSpy, _, userSettingsSpy, environmentSpies) = makeSUT(isOpenedFromMenu: true)
 		userSettingsSpy.stubbedScanInstructionShown = true
 		userSettingsSpy.stubbedPolicyInformationShown = true
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
@@ -205,7 +162,7 @@ class ScanInstructionsCoordinatorTests: XCTestCase {
 		sut.start()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
 	}
 }

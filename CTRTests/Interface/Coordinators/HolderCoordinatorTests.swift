@@ -13,61 +13,76 @@ import CoronaCheckUI
 import ViewControllerPresentationSpy
 
 class HolderCoordinatorTests: XCTestCase {
-
-	var sut: HolderCoordinator!
-
-	var navigationSpy: NavigationControllerSpy!
-	var environmentSpies: EnvironmentSpies!
+	
 	var alertVerifier: AlertVerifier?
 	var window = UIWindow()
-
+	
 	override func setUp() {
-
+		
 		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
-		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
-		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
-		navigationSpy = NavigationControllerSpy()
 		alertVerifier = AlertVerifier()
-		sut = HolderCoordinator(
-			navigationController: navigationSpy,
-			window: window
-		)
 	}
 	
 	override func tearDown() {
 		super.tearDown()
 		alertVerifier = nil
 	}
-
+	
+	internal func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (HolderCoordinator, NavigationControllerSpy, EnvironmentSpies) {
+		
+			let environmentSpies = setupEnvironmentSpies()
+			environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = true
+			environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
+			let navigationSpy = NavigationControllerSpy()
+			let sut = HolderCoordinator(
+				navigationController: navigationSpy,
+				window: window
+			)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, navigationSpy, environmentSpies)
+	}
+	
 	// MARK: - Tests
 
 	func testRunsDatabaseCleanupOnStart() {
+		
+		// Given
+		let (sut, _, environmentSpies) = makeSUT()
+		
 		// When
 		sut.start()
 
 		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == true
+		expect(environmentSpies.walletManagerSpy.invokedExpireEventGroups) == true
 	}
 	
 	func testRunsDatabaseCleanupOnStart_archiveModeEnabled() {
+		
+		// Given
+		let (sut, _, environmentSpies) = makeSUT()
+		
 		// When
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		sut.start()
 		
 		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedExpireEventGroups) == false
+		expect(environmentSpies.walletManagerSpy.invokedRemoveVaccinationAssessmentEventGroups) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveDomesticGreenCards) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveDraftEventGroups) == false
+		expect(environmentSpies.walletManagerSpy.invokedExpireEventGroups) == false
 	}
 	
 	func testStartNewFeatures() {
 
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
@@ -84,13 +99,14 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.start()
 
 		// Then
-		expect(self.sut.childCoordinators).toNot(beEmpty())
-		expect(self.sut.childCoordinators.first is NewFeaturesCoordinator) == true
+		expect(sut.childCoordinators).toNot(beEmpty())
+		expect(sut.childCoordinators.first is NewFeaturesCoordinator) == true
 	}
 
 	func testFinishNewFeatures() {
 
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
@@ -98,7 +114,7 @@ class HolderCoordinatorTests: XCTestCase {
 
 		sut.childCoordinators = [
 			NewFeaturesCoordinator(
-				navigationController: navigationSpy,
+				navigationController: sut.navigationController,
 				newFeaturesManager: NewFeaturesManagerSpy(),
 				delegate: sut
 			)
@@ -108,7 +124,7 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.finishNewFeatures()
 
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	// MARK: - Universal Links -
@@ -116,6 +132,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_redeemHolder() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
@@ -130,14 +147,15 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
-		expect(self.sut.unhandledUniversalLink) == nil
+		expect(navigationSpy.pushViewControllerCallCount).toEventually(equal(1))
+		expect(navigationSpy.viewControllers.last is InputRetrievalCodeViewController).toEventually(beTrue())
+		expect(sut.unhandledUniversalLink) == nil
 	}
 	
 	func test_consume_redeemHolder_addEvents_disabled() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsAddingEventsEnabledResult = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
@@ -153,13 +171,14 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == false
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == nil
+		expect(navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(sut.unhandledUniversalLink) == nil
 	}
 	
 	func test_consume_redeemHolder_needsOnboarding() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = true
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
@@ -175,13 +194,14 @@ class HolderCoordinatorTests: XCTestCase {
 		// Then
 		
 		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == universalLink
+		expect(navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(sut.unhandledUniversalLink) == universalLink
 	}
 	
 	func test_consume_redeemHolder_needsConsent() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = true
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
@@ -196,13 +216,14 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == universalLink
+		expect(navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(sut.unhandledUniversalLink) == universalLink
 	}
 	
 	func test_consume_redeemHolder_needsUpdating() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = true
@@ -217,13 +238,14 @@ class HolderCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
-		expect(self.sut.unhandledUniversalLink) == universalLink
+		expect(navigationSpy.pushViewControllerCallCount).toEventually(equal(0))
+		expect(sut.unhandledUniversalLink) == universalLink
 	}
 	
 	func test_consume_tvsAuth() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		let universalLink = UniversalLink.tvsAuth(returnURL: URL(string: "https://coronacheck.nl"))
 		
 		// When
@@ -236,6 +258,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_consume_thirdPartyScannerApp() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		
 		// When
@@ -250,75 +273,81 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_navigateToChooseQRCodeType() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToChooseQRCodeType()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel)
 			.to(beAnInstanceOf(ChooseProofTypeViewModel.self))
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAddPaperProof() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToAddPaperProof()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ContentWithImageViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ContentWithImageViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ContentWithImageViewController) == true
+		expect((navigationSpy.viewControllers.last as? ContentWithImageViewController)?.viewModel)
 			.to(beAnInstanceOf(PaperProofStartScanningViewModel.self))
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(sut.childCoordinators).to(haveCount(1))
 	}
 	
 	func test_navigateToAboutThisApp() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToAboutThisApp()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is AboutThisAppViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is AboutThisAppViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAboutThisApp_userWishesToOpenScanLog() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.navigateToAboutThisApp()
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
 		
 		// When
 		viewModel.outcomeHandler(.userWishesToOpenScanLog) // Should not be handled by HolderCoordinator
 		
 		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPresent) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateBackToStart() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateBackToStart()
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToRootViewController) == true
+		expect(navigationSpy.invokedPopToRootViewController) == true
 	}
 
 	func test_presentDCCQRDetails() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -345,74 +374,80 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToOpenTheMenu() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToOpenTheMenu()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is MenuViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is MenuViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 
 	func test_userWishesToMakeQRFromRemoteEvent() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToMakeQRFromRemoteEvent(FakeRemoteEvent.fakeRemoteEventVaccination, originalMode: .vaccination)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListRemoteEventsViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
 	}
 
 	func test_userWishesToCreateANegativeTestQR() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateANegativeTestQR()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 
 	func test_userWishesToChooseTestLocation_GGDenabled() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDEnabledResult = true
 		
 		// When
 		sut.userWishesToChooseTestLocation()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseTestLocationViewModel.self))
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToChooseTestLocation_GGDdisabled() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsGGDEnabledResult = false
 		
 		// When
 		sut.userWishesToChooseTestLocation()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is InputRetrievalCodeViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userHasNotBeenTested() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -432,59 +467,64 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToCreateANegativeTestQRFromGGD() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateANegativeTestQRFromGGD()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
 	}
 	
 	func test_userWishesToCreateAVaccinationQR() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateAVaccinationQR()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
 	}
 
 	func test_userWishesToCreateARecoveryQR() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateARecoveryQR()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RemoteEventStartViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
 	}
 	
 	func test_userWishesToCreateAQR() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToCreateAQR()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListOptionsViewController) == true
-		expect((self.navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListOptionsViewController) == true
+		expect((navigationSpy.viewControllers.last as? ListOptionsViewController)?.viewModel).to(beAnInstanceOf(ChooseProofTypeViewModel.self))
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 
 	func test_userWishesMoreInfoAboutClockDeviation() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -502,6 +542,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutOutdatedConfig() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -519,6 +560,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutExpiredQR_vaccination_notInArchiveMode() throws {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -540,6 +582,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutExpiredQR_vaccination_inArchiveMode() throws {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -561,6 +604,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutExpiredQR_recovery_inArchiveMode() throws {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -582,6 +626,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutHiddenQR() throws {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = false
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -603,6 +648,7 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesMoreInfoAboutHiddenQR_inArchiveMode() throws {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.featureFlagManagerSpy.stubbedIsInArchiveModeResult = true
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
@@ -624,17 +670,19 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToViewQRs() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToViewQRs(greenCardObjectIDs: [])
 		
 		// Then
-		expect(self.navigationSpy.invokedPresent) == true
+		expect(navigationSpy.invokedPresent) == true
 	}
 	
 	func test_userWishesToViewQRs_differentContext() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
 		var greenCard: GreenCard?
 		let context = dataStoreManager.managedObjectContext()
@@ -653,12 +701,13 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID])
 		
 		// Then
-		expect(self.navigationSpy.invokedPresent) == true
+		expect(navigationSpy.invokedPresent) == true
 	}
 	
 	func test_userWishesToViewQRs_sameContext() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		var greenCard: GreenCard?
 		let context = Current.dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -676,15 +725,16 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.userWishesToViewQRs(greenCardObjectIDs: [greenCardObjectID])
 		
 		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ShowQRViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPresent) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ShowQRViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_displayError() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle()
 		)
@@ -693,15 +743,16 @@ class HolderCoordinatorTests: XCTestCase {
 		sut.presentError(content: content, backAction: {})
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ContentViewController) == true
-		let viewModel = try XCTUnwrap( (self.navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ContentViewController) == true
+		let viewModel = try XCTUnwrap( (navigationSpy.viewControllers.last as? ContentViewController)?.viewModel)
 		expect(viewModel.content.value.title) == L.generalNetworkwasbusyTitle()
 	}
 	
 	func test_userWishesMoreInfoAboutNoTestToken() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -719,32 +770,35 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_userWishesToSeeStoredEvents() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSeeStoredEvents()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ListStoredEventsViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ListStoredEventsViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToSeeEventDetails() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSeeEventDetails("test_userWishesToSeeEventDetails", details: [])
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is StoredEventDetailsViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is StoredEventDetailsViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_migrationIsSuccessful() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		
 		// When
 		sut.showMigrationSuccessfulDialog()
@@ -764,43 +818,46 @@ class HolderCoordinatorTests: XCTestCase {
 	func test_removeDataAfterMigration_cancel() throws {
 		
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
 		try alertVerifier?.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_retainButton())
 		
 		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == false
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == false
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == false
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == false
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == false
 	}
 	
 	func test_removeDataAfterMigration_remove() throws {
 		
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		sut.showMigrationSuccessfulDialog()
 		
 		// When
 		try alertVerifier?.executeAction(forButton: L.holder_migrationFlow_deleteDetails_dialog_deleteButton())
 		
 		// Then
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == true
-		expect(self.environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingGreenCards) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingEventGroups) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingBlockedEvents) == true
+		expect(environmentSpies.walletManagerSpy.invokedRemoveExistingMismatchedIdentityEvents) == true
 	}
 	
 	func test_userWishesToExportPDF() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		
 		// When
 		sut.userWishesToExportPDF()
 		
 		// Then
-		expect(self.sut.childCoordinators).toNot(beEmpty())
-		expect(self.sut.childCoordinators.first is PDFExportCoordinator) == true
+		expect(sut.childCoordinators).toNot(beEmpty())
+		expect(sut.childCoordinators.first is PDFExportCoordinator) == true
 	}
 }
 // swiftlint:enable type_body_length file_length
