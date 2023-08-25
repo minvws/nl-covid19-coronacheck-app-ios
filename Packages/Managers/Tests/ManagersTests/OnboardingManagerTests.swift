@@ -11,23 +11,27 @@ import XCTest
 class OnboardingManagerTests: XCTestCase {
 
 	// MARK: - Setup
-	var sut: OnboardingManager!
-	var secureUserSettingsSpy: SecureUserSettingsSpy!
 	
-	override func setUp() {
-
-		secureUserSettingsSpy = SecureUserSettingsSpy()
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (OnboardingManager, SecureUserSettingsSpy) {
+			
+		let secureUserSettingsSpy = SecureUserSettingsSpy()
 		secureUserSettingsSpy.stubbedOnboardingData = .empty
 		
-		sut = OnboardingManager(secureUserSettings: secureUserSettingsSpy)
-		super.setUp()
+		let sut = OnboardingManager(secureUserSettings: secureUserSettingsSpy)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, secureUserSettingsSpy)
 	}
-
+	
 	// MARK: - Tests
 
 	func testGetNeedsOnboarding() {
 
 		// Given
+		let (sut, _) = makeSUT()
 
 		// When
 		let value = sut.needsOnboarding
@@ -39,7 +43,8 @@ class OnboardingManagerTests: XCTestCase {
 	func testGetNeedsConsent() {
 
 		// Given
-
+		let (sut, _) = makeSUT()
+		
 		// When
 		let value = sut.needsConsent
 
@@ -50,7 +55,8 @@ class OnboardingManagerTests: XCTestCase {
 	func testFinishOnboarding() {
 
 		// Given
-
+		let (sut, secureUserSettingsSpy) = makeSUT()
+		
 		// When
 		sut.finishOnboarding()
 
@@ -61,6 +67,7 @@ class OnboardingManagerTests: XCTestCase {
 	func testConsentGiven() {
 
 		// Given
+		let (sut, secureUserSettingsSpy) = makeSUT()
 
 		// When
 		sut.consentGiven()

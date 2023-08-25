@@ -17,22 +17,24 @@ import TestingShared
 
 class WalletManagerTests: XCTestCase {
 
-	private var sut: WalletManager!
-	private var dataStoreManager: DataStoreManaging!
-	private var cryptoManagerSpy: CryptoManagerSpy!
-	
-	override func setUp() {
-
-		super.setUp()
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (WalletManager, DataStoreManaging, CryptoManagerSpy) {
+			
+		let cryptoManagerSpy = CryptoManagerSpy()
+		let dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
+		let sut = WalletManager(dataStoreManager: dataStoreManager)
 		
-		cryptoManagerSpy = CryptoManagerSpy()
-		dataStoreManager = DataStoreManager(.inMemory, persistentContainerName: "CoronaCheck", loadPersistentStoreCompletion: { _ in })
-		sut = WalletManager(dataStoreManager: dataStoreManager)
+		trackForMemoryLeak(instance: dataStoreManager, file: file, line: line)
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, dataStoreManager, cryptoManagerSpy)
 	}
-
+	
 	func test_initializer() {
 
 		// Given
+		let (_, dataStoreManager, _) = makeSUT()
 		var wallet: Wallet?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -49,6 +51,7 @@ class WalletManagerTests: XCTestCase {
 	func test_initializer_withExistingWallet() {
 
 		// Given
+		let (_, dataStoreManager, _) = makeSUT()
 		var wallet: Wallet?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -60,7 +63,7 @@ class WalletManagerTests: XCTestCase {
 			let exitingWallet = Wallet(label: WalletManager.walletName, managedContext: context)
 
 			// When
-			sut = WalletManager(dataStoreManager: dataStoreManager)
+			_ = WalletManager(dataStoreManager: dataStoreManager)
 			wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
 
 			// Then
@@ -72,6 +75,7 @@ class WalletManagerTests: XCTestCase {
 	func test_storeEventGroup() {
 
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 
 		// When
@@ -91,6 +95,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeDraftEventGroups() {
 		
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
@@ -117,6 +122,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingEventGroups_withProviderIdentifier() {
 
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		sut.storeEventGroup(
 			.vaccination,
@@ -137,6 +143,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingEventGroups_otherProviderIdentifier() {
 
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		sut.storeEventGroup(
 			.vaccination,
@@ -156,6 +163,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingEventGroups_otherType() {
 
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		sut.storeEventGroup(
 			.test(.ggd),
@@ -175,6 +183,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeAllEventGroups() {
 
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 		sut.storeEventGroup(
 			.test(.ggd),
@@ -208,6 +217,7 @@ class WalletManagerTests: XCTestCase {
 	func test_listEventGroups() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
@@ -240,7 +250,8 @@ class WalletManagerTests: XCTestCase {
 	func test_fetchSignedEvents_noEvents() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let signedEvents = sut.fetchSignedEvents()
 
@@ -251,6 +262,7 @@ class WalletManagerTests: XCTestCase {
 	func test_fetchSignedEvents_invalidData() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
@@ -269,6 +281,7 @@ class WalletManagerTests: XCTestCase {
 	func test_fetchSignedEvents_oneEvent() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
@@ -289,6 +302,7 @@ class WalletManagerTests: XCTestCase {
 	func test_fetchSignedEvents_twoEvents() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
@@ -317,17 +331,19 @@ class WalletManagerTests: XCTestCase {
 	func test_expireEventGroups_noEvents() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
 		
 		// When
 		sut.expireEventGroups(forDate: now)
 		
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(0))
+		expect(sut.listEventGroups()).to(haveCount(0))
 	}
 	
 	func test_expireEventGroups_oneVaccination_notExpired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -340,12 +356,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(1))
+		expect(sut.listEventGroups()).to(haveCount(1))
 	}
 
 	func test_expireEventGroups_oneVaccination_expired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -358,12 +375,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(0))
+		expect(sut.listEventGroups()).to(haveCount(0))
 	}
 
 	func test_expireEventGroups_oneVaccination_expired_oneVaccination_notExpired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -384,12 +402,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(1))
+		expect(sut.listEventGroups()).to(haveCount(1))
 	}
 
 	func test_expireEventGroups_oneVaccination_notExpired_oneRecovery_notExpired_oneTest_notExpired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -418,12 +437,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(3))
+		expect(sut.listEventGroups()).to(haveCount(3))
 	}
 
 	func test_expireEventGroups_oneVaccination_expired_oneRecovery_notExpired_oneTest_notExpired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -452,12 +472,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(2))
+		expect(sut.listEventGroups()).to(haveCount(2))
 	}
 
 	func test_expireEventGroups_oneVaccination_expired_oneRecovery_expired_oneTest_notExpired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -486,12 +507,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(1))
+		expect(sut.listEventGroups()).to(haveCount(1))
 	}
 
 	func test_expireEventGroups_oneVaccination_oneRecovery_oneTest_allExpired() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GDD",
@@ -520,12 +542,13 @@ class WalletManagerTests: XCTestCase {
 		sut.expireEventGroups(forDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(beEmpty())
+		expect(sut.listEventGroups()).to(beEmpty())
 	}
 	
 	func test_removeEventGroup() throws {
 		
 		// Given
+		let (sut, dataStoreManager, _) = makeSUT()
 		var wallet: Wallet?
 		var eventGroup: EventGroup?
 		let context = dataStoreManager.managedObjectContext()
@@ -558,16 +581,19 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExistingGreenCards_noGreenCards() {
 		
 		// Given
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		sut.removeExistingGreenCards()
 		
 		// Then
-		expect(self.sut.listGreenCards()).to(beEmpty())
+		expect(sut.listGreenCards()).to(beEmpty())
 	}
 	
 	func test_removeExistingGreenCards_oneGreenCard() {
 		
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_removeExistingGreenCards_oneGreenCard"
@@ -576,18 +602,19 @@ class WalletManagerTests: XCTestCase {
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
-		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(sut.listGreenCards()).to(haveCount(1))
 		
 		// When
 		sut.removeExistingGreenCards()
 		
 		// Then
-		expect(self.sut.listGreenCards()).to(beEmpty())
+		expect(sut.listGreenCards()).to(beEmpty())
 	}
 	
 	func test_removeExistingGreenCards_twoGreenCards() {
 
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_removeExistingGreenCards_twoGreenCards"
@@ -597,19 +624,20 @@ class WalletManagerTests: XCTestCase {
 		)
 		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
 		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
-		expect(self.sut.listGreenCards()).to(haveCount(2))
+		expect(sut.listGreenCards()).to(haveCount(2))
 
 		// When
 		sut.removeExistingGreenCards()
 
 		// Then
-		expect(self.sut.listGreenCards()).to(beEmpty())
+		expect(sut.listGreenCards()).to(beEmpty())
 	}
 
 	func test_removeExpiredGreenCards_noGreenCards() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let result = sut.removeExpiredGreenCards(forDate: now)
 
@@ -620,6 +648,7 @@ class WalletManagerTests: XCTestCase {
 	func test_removeExpiredGreenCards_oneValidGreenCard() throws {
 
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_removeExistingGreenCards_oneGreenCard"
@@ -628,7 +657,7 @@ class WalletManagerTests: XCTestCase {
 			dcc: EuCredentialAttributes.DigitalCovidCertificate.sampleWithVaccine(doseNumber: 1, totalDose: 2)
 		)
 		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
-		expect(self.sut.listGreenCards()).to(haveCount(1))
+		expect(sut.listGreenCards()).to(haveCount(1))
 
 		// When
 		let result = sut.removeExpiredGreenCards(forDate: now)
@@ -640,6 +669,7 @@ class WalletManagerTests: XCTestCase {
 	func test_storeInternationalGreenCard_vaccination() throws {
 
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_storeInternationalGreenCard_vaccination"
@@ -653,16 +683,17 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(success) == true
-		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		expect(sut.listGreenCards()).to(haveCount(1))
+		expect(sut.listGreenCards().first?.credentials).to(haveCount(1))
 		// Credential Valid From should be epoch for a DCC (immediately valid)
-		expect(self.sut.listGreenCards().first?.castCredentials()?.first?.validFrom) == Date(timeIntervalSince1970: 0)
-		expect(self.sut.listGreenCards().first?.castOrigins()?.first?.castHints()).to(haveCount(1))
+		expect(sut.listGreenCards().first?.castCredentials()?.first?.validFrom) == Date(timeIntervalSince1970: 0)
+		expect(sut.listGreenCards().first?.castOrigins()?.first?.castHints()).to(haveCount(1))
 	}
 
 	func test_storeInternationalGreenCard_vaccination_failedCredential() throws {
 
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOrigin],
 			credential: "test_storeInternationalGreenCard_vaccination"
@@ -674,13 +705,14 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(success) == false
-		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listGreenCards().first?.credentials).to(beEmpty())
+		expect(sut.listGreenCards()).to(haveCount(1))
+		expect(sut.listGreenCards().first?.credentials).to(beEmpty())
 	}
 
 	func test_storeInternationalGreenCard_recovery() throws {
 
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeRecoveryOriginExpiringIn30Days],
 			credential: "test_storeInternationalGreenCard_recovery"
@@ -694,13 +726,14 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(success) == true
-		expect(self.sut.listGreenCards()).to(haveCount(1))
-		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		expect(sut.listGreenCards()).to(haveCount(1))
+		expect(sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 
 	func test_storeInternationalGreenCard_twoVaccinations() throws {
 
 		// Given
+		let (sut, _, cryptoManagerSpy) = makeSUT()
 		let internationalGreenCard = RemoteGreenCards.EuGreenCard(
 			origins: [RemoteGreenCards.Origin.fakeVaccinationOriginExpiringIn30Days],
 			credential: "test_storeInternationalGreenCard_twoVaccinations"
@@ -714,13 +747,14 @@ class WalletManagerTests: XCTestCase {
 		_ = sut.storeEuGreenCard(internationalGreenCard, cryptoManager: cryptoManagerSpy)
 
 		// Then
-		expect(self.sut.listGreenCards()).to(haveCount(2))
-		expect(self.sut.listGreenCards().first?.credentials).to(haveCount(1))
+		expect(sut.listGreenCards()).to(haveCount(2))
+		expect(sut.listGreenCards().first?.credentials).to(haveCount(1))
 	}
 
 	func test_updateEventGroup() throws {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
@@ -728,19 +762,20 @@ class WalletManagerTests: XCTestCase {
 			expiryDate: nil,
 			isDraft: false
 		)
-		let autoId = try XCTUnwrap(self.sut.listEventGroups().first?.uniqueIdentifier)
+		let autoId = try XCTUnwrap(sut.listEventGroups().first?.uniqueIdentifier)
 
 		// When
 		sut.updateEventGroup(identifier: "\(autoId)", expiryDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(1))
-		expect(self.sut.listEventGroups().first?.expiryDate) == now
+		expect(sut.listEventGroups()).to(haveCount(1))
+		expect(sut.listEventGroups().first?.expiryDate) == now
 	}
 
 	func test_updateEventGroup_invalidIdentifier() {
 
 		// Given
+		let (sut, _, _) = makeSUT()
 		sut.storeEventGroup(
 			.test(.ggd),
 			providerIdentifier: "CoronaCheck",
@@ -753,14 +788,15 @@ class WalletManagerTests: XCTestCase {
 		sut.updateEventGroup(identifier: "wrongIdentifier", expiryDate: now)
 
 		// Then
-		expect(self.sut.listEventGroups()).to(haveCount(1))
-		expect(self.sut.listEventGroups().first?.expiryDate) == nil
+		expect(sut.listEventGroups()).to(haveCount(1))
+		expect(sut.listEventGroups().first?.expiryDate) == nil
 	}
 
 	func test_createAndPersistRemovedEvent_noEvents() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeBlocked,
@@ -774,7 +810,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_wrapperVaccination() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeVaccinationResultWrapper,
@@ -790,7 +827,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_wrapperRecovery() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeRecoveryResultWrapper,
@@ -806,7 +844,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_wrapperPositiveTest() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			wrapper: EventFlow.EventResultWrapper.fakePositiveTestResultWrapper,
@@ -822,7 +861,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_wrapperNegativeTest() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			wrapper: EventFlow.EventResultWrapper.fakeNegativeTestResultWrapper,
@@ -838,7 +878,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_euCredentialAttributesVaccination() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			euCredentialAttributes: EuCredentialAttributes.fakeVaccination(),
@@ -854,7 +895,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_euCredentialAttributesRecovery() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			euCredentialAttributes: EuCredentialAttributes.fakeRecovery,
@@ -870,7 +912,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_euCredentialAttributesNegativeTest() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			euCredentialAttributes: EuCredentialAttributes.fakeTest,
@@ -886,7 +929,8 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_euCredentialAttributesInvalid() {
 
 		// Given
-
+		let (sut, _, _) = makeSUT()
+		
 		// When
 		let persisted = sut.createAndPersistRemovedEvent(
 			euCredentialAttributes: EuCredentialAttributes.fakeEmptyCertificate,
@@ -900,6 +944,7 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_blockedItem_cryptoFail() throws {
 
 		// Given
+		let (sut, dataStoreManager, cryptoManagerSpy) = makeSUT()
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = nil
 
 		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
@@ -919,6 +964,7 @@ class WalletManagerTests: XCTestCase {
 	func test_createAndPersistRemovedEvent_blockedItem() throws {
 
 		// Given
+		let (sut, dataStoreManager, cryptoManagerSpy) = makeSUT()
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes.fakeVaccination()
 		let eventGroup = try XCTUnwrap(EventGroup.fakeEventGroup(dataStoreManager: dataStoreManager, type: .vaccination, expiryDate: .distantFuture))
 		let blobExpiry = RemoteGreenCards.BlobExpiry(

@@ -15,27 +15,21 @@ import Reachability
 @testable import Persistence
 
 class CryptoLibUtilityTests: XCTestCase {
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (CryptoLibUtility, NetworkSpy, UserSettingsSpy, ReachabilitySpy, RemoteConfigManagingSpy) {
 
-	private var sut: CryptoLibUtility!
-	private var networkSpy: NetworkSpy!
-	private var userSettingsSpy: UserSettingsSpy!
-	private var reachabilitySpy: ReachabilitySpy!
-	private var remoteConfigManagerSpy: RemoteConfigManagingSpy!
-	private var fileStorageSpy: FileStorageSpy!
-
-	override func setUp() {
-
-		super.setUp()
-		networkSpy = NetworkSpy()
-		userSettingsSpy = UserSettingsSpy()
-		reachabilitySpy = ReachabilitySpy()
-		fileStorageSpy = FileStorageSpy()
-		remoteConfigManagerSpy = RemoteConfigManagingSpy()
+		let networkSpy = NetworkSpy()
+		let userSettingsSpy = UserSettingsSpy()
+		let reachabilitySpy = ReachabilitySpy()
+		let fileStorageSpy = FileStorageSpy()
+		let remoteConfigManagerSpy = RemoteConfigManagingSpy()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
 		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
 		
-		sut = CryptoLibUtility(
+		let sut = CryptoLibUtility(
 			now: { now },
 			userSettings: userSettingsSpy,
 			networkManager: networkSpy,
@@ -43,6 +37,10 @@ class CryptoLibUtilityTests: XCTestCase {
 			reachability: reachabilitySpy,
 			fileStorage: fileStorageSpy
 		)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, networkSpy, userSettingsSpy, reachabilitySpy, remoteConfigManagerSpy)
 	}
 
 	/// Test the crypto lib utility  update call no result from the api
@@ -50,15 +48,16 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
+			let (sut, networkSpy, _, _, _) = self.makeSUT()
+			networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 			// When
-			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
+			sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
 				// Then
-				expect(self.networkSpy.invokedGetPublicKeys) == true
+				expect(networkSpy.invokedGetPublicKeys) == true
 				expect(state.isFailure) == true
 				done()
 			})
@@ -70,14 +69,15 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
+			let (sut, networkSpy, _, _, _) = self.makeSUT()
+			networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 			// When
-			self.sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
+			sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {
 				//
 			}, completion: { state in
 
 				// Then
-				expect(self.networkSpy.invokedGetPublicKeys) == true
+				expect(networkSpy.invokedGetPublicKeys) == true
 				expect(state.isSuccess) == true
 				done()
 			})
@@ -87,6 +87,7 @@ class CryptoLibUtilityTests: XCTestCase {
 	func test_update_withinTTL_callsbackImmediately() {
 
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, remoteConfigManagerSpy) = makeSUT()
 		remoteConfigManagerSpy.stubbedStoredConfiguration = .default
 		remoteConfigManagerSpy.stubbedStoredConfiguration.configTTL = 3600
 		remoteConfigManagerSpy.stubbedStoredConfiguration.configMinimumIntervalSeconds = 60
@@ -105,12 +106,14 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Assert
 		expect(hitCallback).toEventually(beTrue())
-		expect(self.networkSpy.invokedGetPublicKeys) == true
-		expect(self.sut.isLoading) == false
+		expect(networkSpy.invokedGetPublicKeys) == true
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_notWithinTTL_doesNotCallbackImmediately() {
+	
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _) = makeSUT()
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(40 * days * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 		var didNotHitCallback = true
@@ -122,12 +125,14 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Assert
 		expect(didNotHitCallback) == true
-		expect(self.networkSpy.invokedGetPublicKeys) == true
-		expect(self.sut.isLoading) == false
+		expect(networkSpy.invokedGetPublicKeys) == true
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_neverFetchedBefore_doesNotCallbackImmediately() {
+		
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _) = makeSUT()
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = nil
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 		var didNotHitCallback = true
@@ -139,12 +144,13 @@ class CryptoLibUtilityTests: XCTestCase {
 
 		// Assert
 		expect(didNotHitCallback) == true
-		expect(self.networkSpy.invokedGetPublicKeys) == true
-		expect(self.sut.isLoading) == false
+		expect(networkSpy.invokedGetPublicKeys) == true
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_butOutsideMinimumRefreshInterval_doesRefresh() {
 
+		let (sut, networkSpy, userSettingsSpy, _, _) = makeSUT()
 		// Load a new configuration into RemoteConfigurationManager to start with
 		// (currently not an easy way to change it from using .default)
 		var config = RemoteConfiguration.default
@@ -184,11 +190,12 @@ class CryptoLibUtilityTests: XCTestCase {
 		expect(didCallTTLCallback) == true
 		expect(receivedResult).to(beSuccess())
 
-		expect(self.sut.isLoading) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_withinTTL_withinMinimumRefreshInterval_doesNotRefresh() {
 
+		let (sut, networkSpy, userSettingsSpy, _, _) = makeSUT()
 		// Load a new configuration into RemoteConfigurationManager to start with
 		// (currently not an easy way to change it from using .default)
 		var firstConfig = RemoteConfiguration.default
@@ -234,23 +241,26 @@ class CryptoLibUtilityTests: XCTestCase {
 		}
 		
 		expect(receivedResult).to(beSuccess())
-		expect(self.sut.isLoading) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_doesNotLoadWhenAlreadyLoading() {
+		
 		// Arrange
-
+		let (sut, networkSpy, _, _, _) = makeSUT()
+		
 		// Act
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
-		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
+		expect(networkSpy.invokedGetPublicKeysCount) == 1
 	}
 
 	func test_networkFailure_callsback_networkFailure() {
 
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _) = makeSUT()
 		let serverError = ServerError.error(statusCode: 500, response: nil, error: .invalidResponse)
 		let result: Result<Data, ServerError> = .failure(serverError)
 
@@ -270,11 +280,13 @@ class CryptoLibUtilityTests: XCTestCase {
 			default:
 				assertionFailure("results didn't match")
 		}
-		expect(self.sut.isLoading) == false
+		expect(sut.isLoading) == false
 	}
 
 	func test_update_updatesConfigFetchedTimestamp() {
+
 		// Arrange
+		let (sut, networkSpy, userSettingsSpy, _, _) = makeSUT()
 		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = now.addingTimeInterval(20 * days * ago).timeIntervalSince1970
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(Data()), ())
 
@@ -282,20 +294,21 @@ class CryptoLibUtilityTests: XCTestCase {
 		sut.update(isAppLaunching: false, immediateCallbackIfWithinTTL: {}, completion: { _ in })
 
 		// Assert
-		expect(self.userSettingsSpy.invokedIssuerKeysFetchedTimestamp) == now.timeIntervalSince1970
-		expect(self.sut.isLoading) == false
+		expect(userSettingsSpy.invokedIssuerKeysFetchedTimestamp) == now.timeIntervalSince1970
+		expect(sut.isLoading) == false
 	}
 
 	func test_reachability() {
 
 		// Arrange
-		expect(self.networkSpy.invokedGetPublicKeysCount) == 0
+		let (sut, networkSpy, _, reachabilitySpy, _) = makeSUT()
+		expect(networkSpy.invokedGetPublicKeysCount) == 0
 		sut.registerTriggers()
 
 		// Act
 		reachabilitySpy.invokedWhenReachable?(try! Reachability()) // swiftlint:disable:this force_try
 
 		// Assert
-		expect(self.networkSpy.invokedGetPublicKeysCount) == 1
+		expect(networkSpy.invokedGetPublicKeysCount) == 1
 	}
 }

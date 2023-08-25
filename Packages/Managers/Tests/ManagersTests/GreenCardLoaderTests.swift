@@ -1,9 +1,9 @@
 /*
-*  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ *  Copyright (c) 2023 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 
 import Foundation
 @testable import Transport
@@ -13,7 +13,7 @@ import XCTest
 import Nimble
 
 class GreenCardLoaderTests: XCTestCase {
-
+	
 	private var sut: GreenCardLoader!
 	
 	var networkManagerSpy: NetworkSpy!
@@ -76,6 +76,7 @@ class GreenCardLoaderTests: XCTestCase {
 	}
 	
 	func test_signTheEvents_prepareIssue_success_withoutPrepareIssueMessage() {
+		
 		// Arrange
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = .some(Data())
@@ -95,6 +96,7 @@ class GreenCardLoaderTests: XCTestCase {
 	}
 	
 	func test_signTheEvents_fetchGreenCards_failsWithoutSignedEvents() {
+		
 		// Arrange
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = .some(Data())
@@ -115,6 +117,7 @@ class GreenCardLoaderTests: XCTestCase {
 	}
 	
 	func test_signTheEvents_fetchGreenCards_failsWithoutCommitmentMessage() {
+		
 		// Arrange
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = .some(Data())
@@ -136,6 +139,7 @@ class GreenCardLoaderTests: XCTestCase {
 	}
 	
 	func test_signTheEvents_fetchGreenCards_failsOnNetworkError() {
+		
 		// Arrange
 		let serverError: ServerError = .error(statusCode: nil, response: nil, error: .noInternetConnection)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
@@ -159,6 +163,7 @@ class GreenCardLoaderTests: XCTestCase {
 	}
 	
 	func test_signTheEvents_storeGreenCards_withEmptyResponse() {
+		
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
@@ -181,6 +186,7 @@ class GreenCardLoaderTests: XCTestCase {
 	}
 	
 	func test_signTheEvents_storeGreenCards_withOnlyInternationalGreenCard() {
+		
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		cryptoManagerSpy.stubbedGenerateSecretKeyResult = secretKey
@@ -201,8 +207,9 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(self.walletManagerSpy.invokedFetchSignedEvents) == true
 		expect(self.walletManagerSpy.invokedRemoveExistingGreenCards) == true
 	}
-
+	
 	func test_signTheEvents_storeGreenCards_withInternational_success() throws {
+		
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
@@ -233,11 +240,11 @@ class GreenCardLoaderTests: XCTestCase {
 		expect(sentRequestParameters["issueCommitmentMessage"] as? String) == "d29ya3M="
 		expect(sentRequestParameters["flows"] as? [String]) == ["positivetest"]
 		expect(sentRequestParameters["stoken"] as? String) == "test"
-		
 		expect(result?.successValue) == response
 	}
-
+	
 	func test_signTheEvents_storeGreenCards_withBlobExpireDates_success() {
+		
 		// Arrange
 		let secretKey = "secretKey".data(using: .utf8)
 		var result: Result<RemoteGreenCards.Response, GreenCardLoader.Error>?
@@ -259,7 +266,6 @@ class GreenCardLoaderTests: XCTestCase {
 		
 		// Assert
 		expect(self.walletManagerSpy.invokedUpdateEventGroupIdentifierCount) == 1
-		
 		expect(result?.successValue) == response
 	}
 }

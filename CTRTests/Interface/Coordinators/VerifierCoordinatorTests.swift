@@ -11,24 +11,25 @@ import CoronaCheckUI
 @testable import CTR
 import Mobilecore
 
+// swiftlint:disable type_body_length
 class VerifierCoordinatorTests: XCTestCase {
 
-	private var sut: VerifierCoordinator!
-
-	private var navigationSpy: NavigationControllerSpy!
-	private var environmentSpies: EnvironmentSpies!
 	private var window = UIWindow()
-
-	override func setUp() {
-
-		super.setUp()
-		environmentSpies = setupEnvironmentSpies()
-
-		navigationSpy = NavigationControllerSpy()
-		sut = VerifierCoordinator(
+	
+	private func makeSUT(
+		file: StaticString = #filePath,
+		line: UInt = #line) -> (VerifierCoordinator, NavigationControllerSpy, EnvironmentSpies) {
+		
+		let environmentSpies = setupEnvironmentSpies()
+		let navigationSpy = NavigationControllerSpy()
+		let sut = VerifierCoordinator(
 			navigationController: navigationSpy,
 			window: window
 		)
+		
+		trackForMemoryLeak(instance: sut, file: file, line: line)
+		
+		return (sut, navigationSpy, environmentSpies)
 	}
 
 	// MARK: - Tests
@@ -36,6 +37,7 @@ class VerifierCoordinatorTests: XCTestCase {
 	func testStartNewFeatures() {
 
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 
@@ -60,6 +62,7 @@ class VerifierCoordinatorTests: XCTestCase {
 	func testFinishNewFeatures() {
 
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
 
 		sut.childCoordinators = [
@@ -74,7 +77,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.finishNewFeatures()
 
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	// MARK: - Universal Link -
@@ -82,6 +85,7 @@ class VerifierCoordinatorTests: XCTestCase {
 	func test_consume_thirdPartyScannerApp() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
@@ -92,14 +96,15 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp?.name) == "CoronaCheck"
-		expect(self.sut.thirdPartyScannerApp?.returnURL) == URL(string: "https://coronacheck.nl")
-		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController).toEventually(beTrue())
+		expect(sut.thirdPartyScannerApp?.name) == "CoronaCheck"
+		expect(sut.thirdPartyScannerApp?.returnURL) == URL(string: "https://coronacheck.nl")
+		expect(navigationSpy.viewControllers.last is VerifierScanViewController).toEventually(beTrue())
 	}
 	
 	func test_consume_thirdPartyScannerApp_invalideScanLockState() {
 		
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		environmentSpies.scanLockManagerSpy.stubbedState = .locked(until: Date())
@@ -110,12 +115,13 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp) == nil
+		expect(sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_consume_thirdPartyScannerApp_invalidRiskLevel() {
 		
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://coronacheck.nl"))
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "coronacheck.nl", name: "CoronaCheck")]
 		environmentSpies.scanLockManagerSpy.stubbedState = .unlocked
@@ -126,12 +132,13 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp) == nil
+		expect(sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_consume_thirdPartyScannerApp_domainNotAllowed() {
 		
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.remoteConfigManagerSpy.stubbedStoredConfiguration.universalLinkPermittedDomains = [UniversalLinkPermittedDomain(url: "oronacheck.nl", name: "CoronaCheck")]
 		let universalLink = UniversalLink.thirdPartyScannerApp(returnURL: URL(string: "https://apple.com"))
 		
@@ -140,12 +147,13 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == true
-		expect(self.sut.thirdPartyScannerApp) == nil
+		expect(sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_consume_redeemHolder() {
 		
 		// Given
+		let (sut, _, environmentSpies) = makeSUT()
 		environmentSpies.onboardingManagerSpy.stubbedNeedsConsent = false
 		environmentSpies.onboardingManagerSpy.stubbedNeedsOnboarding = false
 		environmentSpies.newFeaturesManagerSpy.stubbedNeedsUpdating = false
@@ -160,24 +168,26 @@ class VerifierCoordinatorTests: XCTestCase {
 		
 		// Then
 		expect(consumed) == false
-		expect(self.sut.thirdPartyScannerApp) == nil
+		expect(sut.thirdPartyScannerApp) == nil
 	}
 	
 	func test_navigateToVerifierWelcome() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToVerifierWelcome()
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
 	}
 	
 	func test_navigateToVerifierWelcome_withNavigationStack() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		navigationSpy.viewControllers = [
 			VerifierStartScanningViewController(viewModel: VerifierStartScanningViewModel(coordinator: sut)),
 			DeniedAccessViewController(viewModel: DeniedAccessViewModel(coordinator: sut))
@@ -187,41 +197,44 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.navigateToVerifierWelcome()
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
 	}
 
 	func test_didFinish_userTappedProceedToScan_scanInstructionsNotShown() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		
 		// When
 		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
 	}
 	
 	func test_didFinish_userTappedProceedToScan_scanInstructionsShown() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		
 		// When
 		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is VerifierScanViewController) == true
 	}
 	
 	func test_didFinish_userTappedProceedToScan_scanInstructionsShown_withNavigationStack() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		navigationSpy.viewControllers = [
 			VerifierStartScanningViewController(viewModel: VerifierStartScanningViewModel(coordinator: sut)),
@@ -233,14 +246,15 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 0
-		expect(self.navigationSpy.invokedPopToViewController) == true
-		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 0
+		expect(navigationSpy.invokedPopToViewController) == true
+		expect(navigationSpy.viewControllers.last is VerifierScanViewController) == true
 	}
 	
 	func test_didFinish_userTappedProceedToScan_scanInstructionsShown_policyInformationNotShown() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = false
 		environmentSpies.featureFlagManagerSpy.stubbedIs1GVerificationPolicyEnabledResult = true
 		environmentSpies.userSettingsSpy.stubbedPolicyInformationShown = false
@@ -249,14 +263,15 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
 	}
 	
 	func test_didFinish_userTappedProceedToScan_scanInstructionsShown_policy3G() {
 		
 		// Given
+		let (sut, navigationSpy, environmentSpies) = makeSUT()
 		environmentSpies.userSettingsSpy.stubbedScanInstructionShown = true
 		environmentSpies.verificationPolicyManagerSpy.stubbedState = .policy3G
 		environmentSpies.featureFlagManagerSpy.stubbedAreMultipleVerificationPoliciesEnabledResult = false
@@ -265,79 +280,85 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.didFinish(VerifierStartResult.userTappedProceedToScan)
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is VerifierScanViewController) == true
 	}
 	
 	func test_didFinish_userTappedProceedToScanInstructions() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.didFinish(VerifierStartResult.userTappedProceedToScanInstructions)
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
-		expect(self.sut.childCoordinators).to(haveCount(1))
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ScanInstructionsViewController) == true
+		expect(sut.childCoordinators).to(haveCount(1))
 	}
 	
 	func test_navigateToCheckIdentity() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let details = MobilecoreVerificationDetails()
 		
 		// When
 		sut.navigateToCheckIdentity(details)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is CheckIdentityViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is CheckIdentityViewController) == true
 	}
 	
 	func test_navigateToVerifiedAccess() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let access = VerifiedAccess.verified(.policy1G)
 		
 		// When
 		sut.navigateToVerifiedAccess(access)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is VerifiedAccessViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is VerifiedAccessViewController) == true
 	}
 	
 	func test_navigateToDeniedAccess() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToDeniedAccess()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is DeniedAccessViewController) == true
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is DeniedAccessViewController) == true
 	}
 	
 	func test_userWishesToOpenTheMenu() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToOpenTheMenu()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is MenuViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is MenuViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesMoreInfoAboutClockDeviation() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -355,100 +376,108 @@ class VerifierCoordinatorTests: XCTestCase {
 	func test_userWishesToOpenScanLog() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToOpenScanLog()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is ScanLogViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is ScanLogViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToOpenRiskLevelSettings() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToOpenRiskLevelSettings()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RiskSettingStartViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RiskSettingStartViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAboutThisApp() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToAboutThisApp()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is AboutThisAppViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is AboutThisAppViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToAboutThisApp_userWishesToOpenScanLog() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.navigateToAboutThisApp()
-		let viewModel = try XCTUnwrap((self.navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
+		let viewModel = try XCTUnwrap((navigationSpy.viewControllers.last as? AboutThisAppViewController)?.viewModel)
 		
 		// When
 		viewModel.outcomeHandler(.userWishesToOpenScanLog)
 		
 		// Then
-		expect(self.navigationSpy.invokedPresent) == false
-		expect(self.navigationSpy.pushViewControllerCallCount) == 2
-		expect(self.navigationSpy.viewControllers.last is ScanLogViewController).toEventually(beTrue())
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPresent) == false
+		expect(navigationSpy.pushViewControllerCallCount) == 2
+		expect(navigationSpy.viewControllers.last is ScanLogViewController).toEventually(beTrue())
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_navigateToVerifiedInfo() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.navigateToVerifiedInfo()
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is VerifiedInfoViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is VerifiedInfoViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToSetRiskLevel_shouldSelect() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSetRiskLevel(shouldSelectSetting: true)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RiskSettingUnselectedViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RiskSettingUnselectedViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesToSetRiskLevel_shouldNotSelect() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.userWishesToSetRiskLevel(shouldSelectSetting: false)
 		
 		// Then
-		expect(self.navigationSpy.pushViewControllerCallCount) == 1
-		expect(self.navigationSpy.viewControllers.last is RiskSettingSelectedViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.pushViewControllerCallCount) == 1
+		expect(navigationSpy.viewControllers.last is RiskSettingSelectedViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 	
 	func test_userWishesMoreInfoAboutDeniedQRScan() throws {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		let viewControllerSpy = ViewControllerSpy()
 		navigationSpy.viewControllers = [
 			viewControllerSpy
@@ -468,18 +497,20 @@ class VerifierCoordinatorTests: XCTestCase {
 	func test_scanInstructionsDidFinish_withScanLock() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		
 		// When
 		sut.scanInstructionsDidFinish(hasScanLock: true)
 		
 		// Then
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.viewControllers.last is VerifierStartScanningViewController) == true
 	}
 	
 	func test_scanInstructionsDidFinish_withoutScanLock() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.childCoordinators = [
 			ScanInstructionsCoordinator(
 				navigationController: sut.navigationController,
@@ -493,14 +524,15 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.scanInstructionsDidFinish(hasScanLock: false)
 		
 		// Then
-		expect(self.sut.childCoordinators).to(beEmpty())
-		expect(self.navigationSpy.invokedPopToViewController) == false
-		expect(self.navigationSpy.viewControllers.last is VerifierScanViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPopToViewController) == false
+		expect(navigationSpy.viewControllers.last is VerifierScanViewController) == true
 	}
 	
 	func test_scanInstructionsWasCancelled() {
 		
 		// Given
+		let (sut, navigationSpy, _) = makeSUT()
 		sut.childCoordinators = [
 			ScanInstructionsCoordinator(
 				navigationController: sut.navigationController,
@@ -514,7 +546,8 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.scanInstructionsWasCancelled()
 		
 		// Then
-		expect(self.navigationSpy.invokedPopViewController) == true
-		expect(self.sut.childCoordinators).to(beEmpty())
+		expect(navigationSpy.invokedPopViewController) == true
+		expect(sut.childCoordinators).to(beEmpty())
 	}
 }
+// swiftlint:enable type_body_length
