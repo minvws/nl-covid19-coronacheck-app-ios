@@ -9,20 +9,20 @@ External Dependencies
 - HTTPStubs - 9.1.0
     https://github.com/AliSoftware/OHHTTPStubs
 - iOS Security - 1.9.9
-  https://github.com/securing/IOSSecuritySuite
+    https://github.com/securing/IOSSecuritySuite
 - mobileCore 0b1d6d8c2a699449f614e90a0e2e5cc643fa67a1 # v0.4.5
     https://github.com/minvws/nl-covid19-coronacheck-mobile-core
 - Lottie - 4.2.0
-      https://github.com/airbnb/lottie-ios
+	https://github.com/airbnb/lottie-ios
 - Nimble - 10.0.0 (last version with v11 support)
     https://github.com/Quick/Nimble
-- OpenSLL - 1.1.2100
+- OpenSLL - 1.1.2200
     https://github.com/krzyzanowskim/OpenSSL 
 - Reachability - 5.1.0
     https://github.com/ashleymills/Reachability.swift
 - RDO Modules main
     https://github.com/minvws/nl-rdo-app-ios-modules
-- R.swift - 7.3.0
+- R.swift - 7.3.2
     https://github.com/mac-cain13/R.swift.git
 - Snapshot Testing - 1.11.1 
     https://github.com/pointfreeco/swift-snapshot-testing
@@ -32,7 +32,7 @@ External Dependencies
 
 
 RDO Modules
-- OpenSLL - 1.1.2100
+- OpenSLL - 1.1.2200
     https://github.com/krzyzanowskim/OpenSSL 
 - HTTPStubs - 9.1.0
     https://github.com/AliSoftware/OHHTTPStubs
@@ -108,7 +108,7 @@ Persistence
 
 Resources
 - Shared
-- R.swift - 7.3.0
+- R.swift - 7.3.2
     https://github.com/mac-cain13/R.swift.git
 - TestingShared
 - Nimble - 10.0.0 (last version with v11 support)
@@ -157,7 +157,7 @@ TestingShared
 
 App
 - Lottie - 4.2.0
-      https://github.com/airbnb/lottie-ios
+	https://github.com/airbnb/lottie-ios
 - RDO Modules main
     https://github.com/minvws/nl-rdo-app-ios-modules 
 - BrightFutures - 8.2.0
