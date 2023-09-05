@@ -24,7 +24,7 @@ jobs:
           xcrun simctl boot "iPhone 14 Pro Max" || true
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup Homebrew
         run: |
