@@ -26,7 +26,7 @@ jobs:
           xcrun simctl boot "iPhone 13" || true
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
