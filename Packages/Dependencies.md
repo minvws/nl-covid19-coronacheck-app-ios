@@ -24,7 +24,7 @@ External Dependencies
     https://github.com/minvws/nl-rdo-app-ios-modules
 - R.swift - 7.3.2
     https://github.com/mac-cain13/R.swift.git
-- Snapshot Testing - 1.11.1 
+- Snapshot Testing - 1.12.0
     https://github.com/pointfreeco/swift-snapshot-testing
 - SwiftSoup - 2.6.1
     https://github.com/scinfu/SwiftSoup
@@ -53,7 +53,7 @@ CoronaCheckTest
 - TestingShared
 - Nimble - 10.0.0 (last version with v11 support)
     https://github.com/Quick/Nimble
-- Snapshot Testing - 1.11.1 
+- Snapshot Testing - 1.12.0
     https://github.com/pointfreeco/swift-snapshot-testing
 
 CoronaCheckUI
@@ -127,7 +127,7 @@ ReusableViews
 - TestingShared
 - Nimble - 10.0.0 (last version with v11 support)
     https://github.com/Quick/Nimble
-- Snapshot Testing - 1.11.1 
+- Snapshot Testing - 1.12.0
     https://github.com/pointfreeco/swift-snapshot-testing
 
 Shared
@@ -150,7 +150,7 @@ Transport
 
 TestingShared
 - Shared
-- Snapshot Testing - 1.11.1 
+- Snapshot Testing - 1.12.0
     https://github.com/pointfreeco/swift-snapshot-test
 - Nimble - 10.0.0 (last version with v11 support)
     https://github.com/Quick/Nimble
