@@ -8,7 +8,7 @@ name: CTR
 packages:
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 4.2.0
+    majorVersion: 4.3.0
   RDOModules:
     github: minvws/nl-rdo-app-ios-modules
     branch: main
