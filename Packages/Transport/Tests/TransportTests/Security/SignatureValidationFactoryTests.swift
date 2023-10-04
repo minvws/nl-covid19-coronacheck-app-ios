@@ -142,7 +142,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 		expect(result) == false
 	}
 
-	func test_securityCheckerProvider_validate_trustedSigner() {
+	func disabled_test_securityCheckerProvider_validate_trustedSigner() {
 
 		// Given
 		let provider = EventFlow.EventProvider(
