@@ -99,8 +99,8 @@ final class ShowHintsViewModel {
 					return L.holder_listRemoteEvents_endStateCantCreateCertificate_message(
 						eventMode.errorStateLocalization.lowercased(),
 						ErrorCode(flow: eventMode.flow, step: .signer, clientCode: errorCode).description
-					)
-				}
+				)
+			}
 		}
 		
 		var buttonTitle: String {
