@@ -11,10 +11,6 @@ import CoronaCheckUI
 
 class ShowQRItemViewTests: XCTestCase {
 
-	override func setUp() {
-		super.setUp()
-	}
-
 	func testLoading() {
 		let sut = ShowQRItemView()
 		sut.visibilityState = .loading

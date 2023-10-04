@@ -11,10 +11,6 @@ import CoronaCheckUI
 
 class ShowQRScreenshotBlockingViewTests: XCTestCase {
 
-	override func setUp() {
-		super.setUp()
-	}
-
 	func testContent() {
 		let sut = ShowQRScreenshotBlockingView()
 		sut.title = "ShowQRScreenshotBlockingView title"

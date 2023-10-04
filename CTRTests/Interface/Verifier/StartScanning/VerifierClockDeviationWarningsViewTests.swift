@@ -11,10 +11,6 @@ import CoronaCheckTest
 
 class VerifierClockDeviationWarningsViewTests: XCTestCase {
 
-	override func setUp() {
-		super.setUp()
-	}
-
 	func testDefaultRendering() {
 
 		// Arrange

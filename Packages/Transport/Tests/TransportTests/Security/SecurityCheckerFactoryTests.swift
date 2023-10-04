@@ -11,11 +11,6 @@ import Nimble
 
 class SecurityCheckerFactoryTests: XCTestCase {
 	
-	override func setUp() {
-		
-		super.setUp()
-	}
-	
 	func test_securityCheckerNone_checkSSL() {
 		
 		// Given
