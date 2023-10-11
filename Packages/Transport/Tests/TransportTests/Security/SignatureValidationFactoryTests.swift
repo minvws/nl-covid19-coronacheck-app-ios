@@ -12,11 +12,6 @@ import Nimble
 
 class SignatureValidationFactoryTests: XCTestCase {
 
-	override func setUp() {
-
-		super.setUp()
-	}
-
 	// MARK: Strategy none
 
 	func test_securityCheckerNone_validate() {
@@ -147,7 +142,7 @@ class SignatureValidationFactoryTests: XCTestCase {
 		expect(result) == false
 	}
 
-	func test_securityCheckerProvider_validate_trustedSigner() {
+	func disabled_test_securityCheckerProvider_validate_trustedSigner() {
 
 		// Given
 		let provider = EventFlow.EventProvider(

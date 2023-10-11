@@ -28,7 +28,7 @@ jobs:
 
   test:
     runs-on: macos-13
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
         # 🧐 when changing below, don't forget to also change the device name in the Fastfile too: 

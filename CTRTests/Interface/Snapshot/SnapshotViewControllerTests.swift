@@ -29,11 +29,6 @@ class SnapshotViewControllerTests: XCTestCase {
 		window = UIWindow()
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-	}
-
 	func loadView() {
 
 		if let sut {
