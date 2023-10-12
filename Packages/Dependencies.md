@@ -12,11 +12,11 @@ External Dependencies
     https://github.com/securing/IOSSecuritySuite
 - mobileCore 0b1d6d8c2a699449f614e90a0e2e5cc643fa67a1 # v0.4.5
     https://github.com/minvws/nl-covid19-coronacheck-mobile-core
-- Lottie - 4.3.0
+- Lottie - 4.3.3
 	https://github.com/airbnb/lottie-ios
 - Nimble - 10.0.0 (last version with v11 support)
     https://github.com/Quick/Nimble
-- OpenSLL - 3.1.2000
+- OpenSLL - 3.1.2001
     https://github.com/krzyzanowskim/OpenSSL 
 - Reachability - 5.1.0
     https://github.com/ashleymills/Reachability.swift
@@ -32,7 +32,7 @@ External Dependencies
 
 
 RDO Modules
-- OpenSLL - 3.1.2000
+- OpenSLL - 3.1.2001
     https://github.com/krzyzanowskim/OpenSSL 
 - HTTPStubs - 9.1.0
     https://github.com/AliSoftware/OHHTTPStubs
@@ -156,7 +156,7 @@ TestingShared
     https://github.com/Quick/Nimble
 
 App
-- Lottie - 4.3.0
+- Lottie - 4.3.3
 	https://github.com/airbnb/lottie-ios
 - RDO Modules main
     https://github.com/minvws/nl-rdo-app-ios-modules 
