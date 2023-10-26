@@ -199,7 +199,7 @@ class SecurityCheckerWorkerTests: XCTestCase {
 		// openssl s_client -showcerts -servername holder-api.coronacheck.nl -connect holder-api.coronacheck.nl:443
 		let realChain = [
 			try getCertificate("QuoVadis Root CA 2 G3"),
-			try getCertificate("QuoVadis Europe EV SSL CA G1")
+			try getCertificate("QuoVadis Global SSL ICA G3")
 		]
 		return realChain
 	}

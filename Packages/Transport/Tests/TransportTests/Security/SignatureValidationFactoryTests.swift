@@ -12,11 +12,6 @@ import Nimble
 
 class SignatureValidationFactoryTests: XCTestCase {
 
-	override func setUp() {
-
-		super.setUp()
-	}
-
 	// MARK: Strategy none
 
 	func test_securityCheckerNone_validate() {

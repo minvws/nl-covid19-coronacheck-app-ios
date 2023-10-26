@@ -29,11 +29,6 @@ class ConfigurationNotificationManagerTests: XCTestCase {
 		notificationCenterSpy.stubbedAddObserverForNameResult = NSObject()
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-	}
-
 	func test_shouldShowAlmostOutOfDateBanner_noConfigFetchedTimeStamp() {
 
 		// Given
