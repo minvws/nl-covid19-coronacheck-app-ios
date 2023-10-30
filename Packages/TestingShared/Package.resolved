@@ -28,21 +28,12 @@
       }
     },
     {
-      "identity" : "r.swift",
+      "identity" : "reachability.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mac-cain13/R.swift.git",
+      "location" : "https://github.com/ashleymills/Reachability.swift",
       "state" : {
-        "revision" : "cffbe4aa55ab5f012590b38ad114079c407e6937",
-        "version" : "7.2.4"
-      }
-    },
-    {
-      "identity" : "swift-argument-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser",
-      "state" : {
-        "revision" : "4ad606ba5d7673ea60679a61ff867cc1ff8c8e86",
-        "version" : "1.2.1"
+        "revision" : "c01bbdf2d633cf049ae1ed1a68a2020a8bda32e2",
+        "version" : "5.1.0"
       }
     },
     {
@@ -50,17 +41,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "f8a9c997c3c1dab4e216a8ec9014e23144cbab37",
-        "version" : "1.9.0"
+        "revision" : "bb0ea08db8e73324fe6c3727f755ca41a23ff2f4",
+        "version" : "1.14.2"
       }
     },
     {
-      "identity" : "xcodeedit",
+      "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tomlokhorst/XcodeEdit",
+      "location" : "https://github.com/apple/swift-syntax.git",
       "state" : {
-        "revision" : "cd466d6e8c5ffd2f2b61165d37b0646f09068e1e",
-        "version" : "2.9.0"
+        "revision" : "ffa3cd6fc2aa62adbedd31d3efaf7c0d86a9f029",
+        "version" : "509.0.1"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "8b6cf29eead8841a1fa7822481cb3af4ddaadba6",
+        "version" : "2.6.1"
       }
     }
   ],
