@@ -61,12 +61,6 @@ class AppCoordinator: Coordinator {
 		window.rootViewController = destination
 		window.makeKeyAndVisible()
 	}
-
-	// MARK: - Universal Link handling
-
-	func consume(universalLink: UniversalLink) -> Bool {
-		return false
-	}
 }
 
 

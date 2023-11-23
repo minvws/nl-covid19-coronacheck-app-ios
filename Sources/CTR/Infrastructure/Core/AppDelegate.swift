@@ -35,20 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		_ application: UIApplication,
 		configurationForConnecting connectingSceneSession: UISceneSession,
 		options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-			// Called when a new scene session is being created.
-			// Use this method to select a configuration to create the new scene with.
-			return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-		}
+		// Called when a new scene session is being created.
+		// Use this method to select a configuration to create the new scene with.
+		return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+	}
 	
-	@available(iOS 13.0, *)
-	func application(
-		_ application: UIApplication,
-		didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-			// Called when the user discards a scene session.
-			// If any sessions were discarded while the application was not running,
-			// this will be called shortly after application:didFinishLaunchingWithOptions.
-			// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-		}
 	
 	// MARK: - Open URL
 	
@@ -58,13 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		open url: URL,
 		options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 			
-		return false
-	}
-	
-	/// Entry point for Universal links in iOS 11/12 only (see SceneDelegate for iOS 13+)
-	/// Used for both running and cold-booted apps
-	func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-		
 		return false
 	}
 	
