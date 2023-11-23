@@ -227,7 +227,6 @@ targetTemplates:
     dependencies:
       - package: CoronaCheckTest
       - target: Holder
-        embed: true
     settings:
       TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
 
