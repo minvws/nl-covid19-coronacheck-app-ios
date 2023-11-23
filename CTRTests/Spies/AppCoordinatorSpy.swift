@@ -6,6 +6,7 @@
 */
 
 @testable import CTR
+import Foundation
 
 class AppCoordinatorSpy: AppCoordinatorDelegate {
 
@@ -23,33 +24,5 @@ class AppCoordinatorSpy: AppCoordinatorDelegate {
 		if shouldInvokeOpenUrlCompletionHandler {
 			completionHandler?()
 		}
-	}
-
-	var invokedHandleLaunchState = false
-	var invokedHandleLaunchStateCount = 0
-	var invokedHandleLaunchStateParameters: (state: LaunchState, Void)?
-	var invokedHandleLaunchStateParametersList = [(state: LaunchState, Void)]()
-
-	func handleLaunchState(_ state: LaunchState) {
-		invokedHandleLaunchState = true
-		invokedHandleLaunchStateCount += 1
-		invokedHandleLaunchStateParameters = (state, ())
-		invokedHandleLaunchStateParametersList.append((state, ()))
-	}
-
-	var invokedRetry = false
-	var invokedRetryCount = 0
-
-	func retry() {
-		invokedRetry = true
-		invokedRetryCount += 1
-	}
-
-	var invokedReset = false
-	var invokedResetCount = 0
-
-	func reset() {
-		invokedReset = true
-		invokedResetCount += 1
 	}
 }

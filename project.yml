@@ -156,7 +156,6 @@ targetTemplates:
       - package: BrightFutures
         product: BrightFutures
         embed: false
-      - sdk: libSwiftCoreGraphics.tbd
     settings:
       base:
         CURRENT_PROJECT_VERSION: 1 # needs to be present for project to build locally, but is overwritten by fastlane. No need to change.
@@ -228,7 +227,6 @@ targetTemplates:
     dependencies:
       - package: CoronaCheckTest
       - target: Holder
-      - framework: Vendor/ViewControllerPresentationSpy.framework
         embed: true
     settings:
       TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
