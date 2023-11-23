@@ -12,13 +12,6 @@ import OpenIDConnect
 protocol AppCoordinatorDelegate: AnyObject {
 	
 	func openUrl(_ url: URL, completionHandler: (() -> Void)?)
-	
-	func handleLaunchState(_ state: LaunchState)
-	
-	/// Retry loading the requirements
-	func retry()
-	
-	func reset()
 }
 
 class AppCoordinator: Coordinator {
@@ -76,38 +69,6 @@ class AppCoordinator: Coordinator {
 	}
 }
 
-// MARK: - LaunchStateDelegate
-
-extension AppCoordinator: LaunchStateManagerDelegate {
-	
-	func appIsDeactivated() {
-		
-	}
-	
-	func applicationShouldStart() {
-		
-	}
-	
-	func cryptoLibDidNotInitialize() {
-	
-	}
-	
-	func errorWhileLoading(_ errorTuples: [(error: ServerError, step: ErrorCode.Step)]) {
-
-	}
-	
-	func updateIsRequired(appStoreUrl: URL) {
-
-	}
-	
-	func updateIsRecommended(version: String, appStoreUrl: URL) {
-		
-	}
-	
-	func showPriorityNotification(_ notification: String) {
-	
-	}
-}
 
 // MARK: - AppCoordinatorDelegate
 
@@ -116,25 +77,6 @@ extension AppCoordinator: AppCoordinatorDelegate {
 	func openUrl(_ url: URL, completionHandler: (() -> Void)? = nil) {
 		
 		UIApplication.shared.open(url, completionHandler: { _ in completionHandler?() })
-	}
-	
-	/// Handle the launch state
-	/// - Parameter state: the launch state
-	func handleLaunchState(_ state: LaunchState) {
-		
-	}
-	
-	// MARK: - Retry -
-	
-	/// Retry loading the requirements
-	func retry() {
-	
-	}
-	
-	func reset() {
-		
-		childCoordinators = []
-		retry()
 	}
 }
 
