@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import OpenIDConnect
 
 protocol AppCoordinatorDelegate: AnyObject {
 	

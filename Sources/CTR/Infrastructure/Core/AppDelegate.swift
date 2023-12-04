@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import OpenIDConnect
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
