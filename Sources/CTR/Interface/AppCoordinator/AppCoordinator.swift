@@ -62,7 +62,6 @@ class AppCoordinator: Coordinator {
 	}
 }
 
-
 // MARK: - AppCoordinatorDelegate
 
 extension AppCoordinator: AppCoordinatorDelegate {
