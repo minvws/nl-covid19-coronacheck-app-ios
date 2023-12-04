@@ -36,7 +36,6 @@ app <- RestrictedBrowser
 # - Packages - 
 
 CoronaCheckFoundation { style.fill: "#ffcc00" }
-CoronaCheckFoundation <- Managers
 CoronaCheckFoundation <- Models
 CoronaCheckFoundation <- Persistence
 CoronaCheckFoundation <- Shared
@@ -48,16 +47,6 @@ CoronaCheckUI <- ReusableViews
 CoronaCheckUI <- Shared
 
 CryptoCore { style.fill: "#ffcc00" }
-
-Managers { style.fill: "#ffcc00" }
-Managers <- CryptoCore
-Managers <- Models
-Managers <- Persistence
-Managers <- Resources
-Managers <- Shared
-Managers <- Transport
-Managers <- BrightFutures
-Managers <- iOSSecuritySuite
 
 Models { style.fill: "#ffcc00" }
 Models <- CryptoCore

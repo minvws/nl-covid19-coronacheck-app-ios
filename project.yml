@@ -12,8 +12,6 @@ packages:
     path: ./Packages/CoronaCheckTest
   CoronaCheckUI:
     path: ./Packages/CoronaCheckUI
-  Managers:
-    path: ./Packages/Managers
   Models:
     path: ./Packages/Models
   Persistence:
@@ -26,8 +24,6 @@ packages:
     path: ./Packages/RestrictedBrowser
   Shared:
     path: ./Packages/Shared
-  Transport:
-    path: ./Packages/Transport
 
 # - Attributes:
 
@@ -120,14 +116,12 @@ targetTemplates:
       # SPM:
       - package: CoronaCheckFoundation
       - package: CoronaCheckUI
-      - package: Managers
       - package: Models
       - package: Persistence
       - package: Resources
       - package: ReusableViews
       - package: RestrictedBrowser
       - package: Shared
-      - package: Transport
         embed: false
     settings:
       base:
@@ -433,9 +427,6 @@ schemes:
       language: nl
     test:
       targets:
-        - package: Managers/ManagersTests
-          randomExecutionOrder: true
-          parallelizable: false
         - package: Models/ModelsTests
           randomExecutionOrder: true
           parallelizable: false
@@ -452,9 +443,6 @@ schemes:
           randomExecutionOrder: true
           parallelizable: false
         - package: Shared/SharedTests
-          randomExecutionOrder: true
-          parallelizable: false
-        - package: Transport/TransportTests
           randomExecutionOrder: true
           parallelizable: false
         - name: CTRTests

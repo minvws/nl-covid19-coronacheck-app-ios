@@ -7,7 +7,6 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import SafariServices
 import RestrictedBrowser
 
 protocol Coordinator: AnyObject {
