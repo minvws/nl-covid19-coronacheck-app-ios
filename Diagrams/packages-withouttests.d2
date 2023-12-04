@@ -7,18 +7,6 @@ Rswift: {
 Reachability: {
   shape: hexagon
 }
-BrightFutures: {
-  shape: hexagon
-}
-HTTPSecurity: {
-  shape: hexagon
-}
-LuhnCheck: {
-  shape: hexagon
-}
-iOSSecuritySuite: {
-  shape: hexagon
-}
 SwiftSoup: {
   shape: hexagon
 }
@@ -36,24 +24,13 @@ app <- RestrictedBrowser
 # - Packages - 
 
 CoronaCheckFoundation { style.fill: "#ffcc00" }
-CoronaCheckFoundation <- Models
 CoronaCheckFoundation <- Persistence
 CoronaCheckFoundation <- Shared
-CoronaCheckFoundation <- Transport
 
 CoronaCheckUI { style.fill: "#ffcc00" }
 CoronaCheckUI <- Resources
 CoronaCheckUI <- ReusableViews
 CoronaCheckUI <- Shared
-
-CryptoCore { style.fill: "#ffcc00" }
-
-Models { style.fill: "#ffcc00" }
-Models <- CryptoCore
-Models <- Persistence
-Models <- Shared
-Models <- Transport
-Models <- LuhnCheck
 
 Persistence { style.fill: "#ffcc00" }
 Persistence <- Shared
@@ -74,7 +51,3 @@ ReusableViews <- Resources
 Shared { style.fill: "#ffcc00" }
 Shared <- Reachability
 Shared <- SwiftSoup
-
-Transport { style.fill: "#ffcc00" }
-Transport <- HTTPSecurity
-Transport <- Shared

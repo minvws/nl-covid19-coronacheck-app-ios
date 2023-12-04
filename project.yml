@@ -12,8 +12,6 @@ packages:
     path: ./Packages/CoronaCheckTest
   CoronaCheckUI:
     path: ./Packages/CoronaCheckUI
-  Models:
-    path: ./Packages/Models
   Persistence:
     path: ./Packages/Persistence
   Resources:
@@ -116,7 +114,6 @@ targetTemplates:
       # SPM:
       - package: CoronaCheckFoundation
       - package: CoronaCheckUI
-      - package: Models
       - package: Persistence
       - package: Resources
       - package: ReusableViews
@@ -427,9 +424,6 @@ schemes:
       language: nl
     test:
       targets:
-        - package: Models/ModelsTests
-          randomExecutionOrder: true
-          parallelizable: false
         - package: Persistence/PersistenceTests
           randomExecutionOrder: true
           parallelizable: false
