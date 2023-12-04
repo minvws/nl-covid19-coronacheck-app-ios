@@ -14,8 +14,6 @@ packages:
     path: ./Packages/CoronaCheckUI
   CryptoCore:
     path: ./Packages/CryptoCore
-  DataMigration:
-    path: ./Packages/DataMigration
   Managers:
     path: ./Packages/Managers
   Models:
@@ -125,7 +123,6 @@ targetTemplates:
       - package: CoronaCheckFoundation
       - package: CoronaCheckUI
       - package: CryptoCore
-      - package: DataMigration
       - package: Managers
       - package: Models
       - package: Persistence
@@ -439,9 +436,6 @@ schemes:
       language: nl
     test:
       targets:
-        - package: DataMigration/DataMigrationTests
-          randomExecutionOrder: true
-          parallelizable: false
         - package: Managers/ManagersTests
           randomExecutionOrder: true
           parallelizable: false
