@@ -39,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
 	}
 	
-	
 	// MARK: - Open URL
 	
 	/// For handling __Deep Links__ only, - not relevant for Universal Links.
