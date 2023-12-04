@@ -19,19 +19,7 @@ LuhnCheck: {
 iOSSecuritySuite: {
   shape: hexagon
 }
-Lottie: {
-  shape: hexagon
-}
-QRGenerator: {
-  shape: hexagon
-}
-OpenIDConnect: {
-  shape: hexagon
-}
 SwiftSoup: {
-  shape: hexagon
-}
-GZip: {
   shape: hexagon
 }
 
@@ -41,15 +29,9 @@ app: {
   shape: package
 }
 
-app <- BrightFutures
 app <- CoronaCheckFoundation
 app <- CoronaCheckUI
 app <- CryptoCore
-app <- DataMigration
-app <- Lottie
-app <- OpenIDConnect
-app <- QRGenerator
-app <- Reachability
 app <- RestrictedBrowser
 
 # - Packages - 
@@ -67,10 +49,6 @@ CoronaCheckUI <- ReusableViews
 CoronaCheckUI <- Shared
 
 CryptoCore { style.fill: "#ffcc00" }
-
-DataMigration { style.fill: "#ffcc00" }
-DataMigration <- Shared
-DataMigration <- GZip
 
 Managers { style.fill: "#ffcc00" }
 Managers <- CryptoCore
