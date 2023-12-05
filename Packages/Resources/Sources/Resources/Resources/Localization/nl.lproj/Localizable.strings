@@ -478,7 +478,7 @@
 "holder_dcc_issuer" = "Afgever certificaat:";
 "holder_deactivation_url" = "https://coronacheck.nl/app/niet-in-gebruik";
 "holder_endOfLife_button" = "Naar CoronaCheck.nl";
-"holder_endOfLife_description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"holder_endOfLife_description" = "De app is niet meer in gebruikt. Ga voor meer informatie naar CoronaCheck.nl ";
 "holder_endOfLife_errorMessage" = "De website kan niet geopend worden.";
 "holder_endOfLife_title" = "App niet in gebruik";
 "holder_event_aboutVaccination_productName" = "Productnaam:";
