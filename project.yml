@@ -427,9 +427,6 @@ schemes:
         - package: Persistence/PersistenceTests
           randomExecutionOrder: true
           parallelizable: false
-        - package: Resources/ResourcesTests
-          randomExecutionOrder: true
-          parallelizable: false
         - package: RestrictedBrowser/RestrictedBrowserTests
           randomExecutionOrder: true
           parallelizable: false
