@@ -64,7 +64,7 @@ extension WebViewController: WKNavigationDelegate {
 
 		let authenticationMethod = challenge.protectionSpace.authenticationMethod
 		if authenticationMethod == NSURLAuthenticationMethodDefault || authenticationMethod == NSURLAuthenticationMethodHTTPBasic || authenticationMethod == NSURLAuthenticationMethodHTTPDigest {
-			let av = UIAlertController(title: webView.title, message: L.holder_login(hostname), preferredStyle: .alert)
+			let av = UIAlertController(title: webView.title, message: L.general_login(hostname), preferredStyle: .alert)
 			av.addTextField(configurationHandler: { textField in
 				textField.placeholder = L.generalUsername()
 			})

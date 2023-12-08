@@ -7,18 +7,10 @@
 
 import CoronaCheckFoundation
 import CoronaCheckUI
-import OpenIDConnect
 
 protocol AppCoordinatorDelegate: AnyObject {
 	
 	func openUrl(_ url: URL, completionHandler: (() -> Void)?)
-	
-	func handleLaunchState(_ state: LaunchState)
-	
-	/// Retry loading the requirements
-	func retry()
-	
-	func reset()
 }
 
 class AppCoordinator: Coordinator {
@@ -31,29 +23,7 @@ class AppCoordinator: Coordinator {
 	
 	private var privacySnapshotWindow: UIWindow?
 	
-	private var priorityNotificationWindow: UIWindow?
-	
-	private var shouldUsePrivacySnapShot = true
-
-	// Flag to prevent showing the priority notification dialog twice
-	// which can happen with the config being fetched within the TTL.
-	private var isPresentingPriorityNotification = false
-	
-	// Flag to prevent showing the priority notification dialog twice
-	// which can happen with the config being fetched within the TTL.
-	private var hasPresentedPriorityNotification = false
-	
-	// Flag to prevent showing the recommended update dialog twice
-	// which can happen with the config being fetched within the TTL.
-	private var isPresentingRecommendedUpdate = false
-	
-	// Flag to prevent showing the recommended update dialog twice
-	// which can happen with the config being fetched within the TTL.
-	private var isPresentingCryptoLibError = false
-	
 	var flavor = AppFlavor.flavor
-	
-	var launchStateManager: LaunchStateManaging
 	
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -61,8 +31,6 @@ class AppCoordinator: Coordinator {
 		
 		window = UIWindow(windowScene: scene)
 		self.navigationController = navigationController
-		self.launchStateManager = LaunchStateManager()
-		self.launchStateManager.delegate = self
 	}
 	
 	/// For use with iOS 12.
@@ -70,392 +38,27 @@ class AppCoordinator: Coordinator {
 		
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.navigationController = navigationController
-		self.launchStateManager = LaunchStateManager()
-		self.launchStateManager.delegate = self
 	}
 	
 	/// Designated starter method
 	func start() {
 		
-		if LaunchArgumentsHandler.shouldResetOnStart() {
-			Current.wipePersistedData(flavor: AppFlavor.holder)
-		}
-		
-		// Start the launcher for update checks
-		startLauncher()
+		appIsPermanentlyDeactivated()
 		addObservers()
 	}
 	
-	// MARK: - Private functions
-	
-	/// Launch the launcher
-	private func startLauncher() {
+	func appIsPermanentlyDeactivated() {
 		
-		let destination = LaunchViewController(
-			viewModel: LaunchViewModel(
-				coordinator: self,
-				flavor: flavor
-			)
-		)
-		// Set the root
-		window.rootViewController = navigationController
-		window.makeKeyAndVisible()
-		
-		navigationController.viewControllers = [destination]
-	}
-	
-	private func registerTriggers() {
-		Current.remoteConfigManager.registerTriggers()
-		Current.cryptoLibUtility.registerTriggers()
-	}
-	
-	/// Start the real application
-	private func startApplication() {
-		
-		// Start listeners after launching is done (willEnterForegroundNotification will mess up launch)
-		registerTriggers()
-		
-		switch flavor {
-			case .holder:
-				startAsHolder()
-			default:
-				startAsVerifier()
-		}
-	}
-	
-	/// Start the app as a holder
-	private func startAsHolder() {
-		
-		guard !shouldShowArchivedMode() else {
-			showArchivedMode()
-			return
-		}
-		
-		guard childCoordinators.isEmpty else {
-			if childCoordinators.first is HolderCoordinator {
-				childCoordinators.first?.start()
-			}
-			return
-		}
-		
-		let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(coordinator)
-		
-		if let universalLink = self.unhandledUniversalLink {
-			coordinator.receive(universalLink: universalLink)
-		}
-	}
-	
-	/// Start the app as a verifier
-	private func startAsVerifier() {
-		
-		guard childCoordinators.isEmpty else {
-			if childCoordinators.first is VerifierCoordinator {
-				childCoordinators.first?.start()
-			}
-			return
-		}
-		
-		let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(coordinator)
-		
-		if let universalLink = self.unhandledUniversalLink {
-			coordinator.receive(universalLink: universalLink)
-		}
-	}
-	
-	/// Show the Internet Required View
-	private func showInternetRequired() {
-		
-		let viewModel = InternetRequiredViewModel(coordinator: self)
-		displayAppStatus(with: viewModel)
-	}
-	
-	private func shouldShowArchivedMode() -> Bool {
-		
-		guard Current.featureFlagManager.isInArchiveMode() else {
-			return false
-		}
-		
-		if LaunchArgumentsHandler.shouldSkipArchiveEndStata() {
-			return false
-		}
-		
-		return Current.walletManager.listEventGroups().isEmpty
-	}
-	
-	/// Show the Archived ModeView
-	private func showArchivedMode() {
-		
-		let viewModel = AppArchivedViewModel(coordinator: self, informationUrl: URL(string: L.holder_archiveMode_link()))
-		displayAppStatus(with: viewModel)
-	}
-	
-	/// Show the error alert when crypto library is not initialized
-	private func showCryptoLibNotInitializedError() {
-		
-		guard !isPresentingCryptoLibError else {
-			return
-		}
-		
-		isPresentingCryptoLibError = true
-		
-		let errorCode = ErrorCode(flow: .onboarding, step: .publicKeys, clientCode: .failedToLoadCryptoLibrary)
-		let message = L.generalErrorCryptolibMessage("\(errorCode)")
-		
-		let alertController = UIAlertController(
-			title: L.generalErrorCryptolibTitle(),
-			message: message,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.generalErrorCryptolibRetry(),
-				style: .cancel,
-				handler: { [weak self] _ in
-					self?.retry()
-					self?.isPresentingCryptoLibError = false
-				}
-			)
-		)
-		window.rootViewController?.present(alertController, animated: true)
-	}
-	
-	/// Show an alert for the recommended update
-	private func showRecommendedUpdate(updateURL: URL) {
-		
-		isPresentingRecommendedUpdate = true
-		
-		let alertController = UIAlertController(
-			title: L.recommendedUpdateAppTitle(),
-			message: L.recommendedUpdateAppSubtitle(),
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.recommendedUpdateAppActionCancel(),
-				style: .cancel,
-				handler: { [weak self] _ in
-					self?.isPresentingRecommendedUpdate = false
-					self?.startApplication()
-				}
-			)
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: L.recommendedUpdateAppActionOk(),
-				style: .default,
-				handler: { [weak self] _ in
-					self?.openUrl(updateURL) {
-						self?.isPresentingRecommendedUpdate = false
-						self?.startApplication()
-					}
-				}
-			)
-		)
-		window.rootViewController?.present(alertController, animated: true)
-	}
-
-	/// Pop any existing presented viewControllers (AppUpdate / AppDeactivated)
-	private func popPresentedViewController(completion: @escaping () -> Void) {
-		
-		guard var topController = window.rootViewController else {
-			completion()
-			return
-		}
-		
-		while let newTopController = topController.presentedViewController {
-			topController = newTopController
-		}
-		
-		guard !(topController is UINavigationController) else {
-			completion()
-			return
-		}
-		
-		topController.dismiss(animated: true, completion: completion)
-	}
-	
-	/// Show the Action Required View
-	/// - Parameter versionInformation: the version information
-	private func displayAppStatus(with viewModel: AppStatusViewModel) {
-		
-		guard var topController = window.rootViewController else { return }
-		
-		while let newTopController = topController.presentedViewController {
-			topController = newTopController
-		}
-		let updateController = AppStatusViewController(viewModel: viewModel)
-		updateController.modalPresentationStyle = .fullScreen
-				
-		if let castedTopController = topController as? AppStatusViewController {
-			
-			if type(of: castedTopController.viewModel) != type(of: viewModel) {
-				// incoming viewModel does not equals presented ViewModel. Dismis modally presented VC, reload.
-				castedTopController.dismiss(animated: false) {
-					self.displayAppStatus(with: viewModel)
-				}
-			}
-			// Do nothing
-			return
-		}
-		
-		// Present updateController
-		
-		if topController is UINavigationController {
-			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
-		} else {
-			topController.present(updateController, animated: true)
-		}
-	}
-	
-	// MARK: - Universal Link handling
-	
-	/// If set, this should be handled at the first opportunity:
-
-	internal var unhandledUniversalLink: UniversalLink?
-	
-	func consume(universalLink: UniversalLink) -> Bool {
-		
-		switch universalLink {
-				
-			case .redeemHolderToken:
-				if Current.featureFlagManager.isAddingEventsEnabled() {
-					unhandledUniversalLink = universalLink
-					return true
-				} else {
-					// Do not cache token deeplinks when adding events is disabled.
-					return false
-				}
-				
-			case .tvsAuth,
-					.thirdPartyScannerApp:
-				
-				// If we reach here it means that there was no holder/verifierCoordinator initialized at the time
-				// the universal link was received. So hold onto it here, for when it is ready.
-				unhandledUniversalLink = universalLink
-				return true
-		}
-	}
-	
-	func closeTheApp() {
-		exit(0)
-	}
-}
-
-// MARK: - LaunchStateDelegate
-
-extension AppCoordinator: LaunchStateManagerDelegate {
-	
-	func appIsDeactivated() {
-		
-		registerTriggers()
 		let urlString: String = flavor == .holder ? L.holder_deactivation_url() : L.verifier_deactivation_url()
-
-		displayAppStatus(
-			with: AppDeactivatedViewModel(
-				coordinator: self,
-				informationUrl: URL(string: urlString),
-				flavor: flavor
-			)
-		)
-	}
-	
-	func applicationShouldStart() {
+		let destination = AppStatusViewController(viewModel: AppDeactivatedViewModel(
+			coordinator: self,
+			   informationUrl: URL(string: urlString),
+			   flavor: flavor
+		   ))
 		
-		popPresentedViewController {
-			self.startApplication()
-		}
-	}
-	
-	func cryptoLibDidNotInitialize() {
-		
-		showCryptoLibNotInitializedError()
-	}
-	
-	func errorWhileLoading(_ errorTuples: [(error: ServerError, step: ErrorCode.Step)]) {
-		
-		// Show Internet Required if we have a no internet
-		logDebug("tuples: \(errorTuples)")
-		for errorTuple in errorTuples {
-			switch errorTuple.error {
-				case .error(_, _, let error), .provider(_, _, _, let error):
-					if [.serverUnreachableTimedOut, .serverUnreachableConnectionLost, .noInternetConnection].contains(error) {
-						showInternetRequired()
-						return
-					}
-			}
-		}
-		
-		let errorCodes = ErrorCode.mapServerErrors(errorTuples, for: .onboarding)
-		let viewModel = LaunchErrorViewModel(errorCodes: errorCodes) { [weak self] url in
-			self?.openUrl(url)
-		} closeHandler: {
-			self.closeTheApp()
-		}
-
-		displayAppStatus(with: viewModel)
-	}
-	
-	func updateIsRequired(appStoreUrl: URL) {
-		
-		registerTriggers()
-		displayAppStatus(with: UpdateRequiredViewModel(coordinator: self, appStoreUrl: appStoreUrl, flavor: flavor))
-	}
-	
-	func updateIsRecommended(version: String, appStoreUrl: URL) {
-		
-		handleRecommendedUpdate(recommendedVersion: version, appStoreUrl: appStoreUrl)
-	}
-	
-	func showPriorityNotification(_ notification: String) {
-		
-		// Only show if the notification is not empty
-		guard notification.isNotEmpty else { return }
-		
-		// prevent presenting twice
-		guard !isPresentingPriorityNotification, !hasPresentedPriorityNotification else { return }
-		
-		isPresentingPriorityNotification = true
-		
-		let alertController = UIAlertController(
-			title: "",
-			message: notification,
-			preferredStyle: .alert
-		)
-
-		alertController.addAction(
-			UIAlertAction(
-				title: L.generalOk(),
-				style: .default,
-				handler: {  _ in
-					// We only want to show this notification once per session
-					self.hasPresentedPriorityNotification = true
-					self.isPresentingPriorityNotification = false
-					self.priorityNotificationWindow?.alpha = 0
-					self.priorityNotificationWindow?.isHidden = true
-					self.priorityNotificationWindow = nil
-				}
-			)
-		)
-		// Show the Priority Notification Alert on top of everything
-		if #available(iOS 13.0, *) {
-			guard let windowScene = window.windowScene else {
-				return
-			}
-			priorityNotificationWindow = UIWindow(windowScene: windowScene)
-		} else {
-			// Fallback on earlier versions
-			priorityNotificationWindow = UIWindow(frame: UIScreen.main.bounds)
-		}
-		
-		let clearVC = UIViewController()
-		clearVC.view.backgroundColor = .clear
-		priorityNotificationWindow?.rootViewController = clearVC
-		priorityNotificationWindow?.windowLevel = .alert + 1
-		priorityNotificationWindow?.alpha = 1
-		priorityNotificationWindow?.makeKeyAndVisible()
-		clearVC.present(alertController, animated: false)
+		// Set the root
+		window.rootViewController = destination
+		window.makeKeyAndVisible()
 	}
 }
 
@@ -467,90 +70,6 @@ extension AppCoordinator: AppCoordinatorDelegate {
 		
 		UIApplication.shared.open(url, completionHandler: { _ in completionHandler?() })
 	}
-	
-	/// Handle the launch state
-	/// - Parameter state: the launch state
-	func handleLaunchState(_ state: LaunchState) {
-		
-		launchStateManager.handleLaunchState(state)
-	}
-	
-	// MARK: - Recommended Update -
-	
-	private func handleRecommendedUpdate(recommendedVersion: String, appStoreUrl: URL) {
-		
-		guard !isPresentingRecommendedUpdate else {
-			// Do not proceed if we are presenting the recommended update dialog.
-			return
-		}
-		
-		switch flavor {
-			case .holder: handleRecommendedUpdateForHolder(
-				recommendedVersion: recommendedVersion,
-				appStoreUrl: appStoreUrl
-			)
-			case .verifier: handleRecommendedUpdateForVerifier(
-				appStoreUrl: appStoreUrl
-			)
-		}
-	}
-	
-	private func handleRecommendedUpdateForHolder(recommendedVersion: String, appStoreUrl: URL) {
-		
-		if let lastSeenRecommendedUpdate = Current.userSettings.lastSeenRecommendedUpdate,
-		   lastSeenRecommendedUpdate == recommendedVersion {
-			logDebug("The recommended version \(recommendedVersion) is the last seen version")
-			startApplication()
-		} else {
-			// User has not seen a dialog for this recommended Version
-			logDebug("The recommended version \(recommendedVersion) is not the last seen version")
-			Current.userSettings.lastSeenRecommendedUpdate = recommendedVersion
-			showRecommendedUpdate(updateURL: appStoreUrl)
-		}
-	}
-	
-	private func handleRecommendedUpdateForVerifier(appStoreUrl: URL) {
-		
-		let now = Date().timeIntervalSince1970
-		let interval: Double = Double(Current.remoteConfigManager.storedConfiguration.recommendedNagIntervalHours ?? 24) * 3600
-		let lastSeen: TimeInterval = Current.userSettings.lastRecommendUpdateDismissalTimestamp ?? now
-		
-		if lastSeen == now || lastSeen + interval < now {
-			showRecommendedUpdate(updateURL: appStoreUrl)
-			Current.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
-		} else {
-			startApplication()
-		}
-	}
-	
-	// MARK: - Retry -
-	
-	/// Retry loading the requirements
-	func retry() {
-		
-		launchStateManager.enableRestart()
-		if let presentedViewController = navigationController.presentedViewController {
-			presentedViewController.dismiss(animated: true) { [weak self] in
-				self?.startLauncher()
-			}
-		} else {
-			startLauncher()
-		}
-	}
-	
-	func reset() {
-		
-		childCoordinators = []
-		retry()
-	}
-}
-
-// MARK: - Notification observations
-
-public extension Notification.Name {
-	
-	static let disablePrivacySnapShot = Notification.Name("nl.rijksoverheid.ctr.disablePrivacySnapShot")
-	static let enablePrivacySnapShot = Notification.Name("nl.rijksoverheid.ctr.enablePrivacySnapShot")
 }
 
 extension AppCoordinator {
@@ -561,10 +80,6 @@ extension AppCoordinator {
 	
 	/// Handle the event the application will resign active
 	@objc func onWillResignActiveNotification() {
-		
-		guard shouldUsePrivacySnapShot else {
-			return
-		}
 		
 		// Show the snapshot (logo) view to hide sensitive data
 		if #available(iOS 13.0, *) {
@@ -604,25 +119,6 @@ extension AppCoordinator {
 		}
 	}
 	
-	@objc private func enablePrivacySnapShot() {
-		shouldUsePrivacySnapShot = true
-	}
-	
-	@objc private func disablePrivacySnapShot() {
-		shouldUsePrivacySnapShot = false
-	}
-	
-	@objc private func onDiskFullNotification() {
-		// Prevent further notifications, as presenting .diskFull terminates the app
-		NotificationCenter.default.removeObserver(self, name: Notification.Name.diskFull, object: nil)
-		
-		popPresentedViewController {
-			let viewController = AppStatusViewController(viewModel: DiskFullViewModel())
-			viewController.modalPresentationStyle = .fullScreen
-			self.navigationController.present(viewController, animated: true)
-		}
-	}
-	
 	private func addObservers() {
 		
 		// Back and foreground
@@ -639,50 +135,5 @@ extension AppCoordinator {
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
-		
-		// Privacy
-		
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(disablePrivacySnapShot),
-			name: Notification.Name.disablePrivacySnapShot,
-			object: nil
-		)
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(enablePrivacySnapShot),
-			name: Notification.Name.enablePrivacySnapShot,
-			object: nil
-		)
-		
-		// Open ID Connect
-		
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(enablePrivacySnapShot),
-			name: Notification.Name.closingOpenIDConnectBrowser,
-			object: nil
-		)
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(disablePrivacySnapShot),
-			name: Notification.Name.launchingOpenIDConnectBrowser,
-			object: nil
-		)
-		
-		// Disk Full
-		
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(onDiskFullNotification),
-			name: Notification.Name.diskFull,
-			object: nil
-		)
 	}
-}
-
-extension ErrorCode.ClientCode {
-	
-	static let failedToLoadCryptoLibrary = ErrorCode.ClientCode(value: "057")
-	
 }
