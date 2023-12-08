@@ -308,7 +308,7 @@ platform :ios do
   end
 
   private_lane :shield do |options|
-    add_badge(shield: "#{options[:version]}-#{options[:build]}-#{options[:color]}", no_badge: true)
+    #add_badge(shield: "#{options[:version]}-#{options[:build]}-#{options[:color]}", no_badge: true)
   end
 end
 
