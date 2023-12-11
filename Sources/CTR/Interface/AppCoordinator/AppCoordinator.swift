@@ -64,23 +64,11 @@ class AppCoordinator: Coordinator {
 	
 	func cleanupExistingData() {
 		
-		// CoreData
-		let fileManager: FileManager = FileManager.default
-		if let applicationSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-			for fileName in ["CoronaCheck.sqlite", "CoronaCheck.sqlite-shm", "CoronaCheck.sqlite-wal"] {
-				let fileUrl = applicationSupport.appendingPathComponent(fileName, isDirectory: false)
-				if fileManager.fileExists(atPath: fileUrl.path) {
-					do {
-						try fileManager.removeItem(atPath: fileUrl.path)
-					} catch {
-						logError("Failed to read directory \(error)")
-					}
-				}
-			}
-		}
+		let fileStorage = FileStorage()
+		// Database
+		fileStorage.removeDatabase()
 		
 		// Configuration files
-		let fileStorage = FileStorage()
 		for fileName in ["config.json", "public_keys.json"] {
 			if fileStorage.fileExists(fileName) {
 				fileStorage.remove(fileName)
