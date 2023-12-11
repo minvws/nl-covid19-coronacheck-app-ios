@@ -21,6 +21,8 @@ class AppCoordinator: Coordinator {
 	
 	var navigationController: UINavigationController
 	
+	var fileManager: FileStorageProtocol = FileStorage()
+	
 	private var privacySnapshotWindow: UIWindow?
 	
 	var flavor = AppFlavor.flavor
@@ -64,14 +66,13 @@ class AppCoordinator: Coordinator {
 	
 	func cleanupExistingData() {
 		
-		let fileStorage = FileStorage()
 		// Database
-		fileStorage.removeDatabase()
+		fileManager.removeDatabase()
 		
 		// Configuration files
 		for fileName in ["config.json", "public_keys.json"] {
-			if fileStorage.fileExists(fileName) {
-				fileStorage.remove(fileName)
+			if fileManager.fileExists(fileName) {
+				fileManager.remove(fileName)
 			}
 		}
 	}
