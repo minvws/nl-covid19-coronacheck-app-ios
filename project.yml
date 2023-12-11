@@ -424,9 +424,6 @@ schemes:
       language: nl
     test:
       targets:
-        - package: Persistence/PersistenceTests
-          randomExecutionOrder: true
-          parallelizable: false
         - package: RestrictedBrowser/RestrictedBrowserTests
           randomExecutionOrder: true
           parallelizable: false
