@@ -70,10 +70,8 @@ class AppCoordinator: Coordinator {
 		fileManager.removeDatabase()
 		
 		// Configuration files
-		for fileName in ["config.json", "public_keys.json"] {
-			if fileManager.fileExists(fileName) {
-				fileManager.remove(fileName)
-			}
+		for fileName in ["config.json", "public_keys.json"] where fileManager.fileExists(fileName) {
+			fileManager.remove(fileName)
 		}
 	}
 }
