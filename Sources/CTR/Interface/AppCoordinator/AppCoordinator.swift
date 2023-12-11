@@ -43,6 +43,7 @@ class AppCoordinator: Coordinator {
 	/// Designated starter method
 	func start() {
 		
+		cleanupExistingData()
 		appIsPermanentlyDeactivated()
 		addObservers()
 	}
@@ -59,6 +60,32 @@ class AppCoordinator: Coordinator {
 		// Set the root
 		window.rootViewController = destination
 		window.makeKeyAndVisible()
+	}
+	
+	func cleanupExistingData() {
+		
+		// CoreData
+		let fileManager: FileManager = FileManager.default
+		if let applicationSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+			for fileName in ["CoronaCheck.sqlite", "CoronaCheck.sqlite-shm", "CoronaCheck.sqlite-wal"] {
+				let fileUrl = applicationSupport.appendingPathComponent(fileName, isDirectory: false)
+				if fileManager.fileExists(atPath: fileUrl.path) {
+					do {
+						try fileManager.removeItem(atPath: fileUrl.path)
+					} catch {
+						logError("Failed to read directory \(error)")
+					}
+				}
+			}
+		}
+		
+		// Configuration files
+		let fileStorage = FileStorage()
+		for fileName in ["config.json", "public_keys.json"] {
+			if fileStorage.fileExists(fileName) {
+				fileStorage.remove(fileName)
+			}
+		}
 	}
 }
 
