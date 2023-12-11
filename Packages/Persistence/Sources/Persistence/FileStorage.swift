@@ -13,6 +13,7 @@ public protocol FileStorageProtocol: AnyObject {
 	func read(fileName: String) -> Data?
 	func fileExists(_ fileName: String) -> Bool
 	func remove(_ fileName: String)
+	func removeDatabase()
 
 	var documentsURL: URL? { get }
 }
@@ -98,4 +99,19 @@ final public class FileStorage: FileStorageProtocol {
 		}
 	}
 
+	public func removeDatabase() {
+		
+		if let applicationSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+			for fileName in ["CoronaCheck.sqlite", "CoronaCheck.sqlite-shm", "CoronaCheck.sqlite-wal"] {
+				let fileUrl = applicationSupport.appendingPathComponent(fileName, isDirectory: false)
+				if fileManager.fileExists(atPath: fileUrl.path) {
+					do {
+						try fileManager.removeItem(atPath: fileUrl.path)
+					} catch {
+						logError("Failed to read directory \(error)")
+					}
+				}
+			}
+		}
+	}
 }

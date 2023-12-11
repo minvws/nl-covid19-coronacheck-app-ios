@@ -15,6 +15,8 @@ class AppCoordinatorTests: XCTestCase {
 	var sut: AppCoordinator!
 
 	var navigationSpy: NavigationControllerSpy!
+	
+	var fileManagerSpy: FileStorageSpy!
 
 	var window = UIWindow()
 	
@@ -22,9 +24,11 @@ class AppCoordinatorTests: XCTestCase {
 		super.setUp()
 		
 		navigationSpy = NavigationControllerSpy()
+		fileManagerSpy = FileStorageSpy()
 		sut = AppCoordinator(
 			navigationController: navigationSpy
 		)
+		sut.fileManager = fileManagerSpy
 	}
 
 	// MARK: - Tests
@@ -41,6 +45,10 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(self.sut.window.rootViewController is AppStatusViewController) == true
 		expect((self.sut.window.rootViewController as? AppStatusViewController)?.viewModel is AppDeactivatedViewModel) == true
+		
+		expect(self.fileManagerSpy.invokedRemoveDatabase) == true
+		expect(self.fileManagerSpy.invokedFileExists) == true
+		expect(self.fileManagerSpy.invokedFileExistsCount) == 2
 	}
 	
 	func test_start_asVerifier() {
@@ -55,5 +63,9 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		expect(self.sut.window.rootViewController is AppStatusViewController) == true
 		expect((self.sut.window.rootViewController as? AppStatusViewController)?.viewModel is AppDeactivatedViewModel) == true
+
+		expect(self.fileManagerSpy.invokedRemoveDatabase) == true
+		expect(self.fileManagerSpy.invokedFileExists) == true
+		expect(self.fileManagerSpy.invokedFileExistsCount) == 2
 	}
 }

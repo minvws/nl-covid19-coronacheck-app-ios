@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import CoronaCheckFoundation
 
 class FileStorageSpy: FileStorageProtocol {
 
@@ -73,5 +73,13 @@ class FileStorageSpy: FileStorageProtocol {
 		invokedRemoveCount += 1
 		invokedRemoveParameters = (fileName, ())
 		invokedRemoveParametersList.append((fileName, ()))
+	}
+
+	var invokedRemoveDatabase = false
+	var invokedRemoveDatabaseCount = 0
+
+	func removeDatabase() {
+		invokedRemoveDatabase = true
+		invokedRemoveDatabaseCount += 1
 	}
 }

@@ -21,6 +21,8 @@ class AppCoordinator: Coordinator {
 	
 	var navigationController: UINavigationController
 	
+	var fileManager: FileStorageProtocol = FileStorage()
+	
 	private var privacySnapshotWindow: UIWindow?
 	
 	var flavor = AppFlavor.flavor
@@ -43,6 +45,7 @@ class AppCoordinator: Coordinator {
 	/// Designated starter method
 	func start() {
 		
+		cleanupExistingData()
 		appIsPermanentlyDeactivated()
 		addObservers()
 	}
@@ -59,6 +62,17 @@ class AppCoordinator: Coordinator {
 		// Set the root
 		window.rootViewController = destination
 		window.makeKeyAndVisible()
+	}
+	
+	func cleanupExistingData() {
+		
+		// Database
+		fileManager.removeDatabase()
+		
+		// Configuration files
+		for fileName in ["config.json", "public_keys.json"] where fileManager.fileExists(fileName) {
+			fileManager.remove(fileName)
+		}
 	}
 }
 
