@@ -43,8 +43,9 @@ class AppCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
-		expect(self.sut.window.rootViewController is AppStatusViewController) == true
-		expect((self.sut.window.rootViewController as? AppStatusViewController)?.viewModel is AppDeactivatedViewModel) == true
+		expect(self.sut.window.rootViewController is UINavigationController) == true
+		expect((self.sut.window.rootViewController as? UINavigationController)?.viewControllers.first is AppStatusViewController) == true
+		expect(((self.sut.window.rootViewController as? UINavigationController)?.viewControllers.first as? AppStatusViewController)?.viewModel is AppDeactivatedViewModel) == true
 		
 		expect(self.fileManagerSpy.invokedRemoveDatabase) == true
 		expect(self.fileManagerSpy.invokedFileExists) == true
@@ -61,8 +62,9 @@ class AppCoordinatorTests: XCTestCase {
 
 		// Then
 		expect(self.sut.childCoordinators).to(haveCount(0))
-		expect(self.sut.window.rootViewController is AppStatusViewController) == true
-		expect((self.sut.window.rootViewController as? AppStatusViewController)?.viewModel is AppDeactivatedViewModel) == true
+		expect(self.sut.window.rootViewController is UINavigationController) == true
+		expect((self.sut.window.rootViewController as? UINavigationController)?.viewControllers.first is AppStatusViewController) == true
+		expect(((self.sut.window.rootViewController as? UINavigationController)?.viewControllers.first as? AppStatusViewController)?.viewModel is AppDeactivatedViewModel) == true
 
 		expect(self.fileManagerSpy.invokedRemoveDatabase) == true
 		expect(self.fileManagerSpy.invokedFileExists) == true

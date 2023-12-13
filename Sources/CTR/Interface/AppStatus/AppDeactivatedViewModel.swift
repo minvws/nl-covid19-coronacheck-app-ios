@@ -46,6 +46,6 @@ class AppDeactivatedViewModel: AppStatusViewModel {
 			)
 			return
 		}
-		coordinator?.openUrl(url, completionHandler: nil)
+		coordinator?.openUrl(url)
 	}
 }

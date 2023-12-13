@@ -10,7 +10,7 @@ import CoronaCheckUI
 
 protocol AppCoordinatorDelegate: AnyObject {
 	
-	func openUrl(_ url: URL, completionHandler: (() -> Void)?)
+	func openUrl(_ url: URL)
 }
 
 class AppCoordinator: Coordinator {
@@ -58,9 +58,10 @@ class AppCoordinator: Coordinator {
 			   informationUrl: URL(string: urlString),
 			   flavor: flavor
 		   ))
+		navigationController.setViewControllers([destination], animated: false)
 		
 		// Set the root
-		window.rootViewController = destination
+		window.rootViewController = self.navigationController
 		window.makeKeyAndVisible()
 	}
 	
@@ -80,10 +81,7 @@ class AppCoordinator: Coordinator {
 
 extension AppCoordinator: AppCoordinatorDelegate {
 	
-	func openUrl(_ url: URL, completionHandler: (() -> Void)? = nil) {
-		
-		UIApplication.shared.open(url, completionHandler: { _ in completionHandler?() })
-	}
+	// OpenURL is implemented by the Coordinator extension
 }
 
 extension AppCoordinator {

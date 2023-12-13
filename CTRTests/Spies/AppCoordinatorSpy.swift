@@ -14,15 +14,11 @@ class AppCoordinatorSpy: AppCoordinatorDelegate {
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, Void)?
 	var invokedOpenUrlParametersList = [(url: URL, Void)]()
-	var shouldInvokeOpenUrlCompletionHandler = false
 
-	func openUrl(_ url: URL, completionHandler: (() -> Void)?) {
+	func openUrl(_ url: URL) {
 		invokedOpenUrl = true
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, ())
 		invokedOpenUrlParametersList.append((url, ()))
-		if shouldInvokeOpenUrlCompletionHandler {
-			completionHandler?()
-		}
 	}
 }
