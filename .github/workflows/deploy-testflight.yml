@@ -91,7 +91,7 @@ jobs:
 
       - name: Archive Holder
         if: ${{ !contains(github.ref, 'Verifier') }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Holder App
           path: CTR.ipa
@@ -99,7 +99,7 @@ jobs:
 
       - name: Archive Holder dSYMs
         if: ${{ !contains(github.ref, 'Verifier') }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Holder App dSYMs
           path: CTR.app.dSYM.zip
@@ -119,7 +119,7 @@ jobs:
 
       - name: Archive Verifier
         if: ${{ !contains(github.ref, 'Holder') }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Verifier App
           path: Verifier.ipa
@@ -127,7 +127,7 @@ jobs:
 
       - name: Archive Verifier dSYMs
         if: ${{ !contains(github.ref, 'Holder') }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Verifier App dSYMs
           path: Verifier.app.dSYM.zip
