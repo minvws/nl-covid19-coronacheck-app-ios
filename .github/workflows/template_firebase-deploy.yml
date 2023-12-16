@@ -97,14 +97,14 @@ jobs:
         ${{ inputs.fastlane_command }}
 
     - name: Archive App
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.app_title }}
         path: ${{ inputs.app_filename }}.ipa
         retention-days: 10
 
     - name: Archive dSYMs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.app_title }} dSYMs
         path: ${{ inputs.app_filename }}.app.dSYM.zip
