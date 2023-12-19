@@ -14,7 +14,6 @@ let package = Package(
 	],
 	dependencies: [
 		// Internal:
-		.package(url: "https://github.com/ashleymills/Reachability.swift", from: "5.1.0"),
 		.package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.6.1"),
 		
 		// Testing:
@@ -26,7 +25,6 @@ let package = Package(
 		.target(
 			name: "Shared",
 			dependencies: [
-				.product(name: "Reachability", package: "Reachability.swift"),
 				"SwiftSoup"
 			]
 		),

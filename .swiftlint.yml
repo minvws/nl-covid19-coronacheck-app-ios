@@ -22,7 +22,7 @@ excluded:
   - Pods
   - Packages/*/.build
   - Packages/*/Package.swift
-  - Vendor
+  - vendor
   - Sources/CTR/Infrastructure/Resources/R.generated.swift
   - Packages/*/.build
 force_cast: warning

@@ -13,21 +13,15 @@ let package = Package(
 	],
 	dependencies: [
 		// Internal:
-		.package(name: "Managers", path: "../Managers"),
-		.package(name: "Models", path: "../Models"),
 		.package(name: "Persistence", path: "../Persistence"),
 		.package(name: "Shared", path: "../Shared"),
-		.package(name: "Transport", path: "../Transport")
 	],
 	targets: [
 		.target(
 			name: "CoronaCheckFoundation",
 			dependencies: [
-				.product(name: "Managers", package: "Managers"),
-				.product(name: "Models", package: "Models"),
 				.product(name: "Persistence", package: "Persistence"),
-				.product(name: "Shared", package: "Shared"),
-				.product(name: "Transport", package: "Transport")
+				.product(name: "Shared", package: "Shared")
 			]
 		)
 	]

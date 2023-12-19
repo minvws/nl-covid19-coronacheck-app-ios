@@ -14,8 +14,6 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_14.3.1.app/Contents/Developer
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
-  MOBILE_CORE_COMMIT_HASH: 0b1d6d8c2a699449f614e90a0e2e5cc643fa67a1 # v0.4.5
-  WEB_PDF_TOOLS_COMMIT_HASH: 530e22f23d98dc41c1611b1ecfb18719e5ab2570 # v4.1.6
   
 jobs:
 
@@ -53,16 +51,6 @@ jobs:
         run: |
           git lfs pull
           git checkout .
-
-      - name: Build mobile core
-        uses: ./.github/actions/build-core
-        with:
-          mobile_core_commit_hash: ${{ env.MOBILE_CORE_COMMIT_HASH }}
-
-      - name: Build web pdf tools
-        uses: ./.github/actions/build-web-pdf-tools
-        with:
-          web_pdf_tools_commit_hash: ${{ env.WEB_PDF_TOOLS_COMMIT_HASH }}
 
       - name: Generate project
         run: |
