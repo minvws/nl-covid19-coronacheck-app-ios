@@ -13,11 +13,7 @@ let package = Package(
 	],
 	dependencies: [
 		// Internal:
-		.package(name: "Shared", path: "../Shared"),
-		
-		// Testing:
-		.package(name: "TestingShared", path: "../TestingShared"),
-		.package(url: "https://github.com/Quick/Nimble", exact: "10.0.0")
+		.package(name: "Shared", path: "../Shared")
 	],
 	targets: [
 		// Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -25,19 +21,8 @@ let package = Package(
 		.target(
 			name: "Persistence",
 			dependencies: [
-				.product(name: "Shared", package: "Shared"),
-			],
-			resources: [
-				.copy("Schemas/CoronaCheck.xcdatamodeld"),
-				.copy("Schemas/Verifier.xcdatamodeld")
+				.product(name: "Shared", package: "Shared")
 			]
-		),
-		.testTarget(
-			name: "PersistenceTests",
-			dependencies: [
-				"Persistence",
-				.product(name: "TestingShared", package: "TestingShared"),
-				.product(name: "Nimble", package: "Nimble")
-			]),
+		)
 	]
 )

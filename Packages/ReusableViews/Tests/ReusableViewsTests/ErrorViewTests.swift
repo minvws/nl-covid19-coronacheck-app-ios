@@ -32,7 +32,7 @@ class ErrorViewTests: XCTestCase {
 	func test_singleLine() {
 
 		// Given
-		sut.error = L.holderTokenentryRegularflowErrorInvalidCode()
+		sut.error = "Deze code is niet geldig. Een code ziet er bijvoorbeeld zo uit: BRB-YYYYYYYYY1-Z2."
 
 		// Then
 		assertSnapshot(matching: sut, as: .image)
@@ -41,7 +41,7 @@ class ErrorViewTests: XCTestCase {
 	func test_multiLine() {
 
 		// Given
-		sut.error = L.holderTokenentryRegularflowErrorUnknownprovider()
+		sut.error = "Deze testlocatie is (nog) niet bij ons bekend. Neem contact op met de locatie waar je bent getest."
 
 		// Then
 		assertSnapshot(matching: sut, as: .image)

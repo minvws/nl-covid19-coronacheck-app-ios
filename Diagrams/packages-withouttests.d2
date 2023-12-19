@@ -4,34 +4,7 @@ direction: down
 Rswift: {
   shape: hexagon
 }
-Reachability: {
-  shape: hexagon
-}
-BrightFutures: {
-  shape: hexagon
-}
-HTTPSecurity: {
-  shape: hexagon
-}
-LuhnCheck: {
-  shape: hexagon
-}
-iOSSecuritySuite: {
-  shape: hexagon
-}
-Lottie: {
-  shape: hexagon
-}
-QRGenerator: {
-  shape: hexagon
-}
-OpenIDConnect: {
-  shape: hexagon
-}
 SwiftSoup: {
-  shape: hexagon
-}
-GZip: {
   shape: hexagon
 }
 
@@ -41,53 +14,20 @@ app: {
   shape: package
 }
 
-app <- BrightFutures
 app <- CoronaCheckFoundation
 app <- CoronaCheckUI
-app <- CryptoCore
-app <- DataMigration
-app <- Lottie
-app <- OpenIDConnect
-app <- QRGenerator
-app <- Reachability
 app <- RestrictedBrowser
 
 # - Packages - 
 
 CoronaCheckFoundation { style.fill: "#ffcc00" }
-CoronaCheckFoundation <- Managers
-CoronaCheckFoundation <- Models
 CoronaCheckFoundation <- Persistence
 CoronaCheckFoundation <- Shared
-CoronaCheckFoundation <- Transport
 
 CoronaCheckUI { style.fill: "#ffcc00" }
 CoronaCheckUI <- Resources
 CoronaCheckUI <- ReusableViews
 CoronaCheckUI <- Shared
-
-CryptoCore { style.fill: "#ffcc00" }
-
-DataMigration { style.fill: "#ffcc00" }
-DataMigration <- Shared
-DataMigration <- GZip
-
-Managers { style.fill: "#ffcc00" }
-Managers <- CryptoCore
-Managers <- Models
-Managers <- Persistence
-Managers <- Resources
-Managers <- Shared
-Managers <- Transport
-Managers <- BrightFutures
-Managers <- iOSSecuritySuite
-
-Models { style.fill: "#ffcc00" }
-Models <- CryptoCore
-Models <- Persistence
-Models <- Shared
-Models <- Transport
-Models <- LuhnCheck
 
 Persistence { style.fill: "#ffcc00" }
 Persistence <- Shared
@@ -106,9 +46,4 @@ ReusableViews <- Shared
 ReusableViews <- Resources
 
 Shared { style.fill: "#ffcc00" }
-Shared <- Reachability
 Shared <- SwiftSoup
-
-Transport { style.fill: "#ffcc00" }
-Transport <- HTTPSecurity
-Transport <- Shared

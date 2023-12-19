@@ -35,27 +35,6 @@ updates:
       time: "08:30"
       timezone: Europe/Amsterdam
   - package-ecosystem: "swift"
-    directory: "/Packages/DataMigration"
-    schedule:
-      interval: weekly
-      day: monday
-      time: "08:30"
-      timezone: Europe/Amsterdam
-  - package-ecosystem: "swift"
-    directory: "/Packages/Managers"
-    schedule:
-      interval: weekly
-      day: monday
-      time: "08:30"
-      timezone: Europe/Amsterdam
-  - package-ecosystem: "swift"
-    directory: "/Packages/Models"
-    schedule:
-      interval: weekly
-      day: monday
-      time: "08:30"
-      timezone: Europe/Amsterdam
-  - package-ecosystem: "swift"
     directory: "/Packages/Persistence"
     schedule:
       interval: weekly
@@ -85,13 +64,6 @@ updates:
       timezone: Europe/Amsterdam
   - package-ecosystem: "swift"
     directory: "/Packages/Shared"
-    schedule:
-      interval: weekly
-      day: monday
-      time: "08:30"
-      timezone: Europe/Amsterdam
-  - package-ecosystem: "swift"
-    directory: "/Packages/Transport"
     schedule:
       interval: weekly
       day: monday
