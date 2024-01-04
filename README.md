@@ -134,38 +134,10 @@ R.swift collates the colors and images from bundled asset catalogs, generating a
 
 Fonts are accessible via `Fonts.swift`
 
-## Release Procedure
-
-The release process is the same for CoronaCheck and for CoronaCheck Scanner.
-
-We use fastlane to automate our release processes, and that is executed by GitHub Actions. See [.github/workflows](.github/workflows) for the workflows definition files.
-
-We release test, acceptance and production-like builds internally to Firebase App Distribution. These are triggered whenever there is a commit made to the main branch (ie by merging a pull request).
-
-You can also manually trigger this release process manually, by running the [Deploy: Firebase (manual)](.github/workflows/deploy-firebase-manual.yml) github action and providing a branch name.
-
-Once it is time to start the release train, create a release branch with the format `release/holder-4.7.0` or `release/verifier-4.7.0`, and then increment the `MARKETING_VERSION`  (for Holder or for Verifier) in [project.yml](project.yml). Pushing to this branch will trigger the appropriate Firebase builds.
-
-Once the team is satisfied with the quality of the builds on Firebase, a production build can be sent to TestFlight. A release to TestFlight is kicked off by *tagging* a commit using this format:
-
-`Holder-4.7.0-RC1`, `Holder-4.7.0-RC2`, etc.
-
-or `Verifier-3.0.2-RC1`, `Verifier-3.0.2-RC2`, etc.
-
-Here we perform a manual regression test on the build to make sure the production-ready binary performs as expected.
-
-Once the build is approved by Apple, we release the approved build manually using a phased rollout to give us the opportunity to spot any crashes that might be detected, or bugs that might be reported. At this point  a final tag should be made, with this format:
-
-`Holder-4.7.0`
-
-`Verifier-3.0.2` 
-
-Now that the release is completed, the private git repository should be "synced" with the public reposititory by running `make sync_repo`. It pushes new *non-RC* tags to the public repository. This command is part of the [RDO Repository Tools](https://github.com/minvws/nl-rdo-git-repository-tool). 
-
 ## Contribution process
 
-The development team works on the repository in a private fork (for reasons of compliance with existing processes) and shares its work as often as possible.
+The development team used to work on the repository in a private fork (for reasons of compliance with existing processes) and was sharing its work as often as possible.
 
 If you plan to make non-trivial changes, we recommend to open an issue beforehand where we can discuss your planned changes. This increases the chance that we might be able to use your contribution (or it avoids doing work if there are reasons why we wouldn't be able to use it).
 
-Note that all commits should be signed using a gpg key.
+Note that all commits were signed using a gpg key.
